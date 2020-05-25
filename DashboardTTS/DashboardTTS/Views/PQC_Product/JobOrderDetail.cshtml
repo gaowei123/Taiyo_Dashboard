@@ -1,0 +1,471 @@
+﻿
+@{
+    ViewBag.Title = "JobOrderDetail";
+}
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+<style>
+    .container-fluid {
+        max-width: 1500px;
+    }
+</style>
+
+
+<div class="container-fluid">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">PQC WIP Inventory</span>
+
+        <label id="lbDeleteJob" style="display:none;"></label>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+
+                <div class="col-md-3">
+                    <label style="width:35%">Status:</label>
+                    <select id="ddlStatus" class="form-control"  data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Inprocess">Inprocess</option>
+                        <option value="Uncomplete" selected="selected">Uncomplete</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job no" style="width:60%;" />
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="Search();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12" style="padding:0px;">
+            <table id="tableJobOrderDetail" data-toggle="table"></table>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetJobOrderDetail = window.globalConfig.rootDirectory + '/PQC_Product/GetJobOrderDetailList';
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+    var apiDeleteWIPJob = window.globalConfig.rootDirectory + '/PQC_Product/DeleteWIPJob';
+
+
+
+    //设置part no, machine id 下拉框
+    $(document).ready(function () {
+
+
+        setPartNoDDL($('#ddlPartNo'), 'PQC','');
+        $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+
+
+
+        $('#txtDateFrom').val('2020-1-1');
+
+        var today = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateTo').val(today);
+
+
+
+
+
+        Search();
+    });
+
+
+
+
+
+    function Search() {
+
+        var partNo = getUrlParam("PartNo");
+        if (partNo == null || partNo == "") {
+            partNo = $('#ddlPartNo').val();
+        }
+
+
+        //重新加载必须将原本table清空
+        $('#tableJobOrderDetail').bootstrapTable('destroy');
+
+        $('#tableJobOrderDetail').bootstrapTable({ // 对应table标签的id
+
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetJobOrderDetail,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    //pageSize: params.limit, // 每页要显示的数据条数
+                    //offset: params.offset, // 每li页显示数据的开始行号
+                    //sort: params.sort, // 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                    //dataId: $("#dataId").val() // 额外添加的参数
+
+
+                    DateFrom: $("#txtDateFrom").val(),
+                    DateTo: $("#txtDateTo").val(),
+
+                    PartNo: partNo,
+                    JobNo: $("#txtJobNo").val(),
+                    Status: $("#ddlStatus").val()
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+
+            },
+
+            columns: [
+            {
+                field: 'sn',
+                title: 'S/N',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.customer == "Total") {
+                        return "";
+                    } else {
+                        return index + 1;
+                    }
+                }
+            },
+            {
+                field: 'customer',
+                title: 'Customer',
+                align: 'left',
+                valign: 'middle'
+            },
+            {
+                field: 'model',
+                title: 'Model',
+                align: 'left',
+                valign: 'middle'
+            },
+            {
+                field: 'partNo',
+                title: 'Part No',
+                align: 'left',
+                valign: 'middle'
+            },
+            {
+                field: 'jobNo',
+                title: 'Job No',
+                align: 'left',
+                valign: 'middle'
+            },
+            {
+                field: 'sMrpQty',
+                title: 'MRP Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'sBeforeQty',
+                title: 'Before Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'sAfterQty',
+                title: 'After Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'mfgDate',
+                title: 'MFG Date',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value != "" && value != null) {
+                        var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+
+                        return dateFormat('dd/MM/yyyy', date);
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            {
+                field: 'bomFlag',
+                title: 'Bom List',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+               
+                title: 'Operation',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.customer == "Total") {
+                        return "";
+                    } else {
+                        return "<button class=\"btn btn-danger btn-sm\" onclick=\"showLogin('" + row.jobNo + "')\"> <i class=\"fa fa-trash-o fa-lg\"></i> </button>";                        
+                    }
+                }
+            }
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+
+                var totalMrpSET = 0;
+                var totalMrpPCS = 0;
+                var totalAfterSET = 0;
+                var totalAfterPCS = 0;
+                var totalBeforeSET = 0;
+                var totalBeforePCS = 0;
+
+
+
+                data.forEach(function (val, index) {
+                    //console.log(val);
+
+                    totalMrpSET += val.mrpQtySET;
+                    totalMrpPCS += val.mrpQtyPCS;
+                    totalAfterSET += val.afterQtySET;
+                    totalAfterPCS += val.afterQtyPCS;
+                    totalBeforeSET += val.beforeQtySET;
+                    totalBeforePCS += val.beforeQtyPCS;
+                
+                });
+
+
+
+                var count = $('#tableJobOrderDetail').bootstrapTable('getData').length;
+                // newFlag == 1的数据为新规的数据
+                $('#tableJobOrderDetail').bootstrapTable('insertRow', {
+                    index: count,
+                    row: {
+                        sn:"",
+                        customer: "Total",
+                        model: "",
+                        partNo: "",
+                        jobNo: "",
+                        sMrpQty: totalMrpSET + "(" + totalMrpPCS + ")",
+                        sBeforeQty: totalBeforeSET + "(" + totalBeforePCS + ")",
+                        sAfterQty: totalAfterSET + "(" + totalAfterPCS + ")",                 
+                        mfgDate: "",
+                        bomFlag: "",
+
+                    }
+                });
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tableJobOrderDetail').bootstrapTable('resetView');
+    });
+
+
+
+
+    function showLogin(jobNo) {
+        $('#lbDeleteJob').text(jobNo);
+
+        $('#modalLogin').modal('show');
+    }
+
+
+
+
+
+    function loginSubmit() {
+
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: 'PQC'
+            },
+            success: function (data) {
+
+                //login fail   
+                if (data != true) {
+                    alert(data);
+                    return false;
+                }
+
+
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiDeleteWIPJob,
+                    data: {
+                        JobNo: $('#lbDeleteJob').text()
+                    },
+                    success: function (data) {
+
+                        //刷新列表
+                        if (data == true) {
+                            Search();
+
+                      
+                            $('#modalLogin').modal('hide');
+
+                            alert('Sucess');
+                        } else {
+                            alert('Delete Fail');
+                        }
+
+                        $('#txtUsername').val('');
+                        $('#txtPassword').val('');
+                    },
+                    error: function () {
+                        alert("Exception happend during deleting");
+                    }
+                });
+            
+
+            },
+            error: function () {
+                alert("a exception happend during login !");
+            }
+        });
+
+
+    }
+
+
+
+
+</script>

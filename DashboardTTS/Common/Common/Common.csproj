@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11B39656-6562-41F7-A926-4D2202CD64EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="CPCLib">
+      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\CPCLib.dll</HintPath>
+    </Reference>
+    <Reference Include="RMS.Business">
+      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="RMS.DB">
+      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.DB.dll</HintPath>
+    </Reference>
+    <Reference Include="RMS.DBEntity">
+      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.DBEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http">
+      <HintPath>bin\Debug\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\BLL\LMMSBomDetail_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSBUYOFFLIST_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSBom_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSCheckList_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSClientVisionLog_His_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSEventLog_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSInventoty_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSMachineDownTime_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSSparePartsInventory_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSUserAttendanceHis_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSUserAttendanceTracking_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSUserEventLog_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSVisionMachineSettingHis_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSWatchDog_His_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSWatchLog_BLL.cs" />
+    <Compile Include="Class\BLL\Material_Inventory_BLL.cs" />
+    <Compile Include="Class\BLL\Material_Inventory_Bom_BLL.cs" />
+    <Compile Include="Class\BLL\Material_Inventory_History_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingBom_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingCheckReport_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingDeliveryHis_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingLabel_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMaintain_Tracking_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMoldLife_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingDefectSetting_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMachineInformation_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMachineStatus_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMaintainenceInspection_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingMaintain_His_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingPartsMovment_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingPqmHistory_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingQaViDefectTracking_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingQaViTracking_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingViDefectTracking_BLL.cs" />
+    <Compile Include="Class\BLL\MouldingViHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PaintingDeliveryHis_BLL.cs" />
+    <Compile Include="Class\BLL\PaintingInventory_BLL.cs" />
+    <Compile Include="Class\BLL\PaintingTempInfo_BLL.cs" />
+    <Compile Include="Class\BLL\PQCBomDetail_BLL.cs" />
+    <Compile Include="Class\BLL\PQCBom_BLL.cs" />
+    <Compile Include="Class\BLL\PQCDefectSetting_BLL.cs" />
+    <Compile Include="Class\BLL\PQCInventory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackDefectHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackDefectTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackDetailHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackDetailTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCPackTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViBinning.cs" />
+    <Compile Include="Class\BLL\PQCQaViDefectHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViDefectTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViDetailHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViDetailTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViHistory_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViTracking_BLL.cs" />
+    <Compile Include="Class\BLL\TempProductivityData_BLL.cs" />
+    <Compile Include="Class\BLL\User_DB_BLL.cs" />
+    <Compile Include="Class\DAL\AssyUserDB.cs" />
+    <Compile Include="Class\DAL\LMMSBomDetail_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSBom_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSBuyOffList.cs" />
+    <Compile Include="Class\DAL\LMMSCheckList_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSClientVisionLog_His_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSEventLog_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSInventory_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSMachineDownTime_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSSparePartsInventory_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSUserAttendanceHis_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSUserAttendanceTracking_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSUserEventLog_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSVisionMachineSettingHis_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSWatchDog_His_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSWatchLog_DAL.cs" />
+    <Compile Include="Class\DAL\Material_Inventory_Bom_DAL.cs" />
+    <Compile Include="Class\DAL\Material_Inventory_DAL.cs" />
+    <Compile Include="Class\DAL\Material_Inventory_History_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingBom_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingCheckReport_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingDefectSetting_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingDeliveryHis_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingLabel_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMachineInformation_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMachineStatus_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMaintainenceInspection_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMaintain_His_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMaintain_Tracking_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingMoldLife_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingPartsMovment_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingPqmHistory_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingQaViDefectTracking_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingQaViTracking_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingUserDB.cs" />
+    <Compile Include="Class\DAL\MouldingViDefectTracking_DAL.cs" />
+    <Compile Include="Class\DAL\MouldingViHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PaintingDeliveryHis_DAL.cs" />
+    <Compile Include="Class\DAL\PaintingInventory_DAL.cs" />
+    <Compile Include="Class\DAL\PaintingTempInfo_DAL.cs" />
+    <Compile Include="Class\DAL\PaintingUserDB.cs" />
+    <Compile Include="Class\DAL\PQCBomDetail_DAL.cs" />
+    <Compile Include="Class\DAL\PQCBom_DAL.cs" />
+    <Compile Include="Class\DAL\PQCDefectSetting_DAL.cs" />
+    <Compile Include="Class\DAL\PQCInventory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackDefectHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackDefectTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackDetailHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackDetailTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCPackTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViBinning.cs" />
+    <Compile Include="Class\DAL\PQCQaViDefectHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViDefectTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViDetailHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViDetailTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViHistory_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCUserDB.cs" />
+    <Compile Include="Class\DAL\TempProductivityData_DAL.cs" />
+    <Compile Include="Class\DAL\User_DB_DAL.cs" />
+    <Compile Include="Class\Model\LMMSBomDetail_Model.cs" />
+    <Compile Include="Class\Model\LMMSBuyOffList_Model.cs" />
+    <Compile Include="Class\Model\LMMSBom_Model.cs" />
+    <Compile Include="Class\Model\LMMSCheckList_Model.cs" />
+    <Compile Include="Class\Model\LMMSClientVisionLog_His_Model.cs" />
+    <Compile Include="Class\Model\LMMSEventLog_Model.cs" />
+    <Compile Include="Class\Model\LMMSInventory_Model.cs" />
+    <Compile Include="Class\Model\LMMSMachineDownTime_Model.cs" />
+    <Compile Include="Class\Model\LMMSSparePartsInventory_Model.cs" />
+    <Compile Include="Class\Model\LMMSUserAttendanceHis_Model.cs" />
+    <Compile Include="Class\Model\LMMSUserAttendanceTracking_Model.cs" />
+    <Compile Include="Class\Model\LMMSUserEventLog.cs" />
+    <Compile Include="Class\Model\LMMSVisionMachineSettingHis_Model.cs" />
+    <Compile Include="Class\Model\LMMSWatchDog_His_Model.cs" />
+    <Compile Include="Class\Model\LMMSWatchLog_Model.cs" />
+    <Compile Include="Class\Model\Material_Inventory_Bom_Model.cs" />
+    <Compile Include="Class\Model\Material_Inventory_History_Model.cs" />
+    <Compile Include="Class\Model\Material_Inventory_Model.cs" />
+    <Compile Include="Class\Model\MouldingBom_Model.cs" />
+    <Compile Include="Class\Model\MouldingCheckReport_Model.cs" />
+    <Compile Include="Class\Model\MouldingDeliveryHis_Model.cs" />
+    <Compile Include="Class\Model\MouldingLabel_Model.cs" />
+    <Compile Include="Class\Model\MouldingMaintain_Tracking_Model.cs" />
+    <Compile Include="Class\Model\MouldingMoldLife_Model.cs" />
+    <Compile Include="Class\Model\MouldingMachineInformation_Model.cs" />
+    <Compile Include="Class\Model\MouldingMachineStatus_Model.cs" />
+    <Compile Include="Class\Model\MouldingMaintain_His_Model.cs" />
+    <Compile Include="Class\Model\MouldingMaintenanceInspection_Model.cs" />
+    <Compile Include="Class\Model\MouldingPartsMovment_Model.cs" />
+    <Compile Include="Class\Model\MouldingViHistory_Model.cs" />
+    <Compile Include="Class\Model\PaintingDeliveryHis_Model.cs" />
+    <Compile Include="Class\Model\PaintingInventory_Model.cs" />
+    <Compile Include="Class\Model\PaintingTempInfo_Model.cs" />
+    <Compile Include="Class\Model\PQCBomDetail_Model.cs" />
+    <Compile Include="Class\Model\PQCBom_Model.cs" />
+    <Compile Include="Class\Model\PQCDefectSetting_Model.cs" />
+    <Compile Include="Class\Model\PQCInventory_Model.cs" />
+    <Compile Include="Class\Model\PQCPackDefectHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCPackDefectTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCPackDetailHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCPackDetailTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCPackHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCPackTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViBinning.cs" />
+    <Compile Include="Class\Model\PQCQaViDefectHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViDefectTracking.cs" />
+    <Compile Include="Class\Model\PQCQaViDefectTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViDetailHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViDetailTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViHistory_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViTracking.cs" />
+    <Compile Include="Class\Model\TempProductivityData_Model.cs" />
+    <Compile Include="Class\Model\User_DB_Model.cs" />
+    <Compile Include="CommFunctions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DB\DB\DBHelp.csproj">
+      <Project>{c6ac93b9-faa8-4488-b2e7-56f278d67a24}</Project>
+      <Name>DBHelp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\StaticRes\StaticRes.csproj">
+      <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
+      <Name>StaticRes</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Test_Bootstrap_Table";
+}
+
+<h2>Test_Bootstrap_Table</h2>
+
+<hr />
+
+
+
+
+<div style="width:400px; height:200px; margin:auto;">
+    <table id="table"></table>
+
+    <input type="password"
+
+</div>
+
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+
+<script src="~/Dashboard CSS JS/JS/MOULD_MonthlyHighestReject.js"></script>
+
+
+<script type="text/javascript">
+
+
+    $("#table").bootstrapTable({ // 对应table标签的id
+
+
+        //call后台数据
+        method: 'post',
+        dataType: 'json',
+        contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+        url: 'GetData',
+
+        //表头样式 undefined, thead-light, thead-dark, 
+        theadClasses: 'thead-title',
+
+        //表格样式
+        classes: 'table table-bordered table-hover',
+
+        
+       
+        
+
+
+        cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+        striped: false,  //表格显示条纹，默认为false
+        pagination: false, // 在表格底部显示分页组件，默认false
+        //pageList: [10, 20], // 设置页面可以显示的数据条数
+        //pageSize: 10, // 页面数据条数
+        //pageNumber: 1, // 首页页码
+        //sidePagination: 'server', // 设置为服务器端分页
+        queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+            return {
+                //pageSize: params.limit, // 每页要显示的数据条数
+                //offset: params.offset, // 每页显示数据的开始行号
+                //sort: params.sort, // 要排序的字段
+                //sortOrder: params.order, // 排序规则
+                //dataId: $("#dataId").val() // 额外添加的参数
+
+                jobno: 'jot19000',
+                partno: 'lalal'
+
+            }
+        },
+        //sortName: 'id', // 要排序的字段
+        //sortOrder: 'desc', // 排序规则
+        columns: [
+            {
+                checkbox: true, // 显示一个勾选框
+                align: 'center' // 居中显示
+                
+            },
+            {
+                field: 'jobNo', // 返回json数据中的name
+                title: 'job No', // 表格表头显示文字
+                align: 'center', // 左右居中
+                valign: 'middle', // 上下居中
+                sortable:true//排序功能
+            },
+            {
+                field: 'machineID',
+                title: 'Mc ID',
+                align: 'center',
+                valign: 'middle',
+                sortable: true
+            },
+            {
+                field: 'partNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                visable: true
+            },
+            {
+                field: 'rate',
+                title: 'rate',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) { // 单元格格式化函数
+                    var text = '-';
+                    if (value == 1) {
+                        text = "方式一";
+                    } else if (value == 2) {
+                        text = "方式二";
+                    } else if (value == 3) {
+                        text = "方式三";
+                    } else if (value == 4) {
+                        text = "方式四";
+                    } else {
+                        text = "Unknow"
+                    }
+                    return text;
+                }
+            },
+            {
+                title: "操作",
+                align: 'center',
+                valign: 'middle',
+                width: 160, // 定义列的宽度，单位为像素px
+                formatter: function (value, row, index) {
+                    return '<button class="btn btn-primary btn-sm" onclick="del(\'' + row.stdId + '\')">删除</button>';
+                }
+            }
+        ],
+        onLoadSuccess: function () {  //加载成功时执行
+            console.log("加载成功");
+        },
+        onLoadError: function () {  //加载失败时执行
+            console.log("加载数据失败");
+        }
+
+    })
+
+
+</script>

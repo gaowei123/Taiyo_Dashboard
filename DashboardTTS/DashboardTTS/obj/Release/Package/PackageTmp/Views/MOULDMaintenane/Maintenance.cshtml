@@ -1,0 +1,757 @@
+﻿
+@{
+    ViewBag.Title = "Maintenance";
+}
+
+
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+<style>
+    .container-fluid{
+        max-width:1400px;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Moulding Maintenance List</span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Machine ID:</label>
+                    <select id="ddlMachineID" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="1">No.1</option>
+                        <option value="2">No.2</option>
+                        <option value="3">No.3</option>
+                        <option value="4">No.4</option>
+                        <option value="5">No.5</option>
+                        <option value="6">No.6</option>
+                        <option value="7">No.7</option>
+                        <option value="8">No.8</option>
+                        <option value="9">No.9</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
+                </div>
+            </div>
+
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Jig No:</label>
+                    <select id="ddlJigNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12" style="padding:0px;">
+            <table id="tableTrackingList" data-toggle="table"></table>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<!-- Update Form 拟态框 -->
+<div class="modal fade" id="modalUpdateForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>Moulding Update Form</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" role="form" id="updatingTrackingForm"></form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="updateValidation();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetMouldTrackingList = window.globalConfig.rootDirectory + '/MOULDMaintenane/GetTrackingList';
+
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+    var apiUpdateTracking = window.globalConfig.rootDirectory + '/MOULDMaintenane/UpdateTracking';
+    var apiDeleteTracking = window.globalConfig.rootDirectory + '/MOULDMaintenane/DeleteTracking';
+    
+
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+
+
+    //init maintenance list
+    $(document).ready(function () {
+
+        setPartNoDDL($('#ddlPartNo'), 'Moulding','');
+
+        setJigNoDDL($('#ddlJigNo'), 'Moulding');
+
+        var today = new Date();
+        var strToday = dateFormat('yyyy-MM-dd', today);
+
+
+        $('#txtDateFrom').val(strToday);
+        $('#txtDateTo').val(strToday);
+
+
+        $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+        $('#ddlJigNo').selectpicker({ width: 'calc(60%)' });
+
+
+        search();
+
+    });
+
+    function search() {
+
+
+        //重新加载必须将原本table清空
+        $('#tableTrackingList').bootstrapTable('destroy');
+
+        $('#tableTrackingList').bootstrapTable({ // 对应table标签的id
+
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetMouldTrackingList,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+
+
+                return {
+                    //pageSize: params.limit, // 每页要显示的数据条数
+                    //offset: params.offset, // 每页显示数据的开始行号
+                    //sort: params.sort, // 要排序的字段
+                    //sortOrder: params.order, // 排序规则
+                    //dataId: $("#dataId").val() // 额外添加的参数
+
+                    DateFrom: $("#txtDateFrom").val(),
+                    DateTo: $("#txtDateTo").val(),
+                    PartNo: $("#ddlPartNo").val(),
+                    JigNo: $("#ddlJigNo").val(),
+                    MachineID: $("#ddlMachineID").val()
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+            uniqueId: "trackingID",
+
+
+            rowStyle: function (row, index) {
+                //console.log(row);
+
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+            {
+                field: 'trackingID',
+                title: 'Tracking ID',
+                align: 'center',
+                valign: 'middle',
+                visible: false
+            },
+            {
+                field: 'day',
+                title: 'Day',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('yyyy/MM/dd', date);
+                }
+            },
+            {
+                field: 'shift',
+                title: 'Shift',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'machineID',
+                title: 'Machine ID',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'partNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'jigNo',
+                title: 'Jig No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'model',
+                title: 'Model',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'totalQty',
+                title: 'Total Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'passQty',
+                title: 'Pass Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'rejQty',
+                title: 'Rej Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'setup',
+                title: 'Setup',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'wastedMaterial01',
+                title: 'Wasted Material01',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'wastedMaterial02',
+                title: 'Wasted Material02',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'datetime',
+                title: 'Date Time',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('yyyy/MM/dd HH:mm', date);
+                }
+            },
+            {
+                title: 'Operation',
+                align: 'center',
+                valign: 'middle',
+                formatter: operation
+            }
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+
+    }
+
+    $(window).resize(function () {
+        $('#tableTrackingList').bootstrapTable('resetView');
+    });
+   
+    //最后按钮列样式
+    function operation(value, row, index) {
+
+
+       
+
+        var strHtml = '';
+
+        var today = dateFormat('yyyy/MM/dd', new Date());
+
+
+        var date = new Date(parseInt(row.day.replace("/Date(", "").replace(")/", ""), 10));
+        var sDay = dateFormat('yyyy/MM/dd', date);
+
+
+        if (sDay != today) {
+            strHtml += "<button class=\"btn btn-warning\" onclick=\"initUpdateForm('" + row.trackingID + "')\"> Update </button>";
+            strHtml += "&nbsp;&nbsp;";
+            strHtml += "<button class=\"btn btn-danger\" onclick=\"initDelForm('" + row.trackingID + "')\"> <i class=\"fa fa-trash-o fa-lg\"></i> </button>";
+        }
+
+       
+        return strHtml;
+    }
+
+
+
+
+    function initUpdateForm(trackingID) {
+ 
+        //根据trackingID读取选中行在表tableTrackingList中的数据给row
+        var row = $("#tableTrackingList").bootstrapTable('getRowByUniqueId', trackingID);
+
+        var strHtml = '';
+
+        //trackingID
+        strHtml += '<div class="row">\
+                        <label class="col-sm-2">Tracking ID:</label>\
+                        <label class="col-sm-9" id="lbTrackingID">' + row.trackingID+ '</label>\
+                        <label class="col-sm-1" id="lbOperationFlag" style="display: none;">update</label>\
+                    </div>';
+
+        strHtml += '<hr/>';
+
+
+        //model, part no
+        strHtml += '<div class="form-group">\
+                        <label for="txtModel" class="col-sm-2 control-label">Model:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtModel" placeholder="' + row.model + '" />\
+                        </div>\
+                        <label for="txtPartNo" class="col-sm-2 control-label">Part No:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtPartNo" placeholder="' + row.partNo + '" />\
+                        </div>\
+                    </div>';
+
+
+        //jigNo
+        strHtml += '<div class="form-group">\
+                        <label for="txtJigNo" class="col-sm-2 control-label">Jig No:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtJigNo" placeholder="' + row.jigNo + '" />\
+                        </div>\
+                    </div>';
+
+        strHtml += '<hr/>';
+
+
+        //total, setup
+        strHtml += '<div class="form-group">\
+                        <label for="txtTotalQty" class="col-sm-2 control-label">Total Qty:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtTotalQty" placeholder="' + row.totalQty + '" />\
+                        </div>\
+                        <label for="txtSetup" class="col-sm-2 control-label">Setup Qty:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtSetup" placeholder="' + row.setup + '" />\
+                        </div>\
+                    </div>';
+
+
+        //wasted material01,02
+        strHtml += '<div class="form-group">\
+                        <label for="txtWastedMaterial01" class="col-sm-2 control-label">Wasted Material 1:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtWastedMaterial01" placeholder="' + row.wastedMaterial01 + '" />\
+                        </div>\
+                        <label for="txtWastedMaterial02" class="col-sm-2 control-label">Wasted Material 2:</label>\
+                        <div class="col-sm-4">\
+                            <input type="text" class="form-control" id="txtWastedMaterial02" placeholder="' + row.wastedMaterial02 + '" />\
+                        </div>\
+                    </div>';
+
+
+
+        $('#updatingTrackingForm').html(strHtml);
+
+        $('#modalUpdateForm').modal('show');
+    }
+
+    function initDelForm(trackingID) {
+        
+        //trackingID
+        var strHtml = '<div class="row">\
+                        <label class="col-sm-2">Tracking ID:</label>\
+                        <label class="col-sm-9" id="lbTrackingID">' + trackingID + '</label>\
+                        <label class="col-sm-1" id="lbOperationFlag" style="display: none;">delete</label>\
+                    </div>';
+
+
+        $('#updatingTrackingForm').html(strHtml);
+
+
+        $('#modalLogin').modal('show');
+    }
+    
+
+
+
+    function updateValidation() {
+
+        var reg = new RegExp("^[0-9]*$");
+
+        var totalQty = $('#txtTotalQty').val();
+        var setup = $('#txtSetup').val();
+        var wastedMaterial01 = $('#txtWastedMaterial01').val();
+        var wastedMaterial02 = $('#txtWastedMaterial02').val();
+
+        if (!reg.test(totalQty) && totalQty != '') {
+            alert("please input number!");
+            $('#txtTotalQty').val('');
+            $('#txtTotalQty').focus();
+            return false;
+        }
+
+        if (!reg.test(setup) && setup != '') {
+            alert("please input number!");
+            $('#txtSetup').val('');
+            $('#txtSetup').focus();
+            return false;
+        }
+
+        if (!reg.test(wastedMaterial01) && wastedMaterial01 != '') {
+            alert("please input number!");
+            $('#txtWastedMaterial01').val('');
+            $('#txtWastedMaterial01').focus();
+            return false;
+        }
+
+        if (!reg.test(wastedMaterial02) && wastedMaterial02 != '') {
+            alert("please input number!");
+            $('#txtWastedMaterial02').val('');
+            $('#txtWastedMaterial02').focus();
+            return false;
+        }
+
+
+        $('#modalLogin').modal('show');
+    }
+    
+
+
+    function loginSubmit() {
+
+
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+
+
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: 'Moulding',
+                Authority: 'Engineer'
+            },
+            success: function (data) {
+
+                //login fail   
+                if (data != true) {
+                    alert(data);
+                    return false;
+                }
+
+
+
+               
+                var trackingID = $('#lbTrackingID').text();
+                var flag = $('#lbOperationFlag').text();
+
+
+
+                if (flag == 'update') {
+
+
+                    var row = $("#tableTrackingList").bootstrapTable('getRowByUniqueId', trackingID);
+
+
+                    var model = '';
+                    var partNo = '';
+                    var jigNo = '';
+                    var totalQty = '';
+                    var setup = '';
+                    var wastedMaterial01 = '';
+                    var wastedMaterial02 = '';
+
+
+                    if ( $('#txtModel').val() != '') {
+                        model = $('#txtModel').val();
+                    } else {
+                        model = row.model;
+                    }
+                    if ($('#txtPartNo').val() != '') {
+                        partNo = $('#txtPartNo').val();
+                    } else {
+                        partNo = row.partNo;
+                    }
+                    if ($('#txtJigNo').val() != '') {
+                        jigNo = $('#txtJigNo').val();
+                    } else {
+                        jigNo = row.jigNo;
+                    }
+                    if ($('#txtTotalQty').val() != '') {
+                        totalQty = $('#txtTotalQty').val();
+                    } else {
+                        totalQty = row.totalQty;
+                    }
+                    if ($('#txtSetup').val() != '') {
+                        setup = $('#txtSetup').val();
+                    } else {
+                        setup = row.setup;
+                    }
+                    if ($('#txtWastedMaterial01').val() != '') {
+                        wastedMaterial01 = $('#txtWastedMaterial01').val();
+                    } else {
+                        wastedMaterial01 = row.wastedMaterial01;
+                    }
+                    if ($('#txtWastedMaterial02').val() != '') {
+                        wastedMaterial02 = $('#txtWastedMaterial02').val();
+                    } else {
+                        wastedMaterial02 = row.wastedMaterial02;
+                    }
+
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: apiUpdateTracking,
+                        data: {
+                            TrackingID: trackingID,
+                            Model: model,
+                            PartNo: partNo,
+                            JigNo: jigNo,
+                            TotalQty: totalQty,
+                            Setup: setup,
+                            WastedMaterial01: wastedMaterial01,
+                            WastedMaterial02: wastedMaterial02
+                        },
+                        success: function (data) {
+
+                            //刷新列表
+                            if (data == true) {
+                                search();
+
+                                $('#modalUpdateForm').modal('hide');
+                                $('#modalLogin').modal('hide');
+
+
+
+                                alert('Sucess');
+                            } else {
+                                alert('Update Fail');
+                            }
+
+
+                            $('#txtUsername').val('');
+                            $('#txtPassword').val('');
+                          
+                        },
+                        error: function () {
+                            alert("Exception happend during updating");
+                        }
+                    });
+                }
+                else if (flag == 'delete') {
+
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: apiDeleteTracking,
+                        data: {
+                            TrackingID: trackingID
+                        },
+                        success: function (data) {
+
+                            //刷新列表
+                            if (data == true) {
+                                search();
+
+                                $('#modalUpdateForm').modal('hide');
+                                $('#modalLogin').modal('hide');
+
+                                alert('Sucess');
+                            } else {
+                                alert('Delete Fail');
+                            }
+
+                            $('#txtUsername').val('');
+                            $('#txtPassword').val('');
+                        },
+                        error: function () {
+                            alert("Exception happend during deleting");
+                        }
+                    });
+
+
+                }
+
+
+            },
+            error: function () {
+                alert("a exception happend during login !");
+            }
+        });
+
+
+    }
+
+
+
+</script>

@@ -1,0 +1,274 @@
+﻿
+@{
+    ViewBag.Title = "AttendanceChart";
+}
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">User Attendance Chart</span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlDepartment">Department:</label>
+                    <select id="ddlDepartment" class="form-control">
+                        <option value="">All</option>
+                        <option value="Moulding">Moulding</option>
+                        <option value="Painting">Painting</option>
+                        <option value="Laser">Laser</option>
+                        <option value="PQC">PQC</option>
+                        <option value="Assembly">Assembly</option>
+                        <option value="Office">Office</option>
+                    </select>
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate"  onclick="generateChart();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+
+    <div class="row panel panel-default">
+        <div class="col-lg-12">
+            <div id="chartAttendance" style="width:100%; height:700px;"></div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Dashboard CSS JS/JS/LASER_MachineSetting.js"></script>
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+
+    var apiGetAttendanceChartData = window.globalConfig.rootDirectory + '/Attendance/GetChartData';
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    //初始化echart
+    var attendanceChart = echarts.init(document.getElementById('chartAttendance'));
+  
+    function generateChart() {
+
+      
+        if ($("#txtDateFrom").val() == '') {
+            alert('Date From can not be empty, please choose !')
+            return false;
+        }
+        if ($("#txtDateTo").val() == '') {
+            alert('Date To can not be empty, please choose !')
+            return false;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetAttendanceChartData,
+            data: {
+                "DateFrom": $("#txtDateFrom").val(),
+                "DateTo": $("#txtDateTo").val(),
+                "Department": $("#ddlDepartment").val()                
+            },
+            success: function (data) {
+
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('There is no record found, Please try again!');
+                    return false;
+                }
+
+                var axisXLabelData = [];
+                var attDaysDataArray = [];
+                var leaveDaysDataArray = [];
+                //var rateDataArray = [];
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var empoyeeID = data[i].empoyeeID;
+                    axisXLabelData.push(empoyeeID);
+
+
+                    var attend = data[i].attendanceDays;
+                    var leave = data[i].leaveDays;
+                    //var rate = data[i].attendaneRate;
+
+                    attDaysDataArray.push(attend);
+                    leaveDaysDataArray.push(leave);
+                    //rateDataArray.push(rate);                    
+                }
+
+                             
+                var attendOption = {
+
+                    color: ['#91c7ae', '#c23531'],
+
+
+                    title: {
+                        text: 'User Attendance Chart'
+                    },
+
+                    legend: {
+                        data: ['Attendance Days', 'Leave Days']
+                    },
+
+                    tooltip: {
+                        show: true,
+                        //trigger: 'axis',
+                        crossStyle: {
+                            color: '#999'
+                        },
+                        //自定义tooltip格式 
+                        formatter: function (params) {
+                           
+                            var dataModel = data.find(function (x) {
+                                return x.empoyeeID == params.name;
+                            })
+                     
+                            var res = '<div>';
+                            res += '<p><b>' + dataModel.empoyeeID + '  -  ' + dataModel.userName + '</b></p>';
+                            res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#91c7ae;"></span>Attendance:' + dataModel.attendanceDays + ' Days</p>';
+                            res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#c23531;"></span>Leave: ' + dataModel.leaveDays + ' Days</p>';
+                            res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#FFA500;"></span>Attend Rate: ' + dataModel.attendaneRate + '% </p>';
+                            res += "</div>";
+                            return res;
+                        }
+                    },
+                    
+                    xAxis: {
+                        type: 'category',
+                        name: 'Employee ID',
+                        data: axisXLabelData,//X轴数据 数组
+                        axisLabel: {
+                            rotate: -40   //X轴 倾斜角度
+                        },
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'Days',
+                            //min: 0,
+                            //max: 250,
+                            //interval: 50,
+                            //axisLabel: {
+                            //    formatter: '{value} ml'
+                            //}
+                        },
+                        //{
+                        //    type: 'value',
+                        //    name: 'Attendane Rate',
+                        //    min: 0,
+                        //    max: 100,
+                        //    interval: 10,
+                        //    axisLabel: {
+                        //        formatter: '{value} %'
+                        //    }
+                        //}
+                    ],
+                    
+                    series: [
+                        {
+                            name: 'Attendance Days',
+                            type: 'bar',
+                            stack: 'user',
+                            data: attDaysDataArray,
+                            label: {
+                                show: true,
+                                position: 'insideTop'
+                            },
+                        },
+                        {
+                            name: 'Leave Days',
+                            type: 'bar',
+                            stack: 'user',
+                            data: leaveDaysDataArray,
+                            label: {
+                                show: true,
+                                position: 'insideTop'
+                            },
+                        }
+                      
+                        //{
+                        //    name: 'Attendance Rate',
+                        //    type: 'line',
+                        //    yAxisIndex: 1,
+                        //    data: rateDataArray
+                        //}
+                    ]
+                };
+
+
+                attendanceChart.clear();
+                attendanceChart.setOption(attendOption);
+
+            },
+            error: function (e) {
+                alert("Get chart data error !");
+            }
+        });
+    }
+
+
+  
+
+
+    $(window).resize(function () {
+        attendanceChart.resize();
+    });
+
+
+
+
+
+
+
+</script>

@@ -1,0 +1,38 @@
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\Common.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\Common.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\StaticRes.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\DBHelp.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\bin\Release\StaticRes.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\obj\Release\Common.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\Common\Common\obj\Release\Common.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\Common.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\Common.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\obj\Release\Common.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\Common\Common\obj\Release\Common.pdb
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\Common.dll
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\Common.pdb
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\DBHelp.dll
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\StaticRes.dll
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\System.Net.Http.dll
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\DBHelp.pdb
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\bin\Release\StaticRes.pdb
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\obj\Release\Common.dll
+D:\Software Project\Taiyo\DashboardTTS\Common\Common\obj\Release\Common.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\Common.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\Common.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\DBHelp.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\StaticRes.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\System.Net.Http.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\DBHelp.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\bin\Release\StaticRes.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\obj\Release\Common.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\Common\Common\obj\Release\Common.pdb

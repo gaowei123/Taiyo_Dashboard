@@ -1,0 +1,398 @@
+﻿
+@{
+    ViewBag.Title = "MachineUtilizationChart";
+}
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Machine Utilization Chart</span>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Shift:</label>
+                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                    </select>
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default" style="padding-top:10px;" >
+            <div id="chartStatus" style="width:100%;height:700px;"></div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Dashboard CSS JS/JS/LASER_MachineSetting.js"></script>
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var apiGetStatusChartData = window.globalConfig.rootDirectory + '/MOULDMachineStatus/GetStatusChartData';
+
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+
+    var chartStatus = echarts.init(document.getElementById('chartStatus'));
+
+
+    $(document).ready(function () {
+        var day = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateFrom').val(day);
+        $('#txtDateTo').val(day);
+
+        search();
+    });
+
+
+    function search() {
+
+        var datefrom = $("#txtDateFrom").val();
+        if (datefrom == '') {
+            alert('Date From can not be empty!');
+            return false;
+        }
+
+        var dateto = $("#txtDateTo").val();
+        if (dateto == '') {
+            alert('Date To can not be empty!');
+            return false;
+        }
+
+   
+
+    
+        //set chart
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetStatusChartData,
+            data: {
+                DateFrom: $("#txtDateFrom").val(),
+                DateTo: $("#txtDateTo").val(),
+                Shift: $("#ddlShift").val()
+            },
+            success: function (data) {
+
+
+
+                var axisXLabelData = [];
+             
+
+
+
+                var seriesData_running = [];
+                var seriesData_adjustment = [];
+                var seriesData_noSchedule = [];
+                var seriesData_mouldTesting = [];
+                var seriesData_materialTesting = [];
+                var seriesData_changeModel = [];
+                var seriesData_noOperator = [];
+                var seriesData_mcStop = [];
+                var seriesData_mouldDamage = [];
+                var seriesData_breakdown = [];
+                var seriesData_meal = [];
+                var seriesData_shutdown = [];
+
+
+                for (var i = 0; i < data.length; i++) {
+
+                    //x轴坐标.
+                    var asixNo = data[i].machineID;
+                    axisXLabelData.push(asixNo);
+
+
+                    seriesData_running.push(data[i].running);
+                    seriesData_adjustment.push(data[i].adjustment);
+                    seriesData_noSchedule.push(data[i].noSchedule);
+                    seriesData_mouldTesting.push(data[i].mouldTesting);
+                    seriesData_materialTesting.push(data[i].materialTesting);
+                    seriesData_changeModel.push(data[i].changeModel);
+                    seriesData_noOperator.push(data[i].noOperator);
+                    seriesData_mcStop.push(data[i].mcStop);
+                    seriesData_mouldDamage.push(data[i].mouldDamage);
+                    seriesData_breakdown.push(data[i].breakdown);
+                    seriesData_meal.push(data[i].meal);
+                    seriesData_shutdown.push(data[i].shutdown);
+                                       
+                }
+
+
+                var attendOption = {
+
+                    color:['Green','Orange','Blue','BlueViolet','Brown','Yellow','DeepPink','BurlyWood','Gray','darkred','Red'],
+
+                    title: {
+                        text: ''
+                    },
+
+                    legend: {
+                        data: ['Running', 'Adjustment', 'Mould Testing', 'Material Testing', 'Change Model', 'No Schedule', 'No Operator', 'Meal', 'ShutDown', 'Break Down', 'Damage Mould']
+                    },
+
+                    tooltip: {
+                        show: true,
+                        trigger: 'axis',
+                        crossStyle: {
+                            color: '#999'
+                        },
+                        //自定义tooltip格式
+                        //formatter: function (params) {
+
+                        //    var dataModel = data.find(function (x) {
+                        //        return x.asixNo == params.name;
+                        //    })
+
+                        //    var res = '<div>';
+                        //    res += '<p>' + dataModel.asixNo + '</p>';
+                        //    res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#00B050;"></span>Attendance:  ' + dataModel.utilization + '%</p>';
+                        //    res += "</div>";
+                        //    return res;
+                        //}
+                    },
+
+                    xAxis: {
+                        type: 'category',
+                        name: 'Machine',
+                        data: axisXLabelData,//X轴数据 数组
+                        axisLabel: {
+                            interval: 0,
+                            rotate: 0   //X轴 倾斜角度
+                        },
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '',
+                            min: 0,
+                            max: 100,
+                            interval: 20,
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
+                        }
+
+                    ],
+
+                    series: [
+                         {
+                             name: 'Running',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_running,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Adjustment',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_adjustment,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Mould Testing',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_mouldTesting,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Material Testing',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_materialTesting,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Change Model',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_changeModel,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                              name: 'No Schedule',
+                              type: 'bar',
+                              stack: 'status',
+                              data: seriesData_noSchedule,
+                              label: {
+                                  show: true,
+                                  position: 'inside',
+                                  formatter: function (params) { //标签内容
+                                      return params.value + '%';
+                                  }
+                              }
+                          },
+                         {
+                             name: 'No Operator',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_noOperator,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Meal',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_meal,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                                 name: 'ShutDown',
+                                 type: 'bar',
+                                 stack: 'status',
+                                 data: seriesData_shutdown,
+                                 label: {
+                                     show: true,
+                                     position: 'inside',
+                                     formatter: function (params) { //标签内容
+                                         return params.value + '%';
+                                     }
+                                 }
+                             },
+                         {
+                             name: 'Break Down',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_breakdown,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         },
+                         {
+                             name: 'Damage Mould',
+                             type: 'bar',
+                             stack: 'status',
+                             data: seriesData_mouldDamage,
+                             label: {
+                                 show: true,
+                                 position: 'inside',
+                                 formatter: function (params) { //标签内容
+                                     return params.value + '%';
+                                 }
+                             }
+                         }
+                    ]
+                };
+
+
+                chartStatus.clear();
+                chartStatus.setOption(attendOption);
+
+            },
+            error: function (e) {
+                alert("Get chart data error !");
+            }
+        });
+
+
+
+    }
+
+
+
+
+    $(window).resize(function () {
+              chartStatus.resize();
+    });
+
+
+</script>

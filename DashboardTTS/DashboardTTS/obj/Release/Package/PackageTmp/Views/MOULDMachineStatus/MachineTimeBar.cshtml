@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "MachineTimeBar";
+}
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Moulding Operation Status</span>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12" style="padding:0px; margin-top:10px;">
+            <div id="chartTimeBar" style="width:100%;height:700px;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Dashboard CSS JS/JS/LASER_MachineSetting.js"></script>
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+<script type="text/javascript">
+
+    var apiTimeBarData = window.globalConfig.rootDirectory + '/MOULDMachineStatus/GetTimeBarData';
+
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+
+    var chartStatus = echarts.init(document.getElementById('chartStatus'));
+
+
+    $(document).ready(function () {
+        var day = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateFrom').val(day);
+        $('#txtDateTo').val(day);
+
+        search();
+    });
+
+
+    function search() {
+
+        var datefrom = $("#txtDateFrom").val();
+        if (datefrom == '') {
+            alert('Date From can not be empty!');
+            return false;
+        }
+
+        var dateto = $("#txtDateTo").val();
+        if (dateto == '') {
+            alert('Date To can not be empty!');
+            return false;
+        }
+
+
+
+
+        //set chart
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiTimeBarData,
+            data: {
+                DateFrom: $("#txtDateFrom").val(),
+                DateTo: $("#txtDateTo").val()
+            },
+            success: function (data) {
+
+
+
+
+            },
+            error: function (e) {
+                alert("Get chart data error !");
+            }
+        });
+
+
+
+    }
+
+
+
+
+    $(window).resize(function () {
+              chartStatus.resize();
+    });
+
+
+</script>

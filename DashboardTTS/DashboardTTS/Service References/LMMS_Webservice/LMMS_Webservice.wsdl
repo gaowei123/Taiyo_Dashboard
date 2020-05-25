@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ARSWHSuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ARSWHSuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ARSWHSuri.org/">
+      <s:element name="LotRegister">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SystemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MachineID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="JobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Operation" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LotRegisterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="LotRegisterResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MrpLotDebug">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SystemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MachineID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="JobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Operation" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MrpLotDebugResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MrpLotDebugResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MrpLotInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SystemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MachineID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="JobID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Operation" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MrpLotInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MrpLotInfoResult" type="tns:MRP_SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MRP_SearchResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="isCorrectResult" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TravellerData" type="tns:MRP_SearchResult_TravellerData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MRP_SearchResult_TravellerData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Item" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="InQuantity" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="StartOn" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Lotno" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="LocalTest_MrpLotInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="JobID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LocalTest_MrpLotInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LocalTest_MrpLotInfoResult" type="tns:MRP_SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="MRP_SearchResult" nillable="true" type="tns:MRP_SearchResult" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="LotRegisterSoapIn">
+    <wsdl:part name="parameters" element="tns:LotRegister" />
+  </wsdl:message>
+  <wsdl:message name="LotRegisterSoapOut">
+    <wsdl:part name="parameters" element="tns:LotRegisterResponse" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugSoapIn">
+    <wsdl:part name="parameters" element="tns:MrpLotDebug" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugSoapOut">
+    <wsdl:part name="parameters" element="tns:MrpLotDebugResponse" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:MrpLotInfo" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:MrpLotInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:LocalTest_MrpLotInfo" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:LocalTest_MrpLotInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugHttpGetIn">
+    <wsdl:part name="SystemID" type="s:string" />
+    <wsdl:part name="MachineID" type="s:string" />
+    <wsdl:part name="JobID" type="s:string" />
+    <wsdl:part name="Operation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoHttpGetIn">
+    <wsdl:part name="SystemID" type="s:string" />
+    <wsdl:part name="MachineID" type="s:string" />
+    <wsdl:part name="JobID" type="s:string" />
+    <wsdl:part name="Operation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:MRP_SearchResult" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoHttpGetIn">
+    <wsdl:part name="JobID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:MRP_SearchResult" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugHttpPostIn">
+    <wsdl:part name="SystemID" type="s:string" />
+    <wsdl:part name="MachineID" type="s:string" />
+    <wsdl:part name="JobID" type="s:string" />
+    <wsdl:part name="Operation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotDebugHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoHttpPostIn">
+    <wsdl:part name="SystemID" type="s:string" />
+    <wsdl:part name="MachineID" type="s:string" />
+    <wsdl:part name="JobID" type="s:string" />
+    <wsdl:part name="Operation" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="MrpLotInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:MRP_SearchResult" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoHttpPostIn">
+    <wsdl:part name="JobID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LocalTest_MrpLotInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:MRP_SearchResult" />
+  </wsdl:message>
+  <wsdl:portType name="LMMS_WebserviceSoap">
+    <wsdl:operation name="LotRegister">
+      <wsdl:input message="tns:LotRegisterSoapIn" />
+      <wsdl:output message="tns:LotRegisterSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotDebug">
+      <wsdl:input message="tns:MrpLotDebugSoapIn" />
+      <wsdl:output message="tns:MrpLotDebugSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <wsdl:input message="tns:MrpLotInfoSoapIn" />
+      <wsdl:output message="tns:MrpLotInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <wsdl:input message="tns:LocalTest_MrpLotInfoSoapIn" />
+      <wsdl:output message="tns:LocalTest_MrpLotInfoSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="LMMS_WebserviceHttpGet">
+    <wsdl:operation name="MrpLotDebug">
+      <wsdl:input message="tns:MrpLotDebugHttpGetIn" />
+      <wsdl:output message="tns:MrpLotDebugHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <wsdl:input message="tns:MrpLotInfoHttpGetIn" />
+      <wsdl:output message="tns:MrpLotInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <wsdl:input message="tns:LocalTest_MrpLotInfoHttpGetIn" />
+      <wsdl:output message="tns:LocalTest_MrpLotInfoHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="LMMS_WebserviceHttpPost">
+    <wsdl:operation name="MrpLotDebug">
+      <wsdl:input message="tns:MrpLotDebugHttpPostIn" />
+      <wsdl:output message="tns:MrpLotDebugHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <wsdl:input message="tns:MrpLotInfoHttpPostIn" />
+      <wsdl:output message="tns:MrpLotInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <wsdl:input message="tns:LocalTest_MrpLotInfoHttpPostIn" />
+      <wsdl:output message="tns:LocalTest_MrpLotInfoHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LMMS_WebserviceSoap" type="tns:LMMS_WebserviceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="LotRegister">
+      <soap:operation soapAction="http://ARSWHSuri.org/LotRegister" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotDebug">
+      <soap:operation soapAction="http://ARSWHSuri.org/MrpLotDebug" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <soap:operation soapAction="http://ARSWHSuri.org/MrpLotInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <soap:operation soapAction="http://ARSWHSuri.org/LocalTest_MrpLotInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LMMS_WebserviceSoap12" type="tns:LMMS_WebserviceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="LotRegister">
+      <soap12:operation soapAction="http://ARSWHSuri.org/LotRegister" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotDebug">
+      <soap12:operation soapAction="http://ARSWHSuri.org/MrpLotDebug" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <soap12:operation soapAction="http://ARSWHSuri.org/MrpLotInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <soap12:operation soapAction="http://ARSWHSuri.org/LocalTest_MrpLotInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LMMS_WebserviceHttpGet" type="tns:LMMS_WebserviceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="MrpLotDebug">
+      <http:operation location="/MrpLotDebug" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <http:operation location="/MrpLotInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <http:operation location="/LocalTest_MrpLotInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LMMS_WebserviceHttpPost" type="tns:LMMS_WebserviceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="MrpLotDebug">
+      <http:operation location="/MrpLotDebug" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MrpLotInfo">
+      <http:operation location="/MrpLotInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LocalTest_MrpLotInfo">
+      <http:operation location="/LocalTest_MrpLotInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LMMS_Webservice">
+    <wsdl:port name="LMMS_WebserviceSoap" binding="tns:LMMS_WebserviceSoap">
+      <soap:address location="http://localhost:82/LMMS_Webservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LMMS_WebserviceSoap12" binding="tns:LMMS_WebserviceSoap12">
+      <soap12:address location="http://localhost:82/LMMS_Webservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LMMS_WebserviceHttpGet" binding="tns:LMMS_WebserviceHttpGet">
+      <http:address location="http://localhost:82/LMMS_Webservice.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LMMS_WebserviceHttpPost" binding="tns:LMMS_WebserviceHttpPost">
+      <http:address location="http://localhost:82/LMMS_Webservice.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

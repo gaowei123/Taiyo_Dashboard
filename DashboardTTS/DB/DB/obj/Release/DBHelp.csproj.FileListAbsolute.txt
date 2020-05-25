@@ -1,0 +1,19 @@
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\DB\DB\bin\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\DB\DB\bin\Release\DBHelp.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\DB\DB\obj\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS - Mine\DB\DB\obj\Release\DBHelp.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+E:\Work\Project\Taiyo\Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
+D:\Software Project\Taiyo\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+D:\Software Project\Taiyo\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+D:\Software Project\Taiyo\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+D:\Software Project\Taiyo\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+D:\Software Project\Taiyo\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb

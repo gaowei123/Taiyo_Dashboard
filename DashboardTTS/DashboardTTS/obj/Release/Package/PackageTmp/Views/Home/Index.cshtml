@@ -1,0 +1,245 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<link href="~/Dashboard CSS JS/CSS/HomePage.css" rel="stylesheet" />
+
+
+
+
+<div class="container-fluid" style="width:1900px;">
+    <div class="row topTitleRow">
+        <div class="col-md-9">
+            <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span>Production Home Page</span>
+        </div>
+        <div class="col-md-3">
+            <label id="lbDate" style="color:white; width:100%; text-align:right;"></label>
+        </div>
+    </div>
+
+
+
+    <div class="row panel panel-default" style="margin-top:10px; padding:0px;">
+        <div class="col-sm-12 col-md-12">
+
+            @*标题行*@
+            <div class="row secondTitleRow">
+                <div class="col-md-1">
+                    <label>Section</label>
+                </div>
+                <div class="col-md-1">
+                    <label>Real Output</label>
+                </div>
+                <div class="col-md-1">
+                    <label>Real Inventory</label>
+                </div>
+                <div class="col-md-1">
+                    <label>Utilization</label>
+                </div>
+                <div class="col-md-8">
+                    <label>Operating Status</label>
+                </div>
+            </div>
+
+
+            @*moulding*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divMouldingSection" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divMouldingOutput" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divMouldingInventory" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div id="divMouldingMachineStatus" class="col-md-8"></div>
+            </div>
+
+
+            @*painting*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divPaintingSection" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divPaintingOutput" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divPaintingInventory" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div id="divPaintingMachineStatus" class="col-md-8"></div>
+            </div>
+
+
+            @*laser*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divLaserSection" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divLaserOutput" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divLaserInventory" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div id="divLaserMachineStatus" class="col-md-8"></div>
+            </div>
+
+
+            @*pqc online*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divOnlineSection" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divOnlineOutput" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div id="divOnlineInventory" class="cell"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div id="divOnlineMachineStatus" class="col-md-8"></div>
+            </div>
+
+
+            @*pqc wip*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divWIPSection"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divWIPOutput"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divWIPInventory"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div class="col-md-8" id="divWIPMachineStatus"></div>
+            </div>
+
+
+            @*pqc packing*@
+            <div class="row divRowBorder">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divPackSection"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divPackOutput"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell" id="divPackInventory"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">NA</div>
+                    </div>
+                </div>
+                <div class="col-md-8" id="divPackMachineStatus"></div>
+            </div>
+
+
+            @*assmbly*@
+            <div class="row">
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">
+                            Assembly
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">
+                            NA
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">
+                            NA
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 divColBorder">
+                    <div class="wrapper">
+                        <div class="cell">
+                            NA
+                        </div>
+                    </div>
+                </div>
+                <div id="divAssyMachineStatus" class="col-md-8"></div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+<script src="~/Dashboard CSS JS/JS/HomePage.js"></script>

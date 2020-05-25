@@ -1,0 +1,4 @@
+D:\Projects\LMMS\SRC\DB\DB\bin\Debug\DB.dll
+D:\Projects\LMMS\SRC\DB\DB\bin\Debug\DB.pdb
+D:\Projects\LMMS\SRC\DB\DB\obj\Debug\DB.dll
+D:\Projects\LMMS\SRC\DB\DB\obj\Debug\DB.pdb

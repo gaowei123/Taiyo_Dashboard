@@ -1,0 +1,884 @@
+﻿
+@{
+    ViewBag.Title = "PQCMaintenance";
+}
+
+
+<style>
+    .container-fluid{
+        max-width:1480px;
+    }
+</style>
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">PQC Online&WIP Job Maintance</span>
+    </div>
+
+
+    @*Job Info & end functin*@
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-12 panel panel-default">
+            <div class="row" style="padding:10px 10px 0px 18px;">
+                <div class="col-md-2">
+                    <b>Job Info :</b>
+                </div>
+                <div class="col-md-9">
+                    <label id="lbDay"></label>
+                    &nbsp;-&nbsp;
+                    <label id="lbShift"></label>
+                    &nbsp;-&nbsp;
+                    <label id="lbJobNo"></label>
+                    &nbsp;-&nbsp;
+                    <label id="lbTrackingID"></label>
+                </div>
+            </div>
+            <div class="row" style="margin:14px 4px 4px 4px;">
+                <div class="col-md-2">
+                    Part No :
+                </div>
+                <div class="col-sm-9">
+                    <label id="lbPartNo"></label>
+                </div>
+            </div>
+            <div class="row " style="margin:4px;">
+                <div class="col-md-2">
+                    MRP QTY :
+                </div>
+                <div class="col-md-7">
+                    <label id="lbMrpQty"></label>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label>
+                        <input type="radio" name="complete" id="radioComplete" value="1"> Lot Complete
+                    </label>
+                    &nbsp;&nbsp;
+                    <label>
+                        <input type="radio" name="complete" id="radioNotComplete" value="0"> Lot Not Complete
+                    </label>
+                    <button type="button" class="btn btn-primary" style="width:70px;" onclick="initEndLogin();">End</button> @*根据End按钮 生成login中绑定endJob function的submit按钮*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*material info list*@
+    <div class="row">
+        <div class="col-md-12 panel panel-default" id="divForm">
+
+            
+
+
+                <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
+                    <div class="col-md-12">
+                        <h4><b>Material Info :</b></h4>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-hover" style="width:500px;margin-bottom:10px;border:1px solid 	#DCDCDC;">
+                    <thead class="thead-title">
+                        <tr><th>SN</th><th>Material No</th><th>Pass Qty</th><th>Reject Qty</th></tr>
+                    </thead>
+                    <tbody id="tbMaterial"></tbody>
+                </table>
+
+
+                <hr />
+
+
+
+                @*defect detail info*@
+                <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
+                    <div class="col-md-11">
+                        <h4><b>Defect Info :</b></h4>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary" style="width:100px;" onclick="initUpdateLogin();">Update</button>  @*根据update按钮 生成login中绑定updateqty function的submit按钮*@
+                    </div>
+                </div>
+
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist" id="ulMaterialTab"></ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content" id="divMaterialTabContent" style="margin-top:10px;"></div>
+
+           
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- 等待后台处理缓冲 -->
+<div id="divLoading" style="position:fixed;left:0;top:0; width:100%;height:100%;background-color:black; opacity:0.8; z-index:9999;display:none;">
+    <div style="position: absolute; left:50%; top:50%; transform:translate(-50%,-50%);">
+        <div class="row text-center">
+            <i class="fa fa-spinner fa-spin fa-5x"></i>
+        </div>
+        <div class="row text-center">
+            <span><font size="25" color="white">Updating, Please wait...</font></span>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+
+    //============================= 初始化界面 & 界面操作逻辑 =============================//
+    var apiGetJobInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetJobInfo';
+    var apiGetMaterialInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetMaterialInfo';
+    var apiGetDefectInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetDefectInfo';
+    
+    //init page
+    $(document).ready(function () {
+
+
+        var jobNo = getUrlParam('JobID');
+        var trackingID = getUrlParam('TrackingID');
+
+        //var jobNo = 'JOT2000003936';
+        //var trackingID = 'c79ac943-6075-4a45-899a-36f16837c327';
+
+        $('#lbJobNo').text(jobNo);
+        $('#lbTrackingID').text(trackingID);
+
+
+
+
+        //init job info
+        initJobInfo();
+
+        //init material list table & defect detail form
+        initMaterialInfoAndMaterialTab();
+
+    });
+
+
+    function initJobInfo() {
+
+        var jobNo = $('#lbJobNo').text();
+        var trackingID = $('#lbTrackingID').text();
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetJobInfo,
+            data: {
+                TrackingID: trackingID,
+                JobNo: jobNo
+            },
+            success: function (data) {
+
+                var date = new Date(parseInt(data.day.replace("/Date(", "").replace(")/", ""), 10));
+
+
+                $('#lbDay').text(dateFormat('yyyy/MM/dd HH:mm', date));
+                $('#lbShift').text(data.shift);
+                $('#lbJobNo').text(data.jobNo);
+                $('#lbTrackingID').text(data.trackingID);
+
+                $('#lbPartNo').text(data.partNo);
+                $('#lbMrpQty').text(data.mrpQty);
+
+
+            },
+            error: function () {
+                alert("Init job info error !");
+            }
+        });
+
+    }
+
+
+    function initMaterialInfoAndMaterialTab() {
+
+        var trackingID = $('#lbTrackingID').text();
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetMaterialInfo,
+            data: {
+                TrackingID: trackingID
+            },
+            success: function (data) {
+
+                if (data == null || data.length ==0)
+                    return;
+                
+
+                //初始化 material table
+                $('#tbMaterial').html('');
+
+                var strHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    strHtml += '<tr>\
+                                    <td>' + (data[i].sn+1) + '</td>\
+                                    <td>' + data[i].materialNo  + '</td>\
+                                    <td><input type="text" class="form-control input-sm" id="txtid_' + data[i].sn + '" value="' + data[i].passQty + '" style="width:80px;text-align:center;" placeholder="' + data[i].passQty + '" oninput="checkInputValue($(this));" /></td>\
+                                    <td>' + data[i].rejQty + '</td>\
+                                </tr>';
+                }
+                $('#tbMaterial').html(strHtml);
+
+
+
+
+
+                //初始化 material tab标签
+                $('#ulMaterialTab').html('');
+
+                var strUlHtml = '';
+                for (var i = 0; i < data.length; i++) {
+
+                    if (i==0) {
+                        strUlHtml += '<li role="presentation" class="active"><a href="#material_' + i + '" aria-controls="home" role="tab" data-toggle="tab">' + data[i].materialNo + '</a></li>';
+                    } else {
+                        strUlHtml += '<li role="presentation"><a href="#material_' + i + '" aria-controls="home" role="tab" data-toggle="tab">' + data[i].materialNo + '</a></li>';
+                    }
+                }
+                $('#ulMaterialTab').html(strUlHtml);
+
+
+
+
+                //初始化 material tab content 
+                $('#divMaterialTabContent').html('');
+
+                var strDivContentHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    if (i == 0) {
+                        strDivContentHtml += '<div role="tabpanel" class="tab-pane fade in active" id="material_' + i + '"></div>'
+                    } else {
+                        strDivContentHtml += '<div role="tabpanel" class="tab-pane fade" id="material_' + i + '"></div>'
+                    }
+                }
+                $('#divMaterialTabContent').html(strDivContentHtml);
+
+
+                //必须在material tab, tab content生成之后再初始化
+                initTabContent();
+            },
+            error: function () {
+                alert("Init job info error !");
+            }
+        });
+    }
+
+
+    function initTabContent() {
+
+
+        //循环每个 material tab, 给对应content 生成 defect
+        var arrli = $('#ulMaterialTab')[0].children;
+
+        for (var i = 0; i < arrli.length; i++) {
+
+
+
+            var materialNo = arrli[i].textContent;
+            var trackingID = $('#lbTrackingID').text();
+
+
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: apiGetDefectInfo,
+                data: {
+                    TrackingID: trackingID,
+                    MaterialNo: materialNo,
+                    TabSN: i
+                },
+                success: function (data) {
+
+                    if (data == null || data.length == 0)
+                        return;
+
+
+                    var tabSN = data[0].tabSN;
+
+                    //异步传输, 无法获取for循环到第几次.  直接把i当参数赋值到 defectInfo.tabSN 来回传.
+                    $('#material_' + tabSN).html('');
+
+
+
+                    var strHtmlMouldDefect = '';
+                    var strHtmlPaintDefect = '';
+                    var strHtmlLaserDefect = '';
+                    var strHtmlOthersDefect = '';
+
+
+
+                    strHtmlMouldDefect += '<div class="row form-group">\
+                                                <div class="col-sm-12 text-center">\
+                                                    <h4><b>Moulding Defect</b></h4>\
+                                                </div>\
+                                            </div>';
+                    strHtmlPaintDefect += '<div class="row form-group">\
+                                                <div class="col-sm-12 text-center">\
+                                                    <h4><b>Paint Defect</b></h4>\
+                                                </div>\
+                                            </div>';
+                    strHtmlLaserDefect += '<div class="row form-group">\
+                                                <div class="col-sm-12 text-center">\
+                                                    <h4><b>Laser Defect</b></h4>\
+                                                </div>\
+                                            </div>';
+                    strHtmlOthersDefect += '<div class="row form-group">\
+                                                <div class="col-sm-12 text-center">\
+                                                    <h4><b>Others Defect</b></h4>\
+                                                </div>\
+                                            </div>';
+
+
+
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].defectDescription == 'Mould') {
+                            strHtmlMouldDefect += '<div class="row form-group">\
+                                                        <div class="col-sm-6 text-right">' + data[i].defectCode + '</div>\
+                                                        <div class="col-sm-2" style="padding:0px;">\
+                                                            <input type="text" class="form-control input-sm" name="defect_' + tabSN + '" id="txtid_' + tabSN + '_' + data[i].defectCodeID + '" value="' + data[i].rejQty + '"/>\
+                                                        </div>\
+                                                        <div class="col-sm-4">\
+                                                            <button class="btn btn-sm btn-danger" onclick="plusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-plus fa-lg"></i></button>\
+                                                            <button class="btn btn-sm btn-danger" onclick="minusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-minus fa-lg"></i></button>\
+                                                        </div>\
+                                                    </div>';
+                        } else if (data[i].defectDescription == 'Paint') {
+                            strHtmlPaintDefect += '<div class="row form-group">\
+                                                        <div class="col-sm-6 text-right">' + data[i].defectCode + '</div>\
+                                                        <div class="col-sm-2" style="padding:0px;">\
+                                                            <input type="text" class="form-control input-sm" name="defect_' + tabSN + '" id="txtid_' + tabSN + '_' + data[i].defectCodeID + '" value="' + data[i].rejQty + '"/>\
+                                                        </div>\
+                                                        <div class="col-sm-4">\
+                                                            <button class="btn btn-sm btn-danger" onclick="plusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-plus fa-lg"></i></button>\
+                                                            <button class="btn btn-sm btn-danger" onclick="minusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-minus fa-lg"></i></button>\
+                                                        </div>\
+                                                    </div>';
+                        } else if (data[i].defectDescription == 'Laser') {
+                            strHtmlLaserDefect += '<div class="row form-group">\
+                                                        <div class="col-sm-6 text-right">' + data[i].defectCode + '</div>\
+                                                        <div class="col-sm-2" style="padding:0px;">\
+                                                            <input type="text" class="form-control input-sm" name="defect_' + tabSN + '" id="txtid_' + tabSN + '_' + data[i].defectCodeID + '" value="' + data[i].rejQty + '"/>\
+                                                        </div>\
+                                                        <div class="col-sm-4">\
+                                                            <button class="btn btn-sm btn-danger" onclick="plusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-plus fa-lg"></i></button>\
+                                                            <button class="btn btn-sm btn-danger" onclick="minusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-minus fa-lg"></i></button>\
+                                                        </div>\
+                                                    </div>';
+                        } else if (data[i].defectDescription == 'Others') {
+                            strHtmlOthersDefect += '<div class="row form-group">\
+                                                        <div class="col-sm-6 text-right">' + data[i].defectCode + '</div>\
+                                                        <div class="col-sm-2" style="padding:0px;">\
+                                                            <input type="text" class="form-control input-sm" name="defect_' + tabSN + '" id="txtid_' + tabSN + '_' + data[i].defectCodeID + '" value="' + data[i].rejQty + '"/>\
+                                                        </div>\
+                                                        <div class="col-sm-4">\
+                                                            <button class="btn btn-sm btn-danger" onclick="plusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-plus fa-lg"></i></button>\
+                                                            <button class="btn btn-sm btn-danger" onclick="minusValue($(\'#txtid_' + tabSN + '_' + data[i].defectCodeID + '\'));"><i class="fa fa-minus fa-lg"></i></button>\
+                                                        </div>\
+                                                    </div>';
+                        }
+                    }
+
+
+
+
+                    var strHtml = '';
+
+                    strHtml += '<div class="row">';
+                    strHtml += '<div class="col-md-3" role="form">';
+                    strHtml += strHtmlMouldDefect;
+                    strHtml += '</div>';
+
+                    strHtml += '<div class="col-md-3" role="form">';
+                    strHtml += strHtmlPaintDefect;
+                    strHtml += '</div>';
+
+                    strHtml += '<div class="col-md-3" role="form">';
+                    strHtml += strHtmlLaserDefect;
+                    strHtml += '</div>';
+
+                    strHtml += '<div class="col-md-3" role="form">';
+                    strHtml += strHtmlOthersDefect;
+                    strHtml += '</div>';
+
+
+                    strHtml += '</div>';
+
+
+
+
+                    $('#material_' + tabSN).html(strHtml);
+
+
+
+
+
+                    //必须在 tab content中的input框生成之后, 再设置样式. 
+                    for (var i = 0; i < data.length; i++) {
+                        $("input[name='defect_"+i+"']").each(function () {
+                            setInputStyle($(this));
+                        });
+                    }
+
+
+
+                  
+                   
+
+                },
+                error: function () {
+                    alert("Init job info error !");
+                }
+            });
+
+        }
+    }
+
+
+    function plusValue(object) {
+        var value = object.val();
+
+        if (value == '') {
+            object.val('1');
+        } else {
+            value++;
+            object.val(value);
+        }
+
+        setInputStyle(object);
+
+        initMaterialRejQty();
+    }
+
+
+    function minusValue(object) {
+        var value = object.val();
+
+        if (value != '' && value > 0) {
+            value--;
+            object.val(value);
+        }
+
+        setInputStyle(object);
+
+        initMaterialRejQty();
+    }
+
+
+    function setInputStyle(input) {
+
+        if (input.val() == 0) {
+            input.css("backgroundColor", "white");
+            input.css("font-weight", "400");
+        } else {
+            input.css("backgroundColor", "pink");
+            input.css("font-weight", "900");
+        }
+
+        input.css("text-align", "center");
+    }
+
+
+    //根据defect rej的数量联动显示table中rej qty
+    function initMaterialRejQty() {
+
+        var tabSN = '';
+
+        var arrli = $('#ulMaterialTab')[0].children
+        for (var i = 0; i < arrli.length; i++) {
+            if (arrli[i].className == "active") {
+                tabSN = i;
+                break;
+            }
+        }
+
+        //var totalRej = 0;
+        //$("#material_" + i + " input[type='text']").each(function () {
+        //    totalRej += parseInt($(this).val());
+        //});
+
+
+        var totalRej = 0;
+        $("input[name='defect_" + i + "']").each(function () {
+            totalRej += parseInt($(this).val());
+        });
+
+
+        var rowIndex = tabSN;
+        rowIndex++;
+
+
+        var arrDr = $('#tbMaterial')[0].children;
+
+
+        for (var i = 0; i < arrDr.length; i++) {
+            if (arrDr[i].children[0].textContent == rowIndex) {
+                arrDr[i].children[3].textContent = totalRej;
+            }
+        }
+    }
+
+    //============================= 初始化界面 & 界面操作逻辑 =============================//
+
+
+
+
+
+
+
+
+
+
+    //============================= End Job =============================//
+    var apiUpdateEndJobFlag = window.globalConfig.rootDirectory + '/PQC_Product/EndJob';
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+
+    function initEndLogin() {
+
+
+        if (!$('#radioComplete').is(":checked") && !$('#radioNotComplete').is(":checked")) {
+            alert('Please choose job complete status!')         
+        } else {
+            $(".modal-footer").html('');
+
+            var strHtml = '<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>\
+                       <button type="button" class="btn btn-success" onclick="endloginSubmit();">Submit</button>';
+            $(".modal-footer").html(strHtml);
+
+            $("#modalLogin").modal('show');
+
+            $('#txtUsername').focus();
+        }
+
+     
+    }
+
+
+    function endloginSubmit() {
+
+      
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+
+
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: 'PQC',
+                Authority: 'Operator'
+            },
+            success: function (data) {
+
+                //login fail   
+                if (data != true) {
+                    alert(data);
+                    return false;
+                }
+
+
+                $('#txtUsername').val('');
+                $('#txtPassword').val('');
+
+
+                endJob();
+
+
+
+            },
+            error: function () {
+                alert("a exception happend during login !");
+            }
+        });
+
+
+    }
+
+
+    function endJob() {
+
+        var trackingID = $('#lbTrackingID').text();
+        var complete = false;
+
+        if ($('input[name="complete"]:checked').val() == 1) {
+            complete = true;
+        } else {
+            complete = false;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiUpdateEndJobFlag,
+            data: {
+                TrackingID: trackingID,
+                Complete:complete
+            },
+            success: function (data) {
+
+                if (data ==  true) {
+                    alert('End Job Sucess');
+                } else {
+                    alert('End Job Fail');
+                }
+             
+
+                $("#modalLogin").modal('hide');
+            },
+            error: function () {
+                alert("End job error !");
+            }
+        });
+    }
+
+    //============================= End Job =============================//
+    
+
+
+
+
+
+
+
+
+
+    //============================= Update Qty =============================//
+    var apiUpdateQty = window.globalConfig.rootDirectory + '/PQC_Product/UpdateQty';
+
+    function initUpdateLogin() {
+
+        $(".modal-footer").html('');
+
+        var strHtml = '<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>\
+                       <button type="button" class="btn btn-success" onclick="updateLoginSubmit();">Submit</button>';
+        $(".modal-footer").html(strHtml);
+
+        $("#modalLogin").modal('show');
+    }
+
+   
+    function updateLoginSubmit() {
+
+
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+
+
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: 'PQC',
+                Authority: 'Operator'
+            },
+
+            
+
+            success: function (data) {
+
+                //login fail   
+                if (data != true) {
+                    alert(data);
+                    return false;
+                }
+
+
+                $('#txtUsername').val('');
+                $('#txtPassword').val('');
+
+
+                updateQty();
+
+            },
+
+
+            error: function () {
+                completeUpLoading();
+                alert("a exception happend during login !");
+            }
+        });
+
+
+    }
+
+
+    function updateQty() {
+              
+        //将所有input 添加到datas对象中.
+        var datas = { TrackingID: $('#lbTrackingID').text()};
+        $("input").each(function () {
+            var id = $(this).attr("id");
+            var value = $(this).val();
+
+            datas[id] = value;
+        });
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiUpdateQty,
+            data: datas,
+
+            beforeSend: function () {
+                $("#divLoading").css("display", "block");
+            },
+
+            success: function (data) {
+
+                if (data == true) {
+                    //alert('Update Sucess');
+
+                    var jobNo = getUrlParam('JobID');
+
+                    window.location.replace("../Webform/PQC/PQCCheckingLiveReport.aspx?jobNumber=" + jobNo);
+
+                } else {
+                    alert('Update Fail');
+                }
+
+
+                $("#modalLogin").modal('hide');
+            },
+
+            complete: function () {
+                $("#divLoading").css("display", "none");
+            },
+
+            error: function () {
+
+                $("#divLoading").css("display", "none");
+
+                alert("Update Qty error !");
+            }
+        });
+
+    }
+
+
+    //material table 输入检测 是不是数字.
+    function checkInputValue(object) {
+
+
+        var reg = /^\+?[1-9][0-9]*$/;//正整数 
+
+
+        var value = object.val();
+        if (value == '')
+            return;
+
+
+        if (!reg.test(value)) {
+
+            var oldValue = value.substring(0, value.length - 1);
+            object.val(oldValue);
+
+            alert('Must input number!');
+        }
+    }
+
+    //============================= Update Qty =============================//
+
+
+
+</script>
+
+
+
