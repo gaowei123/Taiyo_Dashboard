@@ -190,12 +190,7 @@ namespace Common.BLL
 
         #endregion  Method
 
-
-
-
-
-
-
+        
 
 
         bool IsRightShift(DateTime dt, string shift)
@@ -518,12 +513,7 @@ namespace Common.BLL
 
         }
 
-
-    
-
-
-
-
+        
         public StaticRes.Global.StatusType getCurrentStatus(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sPartNo)
         {
             StaticRes.Global.StatusType eCurrentStatus = StaticRes.Global.StatusType.ShutDown;
@@ -677,6 +667,13 @@ namespace Common.BLL
 
 
 
+
+
+
+
+
+        #region 将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds整理 
+
         private List<string> GetMachineStatusList()
         {
             List<string> list = new List<string>();
@@ -690,23 +687,31 @@ namespace Common.BLL
             list.Add("POWER OFF");
             return list;
         }
-
-
-        //获取 包含year, month, day, shift等信息的集合
-        public List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> GetStatusModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus, string sShift, bool bExceptWeekend)
+        
+        private List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> GetBaseList(DateTime dDateFrom, DateTime dDateTo)
         {
-            //源数据   前延2天,后延1天, 防止漏查.
-            DataTable dtEvent = dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), sMachineID, sStatus);
-            if (dtEvent == null || dtEvent.Rows.Count == 0)
-            {
-                return null;
-            }
 
-            #region foreach dtEvent,  按照year, month, daily, shift保存到 allStatusModels中.
+            //源数据   前延2天,后延1天, 防止漏查.
+            DataTable dtEvent = dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "", "");
+            if (dtEvent == null || dtEvent.Rows.Count == 0)
+                return null;
+
+
+
+
+
+
+            Common.Model.LMMSEventLog_Model.EventLogModelForChart model;
+
+
+
+
+            //foreach dtEvent
+            //按照year, month, daily, shift保存到 allStatusModels中.
             List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> allStatusModels = new List<LMMSEventLog_Model.EventLogModelForChart>();
             foreach (DataRow dr in dtEvent.Rows)
             {
-                Common.Model.LMMSEventLog_Model.EventLogModelForChart model;
+                
                 string machineID = dr["machineID"].ToString();
                 string OEEtype = dr["currentOperation"].ToString();
                 string status = dr["eventTrigger"].ToString();
@@ -716,19 +721,28 @@ namespace Common.BLL
 
 
 
+
+
+
+                //不考虑startTime, stopTime超过1天的数据, 属于异常数据, 
+                //早期client的一个bug导致的.  好像是scan状态后重启Client导致生成2条相同状态的eventlog,
+                //但再次scan停止时, 只有一条记录会被更新, 而另一条的stoptime会一直被pingapp不停更新stoptime.
+
+                if ((stopTime - startTime).TotalDays > 1)
+                    continue;
+
+
+
+
+
+                
+
+
                 //4种情况
                 //1. 在8-8点的时间段内
                 //2. 跨8:00 或 20:00 一个时间段
                 //3. 跨8:00 和 20:00 二个时间段
                 //4. 跨三个时间段 (目前只发现,机器停一天, pingApp产生的).
-                //不考虑startTime, stopTime超过1天的数据, 属于异常数据, 
-                //早期client的一个bug导致的.  好像是scan状态后重启Client导致生成2条相同状态的eventlog, 但再次scan停止时, 只有一条记录会被更新, 而另一条的stoptime会一直被pingapp不停刷新. 
-
-
-                //超过一天跳过, 
-                if ((stopTime - startTime).TotalDays > 1)
-                    continue;
-
 
                 DateTime dDate = startTime.Date;
                 if (startTime >= dDate.AddHours(8) && stopTime >= dDate.AddHours(8) && startTime < dDate.AddHours(20) && stopTime < dDate.AddHours(20))
@@ -743,7 +757,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = startTime;
                     model.stopTime = stopTime;
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
 
                     allStatusModels.Add(model);
                     #endregion
@@ -760,11 +774,12 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = startTime;
                     model.stopTime = stopTime;
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
 
                     allStatusModels.Add(model);
                     #endregion
                 }
+                //最大范围在上.
                 else if ((startTime < dDate.AddHours(8) && stopTime > dDate.AddHours(8))  //跨 8:00 这个点
                             &&
                            (startTime < dDate.AddHours(20) && stopTime > dDate.AddHours(20)))//跨20:00 这个点
@@ -781,7 +796,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = startTime;
                     model.stopTime = dDate.AddHours(8).AddSeconds(-1);
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
                     //第二部分 8:00 - 20:00,   属于当天day
@@ -794,7 +809,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = dDate.AddHours(8);
                     model.stopTime = dDate.AddHours(20).AddSeconds(-1);
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
                     //disanbufen 20:00 - stoptime,  属于当天night
@@ -807,10 +822,11 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = dDate.AddHours(20);
                     model.stopTime = stopTime;
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
                     #endregion
                 }
+                //小范围在下
                 else if (startTime < dDate.AddHours(8) && stopTime > dDate.AddHours(8))
                 {
                     #region starttime, stoptime 跨 8:00am 这个点
@@ -827,7 +843,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = startTime;
                     model.stopTime = dDate.AddHours(8).AddSeconds(-1);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
 
@@ -841,7 +857,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = dDate.AddHours(8);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
                     model.stopTime = stopTime;
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
                     #endregion
                 }
@@ -861,7 +877,7 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = startTime;
                     model.stopTime = dDate.AddHours(20).AddSeconds(-1);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
 
@@ -875,94 +891,154 @@ namespace Common.BLL
                     model.status = status;
                     model.startTime = dDate.AddHours(20);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
                     model.stopTime = stopTime;
-                    model.totalSeconds = (model.stopTime - model.startTime).TotalSeconds;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
                     #endregion
                 }
+
             }
-            #endregion
 
 
 
-            #region 补齐所有天数
-            List<string> statusList = GetMachineStatusList();
 
-          
+
+
+            return allStatusModels;
+        }
+        
+        private List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> AddLackData(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> modelList, DateTime dDateFrom, DateTime dDateTo)
+        {
+
+            Common.Model.LMMSEventLog_Model.EventLogModelForChart model;
+            List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> lackModelList = new List<LMMSEventLog_Model.EventLogModelForChart>();
+
+
+
+
+            #region 循环每一天, 每台机器, 每个状态的 白晚班次的机器状态信息.  没有补充,时长默认为0.
             DateTime dTemp = dDateFrom.Date;
-            // 循环每一天
             while (dTemp < dDateTo)
             {
-
-                //循环每台机器
                 for (int i = 1; i < 9; i++)
                 {
-
-                    //如果选定机器, 只有循环到该机器才能继续添加.
-                    if (sMachineID != "")
+                    List<string> statusList = GetMachineStatusList();
+                    foreach (string strStatus in statusList)
                     {
-                        if (i.ToString() != sMachineID)
-                            continue;
-                    }
+                        if (strStatus == "RUNNING") continue;
 
 
-
-                    //循环每个状态
-                    foreach (string status in statusList)
-                    {
-                        //running状态除外, 在后续补充
-                        if (status == "RUNNING")
-                            continue;
-
-
-                        //如果选定状态, 只添加该状态. (running除外)
-                        if (sStatus != "" && sStatus != "RUNNING")
+                        //day
+                        var dayModel = (from a in modelList
+                                        where a.day == dTemp.Date
+                                        && a.machineID == i.ToString()
+                                        && a.status == strStatus
+                                        && a.shift == StaticRes.Global.Shift.Day
+                                        select a).FirstOrDefault();
+                        if (dayModel == null)
                         {
-                            if (status != sStatus)
-                                continue;
-                        }
-
-
-
-                        //补充 day数据
-                        var buyoffDayExist = from a in allStatusModels
-                                             where a.day == dTemp && a.shift == "Day" && a.machineID == i.ToString() && a.status == status
-                                             select a;
-                        if (buyoffDayExist == null || buyoffDayExist.Count() == 0)
-                        {
-                            LMMSEventLog_Model.EventLogModelForChart model = new LMMSEventLog_Model.EventLogModelForChart();
+                            model = new LMMSEventLog_Model.EventLogModelForChart();
                             model.year = dTemp.Year;
                             model.month = dTemp.Month;
                             model.day = dTemp;
                             model.shift = StaticRes.Global.Shift.Day;
                             model.machineID = i.ToString();
-                            model.status = status;
+                            model.status = strStatus;
+                            model.startTime = null;
+                            model.stopTime = null;
                             model.totalSeconds = 0;
-
-                            allStatusModels.Add(model);
+                            lackModelList.Add(model);
                         }
 
 
-                        //补充 night数据
-                        var buyoffNightExist = from a in allStatusModels
-                                               where a.day == dTemp && a.shift == "Night" && a.machineID == i.ToString() && a.status == status
-                                               select a;
-                        if (buyoffNightExist == null || buyoffNightExist.Count() == 0)
+                        //night
+                        var nightModel = (from a in modelList
+                                          where a.day == dTemp.Date
+                                          && a.machineID == i.ToString()
+                                          && a.status == strStatus
+                                          && a.shift == StaticRes.Global.Shift.Night
+                                          select a).FirstOrDefault();
+                        if (nightModel == null)
                         {
-                            LMMSEventLog_Model.EventLogModelForChart model = new LMMSEventLog_Model.EventLogModelForChart();
+                            model = new LMMSEventLog_Model.EventLogModelForChart();
                             model.year = dTemp.Year;
                             model.month = dTemp.Month;
                             model.day = dTemp;
                             model.shift = StaticRes.Global.Shift.Night;
                             model.machineID = i.ToString();
-                            model.status = status;
+                            model.status = strStatus;
+                            model.startTime = null;
+                            model.stopTime = null;
                             model.totalSeconds = 0;
-
-                            allStatusModels.Add(model);
+                            lackModelList.Add(model);
                         }
-
                     }
                 }
-              
+                dTemp = dTemp.AddDays(1);
+            }
+            #endregion
+
+
+
+
+
+            //将缺少的数据合并到list中.
+            modelList.AddRange(lackModelList);
+
+
+
+
+
+            #region power off, 查询该机器, 该天总时长是否为0, 是则将power off赋值 12*3600
+            
+            dTemp = dDateFrom.Date;
+            while (dTemp < dDateTo)
+            {
+                for (int i = 1  ; i < 9; i++)
+                {
+
+                    //查询这一天, 这台机器, 白班的所有信息.
+                    var machineDayList = from a in modelList
+                                  where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day
+                                  select a;
+
+
+                    //如果总时长为0, 并且start/stop time为null,  则将poweroff的时长设置为12*3600;
+                    double totalSecond = machineDayList.Sum(p => p.totalSeconds);
+                    if (totalSecond == 0)
+                    {
+                        var machinePoweroffDayModel = (from a in modelList
+                                                       where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day && a.status == "POWER OFF"
+                                                       select a).FirstOrDefault();
+                        if (machinePoweroffDayModel.startTime == null && machinePoweroffDayModel.stopTime == null)
+                        {
+                            machinePoweroffDayModel.totalSeconds = 12 * 3600;
+                        }
+                    }
+
+
+
+
+
+                    //查询这一天, 这台机器, 晚班的所有信息.
+                    var machineNightList = from a in modelList
+                                           where a.day == dTemp && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night
+                                           select a;
+
+
+                    //如果总时长为0, 并且start/stop time为null,  则将poweroff的时长设置为12*3600;
+                    totalSecond = machineNightList.Sum(p => p.totalSeconds);
+                    if (totalSecond == 0)
+                    {
+                        var machinePoweroffNightModel = (from a in modelList
+                                                         where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night && a.status == "POWER OFF"
+                                                         select a).FirstOrDefault();
+                        if (machinePoweroffNightModel.startTime == null && machinePoweroffNightModel.stopTime == null)
+                        {
+                            machinePoweroffNightModel.totalSeconds = 12 * 3600;
+                        }
+                    }
+
+                }
 
                 dTemp = dTemp.AddDays(1);
             }
@@ -970,165 +1046,101 @@ namespace Common.BLL
 
 
 
-            #region 只有选择running或utilization或空的情况下, 才补充running状态时间,  减少运算量
-            if (sStatus == "" || sStatus == "RUNNING" || sStatus == "UTILIZATION")
+
+
+
+            #region 添加 running model,   = 12*3600 - 其他各状态总时长 
+            
+            dTemp = dDateFrom.Date;
+            while (dTemp < dDateTo)
             {
-                
-                DateTime currentDay = DateTime.Now.AddHours(-8).Date;
-                string currentShift = DateTime.Now >= DateTime.Now.Date.AddHours(8) && DateTime.Now < DateTime.Now.Date.AddHours(20) ? "Day" : "Night";
-
-                
-                //当天 day/night 班次总时长,   (当天按照 8/20到现在的时长计算)
-                double currentDayShiftTotalSeconds = 0;
-                double currentNightShiftTotalSeconds = 0;
-                if (currentShift == StaticRes.Global.Shift.Day)
-                {
-                    currentDayShiftTotalSeconds = (DateTime.Now - currentDay.AddHours(8)).TotalSeconds; //8点到现在的总时间
-                    currentNightShiftTotalSeconds = 0;
-                }
-                else
-                {
-                    currentDayShiftTotalSeconds = 12 * 3600;
-                    currentNightShiftTotalSeconds = (DateTime.Now - currentDay.AddHours(20)).TotalSeconds;//20:00到现在的总时间
-                }
-
-                //正常班次总时长.
-                double shiftTotalSeconds = 12 * 3600;
-
-
-                //循环每一天
-                dTemp = dDateFrom.Date;
-                while (dTemp < dDateTo)
+                for (int i = 1; i < 9; i++)
                 {
 
-                    //循环每台机器
-                    for (int i = 1; i < 9; i++)
-                    {
+                    //查询这一天, 这台机器, 白班的所有信息.
+                    var machineDayList = from a in modelList
+                                         where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day
+                                         select a;
+                    model = new LMMSEventLog_Model.EventLogModelForChart();
+                    model.year = dTemp.Year;
+                    model.month = dTemp.Month;
+                    model.day = dTemp;
+                    model.shift = StaticRes.Global.Shift.Day;
+                    model.machineID = i.ToString();
+                    model.status = "RUNNING";
+                    model.startTime = null;
+                    model.stopTime = null;
+                    model.totalSeconds = 12 * 3600 - machineDayList.Sum(p => p.totalSeconds);
+                    modelList.Add(model);
+                    
 
-                        //如果选定机器, 只有循环到该机器才能继续添加.
-                        if (sMachineID != "")
-                        {
-                            if (i.ToString() != sMachineID)
-                                continue;
-                        }
-                        
-
-                        #region 补充 Day shift 的 running状态时长.
-                        var dayShiftResult = from a in allStatusModels
-                                             where a.day == dTemp && a.machineID == i.ToString() && a.shift == "Day"
-                                             group a by a.day into dayShift
-                                             select new
-                                             {
-                                                 dayShift.Key,
-                                                 //running totall time =  总时间 12 * 3600(每班次)  - (其它状态所有时间)
-                                                 //如果是当天, 就用当天的 8点到现在的时长, 否则就 12*3600
-                                                 RunningSeconds = (dayShift.Key == currentDay ? currentDayShiftTotalSeconds : shiftTotalSeconds) - dayShift.Sum(p => p.totalSeconds)
-                                             };
-                        Common.Model.LMMSEventLog_Model.EventLogModelForChart dayModel = new LMMSEventLog_Model.EventLogModelForChart();
-                        dayModel.year = dTemp.Year;
-                        dayModel.month = dTemp.Month;
-                        dayModel.day = dTemp;
-                        dayModel.shift = StaticRes.Global.Shift.Day;
-                        dayModel.machineID = i.ToString();
-                        dayModel.status = "RUNNING";
-                        dayModel.totalSeconds = dayShiftResult.Count() == 0 ? 0 : dayShiftResult.FirstOrDefault().RunningSeconds;
-
-                        allStatusModels.Add(dayModel);
-
-                        #endregion
-
-                        #region 补充 Night shift 的 running状态时长.
-                        var nightShiftResult = from a in allStatusModels
-                                               where a.day == dTemp && a.machineID == i.ToString() && a.shift == "Night"
-                                               group a by a.day into nightShift
-                                               select new
-                                               {
-                                                   nightShift.Key,
-                                                   //running totall time =  总时间 12 * 3600(每班次)  - (其它状态所有时间)
-                                                   //如果是当天, 就用当天的 20点到现在的时长, 否则就 12*3600
-                                                   RunningSeconds = (nightShift.Key == currentDay ? currentNightShiftTotalSeconds : shiftTotalSeconds) - nightShift.Sum(p => p.totalSeconds)
-                                               };
-                        Common.Model.LMMSEventLog_Model.EventLogModelForChart nightModel = new LMMSEventLog_Model.EventLogModelForChart();
-                        nightModel.year = dTemp.Year;
-                        nightModel.month = dTemp.Month;
-                        nightModel.day = dTemp;
-                        nightModel.shift = StaticRes.Global.Shift.Night;
-                        nightModel.machineID = i.ToString();
-                        nightModel.status = "RUNNING";
-                        nightModel.totalSeconds = nightShiftResult.Count() == 0 ? 0 : nightShiftResult.FirstOrDefault().RunningSeconds;
-
-                        allStatusModels.Add(nightModel);
-                        #endregion
-                    }
-
-                    dTemp = dTemp.AddDays(1);
+                    //查询这一天, 这台机器, 晚班的所有信息.
+                    var machineNightList = from a in modelList
+                                           where a.day == dTemp && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night
+                                           select a;
+                    model = new LMMSEventLog_Model.EventLogModelForChart();
+                    model.year = dTemp.Year;
+                    model.month = dTemp.Month;
+                    model.day = dTemp;
+                    model.shift = StaticRes.Global.Shift.Night;
+                    model.machineID = i.ToString();
+                    model.status = "RUNNING";
+                    model.startTime = null;
+                    model.stopTime = null;
+                    model.totalSeconds = 12 * 3600 - machineNightList.Sum(p => p.totalSeconds);
+                    modelList.Add(model);
                 }
+
+
+                dTemp = dTemp.AddDays(1);
             }
-
-
-
             #endregion
 
 
 
 
-            string[] shiftAll;
-            string[] statusAll;
-            #region 删选 status, shift
-            if (sStatus == "UTILIZATION" || sStatus == "RUNNING")
-                statusAll = new string[] { "RUNNING" };
-
-            else if (sStatus == "BUYOFF")
-                statusAll = new string[] { "BUYOFF" };
-
-            else if (sStatus == "SETUP")
-                statusAll = new string[] { "SETUP" };
-
-            else if (sStatus == "NO SCHEDULE")
-                statusAll = new string[] { "NO SCHEDULE" };
-
-            else if (sStatus == "TESTING")
-                statusAll = new string[] { "TESTING" };
-
-            else if (sStatus == "MAINTAINENCE")
-                statusAll = new string[] { "MAINTAINENCE" };
-
-            else if (sStatus == "BREAKDOWN")
-                statusAll = new string[] { "BREAKDOWN" };
-
-            else if (sStatus == "POWER OFF")
-                statusAll = new string[] { "POWER OFF" };
-
-            else
-                statusAll = new string[] { "RUNNING", "BUYOFF", "SETUP", "NO SCHEDULE", "TESTING", "MAINTAINENCE", "BREAKDOWN", "POWER OFF" };
-
-
-            if (sShift == "Day")
-                shiftAll = new string[] { "Day" };
-
-            else if (sShift == "Night")
-                shiftAll = new string[] { "Night" };
-
-            else
-                shiftAll = new string[] { "Day", "Night" };
-            #endregion
-
-            
-
-            var result = from a in allStatusModels
-                         where 
-                         a.day >= dDateFrom
-                         && a.day < dDateTo//选定时间段
-
-                         && statusAll.Contains(a.status)//选定状态
-                         && shiftAll.Contains(a.shift)//选定班次
-                         && (bExceptWeekend ? a.day.DayOfWeek != DayOfWeek.Sunday && a.day.DayOfWeek != DayOfWeek.Saturday : true)//周末除外
-                         select a;
-
-            
-            return result.ToList();
+            return modelList;
         }
+        
+        public List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> GetStatusModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus, string sShift, bool bExceptWeekend)
+        {
 
+            //event log表原数据切分, 归类到list中. 
+            List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> baseList = GetBaseList(dDateFrom, dDateTo);
+            if (baseList == null)
+                return null;
+
+
+
+            //添加缺失的天, 机器, 状态数据.
+            baseList = AddLackData(baseList, dDateFrom, dDateTo);
+
+
+
+
+            //按条件删选记录.   
+            sStatus = sStatus == "UTILIZATION" ? "RUNNING" : sStatus;
+            string[] arrStatus = string.IsNullOrEmpty(sStatus) ? new string[] { "RUNNING", "BUYOFF", "SETUP", "NO SCHEDULE", "TESTING", "MAINTAINENCE", "BREAKDOWN", "POWER OFF" } : new string[] { sStatus };
+            string[] arrShift = string.IsNullOrEmpty(sShift) ? new string[] { StaticRes.Global.Shift.Day, StaticRes.Global.Shift.Night } : new string[] { sShift };
+            int[] arrWeekDay = bExceptWeekend ? new int[] { 1, 2, 3, 4, 5 } : new int[] { 0, 1, 2, 3, 4, 5, 6 };
+            string[] arrMachine = string.IsNullOrEmpty(sMachineID) ? new string[] { "1", "2", "3", "4", "5", "6", "7", "8" } : new string[] { sMachineID };
+            
+            var result = (from a in baseList
+                          where a.day >= dDateFrom.Date
+                          && a.day < dDateTo
+                          && arrShift.Contains(a.shift)
+                          && arrMachine.Contains(a.machineID)
+                          && arrStatus.Contains(a.status)
+                          && arrWeekDay.Contains((int)a.day.DayOfWeek)
+                          select a).ToList();
+
+
+
+
+            return result;
+        }
+        
+        #endregion
 
 
     }

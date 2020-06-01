@@ -74,344 +74,173 @@ namespace DashboardTTS.Webform.Moulding
 
             
 
-                DataTable dt = new DataTable();
-                if (sDataType == DataType.Output)
+              
+                #region  Machine Status
+                DataTable dt_Status = new DataTable();
+                dt_Status.Columns.Add("MachineID");
+                dt_Status.Columns.Add("Running");
+                dt_Status.Columns.Add("Adjustment");
+                dt_Status.Columns.Add("NoWIP");
+                dt_Status.Columns.Add("Mould_Testing");
+                dt_Status.Columns.Add("Material_Testing");
+                dt_Status.Columns.Add("Change_Model");
+                dt_Status.Columns.Add("No_Operator");
+                dt_Status.Columns.Add("No_Material");
+                dt_Status.Columns.Add("Break_Time");
+                dt_Status.Columns.Add("ShutDown");
+                dt_Status.Columns.Add("Damage_Mould");
+                dt_Status.Columns.Add("Machine_Break");
+
+
+                Common.Class.BLL.MouldingMachineStatus_BLL MachineStatus_bll = new Common.Class.BLL.MouldingMachineStatus_BLL();
+                Dictionary<DateTime, StaticRes.Global.StatusType> Points;
+                dDateTo = dDateTo.AddDays(-1);
+                for (int i = 1; i < 9; i++)
                 {
-                    #region product output
-                    Common.Class.BLL.MouldingViHistory_BLL MouldingBLL = new Common.Class.BLL.MouldingViHistory_BLL();
-                    dt = MouldingBLL.getProductSummaryByMachine(dDateFrom, dDateTo, sShift);
-                    #endregion
-                }
-                else if (sDataType == DataType.OEE)
-                {
-                    #region OEE New
-                    // dt for showing chart
-                    dt.Columns.Add("MachineID");
-                    dt.Columns.Add("OEE_Percentage");
-                    dt.Columns.Add("OEE_Availability"); //   prod time / schedule time = prod time / (prod time + adjustment time) * 100%
-                    dt.Columns.Add("OEE_Performence");  //   actual prod QTY /PLan QTY   * 100%
-                    dt.Columns.Add("OEE_Quality");      //   actual good  QTY /actual prod QTY   * 100% 
+                    DataRow dr = dt_Status.NewRow();
 
 
-                    double Availability = 0;
-                    double Performence = 0;
-                    double Quality = 0;
-                    double SpendingTime = 0;
-                    double UnitCycleTime = 0;
-                    double OutputQTY = 0;
-
-                    #region machine status 
-
-                    Common.BLL.LMMSEventLog_BLL EventLog = new Common.BLL.LMMSEventLog_BLL();
-                    Common.BLL.LMMSWatchLog_BLL WatchDogBll = new Common.BLL.LMMSWatchLog_BLL();
-                    Dictionary<DateTime, StaticRes.Global.StatusType> dPoints = new Dictionary<DateTime, StaticRes.Global.StatusType>();
-                    DataTable dt_OEECount;
+                    Points = new Dictionary<DateTime, StaticRes.Global.StatusType>();
+                    Points = MachineStatus_bll.getOEE(dDateFrom, dDateTo, i.ToString(), sShift, "", false);
 
 
-                    for (int i = 1; i < 9; i++)
+                    if (Points == null || Points.Count == 0)
                     {
-                        DataRow dr_OEE = dt.NewRow();
-                        dr_OEE["MachineID"] = "Machine" + i.ToString();
+                        #region default 0
+                        dr["MachineID"] = "Machine" + i.ToString();
+                        dr["Running"] = 0;
+                        dr["Adjustment"] = 0;
+                        dr["NoWIP"] = 0;
+                        dr["Mould_Testing"] = 0;
+                        dr["Material_Testing"] = 0;
+                        dr["Change_Model"] = 0;
+                        dr["No_Operator"] = 0;
+                        dr["No_Material"] = 0;
+                        dr["Break_Time"] = 0;
+                        dr["ShutDown"] = 0;
+                        dr["Damage_Mould"] = 0;
+                        dr["Machine_Break"] = 0;
+                        #endregion
+                    }
+                    else
+                    {
+                        double Running_Count = 0;
+                        double Adjustment_Count = 0;
+                        double NoWIP_Count = 0;
+                        double Mould_Testing_Count = 0;
+                        double Material_Testing_Count = 0;
+                        double Change_Model_Count = 0;
+                        double No_Operator_Count = 0;
+                        double No_Material_Count = 0;
+                        double Break_Time_Count = 0;
+                        double ShutDown_Count = 0;
+                        double Damage_Mould_Count = 0;
+                        double Machine_Break_Count = 0;
 
-                        dPoints = new Dictionary<DateTime, StaticRes.Global.StatusType>();
-                        dPoints = EventLog.getOEE(dDateFrom, dDateTo, i.ToString(), "para_sPartNo_notuse", sShift, "", false);
-                        dt_OEECount = WatchDogBll.getOEEData(dDateFrom.ToString(), dDateTo.ToString(), i.ToString(), sShift, "", false);
-
-
-                        if (dt_OEECount == null || dt_OEECount.Rows.Count == 0)
+                        #region  catogery the points
+                        foreach (KeyValuePair<DateTime, StaticRes.Global.StatusType> pPoint in Points)
                         {
-                            dr_OEE["OEE_Performence"] = "0%";
-                            dr_OEE["OEE_Quality"] = "0%";
-                        }
-                        else
-                        {
-                            DataRow dr_OEECount = dt_OEECount.Rows[dt_OEECount.Rows.Count - 1];
-
-
-                            Quality = Math.Round(double.Parse(dr_OEECount["OK"].ToString()) / double.Parse(dr_OEECount["OutputQTY"].ToString()) * 100, 2);
-
-                            Quality = double.IsNaN(Quality) ? 0 : Quality;
-                            
-
                             try
                             {
-                                SpendingTime = double.Parse(dr_OEECount["ProcessTime"].ToString());// seconds
+                                switch (pPoint.Value)
+                                {
+                                    case StaticRes.Global.StatusType.Running:
+                                        {
+                                            Running_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.Adjustment:
+                                        {
+                                            Adjustment_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.No_Schedule:
+                                        {
+                                            NoWIP_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.Mould_Testing:
+                                        {
+                                            Mould_Testing_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.Material_Testing:
+                                        {
+                                            Material_Testing_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.Change_Model:
+                                        {
+                                            Change_Model_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.No_Operator:
+                                        {
+                                            No_Operator_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.No_Material:
+                                        {
+                                            No_Material_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.Break_Time:
+                                        {
+                                            Break_Time_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.DamageMould:
+                                        {
+                                            Damage_Mould_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.ShutDown:
+                                        {
+                                            ShutDown_Count++;
+                                            break;
+                                        }
+                                    case StaticRes.Global.StatusType.MachineBreak:
+                                        {
+                                            Machine_Break_Count++;
+                                            break;
+                                        }
+                                    default:
+                                        {
+                                            Running_Count++;
+                                            break;
+                                        }
+                                }
                             }
-                            catch (Exception)
+                            catch (Exception ee)
                             {
-                                OutputQTY = 0;
+
                             }
                         }
+                        #endregion
 
-
-
-                        if (dPoints == null || dPoints.Count == 0)
-                        {
-                            Availability = 0;
-                        }
-                        else
-                        {
-                            double PD_Time_Count = 0;
-                            double Idle_Time_Count = 0;
-                            double NoWIP_Time_Count = 0;
-                            double Adjustmnet_Time_Count = 0;
-                            double Shutdown_Time_Count = 0;
-                            double BreakDown_Time_Count = 0;
-
-                            #region  catogery the points
-                            foreach (KeyValuePair<DateTime, StaticRes.Global.StatusType> pPoint in dPoints)
-                            {
-                                try
-                                {
-                                    switch (pPoint.Value)
-                                    {
-                                        case StaticRes.Global.StatusType.Adjustment:
-                                            {
-                                                Adjustmnet_Time_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Idle:
-                                            {
-                                                Idle_Time_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.NoWIP:
-                                            {
-                                                NoWIP_Time_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.PD:
-                                            {
-                                                PD_Time_Count++;   //will be reset 
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.BreakDown:
-                                            {
-                                                BreakDown_Time_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.ShutDown:
-                                            {
-                                                Shutdown_Time_Count++;
-                                                break;
-                                            }
-                                        default:
-                                            {
-                                                PD_Time_Count++;   //will be reset 
-                                                break;
-                                            }
-                                    }
-                                }
-                                catch (Exception ee)
-                                {
-                                }
-                            }
-                            #endregion
-
-                            if (PD_Time_Count + NoWIP_Time_Count + Adjustmnet_Time_Count + Shutdown_Time_Count + BreakDown_Time_Count == 0)
-                            {
-                                Availability = 0;
-                            }
-                            else
-                            {
-                                Availability = PD_Time_Count / (PD_Time_Count + NoWIP_Time_Count + Adjustmnet_Time_Count + BreakDown_Time_Count + Shutdown_Time_Count) * 100;//少加一个shutdown time
-                                Availability = double.IsNaN(Availability) ? 0 : Availability;
-
-                                // Performence = OutputQTY / (PD_Time_Count * 60 / UnitCycleTime);
-                                Performence = SpendingTime / 60 / PD_Time_Count * 100;
-
-                                if (Performence > 100)
-                                {
-                                    Performence = 100;
-                                }
-                                else if (double.IsNaN(Performence))
-                                {
-                                    Performence = 0;
-                                }
-                            }
-
-                            dr_OEE["OEE_Availability"] = Math.Round(Availability, 2).ToString() + "%";
-                            dr_OEE["OEE_Performence"] = Math.Round(Performence, 2).ToString() + "%";
-                            dr_OEE["OEE_Quality"] = Math.Round(Quality, 2).ToString() + "%";
-                            dr_OEE["OEE_Percentage"] = Math.Round((Availability / 100) * (Performence / 100) * (Quality / 100) * 100, 2).ToString() + "%";
-                        }
-
-                        dt.Rows.Add(dr_OEE);
+                        dr["MachineID"] = "Machine" + i.ToString();
+                        dr["Running"] = Math.Round(Running_Count / 60, 2);
+                        dr["Adjustment"] = Math.Round(Adjustment_Count / 60, 2);
+                        dr["NoWIP"] = Math.Round(NoWIP_Count / 60, 2);
+                        dr["Mould_Testing"] = Math.Round(Mould_Testing_Count / 60, 2);
+                        dr["Material_Testing"] = Math.Round(Material_Testing_Count / 60, 2);
+                        dr["Change_Model"] = Math.Round(Change_Model_Count / 60, 2);
+                        dr["No_Operator"] = Math.Round(No_Operator_Count / 60, 2);
+                        dr["No_Material"] = Math.Round(No_Material_Count / 60, 2);
+                        dr["Break_Time"] = Math.Round(Break_Time_Count / 60, 2);
+                        dr["ShutDown"] = Math.Round(ShutDown_Count / 60, 2);
+                        dr["Damage_Mould"] = Math.Round(Damage_Mould_Count / 60, 2);
+                        dr["Machine_Break"] = Math.Round(Machine_Break_Count / 60, 2);
                     }
-                    #endregion
 
-                    #endregion
-                }
-                else
-                {
-                    #region  Machine Status
-                    DataTable dt_Status = new DataTable();
-                    dt_Status.Columns.Add("MachineID");
-                    dt_Status.Columns.Add("Running");
-                    dt_Status.Columns.Add("Adjustment");
-                    dt_Status.Columns.Add("NoWIP");
-                    dt_Status.Columns.Add("Mould_Testing");
-                    dt_Status.Columns.Add("Material_Testing");
-                    dt_Status.Columns.Add("Change_Model");
-                    dt_Status.Columns.Add("No_Operator");
-                    dt_Status.Columns.Add("No_Material");
-                    dt_Status.Columns.Add("Break_Time");
-                    dt_Status.Columns.Add("ShutDown");
-                    dt_Status.Columns.Add("Damage_Mould");
-                    dt_Status.Columns.Add("Machine_Break");
+                    dt_Status.Rows.Add(dr);
+                }             
+                #endregion
 
 
-                    Common.Class.BLL.MouldingMachineStatus_BLL MachineStatus_bll = new Common.Class.BLL.MouldingMachineStatus_BLL();
-                    Dictionary<DateTime, StaticRes.Global.StatusType> Points;
-                    dDateTo = dDateTo.AddDays(-1);
-                    for (int i = 1; i < 9; i++)
-                    {
-                        DataRow dr = dt_Status.NewRow();
-                        
-
-                        Points = new Dictionary<DateTime, StaticRes.Global.StatusType>();
-                        Points = MachineStatus_bll.getOEE(dDateFrom, dDateTo, i.ToString(),sShift, "", false);
 
 
-                        if (Points == null || Points.Count == 0)
-                        {
-                            #region default 0
-                            dr["MachineID"] = "Machine" + i.ToString();
-                            dr["Running"] = 0;
-                            dr["Adjustment"] = 0;
-                            dr["NoWIP"] = 0;
-                            dr["Mould_Testing"] = 0;
-                            dr["Material_Testing"] = 0;
-                            dr["Change_Model"] = 0;
-                            dr["No_Operator"] = 0;
-                            dr["No_Material"] = 0;
-                            dr["Break_Time"] = 0;
-                            dr["ShutDown"] = 0;
-                            dr["Damage_Mould"] = 0;
-                            dr["Machine_Break"] = 0;
-                            #endregion
-                        }
-                        else
-                        {
-                            double Running_Count = 0;
-                            double Adjustment_Count = 0;
-                            double NoWIP_Count = 0;
-                            double Mould_Testing_Count = 0;
-                            double Material_Testing_Count = 0;
-                            double Change_Model_Count = 0;
-                            double No_Operator_Count = 0;
-                            double No_Material_Count = 0;
-                            double Break_Time_Count = 0;
-                            double ShutDown_Count = 0;
-                            double Damage_Mould_Count = 0;
-                            double Machine_Break_Count = 0;
-
-                            #region  catogery the points
-                            foreach (KeyValuePair<DateTime, StaticRes.Global.StatusType> pPoint in Points)
-                            {
-                                try
-                                {
-                                    switch (pPoint.Value)
-                                    {
-                                        case StaticRes.Global.StatusType.Running:
-                                            {
-                                                Running_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Adjustment:
-                                            {
-                                                Adjustment_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.No_Schedule:
-                                            {
-                                                NoWIP_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Mould_Testing:
-                                            {
-                                                Mould_Testing_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Material_Testing:
-                                            {
-                                                Material_Testing_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Change_Model:
-                                            {
-                                                Change_Model_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.No_Operator:
-                                            {
-                                                No_Operator_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.No_Material:
-                                            {
-                                                No_Material_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.Break_Time:
-                                            {
-                                                Break_Time_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.DamageMould:
-                                            {
-                                                Damage_Mould_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.ShutDown:
-                                            {
-                                                ShutDown_Count++;
-                                                break;
-                                            }
-                                        case StaticRes.Global.StatusType.MachineBreak:
-                                            {
-                                                Machine_Break_Count++;
-                                                break;
-                                            }
-                                        default:
-                                            {
-                                                Running_Count++;
-                                                break;
-                                            }
-                                    }
-                                }
-                                catch (Exception ee)
-                                {
-
-                                }
-                            }
-                            #endregion
-
-                            dr["MachineID"] = "Machine" + i.ToString();
-                            dr["Running"] = Math.Round(Running_Count / 60, 2);
-                            dr["Adjustment"] = Math.Round(Adjustment_Count / 60, 2);
-                            dr["NoWIP"] = Math.Round(NoWIP_Count / 60, 2);
-                            dr["Mould_Testing"] = Math.Round(Mould_Testing_Count / 60, 2);
-                            dr["Material_Testing"] = Math.Round(Material_Testing_Count / 60, 2);
-                            dr["Change_Model"] = Math.Round(Change_Model_Count / 60, 2);
-                            dr["No_Operator"] = Math.Round(No_Operator_Count / 60, 2);
-                            dr["No_Material"] = Math.Round(No_Material_Count / 60, 2);
-                            dr["Break_Time"] = Math.Round(Break_Time_Count / 60, 2);
-                            dr["ShutDown"] = Math.Round(ShutDown_Count / 60, 2);
-                            dr["Damage_Mould"] = Math.Round(Damage_Mould_Count / 60, 2);
-                            dr["Machine_Break"] = Math.Round(Machine_Break_Count / 60, 2);
-                        }
-
-                        dt_Status.Rows.Add(dr);
-                    }
-                    dt = dt_Status.Copy();
-                    #endregion
-                }
-
-
-                
-
-                if (dt == null || dt.Rows.Count == 0)
+                if (dt_Status == null || dt_Status.Rows.Count == 0)
                 {
                     this.lblResult.BackColor = System.Drawing.Color.Red;
                     this.lblResult.Text = "There is no record! ";
@@ -426,11 +255,11 @@ namespace DashboardTTS.Webform.Moulding
 
                     if (sDataType == DataType.All)
                     {
-                        OverAllChart(dt);
+                        OverAllChart(dt_Status);
                     }
                     else
                     {
-                        ChartDisplay_Job(dt);
+                        ChartDisplay_Job(dt_Status);
                     }
                 }
 

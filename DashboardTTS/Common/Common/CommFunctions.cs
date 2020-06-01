@@ -671,5 +671,53 @@ namespace Common
         }
 
 
+
+
+        public static string GetMonthName(int month, bool isFullName)
+        {
+            string result = "";
+
+            switch (month)
+            {
+                case 1:
+                    result = isFullName ? "January" : "Jan";
+                    break;
+                case 2:
+                    result = isFullName ? "February" : "Feb";
+                    break;
+                case 3:
+                    result = isFullName ? "March" : "Mar";
+                    break;
+                case 4:
+                    result = isFullName ? "April" : "Apr";
+                    break;
+                case 5:
+                    result = isFullName ? "May" : "May";
+                    break;
+                case 6:
+                    result = isFullName ? "June" : "Jun";
+                    break;
+                case 7:
+                    result = isFullName ? "July" : "Jul";
+                    break;
+                case 8:
+                    result = isFullName ? "August" : "Aug";
+                    break;
+                case 9:
+                    result = isFullName ? "September" : "Sep";
+                    break;
+                case 10:
+                    result = isFullName ? "October" : "Oct";
+                    break;
+                case 11:
+                    result = isFullName ? "November" : "Nov";
+                    break;
+                case 12:
+                    result = isFullName ? "December" : "Dec";
+                    break;
+            }
+            return result;
+        }
+
     }
 }

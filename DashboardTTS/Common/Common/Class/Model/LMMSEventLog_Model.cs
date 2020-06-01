@@ -104,8 +104,8 @@ namespace Common.Model
             private string _shift;
             private string _machineid;
             private string _status;
-            private DateTime _startTime;
-            private DateTime _stopTime;
+            private DateTime? _startTime;
+            private DateTime? _stopTime;
             private double _totalSeconds;
 
 
@@ -141,13 +141,13 @@ namespace Common.Model
                 set { _status = value; }
                 get { return _status; }
             }
-            public DateTime startTime
+            public DateTime? startTime
             {
                 set { _startTime = value; }
                 get { return _startTime; }
             }
 
-            public DateTime stopTime
+            public DateTime? stopTime
             {
                 set { _stopTime = value; }
                 get { return _stopTime; }

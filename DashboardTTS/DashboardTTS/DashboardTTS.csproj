@@ -2874,7 +2874,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="TempImages\temp.txt" />
-    <Content Include="test.html" />
     <Content Include="UserControl\WebUserControlMachineStatus.ascx" />
     <Content Include="UserControl\WebUserControlMouldingMachineStatus.ascx" />
     <Content Include="UserControl\WebUserControlPQCStatus.ascx" />

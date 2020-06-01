@@ -83,25 +83,10 @@ namespace DashboardTTS.Webform.Laser
                     sSearchingStatus = "";//赋空, 不进行删选, 让所有状态都显示.
                 }
                 #endregion
-
-             
-
-
-
-
+                
 
                 Common.BLL.LMMSEventLog_BLL bll = new Common.BLL.LMMSEventLog_BLL();
-                List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models = new List<Common.Model.LMMSEventLog_Model.EventLogModelForChart>();
-
-                //将源数据 按照8:00 - 8:00分割成 包含year,month,day,shift,status,totalSeconds的完整集合.
-                models = bll.GetStatusModelList(dSearchingFrom, dSearchingTo, sSearchingMachineID, sSearchingStatus,sSearchingShift, exceptWeekend);
-
-
-
-
-
-
-
+                List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models = bll.GetStatusModelList(dSearchingFrom, dSearchingTo, sSearchingMachineID, sSearchingStatus, sSearchingShift, exceptWeekend);
                 if (models == null || models.Count()== 0)
                 {
                     this.ProdChart.Visible = false;
@@ -113,8 +98,11 @@ namespace DashboardTTS.Webform.Laser
                 {
                     this.ProdChart.Visible = true;
                     this.lblResult.Visible = false;
-                    ChartDisplay_Job(models);
+                    Display(models);
                 }
+
+
+
             }
             catch (Exception ee)
             {
@@ -153,7 +141,7 @@ namespace DashboardTTS.Webform.Laser
         }
 
 
-        void ChartDisplay_Job(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        void Display(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
         {
             try
             {
@@ -268,32 +256,32 @@ namespace DashboardTTS.Webform.Laser
 
 
 
-                Series dataSeries_JobOutPut = new Series();
+                Series seriesStatus = new Series();
                 string reportType = this.ddlReportType.SelectedValue;
                 if (reportType == "Yearly")
                 {
-                    dataSeries_JobOutPut = YearlySeries(models);
+                    seriesStatus = YearlySeries(models);
                 }
                 else if (reportType == "Monthly")
                 {
-                    dataSeries_JobOutPut = MonthlySeries(models);
+                    seriesStatus = MonthlySeries(models);
                 }
                 else if (reportType == "Daily")
                 {
-                    dataSeries_JobOutPut = DailySeries(models);
+                    seriesStatus = DailySeries(models);
                 }
                 else if (reportType == "Machine")
                 {
-                    dataSeries_JobOutPut = MachineSeries(models);
+                    seriesStatus = MachineSeries(models);
                 }
                 else if (reportType == "Status")
                 {
-                    dataSeries_JobOutPut = StatusSeries(models);
+                    seriesStatus = StatusSeries(models);
                 }
-                
 
 
-                ProdChart.Series.Add(dataSeries_JobOutPut);
+
+                ProdChart.Series.Add(seriesStatus);
 
                 ProdChart.Titles.Clear();
                 if (ddlReportType.SelectedItem.Text == "Status")
@@ -409,17 +397,17 @@ namespace DashboardTTS.Webform.Laser
                     double utilization = Math.Round(item.totalSeconds / totalSeconds * 100, 2);
 
 
-                    dpColumnPass.AxisLabel = convertMonth(item.month, true);
+                    dpColumnPass.AxisLabel = Common.CommFunctions.GetMonthName(item.month, true);
                     dpColumnPass.YValues[0] = utilization;
                     dpColumnPass.Label = utilization.ToString("0.00") + "%";
-                    dpColumnPass.ToolTip = string.Format("{0}-{1}", convertMonth(item.month, true), utilization.ToString("0.00") + "%");
+                    dpColumnPass.ToolTip = string.Format("{0}-{1}", Common.CommFunctions.GetMonthName(item.month, true), utilization.ToString("0.00") + "%");
                 }
                 else
                 {
-                    dpColumnPass.AxisLabel = convertMonth(item.month, true);
+                    dpColumnPass.AxisLabel = Common.CommFunctions.GetMonthName(item.month, true);
                     dpColumnPass.YValues[0] = Math.Round(item.totalSeconds / 3600, 2);
                     dpColumnPass.Label = Math.Round(item.totalSeconds / 3600, 2).ToString("0.00") + "H";
-                    dpColumnPass.ToolTip = string.Format("{0}-{1}", convertMonth(item.month, true), Math.Round(item.totalSeconds / 3600, 2).ToString("0.00") + "H");
+                    dpColumnPass.ToolTip = string.Format("{0}-{1}", Common.CommFunctions.GetMonthName(item.month, true), Math.Round(item.totalSeconds / 3600, 2).ToString("0.00") + "H");
                 }
 
 
@@ -431,7 +419,7 @@ namespace DashboardTTS.Webform.Laser
         }
         public Series DailySeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
         {
-            var result = from a in models
+            var result = from a in models                    
                          orderby a.day ascending
                          group a by a.day into dayList
                          select new
@@ -462,14 +450,14 @@ namespace DashboardTTS.Webform.Laser
                     double utilization = totalSeconds ==0? 0: Math.Round(item.totalSeconds / totalSeconds * 100, 2);
 
                     
-                    dpColumnPass.AxisLabel = convertMonth(item.day.Month, false) + "-" + item.day.Day.ToString();
+                    dpColumnPass.AxisLabel = Common.CommFunctions.GetMonthName(item.day.Month, false) + "-" + item.day.Day.ToString();
                     dpColumnPass.YValues[0] = utilization;
                     dpColumnPass.Label = utilization.ToString("0.00") + "%";
                     dpColumnPass.ToolTip = string.Format("{0}-{1}", item.day.ToShortDateString(), utilization.ToString("0.00") + "%");
                 }
                 else
                 {
-                    dpColumnPass.AxisLabel = convertMonth(item.day.Month, false) + "-" + item.day.Day.ToString();
+                    dpColumnPass.AxisLabel = Common.CommFunctions.GetMonthName(item.day.Month, false) + "-" + item.day.Day.ToString();
                     dpColumnPass.YValues[0] = Math.Round(item.totalSeconds / 3600, 2);
                     dpColumnPass.Label = Math.Round(item.totalSeconds / 3600, 2).ToString("0.00") + "H";
                     dpColumnPass.ToolTip = string.Format("{0}-{1}", item.day.ToShortDateString(), Math.Round(item.totalSeconds / 3600, 2).ToString("0.00") + "H");
@@ -694,54 +682,7 @@ namespace DashboardTTS.Webform.Laser
 
             return totalSeconds - totalExceptSeconds;
         }
-
-
-        public string convertMonth(int month, bool isFullName)
-        {
-            string result = "";
-
-            switch (month)
-            {
-                case 1:
-                    result = isFullName ? "January" : "Jan";
-                    break;
-                case 2:
-                    result = isFullName ? "February" : "Feb";
-                    break;
-                case 3:
-                    result = isFullName ? "March" : "Mar";
-                    break;
-                case 4:
-                    result = isFullName ? "April" : "Apr";
-                    break;
-                case 5:
-                    result = isFullName ? "May" : "May";
-                    break;
-                case 6:
-                    result = isFullName ? "June" : "Jun";
-                    break;
-                case 7:
-                    result = isFullName ? "July" : "Jul";
-                    break;
-                case 8:
-                    result = isFullName ? "August" : "Aug";
-                    break;
-                case 9:
-                    result = isFullName ? "September" : "Sep";
-                    break;
-                case 10:
-                    result = isFullName ? "October": "Oct";
-                    break;
-                case 11:
-                    result = isFullName ? "November" : "Nov";
-                    break;
-                case 12:
-                    result = isFullName ? "December" : "Dec";
-                    break;
-            }
-            return result;
-        }
-
+        
         
     }
 }
