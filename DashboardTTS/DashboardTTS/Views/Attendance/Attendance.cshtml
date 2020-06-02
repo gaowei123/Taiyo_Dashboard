@@ -255,7 +255,7 @@
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
-                    return '<label><input name="rd_attendance_' + index + '" type="radio" value="Attendance"  onchange="resetLeave(' + index + ');"  />Attendance</label>';
+                    return '<label><input name="rd_attendance_' + index + '" type="radio" value="Attendance" onchange="resetLeave(' + index + ');"  />Attendance</label>';
                 }
             },
             {
@@ -311,7 +311,10 @@
 
                     //赋值attendance & take leave
                     var tempAtt = data[i].Attendance;
-                    if (tempAtt != 'Attendance') {
+                    if (tempAtt == '') {
+                        $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', true);
+                    }
+                    else if (tempAtt != 'Attendance') {
                         $('#ddl_leaveReason_' + i).val(tempAtt);
                         $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', false);
                     } else {

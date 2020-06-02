@@ -559,9 +559,14 @@ namespace DashboardTTS.Webform.Laser
                 DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[btn Submit Click] PQC Job checking flag --  jobno:{0}, jobCheckingFlag:{1}", this.lbJob.Text, jobCheckingFlag));
 
 
+                // 获取该job  vi tracking最新的记录
+                Common.Class.Model.PQCQaViTracking trackingModel = viTrackingBLL.GetLatestModelByJob(this.lbJob.Text);
+
+                if (trackingModel == null) DBHelp.Reports.LogFile.Log("LaserJobMaintance", "[btn Submit Click] The model got from Vi Tracking  is null ");
+
 
                 //pqc结束checking后, 才联动更新.
-                if (jobCheckingFlag == false)
+                if (jobCheckingFlag == false  && trackingModel != null)
                 {
 
                     //shortage paint缺少的数量, 不经过pqc, 不做联动.
@@ -581,8 +586,7 @@ namespace DashboardTTS.Webform.Laser
 
 
 
-                    // 获取该job  vi tracking最新的记录
-                    Common.Class.Model.PQCQaViTracking trackingModel = viTrackingBLL.GetLatestModelByJob(this.lbJob.Text);
+                   
 
                     int sourceTrackTotalQty = int.Parse(trackingModel.TotalQty);
                     int sourceTrackAcceptQty = int.Parse(trackingModel.acceptQty);

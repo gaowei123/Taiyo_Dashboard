@@ -357,6 +357,7 @@ namespace DashboardTTS.Controllers
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"].ToString());
+            dateTo = dateTo.AddDays(1);
 
             string partNo = Request.Form["PartNo"].ToString();
             string model = "";

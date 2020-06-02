@@ -987,7 +987,7 @@ namespace DashboardTTS.ViewBusiness
         public string GetWIPInventory(string sPartNo)
         {
 
-            DateTime dateFrom = DateTime.Parse("2020-1-1");
+            DateTime dateFrom = DateTime.Parse("2020-6-1");
             DateTime dateTo = DateTime.Now.AddDays(1);
 
             List<ViewModel.PQCWIPInventory_ViewModel> modelList = GetWIPList(dateFrom, dateTo, sPartNo, "","");
@@ -1046,7 +1046,8 @@ namespace DashboardTTS.ViewBusiness
         public List<ViewModel.PQCWIPInventory_ViewModel> GetJobOrderDetailList(DateTime? dDateFrom, DateTime? dDateTo, string sPartNo, string sModel, string sJobNo, string sJobStatus)
         {
             List<ViewModel.PQCWIPInventory_ViewModel>  modelList = GetWIPList(dDateFrom, dDateTo, sPartNo, sModel, sJobNo);
-
+            if (modelList == null)
+                return null;
 
             if (sJobStatus == "")
             {

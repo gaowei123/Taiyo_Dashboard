@@ -62,3 +62,19 @@ D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\StaticRes\bin\Release\zh-Hant\
 D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\StaticRes\obj\Release\StaticRes.csprojResolveAssemblyReference.cache
 D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\StaticRes\obj\Release\StaticRes.dll
 D:\UBCT SH\TAIYO\Project Source Code\DashboardTTS\StaticRes\obj\Release\StaticRes.pdb
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\StaticRes.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\StaticRes.pdb
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\System.Windows.Interactivity.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\System.Windows.Interactivity.xml
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\de\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\en\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\es\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\fr\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\it\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\ja\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\ko\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\zh-Hans\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Release\zh-Hant\System.Windows.Interactivity.resources.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Release\StaticRes.csprojResolveAssemblyReference.cache
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Release\StaticRes.dll
+D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Release\StaticRes.pdb

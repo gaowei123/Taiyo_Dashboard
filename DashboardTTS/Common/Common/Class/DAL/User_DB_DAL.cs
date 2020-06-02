@@ -23,7 +23,7 @@ where 1=1 ");
 
             if (!string.IsNullOrEmpty(sDepartment)) strSql.Append(" and DEPARTMENT = @sDepartment ");
             if (!string.IsNullOrEmpty(sUserGroup)) strSql.Append(" and USER_GROUP = @sUserGroup ");
-            if (!string.IsNullOrEmpty(sEmployeeID)) strSql.Append(" and EMPLOYEE_ID = @sEmployeeID ");
+            if (!string.IsNullOrEmpty(sEmployeeID)) strSql.Append(" and ( EMPLOYEE_ID = @sEmployeeID or USER_ID = @sEmployeeID or  USER_NAME = @sEmployeeID) ");
             if (!string.IsNullOrEmpty(sPassword)) strSql.Append(" and PASSWORD = @sPassword ");
 
             strSql.Append(" order by EMPLOYEE_ID asc ");
@@ -311,12 +311,6 @@ group by DEPARTMENT ");
         }
 
       
-
-
-     
-
-        
-        
 
     }
 }

@@ -552,6 +552,11 @@ namespace Common.DAL
 		}
 
 
+
+     
+
+
+
         public DataSet GetListWithDetail(string sPartNo)
         {
             StringBuilder strSql = new StringBuilder();
