@@ -181,7 +181,7 @@ namespace Common.Class.BLL
 
         public Common.Class.Model.PQCBom_Model GetModel(string sPartNo)
         {
-            DataSet ds = dal.GetList(sPartNo);
+            DataSet ds = dal.GetListForModel(sPartNo);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count ==0)
                 return null;
             
@@ -405,7 +405,7 @@ namespace Common.Class.BLL
             }
             model.color = dr["color"].ToString();
             model.processes = dr["processes"].ToString();
-            model.remark_1 = dr["Supplier"].ToString();
+            model.remark_1 = dr["remark_1"].ToString();
             model.remark_2 = dr["remark_2"].ToString();
             model.remark_3 = dr["remark_3"].ToString();
             model.remark_4 = dr["remark_4"].ToString();

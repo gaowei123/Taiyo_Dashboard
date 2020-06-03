@@ -322,7 +322,8 @@ namespace DashboardTTS.ViewBusiness
             List<Common.Class.Model.User_DB_Model> userList = userBLL.GetModelList(sDepartment, "", "", "");
             //去掉一个admin
             var attendanceUser = from a in userList
-                                 where a.USER_GROUP != StaticRes.Global.UserGroup.ADMIN
+                                 where a.USER_GROUP != StaticRes.Global.UserGroup.ADMIN 
+                                 && a.USER_GROUP != StaticRes.Global.UserGroup.IPQC
                                  select a;
 
             List<Common.Model.LMMSUserAttendanceTracking_Model> currentAttendanceList = attendanceBLL.GetModelList(dDay, dDay.AddDays(1), sDepartment);
@@ -376,6 +377,7 @@ namespace DashboardTTS.ViewBusiness
                 
                 displayList.Add(displayModel);
             }
+
 
             return displayList;
         }

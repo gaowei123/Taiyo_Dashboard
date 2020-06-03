@@ -322,8 +322,6 @@ namespace DashboardTTS.UserControl
                 this.lblMachineNo.Text == "Machine 4" ||
                 this.lblMachineNo.Text == "Machine 5")
             {
-             
-
                 imgLogo.ImageUrl = "~/Resources/Images/LaserMachine_RobortArm.png";
             }
             else
