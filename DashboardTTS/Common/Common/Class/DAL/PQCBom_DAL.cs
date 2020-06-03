@@ -551,9 +551,42 @@ namespace Common.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(),paras,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
 
+        public DataSet GetListForModel(string sPartNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select * FROM PQCBom  where 1=1 ");
 
 
-     
+            if (sPartNo.Trim() != "")
+            {
+                strSql.Append(" and  partNumber = @partNumber");
+            }
+
+          
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@partNumber",SqlDbType.VarChar,50)
+            };
+
+            if (sPartNo.Trim() != "")
+            {
+                paras[0].Value = sPartNo;
+            }
+            else
+            {
+                paras[0] = null;
+            }
+
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+
+
+
 
 
 

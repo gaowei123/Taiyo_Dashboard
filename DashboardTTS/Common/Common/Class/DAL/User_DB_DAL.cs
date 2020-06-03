@@ -102,6 +102,12 @@ where 1=1 ");
 
         public int Add(Common.Class.Model.User_DB_Model model, SqlConnection cn)
         {
+
+
+            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "in func add!");
+
+
+
             StringBuilder strSql = new StringBuilder();
 
             strSql.Append(" insert into User_DB ( ");
@@ -109,6 +115,13 @@ where 1=1 ");
 
             strSql.Append(" Values ( ");
             strSql.Append(" @EMPLOYEE_ID, @USER_ID,@USER_NAME, @PASSWORD, @USER_GROUP, @UPDATED_TIME, @UPDATED_BY, @DEPARTMENT, @FINGER_TEMPLATE, @SHIFT, @FINGER_TEMPLATE_1  ) ");
+
+
+
+            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "str sql:" + strSql.ToString());
+
+
+
 
 
 
@@ -140,9 +153,26 @@ where 1=1 ");
             paras[10].Value = model.FINGER_TEMPLATE_1 == null ? (object)DBNull.Value : model.FINGER_TEMPLATE_1;
 
 
-            
 
-            return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), paras, cn);
+            string aa = string.Format("parameters: EMPLOYEE_ID:[{0}], USER_ID:[{1}],USER_NAME:[{2}], PASSWORD:[{3}], USER_GROUP:[{4}], UPDATED_BY:[{5}], SHIFT:[{6}]", model.EMPLOYEE_ID
+                ,model.USER_ID, model.USER_NAME, model.PASSWORD, model.USER_GROUP, model.UPDATED_BY, model.DEPARTMENT, model.SHIFT);
+
+
+            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", aa);
+
+
+           int  result = 0;
+
+            try
+            {
+                result = DBHelp.SqlDB.ExecuteSql(strSql.ToString(), paras, cn);
+            }
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", " add exception: " + ee.ToString());
+            }
+
+            return result;
         }
 
         public int Update(Common.Class.Model.User_DB_Model model)

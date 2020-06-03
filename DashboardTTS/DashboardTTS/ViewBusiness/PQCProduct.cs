@@ -974,6 +974,13 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+            //处理 PQCQaViBinning
+            Common.Class.Model.PQCQaViBinning viBinModel = new Common.Class.Model.PQCQaViBinning();
+
+
+
+
+
 
 
             return viTrackingBLL.MaintenanceUpdateQty(viTrackingModel, detailTrackingList, defectTrackingList);

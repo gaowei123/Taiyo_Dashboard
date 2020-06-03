@@ -38,15 +38,15 @@
                 </td>
                 <td style ="border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px; ">
                 <asp:DropDownList ID="ddl_Machine"  runat="server" Width="100%" Height="23px"  > 
-                    <asp:ListItem Value="1" Selected ="True">Machine 1</asp:ListItem>
-                    <asp:ListItem Value="2">No.2</asp:ListItem>
-                    <asp:ListItem Value="3">No.3</asp:ListItem>
-                    <asp:ListItem Value="4">No.4</asp:ListItem>
-                    <asp:ListItem Value="5">No.5</asp:ListItem>
-                    <asp:ListItem Value="6">No.6</asp:ListItem>
-                    <asp:ListItem Value="7">No.7</asp:ListItem>
-                    <asp:ListItem Value="8">No.8</asp:ListItem>
-                    <asp:ListItem Value="9">No.9</asp:ListItem>
+                    <asp:ListItem Value="MC01" Selected ="True">No 1</asp:ListItem>
+                    <asp:ListItem Value="MC02">No.2</asp:ListItem>
+                    <asp:ListItem Value="MC03">No.3</asp:ListItem>
+                    <asp:ListItem Value="MC04">No.4</asp:ListItem>
+                    <asp:ListItem Value="MC05">No.5</asp:ListItem>
+                    <asp:ListItem Value="MC06">No.6</asp:ListItem>
+                    <asp:ListItem Value="MC07">No.7</asp:ListItem>
+                    <asp:ListItem Value="MC08">No.8</asp:ListItem>
+                    <asp:ListItem Value="MC09">No.9</asp:ListItem>
                 </asp:DropDownList>
                 </td>
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%;   font-family: 'Arial Unicode MS'; height: 50px;"> 

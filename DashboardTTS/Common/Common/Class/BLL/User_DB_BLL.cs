@@ -54,6 +54,10 @@ namespace Common.Class.BLL
             //moulding, pqc client 会使用各自database的user_db表登入
             if (model.DEPARTMENT == StaticRes.Global.Department.Moulding)
             {
+
+                DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "start add moulding or pqc!");
+
+
                 int temp = dal.Add(model, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
                 if (temp < 1)
                 {
@@ -148,7 +152,7 @@ namespace Common.Class.BLL
             List<string> userNameList = new List<string>();
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["USER_GROUP"].ToString().ToUpper() != "ADMIN")
+                if (dr["USER_GROUP"].ToString().ToUpper() == "ADMIN")
                     continue;
 
                 string userName = dr["USER_NAME"].ToString();

@@ -52,7 +52,7 @@ namespace DashboardTTS.Webform
                         this.txtSupplier.Text = pqcBomModel.remark_1;
                         this.ddlCoating.SelectedValue = pqcBomModel.Coating;
                         this.ddlDescription.SelectedValue = pqcBomModel.Description;
-                        this.txtNumber.Text = pqcBomModel.Number; ;
+                        this.txtNumber.Text = pqcBomModel.Number;
                         this.txtUnitCost.Text = pqcBomModel.UnitCost.ToString();
                         this.txtcycleTime.Text = pqcBomModel.cycleTime.ToString();
 
