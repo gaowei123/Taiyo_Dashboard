@@ -38,7 +38,7 @@
                 </td>
                 <td style ="border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px; ">
                 <asp:DropDownList ID="ddl_Machine"  runat="server" Width="100%" Height="23px"  > 
-                    <asp:ListItem Value="MC01" Selected ="True">No 1</asp:ListItem>
+                    <asp:ListItem Value="MC01" Selected ="True">No.1</asp:ListItem>
                     <asp:ListItem Value="MC02">No.2</asp:ListItem>
                     <asp:ListItem Value="MC03">No.3</asp:ListItem>
                     <asp:ListItem Value="MC04">No.4</asp:ListItem>
