@@ -236,3 +236,7 @@ D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\De
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll.licenses
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll.licenses
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.pdb

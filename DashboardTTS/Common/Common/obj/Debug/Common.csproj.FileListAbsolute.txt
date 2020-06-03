@@ -431,3 +431,12 @@ D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\D
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.dll
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\Common.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\Common.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\DBHelp.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\StaticRes.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\DBHelp.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Debug\StaticRes.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Debug\Common.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Debug\Common.pdb
