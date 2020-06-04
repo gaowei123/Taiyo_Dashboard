@@ -237,8 +237,7 @@ namespace DBHelp
             {
                 cn.Open();
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-           
+                
 
                 da.Fill(dt);
 
