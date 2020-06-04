@@ -119,6 +119,7 @@
     <Compile Include="Class\BLL\PQCPackDetailTracking_BLL.cs" />
     <Compile Include="Class\BLL\PQCPackHistory_BLL.cs" />
     <Compile Include="Class\BLL\PQCPackTracking_BLL.cs" />
+    <Compile Include="Class\BLL\PQCQaViBinHistory_BLL.cs" />
     <Compile Include="Class\BLL\PQCQaViBinning.cs" />
     <Compile Include="Class\BLL\PQCQaViDefectHistory_BLL.cs" />
     <Compile Include="Class\BLL\PQCQaViDefectTracking_BLL.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Class\DAL\PQCPackDetailTracking_DAL.cs" />
     <Compile Include="Class\DAL\PQCPackHistory_DAL.cs" />
     <Compile Include="Class\DAL\PQCPackTracking_DAL.cs" />
+    <Compile Include="Class\DAL\PQCQaViBinHistory_DAL.cs" />
     <Compile Include="Class\DAL\PQCQaViBinning.cs" />
     <Compile Include="Class\DAL\PQCQaViDefectHistory_DAL.cs" />
     <Compile Include="Class\DAL\PQCQaViDefectTracking_DAL.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Class\Model\PQCPackDetailTracking_Model.cs" />
     <Compile Include="Class\Model\PQCPackHistory_Model.cs" />
     <Compile Include="Class\Model\PQCPackTracking_Model.cs" />
+    <Compile Include="Class\Model\PQCQaViBinHistory_Model.cs" />
     <Compile Include="Class\Model\PQCQaViBinning.cs" />
     <Compile Include="Class\Model\PQCQaViDefectHistory_Model.cs" />
     <Compile Include="Class\Model\PQCQaViDefectTracking.cs" />

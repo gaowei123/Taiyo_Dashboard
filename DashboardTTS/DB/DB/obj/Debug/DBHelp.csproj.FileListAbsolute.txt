@@ -205,6 +205,6 @@ D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Debug\DBH
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.csprojResolveAssemblyReference.cache

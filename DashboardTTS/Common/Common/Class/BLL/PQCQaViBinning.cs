@@ -18,6 +18,8 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using Common.Class.Model;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Common.Class.BLL
 {
@@ -46,6 +48,14 @@ namespace Common.Class.BLL
 		{
 			return dal.Update(model);
 		}
+
+
+        public SqlCommand UpdateCommand(Common.Class.Model.PQCQaViBinning model)
+        {
+            return dal.UpdateCommand(model);
+        }
+         
+
 
 		/// <summary>
 		/// 删除一条数据
@@ -93,9 +103,9 @@ namespace Common.Class.BLL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public List<Common.Class.Model.PQCQaViBinning> GetModelList(DateTime dDateFrom, DateTime dDateTo)
+		public List<Common.Class.Model.PQCQaViBinning> GetModelList(DateTime dDateFrom, DateTime dDateTo, string sTrackingID, string sCheckProcess)
 		{
-			DataSet ds = dal.GetList(dDateFrom, dDateTo);
+			DataSet ds = dal.GetList(dDateFrom, dDateTo, sTrackingID, sCheckProcess);
 			return DataTableToList(ds.Tables[0]);
 		}
 		/// <summary>
@@ -129,18 +139,8 @@ namespace Common.Class.BLL
 		{
 			return dal.GetListByPage( strWhere,  orderby,  startIndex,  endIndex);
 		}
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		//public DataSet GetList(int PageSize,int PageIndex,string strWhere)
-		//{
-			//return dal.GetList(PageSize,PageIndex,strWhere);
-		//}
 
 		#endregion  BasicMethod
-		#region  ExtensionMethod
-
-		#endregion  ExtensionMethod
 	}
 }
 
