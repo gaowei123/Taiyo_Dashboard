@@ -95,7 +95,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report laserBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            laserBtnModel.pqcDept = "Laser Btn";
+            laserBtnModel.pqcDept = "Laser BTN";
             laserBtnModel.totalOutput = laserBtnList.Sum(p => p.totalQty);
             laserBtnModel.actualOutput = laserBtnList.Sum(p => p.acceptQty);
             laserBtnModel.totalRej = laserBtnList.Sum(p => p.totalRej);
@@ -140,7 +140,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report wipBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            wipBtnModel.pqcDept = "WIP Btn";
+            wipBtnModel.pqcDept = "WIP BTN";
             wipBtnModel.totalOutput = wipBtnList.Sum(p => p.totalQty);
             wipBtnModel.actualOutput = wipBtnList.Sum(p => p.acceptQty);
             wipBtnModel.totalRej = wipBtnList.Sum(p => p.totalRej);
@@ -466,7 +466,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report tks869Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks869Model.pqcDept = "TKS869";
+            tks869Model.pqcDept = "TP1 TKS869";
             tks869Model.totalOutput = tks869List.Sum(p => p.totalQty);
             tks869Model.actualOutput = tks869List.Sum(p => p.acceptQty);
             tks869Model.totalRej = tks869List.Sum(p => p.totalRej);
@@ -971,14 +971,6 @@ namespace DashboardTTS.ViewBusiness
             viTrackingModel.updatedTime = DateTime.Now;
             viTrackingModel.lastUpdatedTime = DateTime.Now;
             viTrackingModel.remarks = "PQC Job Maintenance Update Qty";
-
-
-
-            //处理 PQCQaViBinning
-            Common.Class.Model.PQCQaViBinning viBinModel = new Common.Class.Model.PQCQaViBinning();
-
-
-
 
 
 

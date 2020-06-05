@@ -293,14 +293,9 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\System.W
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\System.Web.WebPages.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\System.Web.WebPages.Razor.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\WebGrease.dll
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.WebUI.Shared.v7.3.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Common.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\DBHelp.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\StaticRes.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.Web.v7.3.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.WebUI.UltraWebChart.v7.3.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.WebUI.WebDateChooser.v7.3.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.WebUI.WebSchedule.v7.3.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.AI.DependencyCollector.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.AI.ServerTelemetryChannel.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.AI.Web.xml
@@ -330,7 +325,6 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsof
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.Owin.Security.Google.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.Owin.Security.Twitter.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Infragistics2.WebUI.Shared.v7.3.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\System.Web.Helpers.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\System.Web.Mvc.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\System.Web.Optimization.resources.dll

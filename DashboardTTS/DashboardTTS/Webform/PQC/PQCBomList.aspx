@@ -63,8 +63,7 @@
                             <asp:BoundColumn DataField="description" HeaderText="Description" ></asp:BoundColumn>
                             <asp:BoundColumn DataField="number" HeaderText="Number" ></asp:BoundColumn>
                             <asp:BoundColumn DataField="unitCost" HeaderText="Unit Cost" ></asp:BoundColumn>
-                            <asp:BoundColumn DataField="cycleTime" HeaderText="Cycle Time" ItemStyle-HorizontalAlign="Center" ></asp:BoundColumn>
-                            <%--<asp:BoundColumn DataField="processes" HeaderText="Process" ></asp:BoundColumn>--%>
+                            <asp:BoundColumn DataField="cycleTime" HeaderText="Cycle Time" ItemStyle-HorizontalAlign="Center" ></asp:BoundColumn>                        
                             <asp:BoundColumn DataField="compeleteProcess" Visible="false"></asp:BoundColumn>
                             <asp:BoundColumn DataField="dateTime" HeaderText="Update Time"></asp:BoundColumn>
 
