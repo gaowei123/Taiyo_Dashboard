@@ -1,3 +1,11 @@
-bin/
-obj/
-*.suo
+DashboardTTS/DashboardTTS/bin/
+DashboardTTS/DashboardTTS/obj/
+
+DashboardTTS/Common/Common/bin/
+DashboardTTS/Common/Common/obj/
+
+DashboardTTS/DB/DB/bin/
+DashboardTTS/DB/DB/obj/
+
+DashboardTTS/StaticRes/bin/
+DashboardTTS/StaticRes/obj/
