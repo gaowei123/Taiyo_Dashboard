@@ -27,6 +27,17 @@ namespace DashboardTTS.ViewBusiness
         public string GetAllSectionList(DateTime dateStart)
         {
             
+
+
+
+
+
+
+
+
+
+
+
             //painting output 
             List<ViewModel.AllSectionInventory.paintingInfo> paintOutList = GetPaintingOutput();
 
