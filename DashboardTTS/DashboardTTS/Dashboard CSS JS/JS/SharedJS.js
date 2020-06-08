@@ -1,4 +1,4 @@
-﻿-
+﻿
 var apiGetPartList = window.globalConfig.rootDirectory + '/Common/GetPartList';
 var apiGetModelList = window.globalConfig.rootDirectory + '/Common/GetModelList';
 var apiGetJigList = window.globalConfig.rootDirectory + '/Common/GetJigNoList';
