@@ -1078,7 +1078,11 @@ namespace Common.Class.BLL
             return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
 
-        public bool MaintenanceUpdateQty(Common.Class.Model.PQCQaViTracking trackingModel, List<Common.Class.Model.PQCQaViDetailTracking_Model> detailModelList, List<Model.PQCQaViDefectTracking_Model> defectModelList)
+        public bool MaintenanceUpdateQty(Common.Class.Model.PQCQaViTracking trackingModel, 
+            List<Common.Class.Model.PQCQaViDetailTracking_Model> detailModelList, 
+            List<Model.PQCQaViDefectTracking_Model> defectModelList,
+            List<Common.Class.Model.PQCQaViBinning> binList, 
+            List<Common.Class.Model.PQCQaViBinHistory_Model> binHisList)
         {
             List<SqlCommand> cmdList = new List<SqlCommand>();
 
@@ -1117,6 +1121,22 @@ namespace Common.Class.BLL
                 cmdList.Add(defectHisBLL.AddCommand(defectHisBLL.CopyObj(model)));
             }
 
+
+
+            //update vi bin 
+            Common.Class.BLL.PQCQaViBinning binBLL = new PQCQaViBinning();
+            foreach (var binModel in binList)
+            {
+                cmdList.Add(binBLL.UpdateCommand(binModel));
+            }
+
+
+            Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new PQCQaViBinHistory_BLL();
+            foreach (var binHisModel in binHisList)
+            {
+                cmdList.Add(binHisBLL.AddCommand(binHisModel));
+            }
+            
 
 
 

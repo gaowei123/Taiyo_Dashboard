@@ -22,3 +22,8 @@ D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\D
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
 D:\Git SourceCode Storage\TAIYO\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb

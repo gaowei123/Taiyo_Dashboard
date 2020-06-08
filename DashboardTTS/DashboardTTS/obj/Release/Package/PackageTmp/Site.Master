@@ -344,6 +344,12 @@
                 $("body").css("paddingTop", 106);
             }
         }
+
+
+        $(function(){  
+            $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off'); 
+        }); 
+
     </script>
 </body>
 </html>

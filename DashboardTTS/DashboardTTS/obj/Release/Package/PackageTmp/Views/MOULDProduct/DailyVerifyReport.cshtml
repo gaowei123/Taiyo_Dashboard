@@ -9,6 +9,14 @@
 
 
 
+<style type="text/css">
+
+    a[href]:after{content:normal;}
+
+</style>
+
+
+
 <div class="container-fluid">
 
     <div class="row titleRow">
@@ -222,7 +230,7 @@
                 valign: 'middle',
                 formatter: function (value, row, index) {
                     if (row.partNo != 'Sub Total->') {
-                        return '<a target="_blank" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Day&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
+                        return '<a target="_blank" onclick="test()" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Day&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
                     } else {
                         return row.mcRunHours
                     }

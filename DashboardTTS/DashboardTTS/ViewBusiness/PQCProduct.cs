@@ -14,6 +14,8 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCQaViDetailTracking_BLL viDetailBLL = new Common.Class.BLL.PQCQaViDetailTracking_BLL();
         private readonly Common.Class.BLL.PQCQaViDefectTracking_BLL viDefectBLL = new Common.Class.BLL.PQCQaViDefectTracking_BLL();
         private readonly Common.Class.BLL.PQCInventory_BLL inventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
+        private readonly Common.Class.BLL.PQCQaViBinning viBinBLL = new Common.Class.BLL.PQCQaViBinning();
+        private readonly Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new Common.Class.BLL.PQCQaViBinHistory_BLL();
 
 
 
@@ -910,6 +912,9 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
             
             //处理 defect list
             List<Common.Class.Model.PQCQaViDefectTracking_Model> defectTrackingList = viDefectBLL.GetModelList(trackingID);
@@ -919,7 +924,7 @@ namespace DashboardTTS.ViewBusiness
                 int materialSN = (from a in materialList where a.materialNo == model.materialPartNo select a).FirstOrDefault().sn;
 
 
-                //前台id规则,   txtid_SN_CodeID   获取提交的数量
+                //前台id自动命名规则,   txtid_SN_CodeID   获取提交的数量
                 decimal rejQty = decimal.Parse(formParameters["txtid_" + materialSN.ToString() + "_" + model.defectCodeID]);
 
 
@@ -933,10 +938,18 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
             //处理 detail list
+
+            //收集对应material pass qty修改后增加了多少。 用于更新 vi bin history。
+            Dictionary<string, decimal> dicAddedPassQty = new Dictionary<string, decimal>();
+
             List<Common.Class.Model.PQCQaViDetailTracking_Model> detailTrackingList = viDetailBLL.GetModelList(trackingID, "", null, null);
             foreach (Common.Class.Model.PQCQaViDetailTracking_Model model in detailTrackingList)
             {
+
                 //matrial sn,  defectCode id
                 int materialSN = (from a in materialList where a.materialNo == model.materialPartNo select a).FirstOrDefault().sn;
 
@@ -949,7 +962,13 @@ namespace DashboardTTS.ViewBusiness
                 decimal passQty = decimal.Parse(formParameters["txtid_" + materialSN.ToString()]);
 
 
-          
+
+                //记录passqty增加了多少。
+                dicAddedPassQty.Add(model.materialPartNo, passQty - model.passQty.Value);
+
+
+
+
                 model.passQty = passQty;
                 model.rejectQty = rejQty;
                 model.totalQty = passQty + rejQty;
@@ -959,7 +978,7 @@ namespace DashboardTTS.ViewBusiness
             }
 
 
-
+            
 
 
             //处理 vi tracing model
@@ -975,7 +994,41 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-            return viTrackingBLL.MaintenanceUpdateQty(viTrackingModel, detailTrackingList, defectTrackingList);
+
+            //处理 PQCQaViBinning
+            List<Common.Class.Model.PQCQaViBinning> viBinList = new List<Common.Class.Model.PQCQaViBinning>();
+            List<Common.Class.Model.PQCQaViBinHistory_Model> binHistoryList = new List<Common.Class.Model.PQCQaViBinHistory_Model>();
+
+            //根据 jobid， process 获取下改 bin 信息。
+            viBinList = viBinBLL.GetModelList(null,null, viTrackingModel.jobId, viTrackingModel.processes);
+
+
+
+            foreach (Common.Class.Model.PQCQaViBinning binModel in viBinList)
+            {
+
+                decimal addedPassQty = dicAddedPassQty[binModel.materialPartNo];
+                decimal curPassQty = binModel.materialQty.Value;
+
+
+                // material qty =  bin的原本数量  +  修改后增加的数量。
+                binModel.materialQty = binModel.materialQty.Value + addedPassQty;
+
+                
+
+                //拷贝到bin history model， 并将原本数量赋值给material from qty， 并添加到list中。
+                Common.Class.Model.PQCQaViBinHistory_Model binHisModel = new Common.Class.Model.PQCQaViBinHistory_Model();
+                binHisModel = binHisBLL.CopyModel(binModel);
+                binHisModel.materialFromQty = curPassQty;
+                binHisModel.updatedTime = DateTime.Now;
+                binHistoryList.Add(binHisModel);
+
+            }
+
+
+
+
+            return viTrackingBLL.MaintenanceUpdateQty(viTrackingModel, detailTrackingList, defectTrackingList, viBinList, binHistoryList);
         }
 
         #endregion

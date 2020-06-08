@@ -1,20 +1,4 @@
-﻿/**  版本信息模板在安装目录下，可自行修改。
-* PQCQaViBinning.cs
-*
-* 功 能： N/A
-* 类 名： PQCQaViBinning
-*
-* Ver    变更日期             负责人  变更内容
-* ───────────────────────────────────
-* V0.01  2020/4/10 10:15:12   N/A    初版
-*
-* Copyright (c) 2012 Maticsoft Corporation. All rights reserved.
-*┌──────────────────────────────────┐
-*│　此技术信息为本公司机密信息，未经本公司书面同意禁止向第三方披露．　│
-*│　版权所有：动软卓越（北京）科技有限公司　　　　　　　　　　　　　　│
-*└──────────────────────────────────┘
-*/
-using System;
+﻿using System;
 using System.Data;
 using System.Text;
 using System.Data.SqlClient;
@@ -195,10 +179,94 @@ namespace Common.Class.DAL
 			}
 		}
 
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public bool Delete()
+
+        public SqlCommand UpdateCommand(Common.Class.Model.PQCQaViBinning model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update PQCQaViBinning set ");
+            strSql.Append("id=@id,");
+            //strSql.Append("trackingID=@trackingID,");
+            strSql.Append("processes=@processes,");
+            strSql.Append("jobId=@jobId,");
+            strSql.Append("PartNumber=@PartNumber,");
+            //strSql.Append("materialPartNo=@materialPartNo,");
+            strSql.Append("materialName=@materialName,");
+            strSql.Append("shipTo=@shipTo,");
+            strSql.Append("model=@model,");
+            strSql.Append("jigNo=@jigNo,");
+            strSql.Append("materialQty=@materialQty,");
+            strSql.Append("status=@status,");
+            strSql.Append("nextViFlag=@nextViFlag,");
+            strSql.Append("dateTime=@dateTime,");
+            strSql.Append("day=@day,");
+            strSql.Append("shift=@shift,");
+            strSql.Append("userName=@userName,");
+            strSql.Append("userID=@userID,");
+            strSql.Append("remark_1=@remark_1,");
+            strSql.Append("remark_2=@remark_2,");
+            strSql.Append("remark_3=@remark_3,");
+            strSql.Append("remark_4=@remark_4,");
+            strSql.Append("remarks=@remarks,");
+            strSql.Append("updatedTime=@updatedTime");
+            strSql.Append(" where  trackingID=@trackingID and  materialPartNo=@materialPartNo ");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.VarChar,50),
+                    new SqlParameter("@trackingID", SqlDbType.VarChar,50),
+                    new SqlParameter("@processes", SqlDbType.VarChar,50),
+                    new SqlParameter("@jobId", SqlDbType.VarChar,50),
+                    new SqlParameter("@PartNumber", SqlDbType.VarChar,50),
+                    new SqlParameter("@materialPartNo", SqlDbType.VarChar,50),
+                    new SqlParameter("@materialName", SqlDbType.VarChar,50),
+                    new SqlParameter("@shipTo", SqlDbType.VarChar,20),
+                    new SqlParameter("@model", SqlDbType.VarChar,20),
+                    new SqlParameter("@jigNo", SqlDbType.VarChar,20),
+                    new SqlParameter("@materialQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@status", SqlDbType.VarChar,20),
+                    new SqlParameter("@nextViFlag", SqlDbType.VarChar,50),
+                    new SqlParameter("@dateTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@day", SqlDbType.DateTime2,8),
+                    new SqlParameter("@shift", SqlDbType.VarChar,50),
+                    new SqlParameter("@userName", SqlDbType.VarChar,50),
+                    new SqlParameter("@userID", SqlDbType.VarChar,50),
+                    new SqlParameter("@remark_1", SqlDbType.VarChar,20),
+                    new SqlParameter("@remark_2", SqlDbType.VarChar,20),
+                    new SqlParameter("@remark_3", SqlDbType.VarChar,20),
+                    new SqlParameter("@remark_4", SqlDbType.VarChar,20),
+                    new SqlParameter("@remarks", SqlDbType.VarChar,500),
+                    new SqlParameter("@updatedTime", SqlDbType.DateTime2,8)};
+            parameters[0].Value = model.id;
+            parameters[1].Value = model.trackingID;
+            parameters[2].Value = model.processes;
+            parameters[3].Value = model.jobId;
+            parameters[4].Value = model.PartNumber;
+            parameters[5].Value = model.materialPartNo;
+            parameters[6].Value = model.materialName;
+            parameters[7].Value = model.shipTo;
+            parameters[8].Value = model.model;
+            parameters[9].Value = model.jigNo;
+            parameters[10].Value = model.materialQty;
+            parameters[11].Value = model.status;
+            parameters[12].Value = model.nextViFlag;
+            parameters[13].Value = model.dateTime;
+            parameters[14].Value = model.day;
+            parameters[15].Value = model.shift;
+            parameters[16].Value = model.userName;
+            parameters[17].Value = model.userID;
+            parameters[18].Value = model.remark_1;
+            parameters[19].Value = model.remark_2;
+            parameters[20].Value = model.remark_3;
+            parameters[21].Value = model.remark_4;
+            parameters[22].Value = model.remarks;
+            parameters[23].Value = model.updatedTime;
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
+
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public bool Delete()
 		{
 			//该表无主键信息，请自定义主键/条件字段
 			StringBuilder strSql=new StringBuilder();
@@ -304,9 +372,21 @@ namespace Common.Class.DAL
 				{
 					model.nextViFlag=row["nextViFlag"].ToString();
 				}
-					//model.dateTime=row["dateTime"].ToString();
-					//model.day=row["day"].ToString();
-				if(row["shift"]!=null)
+
+                if (row["dateTime"] != null && row["dateTime"].ToString() != "")
+                {
+                    model.dateTime = DateTime.Parse(row["dateTime"].ToString());
+                }
+
+                if (row["day"] != null && row["day"].ToString() != "")
+                {
+                    model.day = DateTime.Parse(row["day"].ToString());
+                }
+
+
+
+             
+                if (row["shift"]!=null)
 				{
 					model.shift=row["shift"].ToString();
 				}
@@ -338,8 +418,13 @@ namespace Common.Class.DAL
 				{
 					model.remarks=row["remarks"].ToString();
 				}
-					//model.updatedTime=row["updatedTime"].ToString();
-			}
+
+                if (row["updatedTime"] != null && row["updatedTime"].ToString() != "")
+                {
+                    model.updatedTime = DateTime.Parse(row["updatedTime"].ToString());
+                }
+           
+            }
 			return model;
 		}
 
@@ -363,10 +448,43 @@ namespace Common.Class.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
 
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
+
+
+        public DataSet GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobID, string sCheckProcess)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime ");
+            strSql.Append(" FROM PQCQaViBinning  where 1=1 ");
+
+            if (dDateFrom != null) strSql.Append(" and day >= @dateFrom ");
+            if (dDateTo != null) strSql.Append(" and day < @dateTo ");
+            if (!string.IsNullOrEmpty(sJobID)) strSql.Append(" and jobID = @jobID");
+            if (!string.IsNullOrEmpty(sCheckProcess)) strSql.Append(" and processes = @processes");
+
+
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@dateFrom", SqlDbType.DateTime),
+                    new SqlParameter("@dateTo", SqlDbType.DateTime),
+                    new SqlParameter("@jobID", SqlDbType.VarChar),
+                    new SqlParameter("@processes",SqlDbType.VarChar)
+            };
+
+            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
+            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sJobID)) parameters[2].Value = sJobID; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(sCheckProcess)) parameters[3].Value = sCheckProcess; else parameters[3] = null;
+
+
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+        /// <summary>
+        /// 获得前几行数据
+        /// </summary>
+        public DataSet GetList(int Top,string strWhere,string filedOrder)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select ");

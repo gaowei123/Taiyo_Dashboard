@@ -3,11 +3,6 @@
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
   
-    <link href="../css/Dashboard.css" rel="stylesheet" />
-    <script src="../js/Dashboard.js"></script>
-   
-
-    
     <div style =" width: 75%; margin:auto">
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">
             <tr style ="width: 100%">
@@ -81,5 +76,16 @@
         </table> 
     </div>
     
+
+
+    <link href="../../plugins/bigautocomplete/jquery.bigautocomplete.css" rel="stylesheet" />
+    <script src="../../plugins/bigautocomplete/jquery.bigautocomplete.js"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $(function () {
+                setAutoComplete($('#MainContent_txt_partNo'), 'PQC');
+            });
+        });
+    </script>
            
 </asp:Content>
