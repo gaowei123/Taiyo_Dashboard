@@ -450,14 +450,15 @@ namespace Common.Class.DAL
 
 
 
-        public DataSet GetList(DateTime dDateFrom, DateTime dDateTo, string sTrackingID, string sCheckProcess)
+        public DataSet GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobID, string sCheckProcess)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("select id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime ");
-            strSql.Append(" FROM PQCQaViBinning  where 1=1 and day >= @dateFrom and day < @dateTo");
+            strSql.Append(" FROM PQCQaViBinning  where 1=1 ");
 
-
-            if (!string.IsNullOrEmpty(sTrackingID)) strSql.Append(" and trackingID = @trackingID");
+            if (dDateFrom != null) strSql.Append(" and day >= @dateFrom ");
+            if (dDateTo != null) strSql.Append(" and day < @dateTo ");
+            if (!string.IsNullOrEmpty(sJobID)) strSql.Append(" and jobID = @jobID");
             if (!string.IsNullOrEmpty(sCheckProcess)) strSql.Append(" and processes = @processes");
 
 
@@ -465,12 +466,13 @@ namespace Common.Class.DAL
             SqlParameter[] parameters = {
                     new SqlParameter("@dateFrom", SqlDbType.DateTime),
                     new SqlParameter("@dateTo", SqlDbType.DateTime),
-                    new SqlParameter("@trackingID", SqlDbType.VarChar),
+                    new SqlParameter("@jobID", SqlDbType.VarChar),
                     new SqlParameter("@processes",SqlDbType.VarChar)
             };
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-            if (!string.IsNullOrEmpty(sTrackingID)) parameters[2].Value = sTrackingID; else parameters[2] = null;
+
+            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
+            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sJobID)) parameters[2].Value = sJobID; else parameters[2] = null;
             if (!string.IsNullOrEmpty(sCheckProcess)) parameters[3].Value = sCheckProcess; else parameters[3] = null;
 
 

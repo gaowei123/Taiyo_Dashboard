@@ -298,7 +298,8 @@ namespace DBHelp
                 for (int i = 0; i <= cmdlist.Count - 1; i++)
                 {
                     SqlCommand cmd = cmdlist[i];
-                
+
+                                 
                     cmd.Connection = cn;
                     cmd.Transaction = tran;
                     

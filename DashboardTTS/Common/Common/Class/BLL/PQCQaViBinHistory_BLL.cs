@@ -46,6 +46,7 @@ namespace Common.Class.BLL
             hisModel.day = model.day;
             hisModel.shift = model.shift;
             hisModel.userName = model.userName;
+            hisModel.userID = model.userID;
             hisModel.remark_1 = model.remark_1;
             hisModel.remark_2 = model.remark_2;
             hisModel.remark_3 = model.remark_3;

@@ -14,7 +14,7 @@ namespace Common.Class.DAL
         public SqlCommand AddCommand(Common.Class.Model.PQCQaViBinHistory_Model model)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("insert into PQCQaViBinning(");
+            strSql.Append("insert into PQCQaViBinHistory(");
             strSql.Append("id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,materialFromQty,updatedTime)");
             strSql.Append(" values (");
             strSql.Append("@id,@trackingID,@processes,@jobId,@PartNumber,@materialPartNo,@materialName,@shipTo,@model,@jigNo,@materialQty,@status,@nextViFlag,@dateTime,@day,@shift,@userName,@userID,@remark_1,@remark_2,@remark_3,@remark_4,@remarks,@materialFromQty,@updatedTime)");

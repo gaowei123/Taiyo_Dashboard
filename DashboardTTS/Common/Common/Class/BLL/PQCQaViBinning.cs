@@ -103,9 +103,9 @@ namespace Common.Class.BLL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public List<Common.Class.Model.PQCQaViBinning> GetModelList(DateTime dDateFrom, DateTime dDateTo, string sTrackingID, string sCheckProcess)
+		public List<Common.Class.Model.PQCQaViBinning> GetModelList(DateTime? dDateFrom, DateTime? dDateTo, string sJobID, string sCheckProcess)
 		{
-			DataSet ds = dal.GetList(dDateFrom, dDateTo, sTrackingID, sCheckProcess);
+			DataSet ds = dal.GetList(dDateFrom, dDateTo, sJobID, sCheckProcess);
 			return DataTableToList(ds.Tables[0]);
 		}
 		/// <summary>
@@ -132,13 +132,6 @@ namespace Common.Class.BLL
 
 	
 
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetListByPage(string strWhere, string orderby, int startIndex, int endIndex)
-		{
-			return dal.GetListByPage( strWhere,  orderby,  startIndex,  endIndex);
-		}
 
 		#endregion  BasicMethod
 	}

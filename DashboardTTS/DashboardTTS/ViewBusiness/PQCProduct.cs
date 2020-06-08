@@ -97,7 +97,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report laserBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            laserBtnModel.pqcDept = "Laser Btn";
+            laserBtnModel.pqcDept = "Laser BTN";
             laserBtnModel.totalOutput = laserBtnList.Sum(p => p.totalQty);
             laserBtnModel.actualOutput = laserBtnList.Sum(p => p.acceptQty);
             laserBtnModel.totalRej = laserBtnList.Sum(p => p.totalRej);
@@ -142,7 +142,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report wipBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            wipBtnModel.pqcDept = "WIP Btn";
+            wipBtnModel.pqcDept = "WIP BTN";
             wipBtnModel.totalOutput = wipBtnList.Sum(p => p.totalQty);
             wipBtnModel.actualOutput = wipBtnList.Sum(p => p.acceptQty);
             wipBtnModel.totalRej = wipBtnList.Sum(p => p.totalRej);
@@ -468,7 +468,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report tks869Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks869Model.pqcDept = "TKS869";
+            tks869Model.pqcDept = "TP1 TKS869";
             tks869Model.totalOutput = tks869List.Sum(p => p.totalQty);
             tks869Model.actualOutput = tks869List.Sum(p => p.acceptQty);
             tks869Model.totalRej = tks869List.Sum(p => p.totalRej);
@@ -996,12 +996,11 @@ namespace DashboardTTS.ViewBusiness
 
 
             //处理 PQCQaViBinning
-
             List<Common.Class.Model.PQCQaViBinning> viBinList = new List<Common.Class.Model.PQCQaViBinning>();
             List<Common.Class.Model.PQCQaViBinHistory_Model> binHistoryList = new List<Common.Class.Model.PQCQaViBinHistory_Model>();
 
             //根据 jobid， process 获取下改 bin 信息。
-            viBinList = viBinBLL.GetModelList(viTrackingModel.day.AddDays(-1), viTrackingModel.day.AddDays(1), viTrackingModel.trackingID, viTrackingModel.processes);
+            viBinList = viBinBLL.GetModelList(null,null, viTrackingModel.jobId, viTrackingModel.processes);
 
 
 
@@ -1021,16 +1020,10 @@ namespace DashboardTTS.ViewBusiness
                 Common.Class.Model.PQCQaViBinHistory_Model binHisModel = new Common.Class.Model.PQCQaViBinHistory_Model();
                 binHisModel = binHisBLL.CopyModel(binModel);
                 binHisModel.materialFromQty = curPassQty;
-                binHistoryList.Add(binHisBLL.CopyModel(binModel));
+                binHisModel.updatedTime = DateTime.Now;
+                binHistoryList.Add(binHisModel);
 
             }
-
-
-            
-
-
-
-
 
 
 
