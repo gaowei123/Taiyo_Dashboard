@@ -52,14 +52,33 @@ namespace DashboardTTS.ViewModel
             public string model { get; set; }
             public string partNo { get; set; }
             public string jobNo { get; set; }
-            public string materialNo { get; set; }
-            
-            public double? paintInventory { get; set; }
-            public double? laserInventory { get; set; }
-            public double? checkInventory_1 { get; set; }
-            public double? checkInventory_2 { get; set; }
-            public double? packingInventory { get; set; }
-            
+            public string materialName { get; set; }
+
+
+
+            public double? rawPartMoulding { get; set; }
+            public double? ucPaint { get; set; }
+            public double? mcPaint { get; set; }
+            public double? tcPaint { get; set; }
+
+
+            public double? beforeLaser { get; set; }
+            public double? afterLaser { get; set; }
+            public double? beforeWIP { get; set; }
+            public double? afterWIP { get; set; }
+            public double? beforePack { get; set; }
+            public double? afterPack { get; set; }
+
+
+            public double? beforeFG { get; set; }
+            public double? beforeAssembly { get; set; }
+
+            public double? afterFG { get; set; }
+            public double? afterAssembly { get; set; }
+
+
+            public double? lineRej { get; set; }
+
 
         }
 
