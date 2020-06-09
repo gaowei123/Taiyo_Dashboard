@@ -31,6 +31,7 @@ namespace DashboardTTS.Controllers
 
         public ActionResult GetAllSectionInventoryReport()
         {
+            //全部从6-1号开始计算.
             string result = vBLL.GetAllSectionList(DateTime.Parse("2020-6-1"));            
             return Content(result);
         }

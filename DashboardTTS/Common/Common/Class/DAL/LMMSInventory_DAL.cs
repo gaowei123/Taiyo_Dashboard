@@ -607,5 +607,50 @@ group by a.ID");
 
         }
 
+
+
+
+        public DataTable GetInventoryInfoForAllInventoryReport(DateTime dStartTime)
+        {
+
+            //laser inventory中没有做完的数量, 作为before laser
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+a.jobnumber 
+,a.partnumber
+,b.materialPartNo
+,a.quantity
+
+from lmmsinventory a
+left join LMMSBomDetail b on a.partnumber = b.partnumber 
+left join LMMSWatchLog c on a.jobnumber = c.jobNumber
+left join (select partNumber, count(1) as materialCount from lmmsbomdetail group by partnumber ) d on a.partnumber = d.partnumber 
+
+where 1=1 and a.datetime >= @startTime
+and c.totalPass + totalFail +  isnull(a.pqcQuantity,0) * d.materialCount +  isnull(a.setUpQTY,0) * d.materialCount +  isnull(a.buyOffQty,0) * d.materialCount  < c.totalQuantity ");
+
+       
+            SqlParameter[] parameters = {
+                new SqlParameter("@startTime", SqlDbType.DateTime)
+            };
+
+            parameters[0].Value = dStartTime;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+
+        }
+
+
+
+
+
+
     }
 }

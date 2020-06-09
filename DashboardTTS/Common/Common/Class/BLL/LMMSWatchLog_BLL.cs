@@ -1911,9 +1911,9 @@ namespace Common.BLL
         }
 
 
-        public DataTable GetMaterialListForAllSectionReport(string sJobNo)
+        public DataTable GetMaterialListForAllSectionReport(DateTime  dStartTime)
         {
-            DataSet ds = dal.GetMaterialListForAllSectionReport( sJobNo);
+            DataSet ds = dal.GetMaterialListForAllSectionReport(dStartTime);
             if (ds == null || ds.Tables.Count == 0)
             {
                 return null;

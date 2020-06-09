@@ -18,19 +18,41 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCQaViDetailTracking_BLL detialTrackingBLL = new Common.Class.BLL.PQCQaViDetailTracking_BLL();
         private readonly Common.Class.BLL.PQCQaViBinning pqcBinBLL = new Common.Class.BLL.PQCQaViBinning();
         private readonly Common.Class.BLL.PQCBom_BLL pqcBomBLL = new Common.Class.BLL.PQCBom_BLL();
+        private readonly Common.Class.BLL.PQCQaViTracking_BLL viTrackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
+
+
+        private readonly Common.Class.BLL.LMMSInventoty_BLL laserInventoryBLL = new Common.Class.BLL.LMMSInventoty_BLL();
 
 
 
+        
 
 
         #region all section inventory report 
-        public string GetAllSectionList(DateTime dateStart)
+        public string GetAllSectionList(DateTime dStartTime)
         {
+
+            //pqc bom info.
+            List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+            if (bomList == null) return "";
+
+
+
+
+            //laser before 
+            //painting delivery  not complete.
             
+
+            //laser after
+
+            
+
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             return js.Serialize("");
         }
+
+
 
 
 
@@ -80,40 +102,7 @@ namespace DashboardTTS.ViewBusiness
             return modelList;
         }
         
-        private List<ViewModel.AllSectionInventory.laserInfo> GetLaserOutput()
-        {
-           
-            DataTable dt = watchLogBLL.GetMaterialListForAllSectionReport( "");
-            if (dt == null || dt.Rows.Count == 0 )
-                return null;
-
-
-            List<ViewModel.AllSectionInventory.laserInfo> modelList = new List<ViewModel.AllSectionInventory.laserInfo>();
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                ViewModel.AllSectionInventory.laserInfo model = new ViewModel.AllSectionInventory.laserInfo();
-                
-                model.materialNo = dr["materialNo"].ToString();
-
-
-                if (dr["outputQty"].ToString() == "")
-                {
-                    model.outputQty = 0;
-                }else
-                {
-                    model.outputQty = double.Parse(dr["outputQty"].ToString());
-                }
-                
-                           
-                modelList.Add(model);
-            }
-
-
-
-
-            return modelList;
-        }
+       
         
         private List<ViewModel.AllSectionInventory.pqcCheckInfo> GetCheckInfo(DateTime dDateStart)
         {
@@ -181,6 +170,136 @@ namespace DashboardTTS.ViewBusiness
 
             return binList;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private List<ViewModel.AllSectionInventory.pqcBomInfo> GetPQCBomInfo()
+        {
+            DataTable dt = pqcBomBLL.GetListWithDetail("");
+            if (dt == null || dt.Rows.Count ==0)
+                return null;
+
+
+            List<ViewModel.AllSectionInventory.pqcBomInfo> modelList = new List<ViewModel.AllSectionInventory.pqcBomInfo>();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.pqcBomInfo model = new ViewModel.AllSectionInventory.pqcBomInfo();
+                model.partNo = dr["partNumber"].ToString();
+                model.materialName = dr["materialName"].ToString();
+                model.materialNo = dr["materialPartNo"].ToString();
+                model.model = dr["model"].ToString();
+                model.processes = dr["processes"].ToString();
+                model.shipTo = dr["shipTo"].ToString();
+
+                modelList.Add(model);
+            }
+
+
+            return modelList;
+        }
+        
+
+        //after laser
+        private List<ViewModel.AllSectionInventory.laserOutputInfo> GetLaserOutput(DateTime dStartTime)
+        {
+
+            DataTable dt = watchLogBLL.GetMaterialListForAllSectionReport(dStartTime);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+            List<ViewModel.AllSectionInventory.laserOutputInfo> modelList = new List<ViewModel.AllSectionInventory.laserOutputInfo>();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.laserOutputInfo model = new ViewModel.AllSectionInventory.laserOutputInfo();
+
+                model.jobNo = dr["jobNumber"].ToString();
+                model.partNo = dr["partNumber"].ToString();
+                model.materialNo = dr["materialNo"].ToString();
+                model.okQty = double.Parse(dr["okQty"].ToString());
+                model.ngQty = double.Parse(dr["ngQty"].ToString());
+                model.jobStatus = dr["jobStatus"].ToString();
+
+                modelList.Add(model);
+            }
+
+
+
+
+            return modelList;
+        }
+
+
+        //before laser
+        private List<ViewModel.AllSectionInventory.laserInventoryInfo> GetLaserInventory(DateTime dStartTime)
+        {
+
+            DataTable dt = laserInventoryBLL.GetInventoryInfoForAllInventoryReport(dStartTime);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+            
+            List<ViewModel.AllSectionInventory.laserInventoryInfo> modelList = new List<ViewModel.AllSectionInventory.laserInventoryInfo>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.laserInventoryInfo model = new ViewModel.AllSectionInventory.laserInventoryInfo();
+                model.jobNo = dr["jobNumber"].ToString();
+                model.partNo = dr["partNumber"].ToString();
+                model.materialNo = dr["materialPartNo"].ToString();
+                model.qty = double.Parse(dr["quantity"].ToString());
+                
+                modelList.Add(model);                
+            }
+
+
+            return modelList;
+        }
+
+
+        private List<ViewModel.AllSectionInventory.pqcOutputInfo> GetPQCOutput(DateTime dStartTime)
+        {
+
+            DataTable dt = viTrackingBLL.GetOutputForAllInventoryReport(dStartTime);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+            
+
+            List<ViewModel.AllSectionInventory.pqcOutputInfo> modelList = new List<ViewModel.AllSectionInventory.pqcOutputInfo>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.pqcOutputInfo model = new ViewModel.AllSectionInventory.pqcOutputInfo();
+                model.jobNo = dr["jobid"].ToString();
+                model.partNo = dr["partnumber"].ToString();
+                model.checkProcess = dr["checkProcess"].ToString();
+                model.nextViFlag = bool.Parse(dr["nextViFlag"].ToString());
+                model.materialNo = dr["materialPartNo"].ToString();
+                model.materialName = dr["materialName"].ToString();
+                model.passQty = double.Parse(dr["passQty"].ToString());
+                model.rejectQty = double.Parse(dr["rejectQty"].ToString());
+                model.allProcess = dr["allProcess"].ToString();
+
+             
+                modelList.Add(model);
+            }
+
+
+            return modelList;
+        }
+        
+
+
 
 
         #endregion

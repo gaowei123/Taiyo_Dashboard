@@ -2337,6 +2337,49 @@ and a.day=@day ");
 
 
 
+        public DataTable GetOutputForAllInventoryReport(DateTime dStartTime)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+
+a.trackingID
+,a.partnumber
+,a.jobid
+,a.processes as checkProcess
+,a.nextViFlag
+,b.materialPartNo
+,b.materialname
+,b.passQty
+,b.rejectQty
+,c.processes as allProcess
+
+from PQCQaViTracking a
+left join pqcqavidetailtracking b on a.trackingid = b.trackingid 
+left join pqcbom c on a.partnumber = c.partnumber 
+where a.day >= @startTime ");
+
+
+
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@startTime", SqlDbType.DateTime)
+            };
+            parameters[0].Value = dStartTime;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+
+        }
+
+
+
     }
 }
 

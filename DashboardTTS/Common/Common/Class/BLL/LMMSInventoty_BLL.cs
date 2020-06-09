@@ -428,6 +428,11 @@ namespace Common.Class.BLL
         }
      
 
+        public DataTable GetInventoryInfoForAllInventoryReport(DateTime dStartTime)
+        {
+            return dal.GetInventoryInfoForAllInventoryReport(dStartTime);
+        }
+
 
 
 

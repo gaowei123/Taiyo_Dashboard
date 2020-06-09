@@ -2331,45 +2331,45 @@ where a.materialNo != '' or okQty !=0 or ngQty !=0  ");
 
 
 
-        public DataSet GetMaterialListForAllSectionReport(string sJobNo)
+        public DataSet GetMaterialListForAllSectionReport(DateTime dStartTime)
         {
             StringBuilder strSql = new StringBuilder();
 
 
-            strSql.Append(@"
+            strSql.Append(@"  
 with watchLog as (
     SELECT
+	a.jobNumber, a.partNumber,
     [model1Name],[model2Name],[model3Name],[model4Name],[model5Name],[model6Name],[model7Name],[model8Name],[model9Name],[model10Name],[model11Name]
     ,[ok1Count],[ok2Count],[ok3Count],[ok4Count],[ok5Count],[ok6Count],[ok7Count],[ok8Count],[ok9Count],[ok10Count],[ok11Count]
     ,[ng1Count],[ng2Count],[ng3Count],[ng4Count],[ng5Count],[ng6Count],[ng7Count],[ng8Count],[ng9Count],[ng10Count],[ng11Count]
-	,isnull(c.pqcQuantity,0) as shortage
-	,isnull(c.setUpQTY,0) as setup
-	,isnull(c.buyOffQty,0) as buyoff
-    FROM[LMMSWatchDog_Shift] a 
-	left join LMMSInventory c on a.jobNumber = c.jobNumber
-    where 1 = 1 
-    and a.day >= '2018-9-1' ");
 
+	,case when a.totalPass + a.totalFail + isnull(b.pqcQuantity,0) * c.materialCount + isnull(b.setUpQTY,0) * c.materialCount + isnull(b.buyOffQty,0) * c.materialCount > = a.totalQuantity 
+	then 'DONE'
+	else 'ONGOING'
+	end as jobStatus
 
-            if(sJobNo != "") strSql.Append(" and a.jobNumber = @jobNo ");
+    FROM lmmswatchlog a 
+	left join LMMSInventory b on a.jobNumber = b.jobNumber
+	left join (select partNumber, count(1) as materialCount from LMMSBomDetail group by partNumber  ) c 
+	on c.partNumber = a.partNumber
+    where 1 = 1 and a.datetime >= @dStartTime ) ");
 
-
-            strSql.Append(")");
             
 
             strSql.Append(@"
-select materialNo, (okQty + ngQty + shortage + setup + buyoff) as outputQty from (
-	select model1Name as materialNo, ok1Count as okQty, ng1Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model2Name as materialNo, ok2Count as okQty, ng2Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model3Name as materialNo, ok3Count as okQty, ng3Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model4Name as materialNo, ok4Count as okQty, ng4Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model5Name as materialNo, ok5Count as okQty, ng5Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model6Name as materialNo, ok6Count as okQty, ng6Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model7Name as materialNo, ok7Count as okQty, ng7Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model8Name as materialNo, ok8Count as okQty, ng8Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model9Name as materialNo, ok9Count as okQty, ng9Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model10Name as materialNo, ok10Count as okQty, ng10Count as ngQty, shortage, setup, buyoff from watchLog union all
-	select model11Name as materialNo, ok11Count as okQty, ng11Count as ngQty, shortage, setup, buyoff from watchLog 
+select jobNumber, partNumber , materialNo, okQty, ngQty, jobStatus from (
+	select jobNumber, partNumber, model1Name as materialNo,  isnull(ok1Count,0) as okQty,  isnull(ng1Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model2Name as materialNo,  isnull(ok2Count,0) as okQty,  isnull(ng2Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model3Name as materialNo,  isnull(ok3Count,0) as okQty,  isnull(ng3Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model4Name as materialNo,  isnull(ok4Count,0) as okQty,  isnull(ng4Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model5Name as materialNo,  isnull(ok5Count,0) as okQty,  isnull(ng5Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model6Name as materialNo,  isnull(ok6Count,0) as okQty,  isnull(ng6Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model7Name as materialNo,  isnull(ok7Count,0) as okQty,  isnull(ng7Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model8Name as materialNo,  isnull(ok8Count,0) as okQty,  isnull(ng8Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model9Name as materialNo,  isnull(ok9Count,0) as okQty,  isnull(ng9Count ,0) as ngQty   ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model10Name as materialNo, isnull(ok10Count,0) as okQty, isnull(ng10Count,0)  as ngQty  ,jobStatus from watchLog union all
+	select jobNumber, partNumber, model11Name as materialNo, isnull(ok11Count,0) as okQty, isnull(ng11Count,0)  as ngQty  ,jobStatus from watchLog 
 ) a
 
 where a.materialNo != '' ");
@@ -2380,11 +2380,10 @@ where a.materialNo != '' ");
 
 
             SqlParameter[] parameters = {
-                new SqlParameter("@jobNo", SqlDbType.VarChar)
+                new SqlParameter("@dStartTime", SqlDbType.DateTime)
             };
-            
-            if (sJobNo != "") parameters[0].Value = sJobNo; else parameters[0] = null;
 
+            parameters[0].Value = dStartTime;
 
 
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
