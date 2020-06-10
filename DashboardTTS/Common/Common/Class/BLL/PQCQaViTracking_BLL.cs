@@ -1174,9 +1174,9 @@ namespace Common.Class.BLL
             return jobList;
         }
 
-        public DataTable GetOutputForAllInventoryReport(DateTime dStartTime)
+        public DataTable GetWIPOutputForAllInventoryReport(DateTime dStartTime)
         {
-            return dal.GetOutputForAllInventoryReport(dStartTime);
+            return dal.GetWIPOutputForAllInventoryReport(dStartTime);
         }
 
 

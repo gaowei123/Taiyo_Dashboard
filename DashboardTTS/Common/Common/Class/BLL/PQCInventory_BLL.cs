@@ -292,6 +292,13 @@ namespace Common.Class.BLL
             return dt;
         }
 
+
+
+        public DataTable GetInventoryForAllSectionReport(DateTime dStartTime)
+        {
+            return dal.GetInventoryForAllSectionReport(dStartTime);
+        }
+
         #endregion
 
 

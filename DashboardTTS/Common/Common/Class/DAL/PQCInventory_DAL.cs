@@ -683,5 +683,75 @@ and (CHARINDEX('Laser', b.processes,0) = 0 or CHARINDEX('Laser', b.processes,0) 
             }
         }
 
+
+
+
+
+        public DataTable GetInventoryForAllSectionReport(DateTime dStartTime)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+with jobProcess as (
+	select
+	jobid
+	,max(a.processes) as curProcess
+	,case when  max(nextviflag) = 'true' and    max(a.processes) = (case when b.processes like '%Check#3%' then 'CHECK#3' when b.processes like '%Check#2%' then 'CHECK#2' else 'CHECK#1' end)
+	      then 'true'  else 'false' 
+     end as completeFlag
+	from pqcqavitracking a left join pqcbom b on a.partnumber = b.partnumber 
+	where a.day > @startTime
+	group by jobid, b.processes
+) ");
+
+
+            strSql.Append(@"
+select
+
+a.PartNumber
+,b.materialName
+,sum(a.InMRPQuantity) as InMRPQuantity
+,sum(isnull( d.passqty,0) ) as passqty
+,sum(isnull( d.rejectqty,0) ) as rejectqty
+,sum(a.InMRPQuantity) - sum(isnull( d.passqty,0) ) - sum(isnull( d.rejectqty,0) ) as inventoryQty
+
+
+
+from PQCInventory a 
+left join PQCBomDetail b on a.partnumber = b.partnumber
+left join jobProcess c on c.jobId = a.JobNumber
+left join PQCQaViDetailTracking d on d.jobId = a.JobNumber and d.processes = a.CheckProcess
+
+where a.updatedTime > @startTime 
+and
+(
+	--完全没动工的
+	c.completeFlag is null
+
+	--做一部分没完成的
+	or c.completeFlag = 'false'
+)
+group by a.PartNumber, b.materialname ");
+
+        
+            
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@startTime", SqlDbType.DateTime)
+            };
+            paras[0].Value = dStartTime;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+
+        }
+
+
     }
 }

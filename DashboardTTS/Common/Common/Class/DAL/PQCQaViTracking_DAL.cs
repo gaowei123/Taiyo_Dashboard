@@ -2337,27 +2337,34 @@ and a.day=@day ");
 
 
 
-        public DataTable GetOutputForAllInventoryReport(DateTime dStartTime)
+        public DataTable GetWIPOutputForAllInventoryReport(DateTime dStartTime)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
 
-a.trackingID
-,a.partnumber
-,a.jobid
-,a.processes as checkProcess
-,a.nextViFlag
-,b.materialPartNo
+a.partnumber
 ,b.materialname
-,b.passQty
-,b.rejectQty
-,c.processes as allProcess
+,sum(b.passQty) as passQty
+,sum(b.rejectQty) as rejectQty
 
 from PQCQaViTracking a
 left join pqcqavidetailtracking b on a.trackingid = b.trackingid 
-left join pqcbom c on a.partnumber = c.partnumber 
-where a.day >= @startTime ");
+left join pqcbom c on a.partnumber = c.partnumber
+
+
+where 1=1 
+and a.day >= '2020-6-1'
+
+--如果不是最后一道check工序 , 或者 nextviflag false的,  (做了但没做完的)都算作是after wip
+and 
+(
+    a.processes != (case	when c.processes like '%Check#3' then 'CHECK#3'  when c.processes like '%Check#2' then 'CHECK#2' else 'CHECK#1' end)
+    or 
+    a.nextviflag != 'true' 
+)
+
+group by a.partNumber, b.materialName ");
 
 
 

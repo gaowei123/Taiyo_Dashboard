@@ -7,25 +7,16 @@ namespace DashboardTTS.ViewModel
 {
     public class AllSectionInventory
     {
-        public class paintingInfo
+        public class mainMaterialList
         {
             public string model { get; set; }
-            public string partNo { get; set; }
-            public string materialNo { get; set; }
-            public string jobNo { get; set; }
-            public double output { get; set; }
-            public string sendingTo { get; set; }
+            public string partNo { get; set; }           
+            public string materialName { get; set; }
         }
         
         
         
-        public class pqcCheckInfo
-        {
-            public string jobNo { get; set; }
-            public string materialNo { get; set; }
-            public double outputQty { get; set; }
-            public string process { get; set; }
-        }
+
         
         public class pqcBinInfo
         {
@@ -75,17 +66,19 @@ namespace DashboardTTS.ViewModel
             public double qty { get; set; }
         }
 
-        public class pqcOutputInfo
+        public class wipOutputInfo
         {
-            public string jobNo { get; set; }
             public string partNo { get; set; }
-            public string checkProcess { get; set; }
-            public bool nextViFlag { get; set; }
-            public string materialNo { get; set; }
             public string materialName { get; set; }
             public double passQty { get; set; }
-            public double rejectQty { get; set; }
-            public string allProcess { get; set; }
+            public double rejectQty { get; set; }        
+        }
+
+        public class wipInventoryInfo
+        {
+            public string partNo { get; set; }
+            public string materialName { get; set; }
+            public double inventoryQty { get; set; }
         }
 
 

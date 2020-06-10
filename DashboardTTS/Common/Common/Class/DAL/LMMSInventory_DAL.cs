@@ -609,12 +609,9 @@ group by a.ID");
 
 
 
-
+        //laser inventory - watch log,  
         public DataTable GetInventoryInfoForAllInventoryReport(DateTime dStartTime)
         {
-
-            //laser inventory中没有做完的数量, 作为before laser
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 

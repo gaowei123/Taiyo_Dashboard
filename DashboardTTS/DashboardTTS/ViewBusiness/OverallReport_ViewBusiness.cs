@@ -19,6 +19,7 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCQaViBinning pqcBinBLL = new Common.Class.BLL.PQCQaViBinning();
         private readonly Common.Class.BLL.PQCBom_BLL pqcBomBLL = new Common.Class.BLL.PQCBom_BLL();
         private readonly Common.Class.BLL.PQCQaViTracking_BLL viTrackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
+        private readonly Common.Class.BLL.PQCInventory_BLL pqcInventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
 
 
         private readonly Common.Class.BLL.LMMSInventoty_BLL laserInventoryBLL = new Common.Class.BLL.LMMSInventoty_BLL();
@@ -38,14 +39,33 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+            //主表信息
+            List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
+            if (mainList == null)
+                return null;
 
-            //laser before 
-            //painting delivery  not complete.
-            
 
-            //laser after
+            //before laser  
+            List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
 
-            
+
+            //after laser 
+            List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
+
+
+            //before wip
+            List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
+
+
+            //after wip
+            List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
+
+
+
+
+
+
+
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
@@ -56,80 +76,9 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
-        private List<ViewModel.AllSectionInventory.paintingInfo> GetPaintingOutput()
-        {
-            //laser inventory 从'2018-8-14'开始, 统一时间.
-            DataTable dt = paintDeliveryBLL.GetList(DateTime.Parse("2018-9-1"), DateTime.Now.AddDays(1), "");
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-
-            //排除laser delete掉的job
-            DataTable dtPaintDelivery = dt.Select(" status is  null").CopyToDataTable();
-
-
-            DataTable dtPQCBom = pqcBomBLL.GetListWithDetail("");
-
-
-            List<ViewModel.AllSectionInventory.paintingInfo> modelList = new List<ViewModel.AllSectionInventory.paintingInfo>();
-
-            foreach (DataRow dr in dtPaintDelivery.Rows)
-            {
-                //按material 细分.
-                DataRow[] arrPart = dtPQCBom.Select(" partNumber = '" + dr["partNumber"].ToString() + "'");
-                if (arrPart !=null && arrPart.Length!=0)
-                {
-                    foreach (DataRow drPart in arrPart)
-                    {
-                        ViewModel.AllSectionInventory.paintingInfo model = new ViewModel.AllSectionInventory.paintingInfo();
-
-                        model.jobNo = dr["jobNumber"].ToString();
-                        model.partNo = dr["partNumber"].ToString();
-                        model.output = double.Parse(dr["inQuantity"].ToString());
-                        model.sendingTo = dr["sendingTo"].ToString();
-
-
-                        model.model = drPart["model"].ToString();
-                        model.materialNo = drPart["materialPartNo"].ToString();
-
-                        modelList.Add(model);
-                    }
-                }
-            }
-
-            
-
-            return modelList;
-        }
-        
        
+      
         
-        private List<ViewModel.AllSectionInventory.pqcCheckInfo> GetCheckInfo(DateTime dDateStart)
-        {
-            List<Common.Class.Model.PQCQaViDetailTracking_Model> detialList = detialTrackingBLL.GetModelList("", "", dDateStart, DateTime.Now.AddDays(1));
-            if (detialList == null || detialList.Count == 0)
-                return null;
-
-
-
-            List<ViewModel.AllSectionInventory.pqcCheckInfo> pqcCheckList = new List<ViewModel.AllSectionInventory.pqcCheckInfo>();
-
-            foreach (Common.Class.Model.PQCQaViDetailTracking_Model detailModel in detialList)
-            {
-                ViewModel.AllSectionInventory.pqcCheckInfo checkInfoModel = new ViewModel.AllSectionInventory.pqcCheckInfo();
-
-                checkInfoModel.jobNo = detailModel.jobid;
-                checkInfoModel.materialNo = detailModel.materialPartNo;
-                checkInfoModel.outputQty = double.Parse((detailModel.passQty.Value + detailModel.rejectQty.Value).ToString());
-                checkInfoModel.process = detailModel.processes;
-                
-                pqcCheckList.Add(checkInfoModel);
-            }
-
-
-
-            return pqcCheckList;
-        }
         
         private List<ViewModel.AllSectionInventory.pqcBinInfo> GetPQCBinInfo(DateTime dDateStart)
         {
@@ -177,17 +126,10 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
-
-
-
-
-
-
         private List<ViewModel.AllSectionInventory.pqcBomInfo> GetPQCBomInfo()
         {
             DataTable dt = pqcBomBLL.GetListWithDetail("");
-            if (dt == null || dt.Rows.Count ==0)
+            if (dt == null || dt.Rows.Count == 0)
                 return null;
 
 
@@ -209,7 +151,76 @@ namespace DashboardTTS.ViewBusiness
 
             return modelList;
         }
-        
+
+
+        //从painting delivery中获取list, 生成material list 作为主表.
+        private List<ViewModel.AllSectionInventory.mainMaterialList> GetMainMaterialList(DateTime dStartTime)
+        {
+
+            DataTable dt = paintDeliveryBLL.GetList(dStartTime, DateTime.Now.AddDays(1), "");
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+
+
+            //pqc bom list, 用于生成不同material name的主表信息. 
+            List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+
+
+
+
+
+
+            List<ViewModel.AllSectionInventory.mainMaterialList> modelList = new List<ViewModel.AllSectionInventory.mainMaterialList>();
+
+
+
+
+
+            //排除laser delete掉的job
+            DataTable dtPaintDelivery = dt.Select(" status is  null").CopyToDataTable();
+
+
+            foreach (DataRow dr in dtPaintDelivery.Rows)
+            {
+                string tempPartNo = dr["partNumber"].ToString();
+                string tempModel = dr["model"].ToString();
+
+                var partMaterialList = from a in bomList
+                                       where a.partNo == tempPartNo
+                                       group a by a.materialName into c
+                                       select new
+                                       {
+                                           materialName = c.Key
+                                       };
+                if (partMaterialList == null || partMaterialList.Count() == 0)
+                {
+                    DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllMaterialList, can not find part no from pqc bom [" + tempPartNo + "]");
+                    continue;
+                }
+
+
+
+                foreach (var material in partMaterialList)
+                {
+                    ViewModel.AllSectionInventory.mainMaterialList model = new ViewModel.AllSectionInventory.mainMaterialList();
+
+                    model.model = tempModel;
+                    model.partNo = tempPartNo;
+                    model.materialName = material.materialName;
+                    modelList.Add(model);
+
+                    if (!modelList.Contains(model))
+                        modelList.Add(model);
+                }
+            }
+
+
+
+            return modelList;
+        }
+
 
         //after laser
         private List<ViewModel.AllSectionInventory.laserOutputInfo> GetLaserOutput(DateTime dStartTime)
@@ -268,38 +279,63 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-        private List<ViewModel.AllSectionInventory.pqcOutputInfo> GetPQCOutput(DateTime dStartTime)
+        //after wip
+        private List<ViewModel.AllSectionInventory.wipOutputInfo> GetWIPOutput(DateTime dStartTime)
         {
 
-            DataTable dt = viTrackingBLL.GetOutputForAllInventoryReport(dStartTime);
+            DataTable dt = viTrackingBLL.GetWIPOutputForAllInventoryReport(dStartTime);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
             
 
-            List<ViewModel.AllSectionInventory.pqcOutputInfo> modelList = new List<ViewModel.AllSectionInventory.pqcOutputInfo>();
+            List<ViewModel.AllSectionInventory.wipOutputInfo> modelList = new List<ViewModel.AllSectionInventory.wipOutputInfo>();
             foreach (DataRow dr in dt.Rows)
             {
-                ViewModel.AllSectionInventory.pqcOutputInfo model = new ViewModel.AllSectionInventory.pqcOutputInfo();
-                model.jobNo = dr["jobid"].ToString();
+                ViewModel.AllSectionInventory.wipOutputInfo model = new ViewModel.AllSectionInventory.wipOutputInfo();
+            
                 model.partNo = dr["partnumber"].ToString();
-                model.checkProcess = dr["checkProcess"].ToString();
-                model.nextViFlag = bool.Parse(dr["nextViFlag"].ToString());
-                model.materialNo = dr["materialPartNo"].ToString();
                 model.materialName = dr["materialName"].ToString();
                 model.passQty = double.Parse(dr["passQty"].ToString());
                 model.rejectQty = double.Parse(dr["rejectQty"].ToString());
-                model.allProcess = dr["allProcess"].ToString();
-
-             
+                
                 modelList.Add(model);
             }
 
 
             return modelList;
         }
-        
+                
+
+        //before wip
+        private List<ViewModel.AllSectionInventory.wipInventoryInfo> GetWIPInventory(DateTime dStartTime)
+        {
+            DataTable dt = pqcInventoryBLL.GetInventoryForAllSectionReport(dStartTime);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
 
 
+
+            List<ViewModel.AllSectionInventory.wipInventoryInfo> modelList = new List<ViewModel.AllSectionInventory.wipInventoryInfo>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.wipInventoryInfo model = new ViewModel.AllSectionInventory.wipInventoryInfo();
+                
+                model.partNo = dr["PartNumber"].ToString();
+                model.materialName = dr["materialName"].ToString();
+                model.inventoryQty = double.Parse(dr["inventoryQty"].ToString());
+            
+                modelList.Add(model);
+            }
+
+            return modelList;
+        }
+
+
+       
+
+
+
+     
 
 
         #endregion
