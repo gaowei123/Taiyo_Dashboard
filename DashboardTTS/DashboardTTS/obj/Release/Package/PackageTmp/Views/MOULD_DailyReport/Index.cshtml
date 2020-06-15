@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Daily Report";
+}
+
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+
+<div class="container container-fluid" style="width:100%"> 
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Mouldling Daily Report</span>
+    </div>
+
+    <div class="row searchingBar">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+
+
+            <div class="row form-inline searchingBar">
+                <div class="form-group searchingBarCol">
+                    <label for="ddlPartNo">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+                <div class="form-group searchingBarCol">
+                    <label for="ddlJigNo">Jig No:</label>
+                    <select id="ddlJigNo" class="form-control selectpicker"  data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+                <div class="form-group searchingBarCol">
+                    <label for="ddlShift">Shift:</label>
+                    <select id="ddlShift" class="form-control selectpicker" data-ng-style="btn-info">
+                        <option value=''>All</option>
+                        <option value='Day'>Day</option>
+                        <option value='Night'>Night</option>
+                        @*<option value='Merge'>Merge</option>*@
+                    </select>
+                </div>
+                <div class="form-group searchingBarCol">
+                    <label for="txtDateFrom">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                </div>
+                <div class="form-group searchingBarCol">
+                    <label for="txtDateTo">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                </div>
+                <div class="form-group searchingBarCol">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12" style="padding:0px;">
+            <table id="tableDailyReport" data-toggle="table" data-height="750"></table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<script src="~/Dashboard CSS JS/JS/MOULD_DailyReport.js"></script>

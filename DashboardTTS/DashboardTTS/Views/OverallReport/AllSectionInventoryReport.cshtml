@@ -4,17 +4,10 @@
 }
 
 
-@*下拉框组件*@
-@*<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-    <link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />*@
 
 
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-
-<div class="container">
+<div class="container-fluid">
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
@@ -22,10 +15,39 @@
     </div>
 
 
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label for="ddlModel" style="width:35%;">Model:</label>
+                    <select id="ddlModel" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+
+                <div class="col-md-3">
+                    <label style="width:35%">Ship To:</label>
+                    <select id="ddlShipTo" class="form-control selectpicker" data-ng-style="btn-info">
+                        <option value="">All</option>
+                        <option value="FG">FG</option>
+                        <option value="Assembly">Assembly</option>
+                    </select>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+ 
+
 
 
     <div class="row">
-        <div class="col-lg-12" style="padding:0px; margin-top:20px;">
+        <div class="col-lg-12" style="padding:0px;">
             <table id="tableInventory" data-toggle="table"></table>
         </div>
     </div>
@@ -36,6 +58,11 @@
 
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*bootstrap table*@
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
@@ -44,43 +71,14 @@
     var apiGetAllSectionIventoryReport = window.globalConfig.rootDirectory + '/OverallReport/GetAllSectionInventoryReport';
 
 
-    //初始化时间框
-    $('#txtDateFrom').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        initialDate: new Date()
-    });
-
-    $('#txtDateTo').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        initialDate: new Date()
-    });
+    
 
 
-
-    //设置part no, machine id 下拉框
+    
     $(document).ready(function () {
 
-      
-        var lastDay = getLastReportDay();
-        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
-
-
-        $('#txtDateFrom').val(strLastDay);
-        $('#txtDateTo').val(strLastDay);
-
-
+        setModelDDL($('#ddlModel'), 'PQC');
+        
         search();
     });
 
@@ -105,23 +103,13 @@
 
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
-            //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
+      
+            queryParams: function (params) { 
                 return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    DateFrom: $("#txtDateFrom").val(),
-                    DateTo: $("#txtDateTo").val(),
-                    Shift: $("#ddlShift").val()
+                    Model: $("#ddlModel").val(),
+                    ShipTo: $("#ddlShipTo").val()
                 }
             },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
 
 
             //表头样式 undefined, thead-light, thead-dark,
@@ -138,7 +126,7 @@
             //pageNumber: 1, // 首页页码
 
 
-            height : $(window).height() - 160,
+            height : $(window).height() - 210,
 
 
 
@@ -164,54 +152,105 @@
                 valign: 'middle'
             },
             {
-                field: 'materialNo',
-                title: 'Material No',
+                field: 'materialName',
+                title: 'Material Name',
+                align: 'center',
+                valign: 'middle'
+            },
+            
+            {
+                field: 'lineRej',
+                title: 'Line Rej',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'jobNo',
-                title: 'Job No',
-                align: 'center',
-                valign: 'middle',
-                visible: false
-            },
-            {
-                field: 'paintInventory',
-                title: 'Painting Inventory',
+                field: 'afterAssembly',
+                title: 'After Assembly',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'laserInventory',
-                title: 'Laser Inventory',
+                field: 'beforeAssembly',
+                title: 'Before Assembly',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'checkInventory_1',
-                title: 'Check#1 Inventory',
+                field: 'afterFG',
+                title: 'After FG',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'checkInventory_2',
-                title: 'Check#2 Inventory',
+                field: 'beforeFG',
+                title: 'Before FG',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'packingInventory',
-                title: 'Packing Inventory',
+                field: 'afterPack',
+                title: 'After Packing',
                 align: 'center',
                 valign: 'middle'
-            }
+            },
+            {
+                field: 'beforePack',
+                title: 'Before Packing',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'afterWIP',
+                title: 'After WIP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'beforeWIP',
+                title: 'Before WIP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'afterLaser',
+                title: 'After Laser',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'beforeLaser',
+                title: 'Before Laser',
+                align: 'center',
+                valign: 'middle'
+            },
+           {
+               field: 'tcPaint',
+               title: 'T/C Paint',
+               align: 'center',
+               valign: 'middle'
+           }, {
+               field: 'mcPaint',
+               title: 'M/C Paint',
+               align: 'center',
+               valign: 'middle'
+           }, {
+               field: 'ucPaint',
+               title: 'U/C Paint',
+               align: 'center',
+               valign: 'middle'
+           }, {
+               field: 'rawPartMoulding',
+               title: 'Moulding Raw Part',
+               align: 'center',
+               valign: 'middle'
+           }
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                console.log(data);
-                        
+               
             },
+
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
             }

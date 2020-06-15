@@ -12,29 +12,8 @@ namespace DashboardTTS.ViewModel
             public string model { get; set; }
             public string partNo { get; set; }           
             public string materialName { get; set; }
-        }
-        
-        
-        
-
-        
-        public class pqcBinInfo
-        {
-            public string jobNo { get; set; }
-            public string materialNo { get; set; }
-            public string process { get; set; }
-            public double binQty { get; set; }
             public string shipTo { get; set; }
-
-            public string allProcess { get; set; }
-
         }
-
-
-
-
-
-
 
 
         public class pqcBomInfo
@@ -48,23 +27,24 @@ namespace DashboardTTS.ViewModel
             public string shipTo { get; set; }
         }
 
+
         public class laserOutputInfo
         {
-            public string jobNo { get; set; }
+           
             public string partNo { get; set; }
             public string materialNo { get; set; }
             public double okQty { get; set; }
             public double ngQty { get; set; }
-            public string jobStatus { get; set; }
         }
+
         
         public class laserInventoryInfo
         {
-            public string jobNo { get; set; }
             public string partNo { get; set; }
             public string materialNo { get; set; }
             public double qty { get; set; }
         }
+
 
         public class wipOutputInfo
         {
@@ -74,24 +54,31 @@ namespace DashboardTTS.ViewModel
             public double rejectQty { get; set; }        
         }
 
+
         public class wipInventoryInfo
         {
             public string partNo { get; set; }
             public string materialName { get; set; }
             public double inventoryQty { get; set; }
         }
+        
 
-
-
+        public class pqcBinInfo
+        {
+            public string partNo { get; set; }
+            public string processes { get; set; }
+            public string materialName { get; set; }
+            public double qty { get; set; }
+        }
 
 
 
         public class report
         {
             public string model { get; set; }
-            public string partNo { get; set; }
-            public string jobNo { get; set; }
+            public string partNo { get; set; }         
             public string materialName { get; set; }
+            public string shipTo { get; set; }
 
 
 

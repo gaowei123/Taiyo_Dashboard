@@ -23,199 +23,218 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
         #region daily verify report 
         public string GetDailyVerifyReportPCS(DateTime dDay, string sShift)
         {
-            List<ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo> trackingList = GetTrackingInfo(dDay, sShift);
-            List<ViewModel.MouldDailyVerifyReport_ViewModel.DefectInfo> defectList = GetDefectList(dDay, sShift);
-            if (trackingList == null || trackingList.Count == 0 || defectList == null || defectList.Count == 0)
-                return null;
-
-
-
-            //tracking list 按 machine, partno汇总
-            var trackingSummary = from a in trackingList
-                                  group a by new { a.machineID, a.partNo }
-                                  into b
-                                  select new
-                                  {
-                                      machineID = b.Key.machineID,
-                                      model = b.Max(p => p.model),
-                                      partNo = b.Key.partNo,
-                                      jigNo = b.Max(p => p.jigNo),
-                                      mcRunHours = b.Sum(p => (p.stopTime - p.startTime).TotalSeconds / 3600),
-                                      cavityCount = b.Max(p => p.cavityCount),
-                                      passQty = b.Sum(p => p.passQty),
-                                      rejQty = b.Sum(p => p.rejQty),
-                                      totalQty = b.Sum(p => p.totalQty),
-                                      ipqcRejQty = b.Sum(p => p.ipqcRejQty),
-                                      wastageMaterial01 = b.Sum(p => p.wastageMaterial01),
-                                      wastageMaterial02 = b.Sum(p => p.wastageMaterial02),
-                                      setUp = b.Sum(p => p.setUp),
-                                      userID = b.Max(p => p.userID),
-                                      supervisor = b.Max(p => p.supervisor)
-                                  };
-
-            //defect list 按 machine, partno汇总
-            var defectSummary = from a in defectList
-                                group a by new { a.machineID, a.partNo }
-                                into b
-                                select new
-                                {
-                                    machineID = b.Key.machineID,
-                                    partNo = b.Key.partNo,
-
-                                    whiteDot = b.Sum(p => p.whiteDot),
-                                    scratches = b.Sum(p => p.scratches),
-                                    dentedMark = b.Sum(p => p.dentedMark),
-                                    shinningDot = b.Sum(p => p.shinningDot),
-                                    blackMark = b.Sum(p => p.blackMark),
-                                    sinkMark = b.Sum(p => p.sinkMark),
-                                    flowMark = b.Sum(p => p.flowMark),
-                                    highGate = b.Sum(p => p.highGate),
-                                    silverSteak = b.Sum(p => p.silverSteak),
-                                    blackDot = b.Sum(p => p.blackDot),
-                                    oilStain = b.Sum(p => p.oilStain),
-                                    flowLine = b.Sum(p => p.flowLine),
-                                    overCut = b.Sum(p => p.overCut),
-                                    crack = b.Sum(p => p.crack),
-                                    shortMold = b.Sum(p => p.shortMold),
-                                    stainMark = b.Sum(p => p.stainMark),
-                                    weldLine = b.Sum(p => p.weldLine),
-                                    flashes = b.Sum(p => p.flashes),
-                                    foreignMaterial = b.Sum(p => p.foreignMaterial),
-                                    drag = b.Sum(p => p.drag),
-                                    materialBleed = b.Sum(p => p.materialBleed),
-                                    bent = b.Sum(p => p.bent),
-                                    deform = b.Sum(p => p.deform),
-                                    gasMark = b.Sum(p => p.gasMark)
-                                };
-
-            //合并 tracking, defect汇总信息.
-            var mergedList = from a in trackingSummary
-                             join b in defectSummary on new { a.machineID, a.partNo } equals new { b.machineID, b.partNo }
-                             select new
-                             {
-                                 a,
-                                 b
-                             };
-
-
-
-
-            //导入到 report list中
-            List<ViewModel.MouldDailyVerifyReport_ViewModel.Report> reportList = new List<ViewModel.MouldDailyVerifyReport_ViewModel.Report>();
-            foreach (var item in mergedList)
+            try
             {
-                ViewModel.MouldDailyVerifyReport_ViewModel.Report model = new ViewModel.MouldDailyVerifyReport_ViewModel.Report();
 
-                model.machineID = item.a.machineID;
-                model.model = item.a.model;
-                model.partNo = item.a.partNo;
-                model.jigNo = item.a.jigNo;
-                model.mcRunHours = Common.CommFunctions.ConvertDateTimeShort(item.a.mcRunHours.ToString());
-                model.cavityCount = item.a.cavityCount;
-                model.totalShots = Math.Round(item.a.totalQty / item.a.cavityCount, 0);
-                model.passQty = item.a.passQty;
-                model.rejQty = item.a.rejQty;
-                model.rejRate = Math.Round(item.a.rejQty / item.a.totalQty * 100, 2).ToString("0.00") + "%";
 
-                model.whiteDot = item.b.whiteDot;
-                model.scratches = item.b.scratches;
-                model.dentedMark = item.b.dentedMark;
-                model.shinningDot = item.b.shinningDot;
-                model.blackMark = item.b.blackMark;
-                model.sinkMark = item.b.sinkMark;
-                model.flowMark = item.b.flowMark;
-                model.highGate = item.b.highGate;
-                model.silverSteak = item.b.silverSteak;
-                model.blackDot = item.b.blackDot;
-                model.oilStain = item.b.oilStain;
-                model.flowLine = item.b.flowLine;
-                model.overCut = item.b.overCut;
-                model.crack = item.b.crack;
-                model.shortMold = item.b.shortMold;
-                model.stainMark = item.b.stainMark;
-                model.weldLine = item.b.weldLine;
-                model.flashes = item.b.flashes;
-                model.foreignMaterial = item.b.foreignMaterial;
-                model.drag = item.b.drag;
-                model.materialBleed = item.b.materialBleed;
-                model.bent = item.b.bent;
-                model.deform = item.b.deform;
-                model.gasMark = item.b.gasMark;
-
-                model.ipqcRejQty = item.a.ipqcRejQty;
-                model.wastageMaterial = item.a.wastageMaterial01 + item.a.wastageMaterial02;
-                model.setUp = item.a.setUp;
-                model.setUpRate = Math.Round(item.a.setUp / item.a.totalQty * 100, 2).ToString("0.00") + "%";
-                model.userID = item.a.userID;
-                model.supervisor = item.a.supervisor;
+                List<ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo> trackingList = GetTrackingInfo(dDay, sShift);
+                List<ViewModel.MouldDailyVerifyReport_ViewModel.DefectInfo> defectList = GetDefectList(dDay, sShift);
+                if (trackingList == null || trackingList.Count == 0 || defectList == null || defectList.Count == 0)
+                    return null;
 
 
 
-                reportList.Add(model);
+                //tracking list 按 machine, partno汇总
+                var trackingSummary = from a in trackingList
+                                      group a by new { a.machineID, a.partNo }
+                                      into b
+                                      select new
+                                      {
+                                          machineID = b.Key.machineID,
+                                          model = b.Max(p => p.model),
+                                          partNo = b.Key.partNo,
+                                          jigNo = b.Max(p => p.jigNo),
+                                          mcRunHours = b.Sum(p => (p.stopTime - p.startTime).TotalSeconds / 3600),
+                                          cavityCount = b.Max(p => p.cavityCount),
+                                          passQty = b.Sum(p => p.passQty),
+                                          rejQty = b.Sum(p => p.rejQty),
+                                          totalQty = b.Sum(p => p.totalQty),
+                                          ipqcRejQty = b.Sum(p => p.ipqcRejQty),
+                                          wastageMaterial01 = b.Sum(p => p.wastageMaterial01),
+                                          wastageMaterial02 = b.Sum(p => p.wastageMaterial02),
+                                          setUp = b.Sum(p => p.setUp),
+                                          userID = b.Max(p => p.userID),
+                                          supervisor = b.Max(p => p.supervisor)
+                                      };
+
+                //defect list 按 machine, partno汇总
+                var defectSummary = from a in defectList
+                                    group a by new { a.machineID, a.partNo }
+                                    into b
+                                    select new
+                                    {
+                                        machineID = b.Key.machineID,
+                                        partNo = b.Key.partNo,
+
+                                        whiteDot = b.Sum(p => p.whiteDot),
+                                        scratches = b.Sum(p => p.scratches),
+                                        dentedMark = b.Sum(p => p.dentedMark),
+                                        shinningDot = b.Sum(p => p.shinningDot),
+                                        blackMark = b.Sum(p => p.blackMark),
+                                        sinkMark = b.Sum(p => p.sinkMark),
+                                        flowMark = b.Sum(p => p.flowMark),
+                                        highGate = b.Sum(p => p.highGate),
+                                        silverSteak = b.Sum(p => p.silverSteak),
+                                        blackDot = b.Sum(p => p.blackDot),
+                                        oilStain = b.Sum(p => p.oilStain),
+                                        flowLine = b.Sum(p => p.flowLine),
+                                        overCut = b.Sum(p => p.overCut),
+                                        crack = b.Sum(p => p.crack),
+                                        shortMold = b.Sum(p => p.shortMold),
+                                        stainMark = b.Sum(p => p.stainMark),
+                                        weldLine = b.Sum(p => p.weldLine),
+                                        flashes = b.Sum(p => p.flashes),
+                                        foreignMaterial = b.Sum(p => p.foreignMaterial),
+                                        drag = b.Sum(p => p.drag),
+                                        materialBleed = b.Sum(p => p.materialBleed),
+                                        bent = b.Sum(p => p.bent),
+                                        deform = b.Sum(p => p.deform),
+                                        gasMark = b.Sum(p => p.gasMark)
+                                    };
+
+                //合并 tracking, defect汇总信息.
+                var mergedList = from a in trackingSummary
+                                 join b in defectSummary on new { a.machineID, a.partNo } equals new { b.machineID, b.partNo }
+                                 select new
+                                 {
+                                     a,
+                                     b
+                                 };
+
+
+
+
+                //导入到 report list中
+                List<ViewModel.MouldDailyVerifyReport_ViewModel.Report> reportList = new List<ViewModel.MouldDailyVerifyReport_ViewModel.Report>();
+                foreach (var item in mergedList)
+                {
+                    ViewModel.MouldDailyVerifyReport_ViewModel.Report model = new ViewModel.MouldDailyVerifyReport_ViewModel.Report();
+
+                    model.machineID = item.a.machineID;
+                    model.model = item.a.model;
+                    model.partNo = item.a.partNo;
+                    model.jigNo = item.a.jigNo;
+                    model.mcRunHours = Common.CommFunctions.ConvertDateTimeShort(item.a.mcRunHours.ToString());
+                    model.cavityCount = item.a.cavityCount;
+                    model.totalShots = Math.Round(item.a.totalQty / item.a.cavityCount, 0);
+                    model.passQty = item.a.passQty;
+                    model.rejQty = item.a.rejQty;
+                    model.rejRate = Math.Round(item.a.rejQty / item.a.totalQty * 100, 2).ToString("0.00") + "%";
+
+                    model.whiteDot = item.b.whiteDot;
+                    model.scratches = item.b.scratches;
+                    model.dentedMark = item.b.dentedMark;
+                    model.shinningDot = item.b.shinningDot;
+                    model.blackMark = item.b.blackMark;
+                    model.sinkMark = item.b.sinkMark;
+                    model.flowMark = item.b.flowMark;
+                    model.highGate = item.b.highGate;
+                    model.silverSteak = item.b.silverSteak;
+                    model.blackDot = item.b.blackDot;
+                    model.oilStain = item.b.oilStain;
+                    model.flowLine = item.b.flowLine;
+                    model.overCut = item.b.overCut;
+                    model.crack = item.b.crack;
+                    model.shortMold = item.b.shortMold;
+                    model.stainMark = item.b.stainMark;
+                    model.weldLine = item.b.weldLine;
+                    model.flashes = item.b.flashes;
+                    model.foreignMaterial = item.b.foreignMaterial;
+                    model.drag = item.b.drag;
+                    model.materialBleed = item.b.materialBleed;
+                    model.bent = item.b.bent;
+                    model.deform = item.b.deform;
+                    model.gasMark = item.b.gasMark;
+
+                    model.ipqcRejQty = item.a.ipqcRejQty;
+                    model.wastageMaterial = item.a.wastageMaterial01 + item.a.wastageMaterial02;
+                    model.setUp = item.a.setUp;
+                    model.setUpRate = Math.Round(item.a.setUp / item.a.totalQty * 100, 2).ToString("0.00") + "%";
+                    model.userID = item.a.userID;
+                    model.supervisor = item.a.supervisor;
+
+
+
+                    reportList.Add(model);
+                }
+
+
+                var sortedList = (from a in reportList orderby a.machineID ascending select a).ToList();
+
+
+                ViewModel.MouldDailyVerifyReport_ViewModel.Report total = new ViewModel.MouldDailyVerifyReport_ViewModel.Report();
+                total.partNo = "Sub Total->";
+                total.mcRunHours = Common.CommFunctions.ConvertDateTimeShort(mergedList.Sum(p => p.a.mcRunHours).ToString());
+                total.totalShots = reportList.Sum(p => p.totalShots);
+                total.passQty = reportList.Sum(p => p.passQty);
+                total.rejQty = reportList.Sum(p => p.rejQty);
+                total.rejRate = Math.Round(reportList.Sum(p => p.rejQty) / (reportList.Sum(p => p.passQty) + reportList.Sum(p => p.rejQty)) * 100, 2).ToString("0.00") + "%";
+
+
+                total.whiteDot = reportList.Sum(p => p.whiteDot);
+                total.scratches = reportList.Sum(p => p.scratches);
+                total.dentedMark = reportList.Sum(p => p.dentedMark);
+                total.shinningDot = reportList.Sum(p => p.shinningDot);
+                total.blackMark = reportList.Sum(p => p.blackMark);
+                total.sinkMark = reportList.Sum(p => p.sinkMark);
+                total.flowMark = reportList.Sum(p => p.flowMark);
+                total.highGate = reportList.Sum(p => p.highGate);
+                total.silverSteak = reportList.Sum(p => p.silverSteak);
+                total.blackDot = reportList.Sum(p => p.blackDot);
+                total.oilStain = reportList.Sum(p => p.oilStain);
+                total.flowLine = reportList.Sum(p => p.flowLine);
+                total.overCut = reportList.Sum(p => p.overCut);
+                total.crack = reportList.Sum(p => p.crack);
+                total.shortMold = reportList.Sum(p => p.shortMold);
+                total.stainMark = reportList.Sum(p => p.stainMark);
+                total.weldLine = reportList.Sum(p => p.weldLine);
+                total.flashes = reportList.Sum(p => p.flashes);
+                total.foreignMaterial = reportList.Sum(p => p.foreignMaterial);
+                total.drag = reportList.Sum(p => p.drag);
+                total.materialBleed = reportList.Sum(p => p.materialBleed);
+                total.bent = reportList.Sum(p => p.bent);
+                total.deform = reportList.Sum(p => p.deform);
+                total.gasMark = reportList.Sum(p => p.gasMark);
+
+
+                total.ipqcRejQty = reportList.Sum(p => p.ipqcRejQty);
+                total.wastageMaterial = reportList.Sum(p => p.wastageMaterial);
+                total.setUp = reportList.Sum(p => p.setUp);
+                total.setUpRate = Math.Round(reportList.Sum(p => p.setUp) / (reportList.Sum(p => p.passQty) + reportList.Sum(p => p.rejQty)) * 100, 2).ToString("0.00") + "%";
+
+                total.supervisor = GetReportVerifyBy(dDay, sShift);
+
+
+                sortedList.Add(total);
+
+
+
+                JavaScriptSerializer js = new JavaScriptSerializer();
+
+                return js.Serialize(sortedList);
+
+
             }
-
-
-            var sortedList = (from a in reportList orderby a.machineID ascending select a).ToList();
-
-
-            ViewModel.MouldDailyVerifyReport_ViewModel.Report total = new ViewModel.MouldDailyVerifyReport_ViewModel.Report();
-            total.partNo = "Sub Total->";
-            total.mcRunHours = Common.CommFunctions.ConvertDateTimeShort(mergedList.Sum(p => p.a.mcRunHours).ToString());
-            total.totalShots = reportList.Sum(p => p.totalShots);
-            total.passQty = reportList.Sum(p => p.passQty);
-            total.rejQty = reportList.Sum(p => p.rejQty);
-            total.rejRate = Math.Round(reportList.Sum(p => p.rejQty) / (reportList.Sum(p => p.passQty) + reportList.Sum(p => p.rejQty)) * 100, 2).ToString("0.00") + "%";
-
-
-            total.whiteDot = reportList.Sum(p => p.whiteDot);
-            total.scratches = reportList.Sum(p => p.scratches);
-            total.dentedMark = reportList.Sum(p => p.dentedMark);
-            total.shinningDot = reportList.Sum(p => p.shinningDot);
-            total.blackMark = reportList.Sum(p => p.blackMark);
-            total.sinkMark = reportList.Sum(p => p.sinkMark);
-            total.flowMark = reportList.Sum(p => p.flowMark);
-            total.highGate = reportList.Sum(p => p.highGate);
-            total.silverSteak = reportList.Sum(p => p.silverSteak);
-            total.blackDot = reportList.Sum(p => p.blackDot);
-            total.oilStain = reportList.Sum(p => p.oilStain);
-            total.flowLine = reportList.Sum(p => p.flowLine);
-            total.overCut = reportList.Sum(p => p.overCut);
-            total.crack = reportList.Sum(p => p.crack);
-            total.shortMold = reportList.Sum(p => p.shortMold);
-            total.stainMark = reportList.Sum(p => p.stainMark);
-            total.weldLine = reportList.Sum(p => p.weldLine);
-            total.flashes = reportList.Sum(p => p.flashes);
-            total.foreignMaterial = reportList.Sum(p => p.foreignMaterial);
-            total.drag = reportList.Sum(p => p.drag);
-            total.materialBleed = reportList.Sum(p => p.materialBleed);
-            total.bent = reportList.Sum(p => p.bent);
-            total.deform = reportList.Sum(p => p.deform);
-            total.gasMark = reportList.Sum(p => p.gasMark);
-
-
-            total.ipqcRejQty = reportList.Sum(p => p.ipqcRejQty);
-            total.wastageMaterial = reportList.Sum(p => p.wastageMaterial);
-            total.setUp = reportList.Sum(p => p.setUp);
-            total.setUpRate = Math.Round(reportList.Sum(p => p.setUp) / (reportList.Sum(p => p.passQty) + reportList.Sum(p => p.rejQty)) * 100, 2).ToString("0.00") + "%";
-
-            total.supervisor = GetReportVerifyBy(dDay, sShift);
-
-
-            sortedList.Add(total);
-
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            return js.Serialize(sortedList);
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("M_DailyReport_Debug", "GetDailyVerifyReportPCS Catch Exception: " + ee.ToString());
+                return "";
+            }
         }
 
         public string GetDailyVerifyReportSET(DateTime dDay, string sShift)
         {
-            List<ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo> trackingList = GetTrackingInfo(dDay, sShift);
+
+            try
+            {
+
+                List<ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo> trackingList = GetTrackingInfo(dDay, sShift);
             List<ViewModel.MouldDailyVerifyReport_ViewModel.DefectInfo> defectList = GetDefectList(dDay, sShift);
             if (trackingList == null || trackingList.Count == 0 || defectList == null || defectList.Count == 0)
                 return null;
@@ -398,6 +417,12 @@ namespace DashboardTTS.ViewBusiness
             JavaScriptSerializer js = new JavaScriptSerializer();
 
             return js.Serialize(sortedList);
+            }
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("M_DailyReport_Debug", "GetDailyVerifyReportSET, Catch Exception: " + ee.ToString());
+                return "";
+            }
         }
 
         public ViewModel.MouldDailyVerifyReport_ViewModel.DefectInfo GetDefectDisplayFlag(DateTime dDay)
@@ -578,6 +603,12 @@ namespace DashboardTTS.ViewBusiness
 
             foreach (DataRow dr in dt.Rows)
             {
+                //排除 Mould_Testing 和 Material_Testing的记录.  output report不能包含testing的数量.
+                string status = dr["status"].ToString();
+                if (status == "Mould_Testing" || status == "Material_Testing")
+                    continue;
+
+
                 ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo model = new ViewModel.MouldDailyVerifyReport_ViewModel.TrackingInfo();
                 model.trackingID = dr["trackingID"].ToString();
                 model.day = DateTime.Parse(dr["day"].ToString());

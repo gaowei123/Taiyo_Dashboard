@@ -26,103 +26,237 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-        
+
 
 
         #region all section inventory report 
-        public string GetAllSectionList(DateTime dStartTime)
+        public string GetAllSectionList(DateTime dStartTime, string sModel, string sShipTo)
         {
-
-            //pqc bom info.
-            List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
-            if (bomList == null) return "";
-
-
-
-            //主表信息
-            List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
-            if (mainList == null)
-                return null;
-
-
-            //before laser  
-            List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
-
-
-            //after laser 
-            List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
-
-
-            //before wip
-            List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
-
-
-            //after wip
-            List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
-
-
-
-
-
-
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            return js.Serialize("");
-        }
-
-
-
-
-
-       
-      
-        
-        
-        private List<ViewModel.AllSectionInventory.pqcBinInfo> GetPQCBinInfo(DateTime dDateStart)
-        {
-            DataTable dt = pqcBinBLL.GetList(dDateStart, DateTime.Now.AddDays(1));
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-
-
-            DataTable dtPQCBom = pqcBomBLL.GetList("");
-
-
-
-            List<ViewModel.AllSectionInventory.pqcBinInfo> binList = new List<ViewModel.AllSectionInventory.pqcBinInfo>();
-
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                ViewModel.AllSectionInventory.pqcBinInfo binModel = new ViewModel.AllSectionInventory.pqcBinInfo();
-
-                binModel.jobNo = dr["jobId"].ToString();
-                binModel.materialNo = dr["materialPartNo"].ToString();
-                binModel.process = dr["processes"].ToString();
-                binModel.binQty = double.Parse(dr["materialQty"].ToString());
-                binModel.shipTo = dr["shipTo"].ToString();
 
 
-              
-                DataRow[] drArr = dtPQCBom.Select(" partNumber = '" + dr["PartNumber"].ToString() + "'");
-                if (drArr.Length !=0 )
+                //pqc bom info.
+                List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+                if (bomList == null) return "";
+
+
+
+                //主表信息,   model, part no, material name
+                List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
+                if (mainList == null) return null;
+
+
+
+                //before laser  
+                //详细到material no一条的记录. 需要join pqcbom在 group by material name
+                List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
+
+
+                //after laser 
+                //详细到material no一条的记录, 需要join pqcbom在 group by material name, 并排除 jobStatus 是done的. 
+                List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
+
+
+                //before wip,  详细到material name, 直接join
+                List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
+
+
+                //after wip, 详细到material name, 直接join
+                List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
+
+
+
+                //pqc bin, 详细到material name, 通过process 区分出 check complete qty (before pack),   没pack完的(after pack)
+                List<ViewModel.AllSectionInventory.pqcBinInfo> pqcBinInfo = GetPackInventory(dStartTime);
+                var beforePacking = from a in pqcBinInfo where a.processes == "CHECK#1" || a.processes == "CHECK#2" select a;
+                var afterPacking = from a in pqcBinInfo where a.processes == "PACKING" select a;
+
+
+
+
+                //join 
+                List<ViewModel.AllSectionInventory.report> reportList = new List<ViewModel.AllSectionInventory.report>();
+                foreach (var material in mainList)
                 {
-                    binModel.allProcess = drArr[0]["processes"].ToString();
+
+
+                    //获取该part的 bom detail list.   (material no一条)
+                    var tempBomList = (from a in bomList where a.partNo == material.partNo && a.materialName == material.materialName select a).ToList();
+                    if (tempBomList == null || tempBomList.Count == 0)
+                    {
+                        DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllSectionList, can not find pqc bom, part no:[" + material.partNo + "], material name :[" + material.materialName + "]");
+                        continue;
+                    }
+
+
+
+
+
+                    #region before laser
+                    //laser join pqcbom,  在按照pqcbom的materialname group by.
+                    var tempLaserDetailList = from a in laserInventory
+                                              where a.partNo == material.partNo
+                                              join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
+                                              select new
+                                              {
+                                                  a,
+                                                  b
+                                              };
+
+                    //group by material name
+                    var beforeLaserModel = (from a in tempLaserDetailList
+                                            where a.b.materialName == material.materialName
+                                            group a by a.b.materialName into summary
+                                            select new
+                                            {
+                                                summary.Key,
+                                                qty = summary.Max(p => p.a.qty)
+                                            }).FirstOrDefault();
+                    #endregion
+
+
+
+
+
+
+
+                    #region after laser
+                    //laser join pqcbom, 在按照pqcbom的materialname group by.
+                    var tempLaserOutputDetialList = from a in laserOutputList
+                                                    where a.partNo == material.partNo
+                                                    join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
+                                                    select new
+                                                    {
+                                                        a,
+                                                        b
+                                                    };
+
+
+                    //group by material name
+                    var afterLaserModel = (from a in tempLaserOutputDetialList
+                                           where a.b.materialName == material.materialName
+                                           group a by a.b.materialName into summary
+                                           select new
+                                           {
+                                               summary.Key,
+                                               qty = summary.Max(p => p.a.okQty + p.a.ngQty)
+                                           }).FirstOrDefault();
+                    #endregion
+
+
+
+
+
+
+                    //before wip
+                    var beforeWIPModel = (from a in wipInventoryList
+                                          where a.partNo == material.partNo
+                                           && a.materialName == material.materialName
+                                          select a).FirstOrDefault();
+
+
+
+
+                    //after wip
+                    var afterWIPModel = (from a in wipOutputList
+                                         where a.partNo == material.partNo
+                                         && a.materialName == material.materialName
+                                         select a).FirstOrDefault();
+
+
+
+
+                    //beforepacking
+                    var beforePackingModel = (from a in beforePacking
+                                              where a.partNo == material.partNo
+                                              && a.materialName == material.materialName
+                                              select a).FirstOrDefault();
+
+
+
+
+                    //afterpacking
+                    var afterPackingModel = (from a in afterPacking
+                                             where a.partNo == material.partNo
+                                             && a.materialName == material.materialName
+                                             select a).FirstOrDefault();
+
+
+
+
+
+                    ViewModel.AllSectionInventory.report reportModel = new ViewModel.AllSectionInventory.report();
+                    reportModel.model = material.model;
+                    reportModel.partNo = material.partNo;
+                    reportModel.materialName = material.materialName;
+                    reportModel.shipTo = material.shipTo;
+
+                    reportModel.rawPartMoulding = null;
+                    reportModel.ucPaint = null;
+                    reportModel.mcPaint = null;
+                    reportModel.tcPaint = null;
+
+                    if (beforeLaserModel != null) reportModel.beforeLaser = beforeLaserModel.qty;
+                    if (afterLaserModel != null) reportModel.afterLaser = afterLaserModel.qty;
+                    if (beforeWIPModel != null) reportModel.beforeWIP = beforeWIPModel.inventoryQty;
+                    if (afterWIPModel != null) reportModel.afterWIP = afterWIPModel.passQty + afterWIPModel.rejectQty;
+                    if (beforePackingModel != null) reportModel.beforePack = beforePackingModel.qty;
+                    if (afterPackingModel != null) reportModel.afterPack = afterPackingModel.qty;
+
+
+                    reportModel.beforeFG = null;
+                    reportModel.afterFG = null;
+                    reportModel.beforeAssembly = null;
+                    reportModel.afterAssembly = null;
+                    reportModel.lineRej = null;
+
+
+
+                    reportList.Add(reportModel);
                 }
-              
 
-                binList.Add(binModel);
+
+                JavaScriptSerializer js = new JavaScriptSerializer();
+
+                var orderbyList = from a in reportList
+                                  where a.afterLaser != null
+                                  || a.beforeLaser != null
+                                  || a.afterWIP != null
+                                  || a.beforeWIP != null
+                                  || a.afterPack != null
+                                  || a.beforePack != null
+                                  orderby a.model ascending
+                                  select a;
+
+
+                if (sModel == "" && sShipTo == "")
+                {
+                    return js.Serialize(orderbyList);
+                }
+                else if (sModel != "" && sShipTo == "")
+                {
+                    var result = from a in orderbyList where a.model == sModel select a;
+                    return js.Serialize(result);
+                }
+                else if (sModel == "" && sShipTo != "")
+                {
+                    var result = from a in orderbyList where a.shipTo == sShipTo select a;
+                    return js.Serialize(result);
+                }
+                else
+                {
+                    var result = from a in orderbyList where a.shipTo == sShipTo && a.model == sModel select a;
+                    return js.Serialize(result);
+                }              
+
             }
-
-
-
-            return binList;
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, Catch Exception: " + ee.ToString());
+                return "";
+            }
         }
-
-
-
-
 
 
 
@@ -185,14 +319,14 @@ namespace DashboardTTS.ViewBusiness
             foreach (DataRow dr in dtPaintDelivery.Rows)
             {
                 string tempPartNo = dr["partNumber"].ToString();
-                string tempModel = dr["model"].ToString();
-
                 var partMaterialList = from a in bomList
                                        where a.partNo == tempPartNo
-                                       group a by a.materialName into c
+                                       group a by new { a.materialName, a.model, a.shipTo } into c
                                        select new
                                        {
-                                           materialName = c.Key
+                                           model = c.Key.model,
+                                           materialName = c.Key.materialName,
+                                           shipTo = c.Key.shipTo
                                        };
                 if (partMaterialList == null || partMaterialList.Count() == 0)
                 {
@@ -206,15 +340,31 @@ namespace DashboardTTS.ViewBusiness
                 {
                     ViewModel.AllSectionInventory.mainMaterialList model = new ViewModel.AllSectionInventory.mainMaterialList();
 
-                    model.model = tempModel;
+                    model.model = material.model;
                     model.partNo = tempPartNo;
                     model.materialName = material.materialName;
-                    modelList.Add(model);
+                    model.shipTo = material.shipTo;
 
-                    if (!modelList.Contains(model))
+
+
+
+                    var existModel = from a in modelList
+                                     where a.model == model.model &&
+                                          a.partNo == model.partNo &&
+                                          a.materialName == model.materialName &&
+                                          a.shipTo == model.shipTo
+                                     select a;
+
+                    if (existModel == null || existModel.Count() == 0)
+                    {
                         modelList.Add(model);
+                    }
+
                 }
             }
+
+
+            
 
 
 
@@ -225,7 +375,6 @@ namespace DashboardTTS.ViewBusiness
         //after laser
         private List<ViewModel.AllSectionInventory.laserOutputInfo> GetLaserOutput(DateTime dStartTime)
         {
-
             DataTable dt = watchLogBLL.GetMaterialListForAllSectionReport(dStartTime);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
@@ -236,28 +385,24 @@ namespace DashboardTTS.ViewBusiness
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.AllSectionInventory.laserOutputInfo model = new ViewModel.AllSectionInventory.laserOutputInfo();
-
-                model.jobNo = dr["jobNumber"].ToString();
                 model.partNo = dr["partNumber"].ToString();
                 model.materialNo = dr["materialNo"].ToString();
                 model.okQty = double.Parse(dr["okQty"].ToString());
                 model.ngQty = double.Parse(dr["ngQty"].ToString());
-                model.jobStatus = dr["jobStatus"].ToString();
-
+         
                 modelList.Add(model);
             }
-
-
 
 
             return modelList;
         }
 
 
+
         //before laser
+        //按amterial no汇总的信息
         private List<ViewModel.AllSectionInventory.laserInventoryInfo> GetLaserInventory(DateTime dStartTime)
         {
-
             DataTable dt = laserInventoryBLL.GetInventoryInfoForAllInventoryReport(dStartTime);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
@@ -266,12 +411,12 @@ namespace DashboardTTS.ViewBusiness
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.AllSectionInventory.laserInventoryInfo model = new ViewModel.AllSectionInventory.laserInventoryInfo();
-                model.jobNo = dr["jobNumber"].ToString();
+             
                 model.partNo = dr["partNumber"].ToString();
                 model.materialNo = dr["materialPartNo"].ToString();
-                model.qty = double.Parse(dr["quantity"].ToString());
+                model.qty = double.Parse(dr["inventoryQty"].ToString());
                 
-                modelList.Add(model);                
+                modelList.Add(model);
             }
 
 
@@ -279,7 +424,7 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-        //after wip
+        //after wip ,按amterial no汇总的信息
         private List<ViewModel.AllSectionInventory.wipOutputInfo> GetWIPOutput(DateTime dStartTime)
         {
 
@@ -304,9 +449,9 @@ namespace DashboardTTS.ViewBusiness
 
             return modelList;
         }
-                
 
-        //before wip
+
+        //before wip ,按amterial no汇总的信息
         private List<ViewModel.AllSectionInventory.wipInventoryInfo> GetWIPInventory(DateTime dStartTime)
         {
             DataTable dt = pqcInventoryBLL.GetInventoryForAllSectionReport(dStartTime);
@@ -331,7 +476,29 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-       
+        //按amterial no汇总的信息
+        private List<ViewModel.AllSectionInventory.pqcBinInfo> GetPackInventory(DateTime dStartTime)
+        {
+            DataTable dt = pqcBinBLL.GetBinInfoForAllInventoryReport(dStartTime);
+            if (dt == null)
+                return null;
+
+
+
+            List<ViewModel.AllSectionInventory.pqcBinInfo> modelList = new List<ViewModel.AllSectionInventory.pqcBinInfo>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.AllSectionInventory.pqcBinInfo model = new ViewModel.AllSectionInventory.pqcBinInfo();
+                model.partNo = dr["PartNumber"].ToString();
+                model.processes = dr["processes"].ToString();
+                model.materialName = dr["materialName"].ToString();
+                model.qty = double.Parse(dr["inventoryQty"].ToString());
+
+                modelList.Add(model);
+            }
+
+            return modelList;
+        }
 
 
 

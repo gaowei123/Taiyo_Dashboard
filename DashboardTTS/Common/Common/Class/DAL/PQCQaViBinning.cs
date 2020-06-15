@@ -528,36 +528,63 @@ namespace Common.Class.DAL
 			strSql.AppendFormat(" WHERE TT.Row between {0} and {1}", startIndex, endIndex);
 			return DBHelp.SqlDB.Query(strSql.ToString());
 		}
-
-		/*
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetList(int PageSize,int PageIndex,string strWhere)
-		{
-			SqlParameter[] parameters = {
-					new SqlParameter("@tblName", SqlDbType.VarChar, 255),
-					new SqlParameter("@fldName", SqlDbType.VarChar, 255),
-					new SqlParameter("@PageSize", SqlDbType.Int),
-					new SqlParameter("@PageIndex", SqlDbType.Int),
-					new SqlParameter("@IsReCount", SqlDbType.Bit),
-					new SqlParameter("@OrderType", SqlDbType.Bit),
-					new SqlParameter("@strWhere", SqlDbType.VarChar,1000),
-					};
-			parameters[0].Value = "PQCQaViBinning";
-			parameters[1].Value = "";
-			parameters[2].Value = PageSize;
-			parameters[3].Value = PageIndex;
-			parameters[4].Value = 0;
-			parameters[5].Value = 0;
-			parameters[6].Value = strWhere;	
-			return DBHelp.SqlDB.RunProcedure("UP_GetRecordByPage",parameters,"ds");
-		}*/
-
+        
 		#endregion  BasicMethod
-		#region  ExtensionMethod
 
-		#endregion  ExtensionMethod
+
+
+
+
+        public DataTable GetBinInfoForAllInventoryReport(DateTime dStartTime)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+
+a.PartNumber
+,a.processes
+,a.materialname
+,sum(a.materialQty) as inventoryQty
+
+
+from pqcqavibinning a
+left join pqcbom b on a.partnumber = b.partnumber 
+where 1=1 
+and day > @starttime
+
+
+and 
+(	
+	--packing
+	a.processes = 'PACKING' 
+
+	or 
+
+	--checking的, 只取最后一道工序.
+  	(a.nextviflag = 'True' and a.processes = (case	when b.processes like '%Check#3' then 'CHECK#3' 
+													when b.processes like '%Check#2' then 'CHECK#2' 
+													else 'CHECK#1' end))
+)
+
+group by a.PartNumber , a.materialName , a.processes ");
+
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@starttime", SqlDbType.DateTime)
+            };
+            parameters[0].Value = dStartTime;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+
+        }
+
+
 	}
 }
 

@@ -1,0 +1,2098 @@
+﻿
+@{
+    ViewBag.Title = "DailyVerifyReport";
+}
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+
+<style type="text/css">
+
+    a[href]:after{content:normal;}
+
+</style>
+
+
+
+<div class="container-fluid">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Daily Report  (Check & Verify)</span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default" style="padding:10px; margin-top:10px;">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#PCS" aria-controls="home" role="tab" data-toggle="tab">PCS</a></li>
+                <li role="presentation"><a href="#SET" aria-controls="wip" role="tab" data-toggle="tab">SET</a></li>
+                <li role="presentation"><a href="#Summary" aria-controls="wip" role="tab" data-toggle="tab">Summary</a></li>
+
+                @*嵌在 tab标签内的 date 查询条件*@
+                <li style="float:right;">
+                    <div style="width:260px;display: flex; justify-content:center;align-items:center;">
+                        <label for="txtDate" style="width:50px;">Date:</label>
+                        <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:150px;" onchange="showReport();" />
+                    </div>
+                </li>
+            </ul>
+
+            
+
+            <!-- Tab panes -->
+            <div class="tab-content" style="margin-top:10px;">
+                <div role="tabpanel" class="tab-pane fade in active" id="PCS">
+                    <table id="tableDayPCS" data-toggle="table"></table>    
+                    <br/>
+                    <table id="tableNightPCS" data-toggle="table"></table>                    
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="SET">
+                    <table id="tableDaySET" data-toggle="table"></table>
+                    <br />
+                    <table id="tableNightSET" data-toggle="table"></table>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="Summary">
+                    <table id="tableSummary" data-toggle="table" style="width:450px;"></table>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="divModalFooter">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+
+
+<script>
+
+    var apiGetDayPCS = window.globalConfig.rootDirectory + '/MOULDProduct/GetDailyVerifyPCS';
+    var apiGetDaySET = window.globalConfig.rootDirectory + '/MOULDProduct/GetDailyVerifySET';
+    var apiGetSummary = window.globalConfig.rootDirectory + '/MOULDProduct/GetSummary';
+    var apiGetReportVerifyFlag = window.globalConfig.rootDirectory + '/MOULDProduct/GetReportVerifyFlag';
+    var apiGetDefectColumnDisplayFlag = window.globalConfig.rootDirectory + '/MOULDProduct/GetDefectDisplayFlag';
+    var apiSetVerifyReport = window.globalConfig.rootDirectory + '/MOULDProduct/SetVerifyReport';
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+
+
+    //初始化时间框
+    $('#txtDate').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+   
+    $(document).ready(function () {
+        var lastDay = getLastReportDay();
+        var day = dateFormat('yyyy-MM-dd', lastDay);
+        $('#txtDate').val(day);
+
+        showReport();
+    });
+    $(window).resize(function () {
+        $('#tableDayPCS').bootstrapTable('resetView');
+        $('#tableNightPCS').bootstrapTable('resetView');
+        $('#tableDaySET').bootstrapTable('resetView');
+        $('#tableNightSET').bootstrapTable('resetView');
+        $('#tableSummary').bootstrapTable('resetView');
+    });
+
+
+
+
+    function showReport() {
+
+        //重新加载必须将原本table清空
+        $('#tableDayPCS').bootstrapTable('destroy');
+        $('#tableNightPCS').bootstrapTable('destroy');
+        $('#tableDaySET').bootstrapTable('destroy');
+        $('#tableNightSET').bootstrapTable('destroy');
+        $('#tableSummary').bootstrapTable('destroy');
+
+
+
+        $('#tableDayPCS').bootstrapTable({ // 对应table标签的id
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetDayPCS,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                return {
+                    Date: $('#txtDate').val(),
+                    Shift: 'Day'
+                }
+            },
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+            {
+                field: 'machineID',
+                title: 'MC</br>No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'model',
+                title: 'Model',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'partNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'jigNo',
+                title: 'Jig No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'mcRunHours',
+                title: 'MC Run</br>Hours',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->') {
+                        return '<a target="_blank" onclick="test()" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Day&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
+                    } else {
+                        return row.mcRunHours
+                    }
+                }
+            },
+            {
+                field: 'cavityCount',
+                title: 'Cavity</br>Count',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'totalShots',
+                title: 'Total</br>Shots',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'passQty',
+                title: 'total</br>Pass</br>Pcs',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'rejQty',
+                title: 'Reject</br>Qty</br>Pcs',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'rejRate',
+                title: 'Prod</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'whiteDot',
+                title: 'White</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.whiteDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=White Dot">' + row.whiteDot + '</a>';
+                    } else {
+                        return row.whiteDot
+                    }
+                }
+            },
+            {
+                field: 'scratches',
+                title: 'Scratches',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.scratches != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Scratches">' + row.scratches + '</a>';
+                    } else {
+                        return row.scratches
+                    }
+                }
+            },
+            {
+                field: 'dentedMark',
+                title: 'Dented</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.dentedMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Dented Mark">' + row.dentedMark + '</a>';
+                    } else {
+                        return row.dentedMark
+                    }
+                }
+            },
+            {
+                field: 'shinningDot',
+                title: 'Shinning</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.shinningDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Shinning Dot">' + row.shinningDot + '</a>';
+                    } else {
+                        return row.shinningDot
+                    }
+                }
+            },
+            {
+                field: 'blackMark',
+                title: 'Black</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.blackMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Black Mark">' + row.blackMark + '</a>';
+                    } else {
+                        return row.blackMark
+                    }
+                }
+            },
+            {
+                field: 'sinkMark',
+                title: 'Sink</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.sinkMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Sink Mark">' + row.sinkMark + '</a>';
+                    } else {
+                        return row.sinkMark
+                    }
+                }
+            },
+            {
+                field: 'flowMark',
+                title: 'Flow</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flowMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flow Mark">' + row.flowMark + '</a>';
+                    } else {
+                        return row.flowMark
+                    }
+                }
+            },
+            {
+                field: 'highGate',
+                title: 'High</br>Gate',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.highGate != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=High Gate">' + row.highGate + '</a>';
+                    } else {
+                        return row.highGate
+                    }
+                }
+            },
+            {
+                field: 'silverSteak',
+                title: 'Silver</br>Steak',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.silverSteak != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Silver Steak">' + row.silverSteak + '</a>';
+                    } else {
+                        return row.silverSteak
+                    }
+                }
+            },
+            {
+                field: 'blackDot',
+                title: 'Black</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.blackDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Black Dot">' + row.blackDot + '</a>';
+                    } else {
+                        return row.blackDot
+                    }
+                }
+            },
+            {
+                field: 'oilStain',
+                title: 'Oil</br>Stain',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.oilStain != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Oil Stain">' + row.oilStain + '</a>';
+                    } else {
+                        return row.oilStain
+                    }
+                }
+            },
+            {
+                field: 'flowLine',
+                title: 'Flow</br>Line',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flowLine != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flow Line">' + row.flowLine + '</a>';
+                    } else {
+                        return row.flowLine
+                    }
+                }
+            },
+            {
+                field: 'overCut',
+                title: 'Over</br>Cut',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.overCut != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Over-Cut">' + row.overCut + '</a>';
+                    } else {
+                        return row.overCut
+                    }
+                }
+            },
+            {
+                field: 'crack',
+                title: 'Crack',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.crack != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Crack">' + row.crack + '</a>';
+                    } else {
+                        return row.crack
+                    }
+                }
+            },
+            {
+                field: 'shortMold',
+                title: 'Short</br>Mold',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.shortMold != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Short Mold">' + row.shortMold + '</a>';
+                    } else {
+                        return row.shortMold
+                    }
+                }
+            },
+            {
+                field: 'stainMark',
+                title: 'Stain</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.stainMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Stain Mark">' + row.stainMark + '</a>';
+                    } else {
+                        return row.stainMark
+                    }
+                }
+            },
+            {
+                field: 'weldLine',
+                title: 'Weld</br>Line',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.weldLine != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Weld Line">' + row.weldLine + '</a>';
+                    } else {
+                        return row.weldLine
+                    }
+                }
+            },
+            {
+                field: 'flashes',
+                title: 'Flashes',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flashes != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flashes">' + row.flashes + '</a>';
+                    } else {
+                        return row.flashes
+                    }
+                }
+            },
+            {
+                field: 'foreignMaterial',
+                title: 'Foreign</br>Material',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.foreignMaterial != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Foreign Materials">' + row.foreignMaterial + '</a>';
+                    } else {
+                        return row.foreignMaterial
+                    }
+                }
+            },
+            {
+                field: 'drag',
+                title: 'Drag',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.drag != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Drag">' + row.drag + '</a>';
+                    } else {
+                        return row.drag
+                    }
+                }
+            },
+            {
+                field: 'materialBleed',
+                title: 'Material</br>Bleed',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.materialBleed != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Material Bleed">' + row.materialBleed + '</a>';
+                    } else {
+                        return row.materialBleed
+                    }
+                }
+            },
+            {
+                field: 'bent',
+                title: 'Bent',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.bent != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Bent">' + row.bent + '</a>';
+                    } else {
+                        return row.bent
+                    }
+                }
+            },
+            {
+                field: 'deform',
+                title: 'Deform',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.deform != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Deform">' + row.deform + '</a>';
+                    } else {
+                        return row.deform
+                    }
+                }
+            },
+            {
+                field: 'gasMark',
+                title: 'Gas</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.gasMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Day&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Gas Mark">' + row.gasMark + '</a>';
+                    } else {
+                        return row.gasMark
+                    }
+                }
+            },
+            {
+                field: 'ipqcRejQty',
+                title: 'IPQC</br>Buyoff',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'wastageMaterial',
+                title: 'Purging</br>Material</br>(Kgs)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'setUp',
+                title: 'Adjust</br>Scrap</br>(Shots)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'setUpRate',
+                title: 'Setup</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'userID',
+                title: 'OP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'verifyBy',
+                title: 'Verify</br>By',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo == 'Sub Total->') {
+                        if (row.supervisor == '') {
+                            return '<input type="button" id="btnVerifyDayPCS" class="btn btn-danger btn-sm" value="Verify" onclick="initLogin(\'Day\');" />';
+                        } else {
+                            return '<label>' + row.supervisor + '</label>'
+                        }
+                    } else {
+                        return row.supervisor;
+                    }
+                }
+            }
+
+
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiGetDefectColumnDisplayFlag,
+                    data: {
+                        Date: $('#txtDate').val()
+                    },
+                    success: function (data) {
+
+                        if (data.whiteDot == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'whiteDot');
+                        if (data.scratches == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'scratches');
+                        if (data.dentedMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'dentedMark');
+                        if (data.shinningDot == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'shinningDot');
+                        if (data.blackMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'blackMark');
+                        if (data.sinkMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'sinkMark');
+                        if (data.flowMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'flowMark');
+                        if (data.highGate == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'highGate');
+                        if (data.silverSteak == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'silverSteak');
+                        if (data.BlackDot == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'BlackDot');
+                        if (data.oilStain == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'oilStain');
+                        if (data.flowLine == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'flowLine');
+                        if (data.overCut == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'overCut');
+                        if (data.crack == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'crack');
+                        if (data.shortMold == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'shortMold');
+                        if (data.stainMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'stainMark');
+                        if (data.weldLine == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'weldLine');
+                        if (data.flashes == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'flashes');
+                        if (data.foreignMaterial == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'foreignMaterial');
+                        if (data.drag == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'drag');
+                        if (data.materialBleed == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'materialBleed');
+                        if (data.bent == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'bent');
+                        if (data.deform == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'deform');
+                        if (data.gasMark == 0) $('#tableDayPCS').bootstrapTable('hideColumn', 'gasMark');
+
+                    }
+                });
+
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+        $('#tableNightPCS').bootstrapTable({ // 对应table标签的id
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetDayPCS,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    Date: $('#txtDate').val(),
+                    Shift: 'Night'
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+            {
+                field: 'machineID',
+                title: 'MC</br>No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'model',
+                title: 'Model',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'partNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'jigNo',
+                title: 'Jig No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'mcRunHours',
+                title: 'MC Run</br>Hours',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->') {
+                        return '<a target="_blank" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Night&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
+                    } else {
+                        return row.mcRunHours
+                    }
+                }
+            },
+            {
+                field: 'cavityCount',
+                title: 'Cavity</br>Count',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'totalShots',
+                title: 'Total</br>Shots',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'passQty',
+                title: 'total</br>Pass</br>Pcs',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'rejQty',
+                title: 'Prod</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'rejRate',
+                title: 'Prod</br>RejRate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'whiteDot',
+                title: 'White</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.whiteDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=White Dot">' + row.whiteDot + '</a>';
+                    } else {
+                        return row.whiteDot
+                    }
+                }
+            },
+            {
+                field: 'scratches',
+                title: 'Scratches',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.scratches != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Scratches">' + row.scratches + '</a>';
+                    } else {
+                        return row.scratches
+                    }
+                }
+            },
+            {
+                field: 'dentedMark',
+                title: 'Dented</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.dentedMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Dented Mark">' + row.dentedMark + '</a>';
+                    } else {
+                        return row.dentedMark
+                    }
+                }
+            },
+            {
+                field: 'shinningDot',
+                title: 'Shinning</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.shinningDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Shinning Dot">' + row.shinningDot + '</a>';
+                    } else {
+                        return row.shinningDot
+                    }
+                }
+            },
+            {
+                field: 'blackMark',
+                title: 'Black</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.blackMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Black Mark">' + row.blackMark + '</a>';
+                    } else {
+                        return row.blackMark
+                    }
+                }
+            },
+            {
+                field: 'sinkMark',
+                title: 'Sink</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.sinkMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Sink Mark">' + row.sinkMark + '</a>';
+                    } else {
+                        return row.sinkMark
+                    }
+                }
+            },
+            {
+                field: 'flowMark',
+                title: 'Flow</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flowMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flow Mark">' + row.flowMark + '</a>';
+                    } else {
+                        return row.flowMark
+                    }
+                }
+            },
+            {
+                field: 'highGate',
+                title: 'High</br>Gate',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.highGate != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=High Gate">' + row.highGate + '</a>';
+                    } else {
+                        return row.highGate
+                    }
+                }
+            },
+            {
+                field: 'silverSteak',
+                title: 'Silver</br>Steak',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.silverSteak != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Silver Steak">' + row.silverSteak + '</a>';
+                    } else {
+                        return row.silverSteak
+                    }
+                }
+            },
+            {
+                field: 'blackDot',
+                title: 'Black</br>Dot',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.blackDot != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Black Dot">' + row.blackDot + '</a>';
+                    } else {
+                        return row.blackDot
+                    }
+                }
+            },
+            {
+                field: 'oilStain',
+                title: 'Oil</br>Stain',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.oilStain != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Oil Stain">' + row.oilStain + '</a>';
+                    } else {
+                        return row.oilStain
+                    }
+                }
+            },
+            {
+                field: 'flowLine',
+                title: 'Flow</br>Line',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flowLine != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flow Line">' + row.flowLine + '</a>';
+                    } else {
+                        return row.flowLine
+                    }
+                }
+            },
+            {
+                field: 'overCut',
+                title: 'Over</br>Cut',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.overCut != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Over-Cut">' + row.overCut + '</a>';
+                    } else {
+                        return row.overCut
+                    }
+                }
+            },
+            {
+                field: 'crack',
+                title: 'Crack',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.crack != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Crack">' + row.crack + '</a>';
+                    } else {
+                        return row.crack
+                    }
+                }
+            },
+            {
+                field: 'shortMold',
+                title: 'Short</br>Mold',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.shortMold != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Short Mold">' + row.shortMold + '</a>';
+                    } else {
+                        return row.shortMold
+                    }
+                }
+            },
+            {
+                field: 'stainMark',
+                title: 'Stain</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.stainMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Stain Mark">' + row.stainMark + '</a>';
+                    } else {
+                        return row.stainMark
+                    }
+                }
+            },
+            {
+                field: 'weldLine',
+                title: 'Weld</br>Line',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.weldLine != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Weld Line">' + row.weldLine + '</a>';
+                    } else {
+                        return row.weldLine
+                    }
+                }
+            },
+            {
+                field: 'flashes',
+                title: 'Flashes',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.flashes != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Flashes">' + row.flashes + '</a>';
+                    } else {
+                        return row.flashes
+                    }
+                }
+            },
+            {
+                field: 'foreignMaterial',
+                title: 'Foreign</br>Material',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.foreignMaterial != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Foreign Materials">' + row.foreignMaterial + '</a>';
+                    } else {
+                        return row.foreignMaterial
+                    }
+                }
+            },
+            {
+                field: 'drag',
+                title: 'Drag',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.drag != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Drag">' + row.drag + '</a>';
+                    } else {
+                        return row.drag
+                    }
+                }
+            },
+            {
+                field: 'materialBleed',
+                title: 'Material</br>Bleed',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.materialBleed != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Material Bleed">' + row.materialBleed + '</a>';
+                    } else {
+                        return row.materialBleed
+                    }
+                }
+            },
+            {
+                field: 'bent',
+                title: 'Bent',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.bent != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Bent">' + row.bent + '</a>';
+                    } else {
+                        return row.bent
+                    }
+                }
+            },
+            {
+                field: 'deform',
+                title: 'Deform',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.deform != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Deform">' + row.deform + '</a>';
+                    } else {
+                        return row.deform
+                    }
+                }
+            },
+            {
+                field: 'gasMark',
+                title: 'Gas</br>Mark',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->' && row.gasMark != 0) {
+                        return '<a target="_blank" href="./RejectionDetailReport?Date=' + $('#txtDate').val() + '&Shift=Night&PartNo=' + row.partNo + '&MachineID=' + row.machineID + '&DefectCode=Gas Mark">' + row.gasMark + '</a>';
+                    } else {
+                        return row.gasMark
+                    }
+                }
+            },
+            {
+                field: 'ipqcRejQty',
+                title: 'IPQC</br>Buyoff',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'wastageMaterial',
+                title: 'Purging</br>Material</br>(Kgs)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'setUp',
+                title: 'Adjust</br>Scrap</br>(Shots)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'setUpRate',
+                title: 'Setup</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'userID',
+                title: 'OP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'verifyBy',
+                title: 'Verify</br>By',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo == 'Sub Total->') {
+                        if (row.supervisor == '') {
+                            return '<input type="button" class="btn btn-danger btn-sm" value="Verify" onclick="initLogin(\'Night\');" />';
+                        } else {
+                            return '<label>' + row.supervisor + '</label>'
+                        }
+                    } else {
+                        return row.supervisor;
+                    }
+                }
+            }
+
+
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiGetDefectColumnDisplayFlag,
+                    data: {
+                        Date: $('#txtDate').val()
+                    },
+                    success: function (data) {
+
+                        if (data.whiteDot == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'whiteDot');
+                        if (data.scratches == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'scratches');
+                        if (data.dentedMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'dentedMark');
+                        if (data.shinningDot == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'shinningDot');
+                        if (data.blackMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'blackMark');
+                        if (data.sinkMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'sinkMark');
+                        if (data.flowMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'flowMark');
+                        if (data.highGate == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'highGate');
+                        if (data.silverSteak == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'silverSteak');
+                        if (data.BlackDot == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'BlackDot');
+                        if (data.oilStain == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'oilStain');
+                        if (data.flowLine == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'flowLine');
+                        if (data.overCut == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'overCut');
+                        if (data.crack == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'crack');
+                        if (data.shortMold == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'shortMold');
+                        if (data.stainMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'stainMark');
+                        if (data.weldLine == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'weldLine');
+                        if (data.flashes == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'flashes');
+                        if (data.foreignMaterial == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'foreignMaterial');
+                        if (data.drag == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'drag');
+                        if (data.materialBleed == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'materialBleed');
+                        if (data.bent == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'bent');
+                        if (data.deform == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'deform');
+                        if (data.gasMark == 0) $('#tableNightPCS').bootstrapTable('hideColumn', 'gasMark');
+
+                    }
+                });
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+      
+        $('#tableDaySET').bootstrapTable({ // 对应table标签的id
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetDaySET,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    Date: $('#txtDate').val(),
+                    Shift: 'Day'
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+            {
+                field: 'machineID',
+                title: 'MC</br>No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'model',
+                title: 'Model',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'partNoALL',
+                title: 'Part No ALL',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'jigNo',
+                title: 'Jig No',
+                align: 'center',
+                valign: 'middle',
+                visible: false
+            },
+            {
+                field: 'mcRunHours',
+                title: 'MC Run</br>Hours',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.partNo != 'Sub Total->') {
+                        return '<a target="_blank" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Day&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
+                    } else {
+                        return row.mcRunHours
+                    }
+                }
+            },
+            {
+                field: 'cavityCount',
+                title: 'Cavity</br>Count',
+                align: 'center',
+                valign: 'middle',
+                visible:false
+            },
+            {
+                field: 'totalShots',
+                title: 'Total</br>Shots',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'passQty',
+                title: 'total</br>Pass</br>Set',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'rejQty',
+                title: 'Prod</br>Reject</br>Qty',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'rejRate',
+                title: 'Prod</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'whiteDot',
+                title: 'White</br>Dot',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'scratches',
+                title: 'Scratches',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'dentedMark',
+                title: 'Dented</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'shinningDot',
+                title: 'Shinning</br>Dot',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'blackMark',
+                title: 'Black</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'sinkMark',
+                title: 'Sink</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'flowMark',
+                title: 'Flow</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'highGate',
+                title: 'High</br>Gate',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'silverSteak',
+                title: 'Silver</br>Steak',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'blackDot',
+                title: 'Black</br>Dot',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'oilStain',
+                title: 'Oil</br>Stain',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'flowLine',
+                title: 'Flow</br>Line',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'overCut',
+                title: 'Over</br>Cut',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'crack',
+                title: 'Crack',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'shortMold',
+                title: 'Short</br>Mold',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'stainMark',
+                title: 'Stain</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'weldLine',
+                title: 'Weld</br>Line',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'flashes',
+                title: 'Flashes',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'foreignMaterial',
+                title: 'Foreign</br>Material',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'drag',
+                title: 'Drag',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'materialBleed',
+                title: 'Material</br>Bleed',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'bent',
+                title: 'Bent',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'deform',
+                title: 'Deform',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'gasMark',
+                title: 'Gas</br>Mark',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ipqcRejQty',
+                title: 'IPQC</br>Buyoff',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'wastageMaterial',
+                title: 'Purging</br>Material</br>(Kgs)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'setUp',
+                title: 'Adjust</br>Scrap</br>(Shots)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'setUpRate',
+                title: 'Setup</br>Reject</br>Rate',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: {
+                    css: { "background-color": "#fce4d6" }
+                }
+            },
+            {
+                field: 'userID',
+                title: 'OP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'supervisor',
+                title: 'Verify</br>By',
+                align: 'center',
+                valign: 'middle'
+            }
+
+
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiGetDefectColumnDisplayFlag,
+                    data: {
+                        Date: $('#txtDate').val()
+                    },
+                    success: function (data) {
+
+                        if (data.whiteDot == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'whiteDot');
+                        if (data.scratches == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'scratches');
+                        if (data.dentedMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'dentedMark');
+                        if (data.shinningDot == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'shinningDot');
+                        if (data.blackMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'blackMark');
+                        if (data.sinkMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'sinkMark');
+                        if (data.flowMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'flowMark');
+                        if (data.highGate == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'highGate');
+                        if (data.silverSteak == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'silverSteak');
+                        if (data.BlackDot == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'BlackDot');
+                        if (data.oilStain == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'oilStain');
+                        if (data.flowLine == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'flowLine');
+                        if (data.overCut == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'overCut');
+                        if (data.crack == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'crack');
+                        if (data.shortMold == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'shortMold');
+                        if (data.stainMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'stainMark');
+                        if (data.weldLine == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'weldLine');
+                        if (data.flashes == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'flashes');
+                        if (data.foreignMaterial == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'foreignMaterial');
+                        if (data.drag == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'drag');
+                        if (data.materialBleed == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'materialBleed');
+                        if (data.bent == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'bent');
+                        if (data.deform == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'deform');
+                        if (data.gasMark == 0) $('#tableDaySET').bootstrapTable('hideColumn', 'gasMark');
+
+                    }
+                });
+
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+        $('#tableNightSET').bootstrapTable({ // 对应table标签的id
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetDaySET,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    Date: $('#txtDate').val(),
+                    Shift: 'Night'
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+              {
+                  field: 'machineID',
+                  title: 'MC</br>No',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'model',
+                  title: 'Model',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'partNoALL',
+                  title: 'Part No ALL',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'jigNo',
+                  title: 'Jig No',
+                  align: 'center',
+                  valign: 'middle',
+                  visible: false
+              },
+              {
+                  field: 'mcRunHours',
+                  title: 'MC Run</br>Hours',
+                  align: 'center',
+                  valign: 'middle',
+                  formatter: function (value, row, index) {
+                      if (row.partNo != 'Sub Total->') {
+                          return '<a target="_blank" href="../Webform/Moulding/MouldingMachineStatus.aspx?DateFrom=' + $('#txtDate').val() + '&DateTo=' + $('#txtDate').val() + '&Shift=Night&MachineID=' + row.machineID + '">' + row.mcRunHours + '</a>';
+                      } else {
+                          return row.mcRunHours
+                      }
+                  }
+              },
+              {
+                  field: 'cavityCount',
+                  title: 'Cavity</br>Count',
+                  align: 'center',
+                  valign: 'middle',
+                  visible: false
+              },
+              {
+                  field: 'totalShots',
+                  title: 'Total</br>Shots',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'passQty',
+                  title: 'total</br>Pass</br>Set',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'rejQty',
+                  title: 'Prod</br>Reject</br>Qty',
+                  align: 'center',
+                  valign: 'middle',
+                  cellStyle: {
+                      css: { "background-color": "#fce4d6" }
+                  }
+              },
+              {
+                  field: 'rejRate',
+                  title: 'Prod</br>Reject</br>Rate',
+                  align: 'center',
+                  valign: 'middle',
+                  cellStyle: {
+                      css: { "background-color": "#fce4d6" }
+                  }
+              },
+              {
+                  field: 'whiteDot',
+                  title: 'White</br>Dot',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'scratches',
+                  title: 'Scratches',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'dentedMark',
+                  title: 'Dented</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'shinningDot',
+                  title: 'Shinning</br>Dot',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'blackMark',
+                  title: 'Black</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'sinkMark',
+                  title: 'Sink</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'flowMark',
+                  title: 'Flow</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'highGate',
+                  title: 'High</br>Gate',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'silverSteak',
+                  title: 'Silver</br>Steak',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'blackDot',
+                  title: 'Black</br>Dot',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'oilStain',
+                  title: 'Oil</br>Stain',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'flowLine',
+                  title: 'Flow</br>Line',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'overCut',
+                  title: 'Over</br>Cut',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'crack',
+                  title: 'Crack',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'shortMold',
+                  title: 'Short</br>Mold',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'stainMark',
+                  title: 'Stain</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'weldLine',
+                  title: 'Weld</br>Line',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'flashes',
+                  title: 'Flashes',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'foreignMaterial',
+                  title: 'Foreign</br>Material',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'drag',
+                  title: 'Drag',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'materialBleed',
+                  title: 'Material</br>Bleed',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'bent',
+                  title: 'Bent',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'deform',
+                  title: 'Deform',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'gasMark',
+                  title: 'Gas</br>Mark',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'ipqcRejQty',
+                  title: 'IPQC</br>Buyoff',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'wastageMaterial',
+                  title: 'Purging</br>Material</br>(Kgs)',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'setUp',
+                  title: 'Adjust</br>Scrap</br>(Shots)',
+                  align: 'center',
+                  valign: 'middle',
+                  cellStyle: {
+                      css: { "background-color": "#fce4d6" }
+                  }
+              },
+              {
+                  field: 'setUpRate',
+                  title: 'Setup</br>Reject</br>Rate',
+                  align: 'center',
+                  valign: 'middle',
+                  cellStyle: {
+                      css: { "background-color": "#fce4d6" }
+                  }
+              },
+              {
+                  field: 'userID',
+                  title: 'OP',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'supervisor',
+                  title: 'Verify</br>By',
+                  align: 'center',
+                  valign: 'middle'
+              }
+
+
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiGetDefectColumnDisplayFlag,
+                    data: {
+                        Date: $('#txtDate').val()
+                    },
+                    success: function (data) {
+
+                        if (data.whiteDot == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'whiteDot');
+                        if (data.scratches == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'scratches');
+                        if (data.dentedMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'dentedMark');
+                        if (data.shinningDot == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'shinningDot');
+                        if (data.blackMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'blackMark');
+                        if (data.sinkMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'sinkMark');
+                        if (data.flowMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'flowMark');
+                        if (data.highGate == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'highGate');
+                        if (data.silverSteak == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'silverSteak');
+                        if (data.BlackDot == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'BlackDot');
+                        if (data.oilStain == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'oilStain');
+                        if (data.flowLine == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'flowLine');
+                        if (data.overCut == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'overCut');
+                        if (data.crack == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'crack');
+                        if (data.shortMold == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'shortMold');
+                        if (data.stainMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'stainMark');
+                        if (data.weldLine == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'weldLine');
+                        if (data.flashes == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'flashes');
+                        if (data.foreignMaterial == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'foreignMaterial');
+                        if (data.drag == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'drag');
+                        if (data.materialBleed == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'materialBleed');
+                        if (data.bent == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'bent');
+                        if (data.deform == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'deform');
+                        if (data.gasMark == 0) $('#tableNightSET').bootstrapTable('hideColumn', 'gasMark');
+
+                    }
+                });
+
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+
+        $('#tableSummary').bootstrapTable({ // 对应table标签的id
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetSummary,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    Date: $('#txtDate').val()
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: [
+              {
+                  field: 'description',
+                  title: ''
+              },
+              {
+                  field: 'totalQty',
+                  title: 'Total Qty',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'totalPass',
+                  title: 'Total Pass',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'totalRejQty',
+                  title: 'Total Reject',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'totalRejRate',
+                  title: 'Total RejRate',
+                  align: 'center',
+                  valign: 'middle'
+              },
+              {
+                  field: 'rejCost',
+                  title: 'Rej Cost',
+                  align: 'center',
+                  valign: 'middle'
+              }
+            ],
+
+          
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+    }
+
+    function initLogin(shift) {
+
+        $('#divModalFooter').html('');
+
+        var strHtml = '<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>\
+                    <button type="button" class="btn btn-success" onclick="verifyReport(\'' + shift + '\');">Submit</button>';
+
+        $('#divModalFooter').html(strHtml);
+
+        $('#modalLogin').modal('show');
+    }
+  
+    function verifyReport(shift) {
+
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: 'Moulding',
+                authority: 'Engineer'
+            },
+            success: function (data) {
+
+             
+                //login success, insert verify report.
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: apiSetVerifyReport,
+                    data: {
+                        Date: $('#txtDate').val(),
+                        Shift: shift,
+                        User: $('#txtUsername').val(),
+                    },
+                    success: function (data) {
+
+                        if (data != true) {
+                            alert('Verify Report Error!');
+                        } else {
+                            showReport();
+                        }
+
+                        $('#modalLogin').modal('hide');
+                        $('#txtUsername').val('');
+                        $('#txtPassword').val('');
+                    }
+                });
+
+
+            },
+            error: function () {
+                alert("a exception happend during login !");
+            }
+        });
+
+    }
+
+
+
+
+
+</script>

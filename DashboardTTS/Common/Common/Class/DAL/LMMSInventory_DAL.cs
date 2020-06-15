@@ -615,20 +615,22 @@ group by a.ID");
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
-a.jobnumber 
-,a.partnumber
+
+a.partnumber
 ,b.materialPartNo
-,a.quantity
+,sum(a.quantity) as inventoryQty
 
 from lmmsinventory a
 left join LMMSBomDetail b on a.partnumber = b.partnumber 
 left join LMMSWatchLog c on a.jobnumber = c.jobNumber
 left join (select partNumber, count(1) as materialCount from lmmsbomdetail group by partnumber ) d on a.partnumber = d.partnumber 
 
-where 1=1 and a.datetime >= @startTime
-and c.totalPass + totalFail +  isnull(a.pqcQuantity,0) * d.materialCount +  isnull(a.setUpQTY,0) * d.materialCount +  isnull(a.buyOffQty,0) * d.materialCount  < c.totalQuantity ");
+where 1=1 and a.datetime >= '2020-3-1'
+and c.totalPass + totalFail +  isnull(a.pqcQuantity,0) * d.materialCount +  isnull(a.setUpQTY,0) * d.materialCount +  isnull(a.buyOffQty,0) * d.materialCount  < c.totalQuantity 
 
-       
+group by a.partNumber, b.materialPartNo ");
+
+            
             SqlParameter[] parameters = {
                 new SqlParameter("@startTime", SqlDbType.DateTime)
             };

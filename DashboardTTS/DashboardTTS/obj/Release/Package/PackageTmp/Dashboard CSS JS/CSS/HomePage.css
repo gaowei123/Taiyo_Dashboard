@@ -1,0 +1,104 @@
+﻿a:link,a:visited{
+    text-decoration:none;  /*超链接无下划线*/
+}
+a{
+    color:black;
+}
+
+
+.topTitleRow{
+    background-color: #003366;
+    color:white;
+    font-family:Arial;
+    font-weight:bold;
+    padding:14px 10px 10px 13px;
+    height:56px;
+    border-radius:4px;
+}
+.topTitleRow span{
+        font-size:24px;
+}
+.topTitleRow label{
+        font-size:20px;
+}
+
+
+.secondTitleRow{
+    background-color: #003366;
+    color:white;
+    font-family:Arial;
+    font-weight:bold;
+    padding:14px 10px 10px 13px;
+    height:46px;
+    border-radius:4px;
+}
+.secondTitleRow label{
+    width:100%;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+
+
+
+.divRowBorder{
+    border-bottom:solid;
+    border-bottom-width:1px; 
+    border-bottom-color:#ddd;
+}
+
+.divColBorder{
+    border-right:solid;
+    border-right-width:1px; 
+    border-right-color:#ddd;
+}
+
+
+
+
+.divController{
+    width:128px;
+    display:inline-block;
+    float:left;
+    margin-right:4px;
+}
+.mcStatusTable{
+    width:128px; 
+    height:80px;   
+    margin-top:15px;
+}
+.lbStatus{
+     width:128px;
+     line-height:30px;
+     border-style:solid;
+     border-width:1px;
+     border-color:#003162;
+ }
+ .mcStatusTD{
+    width: 100%;
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+    color:#003162;
+    font-family:'Arial Unicode MS';
+}
+
+ 
+
+
+
+
+.wrapper {
+    display:table;
+    width:100%;
+    height:100px;
+    margin:0 auto;
+}
+.cell{
+    display:table-cell; 
+    vertical-align:middle;
+    font-size:18px;
+    text-align:center;
+    font-weight:bold;
+}

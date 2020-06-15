@@ -2353,12 +2353,17 @@ with watchLog as (
 	left join LMMSInventory b on a.jobNumber = b.jobNumber
 	left join (select partNumber, count(1) as materialCount from LMMSBomDetail group by partNumber  ) c 
 	on c.partNumber = a.partNumber
-    where 1 = 1 and a.datetime >= @dStartTime ) ");
+    where 1 = 1 and a.datetime >= @dStartTime
+)
 
-            
 
-            strSql.Append(@"
-select jobNumber, partNumber , materialNo, okQty, ngQty, jobStatus from (
+select
+
+partNumber, 
+materialNo,
+sum(okQty) as okQty,
+sum(ngQty) as ngQty
+from (
 	select jobNumber, partNumber, model1Name as materialNo,  isnull(ok1Count,0) as okQty,  isnull(ng1Count ,0) as ngQty   ,jobStatus from watchLog union all
 	select jobNumber, partNumber, model2Name as materialNo,  isnull(ok2Count,0) as okQty,  isnull(ng2Count ,0) as ngQty   ,jobStatus from watchLog union all
 	select jobNumber, partNumber, model3Name as materialNo,  isnull(ok3Count,0) as okQty,  isnull(ng3Count ,0) as ngQty   ,jobStatus from watchLog union all
@@ -2372,10 +2377,10 @@ select jobNumber, partNumber , materialNo, okQty, ngQty, jobStatus from (
 	select jobNumber, partNumber, model11Name as materialNo, isnull(ok11Count,0) as okQty, isnull(ng11Count,0)  as ngQty  ,jobStatus from watchLog 
 ) a
 
-where a.materialNo != '' ");
+where a.materialNo != ''
+and jobStatus != 'DONE'
 
-
-
+group by a.partNumber, a.materialNo  ");
 
 
 

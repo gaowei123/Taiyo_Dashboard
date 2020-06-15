@@ -1,0 +1,645 @@
+﻿
+@{
+    ViewBag.Title = "UserManagement";
+}
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">User Management</span>
+    </div>
+
+
+    <div class="row searchingBar">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Department:</label>
+                    <select id="ddlDepartment" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Moulding">Moulding</option>
+                        <option value="Painting">Painting</option>
+                        <option value="Laser">Laser</option>
+                        <option value="PQC">PQC</option>
+                        <option value="Assembly">Assembly</option>
+                        <option value="Office">Office</option>
+
+                        @*<option value="Moulding">Moulding</option>
+                        <option value="Moulding">Moulding</option>
+                        <option value="Moulding">Moulding</option>
+                        <option value="Moulding">Moulding</option>*@
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">User Group:</label>
+                    <select id="ddlUserGroup" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Leader">Leader</option>
+                        <option value="Technician">Technician</option>
+                        <option value="MH">MH</option>
+                        <option value="TemporaryStaff">TemporaryStaff</option>
+                        <option value="IPQC">IPQC</option>
+                        <option value="Checker">Checker</option>
+                        <option value="Operator">Operator</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Employee ID:</label>
+                    <input type="text" class="form-control" id="txtEmployeeID" CssClass="form-control" placeholder="Please input ID" style="width:60%;" />
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" style="width:40%;" />
+                    <input type="button" class="btn btn-primary" value="Add" onclick="initAddForm();"style="width:40%;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12" style="padding:0px;">
+            <table id="tableUserList" data-toggle="table"></table>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<!-- Update Form 拟态框 -->
+<div class="modal fade" id="modalUpdateForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Detail Form</b>
+                </h4>
+                <label id="lbFlag" style="display:none;"></label>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" id="updatingForm">
+
+                    <div class="form-group">
+                        <label for="txtFormEmployeeID" class="col-sm-4 control-label">Employee ID:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtFormEmployeeID" placeholder="Please input employee ID">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtFormDepartmentID" class="col-sm-4 control-label">Department ID:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtFormDepartmentID" placeholder="Please input department ID">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtFormUsername" class="col-sm-4 control-label">User Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtFormUsername" placeholder="Please input user name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtFormPassword" class="col-sm-4 control-label">Password:</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="txtFormPassword" placeholder="Please input password">
+                        </div>
+                    </div>
+                    <div class="form-group" id="divPasswordConfirm">
+                        <label for="txtFormPasswordConfirm" class="col-sm-4 control-label">Confirm Password:</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" id="txtFormPasswordConfirm"  placeholder="Please confirm password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ddlFormUserGroup" class="col-sm-4 control-label">User Group:</label>
+                        <div class="col-sm-8">                          
+                            <select id="ddlFormUserGroup" class="form-control" placeholder="Please choose user group">
+                                <option value=""></option>
+                                <option value="Admin">Admin</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Engineer">Engineer</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Leader">Leader</option>
+                                <option value="Technician">Technician</option>
+                                <option value="MH">MH</option>
+                                <option value="TemporaryStaff">TemporaryStaff</option>
+                                <option value="IPQC">IPQC</option>
+                                <option value="Checker">Checker</option>
+                                <option value="Operator">Operator</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="ddlFormShift" class="col-sm-4 control-label">Shift:</label>
+                        <div class="col-sm-8">
+                            <select id="ddlFormShift" class="form-control" placeholder="Please choose shift">
+                                <option value=""></option>                             
+                                <option value="Day">Day</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ddlFormDepartment" class="col-sm-4 control-label">Department:</label>
+                        <div class="col-sm-8">
+                            <select id="ddlFormDepartment" class="form-control" placeholder="Please choose shift">
+                                <option value=""></option>
+                                <option value="Moulding">Moulding</option>
+                                <option value="Painting">Painting</option>
+                                <option value="Laser">Laser</option>
+                                <option value="PQC">PQC</option>
+                                <option value="Assembly">Assembly</option>
+                                <option value="Office">Office</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="updateValidation();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetUserList = window.globalConfig.rootDirectory + '/Attendance/GetUserList';
+    var apiAddUser = window.globalConfig.rootDirectory + '/Attendance/AddUser';
+    var apiUpdateUser = window.globalConfig.rootDirectory + '/Attendance/UpdateUser';
+    var apiDeleteUser = window.globalConfig.rootDirectory + '/Attendance/DeleteUser';
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+
+
+
+   
+    $(document).ready(function () {
+        search();
+    });
+
+    function search() {
+        //重新加载必须将原本table清空
+        $('#tableUserList').bootstrapTable('destroy');
+        $('#tableUserList').bootstrapTable({ // 对应table标签的id
+
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetUserList,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    Department: $('#ddlDepartment').val(),
+                    UserGroup: $("#ddlUserGroup").val(),
+                    EmployeeID: $("#txtEmployeeID").val()
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            //onClickRow:function (row,$element) {
+            //    $('.danger').removeClass('danger');
+            //    $($element).addClass('danger');
+            //},
+
+            onDblClickRow: function (row) {
+                initUpdateForm(row.EMPLOYEE_ID);
+            },
+
+            uniqueId: "EMPLOYEE_ID",
+
+            columns: [
+            {
+                title: 'S/N',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
+            {
+                field: 'DEPARTMENT',
+                title: 'Department',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'EMPLOYEE_ID',
+                title: 'Employee ID',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'USER_ID',
+                title: 'Department ID',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'USER_GROUP',
+                title: 'User Group',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'USER_NAME',
+                title: 'User Name',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'SHIFT',
+                title: 'Shift',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'UPDATED_BY',
+                title: 'Updated By',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'UPDATED_TIME',
+                title: 'Update Date',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('yyyy/MM/dd HH:mm', date);
+                }
+            },
+            {
+                title: 'Operation',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var strHtml = "<button class=\"btn btn-danger btn-sm\" onclick=\"initDelForm('" + row.EMPLOYEE_ID + "')\"> <i class=\"fa fa-trash-o fa-lg\"></i> </button>";
+                    return strHtml;
+                }
+            }
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+    }
+
+  
+    function initAddForm() {
+        $('#lbFlag').val('Add');
+
+     
+        $('#txtFormEmployeeID').val('');
+        $("#txtFormEmployeeID").removeAttr("disabled");
+
+        $('#txtFormDepartmentID').val('');
+        $('#txtFormUsername').val('');
+        $('#txtFormPassword').val('');
+        $('#txtFormPasswordConfirm').val('');
+        $('#ddlFormUserGroup').val('');
+        $('#ddlFormShift').val('');
+        $('#ddlFormDepartment').val('');
+
+
+        $('#modalUpdateForm').modal('show');
+    }
+    function initUpdateForm(employeeID) {
+
+        $('#lbFlag').val('Update');
+
+        var row = $("#tableUserList").bootstrapTable('getRowByUniqueId', employeeID);
+
+        $('#txtFormEmployeeID').val(row.EMPLOYEE_ID);
+        $("#txtFormEmployeeID").attr("disabled", "disabled");
+
+        $('#txtFormDepartmentID').val(row.USER_ID);
+        $('#txtFormUsername').val(row.USER_NAME);
+        $('#txtFormPassword').val(row.PASSWORD);
+        $('#txtFormPasswordConfirm').val(row.PASSWORD);
+        $('#ddlFormUserGroup').val(row.USER_GROUP);
+        $('#ddlFormShift').val(row.SHIFT);
+        $('#ddlFormDepartment').val(row.DEPARTMENT);
+          
+
+        $('#modalUpdateForm').modal('show');
+    }
+    function initDelForm(employeeID) {
+        $('#lbFlag').val('Delete');
+        $('#txtFormEmployeeID').val(employeeID);
+        $('#modalLogin').modal('show');
+    }
+
+
+    function updateValidation() {
+
+        if ($('#txtFormEmployeeID').val() == '') {
+            alert('Employee ID can not be empty');
+            return false;
+        }
+
+        if ($('#txtFormDepartmentID').val() == '') {
+            alert('Department ID can not be empty');
+            return false;
+        }
+
+        if ($('#txtFormUsername').val() == '') {
+            alert('User name can not be empty');
+            return false;
+        }
+
+      
+        var password = $('#txtFormPassword').val();
+        var passwordConfirm = $('#txtFormPasswordConfirm').val();
+        if (password == '') {
+            alert('Password can not be empty');
+            return false;
+        }
+        if (password != passwordConfirm) {
+            alert('Password not match');
+            return false;
+        }
+
+
+        if ($('#ddlFormUserGroup').val() == '') {
+            alert('User group can not be empty');
+            return false;
+        }
+
+        if ($('#ddlFormShift').val() == '') {
+            alert('Shift can not be empty');
+            return false;
+        }
+
+        if ($('#ddlFormDepartment').val() == '') {
+            alert('Department can not be empty');
+            return false;
+        }
+       
+
+        $('#modalLogin').modal('show');
+    }
+
+
+    function loginSubmit() {
+
+        var username = $('#txtUsername').val();
+        var password = $('#txtPassword').val();
+        if (username == '') {
+            alert("Please input username!");
+            $('#txtUsername').val('');
+            $('#txtUsername').focus();
+            return false;
+        }
+        if (password == '') {
+            alert("Please input password!");
+            $('#txtPassword').val('');
+            $('#txtPassword').focus();
+            return false;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiLogin,
+            data: {
+                Username: username,
+                Password: password,
+                Department: $('#ddlFormDepartment').val(),
+                Authority: 'Admin'
+            },
+            success: function (data) {
+
+                //login fail   
+                if (data != true) {
+                    alert(data);
+                    return false;
+                }
+
+             
+
+                //登入验证成功后, 执行 add/update/delete
+                var paraURL;
+                var paraDATA;
+               
+
+                var flag = $('#lbFlag').val();
+                if (flag == 'Add') {
+                    paraURL = apiAddUser;
+                    paraDATA = {
+                        EmployeeID: $('#txtFormEmployeeID').val(),
+                        DepartmentID: $('#txtFormDepartmentID').val(),
+                        Username: $('#txtFormUsername').val(),
+                        Password: $('#txtFormPassword').val(),
+                        UserGroup: $('#ddlFormUserGroup').val(),
+                        Shift: $('#ddlFormShift').val(),
+                        Department: $('#ddlFormDepartment').val(),
+                        UpdatedBy: $('#txtUsername').val()
+                    }
+                }
+                else if (flag == 'Update') {
+                    paraURL = apiUpdateUser;
+                    paraDATA = {
+                        EmployeeID: $('#txtFormEmployeeID').val(),
+                        DepartmentID: $('#txtFormDepartmentID').val(),
+                        Username: $('#txtFormUsername').val(),
+                        Password: $('#txtFormPassword').val(),
+                        UserGroup: $('#ddlFormUserGroup').val(),
+                        Shift: $('#ddlFormShift').val(),
+                        Department: $('#ddlFormDepartment').val(),
+                        UpdatedBy: $('#txtUsername').val()
+                    }
+                }
+                else if (flag == 'Delete') {
+                    paraURL = apiDeleteUser;
+                    paraDATA = {
+                        EmployeeID: $('#txtFormEmployeeID').val()
+                    }
+                }
+
+
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: paraURL,
+                    data: paraDATA,
+                    success: function (data) {
+
+                        //刷新列表
+                        if (data == true) {
+
+                            search();
+
+                            $('#modalUpdateForm').modal('hide');
+                            $('#modalLogin').modal('hide');
+
+                        } else {
+                            alert(data);
+                        }
+
+
+                        $('#txtUsername').val('');
+                        $('#txtPassword').val('');
+
+
+
+                        $('#txtFormEmployeeID').val('');
+                        $('#txtFormDepartmentID').val('');
+                        $('#txtFormUsername').val('');
+                        $('#txtFormPassword').val('');
+                        $('#txtFormPasswordConfirm').val('');
+                        $('#ddlFormUserGroup').val('');
+                        $('#ddlFormShift').val('');
+                        $('#ddlFormDepartment').val('');
+
+
+                    },
+                    error: function () {
+                        alert("Exception happend");
+                    }
+                });
+
+
+
+            },
+            error: function () {
+                alert("a exception happend during login !");
+            }
+        });
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tableUserList').bootstrapTable('resetView');
+    });
+
+
+    //password confirm框, 失去焦点触发
+    //判断2次密码输入是否匹配, 并设置对应样式
+    $('#txtFormPasswordConfirm').blur(function () {
+        
+        var password = $('#txtFormPassword').val();
+        var passwordConfirm = $('#txtFormPasswordConfirm').val();
+        
+
+        $('.has-success').removeClass('has-success');
+        $('.has-error').removeClass('has-error');
+
+        if (password == passwordConfirm) {         
+            $('#divPasswordConfirm').addClass('has-success');
+        } else {
+            $('#divPasswordConfirm').addClass('has-error');
+            alert('Password not match');
+        }
+    });
+
+
+
+
+</script>
