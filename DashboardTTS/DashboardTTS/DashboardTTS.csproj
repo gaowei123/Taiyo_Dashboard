@@ -3729,6 +3729,10 @@
     <Content Include="Views\MOULDMachineStatus\MachineSummaryReport.cshtml" />
     <Content Include="Views\MOULDMachineStatus\MachineUtilizationChart.cshtml" />
     <Content Include="Views\MOULDMachineStatus\MachineTimeBar.cshtml" />
+    <Content Include="Views\PQC_Product\PackingDetailReport.cshtml" />
+    <Content Include="Views\PQC_Product\CheckingDetailReport.cshtml" />
+    <Content Include="Views\PQC_Product\PackingInventory.cshtml" />
+    <Content Include="Views\PQC_Product\PackingJobOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

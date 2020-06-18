@@ -47,7 +47,33 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+
+        public ActionResult PackingDetailReport()
+        {
+            return View();
+        }
+
+
+        public ActionResult CheckingDetailReport()
+        {
+            return View();
+        }
+
+
+        public ActionResult PackingInventory()
+        {
+            return View();
+        }
         
+
+        public ActionResult PackingJobOrder()
+        {
+            return View();
+        }
+
+
+
         #endregion
 
 
@@ -402,6 +428,50 @@ namespace DashboardTTS.Controllers
         }
 
         #endregion
+        
 
+
+        //new,  packing detail report 
+        public ActionResult GetPackingDetailList()
+        {
+            return Content("");
+        }
+
+
+
+        //new, checking detail report 
+        public ActionResult GetCheckingDetailList()
+        {
+            return Content("");
+        }
+        
+
+
+        #region Packing Inventory
+
+        //inventory 
+        public ActionResult GetPackingInventoryList()
+        {
+            return Content("");
+        }
+
+
+
+        //job order 
+        public ActionResult GetPackingJobOrderList()
+        {
+            return Content("");
+        }
+
+
+
+        //delete function
+
+
+        
+
+
+        #endregion
+        
     }
 }
