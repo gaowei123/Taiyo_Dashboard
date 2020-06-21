@@ -434,7 +434,22 @@ namespace DashboardTTS.Controllers
         //new,  packing detail report 
         public ActionResult GetPackingDetailList()
         {
-            return Content("");
+
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+
+            string pic = Request.Form["PIC"];
+            string station = Request.Form["Station"];
+
+
+            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingList(dateFrom, dateTo, pic, station);
+
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            return Content(js.Serialize(modelList));
         }
 
 

@@ -4,6 +4,7 @@ var apiGetModelList = window.globalConfig.rootDirectory + '/Common/GetModelList'
 var apiGetJigList = window.globalConfig.rootDirectory + '/Common/GetJigNoList';
 var apiGetLastReportDay = window.globalConfig.rootDirectory + '/Common/GetLastReportDay';
 var apiGetMouldingDefectList = window.globalConfig.rootDirectory + '/Common/GetMouldingDefectList';
+var apiGetUserIDList = window.globalConfig.rootDirectory + '/Common/GetUserIDList';
 
 
 
@@ -171,7 +172,7 @@ function setUserIDDDL(selectControl, department) {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: apiGetPartList,
+        url: apiGetUserIDList,
         data: {
             "Department": department
         },
@@ -192,10 +193,10 @@ function setUserIDDDL(selectControl, department) {
             selectControl.selectpicker("refresh");
 
 
-            if (defaultValue != '') {
-                selectControl.val(defaultValue);
-                selectControl.selectpicker("refresh");
-            }
+            //if (defaultValue != '') {
+            //    selectControl.val(defaultValue);
+            //    selectControl.selectpicker("refresh");
+            //}
 
         },
         error: function () {

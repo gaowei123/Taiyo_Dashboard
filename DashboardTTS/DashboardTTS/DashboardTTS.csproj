@@ -302,6 +302,7 @@
     <Compile Include="ViewModel\MouldMaterialTraceability.cs" />
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
+    <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\PQCDailyReport_ViewModel.cs" />

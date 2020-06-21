@@ -41,7 +41,8 @@
                 </div>
                 <div class="col-md-3">
                     <label for="ddlStation" style="width:35%;">Station:</label>
-                    <select id="ddlStation" class="form-control" data-ng-style="btn-info">
+                    <select id="ddlStation" class="form-control selectpicker" data-ng-style="btn-info">
+                        <option value=""></option>
                         <option value="1">Station 01</option>
                         <option value="2">Station 02</option>
                         <option value="3">Station 03</option>
@@ -125,6 +126,7 @@
 
 
     $('#ddlPIC').selectpicker({ width: 'calc(60%)' });
+    $('#ddlStation').selectpicker({ width: 'calc(60%)' });
 
 
    
@@ -200,59 +202,94 @@
 
             columns: [
             {
-                field: 'pqcDept',
-                title: 'PQC Dept',
+                title: 'SN',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
+            {
+                field: 'day',
+                title: 'Day',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+
+                    return dateFormat('dd/MM/yyyy', date);
+                }
+            },
+            {
+                field: 'shift',
+                title: 'Shift',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'totalOutput',
-                title: 'Total Output',
+                field: 'partNo',
+                title: 'Part No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'ttsMouldRejRate',
-                title: 'TTS Mould Rej(%)',
+                field: 'jobID',
+                title: 'Job No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'vendorsModelRejRate',
-                title: 'Vendors Mould Rej(%)',
+                field: 'lotNo',
+                title: 'Lot No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'paintRejRate',
-                title: 'Paint Rej(%)',
+                field: 'okQty',
+                title: 'OK Qty',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'laserRejRate',
-                title: 'Laser Rej(%)',
+                field: 'ngQty',
+                title: 'Rej Qty',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'othersRejRate',
-                title: 'Others Rej(%)',
+                field: 'totalQty',
+                title: 'Total Qty',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'totalRejRate',
-                title: 'Total Rej(%)',
+                field: 'startTime',
+                title: 'Start Time',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+
+                    return dateFormat('HH:mm', date);
+                }
             },
             {
-                field: 'actualOutput',
-                title: 'Actual Output',
+                field: 'stopTime',
+                title: 'Stop Time',
                 align: 'center',
-                valign: 'middle'
-            }
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+
+                    return dateFormat('HH:mm', date);
+                }
+            },
+             {
+                 field: 'PIC',
+                 title: 'PIC',
+                 align: 'center',
+                 valign: 'middle'                
+             }
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行

@@ -278,27 +278,31 @@ namespace Common.Class.DAL
 		/// <summary>
 		/// 获得前几行数据
 		/// </summary>
-		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sStation, string sPIC)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select * from pqcpacktracking where 1=1 and day >= @dateFrom and day < @dateTo ");
 
 
-            if (sShift != "")
-            {
-                strSql.Append(" and shift = @shift");
-            }
+            if (sShift != "") strSql.Append(" and shift = @shift");
+            if (sStation != "") strSql.Append(" and machineID = @machineID");
+            if (sPIC != "") strSql.Append(" and userID = @userID");
+
 
             SqlParameter[] paras =
             {
                 new SqlParameter("@dateFrom",SqlDbType.DateTime),
                 new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@shift",SqlDbType.VarChar)
+                new SqlParameter("@shift",SqlDbType.VarChar),
+                new SqlParameter("@machineID",SqlDbType.VarChar),
+                new SqlParameter("@userID",SqlDbType.VarChar)
             };
 
             paras[0].Value = dDateFrom;
             paras[1].Value = dDateTo;
             paras[2].Value = sShift;
+            paras[3].Value = sStation;
+            paras[4].Value = sPIC;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);

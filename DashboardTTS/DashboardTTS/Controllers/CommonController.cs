@@ -165,10 +165,9 @@ namespace DashboardTTS.Controllers
             Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();
             List<string> userIDList = bll.GetUserIDList(department);
 
-         
 
 
-
+             userIDList.Sort();
             jsonResult = js.Serialize(userIDList);
 
 

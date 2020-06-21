@@ -16,6 +16,7 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCInventory_BLL inventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
         private readonly Common.Class.BLL.PQCQaViBinning viBinBLL = new Common.Class.BLL.PQCQaViBinning();
         private readonly Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new Common.Class.BLL.PQCQaViBinHistory_BLL();
+        private readonly Common.Class.BLL.PQCPackTracking packTrackBLL = new Common.Class.BLL.PQCPackTracking();
 
 
 
@@ -576,7 +577,7 @@ namespace DashboardTTS.ViewBusiness
 
             Common.Class.BLL.PQCPackTracking bll = new Common.Class.BLL.PQCPackTracking();
 
-            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift);
+            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","");
             if (dt == null || dt.Rows.Count == 0)
             {
                 packModel.totalOutput = 0;
@@ -1183,6 +1184,71 @@ namespace DashboardTTS.ViewBusiness
         #endregion
 
 
+
+        #region packing detail list
+
+        public List<ViewModel.PackingDetail_ViewModel> GetPackingList(DateTime dDateFrom, DateTime dDateTo, string sPIC, string sStation)
+        {
+            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sStation , sPIC);
+            if (dt == null) return null;
+
+
+
+            DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-2), dDateTo, "");
+
+
+
+
+            List<ViewModel.PackingDetail_ViewModel> modelList = new List<ViewModel.PackingDetail_ViewModel>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.PackingDetail_ViewModel model = new ViewModel.PackingDetail_ViewModel();
+
+
+
+
+                model.day = DateTime.Parse(dr["day"].ToString());
+                
+                model.shift = dr["shift"].ToString();
+                model.partNo = dr["partnumber"].ToString();
+                model.jobID = dr["jobId"].ToString();
+
+
+                model.okQty = double.Parse(dr["acceptQty"].ToString());
+                model.ngQty = double.Parse(dr["rejectQty"].ToString());
+                model.setQty = 0;// dr["shift"].ToString();
+                model.totalQty = double.Parse(dr["targetQty"].ToString());
+
+
+
+                model.startTime = DateTime.Parse(dr["startTime"].ToString());
+                model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+
+                model.PIC = dr["userID"].ToString();
+
+
+
+
+
+                DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
+                if (tempDrArr != null && tempDrArr.Count() != 0) model.lotNo = tempDrArr[0]["lotNo"].ToString();
+
+
+                modelList.Add(model);
+            }
+
+
+
+
+
+
+            return modelList;
+        }
+
+        
+
+
+        #endregion
 
 
 
