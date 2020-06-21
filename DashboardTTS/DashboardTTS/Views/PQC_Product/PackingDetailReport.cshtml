@@ -127,12 +127,10 @@
     $('#ddlPIC').selectpicker({ width: 'calc(60%)' });
 
 
-    //设置part no, machine id 下拉框
+   
     $(document).ready(function () {
 
-        setPartNoDDL($('#ddlPartNo'), 'PQC','');
-
-
+        setUserIDDDL($('#ddlPIC'), 'PQC');
 
 
         var lastDay = getLastReportDay();
@@ -168,7 +166,7 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+            queryParams: function (params) {
                 return {
                     DateFrom: $("#txtDateFrom").val(),
                     DateTo: $("#txtDateTo").val(),
@@ -176,8 +174,7 @@
                     Station: $("#ddlStation").val()
                 }
             },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
+
 
 
             //表头样式 undefined, thead-light, thead-dark,
@@ -195,14 +192,10 @@
 
 
             rowStyle: function (row, index) {
-                //console.log(row);
-
-
                 return {
                     //防止数据自动换行
                     css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
                 }
-
             },
 
             columns: [
@@ -263,20 +256,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                console.log(data);
-
-
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].totalOutput == 0) {
-                        //隐藏总数为0的记录
-                        $('#tablePQCSummary').bootstrapTable('hideRow', { index: i });
-                    }
-                }
-
-
-
-
-
+             
             },
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
