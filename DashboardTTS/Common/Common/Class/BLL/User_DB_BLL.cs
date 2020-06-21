@@ -161,6 +161,25 @@ namespace Common.Class.BLL
 
             return userNameList;
         }
+
+        public List<string> GetUserIDList(string sDepartment)
+        {
+            DataTable dt = dal.GetList(sDepartment, "", "", "");
+            if (dt == null)
+                return null;
+
+            List<string> userIDList = new List<string>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["USER_GROUP"].ToString().ToUpper() == "ADMIN")
+                    continue;
+
+                string userName = dr["USER_ID"].ToString();
+                userIDList.Add(userName);
+            }
+
+            return userIDList;
+        }
         
         public DataTable GetManPower()
         {

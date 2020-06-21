@@ -166,6 +166,44 @@ function setMouldingDefectCodeDDL(selectControl,defaultValue) {
 }
 
 
+//设置User ID下拉框
+function setUserIDDDL(selectControl, department) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: apiGetPartList,
+        data: {
+            "Department": department
+        },
+        success: function (data) {
+
+
+            //调试用的
+            //console.log(data);
+
+            selectControl.empty();//清空
+            selectControl.append($("<option value=''></option>"));//添加一个空选项
+
+            for (var i = 0; i < data.length; i++) {
+                selectControl.append($("<option value='" + data[i] + "'>" + data[i] + "</option>"));
+            }
+
+
+            selectControl.selectpicker("refresh");
+
+
+            if (defaultValue != '') {
+                selectControl.val(defaultValue);
+                selectControl.selectpicker("refresh");
+            }
+
+        },
+        error: function () {
+            alert("Setting part no drop down list error !");
+        }
+    });
+}
+
 
 
 
