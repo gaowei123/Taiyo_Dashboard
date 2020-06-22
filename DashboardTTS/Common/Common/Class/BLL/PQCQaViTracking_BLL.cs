@@ -1180,5 +1180,11 @@ namespace Common.Class.BLL
         }
 
 
+        public DataTable GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo)
+        {
+            return dal.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
+        }
+
+
     }
 }

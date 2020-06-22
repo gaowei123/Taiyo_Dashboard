@@ -44,7 +44,7 @@ function setPartNoDDL(selectControl, department, defaultValue) {
             //console.log(data);
 
             selectControl.empty();//清空
-            selectControl.append($("<option value=''></option>"));//添加一个空选项
+            selectControl.append($("<option value=''>All</option>"));//添加一个空选项
 
             for (var i = 0; i < data.length; i++) {
                 selectControl.append($("<option value='" + data[i] + "'>" + data[i] + "</option>"));
@@ -64,6 +64,7 @@ function setPartNoDDL(selectControl, department, defaultValue) {
             alert("Setting part no drop down list error !");
         }
     });
+
 }
 
 //设置jig no下拉框
@@ -183,7 +184,7 @@ function setUserIDDDL(selectControl, department) {
             //console.log(data);
 
             selectControl.empty();//清空
-            selectControl.append($("<option value=''></option>"));//添加一个空选项
+            selectControl.append($("<option value=''>All</option>"));//添加一个空选项
 
             for (var i = 0; i < data.length; i++) {
                 selectControl.append($("<option value='" + data[i] + "'>" + data[i] + "</option>"));

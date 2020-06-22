@@ -112,10 +112,10 @@ namespace Common.Class.BLL
 
     
 
-        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sStation, string sPIC, string sJobNo)
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sJobNo)
         {
 
-            DataTable dt = dal.GetList(dDateFrom, dDateTo, sShift, sStation, sPIC, sJobNo);
+            DataTable dt = dal.GetList(dDateFrom, dDateTo, sShift, sPartNo, sStation, sPIC, sJobNo);
 
             return dt;
         }

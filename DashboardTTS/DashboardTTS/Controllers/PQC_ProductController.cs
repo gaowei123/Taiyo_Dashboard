@@ -137,7 +137,7 @@ namespace DashboardTTS.Controllers
 
             try
             {
-                modelList = vBLL.GetCheckingList(dateFrom, dateTo, shift, partNo, station, pic, type);
+                modelList = vBLL.GetCheckingDailyList(dateFrom, dateTo, shift, partNo, station, pic, type);
             }
             catch (Exception ee)
             {
@@ -440,11 +440,13 @@ namespace DashboardTTS.Controllers
             dateTo = dateTo.AddDays(1);
 
             string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
             string station = Request.Form["Station"];
             string jobNo = Request.Form["JobNo"];
+            string lotNo = Request.Form["LotNo"];
 
 
-            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingList(dateFrom, dateTo, pic, station, jobNo);
+            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo);
 
 
 
@@ -464,7 +466,31 @@ namespace DashboardTTS.Controllers
         //new, checking detail report 
         public ActionResult GetCheckingDetailList()
         {
-            return Content("");
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+
+            string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
+            string station = Request.Form["Station"];
+            string jobNo = Request.Form["JobNo"];
+            string lotNo = Request.Form["LotNo"];
+
+
+            List<ViewModel.CheckingDetail_ViewModel> modelList = vBLL.GetCheckingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo);
+
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            if (modelList == null)
+            {
+                return Content(js.Serialize(""));
+            }
+            else
+            {
+                return Content(js.Serialize(modelList));
+            }
         }
         
 

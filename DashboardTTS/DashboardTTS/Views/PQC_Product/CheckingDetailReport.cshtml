@@ -3,5 +3,336 @@
     ViewBag.Title = "CheckingDetailReport";
 }
 
-<h2>CheckingDetailReport</h2>
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+<div class="container">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Checking Detail Report</span>
+    </div>
+
+
+    <div class="row searchingBar">
+
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlPIC" style="width:35%">PIC:</label>
+                    <select id="ddlPIC" class="form-control selectpicker" data-ng-style="btn-info"></select>
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlStation" style="width:35%;">Station:</label>
+                    <select id="ddlStation" class="form-control selectpicker" data-ng-style="btn-info">
+                        <option value="">All</option>
+                        <option value="1">Station 01</option>
+                        <option value="2">Station 02</option>
+                        <option value="3">Station 03</option>
+                        <option value="4">Station 04</option>
+                        <option value="5">Station 05</option>
+                        <option value="6">Station 06</option>
+                        <option value="7">Station 07</option>
+                        <option value="8">Station 08</option>
+                        <option value="11">Station 11</option>
+                        <option value="12">Station 12</option>
+                        <option value="13">Station 13</option>
+                        <option value="14">Station 14</option>
+                        <option value="15">Station 15</option>
+                        <option value="16">Station 16</option>
+                        <option value="17">Station 17</option>
+                        <option value="18">Station 18</option>
+                        <option value="21">Station 21</option>
+                        <option value="22">Station 22</option>
+                        <option value="23">Station 23</option>
+                        <option value="24">Station 24</option>
+                        <option value="25">Station 25</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label for="ddlPartNo" style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job no" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Lot No:</label>
+                    <input type="text" class="form-control" id="txtLotNo" CssClass="form-control" placeholder="Please input lot no" style="width:60%;" />
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12" style="padding:0px;">
+            <table id="tableChecking" data-toggle="table" class="table-hover table-striped"></table>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetCheckingDetail = window.globalConfig.rootDirectory + '/PQC_Product/GetCheckingDetailList';
+
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+
+    $('#ddlPIC').selectpicker({ width: 'calc(60%)' });
+    $('#ddlStation').selectpicker({ width: 'calc(60%)' });
+    $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+
+
+
+    $(document).ready(function () {
+
+        setUserIDDDL($('#ddlPIC'), 'PQC');
+
+        setPartNoDDL($('#ddlPartNo'), 'PQC', '');
+
+
+
+        var lastDay = getLastReportDay();
+        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+
+
+        $('#txtDateFrom').val(strLastDay);
+        $('#txtDateTo').val(strLastDay);
+
+
+        search();
+    });
+
+
+
+
+
+    function search() {
+
+
+        //重新加载必须将原本table清空
+        $('#tableChecking').bootstrapTable('destroy');
+
+
+        $('#tableChecking').bootstrapTable({ // 对应table标签的id
+
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetCheckingDetail,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+
+                return {
+                    DateFrom: $("#txtDateFrom").val(),
+                    DateTo: $("#txtDateTo").val(),
+                    PIC: $('#ddlPIC').val(),
+                    Station: $("#ddlStation").val(),
+                    PartNo: $("#ddlPartNo").val(),
+                    JobNo: $('#txtJobNo').val(),
+                    LotNo: $('#txtLotNo').val()
+                }
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+           columns: [
+           {
+               title: 'SN',
+               align: 'center',
+               valign: 'middle',
+               formatter: function (value, row, index) {
+                   if (row.shift == 'Total') {
+                       return '';
+                   }
+                   return index + 1;
+               }
+           },
+           {
+               field: 'trackingID',
+               visible: false
+           },
+           {
+               field: 'day',
+               title: 'Day',
+               align: 'center',
+               valign: 'middle',
+               formatter: function (value, row, index) {
+
+                   if (value == null) {
+                       return '';
+                   }
+
+                   var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                   return dateFormat('dd/MM/yyyy', date);
+               }
+           },
+           {
+               field: 'shift',
+               title: 'Shift',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'station',
+               title: 'Station',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'jobID',
+               title: 'Job No',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'lotNo',
+               title: 'Lot No',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'processes',
+               title: 'Process',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'totalQty',
+               title: 'Total Qty',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'mouldRej',
+               title: 'Mould',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'paintRej',
+               title: 'Paint',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'laserRej',
+               title: 'Laser',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'othersRej',
+               title: 'Others',
+               align: 'center',
+               valign: 'middle'
+           },
+           {
+               field: 'PIC',
+               title: 'PIC',
+               align: 'center',
+               valign: 'middle'
+           }
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tableChecking').bootstrapTable('resetView');
+    });
+
+
+
+</script>

@@ -577,7 +577,7 @@ namespace DashboardTTS.ViewBusiness
 
             Common.Class.BLL.PQCPackTracking bll = new Common.Class.BLL.PQCPackTracking();
 
-            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","","");
+            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","","","");
             if (dt == null || dt.Rows.Count == 0)
             {
                 packModel.totalOutput = 0;
@@ -602,7 +602,7 @@ namespace DashboardTTS.ViewBusiness
 
 
         #region daily pqc  report 
-        public List<ViewModel.PQCDailyReport_ViewModel> GetCheckingList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sType)
+        public List<ViewModel.PQCDailyReport_ViewModel> GetCheckingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sType)
         {
 
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
@@ -1186,9 +1186,9 @@ namespace DashboardTTS.ViewBusiness
 
 
         //packing detail list
-        public List<ViewModel.PackingDetail_ViewModel> GetPackingList(DateTime dDateFrom, DateTime dDateTo, string sPIC, string sStation, string sJobNo)
+        public List<ViewModel.PackingDetail_ViewModel> GetPackingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo)
         {
-            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sStation , sPIC, sJobNo);
+            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo,"", sPartNo, sStation, sPIC, sJobNo);
             if (dt == null || dt.Rows.Count == 0) return null;
 
 
@@ -1216,10 +1216,28 @@ namespace DashboardTTS.ViewBusiness
                 model.okQty = double.Parse(dr["acceptQty"].ToString());
                 model.ngQty = double.Parse(dr["rejectQty"].ToString());             
                 model.totalQty = double.Parse(dr["totalQty"].ToString());
-                
-                model.startTime = DateTime.Parse(dr["startTime"].ToString());
-                model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+
+
+                if (dr["startTime"].ToString() == "")
+                {
+                    model.startTime = null;
+                }else
+                {
+                    model.startTime = DateTime.Parse(dr["startTime"].ToString());
+                }
+
+                if (dr["stopTime"].ToString() == "")
+                {
+                    model.stopTime = null;
+                }
+                else
+                {
+                    model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+                }
+
+            
                 model.PIC = dr["userID"].ToString();
+                model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
 
 
 
@@ -1227,22 +1245,119 @@ namespace DashboardTTS.ViewBusiness
             }
 
 
+            List<ViewModel.PackingDetail_ViewModel> temp = new List<ViewModel.PackingDetail_ViewModel>();
+            if (sLotNo != "")
+            {
+                temp = (from a in modelList where a.lotNo == sLotNo orderby a.dateTime ascending select a).ToList();
+            }
+            else
+            {
+                temp = (from a in modelList orderby a.dateTime ascending select a).ToList();
+            }
+            
+
             ViewModel.PackingDetail_ViewModel summaryModel = new ViewModel.PackingDetail_ViewModel();
             summaryModel.shift = "Total";
-            summaryModel.okQty = modelList.Sum(p => p.okQty);
-            summaryModel.ngQty = modelList.Sum(p => p.ngQty);
-            summaryModel.totalQty = modelList.Sum(p => p.totalQty);
-            modelList.Add(summaryModel);
+            summaryModel.okQty = temp.Sum(p => p.okQty);
+            summaryModel.ngQty = temp.Sum(p => p.ngQty);
+            summaryModel.totalQty = temp.Sum(p => p.totalQty);
+            temp.Add(summaryModel);
 
 
-            return modelList;
+            return temp;
         }
 
 
 
+        #region  checking detial list
+        public List<ViewModel.CheckingDetail_ViewModel> GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo)
+        {
+            DataTable dt = viTrackingBLL.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
+            if (dt == null || dt.Rows.Count == 0) return null;
+
+        
+
+            DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
 
 
 
+
+            List<ViewModel.CheckingDetail_ViewModel> modelList = new List<ViewModel.CheckingDetail_ViewModel>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.CheckingDetail_ViewModel model = new ViewModel.CheckingDetail_ViewModel();
+                model.trackingID = dr["trackingID"].ToString();
+                model.day = DateTime.Parse(dr["day"].ToString());
+                model.shift = dr["shift"].ToString();
+                model.station = dr["machineID"].ToString();
+                model.partNo = dr["partnumber"].ToString();
+                model.processes = dr["processes"].ToString();
+                model.jobID = dr["jobId"].ToString();
+                //获取 lotno
+                DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
+                if (tempDrArr != null && tempDrArr.Count() != 0)
+                    model.lotNo = tempDrArr[0]["lotNo"].ToString();
+
+                model.okQty = double.Parse(dr["acceptQty"].ToString());
+                model.ngQty = double.Parse(dr["rejectQty"].ToString());
+                model.totalQty = double.Parse(dr["totalQty"].ToString());
+
+            
+                model.PIC = dr["userID"].ToString();
+                model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
+
+
+                model.mouldRej = double.Parse(dr["mouldrej"].ToString());
+                model.paintRej = double.Parse(dr["paintRej"].ToString());
+                model.laserRej = double.Parse(dr["laserRej"].ToString());
+                model.othersRej = double.Parse(dr["othersRej"].ToString());
+
+
+
+                modelList.Add(model);
+            }
+
+
+
+
+            List<ViewModel.CheckingDetail_ViewModel> temp = new List<ViewModel.CheckingDetail_ViewModel>();
+            if (sLotNo != "")
+            {
+                temp = (from a in modelList where a.lotNo == sLotNo orderby a.dateTime ascending select a).ToList();
+            }else
+            {
+                temp = (from a in modelList orderby a.dateTime ascending select a).ToList();
+            }
+
+
+
+            ViewModel.CheckingDetail_ViewModel summaryModel = new ViewModel.CheckingDetail_ViewModel();
+            summaryModel.shift = "Total";
+            summaryModel.okQty = temp.Sum(p => p.okQty);
+            summaryModel.ngQty = temp.Sum(p => p.ngQty);
+            summaryModel.totalQty = temp.Sum(p => p.totalQty);
+
+            summaryModel.mouldRej = temp.Sum(p => p.mouldRej);
+            summaryModel.paintRej = temp.Sum(p => p.paintRej);
+            summaryModel.laserRej = temp.Sum(p => p.laserRej);
+            summaryModel.othersRej = temp.Sum(p => p.othersRej);
+
+
+
+            temp.Add(summaryModel);
+
+
+            return temp;
+        }
+
+
+
+        
+
+
+
+
+        #endregion
 
 
 

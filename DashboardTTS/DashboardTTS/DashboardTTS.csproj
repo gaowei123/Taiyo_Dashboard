@@ -292,6 +292,7 @@
     <Compile Include="ViewModel\AllSectionInventory.cs" />
     <Compile Include="ViewModel\Attendance_ViewModel.cs" />
     <Compile Include="ViewModel\BuyoffReport_ViewModel.cs" />
+    <Compile Include="ViewModel\CheckingDetail_ViewModel.cs" />
     <Compile Include="ViewModel\HomePage_ViewModel.cs" />
     <Compile Include="ViewModel\LaserMachineSetting_ViewModel.cs" />
     <Compile Include="ViewModel\LaserSummaryReport_ViewModel.cs" />

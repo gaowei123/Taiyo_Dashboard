@@ -278,13 +278,14 @@ namespace Common.Class.DAL
 		/// <summary>
 		/// 获得前几行数据
 		/// </summary>
-		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sStation, string sPIC, string sJobNo)
+		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo,string sShift, string sPartNo, string sStation, string sPIC, string sJobNo)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select * from pqcpacktracking where 1=1 and day >= @dateFrom and day < @dateTo ");
 
 
             if (sShift != "") strSql.Append(" and shift = @shift");
+            if (sPartNo != "") strSql.Append(" and partNumber  = @partNumber");
             if (sStation != "") strSql.Append(" and machineID = @machineID");
             if (sPIC != "") strSql.Append(" and userID = @userID");
             if (sJobNo != "") strSql.Append(" and jobId = @jobId");
@@ -298,6 +299,7 @@ namespace Common.Class.DAL
                 new SqlParameter("@machineID",SqlDbType.VarChar),
                 new SqlParameter("@userID",SqlDbType.VarChar),
                 new SqlParameter("@jobId",SqlDbType.VarChar),
+                new SqlParameter("@partNumber", SqlDbType.VarChar)
             };
 
             paras[0].Value = dDateFrom;
@@ -306,8 +308,9 @@ namespace Common.Class.DAL
             if (sStation != "") paras[3].Value = sStation; else paras[3] = null;
             if (sPIC != "") paras[4].Value = sPIC; else paras[4] = null;
             if (sJobNo != "") paras[5].Value = sJobNo; else paras[5] = null;
+            if (sPartNo != "") paras[6].Value = sPartNo; else paras[6] = null;
 
-            
+
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0)
