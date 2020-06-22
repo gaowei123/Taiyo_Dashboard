@@ -577,7 +577,7 @@ namespace DashboardTTS.ViewBusiness
 
             Common.Class.BLL.PQCPackTracking bll = new Common.Class.BLL.PQCPackTracking();
 
-            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","");
+            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","","");
             if (dt == null || dt.Rows.Count == 0)
             {
                 packModel.totalOutput = 0;
@@ -712,7 +712,7 @@ namespace DashboardTTS.ViewBusiness
             return dailyList;
         }
         
-        public List<ViewModel.PQCDailyReport_ViewModel> GetPackingList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC)
+        public List<ViewModel.PQCDailyReport_ViewModel> GetPackingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC)
         {
 
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
@@ -1185,16 +1185,15 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-        #region packing detail list
-
-        public List<ViewModel.PackingDetail_ViewModel> GetPackingList(DateTime dDateFrom, DateTime dDateTo, string sPIC, string sStation)
+        //packing detail list
+        public List<ViewModel.PackingDetail_ViewModel> GetPackingList(DateTime dDateFrom, DateTime dDateTo, string sPIC, string sStation, string sJobNo)
         {
-            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sStation , sPIC);
-            if (dt == null) return null;
+            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sStation , sPIC, sJobNo);
+            if (dt == null || dt.Rows.Count == 0) return null;
 
 
 
-            DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-2), dDateTo, "");
+            DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
 
 
 
@@ -1203,52 +1202,42 @@ namespace DashboardTTS.ViewBusiness
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.PackingDetail_ViewModel model = new ViewModel.PackingDetail_ViewModel();
-
-
-
-
+                model.trackingID = dr["trackingID"].ToString();
                 model.day = DateTime.Parse(dr["day"].ToString());
-                
                 model.shift = dr["shift"].ToString();
+                model.station = dr["machineID"].ToString();
                 model.partNo = dr["partnumber"].ToString();
                 model.jobID = dr["jobId"].ToString();
-
-
+                //获取 lotno
+                DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
+                if (tempDrArr != null && tempDrArr.Count() != 0)
+                    model.lotNo = tempDrArr[0]["lotNo"].ToString();
+                
                 model.okQty = double.Parse(dr["acceptQty"].ToString());
-                model.ngQty = double.Parse(dr["rejectQty"].ToString());
-                model.setQty = 0;// dr["shift"].ToString();
-                model.totalQty = double.Parse(dr["targetQty"].ToString());
-
-
-
+                model.ngQty = double.Parse(dr["rejectQty"].ToString());             
+                model.totalQty = double.Parse(dr["totalQty"].ToString());
+                
                 model.startTime = DateTime.Parse(dr["startTime"].ToString());
                 model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
-
                 model.PIC = dr["userID"].ToString();
 
-
-
-
-
-                DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
-                if (tempDrArr != null && tempDrArr.Count() != 0) model.lotNo = tempDrArr[0]["lotNo"].ToString();
 
 
                 modelList.Add(model);
             }
 
 
-
-
+            ViewModel.PackingDetail_ViewModel summaryModel = new ViewModel.PackingDetail_ViewModel();
+            summaryModel.shift = "Total";
+            summaryModel.okQty = modelList.Sum(p => p.okQty);
+            summaryModel.ngQty = modelList.Sum(p => p.ngQty);
+            summaryModel.totalQty = modelList.Sum(p => p.totalQty);
+            modelList.Add(summaryModel);
 
 
             return modelList;
         }
 
-        
-
-
-        #endregion
 
 
 

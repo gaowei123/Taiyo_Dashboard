@@ -177,7 +177,7 @@ namespace DashboardTTS.Controllers
             List<ViewModel.PQCDailyReport_ViewModel> modelList = new List<ViewModel.PQCDailyReport_ViewModel>();
 
 
-            modelList = vBLL.GetPackingList(dateFrom, dateTo, shift, partNo, station, pic);
+            modelList = vBLL.GetPackingDailyList(dateFrom, dateTo, shift, partNo, station, pic);
 
             if (modelList != null && modelList.Count != 0)
             {
@@ -441,15 +441,22 @@ namespace DashboardTTS.Controllers
 
             string pic = Request.Form["PIC"];
             string station = Request.Form["Station"];
+            string jobNo = Request.Form["JobNo"];
 
 
-            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingList(dateFrom, dateTo, pic, station);
+            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingList(dateFrom, dateTo, pic, station, jobNo);
 
 
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            return Content(js.Serialize(modelList));
+            if (modelList == null)
+            {
+                return Content(js.Serialize(""));
+            }else
+            {
+                return Content(js.Serialize(modelList));
+            }
         }
 
 
