@@ -37,7 +37,6 @@ namespace DashboardTTS.Webform.Laser
 
 
 
-                    
                     //缺少参数会导致多条记录更新.
                     if (sJobNo == "" || sDay == ""|| sShift==""||sMachineID=="")
                     {

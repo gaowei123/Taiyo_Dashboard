@@ -30,7 +30,7 @@ namespace DashboardTTS.Controllers
 
 
 
-        #region data api
+        #region laser summary report 
 
         public ActionResult GetSummaryData()
         {
@@ -63,6 +63,9 @@ namespace DashboardTTS.Controllers
 
 
         #endregion
+
+
+
 
 
 

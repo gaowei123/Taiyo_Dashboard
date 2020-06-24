@@ -83,7 +83,7 @@ function setJigNoDDL(selectControl, department) {
             //console.log(data);
 
             selectControl.empty();//清空
-            selectControl.append($("<option value=''></option>"));//添加一个空选项
+            selectControl.append($("<option value=''>All</option>"));//添加一个空选项
 
             for (var i = 0; i < data.length; i++) {
                 selectControl.append($("<option value='" + data[i] + "'>" + data[i] + "</option>"));
@@ -144,7 +144,7 @@ function setMouldingDefectCodeDDL(selectControl,defaultValue) {
 
             
             selectControl.empty();//清空
-            selectControl.append($("<option value=''></option>"));//添加一个空选项
+            selectControl.append($("<option value=''>All</option>"));//添加一个空选项
 
             for (var i = 0; i < data.length; i++) {
                 selectControl.append($("<option value='" + data[i] + "'>" + data[i] + "</option>"));

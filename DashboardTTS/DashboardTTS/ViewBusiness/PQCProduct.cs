@@ -17,6 +17,7 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCQaViBinning viBinBLL = new Common.Class.BLL.PQCQaViBinning();
         private readonly Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new Common.Class.BLL.PQCQaViBinHistory_BLL();
         private readonly Common.Class.BLL.PQCPackTracking packTrackBLL = new Common.Class.BLL.PQCPackTracking();
+        private readonly Common.Class.BLL.PQCBom_BLL bomBLL = new Common.Class.BLL.PQCBom_BLL();
 
 
 
@@ -1186,7 +1187,7 @@ namespace DashboardTTS.ViewBusiness
 
 
         //packing detail list
-        public List<ViewModel.PackingDetail_ViewModel> GetPackingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo)
+        public List<ViewModel.PackingDetail_ViewModel> GetPackingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
             DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo,"", sPartNo, sStation, sPIC, sJobNo);
             if (dt == null || dt.Rows.Count == 0) return null;
@@ -1195,7 +1196,7 @@ namespace DashboardTTS.ViewBusiness
 
             DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
 
-
+            List<Common.Class.Model.PQCBom_Model> bomList = bomBLL.GetModelList();
 
 
             List<ViewModel.PackingDetail_ViewModel> modelList = new List<ViewModel.PackingDetail_ViewModel>();
@@ -1208,7 +1209,8 @@ namespace DashboardTTS.ViewBusiness
                 model.station = dr["machineID"].ToString();
                 model.partNo = dr["partnumber"].ToString();
                 model.jobID = dr["jobId"].ToString();
-                //获取 lotno
+
+                //从painting delivery中获取 lotno
                 DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
                 if (tempDrArr != null && tempDrArr.Count() != 0)
                     model.lotNo = tempDrArr[0]["lotNo"].ToString();
@@ -1240,31 +1242,43 @@ namespace DashboardTTS.ViewBusiness
                 model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
 
 
+                //根据bom中process设定type
+                var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
+                //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
+                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                {
+                    model.type = "Online";
+                }
+                else
+                {
+                    model.type = "Offline";
+                }
+
+
 
                 modelList.Add(model);
             }
 
 
-            List<ViewModel.PackingDetail_ViewModel> temp = new List<ViewModel.PackingDetail_ViewModel>();
-            if (sLotNo != "")
-            {
-                temp = (from a in modelList where a.lotNo == sLotNo orderby a.dateTime ascending select a).ToList();
-            }
-            else
-            {
-                temp = (from a in modelList orderby a.dateTime ascending select a).ToList();
-            }
             
+
+
+            string[] typeArr = sType == "" ? new string[] { "Online", "Offline" } : new string[] { sType };
+
+            var result = (from a in modelList
+                          where (sLotNo == "" ? true : sLotNo == a.lotNo)
+                          && typeArr.Contains(a.type)
+                          select a).ToList();
 
             ViewModel.PackingDetail_ViewModel summaryModel = new ViewModel.PackingDetail_ViewModel();
             summaryModel.shift = "Total";
-            summaryModel.okQty = temp.Sum(p => p.okQty);
-            summaryModel.ngQty = temp.Sum(p => p.ngQty);
-            summaryModel.totalQty = temp.Sum(p => p.totalQty);
-            temp.Add(summaryModel);
+            summaryModel.okQty = result.Sum(p => p.okQty);
+            summaryModel.ngQty = result.Sum(p => p.ngQty);
+            summaryModel.totalQty = result.Sum(p => p.totalQty);
+            result.Add(summaryModel);
 
 
-            return temp;
+            return result;
         }
 
 

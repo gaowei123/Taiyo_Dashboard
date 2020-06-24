@@ -444,9 +444,10 @@ namespace DashboardTTS.Controllers
             string station = Request.Form["Station"];
             string jobNo = Request.Form["JobNo"];
             string lotNo = Request.Form["LotNo"];
+            string type = Request.Form["Type"];
 
 
-            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo);
+            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo, type);
 
 
 

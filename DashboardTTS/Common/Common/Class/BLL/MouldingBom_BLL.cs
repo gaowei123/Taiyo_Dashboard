@@ -59,7 +59,7 @@ namespace Common.Class.BLL
 
 
             List<string> jigNoList = new List<string>();
-            jigNoList.Add("");
+          
             foreach (DataRow dr in dt.Rows)
             {
                 string jigNo = dr["jigNo"].ToString();

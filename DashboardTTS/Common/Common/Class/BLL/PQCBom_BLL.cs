@@ -278,7 +278,7 @@ namespace Common.Class.BLL
 
         public List<Model.PQCBom_Model> GetModelList()
         {
-            DataSet ds = dal.GetList("");
+            DataSet ds = dal.GetListForModel("");
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                 return null;
 
@@ -289,8 +289,6 @@ namespace Common.Class.BLL
             {
                 bomList.Add(DataRowToModel(dr));
             }
-
-
 
 
             return bomList;

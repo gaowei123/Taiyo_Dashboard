@@ -738,9 +738,9 @@ namespace DashboardTTS.ViewBusiness
 
 
         //rejTime Detail
-        public List<ViewModel.MouldRejTimeDetail> GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode)
+        public List<ViewModel.MouldRejTimeDetail> GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode, string sJigNo)
         {
-            DataTable dt = defectBLL.GetRejTimeDetail(dDateFrom, dDateTo, sShift, sMachineID, sPartNo, sDefectCode);
+            DataTable dt = defectBLL.GetRejTimeDetail(dDateFrom, dDateTo, sShift, sMachineID, sPartNo, sDefectCode, sJigNo);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
@@ -748,147 +748,6 @@ namespace DashboardTTS.ViewBusiness
             List<ViewModel.MouldRejTimeDetail> modelList = new List<ViewModel.MouldRejTimeDetail>();
             foreach (DataRow dr in dt.Rows)
             {
-
-                #region add hour 01
-                if (dr["rejectQtyHour01"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour01"].ToString());
-                    
-                    if (model.shift == "Day")
-                        model.rejTime = "08:00 - 09:00"; 
-                    else
-                        model.rejTime = "20:00 - 21:00";
-
-                    modelList.Add(model);                    
-                }
-                #endregion
-
-                #region add hour 02
-                if (dr["rejectQtyHour02"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour02"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "09:00 - 10:00";
-                    else
-                        model.rejTime = "21:00 - 22:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
-                #region add hour 03
-                if (dr["rejectQtyHour03"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour03"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "10:00 - 11:00";
-                    else
-                        model.rejTime = "22:00 - 23:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
-                #region add hour 04
-                if (dr["rejectQtyHour04"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour04"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "11:00 - 12:00";
-                    else
-                        model.rejTime = "23:00 - 24:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
-                #region add hour 05
-                if (dr["rejectQtyHour05"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour05"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "12:00 - 13:00";
-                    else
-                        model.rejTime = "00:00 - 01:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
-                #region add hour 06
-                if (dr["rejectQtyHour06"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour06"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "13:00 - 14:00";
-                    else
-                        model.rejTime = "01:00 - 02:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
-                #region add hour 07
-                if (dr["rejectQtyHour07"].ToString() != "")
-                {
-                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
-                    model.date = DateTime.Parse(dr["day"].ToString());
-                    model.shift = dr["shift"].ToString();
-                    model.machineID = "Machine0" + dr["machineID"].ToString();
-                    model.partNo = dr["partNumber"].ToString();
-                    model.defectCode = dr["defectCode"].ToString();
-                    model.rejQty = double.Parse(dr["rejectQtyHour07"].ToString());
-
-                    if (model.shift == "Day")
-                        model.rejTime = "14:00 - 15:00";
-                    else
-                        model.rejTime = "02:00 - 03:00";
-
-                    modelList.Add(model);
-                }
-                #endregion
-
                 #region add hour 08
                 if (dr["rejectQtyHour08"].ToString() != "")
                 {
@@ -897,13 +756,14 @@ namespace DashboardTTS.ViewBusiness
                     model.shift = dr["shift"].ToString();
                     model.machineID = "Machine0" + dr["machineID"].ToString();
                     model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour08"].ToString());
 
-                    if (model.shift == "Day")
-                        model.rejTime = "15:00 - 16:00";
+                    if (model.shift == "Night")
+                        model.rejTime = "08:00 - 09:00";
                     else
-                        model.rejTime = "03:00 - 04:00";
+                        model.rejTime = "20:00 - 21:00";
 
                     modelList.Add(model);
                 }
@@ -917,13 +777,14 @@ namespace DashboardTTS.ViewBusiness
                     model.shift = dr["shift"].ToString();
                     model.machineID = "Machine0" + dr["machineID"].ToString();
                     model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour09"].ToString());
 
                     if (model.shift == "Day")
-                        model.rejTime = "16:00 - 17:00";
+                        model.rejTime = "09:00 - 10:00";
                     else
-                        model.rejTime = "04:00 - 05:00";
+                        model.rejTime = "21:00 - 22:00";
 
                     modelList.Add(model);
                 }
@@ -937,13 +798,14 @@ namespace DashboardTTS.ViewBusiness
                     model.shift = dr["shift"].ToString();
                     model.machineID = "Machine0" + dr["machineID"].ToString();
                     model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour10"].ToString());
 
                     if (model.shift == "Day")
-                        model.rejTime = "17:00 - 18:00";
+                        model.rejTime = "10:00 - 11:00";
                     else
-                        model.rejTime = "05:00 - 06:00";
+                        model.rejTime = "22:00 - 23:00";
 
                     modelList.Add(model);
                 }
@@ -957,13 +819,14 @@ namespace DashboardTTS.ViewBusiness
                     model.shift = dr["shift"].ToString();
                     model.machineID = "Machine0" + dr["machineID"].ToString();
                     model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour11"].ToString());
 
                     if (model.shift == "Day")
-                        model.rejTime = "18:00 - 19:00";
+                        model.rejTime = "11:00 - 12:00";
                     else
-                        model.rejTime = "06:00 - 07:00";
+                        model.rejTime = "23:00 - 24:00";
 
                     modelList.Add(model);
                 }
@@ -977,8 +840,156 @@ namespace DashboardTTS.ViewBusiness
                     model.shift = dr["shift"].ToString();
                     model.machineID = "Machine0" + dr["machineID"].ToString();
                     model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour12"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "12:00 - 13:00";
+                    else
+                        model.rejTime = "00:00 - 01:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 01
+                if (dr["rejectQtyHour01"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour01"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "13:00 - 14:00";
+                    else
+                        model.rejTime = "01:00 - 02:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 02
+                if (dr["rejectQtyHour02"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour02"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "14:00 - 15:00";
+                    else
+                        model.rejTime = "02:00 - 03:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 03
+                if (dr["rejectQtyHour03"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour03"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "15:00 - 16:00";
+                    else
+                        model.rejTime = "03:00 - 04:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 04
+                if (dr["rejectQtyHour04"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour04"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "16:00 - 17:00";
+                    else
+                        model.rejTime = "04:00 - 05:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 05
+                if (dr["rejectQtyHour05"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour05"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "17:00 - 18:00";
+                    else
+                        model.rejTime = "05:00 - 06:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 06
+                if (dr["rejectQtyHour06"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour06"].ToString());
+
+                    if (model.shift == "Day")
+                        model.rejTime = "18:00 - 19:00";
+                    else
+                        model.rejTime = "06:00 - 07:00";
+
+                    modelList.Add(model);
+                }
+                #endregion
+
+                #region add hour 07
+                if (dr["rejectQtyHour07"].ToString() != "")
+                {
+                    ViewModel.MouldRejTimeDetail model = new ViewModel.MouldRejTimeDetail();
+                    model.date = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.machineID = "Machine0" + dr["machineID"].ToString();
+                    model.partNo = dr["partNumber"].ToString();
+                    model.jigNo = dr["jigNo"].ToString();
+                    model.defectCode = dr["defectCode"].ToString();
+                    model.rejQty = double.Parse(dr["rejectQtyHour07"].ToString());
 
                     if (model.shift == "Day")
                         model.rejTime = "19:00 - 20:00";

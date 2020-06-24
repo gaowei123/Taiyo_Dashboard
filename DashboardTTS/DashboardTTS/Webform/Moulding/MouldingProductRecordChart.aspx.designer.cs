@@ -22,22 +22,22 @@ namespace DashboardTTS.Webform.Moulding {
         protected global::System.Web.UI.WebControls.Label lblUserHeader;
         
         /// <summary>
-        /// infDchFrom 控件。
+        /// txtDateFrom 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::Infragistics.WebUI.WebSchedule.WebDateChooser infDchFrom;
+        protected global::System.Web.UI.WebControls.TextBox txtDateFrom;
         
         /// <summary>
-        /// infDchTo 控件。
+        /// txtDateTo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::Infragistics.WebUI.WebSchedule.WebDateChooser infDchTo;
+        protected global::System.Web.UI.WebControls.TextBox txtDateTo;
         
         /// <summary>
         /// ddl_dataType 控件。

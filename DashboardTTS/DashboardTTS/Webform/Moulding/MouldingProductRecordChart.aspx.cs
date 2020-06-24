@@ -42,13 +42,13 @@ namespace DashboardTTS.Webform.Moulding
                 if (!IsPostBack)
                 {
                     this.lblUserHeader.Text = " Moulding Production Record Chart";
-                    
 
 
-                    this.infDchFrom.CalendarLayout.SelectedDate = DateTime.Now;
-                    this.infDchFrom.Value = DateTime.Now;
-                    this.infDchTo.CalendarLayout.SelectedDate = DateTime.Now;
-                    this.infDchTo.Value = DateTime.Now;
+                    this.txtDateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                    this.txtDateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
+
+
+
 
 
                     btnGenerate_Click(new object(), new EventArgs());
@@ -66,8 +66,8 @@ namespace DashboardTTS.Webform.Moulding
             try
             {
                 //get parameters
-                DateTime dDateFrom = infDchFrom.CalendarLayout.SelectedDate.Date.AddHours(8);
-                DateTime dDateTo = infDchTo.CalendarLayout.SelectedDate.Date.AddDays(1).AddHours(8);
+                DateTime dDateFrom = DateTime.Parse(this.txtDateFrom.Text).AddHours(8); 
+                DateTime dDateTo = DateTime.Parse(this.txtDateTo.Text).AddDays(1).AddHours(8);
                 string sShift = this.ddl_Shift.SelectedValue;
                 string sDataType = this.ddl_dataType.SelectedValue;
                 string sMachineID = this.ddL_MachineID.SelectedValue;
@@ -461,8 +461,8 @@ namespace DashboardTTS.Webform.Moulding
 
                 double TotalSearchTime = 0;
                 #region total search time
-                DateTime dateFrom = DateTime.Parse(infDchFrom.CalendarLayout.SelectedDate.AddHours(8).ToString());
-                DateTime dateTo = DateTime.Parse(infDchTo.CalendarLayout.SelectedDate.AddHours(8).ToString());
+                DateTime dateFrom = DateTime.Parse(this.txtDateFrom.Text).AddHours(8);
+                DateTime dateTo = DateTime.Parse(this.txtDateTo.Text).AddHours(8);
                 double DayTime_Shift = ddl_Shift.Text == StaticRes.Global.Shift.ALL ? 24 : 12;
 
 
@@ -942,8 +942,8 @@ namespace DashboardTTS.Webform.Moulding
 
                 double TotalSearchTime = 0;
                 #region total search time
-                DateTime dateFrom = DateTime.Parse(infDchFrom.CalendarLayout.SelectedDate.AddHours(8).ToString());
-                DateTime dateTo = DateTime.Parse(infDchTo.CalendarLayout.SelectedDate.AddHours(8).ToString());
+                DateTime dateFrom = DateTime.Parse(this.txtDateFrom.Text).AddHours(8);
+                DateTime dateTo = DateTime.Parse(this.txtDateTo.Text).AddHours(8);
                 double DayTime_Shift = ddl_Shift.Text == StaticRes.Global.Shift.ALL ? 24 : 12;
 
 

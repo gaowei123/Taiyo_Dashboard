@@ -2909,6 +2909,27 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
         }
 
 
+        public SqlCommand DeleteCommand(string sTrackingID)
+        {
+            StringBuilder strSql = new StringBuilder();
+
+            strSql.Append(" Delete from MouldingViTracking  where  trackingID = @trackingID");
+
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@trackingID",SqlDbType.VarChar)
+            };
+
+
+            paras[0].Value = sTrackingID;
+
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+        }
+
 
 
     }
