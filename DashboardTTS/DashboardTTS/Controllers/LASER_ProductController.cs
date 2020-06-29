@@ -22,6 +22,11 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+        public ActionResult LaserMaintenance()
+        {
+            return View();
+        }
         
         #endregion
 
@@ -64,6 +69,43 @@ namespace DashboardTTS.Controllers
 
         #endregion
 
+
+
+        #region Laser Maintenance 
+
+        public ActionResult GetMaintainJobInfo()
+        {
+            DateTime day = DateTime.Parse(Request.Form["Day"].ToString());
+            string shift = Request.Form["Shift"];
+            string machineID = Request.Form["MachineID"];
+            string jobID = Request.Form["JobID"];
+
+            DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[GetMaintainJobInfo] receive job info --  jobno:{0}, day:{1}, shift:{2}, machineID:{3}", jobID, day.ToString("yyyy-MM-dd"), shift, machineID));
+
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            ViewModel.LaserMaintenance_ViewModel model = vBLL.GetMaintainJobInfo(day, shift, machineID, jobID);
+
+            if (model == null)
+            {
+                return Content(js.Serialize(""));
+            }
+            else
+            {
+                return Content(js.Serialize(model));
+            }
+        }
+
+
+
+
+
+
+
+
+        #endregion
 
 
 

@@ -648,6 +648,45 @@ group by a.partNumber, b.materialPartNo ");
 
 
 
+        public DataTable GetListForModel(string sJobNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"SELECT [jobNumber]
+      ,[partNumber]
+      ,[description]
+      ,[quantity]
+      ,isnull( [pqcQuantity],0) as pqcQuantity
+      ,[startOnTime]
+      ,[dateTime]
+      ,[day]
+      ,[month]
+      ,[year]
+      ,[showFlag]
+      ,isnull( [setUpQTY],0) as setUpQTY
+      ,isnull( [buyOffQty],0) as buyOffQty
+      ,[lotNo]
+  FROM LMMSInventory where 1=1  ");
+
+            if (sJobNo != "") strSql.Append(" and jobNumber = @jobNumber");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobNumber", SqlDbType.VarChar)
+            };
+
+            if (sJobNo != "") { parameters[0].Value = sJobNo; } else { parameters[0] = null; }
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
 
 
 

@@ -295,6 +295,7 @@
     <Compile Include="ViewModel\CheckingDetail_ViewModel.cs" />
     <Compile Include="ViewModel\HomePage_ViewModel.cs" />
     <Compile Include="ViewModel\LaserMachineSetting_ViewModel.cs" />
+    <Compile Include="ViewModel\LaserMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\LaserSummaryReport_ViewModel.cs" />
     <Compile Include="ViewModel\MouldDailyReport_ViewModel.cs" />
     <Compile Include="ViewModel\MouldDailyVerifyReport_ViewModel.cs" />
@@ -464,13 +465,6 @@
     </Compile>
     <Compile Include="Webform\MachineOEETimeBar.aspx.designer.cs">
       <DependentUpon>MachineOEETimeBar.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\MouldingOEETimeBar.aspx.cs">
-      <DependentUpon>MouldingOEETimeBar.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\MouldingOEETimeBar.aspx.designer.cs">
-      <DependentUpon>MouldingOEETimeBar.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Moulding\BomDetail.aspx.cs">
       <DependentUpon>BomDetail.aspx</DependentUpon>
@@ -674,13 +668,6 @@
     </Compile>
     <Compile Include="Webform\Moulding\MouldingProductivityChart.aspx.designer.cs">
       <DependentUpon>MouldingProductivityChart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingProductRecordChart.aspx.cs">
-      <DependentUpon>MouldingProductRecordChart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingProductRecordChart.aspx.designer.cs">
-      <DependentUpon>MouldingProductRecordChart.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Moulding\ProductionReport.aspx.cs">
       <DependentUpon>ProductionReport.aspx</DependentUpon>
@@ -2881,7 +2868,6 @@
     <Content Include="UserControl\WebUserControlPQCStatus.ascx" />
     <Content Include="UserControl\WebUserControlTimeBar.ascx" />
     <Content Include="Webform\MachineOEETimeBar.aspx" />
-    <Content Include="Webform\MouldingOEETimeBar.aspx" />
     <Content Include="Webform\PQC\PQCButtonReport.aspx" />
     <Content Include="Webform\PQC\BuyOffRecord.aspx" />
     <Content Include="Webform\PQC\BuyOffRecordForClient.aspx" />
@@ -3649,7 +3635,6 @@
     <Content Include="Webform\Moulding\MouldingPartsMovingDetail.aspx" />
     <Content Include="Webform\Moulding\MouldingProductionReport.aspx" />
     <Content Include="Webform\Moulding\MouldingProductivityChart.aspx" />
-    <Content Include="Webform\Moulding\MouldingProductRecordChart.aspx" />
     <Content Include="Webform\Moulding\ProductionReport.aspx" />
     <Content Include="Webform\Moulding\QAProductionReport.aspx" />
     <Content Include="Webform\Moulding\RejDetail.aspx" />
@@ -3735,11 +3720,11 @@
     <Content Include="Views\PQC_Product\CheckingDetailReport.cshtml" />
     <Content Include="Views\PQC_Product\PackingInventory.cshtml" />
     <Content Include="Views\PQC_Product\PackingJobOrder.cshtml" />
+    <Content Include="Views\LASER_Product\LaserMaintenance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Common\" />
-    <Folder Include="Webform\ChartImages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
