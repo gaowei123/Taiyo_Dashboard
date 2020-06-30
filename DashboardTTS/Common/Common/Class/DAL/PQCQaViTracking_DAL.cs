@@ -2386,6 +2386,92 @@ group by a.partNumber, b.materialName ");
         }
 
 
+        public DataTable GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+with defectList as (
+	select
+	trackingID
+	,isnull(sum( case when defectDescription = 'Mould' then rejectQty end),0) as MouldRej
+	,isnull(sum( case when defectDescription = 'Paint' then rejectQty end),0) as PaintRej
+	,isnull(sum( case when defectDescription = 'Laser' then rejectQty end),0) as LaserRej
+	,isnull(sum( case when defectDescription = 'Others' then rejectQty end),0) as OthersRej
+	from PQCQaViDefectTracking 
+	where day >= @dateFrom and day < @dateTo
+");
+
+            if (sPartNo != "") strSql.Append(" and partnumber= @partnumber ");
+            if (sStation != "") strSql.Append(" and machineID= @machineID ");
+            if (sPIC != "") strSql.Append(" and userID= @userID ");
+            if (sJobNo != "") strSql.Append(" and jobId= @jobId ");
+
+
+            strSql.Append(" group by trackingID ) ");
+
+
+
+
+
+            strSql.Append(@"
+select 
+a.trackingid
+,day
+,shift
+,model
+,partnumber 
+,machineid
+,processes
+,jobId
+,TotalQty
+,acceptQty
+,rejectQty
+,userid
+
+,b.mouldrej
+,b.paintrej
+,b.laserrej
+,b.OthersRej
+
+,a.datetime
+
+from PQCQaViTracking a
+left join defectList b on a.trackingID = b.trackingID
+where day >= @dateFrom and day < @dateTo ");
+
+            if (sPartNo != "") strSql.Append(" and partnumber= @partnumber ");
+            if (sStation != "") strSql.Append(" and machineID= @machineID ");
+            if (sPIC != "") strSql.Append(" and userID= @userID ");
+            if (sJobNo != "") strSql.Append(" and jobId= @jobId ");
+
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom", SqlDbType.DateTime),
+                new SqlParameter("@dateTo", SqlDbType.DateTime),
+                new SqlParameter("@partnumber", SqlDbType.VarChar),
+                new SqlParameter("@machineID", SqlDbType.VarChar),
+                new SqlParameter("@userID", SqlDbType.VarChar),
+                new SqlParameter("@jobId", SqlDbType.VarChar)
+            };
+
+            parameters[0].Value = dDateFrom;
+            parameters[1].Value = dDateTo;
+            if (sPartNo != "") parameters[2].Value = sPartNo; else parameters[2] = null;
+            if (sStation != "") parameters[3].Value = sStation; else parameters[3] = null;
+            if (sPIC != "") parameters[4].Value = sPIC; else parameters[4] = null;
+            if (sJobNo != "") parameters[5].Value = sJobNo; else parameters[5] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
 
     }
 }

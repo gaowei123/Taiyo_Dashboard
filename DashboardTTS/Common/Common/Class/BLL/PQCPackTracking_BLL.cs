@@ -112,10 +112,10 @@ namespace Common.Class.BLL
 
     
 
-        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sJobNo)
         {
 
-            DataTable dt = dal.GetList(dDateFrom, dDateTo, sShift);
+            DataTable dt = dal.GetList(dDateFrom, dDateTo, sShift, sPartNo, sStation, sPIC, sJobNo);
 
             return dt;
         }
@@ -215,17 +215,15 @@ namespace Common.Class.BLL
 
 
 
-        public bool UpdatePQCJobMaintenance(Common.Class.Model.PQCPackTracking_Model trackingModel, List<Common.Class.Model.PQCPackDetailTracking_Model> detailModelList, List<Model.PQCPackDefectTracking_Model> defectModelList)
+        public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, List<Model.PQCPackDetailTracking_Model> detailModelList, List<Model.PQCQaViBinning> packBinList, List<Model.PQCQaViBinHistory_Model> packBinHisList)
         {
 
             Common.Class.DAL.PQCPackDetailTracking_DAL detailTrackingDAL = new DAL.PQCPackDetailTracking_DAL();
-            Common.Class.DAL.PQCPackDefectTracking_DAL defectTracking = new DAL.PQCPackDefectTracking_DAL();
-
-
-
             Common.Class.DAL.PQCPackHistory_DAL packHisDAL = new DAL.PQCPackHistory_DAL();
             Common.Class.DAL.PQCPackDetailHistory_DAL packDetailHisDAL = new DAL.PQCPackDetailHistory_DAL();
             Common.Class.DAL.PQCPackDefectHistory_DAL packDefectHisDAL = new DAL.PQCPackDefectHistory_DAL();
+            Common.Class.DAL.PQCQaViBinning binDAL = new DAL.PQCQaViBinning();
+            Common.Class.DAL.PQCQaViBinHistory_DAL binHisDAL = new DAL.PQCQaViBinHistory_DAL();
 
 
             List<SqlCommand> cmdList = new List<SqlCommand>();
@@ -233,17 +231,10 @@ namespace Common.Class.BLL
 
             //update vi tracking model
             cmdList.Add(dal.UpdatePQCMaintenance(trackingModel));
-
-
             
             //add vi tracking his
             cmdList.Add(packHisDAL.AddCommand(trackingModel));
-
-
-
             
-
-
             //update detail tracking model
             foreach (var model in detailModelList)
             {
@@ -252,16 +243,17 @@ namespace Common.Class.BLL
                 cmdList.Add(packDetailHisDAL.AddCommand(model));
             }
 
-
-
-            //update defect tracking model
-            foreach (var model in defectModelList)
+            //update bin
+            foreach (var model in packBinList)
             {
-                cmdList.Add(defectTracking.UpdateCommand(model));
-
-                cmdList.Add(packDefectHisDAL.AddCommand(model));
+                cmdList.Add(binDAL.PackMaintenanceCommand(model));
             }
 
+            //add bin his
+            foreach (var model in packBinHisList)
+            {
+                cmdList.Add(binHisDAL.AddCommand(model));
+            }
 
 
 

@@ -47,14 +47,40 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+
+        public ActionResult PackingDetailReport()
+        {
+            return View();
+        }
+
+
+        public ActionResult CheckingDetailReport()
+        {
+            return View();
+        }
+
+
+        public ActionResult PackingInventory()
+        {
+            return View();
+        }
         
+
+        public ActionResult PackingJobOrder()
+        {
+            return View();
+        }
+
+
+
         #endregion
 
 
 
-
-
        
+
+
         
         //summary report
         public ActionResult GetSummaryData()
@@ -111,7 +137,7 @@ namespace DashboardTTS.Controllers
 
             try
             {
-                modelList = vBLL.GetCheckingList(dateFrom, dateTo, shift, partNo, station, pic, type);
+                modelList = vBLL.GetCheckingDailyList(dateFrom, dateTo, shift, partNo, station, pic, type);
             }
             catch (Exception ee)
             {
@@ -151,7 +177,7 @@ namespace DashboardTTS.Controllers
             List<ViewModel.PQCDailyReport_ViewModel> modelList = new List<ViewModel.PQCDailyReport_ViewModel>();
 
 
-            modelList = vBLL.GetPackingList(dateFrom, dateTo, shift, partNo, station, pic);
+            modelList = vBLL.GetPackingDailyList(dateFrom, dateTo, shift, partNo, station, pic);
 
             if (modelList != null && modelList.Count != 0)
             {
@@ -318,10 +344,7 @@ namespace DashboardTTS.Controllers
         {
             
             bool updateResult = false;
-
-
-
-
+            
             try
             {
                 updateResult = vBLL.UpdateQty(Request.Form);
@@ -402,6 +425,99 @@ namespace DashboardTTS.Controllers
         }
 
         #endregion
+        
 
+
+        //new,  packing detail report 
+        public ActionResult GetPackingDetailList()
+        {
+
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+
+            string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
+            string station = Request.Form["Station"];
+            string jobNo = Request.Form["JobNo"];
+            string lotNo = Request.Form["LotNo"];
+            string type = Request.Form["Type"];
+
+
+            List<ViewModel.PackingDetail_ViewModel> modelList = vBLL.GetPackingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo, type);
+
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            if (modelList == null)
+            {
+                return Content(js.Serialize(""));
+            }else
+            {
+                return Content(js.Serialize(modelList));
+            }
+        }
+
+
+
+        //new, checking detail report 
+        public ActionResult GetCheckingDetailList()
+        {
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+
+            string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
+            string station = Request.Form["Station"];
+            string jobNo = Request.Form["JobNo"];
+            string lotNo = Request.Form["LotNo"];
+
+
+            List<ViewModel.CheckingDetail_ViewModel> modelList = vBLL.GetCheckingDetailList(dateFrom, dateTo, partNo, station, pic, jobNo, lotNo);
+
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            if (modelList == null)
+            {
+                return Content(js.Serialize(""));
+            }
+            else
+            {
+                return Content(js.Serialize(modelList));
+            }
+        }
+        
+
+
+        #region Packing Inventory
+
+        //inventory 
+        public ActionResult GetPackingInventoryList()
+        {
+            return Content("");
+        }
+
+
+
+        //job order 
+        public ActionResult GetPackingJobOrderList()
+        {
+            return Content("");
+        }
+
+
+
+        //delete function
+
+
+        
+
+
+        #endregion
+        
     }
 }

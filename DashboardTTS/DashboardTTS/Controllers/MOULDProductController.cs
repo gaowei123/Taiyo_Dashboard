@@ -140,13 +140,14 @@ namespace DashboardTTS.Controllers
             string machineID = Request.Form["MachineID"];
             string partNo = Request.Form["PartNo"];
             string defectCode = Request.Form["DefectCode"];
+            string jigNo = Request.Form["JigNo"];
 
 
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 
 
-            List<ViewModel.MouldRejTimeDetail> modelList = vBLL.GetRejTimeDetail(dateFrom,dateTo, shift, machineID, partNo, defectCode);
+            List<ViewModel.MouldRejTimeDetail> modelList = vBLL.GetRejTimeDetail(dateFrom,dateTo, shift, machineID, partNo, defectCode, jigNo);
 
             if (modelList == null)
             {

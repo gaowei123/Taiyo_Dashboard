@@ -123,7 +123,7 @@
                             <a tabindex="-1" href="#">Production</a>
                             <ul class="dropdown-menu">
                                 <li><a runat="server" href="./Webform/Moulding/BomList.aspx">Bom List</a></li>
-                                <li><a runat="server" href="./Webform/Moulding/MouldingProductRecordChart.aspx">Production Chart</a></li>
+                                <%--<li><a runat="server" href="./Webform/Moulding/MouldingProductRecordChart.aspx">Production Chart</a></li>--%>
                                 <li><a runat="server" href="./Webform/Moulding/CheckDetailList.aspx">Product Inspection Record</a></li>
                                 <li><a runat="server" href="./Webform/Moulding/MouldingLabel.aspx">Escutcheon Label</a></li>
                                 <%--<li><a runat="server" href="./Webform/Moulding/MouldingProductivityChart.aspx">Machine Utilization Chart</a></li>--%>
@@ -137,7 +137,7 @@
                                 <li><a runat="server" href="./Webform/Moulding/MouldingProductionReport.aspx">Moulding Checker Checking Record</a></li>
                                 <li><a runat="server" href="./Webform/Moulding/QAProductionReport.aspx">Moulding Checker Rejection Record</a></li>
                                 <li><a runat="server" href="./Webform/Moulding/ProductionReport.aspx">Operation Status</a></li>
-                                <li><a runat="server" href="./Webform/MouldingOEETimeBar.aspx">Operation Status Graph</a></li>
+                                <%--<li><a runat="server" href="./Webform/MouldingOEETimeBar.aspx">Operation Status Graph</a></li>--%>
                                 <li><a runat="server" href="./Webform/Moulding/MouldingInventoryTransfer.aspx">Parts Transfer Record</a></li>
                                 <li><a runat="server" href="./Webform/Moulding/MouldingDeliveryOperatingHis.aspx">Parts Transfer History</a></li>
                             </ul>
@@ -227,6 +227,9 @@
 
                             <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li>
+
+                            <li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>
 
 
                             <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>

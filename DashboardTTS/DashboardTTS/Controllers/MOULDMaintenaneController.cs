@@ -93,7 +93,6 @@ namespace DashboardTTS.Controllers
 
 
             Common.Class.BLL.MouldingViHistory_BLL bll = new Common.Class.BLL.MouldingViHistory_BLL();
-
             Common.Class.Model.MouldingViHistory_Model viModel = bll.GetModel(trackingID);
             viModel.Model = model;
             viModel.PartNumber = partNo;
@@ -104,6 +103,14 @@ namespace DashboardTTS.Controllers
             viModel.WastageMaterial01 = wastedMaterial01;
             viModel.WastageMaterial02 = wastedMaterial02;
             viModel.LastUpdatedTime = DateTime.Now;
+
+
+
+            Common.Class.BLL.MouldingViDefectTracking_BLL defectBLL = new Common.Class.BLL.MouldingViDefectTracking_BLL();
+          
+
+
+
 
          
             bool result = bll.Maintenace(viModel);
@@ -118,14 +125,11 @@ namespace DashboardTTS.Controllers
 
         public ActionResult DeleteTracking()
         {
-
             string trackingID = Request.Form["TrackingID"] == null ? "" : Request.Form["TrackingID"].ToString();
-
-      
+            
 
             Common.Class.BLL.MouldingViHistory_BLL bll = new Common.Class.BLL.MouldingViHistory_BLL();
-            
-            bool result = bll.Delete(trackingID);
+            bool result = bll.DeleteTransaction(trackingID);
 
             JavaScriptSerializer js = new JavaScriptSerializer();
             string jsonResult = js.Serialize(result);

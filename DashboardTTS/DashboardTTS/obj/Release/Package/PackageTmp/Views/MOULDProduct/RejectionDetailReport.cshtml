@@ -68,7 +68,10 @@
                     <label style="width:35%">Defect Code:</label>
                     <select id="ddlDefectCode" class="form-control selectpicker" data-ng-style="btn-info"></select>
                 </div>
-                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    <label style="width:35%">Jig No:</label>
+                    <select id="ddlJigNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
                 <div class="col-md-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
@@ -123,6 +126,7 @@
     });
     $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
     $('#ddlDefectCode').selectpicker({ width: 'calc(60%)' });
+    $('#ddlJigNo').selectpicker({ width: 'calc(60%)' });
 
 
     //设置part no, machine id 下拉框
@@ -162,6 +166,8 @@
         setPartNoDDL($('#ddlPartNo'), 'Moulding', partNo);
 
         setMouldingDefectCodeDDL($('#ddlDefectCode'), defectCode);
+
+        setJigNoDDL($('#ddlJigNo'), 'Moulding');
        
        
         
@@ -201,7 +207,8 @@
                     Shift: $("#ddlShift").val(),
                     PartNo: partNo,
                     MachineID: $("#ddlMachine").val(),
-                    DefectCode: defectCode
+                    DefectCode: defectCode,
+                    JigNo: $("#ddlJigNo").val()
                 }
             },
             //sortName: 'id', // 要排序的字段
@@ -254,6 +261,12 @@
             {
                 field: 'partNo',
                 title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'jigNo',
+                title: 'Jig No',
                 align: 'center',
                 valign: 'middle'
             },

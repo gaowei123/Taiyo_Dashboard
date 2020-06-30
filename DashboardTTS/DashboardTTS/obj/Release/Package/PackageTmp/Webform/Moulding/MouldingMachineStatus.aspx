@@ -127,6 +127,7 @@
         forceParse: 0,
         initialDate: new Date()
     });
+
     $('#MainContent_txtDateTo').datetimepicker({
         weekStart: 1,
         todayBtn: 1,

@@ -228,6 +228,9 @@
                             <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li>
 
+                            <li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>
+
 
                             <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
 

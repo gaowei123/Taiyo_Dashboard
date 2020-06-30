@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MouldingProductRecordChart.aspx.cs" MasterPageFile="~/Site.Master" Inherits="DashboardTTS.Webform.Moulding.MouldingProductRecordChart" %>
-<%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
@@ -18,13 +17,22 @@
                 <asp:Label runat="server" Text="From :" Width="100px"></asp:Label>  
             </td>
             <td style ="border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px; ">
-                <igsch:WebDateChooser ID="infDchFrom" runat="server"   Width="100%" Value="" >  </igsch:WebDateChooser>
+               
+
+                <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="100%"></asp:TextBox>
+
+
             </td>
             <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%; font-family: 'Arial Unicode MS'; height: 50px;"> 
                 <asp:Label runat="server" Text="To :"></asp:Label> 
             </td>
             <td style =" border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px; ">
-                <igsch:WebDateChooser ID="infDchTo" runat="server"   Width="100%">  </igsch:WebDateChooser></td>
+               
+
+                <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="100%"></asp:TextBox>
+
+
+            </td>
             <td style = "padding: 10px; border: 1px solid #CCCCCC; width: 20%; font-family: 'Arial Unicode MS'; height: 50px;">
                 
             </td>
@@ -127,5 +135,33 @@
         </tr>                      
     </table> 
 
-</div>                        
+</div>
+
+
+     <script type="text/javascript">
+       
+        $('#MainContent_txtDateFrom').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            initialDate: new Date()
+        });
+
+        $('#MainContent_txtDateTo').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            initialDate: new Date()
+        });
+
+    </script>
+
 </asp:Content>

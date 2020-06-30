@@ -40,6 +40,15 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.Label lbJob;
         
         /// <summary>
+        /// lbMaterialName 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbMaterialName;
+        
+        /// <summary>
         /// lbTrackingID 控件。
         /// </summary>
         /// <remarks>
@@ -67,40 +76,22 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.Label lbMrpQty;
         
         /// <summary>
-        /// lbCheckQty 控件。
+        /// lbPackedQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbCheckQty;
+        protected global::System.Web.UI.WebControls.Label lbPackedQty;
         
         /// <summary>
-        /// txtCheckQty 控件。
+        /// txtPackQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCheckQty;
-        
-        /// <summary>
-        /// rbtnComplete 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbtnComplete;
-        
-        /// <summary>
-        /// rbtnNotComplete 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rbtnNotComplete;
+        protected global::System.Web.UI.WebControls.TextBox txtPackQty;
         
         /// <summary>
         /// btnConfirm 控件。

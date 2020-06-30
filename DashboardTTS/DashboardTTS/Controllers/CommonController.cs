@@ -153,6 +153,26 @@ namespace DashboardTTS.Controllers
         }
 
 
+        public ActionResult GetUserIDList()
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string jsonResult = "";
+
+
+            string department = Request.Form["Department"];
+
+
+            Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();
+            List<string> userIDList = bll.GetUserIDList(department);
+
+
+
+             userIDList.Sort();
+            jsonResult = js.Serialize(userIDList);
+
+
+            return Content(jsonResult);
+        }
 
     }
 }

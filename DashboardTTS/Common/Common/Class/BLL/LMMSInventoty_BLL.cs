@@ -436,5 +436,41 @@ namespace Common.Class.BLL
 
 
 
+        public Common.Class.Model.LMMSInventory_Model GetModel(string sJobNo)
+        {
+            if (string.IsNullOrEmpty(sJobNo))
+                return null;
+
+
+            DataTable dt = dal.GetListForModel(sJobNo);
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            DataRow drModel = dt.Rows[0];
+            Model.LMMSInventory_Model model = new Model.LMMSInventory_Model();
+            model.JobNumber = drModel["jobNumber"].ToString();
+            model.partNumber = drModel["partNumber"].ToString();
+            model.description = drModel["description"].ToString();
+            model.quantity = double.Parse(drModel["quantity"].ToString());
+            model.PQCQuantity = int.Parse(drModel["pqcQuantity"].ToString());
+            model.startOnTime = DateTime.Parse(drModel["startOnTime"].ToString());
+            model.dateTime = DateTime.Parse(drModel["dateTime"].ToString());
+            model.day = drModel["day"].ToString();
+            model.month = drModel["month"].ToString();
+            model.year = drModel["year"].ToString();
+
+
+            model.SetUp = int.Parse(drModel["setUpQTY"].ToString());
+            model.Buyoff = int.Parse(drModel["buyOffQty"].ToString());
+            model.Lotno = drModel["lotNo"].ToString();
+
+
+            return model;
+        }
+
+
+
     }
 }

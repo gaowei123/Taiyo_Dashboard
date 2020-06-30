@@ -465,7 +465,7 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and day >= @dat
         }
 
 
-        public DataTable GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode)
+        public DataTable GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode, string sJigNo)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -474,6 +474,7 @@ day
 ,shift
 ,machineID
 ,partNumber
+,jigNo
 ,defectCode
 ,rejectQty
 
@@ -496,8 +497,9 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
             if (sPartNo != "") strSql.Append(" and partNumber = @partNo");
             if (sMachineID != "") strSql.Append(" and machineID = @machineID ");
             if (sDefectCode != "") strSql.Append(" and defectCode = @defectCode ");
-            
-         
+            if (sJigNo != "") strSql.Append(" and jigNo = @jigNo ");
+
+
             SqlParameter[] paras =
             {
                 new SqlParameter("@dateFrom",SqlDbType.DateTime),
@@ -505,7 +507,8 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
                 new SqlParameter("@shift",SqlDbType.VarChar,16),
                 new SqlParameter("@partNo",SqlDbType.VarChar,64),
                 new SqlParameter("@machineID",SqlDbType.VarChar,64),
-                new SqlParameter("@defectCode",SqlDbType.VarChar,64)
+                new SqlParameter("@defectCode",SqlDbType.VarChar,64),
+                new SqlParameter("@jigNo",SqlDbType.VarChar,64)
             };
 
             paras[0].Value = dDateFrom;
@@ -514,6 +517,7 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
             if (sPartNo != "") paras[3].Value = sPartNo; else paras[3] = null;
             if (sMachineID != "") paras[4].Value = sMachineID; else paras[4] = null;
             if (sDefectCode != "") paras[5].Value = sDefectCode; else paras[5] = null;
+            if (sJigNo != "") paras[6].Value = sJigNo; else paras[6] = null;
 
 
 
@@ -528,6 +532,55 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
             {
                 return ds.Tables[0];
             }
+        }
+
+
+
+        public SqlCommand DeleteCommand(string sTrackingID)
+        {
+            if (string.IsNullOrEmpty(sTrackingID))
+                return null;
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" Delete from MouldingViDefectTracking  where  trackingID = @trackingID");
+            
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@trackingID",SqlDbType.VarChar)
+            };
+            paras[0].Value = sTrackingID;
+
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+        }
+
+
+        public SqlCommand MaintenanceCommand(string sTrackingID, string sPartNo, string sModel, string sJigNo)
+        {
+            string strSql = @"
+update MouldingViDefectTracking
+set partNumber = @partNumber, 
+model = @model, 
+jigNo = @jigNo
+where trackingID = @trackingID";
+
+
+            SqlParameter[] paras =
+            {    
+                new SqlParameter("@partNumber",SqlDbType.VarChar),
+                new SqlParameter("@model",SqlDbType.VarChar),
+                new SqlParameter("@jigNo",SqlDbType.VarChar),
+                new SqlParameter("@trackingID",SqlDbType.VarChar)
+            };
+            paras[0].Value = sPartNo;
+            paras[1].Value = sModel;
+            paras[2].Value = sJigNo;
+            paras[3].Value = sTrackingID;
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
 
     }

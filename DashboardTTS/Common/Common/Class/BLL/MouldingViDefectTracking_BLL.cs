@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-
+using System.Data.SqlClient;
 
 namespace Common.Class.BLL
 {
@@ -208,10 +208,16 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode)
+        public DataTable GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode, string sJigNo)
         {
-            return  dal.GetRejTimeDetail(dDateFrom, dDateTo, sShift, sMachineID, sPartNo, sDefectCode);        
+            return  dal.GetRejTimeDetail(dDateFrom, dDateTo, sShift, sMachineID, sPartNo, sDefectCode, sJigNo);        
         }
 
+
+
+        public SqlCommand MaintenanceCommand(string sTrackingID, string sPartNo, string sModel, string sJigNo)
+        {
+            return dal.MaintenanceCommand(sTrackingID, sPartNo, sModel, sJigNo);
+        }
     }
 }

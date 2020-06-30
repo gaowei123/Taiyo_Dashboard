@@ -2648,24 +2648,27 @@ namespace Common.Class.BLL
             cmdList.Add(dal.AddHistoryCMD(model));
 
 
+            Common.Class.BLL.MouldingViDefectTracking_BLL defectBLL = new MouldingViDefectTracking_BLL();
+            cmdList.Add(defectBLL.MaintenanceCommand(model.TrackingID, model.PartNumber, model.Model, model.JigNo));
+
+
+
+
             return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
 
 
-        public bool Delete(string sTrackingID)
+        public bool DeleteTransaction(string sTrackingID)
         {
+            Common.Class.DAL.MouldingViDefectTracking_DAL defectDAL = new DAL.MouldingViDefectTracking_DAL();
 
-            int row = dal.Delete(sTrackingID);
+            List<SqlCommand> cmdList = new List<SqlCommand>();
+            cmdList.Add(dal.DeleteCommand(sTrackingID));
+            cmdList.Add(defectDAL.DeleteCommand(sTrackingID));
 
-            if (row > 0)
-            {
-                return true;
 
-            }else
-            {
-                return false;
-            }
 
+            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
 
 

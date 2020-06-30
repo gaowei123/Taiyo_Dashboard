@@ -238,6 +238,8 @@ with dogShift as (
     and shift=@shift
     and machineID=@machineID
  )
+
+
 select 
 a.sn
 ,case when a.materialNo = '' and (a.okQty + a.ngQty) != 0 
