@@ -69,10 +69,10 @@ namespace Common.Class.BLL
         /// <summary>
         /// 得到一个对象实体
         /// </summary>
-        public Common.Class.Model.PQCQaViBinning GetModel()
+        public Common.Class.Model.PQCQaViBinning GetModel(string sTrackingID)
         {
             //该表无主键信息，请自定义主键/条件字段
-            return dal.GetModel();
+            return dal.GetModel(sTrackingID);
         }
 
 
@@ -94,21 +94,36 @@ namespace Common.Class.BLL
                 return ds.Tables[0];
             }
         }
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
-        {
-            return dal.GetList(Top, strWhere, filedOrder);
-        }
+         
         /// <summary>
         /// 获得数据列表
         /// </summary>
         public List<Common.Class.Model.PQCQaViBinning> GetModelList(DateTime? dDateFrom, DateTime? dDateTo, string sJobID, string sCheckProcess)
         {
             DataSet ds = dal.GetList(dDateFrom, dDateTo, sJobID, sCheckProcess);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count  == 0)
+            {
+                return null;
+            }
+
+
             return DataTableToList(ds.Tables[0]);
         }
+
+
+        public List<Common.Class.Model.PQCQaViBinning> GetModelList(string sTrackingID)
+        {
+            DataSet ds = dal.GetList(sTrackingID);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+            {
+                return null;
+            }
+
+            return DataTableToList(ds.Tables[0]);
+        }
+
+
+
         /// <summary>
         /// 获得数据列表
         /// </summary>

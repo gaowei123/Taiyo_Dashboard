@@ -78,9 +78,9 @@ namespace DashboardTTS.Controllers
 
 
 
-
-
        
+
+
         
         //summary report
         public ActionResult GetSummaryData()
@@ -344,10 +344,7 @@ namespace DashboardTTS.Controllers
         {
             
             bool updateResult = false;
-
-
-
-
+            
             try
             {
                 updateResult = vBLL.UpdateQty(Request.Form);

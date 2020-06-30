@@ -263,6 +263,35 @@ namespace Common.Class.DAL
         }
 
 
+
+        public SqlCommand PackMaintenanceCommand(Common.Class.Model.PQCQaViBinning model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update PQCQaViBinning set ");
+            strSql.Append("materialQty=@materialQty,");
+            strSql.Append("remarks=@remarks,");
+            strSql.Append("updatedTime=@updatedTime");
+            strSql.Append(" where  trackingID = @trackingID and materialPartNo=@materialPartNo and processes = 'PACKING' ");
+            SqlParameter[] parameters = {
+                new SqlParameter("@materialQty", SqlDbType.Decimal,9),
+                new SqlParameter("@remarks", SqlDbType.VarChar,500),
+                new SqlParameter("@updatedTime", SqlDbType.DateTime2,8),
+                new SqlParameter("@trackingID", SqlDbType.VarChar,50),
+                new SqlParameter("@materialPartNo", SqlDbType.VarChar,50)};
+
+
+            parameters[0].Value = model.materialQty;
+            parameters[1].Value = model.remarks;
+            parameters[2].Value = model.updatedTime;
+            parameters[3].Value = model.trackingID;
+            parameters[4].Value = model.materialPartNo;
+          
+           
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
+
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -287,19 +316,23 @@ namespace Common.Class.DAL
 		}
 
 
-		/// <summary>
-		/// 得到一个对象实体
-		/// </summary>
-		public Common.Class.Model.PQCQaViBinning GetModel()
+
+
+		public Common.Class.Model.PQCQaViBinning GetModel(string sTrackingID)
 		{
-			//该表无主键信息，请自定义主键/条件字段
-			StringBuilder strSql=new StringBuilder();
+
+            if (string.IsNullOrEmpty(sTrackingID))
+                return null;
+
+
+            StringBuilder strSql=new StringBuilder();
 			strSql.Append("select  top 1 id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime from PQCQaViBinning ");
-			strSql.Append(" where ");
+			strSql.Append(" where trackingID = @trackingID ");
 			SqlParameter[] parameters = {
+                new SqlParameter("@trackingID", SqlDbType.VarChar)
 			};
 
-			Common.Class.Model.PQCQaViBinning model=new Common.Class.Model.PQCQaViBinning();
+		
 			DataSet ds=DBHelp.SqlDB.Query(strSql.ToString(),parameters);
 			if(ds.Tables[0].Rows.Count>0)
 			{
@@ -428,10 +461,28 @@ namespace Common.Class.DAL
 			return model;
 		}
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetList(DateTime dDateFrom, DateTime dDateTo)
+
+        public DataSet GetList(string sTrackingID)
+        {
+
+            if (string.IsNullOrEmpty(sTrackingID))
+                return null;
+
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select  top 1 id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime from PQCQaViBinning ");
+            strSql.Append(" where trackingID = @trackingID ");
+            SqlParameter[] parameters = {
+                new SqlParameter("@trackingID", SqlDbType.VarChar)
+            };
+
+            parameters[0].Value = sTrackingID;
+
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+        public DataSet GetList(DateTime dDateFrom, DateTime dDateTo)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime ");
@@ -447,8 +498,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
-
-
+        
 
         public DataSet GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobID, string sCheckProcess)
         {
@@ -481,53 +531,9 @@ namespace Common.Class.DAL
         }
 
 
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select ");
-			if(Top>0)
-			{
-				strSql.Append(" top "+Top.ToString());
-			}
-			strSql.Append(" id,trackingID,processes,jobId,PartNumber,materialPartNo,materialName,shipTo,model,jigNo,materialQty,status,nextViFlag,dateTime,day,shift,userName,userID,remark_1,remark_2,remark_3,remark_4,remarks,updatedTime ");
-			strSql.Append(" FROM PQCQaViBinning ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			strSql.Append(" order by " + filedOrder);
-			return DBHelp.SqlDB.Query(strSql.ToString());
-		}
 
 		
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetListByPage(string strWhere, string orderby, int startIndex, int endIndex)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("SELECT * FROM ( ");
-			strSql.Append(" SELECT ROW_NUMBER() OVER (");
-			if (!string.IsNullOrEmpty(orderby.Trim()))
-			{
-				strSql.Append("order by T." + orderby );
-			}
-			else
-			{
-				strSql.Append("order by T. desc");
-			}
-			strSql.Append(")AS Row, T.*  from PQCQaViBinning T ");
-			if (!string.IsNullOrEmpty(strWhere.Trim()))
-			{
-				strSql.Append(" WHERE " + strWhere);
-			}
-			strSql.Append(" ) TT");
-			strSql.AppendFormat(" WHERE TT.Row between {0} and {1}", startIndex, endIndex);
-			return DBHelp.SqlDB.Query(strSql.ToString());
-		}
+	
         
 		#endregion  BasicMethod
 

@@ -913,11 +913,10 @@ namespace DashboardTTS.ViewBusiness
             List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> materialList = GetMaterialList(trackingID);
 
 
-
-
-
-
             
+
+
+
             //处理 defect list
             List<Common.Class.Model.PQCQaViDefectTracking_Model> defectTrackingList = viDefectBLL.GetModelList(trackingID);
             foreach (Common.Class.Model.PQCQaViDefectTracking_Model model in defectTrackingList)
@@ -997,6 +996,12 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
+
+
+
             //处理 PQCQaViBinning
             List<Common.Class.Model.PQCQaViBinning> viBinList = new List<Common.Class.Model.PQCQaViBinning>();
             List<Common.Class.Model.PQCQaViBinHistory_Model> binHistoryList = new List<Common.Class.Model.PQCQaViBinHistory_Model>();
@@ -1013,8 +1018,10 @@ namespace DashboardTTS.ViewBusiness
                 decimal curPassQty = binModel.materialQty.Value;
 
 
-                // material qty =  bin的原本数量  +  修改后增加的数量。
+                //material qty =  bin的原本数量  +  修改后增加的数量。
                 binModel.materialQty = binModel.materialQty.Value + addedPassQty;
+                binModel.updatedTime = DateTime.Now;
+                //binModel.remark_1 = "Updated By " + formParameters["txtUsername"];
 
                 
 
