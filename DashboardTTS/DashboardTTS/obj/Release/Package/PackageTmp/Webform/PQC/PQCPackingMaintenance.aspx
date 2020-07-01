@@ -29,6 +29,7 @@
                         <asp:Label runat="server" ID="lbDay" Font-Bold="true"></asp:Label> &nbsp-&nbsp
                         <asp:Label runat="server" ID="lbShift" Font-Bold="true"></asp:Label>&nbsp-&nbsp
                         <asp:Label runat="server" ID="lbJob" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
+                        <asp:Label runat="server" ID="lbMaterialName" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
                         <asp:Label runat="server" ID="lbTrackingID" Font-Bold="true"></asp:Label>
                     </div>
                 </div>
@@ -56,14 +57,11 @@
                         Packed Qty :
                     </div>
                     <div class="col-md-4">
-                        <asp:Label runat="server" ID="lbCheckQty" Width="50px"></asp:Label>
+                        <asp:Label runat="server" ID="lbPackedQty" Width="50px"></asp:Label>
                         <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
-                        <asp:TextBox runat="server"  ID="txtCheckQty" CssClass="form-control" BackColor="#90ee90" Width="140px" AutoCompleteType="Disabled" ></asp:TextBox>
+                        <asp:TextBox runat="server"  ID="txtPackQty" CssClass="form-control" BackColor="#90ee90" Width="140px" AutoCompleteType="Disabled" ></asp:TextBox>
                     </div>
-                    <div class="col-md-4">
-                        <asp:RadioButton runat="server" ID="rbtnComplete" GroupName="complete" Text="Lot Complete" /> &nbsp;
-                        <asp:RadioButton runat="server" ID="rbtnNotComplete" GroupName="complete" Text="Lot Not Complete" />
-                    </div>
+                    <div class="col-md-4"></div>
                     <div class="col-md-2">
                          <asp:Button runat="server" ID="btnConfirm" Text="End" Height="38px" Width="100%" CssClass="btn-primary" style="border-radius:4px;" data-toggle="modal" data-target="#modalLogin" OnClientClick="return false;" />
                     </div>

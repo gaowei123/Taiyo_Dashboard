@@ -223,30 +223,34 @@
                             <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx?type=Online">OnLine Real Time</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx?type=WIP">WIP Real Time</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx?type=Packing">Packing Real Time</a></li>
-                            <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
+
+                            <li class="divider"></li>
 
                             <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li>
-
                             <li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>
-
-
+                            <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
                             <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
-
-
-                            <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">Button Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">Bezel Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">Panel Report</a></li>
                             <li><a runat="server" href="./PQC_Product/WIPInventory">WIP Inventory</a></li>
                             <li><a runat="server" href="./PQC_Product/JobOrderDetail">Job Order Detail</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCRejectDetail.aspx">PQC Reject Detail Report</a></li>
+
+                            <li class="divider"></li>
+                            
+                            <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingPicChart">Packing PIC Chart</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingProductionTrendChart">Packing Production Trend Chart</a></li>
+
+                           
+                            <li class="divider"></li>
+
+                            <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCProductionChart.aspx">Production Chart</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCCheckerOutputChart.aspx">Checker Output Chart</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBomList.aspx">Bom List</a></li>
-
-
                             <li><a runat="server" href="./Buyoff/PQCBuyoffList">PQC Buyoff Record History</a></li>
 
                         </ul>

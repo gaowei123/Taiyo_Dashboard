@@ -1223,7 +1223,7 @@ namespace DashboardTTS.ViewBusiness
                     model.lotNo = tempDrArr[0]["lotNo"].ToString();
                 
                 model.okQty = double.Parse(dr["acceptQty"].ToString());
-                model.ngQty = double.Parse(dr["rejectQty"].ToString());             
+                model.ngQty = double.Parse(dr["rejectQty"].ToString());
                 model.totalQty = double.Parse(dr["totalQty"].ToString());
 
 
@@ -1373,10 +1373,195 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
+
+
+        #endregion
+
+
+
+        #region packing chart 
+
         
+        private List<ViewModel.PackingProductChart_ViewModel> GetPackingProductionData(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
+        {
+            DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo);
+            if (dt == null || dt.Rows.Count == 0) return null;
+
+
+            List<Common.Class.Model.PQCBom_Model> bomList = bomBLL.GetModelList();
 
 
 
+            List<ViewModel.PackingProductChart_ViewModel> modelList = new List<ViewModel.PackingProductChart_ViewModel>();
+            foreach (DataRow dr in dt.Rows)
+            {
+
+                //根据bom中process设定type
+                string jobType = "";
+                var bomModel = (from a in bomList where a.partNumber == dr["partnumber"].ToString() select a).FirstOrDefault();
+                //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
+                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                {
+                    jobType = "Online";
+                }
+                else
+                {
+                    jobType = "Offline";
+                }
+
+                //如果选定  on/off line.  则判断不是当前记录不是 选定的type跳过.
+                if (sType != "" && jobType != sType)
+                    continue;
+
+
+
+
+
+                ViewModel.PackingProductChart_ViewModel model = new ViewModel.PackingProductChart_ViewModel();
+
+
+                DateTime day = DateTime.Parse(dr["day"].ToString());
+
+                model.iYear = day.Year;
+                model.iMonth = day.Month;
+                model.iDay = day.Day;
+                model.dDay = day;
+                model.output = double.Parse(dr["totalQty"].ToString());
+                model.op = dr["userID"].ToString().ToUpper();
+
+
+                modelList.Add(model);
+            }
+
+
+            DateTime dTemp = dDateFrom.Date;
+            while (dTemp < dDateTo)
+            {
+                var result = (from a in modelList where a.dDay == dTemp select a).ToList();
+                if (result == null || result.Count == 0)
+                {
+                    ViewModel.PackingProductChart_ViewModel model = new ViewModel.PackingProductChart_ViewModel();
+                    model.iYear = dTemp.Year;
+                    model.iMonth = dTemp.Month;
+                    model.iDay = dTemp.Day;
+                    model.dDay = dTemp;
+                    model.output = 0;
+                    model.op = "";
+
+                    modelList.Add(model);
+                }
+
+
+
+                dTemp = dTemp.AddDays(1);
+            }
+
+
+            return modelList;
+        }
+
+
+
+
+
+        public string GetPicList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sType)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+
+            List<ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo, sType);
+            if (packingChartDataList == null)
+            {
+                return js.Serialize("");
+            }
+
+
+            var result = from a in packingChartDataList
+                         where a.output != 0
+                         group a by a.op into b
+                         where b.Key != ""
+                         orderby int.Parse(b.Key.Replace("LPC","").Replace("LP",""))  ascending
+                         select new
+                         {
+                             op = b.Key,
+                             output = b.Sum(p => p.output)
+                         };
+
+          
+            if (result == null)
+            {
+                return js.Serialize("");
+            }
+            else
+            {
+                return js.Serialize(result);
+            }
+        }
+
+        public string GetProductTrendList(string sGroupBy,DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+            List<ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo, sType);
+            if (packingChartDataList == null)
+            {
+                return js.Serialize("");
+            }
+
+       
+
+            string result = "";
+
+            switch (sGroupBy)
+            {
+                case "YEAR":
+                    var result1 = from a in packingChartDataList
+                                 group a by a.iYear into b
+                                 select new
+                                 {
+                                     year = b.Key,
+                                     output = b.Sum(p => p.output)
+                                 };
+
+                    result = js.Serialize(result1);
+                    break;
+
+                case "MONTH":
+                    var result2 = from a in packingChartDataList
+                                 group a by a.iMonth into b
+                                 select new
+                                 {
+                                     month = b.Key,
+                                     output = b.Sum(p => p.output)
+                                 };
+                    result = js.Serialize(result2);
+                    break;
+
+                case "DAY":
+                    var result3 = from a in packingChartDataList
+                                 group a by a.iDay into b
+                                 select new
+                                 {
+                                     day = b.Key,
+                                     output = b.Sum(p => p.output)
+                                 };
+                    result = js.Serialize(result3);
+                    break;
+
+                default:
+                    break;
+            };
+
+
+
+            return result;
+        }
+
+
+      
 
         #endregion
 
