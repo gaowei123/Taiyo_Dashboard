@@ -437,7 +437,7 @@ namespace DashboardTTS.Webform.Moulding
             Li.Text = "";
             Li.Value = "";
             this.ddl_MachineNo.Items.Add(Li);
-            for (int i = 1; i < 9; i++)
+            for (int i = 1; i < 10; i++)
             {
                 Li = new ListItem();
                 Li.Value = i.ToString();

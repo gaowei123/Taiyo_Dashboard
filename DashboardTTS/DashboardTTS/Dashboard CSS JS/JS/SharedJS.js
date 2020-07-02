@@ -207,6 +207,34 @@ function setUserIDDDL(selectControl, department) {
 }
 
 
+//设置Year下拉框
+function setYearDDL(selectControl, defaultValue) {
+   
+    selectControl.empty();//清空
+    
+
+    var today = new Date();
+    var currentYear = today.getFullYear();
+
+
+
+    var yearStart = 2019;
+
+    for (var i = 2019; i < currentYear + 1; i++) {
+        selectControl.append($("<option value='" + i + "'>" + i + "</option>"));
+    }
+
+
+    selectControl.selectpicker("refresh");
+
+
+    if (defaultValue != '') {
+        selectControl.val(defaultValue);
+        selectControl.selectpicker("refresh");
+    }
+
+
+}
 
 
 

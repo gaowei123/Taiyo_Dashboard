@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "LaserMaintenance";
+}
+
+<style>
+    .container{
+        max-width: 900px;
+    }
+</style>
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="../../Resources/Images/headericon.gif" />
+        <span class="titleText">Laser Job Maintance</span>
+    </div>
+
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-12 panel panel-default" role="form">
+            <div class="row form-inline" style="padding:10px 10px 0px 18px;">
+                <div class="col-md-2">
+                    <b>Job Info :</b>
+                </div>
+                <div class="col-md-9">
+                    <label id="lbDay" ></label> &nbsp-&nbsp
+                    <label id="lbShift" ></label>&nbsp-&nbsp
+                    <label id="lbMachineID" ></label>&nbsp-&nbsp
+                    <label id="lbJob"></label> &nbsp;&nbsp;
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row form-inline" style="margin:4px;">
+                <div class="col-md-12">
+                    <label>Set Up Usage : </label>
+                    <label id="lbSetUp"></label>
+                    <label>--></label>
+                    <input type="text" id="txtSetup" class="form-control" />
+                </div>
+            </div>
+            <div class="row form-inline" style="margin:4px;">
+                <div class="col-md-12">
+                    <label>Buyoff Usage : </label>     
+                    <label id="lbBuyoff"></label>
+                    <label>--></label>
+                    <input type="text" id="txtBuyoffQty" class="form-control" />               
+                </div>
+            </div>
+            <div class="row form-inline" style="margin:4px;">
+                <div class="col-md-12">
+                    <label>Shortage Qty : </label>
+                    <label id="lbShortage"></label>
+                    <label>--></label>
+                    <input type="text" id="txtShortage" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default">
+            <div class="row" style="padding:10px 10px 0px 20px;">
+                <div class="col-md-12">
+                    <b>Material Detail Info</b>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12" style="padding:0px 30px 0 30px;">
+                 
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default" align="center" style="padding:4px 0px 4px 0px;">
+            <input type="button" id="btnConfirm" class="btn btn-success" value="Login Confirm" data-toggle="modal" data-target="#modalLogin" />
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    var apiGetJobInfo = window.globalConfig.rootDirectory + '/LASER_Product/GetMaintainJobInfo';
+
+
+
+
+</script>

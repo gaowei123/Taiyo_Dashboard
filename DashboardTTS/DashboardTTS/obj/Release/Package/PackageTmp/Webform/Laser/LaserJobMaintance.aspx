@@ -6,7 +6,7 @@
     <style>
         @media (min-width: 1200px) {
             .container{
-                max-width: 900px;
+                max-width: 600px;
             }
         }
     </style>
@@ -35,33 +35,33 @@
                 <hr />
 
                 <div class="row form-inline" style="margin:4px;"> 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         Set Up Usage :
                     </div>
-                    <div class="col-sm-9">
-                        <asp:Label runat="server" ID="lbSetUp" width="50"></asp:Label>
+                    <div class="col-sm-8">
+                        <asp:Label runat="server" ID="lbSetUp" width="50" ToolTip="Total setup for the job"></asp:Label>
                         <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
-                        <asp:TextBox runat="server"  ID="txtSetupQty" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ></asp:TextBox>
+                        <asp:TextBox runat="server"  ID="txtSetupQty" CssClass="form-control" Width="100px" AutoCompleteType="Disabled"  ToolTip="Total setup for the job"></asp:TextBox>
                     </div>
                 </div>
                 <div class="row form-inline" style="margin:4px;">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         Buyoff Usage :
                     </div>
-                    <div class="col-md-9">
-                        <asp:Label runat="server" ID="lbBuyoff" Width="50px"></asp:Label>
+                    <div class="col-md-8">
+                        <asp:Label runat="server" ID="lbBuyoff" Width="50px" ToolTip="Total buyoff for the job"></asp:Label>
                         <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
-                        <asp:TextBox runat="server"  ID="txtBuyoffQty" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ></asp:TextBox>
+                        <asp:TextBox runat="server"  ID="txtBuyoffQty" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ToolTip="Total buyoff for the job"></asp:TextBox>
                     </div>
                 </div>
                 <div class="row form-inline" style="margin:4px;">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         Shortage Qty :
                     </div>
-                    <div class="col-md-9">
-                        <asp:Label runat="server" ID="lbShortage" Width="50px"></asp:Label>
+                    <div class="col-md-8">
+                        <asp:Label runat="server" ID="lbShortage" Width="50px" ToolTip="Total shortage for the job"></asp:Label>
                         <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
-                        <asp:TextBox runat="server"  ID="txtShortage" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ></asp:TextBox>
+                        <asp:TextBox runat="server"  ID="txtShortage" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ToolTip="Total shortage for the job"></asp:TextBox>
                     </div>
                 </div>
             </div>
@@ -81,37 +81,39 @@
                 <div class="row">
                     <div class="col-md-12" style="padding:0px 30px 0 30px;">
                         <asp:Label runat="server" ID="lbResult"></asp:Label>
-                        <asp:DataGrid runat="server" Width ="100%" ID ="dgMaterialMaintain" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" AutoGenerateColumns="false"  CssClass="table table-hover">
+                        <asp:DataGrid runat="server" Width ="300" ID ="dgMaterialMaintain" CellPadding="10" ForeColor="#333333" GridLines="none" CellSpacing="2" AutoGenerateColumns="false"  CssClass="table">
                             <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Wrap="False" Height="30px" HorizontalAlign="Center" VerticalAlign="Middle" />
                             <ItemStyle BackColor="#F7F6F3" ForeColor="#333333" Wrap="False" BorderStyle="None" VerticalAlign="Middle" HorizontalAlign="Center" />
                             <Columns>
                                 <asp:BoundColumn DataField="SN" Visible="false"></asp:BoundColumn>
-                                <asp:BoundColumn DataField="materialNo" HeaderText="Material No" HeaderStyle-Width="25%" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left"></asp:BoundColumn>
-
-                                <asp:BoundColumn DataField="okQty" HeaderText="Current OK"></asp:BoundColumn>
-                                <asp:TemplateColumn HeaderText="Actual OK">
-                                    <ItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtActualOK" Width="100" CssClass="form-control" style="height:24px; margin:0px;  border-radius:4px; border:solid 1px #cccc;" ></asp:TextBox>
-                                    </ItemTemplate>
-                                </asp:TemplateColumn>
-
-
+                                <asp:BoundColumn DataField="materialNo" HeaderText="Material No" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderStyle-Width="10%"><ItemTemplate></ItemTemplate></asp:TemplateColumn>
-
 
                                 <asp:BoundColumn DataField="ngQty" HeaderText="Current NG"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderText="Actual NG">
                                     <ItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtActualNG" Width="100" CssClass="form-control" style="height:24px; margin:0px; border-radius:4px; border:solid 1px #cccc;"></asp:TextBox>
+                                        <asp:TextBox runat="server" ID="txtActualNG" Width="70" CssClass="form-control" style="height:24px; margin:0px; border-radius:4px; border:solid 1px #cccc;"></asp:TextBox>
                                     </ItemTemplate>
                                 </asp:TemplateColumn>
-
                             </Columns>
                         </asp:DataGrid>
 
                     </div>
                 </div>
+            </div>
+        </div>
 
+
+        <div class="row">
+            <div class="col-md-12 panel panel-default" style="padding:10px 10px 0px 40px;">
+                <asp:Label runat="server" Font-Bold="true">Job Complete:</asp:Label>
+                
+                <hr />
+                
+                <asp:RadioButtonList runat="server" ID="radiobtnList" >
+                    <asp:ListItem Text="Yes"></asp:ListItem>
+                    <asp:ListItem Text="No"></asp:ListItem>
+                </asp:RadioButtonList>
 
             </div>
         </div>
@@ -119,9 +121,7 @@
 
         <div class="row">
             <div class="col-md-12 panel panel-default"align="center" style="padding:4px 0px 4px 0px;">
-
-                <asp:Button runat="server" ID="btnConfirm" Text="Login Confirm" Width="200px" Height="38px" CssClass="btn-success" style="border-radius:4px;" data-toggle="modal" data-target="#modalLogin" OnClientClick="return false;" />
-
+                <asp:Button runat="server" ID="btnConfirm" Text="Login Confirm" Width="150px" Height="38px" CssClass="btn-success" style="border-radius:4px;" data-toggle="modal" data-target="#modalLogin" OnClientClick="return false;" />
             </div>
         </div>
 

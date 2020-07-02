@@ -12,68 +12,54 @@ namespace DashboardTTS.Controllers
         private readonly ViewBusiness.PQCProduct vBLL = new ViewBusiness.PQCProduct();
 
         #region View
-        // GET: PQC_Product
         public ActionResult Index()
         {
             return View();
         }
-
-
         public ActionResult SummaryReport()
         {
             return View();
         }
-
-
         public ActionResult DailyReport()
         {
             return View();
         }
-
-
         public ActionResult WIPInventory()
         {
             return View();
         }
-
-
         public ActionResult JobOrderDetail()
         {
             return View();
         }
-
-
         public ActionResult Maintenance()
         {
             return View();
         }
-
-
         public ActionResult PackingDetailReport()
         {
             return View();
         }
-
-
         public ActionResult CheckingDetailReport()
         {
             return View();
         }
-
-
         public ActionResult PackingInventory()
         {
             return View();
         }
-        
-
         public ActionResult PackingJobOrder()
         {
             return View();
         }
-
-
-
+        public ActionResult PackingPicChart()
+        {
+            return View();
+        }
+        public ActionResult PackingProductionTrendChart()
+        {
+            return View();
+        }
         #endregion
 
 
@@ -514,10 +500,74 @@ namespace DashboardTTS.Controllers
         //delete function
 
 
-        
+
 
 
         #endregion
-        
+
+
+
+       
+        public ActionResult GetPicList()
+        {
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+
+            string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
+            string station = Request.Form["Station"];
+            string jobNo = Request.Form["JobNo"];
+            string type = Request.Form["Type"];
+
+
+            string result = vBLL.GetPicList(dateFrom, dateTo, partNo, station, pic, jobNo, type);
+            return Content(result);
+        }
+
+
+
+       
+        public ActionResult GetProductTrendList()
+        {
+            string groupBy = Request.Form["GroupBy"];
+
+            DateTime dateFrom = new DateTime();
+            DateTime dateTo = new DateTime();
+            string year = Request.Form["Year"];
+            if (groupBy == "Day")
+            {
+                dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+                dateTo = DateTime.Parse(Request.Form["DateTo"]);
+                dateTo = dateTo.AddDays(1);
+            }
+            else if (groupBy == "Month")
+            {
+                dateFrom = DateTime.Parse(year + "-1-1");
+                dateTo = dateFrom.AddYears(1);
+            }
+            else
+            {
+                dateFrom = DateTime.Parse("2019-1-1");
+                dateTo = DateTime.Now;
+            }
+
+
+            string type = Request.Form["Type"];
+            string pic = Request.Form["PIC"];
+            string partNo = Request.Form["PartNo"];
+            string station = Request.Form["Station"];
+           
+
+            
+
+
+
+            string result = vBLL.GetProductTrendList(groupBy, dateFrom, dateTo, partNo, station, pic, type);
+
+            return Content(result);
+        }
+
+
     }
 }

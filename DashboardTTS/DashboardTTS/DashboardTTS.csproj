@@ -305,6 +305,7 @@
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
     <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
+    <Compile Include="ViewModel\PackingProductChart_ViewModel.cs" />
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\PQCDailyReport_ViewModel.cs" />
@@ -3721,6 +3722,8 @@
     <Content Include="Views\PQC_Product\PackingInventory.cshtml" />
     <Content Include="Views\PQC_Product\PackingJobOrder.cshtml" />
     <Content Include="Views\LASER_Product\LaserMaintenance.cshtml" />
+    <Content Include="Views\PQC_Product\PackingPicChart.cshtml" />
+    <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

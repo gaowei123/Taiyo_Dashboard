@@ -588,7 +588,10 @@ namespace Common
             double todayCurrentSeconds = 0;
 
 
-            if (dateTo < DateTime.Now.Date)
+            
+
+
+            if (dateTo <= DateTime.Now.Date)
             {
                 double totalHours = (dateTo - dateFrom).Days * hourPerDay;
                 totalSeconds = totalHours * 3600;
