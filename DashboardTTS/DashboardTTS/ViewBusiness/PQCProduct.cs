@@ -1384,7 +1384,12 @@ namespace DashboardTTS.ViewBusiness
 
         #region packing chart 
 
-        
+
+
+                                                                                     
+
+
+
         private List<ViewModel.PackingProductChart_ViewModel> GetPackingProductionData(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
             DataTable dt = packTrackBLL.GetList(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo);
@@ -1402,6 +1407,10 @@ namespace DashboardTTS.ViewBusiness
                 //根据bom中process设定type
                 string jobType = "";
                 var bomModel = (from a in bomList where a.partNumber == dr["partnumber"].ToString() select a).FirstOrDefault();
+                if (bomModel == null)
+                    continue;
+
+
                 //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
                 if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
                 {
@@ -1472,7 +1481,7 @@ namespace DashboardTTS.ViewBusiness
             JavaScriptSerializer js = new JavaScriptSerializer();
 
 
-            List<ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo, sType);
+            List<ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo,"", sType);
             if (packingChartDataList == null)
             {
                 return js.Serialize("");
@@ -1500,12 +1509,14 @@ namespace DashboardTTS.ViewBusiness
                 return js.Serialize(result);
             }
         }
-
-        public string GetProductTrendList(string sGroupBy,DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
+        
+        public string GetProductTrendList(string sGroupBy,DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sType)
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
 
-            List<ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, "", sPartNo, sStation, sPIC, sJobNo, sType);
+            
+
+            List <ViewModel.PackingProductChart_ViewModel> packingChartDataList = GetPackingProductionData(dDateFrom, dDateTo, sPartNo, sStation, sPIC, "","", sType);
             if (packingChartDataList == null)
             {
                 return js.Serialize("");
@@ -1517,10 +1528,11 @@ namespace DashboardTTS.ViewBusiness
 
             switch (sGroupBy)
             {
-                case "YEAR":
+                case "Year":
                     var result1 = from a in packingChartDataList
                                  group a by a.iYear into b
-                                 select new
+                                  orderby b.Key
+                                  select new
                                  {
                                      year = b.Key,
                                      output = b.Sum(p => p.output)
@@ -1529,23 +1541,26 @@ namespace DashboardTTS.ViewBusiness
                     result = js.Serialize(result1);
                     break;
 
-                case "MONTH":
+                case "Month":
                     var result2 = from a in packingChartDataList
                                  group a by a.iMonth into b
-                                 select new
+                                  orderby b.Key
+                                  select new
                                  {
-                                     month = b.Key,
-                                     output = b.Sum(p => p.output)
+                                      month = Common.CommFunctions.GetMonthName(b.Key, false),
+                                      output = b.Sum(p => p.output)
                                  };
                     result = js.Serialize(result2);
                     break;
 
-                case "DAY":
+                case "Day":
                     var result3 = from a in packingChartDataList
-                                 group a by a.iDay into b
+                                 group a by new { a.iMonth, a.iDay } into b
+                                 orderby b.Key.iMonth ascending , b.Key.iDay ascending
                                  select new
                                  {
-                                     day = b.Key,
+                                     day = b.Key.iDay,
+                                     month = Common.CommFunctions.GetMonthName(b.Key.iMonth, false) ,
                                      output = b.Sum(p => p.output)
                                  };
                     result = js.Serialize(result3);

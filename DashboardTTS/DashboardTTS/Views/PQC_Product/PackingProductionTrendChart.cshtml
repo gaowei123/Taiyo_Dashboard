@@ -26,10 +26,18 @@
 
             <div class="row form-inline searchingBar ">
                 <div class="col-md-3">
+                    <label style="width:35%">Summary By:</label>
+                    <select id="ddlGroupBy" class="form-control selectpicker" data-ng-style="btn-info">
+                        <option value="Day">Day</option>
+                        <option value="Month">Month</option>
+                        <option value="Year">Year</option>
+                    </select>
+                </div>
+                <div class="col-md-3" id="divDateFrom">
                     <label style="width:35%">Date From:</label>
                     <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" id="divDateTo">
                     <label style="width:35%">Date To:</label>
                     <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
                 </div>
@@ -40,10 +48,6 @@
                         <option value="Online">Online</option>
                         <option value="Offline">Offline</option>
                     </select>
-                </div>
-                <div class="col-md-3">
-                    <label for="ddlPIC" style="width:35%">PIC:</label>
-                    <select id="ddlPIC" class="form-control selectpicker" data-ng-style="btn-info"></select>
                 </div>
             </div>
 
@@ -80,8 +84,8 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label style="width:35%">Job No:</label>
-                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job no" style="width:60%;" />
+                    <label for="ddlPIC" style="width:35%">PIC:</label>
+                    <select id="ddlPIC" class="form-control selectpicker" data-ng-style="btn-info"></select>
                 </div>
                 <div class="col-md-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
@@ -139,7 +143,7 @@
         initialDate: new Date()
     });
 
-
+    $('#ddlGroupBy').selectpicker({ width: 'calc(60%)' });
     $('#ddlPIC').selectpicker({ width: 'calc(60%)' });
     $('#ddlStation').selectpicker({ width: 'calc(60%)' });
     $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
@@ -165,36 +169,88 @@
     });
 
 
+    $('#ddlGroupBy').change(function () {
+        var selectedValue = $(this).children('option:selected').val();
+
+        
+
+       
+      
+        var strHtml_DateFrom = '<label style="width:35%">Date From:</label>\
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />';
+        var strHtml_DateTo = '<label style="width:35%">Date To:</label>\
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />';
+        var strHtml_ddlYear = '<label style="width:35%">Year:</label>\
+                    <select id="ddlYear" class="form-control selectpicker" data-ng-style="btn-info"></select>';
+
+
+
+        $('#divDateFrom').html('');
+        $('#divDateTo').html('');
+      
+        
+
+        if (selectedValue == 'Day') {
+            $('#divDateFrom').html(strHtml_DateFrom);
+            $('#divDateTo').html(strHtml_DateTo);
+
+            $('#txtDateFrom').datetimepicker({
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                initialDate: new Date()
+            });
+            $('#txtDateTo').datetimepicker({
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                initialDate: new Date()
+            });
+
+        } else if (selectedValue == 'Month') {
+            $('#divDateFrom').html(strHtml_ddlYear);
+
+            var today = new Date();
+
+            $('#ddlYear').selectpicker({ width: 'calc(60%)' });
+
+            setYearDDL($('#ddlYear'), today.getFullYear());
+        } else {
+
+        }
+
+
+
+
+    })
+
+
 
     function search() {
 
-        var datefrom = $("#txtDateFrom").val();
-        if (datefrom == '') {
-            alert('Date From can not be empty!');
-            return false;
-        }
-
-        var dateto = $("#txtDateTo").val();
-        if (dateto == '') {
-            alert('Date To can not be empty!');
-            return false;
-        }
-
-
-
+        
 
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetProductList,
             data: {
+                GroupBy: $('#ddlGroupBy').val(),
+                Year: $('#ddlYear').val(),
                 DateFrom: $("#txtDateFrom").val(),
                 DateTo: $("#txtDateTo").val(),
-                PIC: $('#ddlPIC').val(),
-                Station: $("#ddlStation").val(),
+                Type: $('#ddlType').val(),
                 PartNo: $("#ddlPartNo").val(),
-                JobNo: $('#txtJobNo').val(),
-                Type: $('#ddlType').val()
+                Station: $("#ddlStation").val(),
+                PIC: $('#ddlPIC').val()
             },
             success: function (data) {
 
@@ -205,9 +261,20 @@
                 var axisXLabelData = [];
                 var outputData = [];
 
+           
+                
+
 
                 for (var i = 0; i < data.length; i++) {
-                    axisXLabelData.push(data[i].op);
+                    if ($('#ddlGroupBy').val() == 'Day') {
+                        axisXLabelData.push(data[i].month +' - '+data[i].day);
+                    } else if ($('#ddlGroupBy').val() == 'Month') {
+                        axisXLabelData.push(data[i].month);
+                    } else {
+                        axisXLabelData.push(data[i].year);
+                    }
+
+                  
                     outputData.push(data[i].output);
                 }
 
@@ -216,11 +283,11 @@
                     color: ['#00B050'],
 
                     title: {
-                        text: 'Packing PIC Chart'
+                        text: 'Packing Production Trend Chart'
                     },
 
                     legend: {
-                        data: ['operator']
+                        data: [$('#ddlGroupBy').val()]
                     },
 
                     tooltip: {
@@ -233,7 +300,7 @@
 
                     xAxis: {
                         type: 'category',
-                        name: 'Operator',
+                        name: $('#ddlGroupBy').val(),
                         data: axisXLabelData,//X轴数据 数组
                         axisLabel: {
                             interval: 0,
@@ -259,7 +326,7 @@
 
                     series: [
                         {
-                            name: 'operator',
+                            name: 'Output',
                             type: 'bar',
                             data: outputData,
                             label: {
@@ -280,7 +347,19 @@
             }
         });
 
+
+
+        //点击事件
+        //chart.on('click', function (params) {
+        //    console.log(params); 
+        //    var name = params.name;
+        //});
+
+
     }
+
+
+
 
 
 
