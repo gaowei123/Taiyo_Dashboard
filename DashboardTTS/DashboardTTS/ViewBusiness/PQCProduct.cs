@@ -1486,13 +1486,13 @@ namespace DashboardTTS.ViewBusiness
             {
                 return js.Serialize("");
             }
-
+            
 
             var result = from a in packingChartDataList
                          where a.output != 0
                          group a by a.op into b
                          where b.Key != ""
-                         orderby int.Parse(b.Key.Replace("LPC","").Replace("LP",""))  ascending
+                         orderby int.Parse(b.Key.Replace("LPC","").Replace("LP","").Replace("PT", "").Replace("PK", "").Replace("LS", "").Replace("D", "").Replace("C", ""))  ascending
                          select new
                          {
                              op = b.Key,

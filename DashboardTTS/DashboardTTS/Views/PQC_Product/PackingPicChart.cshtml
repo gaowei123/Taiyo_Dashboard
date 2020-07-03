@@ -214,6 +214,14 @@
                 }
 
 
+
+                //超过15天, x轴标签转 -60
+                var axisXLabelRotate = 0;
+                if (data.length > 15) {
+                    axisXLabelRotate = -60;
+                }
+
+
                 var option = {
                     color: ['#00B050'],
 
@@ -239,7 +247,7 @@
                         data: axisXLabelData,//X轴数据 数组
                         axisLabel: {
                             interval: 0,
-                            rotate: 0   //X轴 倾斜角度
+                            rotate: axisXLabelRotate   //X轴 倾斜角度
                         },
                         axisPointer: {
                             type: 'shadow'
