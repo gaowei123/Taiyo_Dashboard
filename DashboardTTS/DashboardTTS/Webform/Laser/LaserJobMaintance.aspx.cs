@@ -129,13 +129,13 @@ namespace DashboardTTS.Webform.Laser
 
                 foreach (DataGridItem item in this.dgMaterialMaintain.Items)
                 {
-                    string sNG = ((TextBox)item.Cells[4].FindControl("txtActualNG")).Text.Trim();
+                    string sNG = ((TextBox)item.Cells[5].FindControl("txtActualNG")).Text.Trim();
                     if (sNG != "" && !Common.CommFunctions.isNumberic(sNG))
                     {
                         Common.CommFunctions.ShowMessage(this.Page, "Actual NG must be number !");
 
-                        ((TextBox)item.Cells[4].FindControl("txtActualNG")).Text = "";
-                        ((TextBox)item.Cells[4].FindControl("txtActualNG")).Focus();
+                        ((TextBox)item.Cells[5].FindControl("txtActualNG")).Text = "";
+                        ((TextBox)item.Cells[5].FindControl("txtActualNG")).Focus();
                         return;
                     }
                 }
@@ -318,8 +318,8 @@ namespace DashboardTTS.Webform.Laser
 
                     int sn = int.Parse(item.Cells[0].Text);
                     string materialNo = item.Cells[1].Text;
-                    string sActualNG = ((TextBox)item.Cells[4].FindControl("txtActualNG")).Text.Trim();
-                    int dNG = sActualNG == "" ? int.Parse(item.Cells[3].Text) : int.Parse(sActualNG);
+                    string sActualNG = ((TextBox)item.Cells[5].FindControl("txtActualNG")).Text.Trim();
+                    int dNG = sActualNG == "" ? int.Parse(item.Cells[4].Text) : int.Parse(sActualNG);
 
 
                     bool jobComplete = this.radiobtnList.SelectedItem.Text == "Yes" ? true : false;
@@ -873,8 +873,8 @@ namespace DashboardTTS.Webform.Laser
 
             foreach (DataGridItem item in this.dgMaterialMaintain.Items)
             {
-                ((TextBox)item.Cells[4].FindControl("txtActualNG")).Attributes["placeholder"] = item.Cells[3].Text;
-                DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set material detail list --  sn: {0}, material no: {1}, ng{2}",item.Cells[0].Text, item.Cells[1].Text, item.Cells[3].Text));
+                ((TextBox)item.Cells[5].FindControl("txtActualNG")).Attributes["placeholder"] = item.Cells[4].Text;
+                DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set material detail list --  sn: {0}, material no: {1}, ng{2}",item.Cells[0].Text, item.Cells[1].Text, item.Cells[4].Text));
             }
         }
 

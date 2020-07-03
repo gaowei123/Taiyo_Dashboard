@@ -6,7 +6,7 @@
     <style>
         @media (min-width: 1200px) {
             .container{
-                max-width: 600px;
+                max-width: 720px;
             }
         }
     </style>
@@ -88,6 +88,8 @@
                                 <asp:BoundColumn DataField="SN" Visible="false"></asp:BoundColumn>
                                 <asp:BoundColumn DataField="materialNo" HeaderText="Material No" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderStyle-Width="10%"><ItemTemplate></ItemTemplate></asp:TemplateColumn>
+
+                                <asp:BoundColumn DataField="okQty" HeaderText="OK"></asp:BoundColumn>
 
                                 <asp:BoundColumn DataField="ngQty" HeaderText="Current NG"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderText="Actual NG">

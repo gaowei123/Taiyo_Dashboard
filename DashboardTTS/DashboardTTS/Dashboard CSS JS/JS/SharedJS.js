@@ -233,7 +233,6 @@ function setYearDDL(selectControl, defaultValue) {
         selectControl.selectpicker("refresh");
     }
 
-
 }
 
 
