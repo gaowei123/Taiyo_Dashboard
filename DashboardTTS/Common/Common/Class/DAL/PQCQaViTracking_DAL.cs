@@ -2433,6 +2433,9 @@ a.trackingid
 ,b.laserrej
 ,b.OthersRej
 
+,a.startTime
+,a.stopTime
+
 ,a.datetime
 
 from PQCQaViTracking a

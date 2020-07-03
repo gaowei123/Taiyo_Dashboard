@@ -1275,6 +1275,8 @@ namespace DashboardTTS.ViewBusiness
             var result = (from a in modelList
                           where (sLotNo == "" ? true : sLotNo == a.lotNo)
                           && typeArr.Contains(a.type)
+                          && a.totalQty > 0
+                          orderby a.dateTime ascending
                           select a).ToList();
 
             ViewModel.PackingDetail_ViewModel summaryModel = new ViewModel.PackingDetail_ViewModel();
@@ -1291,7 +1293,7 @@ namespace DashboardTTS.ViewBusiness
 
 
         #region  checking detial list
-        public List<ViewModel.CheckingDetail_ViewModel> GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo)
+        public List<ViewModel.CheckingDetail_ViewModel> GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
             DataTable dt = viTrackingBLL.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
             if (dt == null || dt.Rows.Count == 0) return null;
@@ -1300,7 +1302,7 @@ namespace DashboardTTS.ViewBusiness
 
             DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
 
-
+            List<Common.Class.Model.PQCBom_Model> bomList = bomBLL.GetModelList();
 
 
             List<ViewModel.CheckingDetail_ViewModel> modelList = new List<ViewModel.CheckingDetail_ViewModel>();
@@ -1334,21 +1336,48 @@ namespace DashboardTTS.ViewBusiness
                 model.othersRej = double.Parse(dr["othersRej"].ToString());
 
 
+                if (dr["startTime"].ToString() == "")
+                {
+                    model.startTime = null;
+                }
+                else
+                {
+                    model.startTime = DateTime.Parse(dr["startTime"].ToString());
+                }
+
+                if (dr["stopTime"].ToString() == "")
+                {
+                    model.stopTime = null;
+                }
+                else
+                {
+                    model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+                }
+
+
+
+                //根据bom中process设定type
+                var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
+                //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
+                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                {
+                    model.type = "Online";
+                }
+                else
+                {
+                    model.type = "Offline";
+                }
+
 
                 modelList.Add(model);
             }
 
 
-
-
-            List<ViewModel.CheckingDetail_ViewModel> temp = new List<ViewModel.CheckingDetail_ViewModel>();
-            if (sLotNo != "")
-            {
-                temp = (from a in modelList where a.lotNo == sLotNo orderby a.dateTime ascending select a).ToList();
-            }else
-            {
-                temp = (from a in modelList orderby a.dateTime ascending select a).ToList();
-            }
+            string[] typeArr = sType == "" ? new string[] { "Online", "Offline" } : new string[] { sType };
+            List<ViewModel.CheckingDetail_ViewModel> temp = temp = (from a in modelList
+                                                                    where typeArr.Contains(a.type) && a.totalQty > 0
+                                                                    orderby a.dateTime ascending select a).ToList();
+          
 
 
 

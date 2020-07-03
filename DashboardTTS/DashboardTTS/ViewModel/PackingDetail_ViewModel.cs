@@ -24,6 +24,9 @@ namespace DashboardTTS.ViewModel
    
         public double totalQty { get; set; }
 
+
+
+
         public DateTime? startTime { get; set; }
         public DateTime? stopTime { get; set; }
 
