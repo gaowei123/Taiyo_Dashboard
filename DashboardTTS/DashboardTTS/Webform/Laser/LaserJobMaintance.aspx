@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-            <span class="titleText">Laser Job Maintance</span>
+            <span class="titleText">Laser Job Maintenance</span>
         </div>
 
 

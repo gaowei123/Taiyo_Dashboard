@@ -1295,109 +1295,116 @@ namespace DashboardTTS.ViewBusiness
         #region  checking detial list
         public List<ViewModel.CheckingDetail_ViewModel> GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
-            DataTable dt = viTrackingBLL.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
-            if (dt == null || dt.Rows.Count == 0) return null;
-
-        
-
-            DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
-
-            List<Common.Class.Model.PQCBom_Model> bomList = bomBLL.GetModelList();
-
-
-            List<ViewModel.CheckingDetail_ViewModel> modelList = new List<ViewModel.CheckingDetail_ViewModel>();
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                ViewModel.CheckingDetail_ViewModel model = new ViewModel.CheckingDetail_ViewModel();
-                model.trackingID = dr["trackingID"].ToString();
-                model.day = DateTime.Parse(dr["day"].ToString());
-                model.shift = dr["shift"].ToString();
-                model.station = dr["machineID"].ToString();
-                model.partNo = dr["partnumber"].ToString();
-                model.processes = dr["processes"].ToString();
-                model.jobID = dr["jobId"].ToString();
-                //获取 lotno
-                DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
-                if (tempDrArr != null && tempDrArr.Count() != 0)
-                    model.lotNo = tempDrArr[0]["lotNo"].ToString();
-
-                model.okQty = double.Parse(dr["acceptQty"].ToString());
-                model.ngQty = double.Parse(dr["rejectQty"].ToString());
-                model.totalQty = double.Parse(dr["totalQty"].ToString());
-
-            
-                model.PIC = dr["userID"].ToString();
-                model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
+                DataTable dt = viTrackingBLL.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
+                if (dt == null || dt.Rows.Count == 0) return null;
 
 
-                model.mouldRej = double.Parse(dr["mouldrej"].ToString());
-                model.paintRej = double.Parse(dr["paintRej"].ToString());
-                model.laserRej = double.Parse(dr["laserRej"].ToString());
-                model.othersRej = double.Parse(dr["othersRej"].ToString());
+
+                DataTable dtPaint = paintBLL.GetList(dDateFrom.AddMonths(-6), dDateTo, "");
+
+                List<Common.Class.Model.PQCBom_Model> bomList = bomBLL.GetModelList();
 
 
-                if (dr["startTime"].ToString() == "")
+                List<ViewModel.CheckingDetail_ViewModel> modelList = new List<ViewModel.CheckingDetail_ViewModel>();
+                foreach (DataRow dr in dt.Rows)
                 {
-                    model.startTime = null;
-                }
-                else
-                {
-                    model.startTime = DateTime.Parse(dr["startTime"].ToString());
-                }
+                    ViewModel.CheckingDetail_ViewModel model = new ViewModel.CheckingDetail_ViewModel();
+                    model.trackingID = dr["trackingID"].ToString();
+                    model.day = DateTime.Parse(dr["day"].ToString());
+                    model.shift = dr["shift"].ToString();
+                    model.station = dr["machineID"].ToString();
+                    model.partNo = dr["partnumber"].ToString();
+                    model.processes = dr["processes"].ToString();
+                    model.jobID = dr["jobId"].ToString();
+                    //获取 lotno
+                    DataRow[] tempDrArr = dtPaint.Select(" jobNumber = '" + dr["jobId"].ToString() + "'");
+                    if (tempDrArr != null && tempDrArr.Count() != 0)
+                        model.lotNo = tempDrArr[0]["lotNo"].ToString();
 
-                if (dr["stopTime"].ToString() == "")
-                {
-                    model.stopTime = null;
-                }
-                else
-                {
-                    model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
-                }
-
-
-
-                //根据bom中process设定type
-                var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
-                //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
-                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
-                {
-                    model.type = "Online";
-                }
-                else
-                {
-                    model.type = "Offline";
-                }
+                    model.okQty = double.Parse(dr["acceptQty"].ToString());
+                    model.ngQty = double.Parse(dr["rejectQty"].ToString());
+                    model.totalQty = double.Parse(dr["totalQty"].ToString());
 
 
-                modelList.Add(model);
+                    model.PIC = dr["userID"].ToString();
+                    model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
+
+
+                    model.mouldRej = double.Parse(dr["mouldrej"].ToString());
+                    model.paintRej = double.Parse(dr["paintRej"].ToString());
+                    model.laserRej = double.Parse(dr["laserRej"].ToString());
+                    model.othersRej = double.Parse(dr["othersRej"].ToString());
+
+
+                    if (dr["startTime"].ToString() == "")
+                    {
+                        model.startTime = null;
+                    }
+                    else
+                    {
+                        model.startTime = DateTime.Parse(dr["startTime"].ToString());
+                    }
+
+                    if (dr["stopTime"].ToString() == "")
+                    {
+                        model.stopTime = null;
+                    }
+                    else
+                    {
+                        model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+                    }
+
+
+
+                    //根据bom中process设定type
+                    var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
+                    //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
+                    if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                    {
+                        model.type = "Online";
+                    }
+                    else
+                    {
+                        model.type = "Offline";
+                    }
+
+
+                    modelList.Add(model);
+                }
+
+
+                string[] typeArr = sType == "" ? new string[] { "Online", "Offline" } : new string[] { sType };
+                List<ViewModel.CheckingDetail_ViewModel> temp = temp = (from a in modelList
+                                                                        where typeArr.Contains(a.type) && a.totalQty > 0
+                                                                        orderby a.dateTime ascending
+                                                                        select a).ToList();
+
+
+
+
+                ViewModel.CheckingDetail_ViewModel summaryModel = new ViewModel.CheckingDetail_ViewModel();
+                summaryModel.shift = "Total";
+                summaryModel.okQty = temp.Sum(p => p.okQty);
+                summaryModel.ngQty = temp.Sum(p => p.ngQty);
+                summaryModel.totalQty = temp.Sum(p => p.totalQty);
+
+                summaryModel.mouldRej = temp.Sum(p => p.mouldRej);
+                summaryModel.paintRej = temp.Sum(p => p.paintRej);
+                summaryModel.laserRej = temp.Sum(p => p.laserRej);
+                summaryModel.othersRej = temp.Sum(p => p.othersRej);
+
+
+
+                temp.Add(summaryModel);
+                return temp;
             }
-
-
-            string[] typeArr = sType == "" ? new string[] { "Online", "Offline" } : new string[] { sType };
-            List<ViewModel.CheckingDetail_ViewModel> temp = temp = (from a in modelList
-                                                                    where typeArr.Contains(a.type) && a.totalQty > 0
-                                                                    orderby a.dateTime ascending select a).ToList();
-          
-
-
-
-            ViewModel.CheckingDetail_ViewModel summaryModel = new ViewModel.CheckingDetail_ViewModel();
-            summaryModel.shift = "Total";
-            summaryModel.okQty = temp.Sum(p => p.okQty);
-            summaryModel.ngQty = temp.Sum(p => p.ngQty);
-            summaryModel.totalQty = temp.Sum(p => p.totalQty);
-
-            summaryModel.mouldRej = temp.Sum(p => p.mouldRej);
-            summaryModel.paintRej = temp.Sum(p => p.paintRej);
-            summaryModel.laserRej = temp.Sum(p => p.laserRej);
-            summaryModel.othersRej = temp.Sum(p => p.othersRej);
-
-
-
-            temp.Add(summaryModel);
-
-
-            return temp;
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("CheckingDetailReport", "GetCheckingDetailList, catch exception " + ee.ToString());
+                return null;
+            }
         }
 
 
@@ -1521,7 +1528,7 @@ namespace DashboardTTS.ViewBusiness
                          where a.output != 0
                          group a by a.op into b
                          where b.Key != ""
-                         orderby int.Parse(b.Key.Replace("LPC","").Replace("LP","").Replace("PT", "").Replace("PK", "").Replace("LS", "").Replace("D", "").Replace("C", ""))  ascending
+                         orderby b.Key ascending
                          select new
                          {
                              op = b.Key,

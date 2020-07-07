@@ -160,8 +160,18 @@
         setPartNoDDL($('#ddlPartNo'), 'PQC', '');
 
 
+
+
         var today = dateFormat('yyyy-MM-dd', new Date());
-        $('#txtDateFrom').val(today);
+
+
+        var dateTime = new Date();
+        var datefrom = dateTime.setDate(dateTime.getDate() - 30);
+        datefrom = new Date(datefrom);
+        datefrom = dateFormat('yyyy-MM-dd', datefrom);
+
+
+        $('#txtDateFrom').val(datefrom);
         $('#txtDateTo').val(today);
 
 
