@@ -586,7 +586,6 @@ a group by a.ID ");
 
         public DataTable GetWIPInventoryReport(DateTime? dDateFrom, DateTime? dDateTo, string sPartNo, string sModel, string sJobNo)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
@@ -636,7 +635,7 @@ left join
 
 where 1=1 
 
---charindex 从process中查询laser出现在第几个位置, 0就是没有laser 即wip.    
+--charindex 从process中查询laser出现在第几个位置, 0就是没有laser 即wip.
 --(允许processes是null. 否则无bom的记录无法显示)
 and (CHARINDEX('Laser', b.processes,0) = 0 or CHARINDEX('Laser', b.processes,0) is null) ");
 

@@ -148,8 +148,11 @@ namespace DashboardTTS.Webform.Moulding
                 case 6:
                     sMonth = "Jun";
                     break;
-                case 8:
+                case 7:
                     sMonth = "Jul";
+                    break;
+                case 8:
+                    sMonth = "Aug";
                     break;
                 case 9:
                     sMonth = "Sep";

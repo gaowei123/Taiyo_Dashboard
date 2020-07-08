@@ -482,15 +482,12 @@ namespace DashboardTTS.Controllers
 
         #region Packing Inventory
 
-        //inventory 
+       
         public ActionResult GetPackingInventoryList()
         {
             return Content("");
         }
-
-
-
-        //job order 
+     
         public ActionResult GetPackingJobOrderList()
         {
             return Content("");
@@ -500,12 +497,8 @@ namespace DashboardTTS.Controllers
 
         //delete function
 
-
-
-
-
         #endregion
-
+        
 
 
        

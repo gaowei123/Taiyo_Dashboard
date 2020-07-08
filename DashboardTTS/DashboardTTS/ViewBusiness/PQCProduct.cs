@@ -1292,7 +1292,7 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-        #region  checking detial list
+        //checking detial list
         public List<ViewModel.CheckingDetail_ViewModel> GetCheckingDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
             try
@@ -1406,25 +1406,12 @@ namespace DashboardTTS.ViewBusiness
                 return null;
             }
         }
-
-
-
-
-
-
-
-
-        #endregion
+        
+ 
 
 
 
         #region packing chart 
-
-
-
-                                                                                     
-
-
 
         private List<ViewModel.PackingProductChart_ViewModel> GetPackingProductionData(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sStation, string sPIC, string sJobNo, string sLotNo, string sType)
         {
@@ -1507,8 +1494,6 @@ namespace DashboardTTS.ViewBusiness
 
             return modelList;
         }
-
-
 
 
 
@@ -1610,9 +1595,15 @@ namespace DashboardTTS.ViewBusiness
 
             return result;
         }
+        #endregion
 
 
-      
+
+
+        #region packing inventory
+
+
+
 
         #endregion
 
