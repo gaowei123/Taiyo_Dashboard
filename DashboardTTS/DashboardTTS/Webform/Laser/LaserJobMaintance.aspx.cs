@@ -321,6 +321,9 @@ namespace DashboardTTS.Webform.Laser
                     string sActualNG = ((TextBox)item.Cells[5].FindControl("txtActualNG")).Text.Trim();
                     int dNG = sActualNG == "" ? int.Parse(item.Cells[4].Text) : int.Parse(sActualNG);
 
+                    //ng维护减少的数量.
+                    int decreasedNGQty = int.Parse(item.Cells[4].Text) - dNG;
+
 
                     bool jobComplete = this.radiobtnList.SelectedItem.Text == "Yes" ? true : false;
                     if (jobComplete)
@@ -524,6 +527,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model1Name = materialNo;
+                                    curWatchdogModel.ok1Count += decreasedNGQty;
                                     curWatchdogModel.ng1Count = dNG;
                                 }
                                 break;
@@ -537,6 +541,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model2Name = materialNo;
+                                    curWatchdogModel.ok2Count += decreasedNGQty;
                                     curWatchdogModel.ng2Count = dNG;
                                 }
                                 break;
@@ -550,6 +555,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model3Name = materialNo;
+                                    curWatchdogModel.ok3Count += decreasedNGQty;
                                     curWatchdogModel.ng3Count = dNG;
                                 }
                                 break;
@@ -563,6 +569,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model4Name = materialNo;
+                                    curWatchdogModel.ok4Count += decreasedNGQty;
                                     curWatchdogModel.ng4Count = dNG;
                                 }
                                 break;
@@ -576,6 +583,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model5Name = materialNo;
+                                    curWatchdogModel.ok5Count += decreasedNGQty;
                                     curWatchdogModel.ng5Count = dNG;
                                 }
                                 break;
@@ -589,6 +597,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model6Name = materialNo;
+                                    curWatchdogModel.ok6Count += decreasedNGQty;
                                     curWatchdogModel.ng6Count = dNG;
                                 }
                                 break;
@@ -602,6 +611,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model7Name = materialNo;
+                                    curWatchdogModel.ok7Count += decreasedNGQty;
                                     curWatchdogModel.ng7Count = dNG;
                                 }
                                 break;
@@ -615,6 +625,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model8Name = materialNo;
+                                    curWatchdogModel.ok8Count += decreasedNGQty;
                                     curWatchdogModel.ng8Count = dNG;
                                 }
                                 break;
@@ -628,6 +639,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model9Name = materialNo;
+                                    curWatchdogModel.ok9Count += decreasedNGQty;
                                     curWatchdogModel.ng9Count = dNG;
                                 }
                                 break;
@@ -641,6 +653,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model10Name = materialNo;
+                                    curWatchdogModel.ok10Count += decreasedNGQty;
                                     curWatchdogModel.ng10Count = dNG;
                                 }
                                 break;
@@ -654,6 +667,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model11Name = materialNo;
+                                    curWatchdogModel.ok11Count += decreasedNGQty;
                                     curWatchdogModel.ng11Count = dNG;
                                 }
                                 break;
