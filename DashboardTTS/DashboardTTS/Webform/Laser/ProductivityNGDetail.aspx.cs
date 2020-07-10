@@ -26,7 +26,7 @@ namespace DashboardTTS.Webform
                     string DateFrom = Request.QueryString["DateFrom"] == null ? "" : Request.QueryString["DateFrom"].ToString();
                     string DateTo = Request.QueryString["DateTo"] == null ? "" : Request.QueryString["DateTo"].ToString();
                     string MachineID = Request.QueryString["MachineID"] == null ? "" : Request.QueryString["MachineID"].ToString();
-                    string shift = Request.QueryString["Shift"] == null ? "" : Request.QueryString["Shift"].ToString();
+                  
 
                     //Init search condition
                     this.txtJobNo.Text = JobNumber;
@@ -42,9 +42,9 @@ namespace DashboardTTS.Webform
                         this.txtDateTo.Text = DateTime.Now.Date.ToString("yyyy-MM-dd");
                     }
                    
-                    if (shift != "")
+                    if (JobShift != "")
                     {
-                        this.ddlShift.SelectedValue = shift;
+                        this.ddlShift.SelectedValue = JobShift;
                     }
                     
                     btnGenerate_Click(new object(), new EventArgs());

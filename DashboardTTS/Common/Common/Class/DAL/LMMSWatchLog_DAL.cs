@@ -856,410 +856,111 @@ where 1=1  and a.totalPass + a.totalFail > 0 and a.totalQuantity > 0 and day >= 
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
         }
         
-        internal DataSet getJobReport(DateTime dateFrom, DateTime dateTo, string sMachineID, string sPartNo, double sPerformance, double sRejRate,string Shift,string sJobNumber,string sModule, string sDateNotIn)
+       
+
+        public DataTable GetProductionDetailReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sModel,string sPartNo, string sMachineID, string sJobNo)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"Select ROW_NUMBER() OVER(ORDER BY FuckingShit.datetime desc) AS ID ,  * from ( ");
+            strSql.Append(@"
+select
+	convert(varchar(50), a.day,111) + ' - '+a.shift as shift
+	,'Machine' + a.machineID as machineID  
+	,b.module as model
+	,a.jobNumber as jobNo
+	,a.partNumber as partNo  
+	,startTime as startTime
+	,stopTime as endTime
+	,convert(varchar,  ISNULL([stopTime], GETDATE()) - [startTime], 108) as time
+		
+	--PCS
+	,a.totalPass as ok
+	,a.totalFail as ng
+	,a.totalpass + a.totalFail as output
+	,totalQuantity as mrpTotal
+    ,isnull(a.setUpQTY,0) * c.materialCount as setupQty
+	--PCS
 
-            strSql.Append(@" select   
-                            distinct
-                            a.dateTime as DateTime_TableShift
-                            ,DATEPART(day,a.Day) as DayNo
-                            ,convert(varchar(50), a.day,111) + ' - '+a.shift as Shift
-                            ,'Machine' + a.machineID as MachineID   
-                            , a.jobNumber as JobNumber   
-                            , b.customer as Customer
-                            , a.[partNumber] as PartNumber   
-                            , b.cycleTime as CycleTime   
-                            , b.blockCount as BlockCount  
-                            , b.unitCount as UnitCount  
-                            , [startTime] as StartTime  
-                            , [stopTime]  as EndTime  
-                            , convert(varchar,  ISNULL([stopTime], GETDATE()) - [startTime], 108) as Time
+	--SET
+    ,dbo.GetMinOK(ok1Count,ok2Count,ok3Count,ok4Count,ok5Count,ok6Count,ok7Count,ok8Count,ok9Count,ok10Count,ok11Count,ok12Count,ok13Count,ok14Count,ok15Count,ok16Count) as setOK
+	,dbo.GetMaxNG(ng1Count,ng2Count,ng3Count,ng4Count,ng5Count,ng6Count,ng7Count,ng8Count,ng9Count,ng10Count,ng11Count,ng12Count,ng13Count,ng14Count,ng15Count,ng16Count) as setNG	
+	,dbo.GetMaxNG(ng1Count,ng2Count,ng3Count,ng4Count,ng5Count,ng6Count,ng7Count,ng8Count,ng9Count,ng10Count,ng11Count,ng12Count,ng13Count,ng14Count,ng15Count,ng16Count) 
+	 +
+	 dbo.GetMinOK(ok1Count,ok2Count,ok3Count,ok4Count,ok5Count,ok6Count,ok7Count,ok8Count,ok9Count,ok10Count,ok11Count,ok12Count,ok13Count,ok14Count,ok15Count,ok16Count) as setOutput
+	,totalQuantity / c.materialcount as setMrpTotal
+	,isnull(a.setUpQTY,0) as setSetupQty
+	--SET
 
-                            , case  when a.machineID in('6','7','8') then  totalPass 
-                              else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                              end as OK	  
+	--Display  占个格子, 后续在代码中生成.
+	,'' as displayOK
+	,'' as displayNG
+	,'' as displayOutput
+	,'' as displayRejRate
+	,'' as displaySetup
+	,'' as displayMRP
+	--Display
 
-                            , case  when a.machineID in('6','7','8') then totalFail 
-                              else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                              end as NG	  
+FROM[LMMSWatchDog_Shift] a 
+left join LMMSBom b on a.partNumber = b.partNumber and a.machineID = b.machineID
+left join (select partNumber, count(1) as materialCount from lmmsbomdetail group by partNumber) c on a.partNumber = c.partNumber
+where 1=1  and (a.totalPass + a.totalFail) > 0");
+
+            strSql.Append(" and a.day >= @dateFrom ");
+            strSql.Append(" and a.day < @dateTo ");
 
 
-                            , case  when a.machineID in('6','7','8') then  totalPass 
-                              else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                              end 
-                                +
-                              case  when a.machineID in('6','7','8') then totalFail 
-                              else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                              end  as Output
+            if (!string.IsNullOrEmpty(sShift))
+                strSql.Append(" and a.shift = @shift ");
 
-                            , case  when a.machineID in('6','7','8') then  totalFail 
-                              else    CONVERT(  numeric(10, 0) , dbo.Dwyane_greatest( isnull(ng1Count,0)  , isnull(ng2Count,0)  , isnull(ng3Count,0)  , isnull(ng4Count,0) , isnull(ng5Count,0)  , isnull(ng6Count,0)  , isnull(ng7Count,0) , isnull(ng8Count,0) , isnull(ng9Count,0)  , isnull(ng10Count,0) , isnull(ng11Count,0) , isnull(ng12Count,0) , isnull(ng13Count,0)  , isnull(ng14Count,0)  , isnull(ng15Count,0) , isnull(ng16Count,0), isnull(ng16Count,0)  ) )    
-                              end as SetNG
+            if (!string.IsNullOrEmpty(sModel))
+                strSql.Append(" and b.module = @model ");
 
-                            ,[totalQuantity] as Total
+            if (!string.IsNullOrEmpty(sPartNo))
+                strSql.Append(" and a.partNumber = @partNumber ");
 
-                            , case when  totalQuantity / nullif((select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber),0) IS null    
-                              then totalQuantity     
-                              else  totalQuantity / nullif((select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber),0) 
-                              end  as SetTotal    
+            if (!string.IsNullOrEmpty(sMachineID))
+                strSql.Append(" and a.machineID = @machineID ");
 
-                          , CONVERT(varchar, 
-                                        convert(numeric(10, 2),   
-                                        convert(numeric(10, 2),   
-                                            case when a.machineID in('6','7','8') then [totalFail] 
-                                            else ( ISNULL(ng1Count,0) + ISNULL(ng2Count,0)+ISNULL(ng3Count,0)+ISNULL(ng4Count,0)+ISNULL(ng5Count,0)+ISNULL(ng6Count,0)+ISNULL(ng7Count,0)+ISNULL(ng8Count,0)+ISNULL(ng9Count,0)+ISNULL(ng10Count,0)+ISNULL(ng11Count,0)+ISNULL(ng12Count,0)+ISNULL(ng13Count,0)+ISNULL(ng14Count,0)+ISNULL(ng15Count,0)+ISNULL(ng16Count,0))
-                                            end) * 100
-                                            /    
-                                           case when 
-		                                        convert(numeric(10, 2),
-			                                        case  when a.machineID in('6','7','8') then  totalPass 
-			                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-			                                        end  
-			                                        +
-			                                        case  when a.machineID in('6','7','8') then totalFail 
-			                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-			                                        end 
-		                                        ) = 0 
-                                           then 1 else 
-		                                        convert(numeric(10, 2),
-				                                        case  when a.machineID in('6','7','8') then  totalPass 
-				                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-				                                        end  
-				                                        +
-				                                        case  when a.machineID in('6','7','8') then totalFail 
-				                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-				                                        end 
-			                                        )
-	                                        end
-	                                        )
-                                        ) + '%' 
-                                        as RejRate
-  
-                            ,CONVERT(varchar, convert(numeric(10, 2),  
-	                            case when a.machineID in ('6','7','8') then a.totalFail       
-	                            else dbo.Dwyane_greatest(isnull(ng1Count,0)  , isnull(ng2Count,0)  , isnull(ng3Count,0)  , isnull(ng4Count,0) , isnull(ng5Count,0)  , isnull(ng6Count,0)  , isnull(ng7Count,0) , isnull(ng8Count,0) , isnull(ng9Count,0)  , isnull(ng10Count,0) , isnull(ng11Count,0) , isnull(ng12Count,0) , isnull(ng13Count,0)  , isnull(ng14Count,0)  , isnull(ng15Count,0) , isnull(ng16Count,0), isnull(ng16Count,0))     
-	                            end  
-	                            *100  
-	                            /  case when (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) = 0  
-	                               then totalQuantity  else  totalQuantity / (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) 
-	                               end      )  
-                            )  + '%' as SetRejRate  
+            if (!string.IsNullOrEmpty(sJobNo))
+                strSql.Append(" and a.jobNumber = @jobNumber ");
 
-                            ,a.dateTime as DateTime  
 
-                            ,   convert(varchar,
-		                            convert(numeric(10, 0),  
-			                            [dbo].[Laser_Get_Minimum_OK](ok1Count, ok2Count, ok3Count, ok4Count, ok5Count, ok6Count, ok7Count, ok8Count, ok9Count, ok10Count, ok11Count, ok12Count, ok13Count, ok14Count, ok15Count, ok16Count)
-		                            )
-	                            )
-	                            + '(' +
-	                            convert(varchar,
-	                            case  when a.machineID in('6','7','8') then  totalPass 
-	                            else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-	                            end 
-	                            )
-                              + ')'
-                              as OK_Set
+            strSql.Append(" order by a.datetime desc ");
 
 
 
-
-                            ,   convert(varchar,
-	                            case  when a.machineID in('6','7','8') then  totalFail 
-	                            else    CONVERT(  numeric(10, 0) , dbo.Dwyane_greatest( isnull(ng1Count,0)  , isnull(ng2Count,0)  , isnull(ng3Count,0)  , isnull(ng4Count,0) , isnull(ng5Count,0)  , isnull(ng6Count,0)  , isnull(ng7Count,0) , isnull(ng8Count,0) , isnull(ng9Count,0)  , isnull(ng10Count,0) , isnull(ng11Count,0) , isnull(ng12Count,0) , isnull(ng13Count,0)  , isnull(ng14Count,0)  , isnull(ng15Count,0) , isnull(ng16Count,0), isnull(ng16Count,0)  ) )    
-	                            end 
-                              )
-                               +'('+
-                              convert(varchar,
-	                              case  when a.machineID in('6','7','8') then totalFail 
-	                              else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-	                              end
-                              )
-                              +')' as NG_Set
-  
- 
-  
-                            ,  convert(varchar,
-                              convert(numeric(10, 0), 
-	                             ( case  when a.machineID in('6','7','8') then  totalPass 
-	                              else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-	                              end 
-		                            +
-	                              case  when a.machineID in('6','7','8') then totalFail 
-	                              else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-	                              end )
-	                              /
-	                              case when (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) = 0 
-		                            then 1 else  (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber)
-	                              end
-	                            )
-	                            )
-                              +'('+
-                             convert(varchar,
-                              case  when a.machineID in('6','7','8') then  totalPass 
-                              else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                              end 
-                                +
-                              case  when a.machineID in('6','7','8') then totalFail 
-                              else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                              end 
-                              )
-                              +')'
-  
-                             as Output_Set
-
-
-
-                            , convert(varchar,
-                              convert(numeric(10, 0), 
-		                             totalQuantity
-		                             /
-		                            case when (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) = 0 
-		                            then 1 else  (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber)
-		                            end
-	                            )
-	                            )
-                             +'('+ 
-                          convert(varchar, totalQuantity)
-                            +')'
-                            as Total_Set
-
-
-                         , 
-                         CONVERT(varchar, convert(numeric(10, 2),  
-                            case when 
-                               case  when a.machineID in('6','7','8') then  totalPass 
-                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                                        end 
-                                        +
-                                        case  when a.machineID in('6','7','8') then totalFail 
-                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                                        end  = 0
-                
-                                then 0 else
-        
-                                case when a.machineID in ('6','7','8') then a.totalFail       
-                                else dbo.Dwyane_greatest(isnull(ng1Count,0)  , isnull(ng2Count,0)  , isnull(ng3Count,0)  , isnull(ng4Count,0) , isnull(ng5Count,0)  , isnull(ng6Count,0)  , isnull(ng7Count,0) , isnull(ng8Count,0) , isnull(ng9Count,0)  , isnull(ng10Count,0) , isnull(ng11Count,0) , isnull(ng12Count,0) , isnull(ng13Count,0)  , isnull(ng14Count,0)  , isnull(ng15Count,0) , isnull(ng16Count,0), isnull(ng16Count,0))     
-                                end  
-                                *100  
-                                /  case when (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) = 0  
-                                   then 
-                                        case  when a.machineID in('6','7','8') then  totalPass 
-                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                                        end 
-                                        +
-                                        case  when a.machineID in('6','7','8') then totalFail 
-                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                                        end  
-
-                                   else  
-                                        case  when a.machineID in('6','7','8') then  totalPass 
-                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                                        end 
-                                        +
-                                        case  when a.machineID in('6','7','8') then totalFail 
-                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                                        end 
-                                        / (select distinct( COUNT( c.materialPartNo)) from LMMSBomDetail c  where c.partNumber = b.partNumber) 
-                                   end      
-                               end)  
-                            )  
-                            + '%('+ 
-    
-                             CONVERT(varchar, 
-                            convert(numeric(10, 2),   
-                            convert(numeric(10, 2),   
-                                case when a.machineID in('6','7','8') then [totalFail] 
-                                else ( ISNULL(ng1Count,0) + ISNULL(ng2Count,0)+ISNULL(ng3Count,0)+ISNULL(ng4Count,0)+ISNULL(ng5Count,0)+ISNULL(ng6Count,0)+ISNULL(ng7Count,0)+ISNULL(ng8Count,0)+ISNULL(ng9Count,0)+ISNULL(ng10Count,0)+ISNULL(ng11Count,0)+ISNULL(ng12Count,0)+ISNULL(ng13Count,0)+ISNULL(ng14Count,0)+ISNULL(ng15Count,0)+ISNULL(ng16Count,0))
-                                end) * 100
-                                /    
-                               case when 
-                                    convert(numeric(10, 2),
-                                        case  when a.machineID in('6','7','8') then  totalPass 
-                                        else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                                        end  
-                                        +
-                                        case  when a.machineID in('6','7','8') then totalFail 
-                                        else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                                        end 
-                                    ) = 0 
-                               then 1 else 
-                                    convert(numeric(10, 2),
-                                            case  when a.machineID in('6','7','8') then  totalPass 
-                                            else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) )   
-                                            end  
-                                            +
-                                            case  when a.machineID in('6','7','8') then totalFail 
-                                            else  ( isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0) )   
-                                            end 
-                                        )
-                                end
-                                )
-                            ) 
-
-                            + '%)' 
-
-                            as RejRate_Set
-
-                            ,b.module as Module
-                            ,case when c.setUpQTY is null or c.setUpQTY ='' then 0 else c.setUpQTY  end as SetupQTY_Set 
-                            ,(case when c.setUpQTY is null or c.setUpQTY ='' then 0 else c.setUpQTY end )
-							* (
-							case when (select count(1) from lmmsbomdetail aaa where aaa.partnumber = a.partnumber) = 0 
-							then 1 
-							else (select count(1) from lmmsbomdetail aaa where aaa.partnumber = a.partnumber) end) as SetupQTY
-
-                          
-
-                            FROM[LMMSWatchDog_Shift] a 
-                            left join (select distinct partnumber, machineID ,module ,cycleTime, blockCount, UnitCount,customer from lmmsbom) b on a.partNumber = b.partNumber and a.machineID = b.machineID
-                            left join lmmsinventory c on a.jobnumber = c.jobnumber ");
-
-         
-
-            strSql.Append(@"  where a.dateTime >= @dateFrom and a.dateTime < @dateTo + 1  and  
-                               case  when a.machineID in('6','7','8') 
-                               then  totalPass + totalFail
-                               else  (   isnull(ok1Count,0) + isnull(ok2Count,0) + isnull(ok3Count,0) + isnull(ok4Count,0)  + isnull(ok5Count,0)  + isnull(ok6Count,0) + isnull(ok7Count,0)  + isnull(ok8Count,0)  + isnull(ok9Count,0)  + isnull(ok10Count,0)  + isnull(ok11Count,0)  + isnull(ok12Count,0)  + isnull(ok13Count,0)  + isnull(ok14Count,0)  + isnull(ok15Count,0)  + isnull(ok16Count,0) +  isnull(ng1Count,0)  + isnull(ng2Count,0)  + isnull(ng3Count,0)  + isnull(ng4Count,0) + isnull(ng5Count,0)  + isnull(ng6Count,0)  + isnull(ng7Count,0) + isnull(ng8Count,0) + isnull(ng9Count,0)  + isnull(ng10Count,0) + isnull(ng11Count,0) + isnull(ng12Count,0) + isnull(ng13Count,0)  + isnull(ng14Count,0)  + isnull(ng15Count,0) + isnull(ng16Count,0)  )
-                               end    > 0
-                             and a.totalQuantity > 0 ");
-
-           
-            
-            if (sMachineID.Trim().Length > 0)
-            {
-                strSql.Append("  and a.MachineID = @MachineID   ");
-            }
-            if (sPartNo.Trim().Length >0 )
-            {
-                strSql.Append("  and a.partNumber = @PartNo  ");
-            }
-
-            if (sPerformance > 0)
-            {
-                strSql.Append(" and case when(([totalPass] +[totalFail]) * (b.cycleTime/nullif(b.blockUnit,0)) * 100) / DATEDIFF(second, [startTime],[stopTime]) > 100 then 100 else    (([totalPass] + [totalFail]) * (b.cycleTime/nullif(b.blockUnit,0)) * 100) / DATEDIFF(second, [startTime],[stopTime])  end < @sPerformance");
-            }
-
-            if (sRejRate > 0)
-            {
-                strSql.Append(" and convert(numeric(10, 2), convert(numeric(10, 2),[totalFail]) * 100 / convert(numeric(10, 2),[totalQuantity])) > @sRejRate ");
-            }
-
-            if (Shift != StaticRes.Global.Shift.ALL && Shift != "")
-            {
-                strSql.Append(" and shift = @shift ");
-            }
-
-            if (sJobNumber != "")
-            {
-                strSql.Append(" and a.jobNumber = @jobNumber");
-            }
-
-            if (sModule != "")
-            {
-                strSql.Append(" and b.module = @module");
-            }
-
-            strSql.Append(" ) FuckingShit ");
-
-            if (sDateNotIn != "")
-            {
-                strSql.Append(" where FuckingShit.DayNo not in (");
-
-                string[] DayArr = sDateNotIn.Split(',');
-                for (int i = 0; i < DayArr.Length; i++)
-                {
-                    strSql.Append(DayArr[i] + ",");
-                }
-
-                strSql.Remove(strSql.Length - 1, 1);
-
-                strSql.Append(" ) ");
-            }
-            strSql.Append("  order by  FuckingShit.datetime desc   ");
 
             SqlParameter[] parameters = {
-                    new SqlParameter("@MachineID", SqlDbType.VarChar ,30),
-                    new SqlParameter("@dateFrom", SqlDbType.DateTime),
-                    new SqlParameter("@dateTo", SqlDbType.DateTime),
-                    new SqlParameter("@PartNo", SqlDbType.VarChar,50 ),
-                    new SqlParameter("@sPerformance",SqlDbType.Decimal),
-                    new SqlParameter("@sRejRate", SqlDbType.Decimal),
-                    new SqlParameter("@shift", SqlDbType.VarChar),
-                    new SqlParameter("@jobNumber", SqlDbType.VarChar),
-                    new SqlParameter("@module", SqlDbType.VarChar)
-                   
+                new SqlParameter("@dateFrom", SqlDbType.DateTime),
+                new SqlParameter("@dateTo", SqlDbType.DateTime),
+                new SqlParameter("@shift", SqlDbType.DateTime),
+                new SqlParameter("@model", SqlDbType.DateTime),
+                new SqlParameter("@partNumber", SqlDbType.VarChar,50 ),
+                new SqlParameter("@machineID", SqlDbType.VarChar),
+                new SqlParameter("@jobNumber", SqlDbType.VarChar)                
             };
 
-            if (sMachineID.Trim().Length > 0)
-            {
-                parameters[0].Value = sMachineID;
-            }
-            else
-            {
-                parameters[0] = null;
-            }
 
-            parameters[1].Value = dateFrom;
-            parameters[2].Value = dateTo;
-            if (sPartNo.Trim().Length > 0)
-            {
-                parameters[3].Value = sPartNo;
-            }
-            else
-            {
-                parameters[3] = null;
-            }
+            parameters[0].Value = dDateFrom;
+            parameters[1].Value = dDateTo;
+            if (!string.IsNullOrEmpty(sShift)) parameters[2].Value = sShift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(sModel)) parameters[3].Value = sModel; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(sPartNo)) parameters[4].Value = sPartNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(sMachineID)) parameters[5].Value = sMachineID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(sJobNo)) parameters[6].Value = sJobNo; else parameters[6] = null;
 
-            if (sPerformance > 0)
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+            if (ds == null || ds.Tables.Count == 0)
             {
-                parameters[4].Value = sPerformance;
-            }
-            else
-            {
-                parameters[4] = null;
-            }
-            if (sRejRate > 0)
-            {
-                parameters[5].Value = sRejRate;
+                return null;
             }else
             {
-                parameters[5] = null;
+                return ds.Tables[0];
             }
-
-            if (Shift != StaticRes.Global.Shift.ALL && Shift != "")
-            {
-                parameters[6].Value = Shift;
-            }
-            else
-            {
-                parameters[6] = null;
-            }
-            if (sJobNumber != "")
-            {
-                parameters[7].Value = sJobNumber;
-            }
-            else
-            {
-                parameters[7] = null;
-            }
-            if (sModule != "")
-            {
-                parameters[8].Value = sModule;
-            }
-            else
-            {
-                parameters[8] = null;
-            }
-         
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
         }
 
-
-
-
+       
 
 
 

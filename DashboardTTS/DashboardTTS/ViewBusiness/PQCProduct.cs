@@ -1040,6 +1040,110 @@ namespace DashboardTTS.ViewBusiness
             return viTrackingBLL.MaintenanceUpdateQty(viTrackingModel, detailTrackingList, defectTrackingList, viBinList, binHistoryList);
         }
 
+
+
+        //private List<System.Data.SqlClient.SqlCommand> PqcOutput(bool isCheckComplete, Common.Model.PQCQaViTracking_Model objQaVi, List<Common.Model.PQCQaViDetailTracking_Model> lDetailTrack)
+        //{
+        //    DBHelp.Reports.LogFile.Log("PQCQA", "[PqcOutput] [Info] :Start Calculate the PQC Output Stock(Binning & BinHistory)");
+
+        //    List<System.Data.SqlClient.SqlCommand> sqlCommandList = new List<System.Data.SqlClient.SqlCommand>();
+        //    string NextFlag = isCheckComplete ? Common.Model.PQCQaViBinning_Model.NeedNextViCheckFlag.True : Common.Model.PQCQaViBinning_Model.NeedNextViCheckFlag.False;
+        //    DateTime dTime = System.DateTime.Now;
+        //    string nGuid = Guid.NewGuid().ToString();
+
+        //    Common.BLL.PQCQaViBinning_BLL bllBin = new Common.BLL.PQCQaViBinning_BLL();
+        //    Common.BLL.PQCQaViBinHistory_BLL bllBinHis = new Common.BLL.PQCQaViBinHistory_BLL();
+
+        //    //get the all the material qty by matpartno from binning table. 
+        //    //differnt shipto us differnt logic. 
+        //    //if to assy, then by JobID + material partno + process, untill this Job is empty.
+        //    //if to FG, then by material partno + datetime + process, one by one reduce.  
+        //    //but below logic is for PQC, so should use the logic as ToAssy, by Job + MatPartNo + process.
+        //    //if new task of job + process, then insert data into binning table.
+        //    //if partial task of job+process, then update qty from binning table 
+        //    List<PQCQaViBinning_Model> currentBinList = new List<PQCQaViBinning_Model>();
+        //    currentBinList = bllBin.GetlBinModel_ByJobIdProcess(objQaVi.jobid, objQaVi.processes);
+        //    DBHelp.Reports.LogFile.Log("PQCQA", "[PqcOutput] [Info] : checking whether have existing data or not [objQaVi.jobid= " + objQaVi.jobid + "] , [objQaVi.processes=" + objQaVi.processes + "][currentBinList Count =" + currentBinList.Count.ToString() + "][input parameter lDetailTrack Count= " + lDetailTrack.Count.ToString() + "]");
+
+        //    List<PQCQaViBinning_Model> tmpCurrBinListByMatPart = new List<PQCQaViBinning_Model>();
+        //    foreach (Common.Model.PQCQaViDetailTracking_Model ObjDetailTrackModel in lDetailTrack)
+        //    {
+        //        #region Task Tracking
+        //        Common.Model.PQCQaViBinHistory_Model objBinHisModel = new PQCQaViBinHistory_Model();
+        //        Common.Model.PQCQaViBinning_Model objBinModel = new PQCQaViBinning_Model();
+
+        //        objBinHisModel.PartNumber = objQaVi.partNumber;
+
+        //        objBinHisModel.jobId = ObjDetailTrackModel.jobid;
+        //        objBinHisModel.trackingID = ObjDetailTrackModel.trackingID;  //bin table is no any usage, bin his need to record this trakcing id
+        //        objBinHisModel.materialPartNo = ObjDetailTrackModel.materialPartNo;
+        //        objBinHisModel.materialName = ObjDetailTrackModel.materialName;
+        //        objBinHisModel.shipTo = ObjDetailTrackModel.shipTo;
+        //        objBinHisModel.model = ObjDetailTrackModel.model;
+        //        objBinHisModel.jigNo = ObjDetailTrackModel.jigNo;
+
+        //        objBinHisModel.updatedTime = ObjDetailTrackModel.lastUpdatedTime == null ? dTime : ObjDetailTrackModel.lastUpdatedTime.Value;
+        //        objBinHisModel.status = Common.Model.PQCQaViBinning_Model.StatusList.Load;
+        //        objBinHisModel.nextViFlag = NextFlag;
+        //        objBinHisModel.remark_1 = ObjDetailTrackModel.remark_1;
+        //        objBinHisModel.remark_2 = ObjDetailTrackModel.remark_2;
+        //        objBinHisModel.remark_3 = "";
+        //        objBinHisModel.remark_4 = "";
+        //        objBinHisModel.remarks = ObjDetailTrackModel.remarks;
+        //        objBinHisModel.processes = ObjDetailTrackModel.processes;
+        //        objBinHisModel.shipTo = ObjDetailTrackModel.shipTo;
+
+        //        objBinHisModel.day = ObjDetailTrackModel.day;
+        //        objBinHisModel.shift = ObjDetailTrackModel.shift;
+        //        objBinHisModel.userName = ObjDetailTrackModel.userName;
+        //        objBinHisModel.userID = ObjDetailTrackModel.userID;
+
+        //        tmpCurrBinListByMatPart = new List<PQCQaViBinning_Model>();
+        //        tmpCurrBinListByMatPart = currentBinList.Where(m => ((m.materialPartNo == ObjDetailTrackModel.materialPartNo) && (m.processes == ObjDetailTrackModel.processes))).ToList();
+
+        //        if (tmpCurrBinListByMatPart.Count == 0)
+        //        {
+        //            //insert
+        //            // this material part no does not have bin record but maybe other material part no has
+        //            // e.g. there are 11 mat parts in 1 prod part , 10 mat parts have record, but the 11th mat part does not have record
+        //            DBHelp.Reports.LogFile.Log("PQCQA", "[PqcOutput] [Info] : tmpCurrBinListByMatPart.Count == 0, New data of this Material Part No. [currentBinList.Count=" + currentBinList.Count.ToString() + "]");
+        //            objBinHisModel.id = currentBinList.Count > 0 ? currentBinList[0].id : objBinHisModel.id = nGuid;
+        //            objBinHisModel.materialQty = ObjDetailTrackModel.passQty == null ? 0 : ObjDetailTrackModel.passQty.Value;
+        //            objBinHisModel.materialFromQty = 0;
+        //            objBinHisModel.dateTime = dTime; //created time 
+        //            sqlCommandList.Add(bllBinHis.AddCommand(objBinHisModel));
+
+        //            objBinModel = bllBin.CopyObjFromHis(objBinHisModel);
+        //            sqlCommandList.Add(bllBin.AddCommand(objBinModel));
+        //        }
+        //        else
+        //        {
+        //            //update
+        //            DBHelp.Reports.LogFile.Log("PQCQA", "[PqcOutput] [Info] : tmpCurrBinListByMatPart.Count =" + tmpCurrBinListByMatPart.Count.ToString() + ", has existing data of this Material Part No. [current Mat Qty =" + tmpCurrBinListByMatPart[0].materialQty.ToString() + "]");
+
+        //            objBinHisModel.id = tmpCurrBinListByMatPart[0].id;
+        //            objBinHisModel.materialQty = ObjDetailTrackModel.passQty == null ? 0 : ObjDetailTrackModel.passQty.Value;
+        //            objBinHisModel.materialFromQty = tmpCurrBinListByMatPart[0].materialQty;
+        //            objBinHisModel.dateTime = tmpCurrBinListByMatPart[0].dateTime; //created time  
+        //            sqlCommandList.Add(bllBinHis.AddCommand(objBinHisModel));
+
+        //            objBinModel = bllBin.CopyObjFromHis(objBinHisModel);
+        //            objBinModel.materialQty = tmpCurrBinListByMatPart[0].materialQty + (ObjDetailTrackModel.passQty == null ? 0 : ObjDetailTrackModel.passQty.Value);
+        //            sqlCommandList.Add(bllBin.UpdateCommandbyJobMatPartProcess(objBinModel));
+        //        }
+
+        //        #endregion Task Tracking
+
+
+
+        //    }
+        //    return sqlCommandList;
+        //}
+
+
+
+
+
         #endregion
 
 

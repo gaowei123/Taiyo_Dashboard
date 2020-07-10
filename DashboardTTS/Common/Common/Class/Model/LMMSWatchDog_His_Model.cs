@@ -114,6 +114,11 @@ namespace Common.Model
         private int? _ng16count;
 
 
+        private int? _setupQty;
+        private int? _buyoffQty;
+        private int? _shortage;
+
+
 
         /// <summary>
         /// 
@@ -774,6 +779,22 @@ namespace Common.Model
             get { return _ng16count; }
         }
 
+
+        public int? setupQty
+        {
+            set { _setupQty = value; }
+            get { return _setupQty; }
+        }
+        public int? buyoffQty
+        {
+            set { _buyoffQty = value; }
+            get { return _buyoffQty; }
+        }
+        public int? shortage
+        {
+            set { _shortage = value; }
+            get { return _shortage; }
+        }
 
 
         #endregion Model

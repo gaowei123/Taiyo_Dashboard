@@ -320,6 +320,7 @@
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
     <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
+    <Compile Include="ViewModel\PackingInventory_ViewModel.cs" />
     <Compile Include="ViewModel\PackingProductChart_ViewModel.cs" />
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
@@ -887,13 +888,6 @@
     </Compile>
     <Compile Include="Webform\Reports\Productivity.aspx.designer.cs">
       <DependentUpon>Productivity.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingDailyReport.aspx.cs">
-      <DependentUpon>MouldingDailyReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingDailyReport.aspx.designer.cs">
-      <DependentUpon>MouldingDailyReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\TTSHomePage.aspx.cs">
       <DependentUpon>TTSHomePage.aspx</DependentUpon>
@@ -2906,7 +2900,6 @@
     <Content Include="Webform\Reports\LaserPQCTotalReport.aspx" />
     <Content Include="Webform\Reports\Output.aspx" />
     <Content Include="Webform\Reports\Productivity.aspx" />
-    <Content Include="Webform\Moulding\MouldingDailyReport.aspx" />
     <Content Include="Webform\TTSHomePage.aspx" />
     <Content Include="plugins\bootstrap-3.3.7\.editorconfig" />
     <Content Include="plugins\bootstrap-3.3.7\.gitattributes" />

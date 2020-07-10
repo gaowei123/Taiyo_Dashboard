@@ -34,23 +34,14 @@ namespace DashboardTTS.Webform.Laser
                     string sDay = Request.QueryString["day"] == null ? "" : Request.QueryString["day"].ToString();
                     string sShift = Request.QueryString["shift"] == null ? "" : Request.QueryString["shift"].ToString();
                     string sMachineID = Request.QueryString["machineID"] == null ? "" : Request.QueryString["machineID"].ToString();
-                    
                     DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] receive job info --  jobno:{0}, day:{1}, shift:{2}, machineID:{3}", sJobNo, sDay, sShift, sMachineID));
-
-
-
-
+                    
                     //缺少参数会导致多条记录更新.
                     if (sJobNo == "" || sDay == ""|| sShift==""||sMachineID=="")
                     {
                         Common.CommFunctions.ShowMessageAndRedirect(this.Page, "Get job info fail, Please try again!", "./ProductivityDetail.aspx");
                         return;
                     }
-
-
-
-
-
 
                     this.lbDay.Text = sDay;
                     this.lbShift.Text = sShift;
@@ -62,8 +53,23 @@ namespace DashboardTTS.Webform.Laser
 
 
 
+
+
+
+                    //获取当前选中的 watchdog shift记录.
+                    Common.Model.LMMSWatchDog_His_Model watchDogShiftModel = new Common.Model.LMMSWatchDog_His_Model();
+                    watchDogShiftModel = watchdogBLL.GetModel(sJobNo, DateTime.Parse(sDay), sShift, sMachineID);
+                    
+                    
                     //设置 setup, buyoff, shortage的数量.
-                    setInventoryDetail(sJobNo);
+                    this.lbShortage.Text = watchDogShiftModel.shortage.ToString();
+                    this.lbSetUp.Text = watchDogShiftModel.setupQty.ToString();
+                    this.lbBuyoff.Text = watchDogShiftModel.buyoffQty.ToString();
+                    this.txtShortage.Attributes["placeholder"] = watchDogShiftModel.shortage.ToString();
+                    this.txtSetupQty.Attributes["placeholder"] = watchDogShiftModel.setupQty.ToString();
+                    this.txtBuyoffQty.Attributes["placeholder"] = watchDogShiftModel.buyoffQty.ToString();
+                    DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set inventory info --  setup:{0}, buyoff:{1}, shortage:{2}", watchDogShiftModel.setupQty, watchDogShiftModel.buyoffQty, watchDogShiftModel.shortage));
+
 
 
 
@@ -96,7 +102,7 @@ namespace DashboardTTS.Webform.Laser
             {
 
 
-                #region textbox value validation
+                #region textbox value  & Login  validation
                 string sSetup = this.txtSetupQty.Text.Trim();
                 string sBuyoff = this.txtBuyoffQty.Text.Trim();
                 string sShortage = this.txtShortage.Text.Trim();
@@ -147,15 +153,7 @@ namespace DashboardTTS.Webform.Laser
                 }
 
 
-                #endregion
-
-
-
-
-
-
-
-                #region login 
+                //login
                 string userName = this.txtUserName.Text;
                 string password = this.txtPassword.Text;
 
@@ -184,9 +182,11 @@ namespace DashboardTTS.Webform.Laser
                     Common.CommFunctions.ShowMessage(Page, errorStr);
                     return;
                 }
-                #endregion
 
                 DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[btn Submit Click] Login By User --  user:{0}", userName));
+                #endregion
+
+
 
 
 
@@ -204,27 +204,36 @@ namespace DashboardTTS.Webform.Laser
 
 
 
+
+
+
+
+
                 #region set inventory model
+                int preSetup = int.Parse(this.lbSetUp.Text);
+                int preBuyoff = int.Parse(this.lbBuyoff.Text);
+                int preShortage = int.Parse(this.lbShortage.Text);
 
                 //setup, buyoff, shortage只要不填, 则取原本的值.
                 sSetup = sSetup == "" ? this.lbSetUp.Text : sSetup;
                 sBuyoff = sBuyoff == "" ? this.lbBuyoff.Text : sBuyoff;
                 sShortage = sShortage == "" ? this.lbShortage.Text : sShortage;
-                
-                int dSetup = int.Parse(sSetup);
-                int dBuyoff = int.Parse(sBuyoff);
-                int dShortage = int.Parse(sShortage);
+                int iSetup = int.Parse(sSetup);
+                int iBuyoff = int.Parse(sBuyoff);
+                int iShortage = int.Parse(sShortage);
 
 
                 //更新 inventory的数量
                 Common.Class.Model.LMMSInventory_Model inventoryModel = inventoryBLL.GetModel(this.lbJob.Text);
                 inventoryModel.JobNumber = this.lbJob.Text;
-                inventoryModel.SetUp = dSetup;
-                inventoryModel.Buyoff = dBuyoff;
-                inventoryModel.PQCQuantity = dShortage;
-                #endregion
+                inventoryModel.SetUp += (iSetup - preSetup);
+                inventoryModel.Buyoff += (iBuyoff - preBuyoff);
+                inventoryModel.PQCQuantity += (iShortage - preShortage);
+
 
                 DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[btn Submit Click] update inventory data info --  jobno:{0}, setup:{1}, buyoff:{2}, shortage:{3}", inventoryModel.JobNumber, inventoryModel.SetUp, inventoryModel.Buyoff, inventoryModel.PQCQuantity));
+                #endregion
+
 
 
 
@@ -240,7 +249,7 @@ namespace DashboardTTS.Webform.Laser
                 userEventModel.endTime = DateTime.Now;
                 userEventModel.eventType = "LaserJobMaintance";
                 userEventModel.pageName = "LaserJobMaintance";
-                userEventModel.action = string.Format("SetUp:{0} --> {1}, Buyoff:{2} --> {3}, WIP:{4} -- > {5}", lbSetUp.Text, inventoryModel.SetUp, lbBuyoff.Text, inventoryModel.Buyoff, lbShortage.Text, inventoryModel.PQCQuantity); ;
+                userEventModel.action = string.Format("SetUp:{0} --> {1}, Buyoff:{2} --> {3}, WIP:{4} -- > {5}", preSetup, iSetup, preBuyoff, iBuyoff, preShortage, iShortage);
                 userEventModel.temp1 = "Machine-" + this.lbMachineID.Text;
                 userEventModel.temp2 = "";
                 userEventModel.userID = userName;
@@ -266,9 +275,18 @@ namespace DashboardTTS.Webform.Laser
                                                                      select a).FirstOrDefault();
 
 
+
                 //用于记录log.
                 int beforeTotalPass = curWatchdogModel.totalPass.Value;
                 int beforeTotalFail = curWatchdogModel.totalFail.Value;
+
+
+
+                curWatchdogModel.setupQty = iSetup;
+                curWatchdogModel.buyoffQty = iBuyoff;
+                curWatchdogModel.shortage = iShortage;
+
+
 
 
 
@@ -306,7 +324,12 @@ namespace DashboardTTS.Webform.Laser
                                    ng8Count = c.Sum(p => p.ng8Count),
                                    ng9Count = c.Sum(p => p.ng9Count),
                                    ng10Count = c.Sum(p => p.ng10Count),
-                                   ng11Count = c.Sum(p => p.ng11Count)
+                                   ng11Count = c.Sum(p => p.ng11Count),
+
+                                   setupQty = c.Sum(p=>p.setupQty),
+                                   buyoffQty = c.Sum(p => p.buyoffQty),
+                                   shortage = c.Sum(p => p.shortage),
+
                                }).FirstOrDefault();
                 
 
@@ -349,7 +372,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model1Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng) - setup - buyoff - shortage.
-                                    curWatchdogModel.ok1Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok1Count) - (summaryModel == null ? 0 : summaryModel.ng1Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok1Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok1Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng1Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng1Count = dNG;
                                 }                              
                                 break;
@@ -364,7 +393,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model2Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok2Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok2Count) - (summaryModel == null ? 0 : summaryModel.ng2Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok2Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok2Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng2Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng2Count = dNG;
                                 }
                                 break;
@@ -379,7 +414,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model3Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok3Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok3Count) - (summaryModel == null ? 0 : summaryModel.ng3Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok3Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok3Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng3Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng3Count = dNG;
                                 }
                                 break;
@@ -394,7 +435,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model4Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok4Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok4Count) - (summaryModel == null ? 0 : summaryModel.ng4Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok4Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok4Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng4Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng4Count = dNG;
                                 }
                                 break;
@@ -409,7 +456,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model5Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok5Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok5Count) - (summaryModel == null ? 0 : summaryModel.ng5Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok5Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok5Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng5Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng5Count = dNG;
                                 }
                                 break;
@@ -424,7 +477,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model6Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok6Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok6Count) - (summaryModel == null ? 0 : summaryModel.ng6Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok6Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok6Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng6Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng6Count = dNG;
                                 }
                                 break;
@@ -439,7 +498,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model7Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok7Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok7Count) - (summaryModel == null ? 0 : summaryModel.ng7Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok7Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok7Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng7Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng7Count = dNG;
                                 }
                                 break;
@@ -454,7 +519,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model8Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok8Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok8Count) - (summaryModel == null ? 0 : summaryModel.ng8Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok8Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok8Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng8Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng8Count = dNG;
                                 }
                                 break;
@@ -469,7 +540,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model9Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok9Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok9Count) - (summaryModel == null ? 0 : summaryModel.ng9Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok9Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok9Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng9Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng9Count = dNG;
                                 }
                                 break;
@@ -484,7 +561,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model10Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok10Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok10Count) - (summaryModel == null ? 0 : summaryModel.ng10Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok10Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok10Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng10Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng10Count = dNG;
                                 }
                                 break;
@@ -499,7 +582,13 @@ namespace DashboardTTS.Webform.Laser
                                 {
                                     curWatchdogModel.model11Name = materialNo;
                                     //按照mrp的总数量 - 当前ng - (历史总ok + ng)
-                                    curWatchdogModel.ok11Count = materialQty - dNG - (summaryModel == null ? 0 : summaryModel.ok11Count) - (summaryModel == null ? 0 : summaryModel.ng11Count) - dSetup - dBuyoff - dShortage;
+                                    curWatchdogModel.ok11Count = materialQty
+                                        - dNG - iSetup - iBuyoff - iShortage
+                                        - (summaryModel == null ? 0 : summaryModel.ok11Count)
+                                        - (summaryModel == null ? 0 : summaryModel.ng11Count)
+                                        - (summaryModel == null ? 0 : summaryModel.setupQty)
+                                        - (summaryModel == null ? 0 : summaryModel.buyoffQty)
+                                        - (summaryModel == null ? 0 : summaryModel.shortage);
                                     curWatchdogModel.ng11Count = dNG;
                                 }
                                 break;
@@ -527,7 +616,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model1Name = materialNo;
-                                    curWatchdogModel.ok1Count += decreasedNGQty;
+                                    curWatchdogModel.ok1Count = curWatchdogModel.ok1Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng1Count = dNG;
                                 }
                                 break;
@@ -541,7 +630,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model2Name = materialNo;
-                                    curWatchdogModel.ok2Count += decreasedNGQty;
+                                    curWatchdogModel.ok2Count = curWatchdogModel.ok2Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng2Count = dNG;
                                 }
                                 break;
@@ -555,7 +644,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model3Name = materialNo;
-                                    curWatchdogModel.ok3Count += decreasedNGQty;
+                                    curWatchdogModel.ok3Count = curWatchdogModel.ok3Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng3Count = dNG;
                                 }
                                 break;
@@ -569,7 +658,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model4Name = materialNo;
-                                    curWatchdogModel.ok4Count += decreasedNGQty;
+                                    curWatchdogModel.ok4Count = curWatchdogModel.ok4Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng4Count = dNG;
                                 }
                                 break;
@@ -583,7 +672,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model5Name = materialNo;
-                                    curWatchdogModel.ok5Count += decreasedNGQty;
+                                    curWatchdogModel.ok5Count = curWatchdogModel.ok5Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng5Count = dNG;
                                 }
                                 break;
@@ -597,7 +686,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model6Name = materialNo;
-                                    curWatchdogModel.ok6Count += decreasedNGQty;
+                                    curWatchdogModel.ok6Count = curWatchdogModel.ok6Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng6Count = dNG;
                                 }
                                 break;
@@ -611,7 +700,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model7Name = materialNo;
-                                    curWatchdogModel.ok7Count += decreasedNGQty;
+                                    curWatchdogModel.ok7Count = curWatchdogModel.ok7Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng7Count = dNG;
                                 }
                                 break;
@@ -625,7 +714,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model8Name = materialNo;
-                                    curWatchdogModel.ok8Count += decreasedNGQty;
+                                    curWatchdogModel.ok8Count = curWatchdogModel.ok8Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng8Count = dNG;
                                 }
                                 break;
@@ -639,7 +728,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model9Name = materialNo;
-                                    curWatchdogModel.ok9Count += decreasedNGQty;
+                                    curWatchdogModel.ok9Count = curWatchdogModel.ok9Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng9Count = dNG;
                                 }
                                 break;
@@ -653,7 +742,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model10Name = materialNo;
-                                    curWatchdogModel.ok10Count += decreasedNGQty;
+                                    curWatchdogModel.ok10Count = curWatchdogModel.ok10Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng10Count = dNG;
                                 }
                                 break;
@@ -667,7 +756,7 @@ namespace DashboardTTS.Webform.Laser
                                 else
                                 {
                                     curWatchdogModel.model11Name = materialNo;
-                                    curWatchdogModel.ok11Count += decreasedNGQty;
+                                    curWatchdogModel.ok11Count = curWatchdogModel.ok11Count + decreasedNGQty - (iSetup - preSetup) - (iBuyoff - preBuyoff) - (iShortage - preShortage);
                                     curWatchdogModel.ng11Count = dNG;
                                 }
                                 break;
@@ -778,7 +867,7 @@ namespace DashboardTTS.Webform.Laser
                 //更新 paint delivery his paint rej的数量.
                 try
                 {
-                    if (!deliveryBLL.UpdatePaintRej(this.lbJob.Text, dShortage, "Paint#1"))
+                    if (!deliveryBLL.UpdatePaintRej(this.lbJob.Text, iShortage, "Paint#1"))
                     {
                         DBHelp.Reports.LogFile.Log("LaserJobMaintance", "[btn Submit Click] update painting delivery history failed !");
                     }
@@ -794,7 +883,7 @@ namespace DashboardTTS.Webform.Laser
                         userEventModel.endTime = DateTime.Now;
                         userEventModel.eventType = "LaserJobMaintance";
                         userEventModel.pageName = "LaserJobMaintance";
-                        userEventModel.action = string.Format("[PaintingDeliveryHis]  update paintRejQty to {0}", dShortage);
+                        userEventModel.action = string.Format("[PaintingDeliveryHis]  update paintRejQty to {0}", iShortage);
                         userEventModel.temp1 = "";
                         userEventModel.temp2 = "";
                         userEventModel.userID = userName;
@@ -837,39 +926,10 @@ namespace DashboardTTS.Webform.Laser
 
 
 
-        private void setInventoryDetail(string sJobNo)
-        {
-            DataTable dtInventory = inventoryBLL.GetJobDetailForMaintenance(sJobNo);
-
-            if (dtInventory != null && dtInventory.Rows.Count != 0)
-            {
-                string shortage = dtInventory.Rows[0]["shortage"].ToString();
-                string setup = dtInventory.Rows[0]["setupQty"].ToString();
-                string buyoff = dtInventory.Rows[0]["buyoffQty"].ToString();
-
-                this.lbShortage.Text = shortage;
-                this.lbSetUp.Text = setup;
-                this.lbBuyoff.Text = buyoff;
-
-
-                this.txtShortage.Attributes["placeholder"] = shortage;
-                this.txtSetupQty.Attributes["placeholder"] = setup;
-                this.txtBuyoffQty.Attributes["placeholder"] = buyoff;
-
-
-
-                DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set inventory info --  setup:{0}, buyoff:{1}, shortage:{2}", setup, buyoff, shortage));
-            }
-            else
-            {
-                DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set inventory info --  get datatable null from inventory!"));
-            }
-        }
-
+     
 
         private void setMaterialDetailList(string sJobNo, DateTime dDay, string sShift, string sMachineID)
         {
-
             DataTable dtMaterial = watchdogBLL.GetJobMaterialList(sJobNo, dDay, sShift, sMachineID);
             if (dtMaterial == null || dtMaterial.Rows.Count == 0)
             {

@@ -481,10 +481,16 @@ namespace DashboardTTS.Controllers
 
 
         #region Packing Inventory
-
-       
+        
         public ActionResult GetPackingInventoryList()
         {
+            string partNo = Request.Form["PartNo"];
+            string type = Request.Form["Type"];
+
+
+
+
+
             return Content("");
         }
      
@@ -492,10 +498,7 @@ namespace DashboardTTS.Controllers
         {
             return Content("");
         }
-
-
-
-        //delete function
+        
 
         #endregion
         
