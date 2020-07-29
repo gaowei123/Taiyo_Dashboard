@@ -869,11 +869,11 @@ namespace Common.Class.BLL
 
         
 
-        public DataTable GetVIDefectForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sColor, string sSupplier, string sCoating)
+        public DataTable GetVIDefectForButtonReport_NEW(string sqlWhere)
         {
 
             DataTable dtViDetailTracking = new DataTable();
-            dtViDetailTracking = dal.GetVIDefectForButtonReport_NEW(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sColor, sSupplier, sCoating);
+            dtViDetailTracking = dal.GetVIDefectForButtonReport_NEW(sqlWhere);
 
             if (dtViDetailTracking == null || dtViDetailTracking.Rows.Count == 0)
                 return null;

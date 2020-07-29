@@ -218,9 +218,9 @@ namespace Common.Class.BLL
 
 
 
-        public DataTable GetPaintDeliveryForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public DataTable GetPaintDeliveryForButtonReport_NEW(string strWhere)
         {
-            DataSet ds = dal.GetPaintDeliveryForButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
+            DataSet ds = dal.GetPaintDeliveryForButtonReport_NEW(strWhere);
 
             if (ds == null || ds.Tables.Count == 0)
             {

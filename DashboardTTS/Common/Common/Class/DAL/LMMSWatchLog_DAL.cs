@@ -1498,7 +1498,7 @@ from
         }
 
         
-        public DataTable GetLaserRejForButtonReport_NEW(DateTime dateFrom, DateTime dateTo, string jobNo)
+        public DataTable GetLaserRejForButtonReport_NEW(string strWhere)
         {
 
             StringBuilder strSql = new StringBuilder();
@@ -1534,16 +1534,7 @@ with laserInfo as
     , b.setUpQTY
     from LMMSWatchLog a
     left join LMMSInventory b on a.jobnumber = b.jobnumber
-    where 1=1 
-    and a.datetime > @dateFrom
-    and a.datetime < @dateTo ");
-
-            if (jobNo != "")
-            {
-                strSql.Append(" and a.jobNumber = @jobNo ");
-            }
-            strSql.Append(" )");
-
+    where 1=1  and a.jobNumber in  " + strWhere + " )");    
 
 
             strSql.Append(@"
@@ -1559,21 +1550,8 @@ select jobNumber, model9Name as materialNo, isnull(ng9Count,0) as ng, isnull(sho
 select jobNumber, model10Name as materialNo, isnull(ng10Count,0) as ng, isnull(shortage,0) as shortage, isnull(setUpQTY,0) as setUpQty, isnull(buyOffQty,0) as buyOffQty from laserInfo union
 select jobNumber, model11Name as materialNo, isnull(ng11Count,0) as ng, isnull(shortage,0) as shortage, isnull(setUpQTY,0) as setUpQty, isnull(buyOffQty,0) as buyOffQty from laserInfo");
 
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom", SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@jobNo", SqlDbType.VarChar,50)
-            };
-
-            paras[0].Value = dateFrom;
-            paras[1].Value = dateTo;
-            if (jobNo != "") paras[2].Value = jobNo; else paras[2] = null;
-
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
+          
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
             if (ds == null || ds.Tables.Count == 0)
                 return null;
             else

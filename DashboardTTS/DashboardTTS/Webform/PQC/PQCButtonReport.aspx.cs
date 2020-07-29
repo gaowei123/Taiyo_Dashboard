@@ -26,14 +26,14 @@ namespace DashboardTTS.Webform.PQC
 
 
                     this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");
-                    this.txtDateTo.Text = dLastDay.ToString("yyyy-MM-dd");
+                    //this.txtDateTo.Text = dLastDay.ToString("yyyy-MM-dd");
 
 
 
 
-                    SetColorDDL();
-                    SetSupplierDDL();
-                    SetModelDDL();
+                    //SetColorDDL();
+                    //SetSupplierDDL();
+                    //SetModelDDL();
 
 
                     BtnGenerate_Click(new object(), new EventArgs());
@@ -62,50 +62,56 @@ namespace DashboardTTS.Webform.PQC
             try
             {
                 //搜索条件
-                string JobNo = this.txtJobNo.Text.Trim();
-                string partNumber = this.txtPartNo.Text.Trim();
-                string model = this.ddlModel.SelectedValue;
-                string color = this.ddlColor.SelectedValue;
-                string supplier = this.ddlSupplier.SelectedValue;
-                string coating = this.ddlCoating.SelectedValue;
+                string JobNo = "";// this.txtJobNo.Text.Trim();
+                string partNumber = "";//this.txtPartNo.Text.Trim();
+                string model = "";// this.ddlModel.SelectedValue;
+                string color = "";// this.ddlColor.SelectedValue;
+                string supplier = "";// this.ddlSupplier.SelectedValue;
+                string coating = "";// this.ddlCoating.SelectedValue;
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
-                DateTime DateTo = DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
-
-                // 可以选定现显示 laser, wip部分列表
-                string reportType = this.ddlType.SelectedItem.Value;
+                DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
+                string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
 
 
 
-                #region 获取数据源
-
-
-                List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> pqcDetailList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDetail>();
-                pqcDetailList = GetPQCDetialList(DateFrom, DateTo, partNumber, JobNo, model, color, supplier, coating);
-
-
-                List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> pqcDefectList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
-                pqcDefectList = GetPQCDefectList(DateFrom, DateTo, partNumber, JobNo, model, color, supplier, coating);
-
-                List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> laserInfoList = new List<ViewModel.PQCButtonReport_ViewModel.LaserInfo>();
-                laserInfoList = GetLaserInfoList(DateFrom.AddDays(-60), DateTo, "");//放宽60天, 以防查不到
-
-                List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> paintTempInfoList = new List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo>();
-                paintTempInfoList = GetPaintTempInfoList(DateFrom.AddDays(-60), DateTo, "");//放宽60天, 以防查不到
-
-                List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> paintDeliveryList = new List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery>();
-                paintDeliveryList = GetPaintDeliveryList(DateFrom.AddDays(-60), DateTo, "");//放宽60天, 以防查不到
-
-
-                //主表信息为null, 弹窗提醒.
-                if (pqcDetailList == null || pqcDefectList == null)
+                //先拉取满足条件的所有job id.
+                List<string> jobs = GetAllDisplayJobs(DateFrom, DateTo, partNumber, JobNo, model, supplier, color, coating);
+                if (jobs == null || jobs.Count() == 0)
                 {
                     Common.CommFunctions.ShowMessage(this.Page, "There is no data, Please change searching condition!");
                     this.dgButton.Visible = false;
                     return;
                 }
 
-                #endregion
 
+
+                //组合成sql in格式.
+                string sqlWhere = "(";
+                foreach (string jobNo in jobs)
+                {
+                    sqlWhere += "'" + jobNo + "',";
+                }
+                sqlWhere = sqlWhere.Substring(0, sqlWhere.Length - 1);
+                sqlWhere += ")";
+
+
+
+
+
+                //获取数据源
+                List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> pqcDetailList = GetPQCDetialList(sqlWhere);
+                
+                List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> pqcDefectList = GetPQCDefectList(sqlWhere);
+                
+                List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> laserInfoList = GetLaserInfoList(sqlWhere);
+
+                List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> paintTempInfoList = GetPaintTempInfoList(sqlWhere);
+                
+                List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> paintDeliveryList = GetPaintDeliveryList(sqlWhere);
+
+
+                
+             
 
 
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
@@ -136,7 +142,8 @@ namespace DashboardTTS.Webform.PQC
                     ViewModel.PQCButtonReport_ViewModel.Report reportModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     reportModel.partsType = pqcdetailModel.partsType;//区分laser, wip part.   
                     reportModel.model = pqcdetailModel.model;
-                    reportModel.jobID = pqcdetailModel.jobID;
+                    reportModel.jobID = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", pqcdetailModel.jobID, pqcdetailModel.jobID);
+
                     reportModel.lotNo = paintDeliveryModel.lotNo;
                     reportModel.partNo = pqcdetailModel.partNumber;
                     reportModel.materialNo = pqcdetailModel.materialNo;
@@ -352,7 +359,7 @@ namespace DashboardTTS.Webform.PQC
                     reportModel.InspBy = pqcdetailModel.OP;
 
                     reportList.Add(reportModel);
-                    #endregion
+                        #endregion                    
                 }
 
 
@@ -1578,13 +1585,31 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-
-
-        //获取pqc detail tracking的信息
-        public List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> GetPQCDetialList(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sColor, string sSupplier, string sCoating)
+        //获取所有满足条件的job
+        public List<string> GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
-            DataTable dt = bll.GetVIDetailForButtonReport_NEW(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sColor, sSupplier, sCoating);
+
+            DataTable dt = bll.GetAllDisplayJobs(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+            List<string> jobList = new List<string>();
+            foreach (DataRow      dr in dt.Rows)
+            {
+                jobList.Add(dr["jobid"].ToString());
+            }
+
+
+            return jobList;
+        }
+        
+
+        //获取pqc detail tracking的信息
+        public List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> GetPQCDetialList(string strWhere)
+        {
+            Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
+            DataTable dt = bll.GetVIDetailForButtonReport_NEW(strWhere);
 
 
             if (dt == null || dt.Rows.Count == 0)
@@ -1617,10 +1642,10 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取pqc defect 信息
-        public List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> GetPQCDefectList(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sColor, string sSupplier, string sCoating)
+        public List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> GetPQCDefectList(string sqlWhere)
         {
             Common.Class.BLL.PQCQaViDefectTracking_BLL bll = new Common.Class.BLL.PQCQaViDefectTracking_BLL();
-            DataTable dt = bll.GetVIDefectForButtonReport_NEW(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sColor, sSupplier, sCoating);
+            DataTable dt = bll.GetVIDefectForButtonReport_NEW(sqlWhere);
 
 
             if (dt == null || dt.Rows.Count == 0)
@@ -1652,7 +1677,7 @@ namespace DashboardTTS.Webform.PQC
 
             //获取2个月内的信息, 防止找不到.
             List<ViewModel.PQCButtonReport_ViewModel.LaserNG> laserNGList = new List<ViewModel.PQCButtonReport_ViewModel.LaserNG>();
-            laserNGList = GetLaserNG(dDateFrom.AddDays(-60), dDateTo, "");
+            laserNGList = GetLaserNG(sqlWhere);
 
 
             //获取Graphic Shift check by M/C code的列表
@@ -1755,10 +1780,10 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取laser vision rej, shortage, buyoff, setup 数量.
-        public List<ViewModel.PQCButtonReport_ViewModel.LaserNG> GetLaserNG(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public List<ViewModel.PQCButtonReport_ViewModel.LaserNG> GetLaserNG(string strWhere)
         {
             Common.BLL.LMMSWatchLog_BLL bll = new Common.BLL.LMMSWatchLog_BLL();
-            DataTable dt = bll.GetLaserRejButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
+            DataTable dt = bll.GetLaserRejButtonReport_NEW(strWhere);
 
             if (dt == null)
                 return null;
@@ -1788,10 +1813,10 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取laser info
-        public List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> GetLaserInfoList(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> GetLaserInfoList(string strWhere)
         {
             Common.Class.BLL.LMMSBUYOFFLIST_BLL bll = new Common.Class.BLL.LMMSBUYOFFLIST_BLL();
-            DataTable dt = bll.GetLaserInfoButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
+            DataTable dt = bll.GetLaserInfoButtonReport_NEW(strWhere);
 
             if (dt == null)
                 return null;
@@ -1824,11 +1849,10 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取paint info
-        public List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> GetPaintTempInfoList(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> GetPaintTempInfoList(string strWhere )
         {
             Common.Class.BLL.PaintingTempInfo bll = new Common.Class.BLL.PaintingTempInfo();
-            DataTable dt = bll.GetPaintTempInfoForButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
-
+            DataTable dt = bll.GetPaintTempInfoForButtonReport_NEW(strWhere);
             if (dt == null)
                 return null;
 
@@ -1899,10 +1923,10 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取paint delivery info
-        public List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> GetPaintDeliveryList(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> GetPaintDeliveryList(string strWhere)
         {
             Common.Class.BLL.PaintingDeliveryHis_BLL bll = new Common.Class.BLL.PaintingDeliveryHis_BLL();
-            DataTable dt = bll.GetPaintDeliveryForButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
+            DataTable dt = bll.GetPaintDeliveryForButtonReport_NEW(strWhere);
 
             if (dt == null)
                 return null;
@@ -1915,9 +1939,7 @@ namespace DashboardTTS.Webform.PQC
                 model.jobNo = dr["jobNumber"].ToString().ToUpper();
                 model.lotNo = dr["lotNo"].ToString();
                 model.mrpQty = int.Parse(dr["MrpQty"].ToString());
-
-
-
+                
                 paintDeliveryList.Add(model);
             }
 
@@ -1961,8 +1983,8 @@ namespace DashboardTTS.Webform.PQC
             }
             else
             {
-                dt.Columns.RemoveAt(3);//remove column job no
-                dt.Columns.RemoveAt(2);//remove column parts type
+                //dt.Columns.RemoveAt(3);//remove column job no
+                //dt.Columns.RemoveAt(2);//remove column parts type
                 this.dgButton.Visible = true;
             }
 
@@ -1981,7 +2003,7 @@ namespace DashboardTTS.Webform.PQC
                 item.Cells[0].Text = sn.ToString();
                 sn++;
 
-                string sPartRowText = item.Cells[3].Text;
+                string sPartRowText = item.Cells[4].Text;
 
                 for (int i = 0; i < dgButton.Columns.Count; i++)
                 {
@@ -2105,8 +2127,8 @@ namespace DashboardTTS.Webform.PQC
 
                 #region 处理 special row  style
                 string titleText = item.Cells[1].Text;
-                string modelSummaryRowText = item.Cells[3].Text;
-                string summaryRowText = item.Cells[3].Text;
+                string modelSummaryRowText = item.Cells[4].Text;
+                string summaryRowText = item.Cells[4].Text;
 
                 //part 1 title  style
                 if (titleText == "PART 1: PAINTING ONLY PARTS")
@@ -2123,8 +2145,8 @@ namespace DashboardTTS.Webform.PQC
                     }
 
 
-                    item.Cells[2].Visible = false;
                     item.Cells[3].Visible = false;
+                    item.Cells[4].Visible = false;
 
                 }
                 //part 2 title  style
@@ -2140,8 +2162,8 @@ namespace DashboardTTS.Webform.PQC
                         item.Cells[i].BackColor = System.Drawing.Color.White;
                     }
 
-                    item.Cells[2].Visible = false;
                     item.Cells[3].Visible = false;
+                    item.Cells[4].Visible = false;
 
                     iPart2TitleRowIndex = item.ItemIndex;
                 }
@@ -2157,15 +2179,15 @@ namespace DashboardTTS.Webform.PQC
                         item.Cells[i].BackColor = System.Drawing.Color.White;
                     }
 
-                    item.Cells[2].Visible = false;
                     item.Cells[3].Visible = false;
+                    item.Cells[4].Visible = false;
                 }
                 //sub total row style
                 else if (modelSummaryRowText == "SUB TOTAL>>")
                 {
                     item.BackColor = System.Drawing.Color.Beige;
                     item.Cells[1].Font.Bold = true;
-                    item.Cells[3].Font.Bold = true;
+                    item.Cells[4].Font.Bold = true;
                 }
                 else if (summaryRowText == "OTHERS >" || summaryRowText == "TTS - MOULDING >" || summaryRowText == "VENDOR - MOULDING >" || summaryRowText == "PAINTING >"
                     || summaryRowText == "PAINTING SETUP >" || summaryRowText == "QA PAINT TEST >" || summaryRowText == "LASER >" || summaryRowText == "OVERALL >")
@@ -2214,105 +2236,105 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-        private void SetColorDDL()
-        {
-            this.ddlColor.Items.Clear();
+        //private void SetColorDDL()
+        //{
+        //    this.ddlColor.Items.Clear();
 
-            ListItem Li = new ListItem();
-            Li.Text = "All";
-            Li.Value = "";
-            this.ddlColor.Items.Add(Li);
+        //    ListItem Li = new ListItem();
+        //    Li.Text = "All";
+        //    Li.Value = "";
+        //    this.ddlColor.Items.Add(Li);
 
-            Li = new ListItem();
-            Li.Text = "Black";
-            Li.Value = "Black";
-            this.ddlColor.Items.Add(Li);
+        //    Li = new ListItem();
+        //    Li.Text = "Black";
+        //    Li.Value = "Black";
+        //    this.ddlColor.Items.Add(Li);
 
-            Li = new ListItem();
-            Li.Text = "Silver";
-            Li.Value = "Silver";
-            this.ddlColor.Items.Add(Li);
+        //    Li = new ListItem();
+        //    Li.Text = "Silver";
+        //    Li.Value = "Silver";
+        //    this.ddlColor.Items.Add(Li);
 
-            Li = new ListItem();
-            Li.Text = "High gloss";
-            Li.Value = "High gloss";
-            this.ddlColor.Items.Add(Li);
+        //    Li = new ListItem();
+        //    Li.Text = "High gloss";
+        //    Li.Value = "High gloss";
+        //    this.ddlColor.Items.Add(Li);
 
-            Li = new ListItem();
-            Li.Text = "Mat black";
-            Li.Value = "Mat black";
-            this.ddlColor.Items.Add(Li);
+        //    Li = new ListItem();
+        //    Li.Text = "Mat black";
+        //    Li.Value = "Mat black";
+        //    this.ddlColor.Items.Add(Li);
 
-            Li = new ListItem();
-            Li.Text = "Texture line";
-            Li.Value = "Texture line";
-            this.ddlColor.Items.Add(Li);
-        }
+        //    Li = new ListItem();
+        //    Li.Text = "Texture line";
+        //    Li.Value = "Texture line";
+        //    this.ddlColor.Items.Add(Li);
+        //}
 
-        private void SetModelDDL()
-        {
-            this.ddlModel.Items.Clear();
+        //private void SetModelDDL()
+        //{
+        //    this.ddlModel.Items.Clear();
 
 
-            Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
+        //    Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
             
-            List<string> modelList = bll.GetModelNoList();
-            if (modelList == null)
-                return;
+        //    List<string> modelList = bll.GetModelNoList();
+        //    if (modelList == null)
+        //        return;
 
-            ListItem Li = new ListItem();
-            Li.Text = "All";
-            Li.Value = "";
+        //    ListItem Li = new ListItem();
+        //    Li.Text = "All";
+        //    Li.Value = "";
 
-            this.ddlModel.Items.Add(Li);
+        //    this.ddlModel.Items.Add(Li);
 
 
 
-            foreach (string model in modelList)
-            {
-                if (model != "")
-                {
-                    Li = new ListItem();
+        //    foreach (string model in modelList)
+        //    {
+        //        if (model != "")
+        //        {
+        //            Li = new ListItem();
 
-                    Li.Text = model;
-                    Li.Value = model;
+        //            Li.Text = model;
+        //            Li.Value = model;
 
-                    this.ddlModel.Items.Add(Li);
-                }
-            }
-        }
+        //            this.ddlModel.Items.Add(Li);
+        //        }
+        //    }
+        //}
 
-        private void SetSupplierDDL()
-        {
-            this.ddlSupplier.Items.Clear();
+        //private void SetSupplierDDL()
+        //{
+        //    this.ddlSupplier.Items.Clear();
             
-            Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
+        //    Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
 
-            List<string> supplierList = bll.GetSupplierList();
-            if (supplierList == null)
-                return;
+        //    List<string> supplierList = bll.GetSupplierList();
+        //    if (supplierList == null)
+        //        return;
 
-            ListItem Li = new ListItem();
-            Li.Text = "All";
-            Li.Value = "";
+        //    ListItem Li = new ListItem();
+        //    Li.Text = "All";
+        //    Li.Value = "";
 
-            this.ddlSupplier.Items.Add(Li);
+        //    this.ddlSupplier.Items.Add(Li);
 
 
 
-            foreach (string supplier in supplierList)
-            {
-                if (supplier != "")
-                {
-                    Li = new ListItem();
+        //    foreach (string supplier in supplierList)
+        //    {
+        //        if (supplier != "")
+        //        {
+        //            Li = new ListItem();
 
-                    Li.Text = supplier;
-                    Li.Value = supplier;
+        //            Li.Text = supplier;
+        //            Li.Value = supplier;
 
-                    this.ddlSupplier.Items.Add(Li);
-                }
-            }
-        }
+        //            this.ddlSupplier.Items.Add(Li);
+        //        }
+        //    }
+        //}
 
 
     }

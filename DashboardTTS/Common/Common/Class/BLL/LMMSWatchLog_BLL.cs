@@ -1689,9 +1689,9 @@ namespace Common.BLL
 
 
 
-        public DataTable GetLaserRejButtonReport_NEW(DateTime dateFrom, DateTime dateTo, string jobNo)
+        public DataTable GetLaserRejButtonReport_NEW(string strWhere )
         {
-            DataTable dt = dal.GetLaserRejForButtonReport_NEW(dateFrom, dateTo, jobNo);
+            DataTable dt = dal.GetLaserRejForButtonReport_NEW(strWhere);
             if (dt == null || dt.Rows.Count == 0)
             {
                 return null;

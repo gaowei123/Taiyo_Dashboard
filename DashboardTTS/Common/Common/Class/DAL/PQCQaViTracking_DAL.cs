@@ -550,43 +550,60 @@ on c.partNumber collate chinese_prc_ci_as = e.partNumber collate chinese_prc_ci_
 
         
        
-        public DataTable GetVIDetailForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sColor, string sSupplier, string sCoating)
+        public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+a.jobID
+,a.model
+,a.partNumber
+,b.materialPartNo
+,Sum(b.passQty) as passQty
+,sum(b.rejectQty) as rejectQty
+,c.remark_1 as supplier
+,case when c.processes like '%Laser%' then 'Laser'  else 'WIP' end as PartsType
+,a.processes
+,OP = stuff((SELECT  ',' +  t.userID 
+			FROM (select jobId,processes, userID from PQCQaViTracking group by jobId,processes,userID) t  
+			WHERE t.jobId = a.jobId and t.processes = a.processes  FOR xml path('')) 
+			, 1 , 1 , '')
+
+from PQCQaViTracking a
+left join PQCQaViDetailTracking b on a.trackingID = b.trackingID
+left join PQCBom c on a.partNumber = c.partnumber 
+where 1=1 ");
+
+            strSql.Append(" and a.jobId in " + strWhere);
+            strSql.Append(" group by a.jobId, a.model, a.partNumber , b.materialPartNo, c.remark_1, a.processes, c.processes ");
+            
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+
+
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
             StringBuilder strSql = new StringBuilder();
 
             //查询出所有job到临时表
             strSql.Append(@"
-with AllJobs as 
-(
-    select
-    distinct UPPER(jobid) as jobID
-	,b.model
-	,b.partNumber
-	,b.remark_1 as supplier
-    ,b.processes
-    from PQCQaViTracking a
-    left join PQCBom b on a.partNumber = b.partNumber
-    where  1=1 
-    and case 
-	    --有check#3的, 最后的工序必须是check#3, 并且nextviflag是true
-	    when b.processes like '%Check#3%' 
-        then case when a.processes = 'Check#3' and a.nextViFlag = 'True' then 1 else 0 end  
+select distinct jobid from pqcqavitracking a
+left join pqcbom b on a.partnumber = b.partnumber  
+where  1=1 
+and b.description = 'BUTTON' 
+and a.nextViFlag = 'true'
+and a.day >= @DateFrom
+and a.day < @DateTo ");
 
-	    --有check#2的, 最后的工序必须是check#2, 并且nextviflag是true
-	    when b.processes like '%Check#2%' and b.processes not like '%Check#3%'
-	    then case when a.processes = 'Check#2' and a.nextViFlag = 'True' then 1 else 0 end
-
-	    --只有check#1的, nextviflag是true
-	    when b.processes not like '%Check#3%' and b.processes not like '%Check#2%'
-	    then case when a.nextViFlag = 'True' then 1 else 0 end 
-
-	    end = 1
-    and b.description = 'BUTTON' 
-    and a.day >= @DateFrom
-    and a.day < @DateTo        
-");
             if (sPartNumber.Trim() != "")
-                strSql.AppendLine(" and b.partnumber = @PartNumber ");
+                strSql.AppendLine(" and a.partnumber = @PartNumber ");
 
             if (sJobNo.Trim() != "")
                 strSql.AppendLine(" and a.JobID = @JobNo ");
@@ -602,50 +619,9 @@ with AllJobs as
 
             if (sCoating.Trim() != "")
                 strSql.AppendLine(" and b.coating = @coating");
-            
-            strSql.AppendLine(")");
-            //查询出所有job到临时表
 
-
-            
-
-            strSql.Append(@"
-select 
-a.jobID
-,a.model
-,a.partNumber
-,b.materialPartNo
-,b.passQty
-,b.rejectQty
-,a.supplier
-
-,case when a.processes like '%Laser%'
-	  then 'Laser' 
-	  else 'WIP'
-end as PartsType
-
-,userID as OP
-
-,b.processes
-
-from AllJobs a
-left join 
-(
-	select 
-	jobID
-	,materialPartNo
-	,sum(totalQty) as totalQty
-	,sum(passQty) as passQty
-	,sum(rejectQty) as rejectQty
-	,processes
-    ,userID = stuff( (SELECT  ',' +  t.userID FROM (select jobId,processes, userID from PQCQaViTracking group by jobId,processes,userID) t  WHERE t.jobId = PQCQaViDetailTracking.jobId and t.processes = PQCQaViDetailTracking.processes FOR xml path('')) , 1 , 1 , '')
-	from PQCQaViDetailTracking
-	group by jobID,materialPartNo, processes
-) b on a.jobID = b.jobID
-");
-
-
-
+         
+          
 
             SqlParameter[] parameters = {
                 new SqlParameter("@DateFrom", SqlDbType.DateTime),
@@ -655,19 +631,19 @@ left join
                 new SqlParameter("@Model", SqlDbType.VarChar,50),
                 new SqlParameter("@Color", SqlDbType.VarChar,50),
                 new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50)                
+                new SqlParameter("@coating", SqlDbType.VarChar,50)
             };
 
 
-            if (dDateFrom != null)  parameters[0].Value = dDateFrom;    else parameters[0] = null;
-            if (dDateTo != null)    parameters[1].Value = dDateTo;      else parameters[1] = null;
-            if (sPartNumber != "")  parameters[2].Value = sPartNumber;  else parameters[2] = null;
-            if (sJobNo != "")       parameters[3].Value = sJobNo;       else parameters[3] = null;
-            if (sModel != "")       parameters[4].Value = sModel;       else parameters[4] = null;
-            if (sColor != "")       parameters[5].Value = sColor;       else parameters[5] = null;
-            if (sSupplier != "")    parameters[6].Value = sSupplier;    else parameters[6] = null;
-            if (sCoating != "")     parameters[7].Value = sCoating;     else parameters[7] = null;
-            
+            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
+            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
+            if (sPartNumber != "") parameters[2].Value = sPartNumber; else parameters[2] = null;
+            if (sJobNo != "") parameters[3].Value = sJobNo; else parameters[3] = null;
+            if (sModel != "") parameters[4].Value = sModel; else parameters[4] = null;
+            if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
+            if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
+            if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
+
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
@@ -677,7 +653,8 @@ left join
                 return ds.Tables[0];
         }
 
-        
+
+
 
 
         public DataTable GetCheckingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sStation, string sPIC, string sType)

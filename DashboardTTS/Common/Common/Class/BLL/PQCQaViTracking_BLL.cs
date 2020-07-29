@@ -492,16 +492,21 @@ namespace Common.Class.BLL
             return dtTotalReport;
         }
         
-        public DataTable GetVIDetailForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sColor, string sSupplier, string sCoating)
+        public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
         {
 
             DataTable dtViDetailTracking = new DataTable();
-            dtViDetailTracking = dal.GetVIDetailForButtonReport_NEW(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sColor, sSupplier, sCoating);
+            dtViDetailTracking = dal.GetVIDetailForButtonReport_NEW(strWhere);
             
             if (dtViDetailTracking == null || dtViDetailTracking.Rows.Count == 0)
                 return null;
             else
                 return dtViDetailTracking;
+        }
+
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        {
+            return dal.GetAllDisplayJobs(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
         }
         
         private int GetSN(string type)

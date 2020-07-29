@@ -232,9 +232,8 @@ namespace Common.Class.DAL
 
 
 
-        public DataTable GetLaserInfoForButtonReport_NEW(DateTime dateFrom, DateTime dateTo, string jobNo)
+        public DataTable GetLaserInfoForButtonReport_NEW(string strWhere)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
                             select 
@@ -243,30 +242,9 @@ namespace Common.Class.DAL
                             ,MC_OPERATOR as laserOP
                             ,MACHINE_ID as laserMachine
                             from LMMSBUYOFF_LIST
-                            where DATE_TIME >= @dateFrom
-                            and DATE_TIME < @dateTo ");
+                            where  JOB_ID in  " + strWhere);
 
-            if (jobNo != "")
-            {
-                strSql.Append(" and JOB_ID = @jobNo ");
-            }
-           
-         
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom", SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@jobNo", SqlDbType.VarChar,50)
-            };
-
-            paras[0].Value = dateFrom;
-            paras[1].Value = dateTo;
-            if (jobNo != "") paras[2].Value = jobNo; else paras[2] = null;
-
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
             if (ds == null || ds.Tables.Count == 0)
                 return null;
             else

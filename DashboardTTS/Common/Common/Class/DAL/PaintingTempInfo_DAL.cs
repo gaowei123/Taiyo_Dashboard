@@ -600,7 +600,7 @@ namespace Common.Class.DAL
 
 
 
-        public DataSet GetPaintTempInfoForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public DataSet GetPaintTempInfoForButtonReport_NEW(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select
@@ -624,32 +624,12 @@ namespace Common.Class.DAL
 
                             from PaintingTempInfo
 
-                            where createdTime >= @dateFrom
-                            and createdTime < @dateTo ");
-
-            if (sJobNo != "")
-            {
-                strSql.Append(" and jobnumber = @JobNo ");
-            }
-
-            SqlParameter[] paras =
-           {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@JobNo",SqlDbType.VarChar , 50)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sJobNo != "")
-            { paras[2].Value = sJobNo; } else
-            {
-                paras[2] = null;
-            }
+                            where 1=1  and jobnumber in " + strWhere);       
 
 
 
-                return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
 
 

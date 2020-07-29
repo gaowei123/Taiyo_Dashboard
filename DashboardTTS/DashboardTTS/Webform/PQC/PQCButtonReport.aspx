@@ -43,10 +43,10 @@
                             <label>Date From:</label>
                             <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
                         </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
+                        <%--<div class="form-group searchingBarCol" style="margin:5px;">
                             <label>Date To:</label>
                             <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
-                        </div>
+                        </div>--%>
 
                         <div class="form-group searchingBarCol" style="margin:5px;">
                             <label>Type:</label>
@@ -57,7 +57,7 @@
                             </asp:DropDownList>
                         </div>
 
-                        <div class="form-group searchingBarCol">
+                        <%--<div class="form-group searchingBarCol">
                             <label>Model:</label>
                             <asp:DropDownList runat="server" ID="ddlModel" CssClass="form-control" Width="120"></asp:DropDownList>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="form-group searchingBarCol" style="margin:5px;">
                             <label>Job No:</label>
                             <asp:TextBox runat="server" ID="txtJobNo" CssClass="form-control" Width="120"></asp:TextBox>
-                        </div>
+                        </div>--%>
 
                         <div class="form-group searchingBarCol" style="margin:5px; float:right;">
                             <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="BtnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
@@ -114,6 +114,7 @@
                 <Columns>
                     <asp:BoundColumn DataField="SN" HeaderText="SN"></asp:BoundColumn>
                     <asp:BoundColumn DataField="model" HeaderText="Model"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="jobID" HeaderText="Job No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="lotNo" HeaderText="Lot No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="partNo" HeaderText="Part No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="materialNo" HeaderText="Material No"></asp:BoundColumn>
@@ -324,7 +325,7 @@
 
             
             
-            $("#dgButton").FrozenTable(1, 0, 9);
+            $("#dgButton").FrozenTable(1, 0, 10);
 
         });
 

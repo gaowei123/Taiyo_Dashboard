@@ -526,6 +526,11 @@ namespace DashboardTTS.Webform.PQC
             catch (Exception ee)
             {
                 DBHelp.Reports.LogFile.Log("PQCBezelPanelReport", "BtnGenerate_Click error : " + ee.ToString());
+
+                if (ee.ToString().ToUpper().Contains("TIMEOUT"))
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "Searching timeout, please reduce the searching days!");
+                }
             }
         }
 

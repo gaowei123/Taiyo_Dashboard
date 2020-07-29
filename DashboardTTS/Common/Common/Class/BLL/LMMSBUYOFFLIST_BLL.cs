@@ -168,9 +168,9 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetLaserInfoButtonReport_NEW(DateTime dateFrom, DateTime dateTo, string jobNo)
+        public DataTable GetLaserInfoButtonReport_NEW(string strWhere)
         {
-            DataTable dt = dal.GetLaserInfoForButtonReport_NEW(dateFrom, dateTo, jobNo);
+            DataTable dt = dal.GetLaserInfoForButtonReport_NEW(strWhere);
             if (dt == null || dt.Rows.Count == 0)
             {
                 return null;

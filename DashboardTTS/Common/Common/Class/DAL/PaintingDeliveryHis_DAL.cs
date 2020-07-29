@@ -459,7 +459,7 @@ from
 
 
 
-        public DataSet GetPaintDeliveryForButtonReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sJobNo)
+        public DataSet GetPaintDeliveryForButtonReport_NEW(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -468,38 +468,9 @@ jobNumber
 ,lotNo
 ,convert(float,isnull(inQuantity,0)) as MrpQty
 from PaintingDeliveryHis 
-where updatedTime >= @dateFrom
-and updatedTime < @dateTo");
-            
-            if (sJobNo != "")
-            {
-                strSql.Append(" and jobNumber = @jobNo");
-            }
+where 1=1 and jobNumber in " + strWhere);
 
-            
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@jobNo",SqlDbType.VarChar,50)
-            };
-
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-
-            if (sJobNo != "")
-            {
-                paras[2].Value = sJobNo;
-            }
-            else
-            {
-                paras[2] = null;
-            }
-
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+            return DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
 
 

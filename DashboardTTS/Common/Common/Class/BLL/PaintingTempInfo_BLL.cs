@@ -143,9 +143,9 @@ namespace Common.Class.BLL
 
 
 
-        public DataTable  GetPaintTempInfoForButtonReport_NEW(DateTime dDateFrom, DateTime  dDateTo, string sJobNo)
+        public DataTable  GetPaintTempInfoForButtonReport_NEW(string strWhere)
         {
-            DataSet ds = dal.GetPaintTempInfoForButtonReport_NEW(dDateFrom, dDateTo, sJobNo);
+            DataSet ds = dal.GetPaintTempInfoForButtonReport_NEW(strWhere);
 
             if (ds == null || ds.Tables.Count == 0)
             {
