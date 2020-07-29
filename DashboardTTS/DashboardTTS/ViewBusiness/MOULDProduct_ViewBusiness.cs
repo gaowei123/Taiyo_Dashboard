@@ -634,11 +634,29 @@ namespace DashboardTTS.ViewBusiness
                 model.supervisor = dr["SupervisorCheck"].ToString();
                 model.startTime = DateTime.Parse(dr["startTime"].ToString());
 
-                //如果stoptime为空, 则默认为当班次最后时刻.
-                if (dr["stopTime"].ToString() == "")
-                    model.stopTime = model.shift == "Day" ? model.day.AddHours(20) : model.day.AddDays(1).AddHours(8);
+                
+                DateTime curDay = DateTime.Now.AddHours(-8).Date;
+                string curShift = DateTime.Now < curDay.AddHours(20) && DateTime.Now >= curDay.AddHours(8) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
+                //如果是当天当班, 则stop time取当前时间.
+                if (curDay == model.day && curShift == model.shift)
+                {
+                    model.stopTime = DateTime.Now;
+                }
+                //如果不是, 并且没有stoptime, 则取当班最后时刻.
                 else
-                    model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+                {
+                    if (dr["stopTime"].ToString() == "")
+                    {
+                        model.stopTime = model.shift == StaticRes.Global.Shift.Day ? model.day.AddHours(20) : model.day.AddHours(32);
+                    }
+                    else
+                    {
+                        model.stopTime = DateTime.Parse(dr["stopTime"].ToString());
+                    }
+                }
+
+
+                   
 
 
                 viList.Add(model);
@@ -760,7 +778,7 @@ namespace DashboardTTS.ViewBusiness
                     model.defectCode = dr["defectCode"].ToString();
                     model.rejQty = double.Parse(dr["rejectQtyHour08"].ToString());
 
-                    if (model.shift == "Night")
+                    if (model.shift == "Day")
                         model.rejTime = "08:00 - 09:00";
                     else
                         model.rejTime = "20:00 - 21:00";

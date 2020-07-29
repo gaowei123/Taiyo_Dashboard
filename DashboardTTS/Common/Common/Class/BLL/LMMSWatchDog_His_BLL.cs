@@ -52,7 +52,20 @@ namespace Common.BLL
 
             return watchdogModelList;
         }
-        
+
+
+
+        public Common.Model.LMMSWatchDog_His_Model GetModel(string sJobNo, DateTime? dDay, string sShift, string sMachineID  )
+        {
+            DataTable dt = dal.GetModel(sJobNo, dDay, sShift, sMachineID);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+            
+            return DataRowToList(dt.Rows[0]);
+        }
+
+
+
 
         public Common.Model.LMMSWatchDog_His_Model DataRowToList(DataRow dr)
         {
@@ -313,6 +326,23 @@ namespace Common.BLL
             {
                 model.ng16Count = int.Parse(dr["ng16Count"].ToString());
             }
+
+
+        
+
+            if (dr["setUpQTY"].ToString() != "")
+            {
+                model.setupQty = int.Parse(dr["setUpQTY"].ToString());
+            }else { model.setupQty = 0; }
+            if (dr["buyOffQty"].ToString() != "")
+            {
+                model.buyoffQty = int.Parse(dr["buyOffQty"].ToString());
+            }else { model.buyoffQty = 0; }
+            if (dr["shortage"].ToString() != "")
+            {
+                model.shortage = int.Parse(dr["shortage"].ToString());
+            }else { model.shortage = 0; }
+
 
 
             return model;

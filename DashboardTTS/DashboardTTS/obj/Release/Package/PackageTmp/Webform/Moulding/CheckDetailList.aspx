@@ -83,8 +83,7 @@
                             <asp:Label runat="server" Text="From :" Width="100px"></asp:Label>  
                     </td>
                     <td style ="border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px; ">
-                        <igsch:WebDateChooser ID="infDchFrom" runat="server" Height="23px"   Width="100%" Value="" >
-                        </igsch:WebDateChooser>
+                        <igsch:WebDateChooser ID="infDchFrom" runat="server" Height="23px"   Width="100%" Value="" ></igsch:WebDateChooser>
                     </td>
                     <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%; font-family: 'Arial Unicode MS'; height: 50px;"> 
                         <asp:Label runat="server" Text="To :"></asp:Label> 

@@ -112,7 +112,7 @@ where a.nextviflag = 'true' ");
                             left join PQCBom b on a.partNumber = b.partNumber ");
             strSql.Append("left join OPENDATASOURCE( 'SQLOLEDB', "+StaticRes.Global.SqlConnection.SqlconnPainting+" ).taiyo_painting.dbo.PaintingDeliveryHis c on a.jobId COLLATE Chinese_PRC_CI_AS = c.jobNumber COLLATE Chinese_PRC_CI_AS");
 
-            strSql.Append("  where 1 = 1  ");
+            strSql.Append("  where 1 = 1  and c.paintProcess= 'Paint#1' ");
             strSql.Append(" and a.day >= @DateFrom ");
             strSql.Append(" and a.day < @DateTo ");
             
@@ -177,7 +177,7 @@ where a.nextviflag = 'true' ");
             if (!string.IsNullOrEmpty(sPartNumber))
             {
                 parameters[2].Value = sPartNumber;
-            }
+            }   
             else { parameters[2] = null; }
             if (!string.IsNullOrEmpty(sJobNumber))
             {

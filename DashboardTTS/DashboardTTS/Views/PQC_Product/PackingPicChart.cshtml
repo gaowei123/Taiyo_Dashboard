@@ -198,6 +198,11 @@
                 JobNo: $('#txtJobNo').val(),
                 Type: $('#ddlType').val()
             },
+
+            beforeSend: function(){
+                chart.showLoading();
+            },
+
             success: function (data) {
 
                 if (data == "") {
@@ -280,6 +285,7 @@
                     ]
                 };
 
+                chart.hideLoading();
 
                 chart.clear();
                 chart.setOption(option);
@@ -288,6 +294,11 @@
             error: function (e) {
                 alert("Get chart data error !");
             }
+
+
+
+
+
         });
 
 

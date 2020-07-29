@@ -49,7 +49,7 @@
                     <div class="col-md-3">
                         <label style="width:35%">Machine No:</label>
                         <asp:DropDownList runat="server" ID="ddlMachineNo" CssClass="form-control" Width="60%">
-                            <asp:ListItem Value="ALL">ALL</asp:ListItem>
+                            <asp:ListItem Value="">All</asp:ListItem>
                             <asp:ListItem Value="1">No.1</asp:ListItem>
                             <asp:ListItem Value="2">No.2</asp:ListItem>
                             <asp:ListItem Value="3">No.3</asp:ListItem>
@@ -88,32 +88,22 @@
                     <PagerStyle BackColor="#284775" HorizontalAlign="Center" BorderStyle="None" PageButtonCount="5" />
                     <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
                     <Columns>
-                        <asp:BoundColumn DataField="ID" HeaderText="ID" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Shift" HeaderText="Shift"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="MachineID" HeaderText="MachineID"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Customer" HeaderText="Customer" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Module" HeaderText="Model"></asp:BoundColumn>
-                        <asp:ButtonColumn  DataTextField="JobNumber" HeaderText="JobNumber" CommandName="LaserJobMaintain"></asp:ButtonColumn>
-                        <asp:BoundColumn DataField="PartNumber" HeaderText="Part No" ></asp:BoundColumn>
-                        <asp:ButtonColumn  DataTextField="PartNumber" HeaderText="PartNumber" CommandName="UpdateBom" Visible="false"></asp:ButtonColumn>
-                        <asp:BoundColumn DataField="CycleTime" HeaderText="Cycle Time"  Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="BlockCount" HeaderText="BlockCount"  Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="UnitCount" HeaderText="Unit Count"  Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="StartTime" HeaderText="Start Time"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="EndTime" HeaderText="End Time"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Time" HeaderText="Time"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="OK_Set" HeaderText="OK Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:ButtonColumn DataTextField="NG_Set" CommandName="Link" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:ButtonColumn>
-                        <asp:BoundColumn DataField="NG_Set" HeaderText="NG" Visible="false" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Output_Set" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="RejRate_Set" HeaderText="Rej%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Setup" HeaderText="Setup Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Total_Set" HeaderText="MRP Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn> 
-                        <asp:BoundColumn DataField="SetTotal" HeaderText="SetTotal" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="SetRejRate" HeaderText="SetRejRate" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="DateTime" HeaderText="DateTime" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Performance" HeaderText="Performance"  ItemStyle-HorizontalAlign="Center" Visible="false"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="JobNumber" HeaderText="JobNumber" Visible="false"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="jobNo" Visible="false"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="shift" HeaderText="Shift"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="machineID" HeaderText="MachineID"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="model" HeaderText="Model"></asp:BoundColumn>
+                        <asp:ButtonColumn  DataTextField="jobNo" HeaderText="JobNumber" CommandName="LaserJobMaintain"></asp:ButtonColumn>
+                        <asp:BoundColumn DataField="partNo" HeaderText="Part No" ></asp:BoundColumn>
+                        <asp:BoundColumn DataField="startTime" HeaderText="Start Time"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="endTime" HeaderText="End Time"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="time" HeaderText="Time"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="displayOK" HeaderText="OK Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:ButtonColumn DataTextField="displayNG" CommandName="Link" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:ButtonColumn>
+                        <asp:BoundColumn DataField="displayNG" HeaderText="NG" Visible="false" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="displayOutput" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="displayRejRate" HeaderText="Rej%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="displaySetup" HeaderText="Setup Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="displayMRP" HeaderText="MRP Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>                         
                     </Columns>
                 </asp:DataGrid>
             </div>

@@ -13,3 +13,4 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\bin\Debug\zh-Ha
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache

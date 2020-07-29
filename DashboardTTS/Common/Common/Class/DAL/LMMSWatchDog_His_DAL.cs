@@ -43,7 +43,49 @@ namespace Common.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(), paras);
         }
 
-        
+        public DataTable GetModel(string sJobNo, DateTime? dDay, string sShift, string sMachineID)
+        {
+            //只有job, day, shift, machineid同时指定, 才能获取获取唯一 watchdog_shift.
+            if (string.IsNullOrEmpty(sJobNo) || 
+                dDay==null || 
+                string.IsNullOrEmpty(sShift) ||
+                string.IsNullOrEmpty(sMachineID))
+            {
+                return null;
+            }
+
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select * from LMMSWatchDog_Shift where jobNumber = @jobNumber and day = @day and shift=@shift and machineID=@machineID ");
+            
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@jobNumber",SqlDbType.VarChar,32),
+                new SqlParameter("@day",SqlDbType.DateTime),
+                new SqlParameter("@shift",SqlDbType.VarChar,32),
+                new SqlParameter("@machineID",SqlDbType.VarChar,32)
+            };
+
+            paras[0].Value = sJobNo;
+            paras[1].Value = dDay.Value;
+            paras[2].Value = sShift;
+            paras[3].Value = sMachineID;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+
+
         public SqlCommand UpdateJobMaintenanceCMD(Common.Model.LMMSWatchDog_His_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -85,6 +127,10 @@ namespace Common.DAL
             strSql.Append("	,ng14Count	=	@ng14Count	");
             strSql.Append("	,ng15Count	=	@ng15Count	");
             strSql.Append("	,ng16Count	=	@ng16Count	");
+
+            strSql.Append("	,setUpQTY	=	@setUpQTY	");
+            strSql.Append("	,buyOffQty	=	@buyOffQty	");
+            strSql.Append("	,shortage	=	@shortage	");
 
 
             strSql.Append(" Where jobnumber = @jobnumber ");
@@ -133,7 +179,11 @@ namespace Common.DAL
 
                 new SqlParameter("@day", SqlDbType.DateTime),
                 new SqlParameter("@shift", SqlDbType.VarChar),
-                new SqlParameter("@machineID", SqlDbType.VarChar)
+                new SqlParameter("@machineID", SqlDbType.VarChar),
+
+                new SqlParameter("@setUpQTY", SqlDbType.Int),
+                new SqlParameter("@buyOffQty", SqlDbType.Int),
+                new SqlParameter("@shortage", SqlDbType.Int),
             };
 
 
@@ -178,6 +228,10 @@ namespace Common.DAL
             parameters[35].Value = model.day;
             parameters[36].Value = model.shift;
             parameters[37].Value = model.machineID;
+
+            parameters[38].Value = model.setupQty == null ? 0 : model.setupQty;
+            parameters[39].Value = model.buyoffQty == null ? 0 : model.buyoffQty;
+            parameters[40].Value = model.shortage == null ? 0 : model.shortage;
 
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);

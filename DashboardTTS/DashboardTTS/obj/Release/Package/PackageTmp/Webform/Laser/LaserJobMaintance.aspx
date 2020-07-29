@@ -6,7 +6,7 @@
     <style>
         @media (min-width: 1200px) {
             .container{
-                max-width: 600px;
+                max-width: 720px;
             }
         }
     </style>
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-            <span class="titleText">Laser Job Maintance</span>
+            <span class="titleText">Laser Job Maintenance</span>
         </div>
 
 
@@ -89,6 +89,8 @@
                                 <asp:BoundColumn DataField="materialNo" HeaderText="Material No" HeaderStyle-HorizontalAlign="Left" ItemStyle-HorizontalAlign="Left"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderStyle-Width="10%"><ItemTemplate></ItemTemplate></asp:TemplateColumn>
 
+                                <asp:BoundColumn DataField="okQty" HeaderText="OK"></asp:BoundColumn>
+
                                 <asp:BoundColumn DataField="ngQty" HeaderText="Current NG"></asp:BoundColumn>
                                 <asp:TemplateColumn HeaderText="Actual NG">
                                     <ItemTemplate>
@@ -106,7 +108,7 @@
 
         <div class="row">
             <div class="col-md-12 panel panel-default" style="padding:10px 10px 0px 40px;">
-                <asp:Label runat="server" Font-Bold="true">Job Complete:</asp:Label>
+                <asp:Label runat="server" Font-Bold="true">Lot Complete:</asp:Label>
                 
                 <hr />
                 

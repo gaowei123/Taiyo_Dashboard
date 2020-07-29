@@ -160,8 +160,18 @@
         setPartNoDDL($('#ddlPartNo'), 'PQC', '');
 
 
+
+
         var today = dateFormat('yyyy-MM-dd', new Date());
-        $('#txtDateFrom').val(today);
+
+
+        var dateTime = new Date();
+        var datefrom = dateTime.setDate(dateTime.getDate() - 30);
+        datefrom = new Date(datefrom);
+        datefrom = dateFormat('yyyy-MM-dd', datefrom);
+
+
+        $('#txtDateFrom').val(datefrom);
         $('#txtDateTo').val(today);
 
 
@@ -252,6 +262,11 @@
                 Station: $("#ddlStation").val(),
                 PIC: $('#ddlPIC').val()
             },
+
+            beforeSend: function () {
+                chart.showLoading();
+            },
+
             success: function (data) {
 
                 if (data == "") {
@@ -273,7 +288,7 @@
 
                 for (var i = 0; i < data.length; i++) {
                     if ($('#ddlGroupBy').val() == 'Day') {
-                        axisXLabelData.push(data[i].month +' - '+data[i].day);
+                        axisXLabelData.push(data[i].month +'-'+data[i].day);
                     } else if ($('#ddlGroupBy').val() == 'Month') {
                         axisXLabelData.push(data[i].month);
                     } else {
@@ -343,7 +358,7 @@
                     ]
                 };
 
-
+                chart.hideLoading();
                 chart.clear();
                 chart.setOption(option);
 

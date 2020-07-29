@@ -24,18 +24,16 @@ namespace DashboardTTS.Webform
                 try
                 {
 
-             
-
-                    string MachineID = Request.QueryString["MachineID"] == null ? "" : Request.QueryString["MachineID"].ToString();
-                    if (!string.IsNullOrEmpty(MachineID))
+                   
+                    if (!string.IsNullOrEmpty(Request.QueryString["MachineID"]))
                     {
-                        this.ddlMachineNo.SelectedValue = MachineID.Replace("Machine", "").Replace("No.", "").Trim();
+                        this.ddlMachineNo.SelectedValue = Request.QueryString["MachineID"].Replace("Machine", "").Replace("No.", "").Trim();
                     }
 
-                    string Shift = Request.QueryString["Shift"] == null ? "" : Request.QueryString["Shift"].ToString();
-                    if (!string.IsNullOrEmpty(Shift))
+                
+                    if (!string.IsNullOrEmpty(Request.QueryString["Shift"]))
                     {
-                        this.ddlShift.SelectedValue = Shift;
+                        this.ddlShift.SelectedValue = Request.QueryString["Shift"];
                     }
                   
                     string sDateFrom = Request.QueryString["DateFrom"] == null ? "" : Request.QueryString["DateFrom"].ToString();
@@ -48,10 +46,10 @@ namespace DashboardTTS.Webform
 
                     
 
-                    // 如果有jobnumber URL参数, 则放宽一年时间时间段, 查出所有job.
+                    //如果有jobnumber URL参数, 则放宽3年时间时间段, 查出所有job.
                     if (Request.QueryString["jobNumber"] != null)
                     {
-                        this.txtDateFrom.Text = dDateFrom.AddYears(-1).ToString("yyyy-MM-dd");
+                        this.txtDateFrom.Text = dDateFrom.AddYears(-3).ToString("yyyy-MM-dd");
                         this.txtJobNo.Text = Request.QueryString["jobNumber"].ToString();
                     }
 
@@ -71,96 +69,47 @@ namespace DashboardTTS.Webform
 
         private void DgJob_ItemCommand(object source, DataGridCommandEventArgs e)
         {
+            string jobNo = e.Item.Cells[0].Text;
+            string day = e.Item.Cells[1].Text.Split('-')[0].Trim();
+            string shift = e.Item.Cells[1].Text.Split('-')[1].Trim();
+            string dateFrom = this.txtDateFrom.Text;
+            string dateTo = this.txtDateTo.Text;
+            string machineID = e.Item.Cells[2].Text.Replace("Machine", "");
+            string ng = e.Item.Cells[11].Text == "&nbsp;" ? "0" : e.Item.Cells[11].Text.Split('(')[0];
+
+            
+
             if (e.CommandName == "Link")
             {
-                #region Link
-                DataGridItem item = e.Item;
-                string JobDayShift = item.Cells[1].Text;
-                string MachineID = item.Cells[2].Text == "&nbsp;" ? "" : item.Cells[2].Text.Substring(7, 1);
-                string JobNumber = item.Cells[25].Text;
-                string NG = item.Cells[16].Text == "&nbsp;" ? "0" : item.Cells[16].Text.Split('(')[0];
-                string DateTime = item.Cells[23].Text;
-                string DateFrom = this.txtDateFrom.Text;
-                string DateTo = this.txtDateTo.Text;
-                
-                if (NG == "0")
+                if (ng == "0"  || jobNo == "" || e.Item.Cells[1].Text == "Total")
                     return;
-
-                if (JobNumber=="" || item.Cells[1].Text == "Total :")
-                    return;
-                else
-                {
-                    string[] Temp = JobDayShift.Split('-');
-                    string JobDay = Temp[0].Trim();
-                    string JobShift = Temp[1].Trim();
-
-                    string URL = "./ProductivityNGDetail.aspx?";
-                    URL += "JobDay=" + JobDay;
-                    URL += "&JobShift=" + JobShift;
-                    URL += "&JobNumber=" + JobNumber;
-                    URL += "&DateFrom=" + DateFrom;
-                    URL += "&DateTo=" + DateTo;
-                    URL += "&MachineID=" + MachineID;
-                    URL += "&Shift=" + this.ddlShift.SelectedValue;
-
-
-                    Response.Redirect(URL);
-                }
-
-                #endregion
-            }
-            else if (e.CommandName == "UpdateBom")
-            {
-                #region Update Bom
-
-                DataGridItem item = e.Item;
-
-                string Customer = item.Cells[3].Text == "&nbsp;" ? "" : item.Cells[3].Text;
-                string Module = item.Cells[4].Text == "&nbsp;" ? "" : item.Cells[4].Text;
-
-                if (Customer =="" && Module =="")
-                {
-                    string MachineID = item.Cells[2].Text;
-                    string PartNumber = item.Cells[6].Text;
-
-                    Response.Redirect("./BomFormMenu.aspx?MachineID=" + MachineID + "&PartNumber=" + PartNumber + "&buttonType=LinkFromProductionDetail");
-                }
-
-
-                #endregion
+                               
+                string URL = "./ProductivityNGDetail.aspx?";
+                URL += "JobDay=" + day;
+                URL += "&JobShift=" + shift;
+                URL += "&JobNumber=" + jobNo;
+                URL += "&DateFrom=" + dateFrom;
+                URL += "&DateTo=" + dateTo;
+                URL += "&MachineID=" + machineID;
+                Response.Redirect(URL);
             }
             else if (e.CommandName == "LaserJobMaintain")
             {
-                #region laser job maintain
-                DataGridItem item = e.Item;
-                string JobDayShift = item.Cells[1].Text;
-                string JobNumber = item.Cells[25].Text;
-                string JobMachineID = item.Cells[2].Text.Replace("Machine", "");
-
-                string[] Temp = JobDayShift.Split('-');
-                string JobDay = Temp[0].Trim();
-                string JobShift = Temp[1].Trim();
-
-
-
-                // 判断是否是跨班job
+                //有跨班多条记录的, 并且没有自跳转过的.
                 Common.BLL.LMMSWatchDog_His_BLL bll = new Common.BLL.LMMSWatchDog_His_BLL();
-                DataTable dt = bll.GetList(JobNumber);
+                DataTable dt = bll.GetList(jobNo);
                 if (dt == null || dt.Rows.Count ==0 )
                     return;
-
-
-                //有跨班多条记录的, 并且没有自跳转过的.
+                
                 if (dt.Rows.Count >1 && Request.QueryString["jobNumber"] == null)
                 {
-                    Response.Redirect("./ProductivityDetail.aspx?jobNumber=" + JobNumber);
+                    Response.Redirect("./ProductivityDetail.aspx?jobNumber=" + jobNo);
                 }
                 else
                 {
-                    string URL = string.Format("./LaserJobMaintance.aspx?jobNumber={0}&day={1}&shift={2}&machineID={3}",JobNumber,JobDay,JobShift,JobMachineID);
+                    string URL = string.Format("./LaserJobMaintance.aspx?jobNumber={0}&day={1}&shift={2}&machineID={3}", jobNo, day, shift, machineID);
                     Response.Redirect(URL);
                 }
-                #endregion
             }
         }
 
@@ -169,40 +118,27 @@ namespace DashboardTTS.Webform
         {
             try
             {
-                // 获取并处理查询参数
-                double performance = 0;
-                double rejRate = 0;
+                //获取并处理查询参数
 
+
+                DateTime dDateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
+                DateTime dDateTo = DateTime.Parse(this.txtDateTo.Text).Date;
+                dDateTo = dDateTo.AddDays(1);
+
+
+                string sShift = ddlShift.SelectedValue;
                 string sModel = this.txtModel.Text.Trim();
-                string DateNotIn = "";
-                string shift = ddlShift.SelectedValue;
                 string sPartNo = txtPartNo.Text.Trim();
+                string sMachineID = this.ddlMachineNo.SelectedItem.Value;
+                string sJobNo = this.txtJobNo.Text.Trim();
 
-                string sMachineNo = ddlMachineNo.SelectedValue == "ALL" ? "" : ddlMachineNo.SelectedValue;
-                DateTime dTimeFrom = DateTime.Parse(this.txtDateFrom.Text).Date.AddHours(8);
-                DateTime dTimeTo = DateTime.Parse(this.txtDateTo.Text).Date.AddHours(8);
-                string sJobnumber = this.txtJobNo.Text.Trim();
-
-                string sDateNotIn_Confirmed = "";
-                if (DateNotIn != "")
-                {
-                    string[] ArrDay = DateNotIn.Split(',');
-
-                    for (int i = 0; i < ArrDay.Length; i++)
-                    {
-                        if (Common.CommFunctions.isNumberic( ArrDay[i]))
-                        {
-                            sDateNotIn_Confirmed += ArrDay[i] + ",";
-                        }
-                    }
-
-                    sDateNotIn_Confirmed = sDateNotIn_Confirmed.Substring(0, sDateNotIn_Confirmed.Length - 1);
-                }
 
 
 
                 Common.BLL.LMMSWatchLog_BLL WatchDogBll = new Common.BLL.LMMSWatchLog_BLL();
-                DataTable dt = WatchDogBll.getJobReportDetail(dTimeFrom, dTimeTo, sMachineNo, sPartNo, performance, rejRate, shift, sJobnumber, sModel,sDateNotIn_Confirmed);
+                DataTable dt = WatchDogBll.GetProductionDetailReport(dDateFrom, dDateTo, sShift, sModel, sPartNo, sMachineID, sJobNo);
+
+
 
            
                 if (dt == null || dt.Rows.Count == 0)

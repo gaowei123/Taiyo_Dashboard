@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-            <span class="titleText">Laser Job Maintance</span>
+            <span class="titleText">Laser Job Maintenance</span>
         </div>
 
 
@@ -108,7 +108,7 @@
 
         <div class="row">
             <div class="col-md-12 panel panel-default" style="padding:10px 10px 0px 40px;">
-                <asp:Label runat="server" Font-Bold="true">Job Complete:</asp:Label>
+                <asp:Label runat="server" Font-Bold="true">Lot Complete:</asp:Label>
                 
                 <hr />
                 

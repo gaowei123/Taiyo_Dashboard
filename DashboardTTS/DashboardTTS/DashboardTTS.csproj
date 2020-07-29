@@ -47,8 +47,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Infragistics2.Web.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.WebUI.Misc.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Infragistics2.WebUI.Misc.v7.3.dll</HintPath>
+    </Reference>
+    <Reference Include="Infragistics2.WebUI.Shared.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Infragistics2.WebUI.Shared.v7.3.dll</HintPath>
+    </Reference>
     <Reference Include="Infragistics2.WebUI.UltraWebChart.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
-    <Reference Include="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.WebUI.UltraWebGauge.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Infragistics2.WebUI.UltraWebGauge.v7.3.dll</HintPath>
+    </Reference>
+    <Reference Include="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Infragistics2.WebUI.WebDateChooser.v7.3.dll</HintPath>
+    </Reference>
     <Reference Include="Infragistics2.WebUI.WebSchedule.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -305,6 +320,7 @@
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
     <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
+    <Compile Include="ViewModel\PackingInventory_ViewModel.cs" />
     <Compile Include="ViewModel\PackingProductChart_ViewModel.cs" />
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
@@ -872,13 +888,6 @@
     </Compile>
     <Compile Include="Webform\Reports\Productivity.aspx.designer.cs">
       <DependentUpon>Productivity.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingDailyReport.aspx.cs">
-      <DependentUpon>MouldingDailyReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingDailyReport.aspx.designer.cs">
-      <DependentUpon>MouldingDailyReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\TTSHomePage.aspx.cs">
       <DependentUpon>TTSHomePage.aspx</DependentUpon>
@@ -2891,7 +2900,6 @@
     <Content Include="Webform\Reports\LaserPQCTotalReport.aspx" />
     <Content Include="Webform\Reports\Output.aspx" />
     <Content Include="Webform\Reports\Productivity.aspx" />
-    <Content Include="Webform\Moulding\MouldingDailyReport.aspx" />
     <Content Include="Webform\TTSHomePage.aspx" />
     <Content Include="plugins\bootstrap-3.3.7\.editorconfig" />
     <Content Include="plugins\bootstrap-3.3.7\.gitattributes" />

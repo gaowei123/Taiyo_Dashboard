@@ -481,31 +481,27 @@ namespace DashboardTTS.Controllers
 
 
         #region Packing Inventory
-
-        //inventory 
+        
         public ActionResult GetPackingInventoryList()
         {
+            string partNo = Request.Form["PartNo"];
+            string type = Request.Form["Type"];
+
+
+
+
+
             return Content("");
         }
-
-
-
-        //job order 
+     
         public ActionResult GetPackingJobOrderList()
         {
             return Content("");
         }
-
-
-
-        //delete function
-
-
-
-
+        
 
         #endregion
-
+        
 
 
        

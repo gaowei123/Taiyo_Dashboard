@@ -809,292 +809,109 @@ namespace Common.BLL
             return dt;
 
         }
+      
 
-
-        public DataTable getJobReportDetail(DateTime dateFrom, DateTime dateTo, string sMachineID, string sPartNo, double sPerformance, double sRejRate,string shift,string sJobNumber,string sModule,string sDateNotIn)
+       
+        public DataTable GetProductionDetailReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sModel, string sPartNo, string sMachineID, string sJobNo)
         {
-            DataTable dtRaw = new DataTable();
-
-
-
-
-            DataSet ds = new DataSet();
-            ds = dal.getJobReport(dateFrom, dateTo, sMachineID, sPartNo, sPerformance, sRejRate, shift, sJobNumber, sModule, sDateNotIn);
-            if (ds == null || ds.Tables.Count == 0)
-            {
+            DataTable dt = dal.GetProductionDetailReport(dDateFrom, dDateTo, sShift, sModel, sPartNo, sMachineID, sJobNo);
+            if (dt == null || dt.Rows.Count == 0)
                 return null;
-            }
-            else
+
+
+            TimeSpan totalTime = new TimeSpan(0);
+            Dictionary<string, double> dicMrpQty = new Dictionary<string, double>();
+            Dictionary<string, double> dicSetMrpQty = new Dictionary<string, double>();
+
+            foreach (DataRow dr in dt.Rows)
             {
-                dtRaw = ds.Tables[0];
-            }
+                string jobNo = dr["jobNo"].ToString();
 
+                double ok = double.Parse(dr["ok"].ToString());
+                double ng = double.Parse(dr["ng"].ToString());
+                double output = double.Parse(dr["output"].ToString());
+                double mrpTotal = double.Parse(dr["mrpTotal"].ToString());
+                double setupQty = double.Parse(dr["setupQty"].ToString());
 
+                double setOK = double.Parse(dr["setOK"].ToString());
+                double setNG = double.Parse(dr["setNG"].ToString());                
+                double setOutput = double.Parse(dr["setOutput"].ToString());
+                double setMrpTotal = double.Parse(dr["setMrpTotal"].ToString());
+                double setSetupQty = double.Parse(dr["setSetupQty"].ToString());
 
-            if (dtRaw == null || dtRaw.Rows.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-
-                DataTable dt = dtRaw;
-                dt.Columns.Add("Setup");
-                dt.Columns.Add("Performance");
-
-              
-
-                DataRow dr = dt.NewRow();
-
-             
-                double OK_Summary = 0;
-                double NG_Summary = 0;
-                double OKSet_Summary = 0;
-                double NGSet_Summary = 0;
-                double Output_Summary = 0;
-                double OutputSet_Summary = 0;
-               
-
-                double RealOutput_Summary = 0;
-                double OutputBycycleTime_Summary = 0;
-
-                TimeSpan Time_Summary = new TimeSpan(0);
-
-
-
-                Dictionary<string, double> setupSetSummary = new Dictionary<string, double>();
-                Dictionary<string, double> setupPCSSummary = new Dictionary<string, double>();
-                Dictionary<string, double> totalQtySetSummary = new Dictionary<string, double>();
-                Dictionary<string, double> totalQtyPcsSummary = new Dictionary<string, double>();
-
-
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    #region Add performance for each job
-                    //string MachineID = row["MachineID"].ToString();
-                    //DateTime StartTime = DateTime.Parse(row["StartTime"].ToString());
-                    //DateTime StopTime = DateTime.Parse(row["EndTime"].ToString());
-                    //TimeSpan Ts = new TimeSpan();
-
-                    //Common.DAL.LMMSEventLog_DAL EventLog_dal = new DAL.LMMSEventLog_DAL();
-                    //DataTable dt_eventLog = EventLog_dal.SelectAdjustEvent(MachineID, StartTime, StopTime);
-            
-                    //if (dt_eventLog != null && dt_eventLog.Rows.Count != 0)
-                    //{
-                    //    foreach (DataRow x in dt_eventLog.Rows)
-                    //    {
-                    //        try
-                    //        {
-                    //            DateTime dTimeStart = DateTime.Parse(x["startTime"].ToString());
-                    //            DateTime dTimeStop = DateTime.Parse(x["stopTime"].ToString());
-
-                    //            Ts += dTimeStop - dTimeStart;
-                    //        }
-                    //        catch (Exception) { }
-                    //    }
-                    //}
-
-
-                    //try
-                    //{
-                    //    double TotalTime;
-                    //    if (Ts.TotalSeconds !=0)
-                    //    {
-                    //        TotalTime = TimeSpan.Parse(row["Time"].ToString()).TotalSeconds - Ts.TotalSeconds;
-                    //    }
-                    //    else
-                    //    {
-                    //        TotalTime = TimeSpan.Parse(row["Time"].ToString()).TotalSeconds;
-                    //    }
-
-                       
-                    //    double CycleTime = double.Parse(row["CycleTime"].ToString());
-                    //    double BlockCount = double.Parse(row["BlockCount"].ToString());
-                    //    double UnitCount = double.Parse(row["UnitCount"].ToString());
-                    //    double RealOutput = double.Parse(row["Output"].ToString());
-
-                    //    double OutputByCycleTime = TotalTime / (CycleTime / BlockCount / UnitCount);
-
-                    //    double performance = Math.Round(RealOutput / OutputByCycleTime * 100, 2);
-                    //    performance = performance < 0 ? 0 : performance;
-
-                    //    RealOutput_Summary += RealOutput;
-                    //    OutputBycycleTime_Summary += OutputByCycleTime;
-
-                    //    row["Performance"] = (performance > 100 ? 100: performance) + "%";
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    row["Performance"] = "0%";
-                    //}
-                    #endregion
-
-
-                    row["Setup"] = row["SetupQTY_Set"].ToString() + "(" + row["SetupQTY"].ToString() + ")";
-
-                    try
-                    {
-                        //TotalQTY_Summary += double.Parse(row["Total"].ToString());
-
-                        if (!totalQtyPcsSummary.ContainsKey(row["jobnumber"].ToString()))
-                        {
-                            totalQtyPcsSummary.Add(row["jobnumber"].ToString(), double.Parse(row["Total"].ToString()));
-                        }
-                    }
-                    catch (Exception)
-                    { //TotalQTY_Summary += 0; 
-                    }
-
-                    try
-                    {
-
-                        //TotalSet_Summary += double.Parse(row["Total_Set"].ToString().Trim(')').Split('(')[0]);
-
-                        if (!totalQtySetSummary.ContainsKey(row["jobnumber"].ToString()))
-                        {
-
-                            totalQtySetSummary.Add(row["jobnumber"].ToString(), double.Parse(row["Total_Set"].ToString().Trim(')').Split('(')[0]));
-                        }
-
-                    }
-                    catch (Exception ee) 
-                    { //TotalSet_Summary += 0; 
-                    }
-
-
-                    try
-                    {
-                        OK_Summary += double.Parse(row["OK"].ToString());
-                    }
-                    catch (Exception)
-                    { OK_Summary += 0; }
-
-
-                    try
-                    {
-                        OKSet_Summary += double.Parse(row["OK_Set"].ToString().Trim(')').Split('(')[0]);
-                    }
-                    catch (Exception)
-                    { OKSet_Summary += 0; }
-
-                    try
-                    {
-                        NG_Summary += double.Parse(row["NG"].ToString());
-                    }
-                    catch (Exception)
-                    { NG_Summary += 0; }
-
-
-                    try
-                    {
-                      
-                        NGSet_Summary += double.Parse(row["NG_Set"].ToString().Trim(')').Split('(')[0]);
-                    }
-                    catch (Exception)
-                    { NGSet_Summary += 0; }
-
-
-
-                    try
-                    {
-                        Output_Summary += double.Parse(row["Output"].ToString());
-                    }
-                    catch (Exception)
-                    { Output_Summary += 0; }
-
-
-                    try
-                    {
-                     
-                        OutputSet_Summary += double.Parse(row["Output_Set"].ToString().Trim(')').Split('(')[0]);
-                    }
-                    catch (Exception)
-                    { OutputSet_Summary += 0; }
-
-
-                    try
-                    {
-                         Time_Summary = Time_Summary + TimeSpan.Parse(row["Time"].ToString());
-                    }
-                    catch (Exception ee) { }
-
-                    try
-                    {
-                        //Setup_Summary = Setup_Summary + double.Parse(row["SetupQTY"].ToString());
-                        
-                        if (!setupPCSSummary.ContainsKey(row["jobnumber"].ToString()))
-                        {
-                            setupPCSSummary.Add(row["jobnumber"].ToString(), double.Parse(row["SetupQTY"].ToString()));
-                        }
-                    }
-                    catch (Exception ee) { }
-
-                    try
-                    {
-                        //SetupSet_Summary = SetupSet_Summary + double.Parse(row["SetupQTY_Set"].ToString());
-
-                        if (!setupSetSummary.ContainsKey(row["jobnumber"].ToString()))
-                        {
-                            setupSetSummary.Add(row["jobnumber"].ToString(), double.Parse(row["SetupQTY_Set"].ToString()));
-                        }
-                    }
-                    catch (Exception ee) { }
-
-                }
-
-
-                string RejRate = Output_Summary == 0 ? "0%" : Math.Round(NG_Summary / Output_Summary * 100, 2).ToString() + "%";
-                string RejRateSet = NGSet_Summary == 0 ? "0%" : Math.Round(NGSet_Summary / OutputSet_Summary * 100, 2).ToString() + "%";
-
-
-
-                double TotalQTY_Summary = 0;
-                double TotalSet_Summary = 0;
-                double Setup_Summary = 0;
-                double SetupSet_Summary = 0;
                 
-                foreach (KeyValuePair<string,double> item in setupSetSummary)
-                {
-                    SetupSet_Summary += item.Value;
-                }
-                foreach (KeyValuePair<string, double> item in setupPCSSummary)
-                {
-                    Setup_Summary += item.Value;
-                }
-                foreach (KeyValuePair<string, double> item in totalQtyPcsSummary)
-                {
-                    TotalQTY_Summary += item.Value;
-                }
-                foreach (KeyValuePair<string, double> item in totalQtySetSummary)
-                {
-                    TotalSet_Summary += item.Value;
-                }
+                
+
+                dr["displayOK"] = string.Format("{0}({1})", setOK,ok);
+                dr["displayNG"] = string.Format("{0}({1})", setNG, ng);
+                dr["displayOutput"] = string.Format("{0}({1})", setOutput, output);
+                dr["displayMRP"] = string.Format("{0}({1})", setMrpTotal, mrpTotal);
+                dr["displaySetup"] = string.Format("{0}({1})", setSetupQty, setupQty);
+
+
+                double rejRate = Math.Round((ng + setupQty) / output * 100, 2);
+                double setRejRate = Math.Round((setNG + setSetupQty) / setOutput * 100, 2);
+                dr["displayRejRate"] = string.Format("{0}%({1}%)", setRejRate.ToString("0.00"), rejRate.ToString("0.00"));
 
 
 
-
-                dr["Shift"] = "Total :";
-                dr["OK_Set"] = OKSet_Summary.ToString() + "(" + OK_Summary.ToString() + ")";
-                dr["NG_Set"] = NGSet_Summary.ToString() + "(" + NG_Summary.ToString()  + ")";
-                dr["Output_Set"] = OutputSet_Summary.ToString() + "(" + Output_Summary.ToString()  + ")";
-                dr["Total_Set"] = TotalSet_Summary.ToString()  + "(" + TotalQTY_Summary.ToString() + ")";
-                dr["RejRate_Set"] = RejRateSet + "(" + RejRate  + ")";
-                dr["Time"] = Math.Round( Time_Summary.TotalHours,2) + "H";
-                dr["Setup"] = SetupSet_Summary.ToString() + "(" + Setup_Summary.ToString() + ")";
-                //double Total_Performance = Math.Round(RealOutput_Summary / OutputBycycleTime_Summary * 100, 2);
-                //dr["Performance"] = (Total_Performance > 100 ? 100 : Total_Performance) + "%";
-                dt.Rows.Add(dr);
+                totalTime = totalTime + TimeSpan.Parse(dr["Time"].ToString());
 
 
-                return dt;
+
+                if (!dicMrpQty.ContainsKey(jobNo))
+                    dicMrpQty.Add(jobNo, mrpTotal);
+                
+                if (!dicSetMrpQty.ContainsKey(jobNo))
+                    dicSetMrpQty.Add(jobNo, setMrpTotal);
             }
+
+
+
+            double totalOk = double.Parse(dt.Compute("sum(ok)", "").ToString());
+            double totalNg = double.Parse(dt.Compute("sum(ng)", "").ToString());
+            double totalOutput = double.Parse(dt.Compute("sum(output)", "").ToString());
+            double totalSetupQty = double.Parse(dt.Compute("sum(setupQty)", "").ToString());
+
+            double totalSetOK = double.Parse(dt.Compute("sum(setOK)", "").ToString());
+            double totalSetNG = double.Parse(dt.Compute("sum(setNG)", "").ToString());
+            double totalSetOutput = double.Parse(dt.Compute("sum(setOutput)", "").ToString());
+            double totalSetSetupQty = double.Parse(dt.Compute("sum(setSetupQty)", "").ToString());
+
+            double totalMrpTotal = 0;
+            double totalSetMrpTotal = 0;
+            foreach (KeyValuePair<string, double> item in dicMrpQty)
+            {
+                totalMrpTotal += item.Value;
+            }
+            foreach (KeyValuePair<string, double> item in dicSetMrpQty)
+            {
+                totalSetMrpTotal += item.Value;
+            }
+
+
+
+
+            DataRow drSummary = dt.NewRow();
+            drSummary["shift"] = "Total";
+            drSummary["Time"] = Math.Round(totalTime.TotalHours, 2) + "H";
+            drSummary["displayOK"] = string.Format("{0}({1})", totalSetOK, totalOk);
+            drSummary["displayNG"] = string.Format("{0}({1})", totalSetNG, totalNg);
+            drSummary["displayOutput"] = string.Format("{0}({1})", totalSetOutput, totalOutput);
+            drSummary["displayMRP"] = string.Format("{0}({1})", totalSetMrpTotal, totalMrpTotal);
+            drSummary["displaySetup"] = string.Format("{0}({1})", totalSetSetupQty, totalSetupQty);
+
+            double totalRejRate = Math.Round((totalNg + totalSetupQty) / totalOutput * 100, 2);
+            double totalSetRejRate = Math.Round((totalSetNG + totalSetSetupQty) / totalSetOutput * 100, 2);
+            drSummary["displayRejRate"] = string.Format("{0}%({1}%)", totalSetRejRate.ToString("0.00"), totalRejRate.ToString("0.00"));
+
+            dt.Rows.Add(drSummary);
+
+            return dt;
         }
 
 
-       
 
- 
 
         public DataTable GetDayOutput(DateTime dDay)
         {
