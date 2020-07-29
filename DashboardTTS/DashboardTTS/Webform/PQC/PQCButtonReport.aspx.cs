@@ -372,8 +372,8 @@ namespace DashboardTTS.Webform.PQC
                                                partNo = "",
                                                lotQty = modelGroup.Sum(p => p.lotQty),
                                                pass = modelGroup.Sum(p => p.pass),
-                                               rejQty = modelGroup.Sum(p => p.rejQty),
-                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                               rejQty = modelGroup.Sum(p => p.rejQty + p.Paint_SetupRej + p.Paint_QATestRej),
+                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty + p.Paint_SetupRej + p.Paint_QATestRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
 
                                                //TTS defect code
@@ -765,6 +765,9 @@ namespace DashboardTTS.Webform.PQC
                     othersWIPSummaryModel.Light_Bubble = wipPartModel.Light_Bubble;
                     othersWIPSummaryModel.White_Dot_in_Material = wipPartModel.White_Dot_in_Material;
                     othersWIPSummaryModel.Other = wipPartModel.Other;
+                    othersWIPSummaryModel.Others_TotalRej = wipPartModel.Others_TotalRej;
+                    othersWIPSummaryModel.Others_TotalRejRate = wipPartModel.Others_TotalRejRate;
+
 
                     WIPPartSummaryInfo.Add(othersWIPSummaryModel);
                     #endregion
@@ -808,7 +811,8 @@ namespace DashboardTTS.Webform.PQC
                     ttsMouldingWIPSummaryModel.TTS_Printing_Color_Dark = wipPartModel.TTS_Printing_Color_Dark;
                     ttsMouldingWIPSummaryModel.TTS_Wrong_Orietation = wipPartModel.TTS_Wrong_Orietation;
                     ttsMouldingWIPSummaryModel.TTS_Other = wipPartModel.TTS_Other;
-
+                    ttsMouldingWIPSummaryModel.TTS_Mould_TotalRej = wipPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingWIPSummaryModel.TTS_Mould_TotalRejRate = wipPartModel.TTS_Mould_TotalRejRate;
 
                     WIPPartSummaryInfo.Add(ttsMouldingWIPSummaryModel);
                     #endregion

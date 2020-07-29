@@ -86,6 +86,15 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+           
+                if ((dDateTo.Value - dDateFrom.Value).TotalDays > 30)
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "Please reduce searching days");
+                    return;
+                }
+
+
+
                 string sType = "";
                 string sDescription = Request.QueryString["Description"].ToString();
                 string sNumber = this.ddlNumber.SelectedValue;
