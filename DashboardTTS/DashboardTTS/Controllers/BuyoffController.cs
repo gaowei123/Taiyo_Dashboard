@@ -38,10 +38,22 @@ namespace DashboardTTS.Controllers
 
 
 
-      
+
+        public ActionResult GetCheckingDate()
+        {
+            string jobNo = Request.Form["JobNo"];
+
+            Common.Class.BLL.PQCQaViTracking_BLL trackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
+            DateTime day = trackingBLL.GetCheckingDateByJob(jobNo);
+
+
+            return Content(day.ToString("yyyy-MM-dd"));
+        }
+
+
         public ActionResult GetJobList()
         {
-             Common.Class.BLL.PQCQaViTracking_BLL trackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
+            Common.Class.BLL.PQCQaViTracking_BLL trackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
 
             JavaScriptSerializer js = new JavaScriptSerializer();
 

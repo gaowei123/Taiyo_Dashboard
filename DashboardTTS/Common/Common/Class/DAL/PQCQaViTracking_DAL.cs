@@ -274,48 +274,7 @@ where a.nextviflag = 'true' ");
             }
         }
 
-        public DataTable GetDayOutput(DateTime  dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select 
-                            a.day
-                            ,isnull( sum( case when a.machineID in (1,2,3,4,5,6,7,8) then isnull(a.TotalQty,0) end ), 0) as OnLineOutput_PCS
-                            ,isnull( sum( case when a.machineID in (11,12,13,14,15 ,16,17,18,21,22,23,24,25,26,27,28) then isnull(a.TotalQty,0) end), 0) as WIPOutput_PCS
- 
-                            ,convert(decimal(18,0), isnull( sum( case when a.machineID in (1,2,3,4,5,6,7,8) then isnull(a.TotalQty,0) /  isnull(b.materialcount,1) end), 0)) as OnLineOutput_SET
-                            ,convert(decimal(18,0), isnull( sum( case when a.machineID in (11,12,13,14,15 ,16,17,18,21,22,23,24,25,26,27,28) then isnull(a.TotalQty,0) /  isnull(b.materialcount,1)  end ), 0)) as WIPOutput_SET
-
-
-                            from PQCQaViTracking a
-                            left join (select partnumber, count(1) as materialCount from PQCBomDetail group by partNumber) b 
-                            on a.partNumber = b.partnumber
-
-                            where a.day = @day
-
-                            group by a.day ");
-
-
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@day", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = dDay;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-        
+     
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -391,163 +350,6 @@ where day >= @datefrom and day < @dateto
 
         }
         
-        public DataTable GetButtonReport(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sModel, string sColor, string sType, string sSupplier, string sDescription, string sCoating, string sJobNo)
-        {
-           
-            StringBuilder strSql = new StringBuilder();
-
-            //查询出所有job到临时表
-            strSql.Append(@"
-with allJobsForReports as (
-    select
-    distinct UPPER(jobid) as jobID
-    from PQCQaViTracking a
-    left join PQCBom b on a.partNumber = b.partNumber
-    where 1 = 1 and acceptQty + rejectQty >= totalQty
-
-    --Bom中有check2的, 先查check2的nextViFlag
-    and case when b.processes like '%Check#2%'
-        then  case when a.processes = 'CHECK#2' and a.nextViFlag = 'True' then 'True' else 'False' end
-        --只有check1的, 直接以nextViFlag定
-		else a.nextViFlag
-    end = 'True'
-
-    and a.dateTime >= @DateFrom
-    and a.datetime < @DateTo ");
-            
-
-            if (sPartNumber.Trim() != "")
-                strSql.AppendLine(" and b.partnumber = @PartNumber ");
-
-            if (sModel.Trim() != "")
-                strSql.AppendLine(" and b.model = @Model");
-
-            if (sColor.Trim() != "")
-                strSql.AppendLine(" and b.color = @Color  ");
-            
-            if (sSupplier.Trim() != "")
-                strSql.AppendLine(" and b.remark_1 = @supplier");
-            
-            if (sCoating.Trim() != "")
-                strSql.AppendLine(" and b.coating = @coating");
-
-            if (sDescription.Trim() != "")
-                strSql.AppendLine(" and b.description = @description ");
-
-            if (sType.Trim() != "")
-                strSql.AppendLine(" and b.Type = @Type");
-
-            if (sJobNo.Trim() != "")
-                strSql.AppendLine(" and a.JobID = @JobNo");
-
-
-            strSql.AppendLine(")");
-            //查询出所有job到临时表
-
-            
-            //Laser Buyoff 临时表
-            strSql.AppendFormat(@"
-,LaserInfo as (
-	select * from opendatasource( 'SQLOLEDB', {0}).lmms_taiyo.dbo.LMMSBUYOFF_LIST  
-	where DATE_TIME > '2019-4-15' and DATE_TIME < @DateTo
-)", StaticRes.Global.SqlConnection.SqlconnLaser);
-
-            //Painting delivery 临时表
-            strSql.AppendFormat(@"
-,PaintingDelivery as (
-	select * from opendatasource( 'SQLOLEDB', {0}).taiyo_painting.dbo.PaintingDeliveryHis 
-	where updatedTime > '2019-4-15' and updatedTime < @DateTo
-)", StaticRes.Global.SqlConnection.SqlconnPainting);
-
-
-
-            strSql.Append(@"
-select 
-
-UPPER(a.jobId) as jobNumber
-,c.lotno 
-,c.partnumber
-,b.materialPartNo as materialNo
-,convert(float, isnull( c.inQuantity,0)) as lotQty
-,b.passQty
-,convert(varchar(50), b.rejectQty) as PQCTotalRej
-,e.model
-,'' as totalRejRate
-,b.userID as PQCop
-,e.remark_1 as Supplier
-,b.processes as Process
-,case when e.processes like '%Laser%' then 'LASER' else 'WIP' end as BomProcess
-
-,e.description
-
---Laser Info
-,d.MACHINE_ID as laserMachine
-,d.DATE_TIME as laserOperator
-,d.MC_OPERATOR as laserDate
-
-from allJobsForReports a
-
-left join (
-	select 
-    aa.jobId
-    ,userID = stuff( (SELECT  ',' +  t.userID FROM (select jobId, userID from PQCQaViTracking group by jobId, userID) t  WHERE t.jobId = aa.jobId  FOR xml path('')) , 1 , 1 , '')
-    ,aa.materialPartNo
-	,SUM(aa.passQty)  as passQty
-    ,SUM(aa.rejectQty) as rejectQty
-    ,processes
-    
-    from PQCQaViDetailTracking aa
-    group by aa.jobId,aa.materialPartNo, aa.processes
-) b on a.jobID = b.jobID
-
-left join PaintingDelivery c 
-on a.jobID collate chinese_prc_ci_as  = c.JobNumber collate chinese_prc_ci_as
-
-left join LaserInfo d 
-on a.jobID collate chinese_prc_ci_as = d.JOB_ID collate chinese_prc_ci_as
-
-left join PQCBom e 
-on c.partNumber collate chinese_prc_ci_as = e.partNumber collate chinese_prc_ci_as ");
-           
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@DateFrom", SqlDbType.DateTime),
-                new SqlParameter("@DateTo", SqlDbType.DateTime),
-                new SqlParameter("@description", SqlDbType.VarChar,50),
-                new SqlParameter("@PartNumber", SqlDbType.VarChar,50),
-                new SqlParameter("@Model", SqlDbType.VarChar,50),
-                new SqlParameter("@Color", SqlDbType.VarChar,50),
-                new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50),
-                new SqlParameter("@Type", SqlDbType.VarChar,50),
-                new SqlParameter("@JobNo",SqlDbType.VarChar,50)
-            };
-
-
-            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
-            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
-            if (sDescription != "") parameters[2].Value = sDescription; else parameters[2] = null;
-            if (sPartNumber != "") parameters[3].Value = sPartNumber; else parameters[3] = null;
-            if (sModel != "") parameters[4].Value = sModel; else parameters[4] = null;
-            if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
-            if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
-            if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
-            if (sType != "") parameters[8].Value = sType; else parameters[8] = null;
-            if (sJobNo != "") parameters[9].Value = sJobNo; else parameters[9] = null;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
         
        
         public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
@@ -588,7 +390,7 @@ where 1=1 ");
 
 
 
-        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
             StringBuilder strSql = new StringBuilder();
 
@@ -597,10 +399,12 @@ where 1=1 ");
 select distinct jobid from pqcqavitracking a
 left join pqcbom b on a.partnumber = b.partnumber  
 where  1=1 
-and b.description = 'BUTTON' 
 and a.nextViFlag = 'true'
 and a.day >= @DateFrom
 and a.day < @DateTo ");
+
+            if (sDescription.Trim() != "")
+                strSql.AppendLine(" and b.description = @description ");
 
             if (sPartNumber.Trim() != "")
                 strSql.AppendLine(" and a.partnumber = @PartNumber ");
@@ -631,7 +435,8 @@ and a.day < @DateTo ");
                 new SqlParameter("@Model", SqlDbType.VarChar,50),
                 new SqlParameter("@Color", SqlDbType.VarChar,50),
                 new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50)
+                new SqlParameter("@coating", SqlDbType.VarChar,50),
+                new SqlParameter("@description", SqlDbType.VarChar,50)
             };
 
 
@@ -643,6 +448,7 @@ and a.day < @DateTo ");
             if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
             if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
             if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
+            if (sDescription != "") parameters[8].Value = sDescription; else parameters[8] = null;
 
 
 
@@ -1075,8 +881,8 @@ with allJobsForReports as (
 	from PQCQaViTracking a 
 	left join PQCBom b on a.partNumber = b.partNumber
 	where 1 = 1  and acceptQty + rejectQty >= totalQty 
-	and a.dateTime >= @DateFrom
-	and a.datetime <  @DateTo
+	and a.day >= @DateFrom
+	and a.day <  @DateTo
     --Bom中有check2的, 先查check2的nextViFlag
 	and case when b.processes like '%Check#2%'
 		then  case when a.processes = 'CHECK#2' and a.nextViFlag = 'True' then 'True' else 'False' end
@@ -2157,79 +1963,7 @@ and a.day=@day ");
                 return ds.Tables[0];
         }
 
-        public DataTable GetJobStatus(string sJobNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select top 1 jobID ,status,nextViFlag from pqcqavitracking  where 1=1  ");
-            
-            if (!string.IsNullOrEmpty(sJobNo))
-            {
-                strSql.Append("  and jobId = @jobId ");
-            }
-            strSql.Append(" order by datetime desc ");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@jobId", SqlDbType.VarChar)
-            };
-
-            if (!string.IsNullOrEmpty(sJobNo))
-            {
-                parameters[0].Value = sJobNo;
-            }
-            else
-            {
-                parameters[0] = null;
-            }
-       
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
-
-
-
-        public SqlCommand UpdateJobByLaserMaintenance(Common.Class.Model.PQCQaViTracking model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" update PQCQaViTracking set
-                                totalQty = @totalQty, 
-                                acceptQty = @acceptQty, 
-                                lastUpdatedTime = @lastUpdatedTime,
-                                updatedTime =  @updatedTime,
-                                remarks = @remarks
-                            where trackingID  =@trackingID ");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@totalQty", SqlDbType.Decimal),
-                new SqlParameter("@acceptQty", SqlDbType.Decimal),
-                new SqlParameter("@trackingID", SqlDbType.VarChar),
-                new SqlParameter("@remarks", SqlDbType.VarChar),
-                new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
-                new SqlParameter("@updatedTime", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = model.TotalQty;
-            parameters[1].Value = model.acceptQty;
-            parameters[2].Value = model.trackingID;
-            parameters[3].Value = model.remarks;
-            parameters[4].Value = model.lastUpdatedTime;
-            parameters[5].Value = model.lastUpdatedTime;
-
-
-
-            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
+      
 
         public SqlCommand UpdatePQCMaintenance(Common.Class.Model.PQCQaViTracking model)
         {
@@ -2440,6 +2174,30 @@ where day >= @dateFrom and day < @dateTo ");
             if (sStation != "") parameters[3].Value = sStation; else parameters[3] = null;
             if (sPIC != "") parameters[4].Value = sPIC; else parameters[4] = null;
             if (sJobNo != "") parameters[5].Value = sJobNo; else parameters[5] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+
+        public DataTable GetCheckingDateByJob(string sJob)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"select * from PQCQaViTracking where jobid= @jobid order by datetime desc");
+            
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobid", SqlDbType.VarChar,50)
+            };
+
+            parameters[0].Value = sJob;
 
 
 

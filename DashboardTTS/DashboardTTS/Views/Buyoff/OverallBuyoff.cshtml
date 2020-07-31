@@ -310,21 +310,15 @@
 
 <script type="text/javascript">
 
+    var apiGetCheckingDate = window.globalConfig.rootDirectory + '/Buyoff/GetCheckingDate';
     var apiGetBuyoffJobList = window.globalConfig.rootDirectory + '/Buyoff/GetJobList';
-
     var apiGetLaserModel = window.globalConfig.rootDirectory + '/Buyoff/GetLaserBuyoffRecord';
     var apiGetLaserParameterModel = window.globalConfig.rootDirectory + '/Buyoff/GetLaserParameter';
-
-
-
     var apiGetMouldingDefect = window.globalConfig.rootDirectory + '/Buyoff/GetMouldDefect';
     var apiGetPaintingDefect = window.globalConfig.rootDirectory + '/Buyoff/GetPaintDefect';
     var apiGetLaserDefect = window.globalConfig.rootDirectory + '/Buyoff/GetLaserDefect';
     var apiGetOthersDefect = window.globalConfig.rootDirectory + '/Buyoff/GetOthersDefect';
 
-    
-
-        
 
 
     //初始化时间框
@@ -340,16 +334,61 @@
     });
 
 
+
+    $(document).ready(function () {
+
+        var jobNo = getUrlParam("JobNumber");
+
+
+        if (jobNo == '') {
+            return;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: apiGetCheckingDate,
+            data: {
+                JobNo: jobNo
+            },
+            success: function (data) {
+
+                $('#txtDate').val(data);
+
+                setJobList();
+            },
+            error: function () {
+                alert("Setting Job no list error !");
+            }
+        });
+
+
+       
+    });
+
+
+
+
+
+
     //set job no list
-    $('#txtDate').change(function () {
-      
+    $('#txtDate').change( setJobList());
+
+
+    function setJobList() {
+
+
+        if ($('#txtDate').val() == '') {
+            return;
+        }
 
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetBuyoffJobList,
             data: {
-                Date:  $('#txtDate').val()
+                Date: $('#txtDate').val()
             },
             success: function (data) {
 
@@ -367,25 +406,33 @@
 
                 $('#ddlJobNo').selectpicker("refresh");
 
+                var jobNo = getUrlParam("JobNumber");
+                if (jobNo != '') {
+                    $('#ddlJobNo').val(jobNo);
+                    $('#ddlJobNo').selectpicker("refresh");
+
+
+                    ShowReport();
+                }
+
+
             },
             error: function () {
                 alert("Setting Job no list error !");
             }
         });
-    });
-    
-
+    }
 
 
 
     function ShowReport() {
-        
+
 
         var jobNo = $('#ddlJobNo').val();
-      
+
         if (jobNo == '') {
             return;
-        } 
+        }
 
 
         setLaserBuyoff(jobNo);
@@ -398,20 +445,7 @@
     }
 
 
-    $(document).ready(function () {
-
-        var jobNo = getUrlParam("JobNumber");
-
-        setLaserBuyoff(jobNo);
-
-
-        setLaserParameters(jobNo);
-
-        setDefectTable(jobNo);
-
-    });
-
-
+   
 
 
     function setLaserBuyoff(jobNo) {
@@ -509,7 +543,6 @@
                     $('#tdCheckGuideIN').html('<label style="background-color:' + data.checkGuideINColor + ';width:50px;">' + data.checkGuideIN + '</label>');
                     $('#tdNavitasIN').html('<label style="background-color:' + data.navitasINColor + ';width:50px;">' + data.navitasIN + '</label>');
                     $('#tdSmartScopeIN').html('<label style="background-color:' + data.smartScopeINColor + ';width:50px;">' + data.smartScopeIN + '</label>');
-
                 }
 
 
@@ -952,7 +985,7 @@
             }
 
         });
-
+        
         $('#tablePaintingDefect').bootstrapTable({ // 对应table标签的id
 
 
@@ -1160,6 +1193,11 @@
                 title: 'Shortage',
                 align: 'center',
                 valign: 'middle'
+            }, {
+                field: 'qa',
+                title: 'QA',
+                align: 'center',
+                valign: 'middle'
             },
             {
                 field: 'other',
@@ -1204,6 +1242,7 @@
                 var particleForLaserSetup = 0;
                 var buyoff = 0;
                 var shortage = 0;
+                var qa = 0;
                 var other = 0;
               
 
@@ -1237,6 +1276,7 @@
                     particleForLaserSetup += data[i].particleForLaserSetup;
                     buyoff += data[i].buyoff;
                     shortage += data[i].shortage;
+                    qa += data[i].qa;
                     other += data[i].other;
                 }
 
@@ -1266,6 +1306,7 @@
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
                 if (buyoff == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'buyoff');
                 if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
+                if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 
 

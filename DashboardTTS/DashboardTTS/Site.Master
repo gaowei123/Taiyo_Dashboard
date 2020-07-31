@@ -269,7 +269,7 @@
                         <ul class="dropdown-menu menu-top">
                             <li><a runat="server" href="./Webform/TTSHomePage.aspx">Home Page</a></li> 
                             <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
-                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx">Laser PQC Total Report</a></li>
+                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">Laser PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
                             <li><a runat="server" href="./Webform/Reports/AllMachineUtilizationRate.aspx">All Machine Utilization</a></li>
                             <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>

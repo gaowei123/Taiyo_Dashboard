@@ -24,24 +24,11 @@ namespace DashboardTTS.Webform.PQC
                     this.lbBezelPanelName.Text = reportType + " No:";
 
 
-                    //默认显示前一天的.   周日, 周一显示 上周五的.
-                    DateTime dLastDay = new DateTime();
-                    if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-                    {
-                        dLastDay = DateTime.Now.AddDays(-2);
-                    }
-                    else if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
-                    {
-                        dLastDay = DateTime.Now.AddDays(-3);
-                    }
-                    else
-                    {
-                        dLastDay = DateTime.Now.AddDays(-1);
-                    }
+                    //周日, 周一显示 上周五的. 默认显示前一天的.
+                    DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
 
 
                     this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");
-                    this.txtDateTo.Text = dLastDay.ToString("yyyy-MM-dd");
 
 
 
@@ -70,8 +57,7 @@ namespace DashboardTTS.Webform.PQC
                 DateTime? dMFGDate = new DateTime();
                 DateTime? dPaintDate = new DateTime();
 
-                try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }
-                try { dDateTo = DateTime.Parse(txtDateTo.Text); } catch { dDateTo = null; }
+                try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }             
                 try { dPaintDate = DateTime.Parse(txtPaintDate.Text); } catch { dPaintDate = null; }
                 try { dMFGDate = DateTime.Parse(txtMFGDate.Text); } catch { dMFGDate = null; }
 
@@ -81,8 +67,9 @@ namespace DashboardTTS.Webform.PQC
                     return;
                 }
 
-                dDateFrom = dDateFrom.Value.AddHours(8);
-                dDateTo = dDateTo.Value.AddDays(1).AddHours(8);
+
+                dDateFrom = dDateFrom.Value;
+                dDateTo = dDateFrom.Value.AddDays(1);
 
 
 
@@ -243,8 +230,10 @@ namespace DashboardTTS.Webform.PQC
                     DataRow drOutput = dtOutput.NewRow();
                     drOutput["Part No"] = dr["PartNumber"].ToString();
                     drOutput["Lot No"] = dr["LotNo"].ToString();
+
                     //带a连接标签的jobno, 做跳转连接
-                    drOutput["Job No"] = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", sJobNumber,sJobNumber);
+      
+                    drOutput["Job No"] = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", sJobNumber, sJobNumber);
 
                     drOutput["MFG Date"] = dr["MFG Date"].ToString();
                     drOutput["Painting Under Coat Date"] = dr["Painting Under Coat Date"].ToString();
@@ -564,7 +553,7 @@ namespace DashboardTTS.Webform.PQC
             int hide_0_StartRowIndex = 0;
             int hide_0_EndRowIndex = 0;
             int hide_0_StartColumnIndex = 1;
-            int hide_0_EndColumnIndex = dt.Columns.Count - 3;
+            int hide_0_EndColumnIndex = dt.Columns.Count - 2;
 
             foreach (DataGridItem item in this.dgBezelPanel.Items)
             {

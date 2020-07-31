@@ -359,6 +359,7 @@ namespace DashboardTTS.Webform.PQC
 
                 //从mrp接口获取的datetime不是mfgdate, 只能通过pqc op在buyoff reocord中手动选择mfg date.
                 MFGDate = DateTime.Parse(this.txtMFGDate.Text);
+
                 //更新回各个表.
                 UpdateMFGDate(txtJobNumber.Text, MFGDate.Value);
 

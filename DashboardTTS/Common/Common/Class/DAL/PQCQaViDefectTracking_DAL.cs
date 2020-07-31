@@ -1396,6 +1396,7 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Particle for laser setup' then rejectQty end),0) as [Particle for laser setup]
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Buyoff' then rejectQty end),0) as [Buyoff]
 ,'0' as Shortage
+,'0' as QA
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Other' then rejectQty end),0) as [Other]
 from PQCQaViDefectTracking 
 where 1=1  ");

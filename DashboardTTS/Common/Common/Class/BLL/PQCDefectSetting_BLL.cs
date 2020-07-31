@@ -137,6 +137,16 @@ namespace Common.Class.BLL
                 dt.Rows.Add(drBuyoff);
             }
 
+            if (dt.Select(string.Format(" defectCodeSource = '{0}' and defectDescription =  'Paint'", "QA")).Length == 0)
+            {
+                DataRow drPaintQA = dt.NewRow();
+                drPaintQA["defectcodeID"] = 104;
+                drPaintQA["defectDescription"] = "Paint";
+                drPaintQA["defectCode"] = "PAINTING QA";
+                drPaintQA["defectCodeSource"] = "QA";
+                dt.Rows.Add(drPaintQA);
+            }
+                
 
 
 

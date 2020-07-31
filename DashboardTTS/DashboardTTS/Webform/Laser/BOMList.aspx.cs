@@ -61,7 +61,7 @@ namespace DashboardTTS.Webform
 
                         DataGridItem item = e.Item;
                         string PartNo = item.Cells[4].Text;
-                        string MachineID = item.Cells[6].Text;
+                        string MachineID = item.Cells[7].Text;
                         string commandType = "Delete";
 
                         string strUrl = "./Login.aspx?partNumber=" + PartNo + "&machineID=" + MachineID + "&commandType=" + commandType + "&Department=" + StaticRes.Global.Department.Laser;
@@ -81,9 +81,6 @@ namespace DashboardTTS.Webform
                        
 
                         Response.Redirect("./BomFormMenu.aspx?buttonType=UpdateBom", false);
-
-                       
-
                         #endregion
                         break;
                     default:

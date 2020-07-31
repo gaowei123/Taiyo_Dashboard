@@ -70,6 +70,8 @@ namespace DashboardTTS.ViewModel
             public string buyoffBy { get; set; }
             public string approvedBy { get; set; }
             public string checkBy { get; set; }
+
+            public DateTime? date { get; set; }
             
         }
 
@@ -157,6 +159,7 @@ namespace DashboardTTS.ViewModel
             public double particleForLaserSetup { get; set; }
             public double buyoff { get; set; }
             public double shortage { get; set; }
+            public double qa { get; set; }
             public double other { get; set; }
 
 

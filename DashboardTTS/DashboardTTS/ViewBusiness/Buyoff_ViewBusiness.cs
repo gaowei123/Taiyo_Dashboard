@@ -78,6 +78,8 @@ namespace DashboardTTS.ViewBusiness
                 model.approvedBy = "";
                 model.checkBy = "";
 
+                model.date = null;
+
 
 
             }
@@ -297,6 +299,8 @@ namespace DashboardTTS.ViewBusiness
                 model.approvedBy = dt.Rows[0]["APPROVED_BY"].ToString();
                 model.checkBy = dt.Rows[0]["CHECK_BY"].ToString();
 
+                model.date = DateTime.Parse(dt.Rows[0]["DATE_TIME"].ToString());
+
             }
             
 
@@ -436,6 +440,7 @@ namespace DashboardTTS.ViewBusiness
                     model.dented = double.Parse(dr["Dented"].ToString());
                     model.particleForLaserSetup = double.Parse(dr["Particle for laser setup"].ToString());
                     model.buyoff = double.Parse(dr["Buyoff"].ToString());
+                    model.qa = double.Parse(dr["QA"].ToString());
 
                     model.shortage = double.Parse(dr["Shortage"].ToString());
 

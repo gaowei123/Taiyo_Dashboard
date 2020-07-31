@@ -1093,6 +1093,12 @@
                 valign: 'middle'
             },
             {
+                field: 'qa',
+                title: 'QA',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
                 field: 'other',
                 title: 'Other',
                 align: 'center',
@@ -1135,6 +1141,7 @@
                 var particleForLaserSetup = 0;
                 var buyoff = 0;
                 var shortage = 0;
+                var qa = 0;
                 var other = 0;
 
 
@@ -1168,6 +1175,7 @@
                     particleForLaserSetup += data[i].particleForLaserSetup;
                     buyoff += data[i].buyoff;
                     shortage += data[i].shortage;
+                    qa += data[i].qa;
                     other += data[i].other;
                 }
 
@@ -1197,6 +1205,7 @@
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
                 if (buyoff == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'buyoff');
                 if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
+                if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 
 

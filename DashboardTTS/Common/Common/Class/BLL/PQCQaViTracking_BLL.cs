@@ -165,18 +165,10 @@ namespace Common.Class.BLL
                 return int.Parse(dt.Rows[0]["OK"].ToString());
             }
         }
-        
-        public DataTable GetDayOutput(DateTime dDay)
-        {
-            DataTable dt = dal.GetDayOutput(dDay);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
 
-            return dt;
-        }
-        
+
+   
+
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             DataTable dt = dal.GetSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
@@ -472,25 +464,7 @@ namespace Common.Class.BLL
 
             return dtProduct;
         }
-        
-        public DataTable getTotalReport(DateTime dDateFrom, DateTime dDateTo,string sPartNumber,string sModel,string sColor, string sType,string sSupplier, string sDescription, string sCoating, string sJobNo)
-        {
-         
-            DataTable dtTotalReport = new DataTable();
-
-            dtTotalReport = dal.GetButtonReport(dDateFrom, dDateTo, sPartNumber, sModel,sColor,sType, sSupplier, sDescription, sCoating, sJobNo);
-
-
-
-            if (dtTotalReport == null || dtTotalReport.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            
-            
-            return dtTotalReport;
-        }
+ 
         
         public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
         {
@@ -504,9 +478,9 @@ namespace Common.Class.BLL
                 return dtViDetailTracking;
         }
 
-        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
-            return dal.GetAllDisplayJobs(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+            return dal.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription,sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
         }
         
         private int GetSN(string type)
@@ -882,32 +856,7 @@ namespace Common.Class.BLL
 
 
 
-        public bool IsChecking(string sJobNo)
-        {
-            bool result = false;
-
-
-            DataTable dt = dal.GetJobStatus(sJobNo);
-
-            if (dt ==null|| dt.Rows.Count==0)
-            {
-                result = false;
-            }else
-            {
-                string status = dt.Rows[0]["status"].ToString();
-
-                if (status.ToUpper() == "START")
-                {
-                    result = true;
-                }
-            }
-
-
-
-
-            return result;
-        }
-
+     
 
         public Common.Class.Model.PQCQaViTracking GetLatestModelByJob(string sJobNo)
         {
@@ -926,91 +875,7 @@ namespace Common.Class.BLL
         }
 
 
-
-
-        public bool UpdateJobByLaserMaintenance(Common.Class.Model.PQCQaViTracking trackingModel, List<Common.Class.Model.PQCQaViDetailTracking_Model> detailModelList)
-        {
-            List<SqlCommand> cmdList = new List<SqlCommand>();
-
-
-            //update vi tracking model
-            cmdList.Add(dal.UpdateJobByLaserMaintenance(trackingModel));
-
-
-
-            //add vi tracking his
-            Common.DAL.PQCQaViHistory_DAL viHisDAL = new Common.DAL.PQCQaViHistory_DAL();
-            cmdList.Add(viHisDAL.AddCommand(CopyModel(trackingModel)));
-
-
-
-
-            //update detail tracking model
-            Common.DAL.PQCQaViDetailTracking_DAL detailTrackDAL = new Common.DAL.PQCQaViDetailTracking_DAL();
-            Common.Class.BLL.PQCQaViDetailHistory_BLL detailHisBLL = new PQCQaViDetailHistory_BLL();
-            foreach (var model in detailModelList)
-            {
-                cmdList.Add(detailTrackDAL.UpdateJobByLaserMaintenance(model));
-
-                cmdList.Add(detailHisBLL.AddCommand(detailHisBLL.CopyObj(model)));
-            }
-          
-            
-
-
-            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-        }
-
-
-
-        public bool UpdatePQCJobMaintenance(Common.Class.Model.PQCQaViTracking trackingModel, List<Common.Class.Model.PQCQaViDetailTracking_Model> detailModelList, List<Model.PQCQaViDefectTracking_Model> defectModelList)
-        {
-
-            List<SqlCommand> cmdList = new List<SqlCommand>();
-
-
-            //update vi tracking model
-            cmdList.Add(dal.UpdatePQCMaintenance(trackingModel));
-
-
-
-            //add vi tracking his
-            Common.DAL.PQCQaViHistory_DAL viHisDAL = new Common.DAL.PQCQaViHistory_DAL();
-            cmdList.Add(viHisDAL.AddCommand(CopyModel(trackingModel)));
-
-
-
-
-            //update detail tracking model
-            Common.DAL.PQCQaViDetailTracking_DAL detailTrackDAL = new Common.DAL.PQCQaViDetailTracking_DAL();
-            Common.Class.BLL.PQCQaViDetailHistory_BLL detailHisBLL = new PQCQaViDetailHistory_BLL();
-            foreach (var model in detailModelList)
-            {
-                cmdList.Add(detailTrackDAL.UpdatePQCMaintenance(model));
-
-                cmdList.Add(detailHisBLL.AddCommand(detailHisBLL.CopyObj(model)));
-            }
-
-
-
-            //update defect tracking model
-            Common.Class.DAL.PQCQaViDefectTracking_DAL defectDAL = new DAL.PQCQaViDefectTracking_DAL();
-            Common.Class.BLL.PQCQaViDefectHistory_BLL defectHisBLL = new Common.Class.BLL.PQCQaViDefectHistory_BLL();
-            foreach (var model in defectModelList)
-            {
-                cmdList.Add(defectDAL.UpdateCommand(model));
-
-                cmdList.Add(defectHisBLL.AddCommand(defectHisBLL.CopyObj(model)));
-            }
-
-
-
-
-            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
-
+        
 
 
 
@@ -1043,10 +908,7 @@ namespace Common.Class.BLL
                 detailModel.remarks = "PQC Maintenance  End Job";
             }
 
-
-
-
-      
+                  
 
 
 
@@ -1189,6 +1051,15 @@ namespace Common.Class.BLL
         {
             return dal.GetCheckingDetailList(dDateFrom, dDateTo, sPartNo, sStation, sPIC, sJobNo);
         }
+
+
+        public DateTime GetCheckingDateByJob(string sJobNo) {
+
+            DataTable dt = dal.GetCheckingDateByJob(sJobNo);
+            string sDay = dt.Rows[0]["Day"].ToString();
+            return DateTime.Parse(sDay);
+        }
+            
 
 
     }

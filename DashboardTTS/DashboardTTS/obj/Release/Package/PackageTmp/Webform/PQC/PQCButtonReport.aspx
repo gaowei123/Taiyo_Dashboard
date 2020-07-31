@@ -24,6 +24,8 @@
     <script src="../../Dashboard CSS JS/JS/SharedJS.js"></script>
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
 
+
+
 </head>
 <body>
     <form id="form1" runat="server">
@@ -40,7 +42,7 @@
                 <div class="col-md-12 panel panel-default" style=" margin-bottom:4px;margin-top:6px;">
                     <div class="form-inline" role="form">
                         <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Date From:</label>
+                            <label>PQC Date:</label>
                             <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
                         </div>
                         <%--<div class="form-group searchingBarCol" style="margin:5px;">

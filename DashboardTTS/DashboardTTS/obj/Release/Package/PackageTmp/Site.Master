@@ -230,9 +230,9 @@
                             <li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>
                             <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
                             <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">Button Report</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">Bezel Report</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">Panel Report</a></li>
+                            <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">PQC Report(BTN)</a></li>
+                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">PQC Report(BEZEL)</a></li>
+                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">PQC Report(PANEL)</a></li>
                             <li><a runat="server" href="./PQC_Product/WIPInventory">WIP Inventory</a></li>
                             <li><a runat="server" href="./PQC_Product/JobOrderDetail">Job Order Detail</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCRejectDetail.aspx">PQC Reject Detail Report</a></li>
@@ -269,7 +269,7 @@
                         <ul class="dropdown-menu menu-top">
                             <li><a runat="server" href="./Webform/TTSHomePage.aspx">Home Page</a></li> 
                             <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
-                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx">Laser PQC Total Report</a></li>
+                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">Laser PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
                             <li><a runat="server" href="./Webform/Reports/AllMachineUtilizationRate.aspx">All Machine Utilization</a></li>
                             <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>

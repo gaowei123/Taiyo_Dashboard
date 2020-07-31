@@ -379,241 +379,7 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable getPQCDefect(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sModel, string sColor, string sType, string sSupplier, string sDescription, string sCoating, string sJobNo)
-        {
-            DataTable dtPQCDefect = new DataTable();
-
-            // ============ set dtPQCDefect columns ============ //
-            Common.Class.BLL.PQCDefectSetting_BLL defectSettingBLL = new PQCDefectSetting_BLL();
-            DataTable dtDefectSetting = defectSettingBLL.GetAllForPQCLaserTotalReport();
-            if (dtDefectSetting == null || dtDefectSetting.Rows.Count == 0)
-                return null;
-            
-
-            dtPQCDefect.Columns.Add("JobNumber");
-            dtPQCDefect.Columns.Add("LotNo");
-            dtPQCDefect.Columns.Add("materialNo");
-            dtPQCDefect.Columns.Add("lotQty");
-            dtPQCDefect.Columns.Add("Process");
-            dtPQCDefect.Columns.Add("BomProcess");
-
-            foreach (DataRow dr in dtDefectSetting.Rows)
-            {
-                dtPQCDefect.Columns.Add(dr["defectCode"].ToString());
-            }
-            dtPQCDefect.Columns.Add("OTHERSRejRate");
-            dtPQCDefect.Columns.Add("MOULDINGRejRate");
-            dtPQCDefect.Columns.Add("PAINTINGRejRate");
-            dtPQCDefect.Columns.Add("LASERRejRate");
-
-            dtPQCDefect.Columns.Add("OTHERSRejQty");
-            dtPQCDefect.Columns.Add("MOULDINGRejQty");
-            dtPQCDefect.Columns.Add("PAINTINGRejQty");
-            dtPQCDefect.Columns.Add("LASERRejQty");
-            // ============ set dtPQCDefect columns ============ //
-
-
-
-            //get pqcqavi defectTracking
-            DataTable dtDefectTrakcingList = dal.GetDefectDetailForPQCReport(dDateFrom, dDateTo, sPartNumber, sModel, sColor, sType, sSupplier, sDescription, sCoating, sJobNo);
-            
-            //get Laser ng info
-            Common.BLL.LMMSWatchLog_BLL watchLog = new Common.BLL.LMMSWatchLog_BLL();
-            DataTable dtLaser = watchLog.GetList(dDateFrom.AddDays(-14), dDateTo);
-
-            //get Laser shortage, setup, buyoff info
-            Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
-            DataTable dtInventory = inventoryBLL.GetListForPQCReport(dDateFrom.AddDays(-21), dDateTo);
-
-            //get Painting delivery 
-            Common.Class.BLL.PaintingDeliveryHis_BLL paintBLL = new PaintingDeliveryHis_BLL();
-            DataTable dtPaintingDelivery = paintBLL.GetList(dDateFrom.AddDays(-30), dDateTo,"");
-
-            
-
-            foreach (DataRow dr in dtDefectTrakcingList.Rows)
-            {
-             
-                //defect tracking 基本信息
-                string MaterialNo = dr["materialNo"].ToString();
-                string JobNumber = dr["jobnumber"].ToString();
-                string DefectCode = dr["defectCode"].ToString();
-                double RejQty = dr["rejectQty"].ToString() == "" ? 0 : double.Parse(dr["rejectQty"].ToString());
-                string Process = dr["processes"].ToString();
-                string BomProcess = dr["BomProcess"].ToString();
-
-
-
-                //painting delivery 基本信息
-                string sLotNo = "";
-                string sLotQty = "";
-
-                DataRow[] drArrPaint = dtPaintingDelivery.Select(" jobnumber = '" + JobNumber + "'");
-                if (drArrPaint.Length!= 0)
-                {
-                    sLotNo = drArrPaint[0]["LotNo"].ToString();
-                    sLotQty = drArrPaint[0]["inQuantity"].ToString();
-                }
-
-
-                #region special defect code, graphic shift check by m/c 从laser watchlog中获取赋值给rejqty
-                if (DefectCode == "LASER Graphic Shift check by M/C" && Process=="LASER")
-                {
-
-                    //同一个job会有多条记录, 由于要显示defectcode等 detail 信息, 无法group by, 会导致重复赋值, 所以当查询到G/S by mc=0时才赋一次值.
-                    double rejCount = double.Parse(dtDefectTrakcingList.Compute(" Sum(rejectQty) ", string.Format(" jobnumber = '{0}' and defectCode = 'LASER Graphic Shift check by M/C' ", JobNumber)).ToString());
-                    if (rejCount == 0)
-                    {
-                        DataRow[] drArrLaserTemp = dtLaser.Select(" jobNumber = '" + JobNumber + "' ");
-                        if (drArrLaserTemp.Length > 0)
-                        {
-                            DataRow drLaser = drArrLaserTemp[0];
-
-                            //遍历model1Name - model16Name 查找对应material ng数量
-                            int no = 0;
-                            for (int i = 1; i < 17; i++)
-                            {
-                                string drLaser_MaterialName = drLaser[string.Format("model{0}Name", i)].ToString();
-                                if (drLaser_MaterialName == MaterialNo)
-                                {
-                                    no = i;
-                                    break;
-                                }
-                            }
-
-
-                            RejQty = drLaser[string.Format("ng{0}Count", no)].ToString() == "" ? 0 : double.Parse(drLaser[string.Format("ng{0}Count", no)].ToString());
-
-                            //重新赋值回dtDefectTrakcingList, 后面会再汇总每种类型的rej总数.
-                            dr["rejectQty"] = RejQty;
-                        }
-                    }
-                }
-                #endregion
-                
-               
-
-
-
-                //将所有信息添加到 dtPQCDefect表中
-                try
-                {
-                    //加过的job material, 累加rej qty 
-                    if (dtPQCDefect.Select(" jobnumber = '" + JobNumber + "' and  materialNo = '" + MaterialNo + "'  and process = '"+Process+"' and bomProcess = '"+BomProcess+"' ").Length > 0)
-                    {
-
-                        string sCurRej = dtPQCDefect.Select(" jobnumber = '" + JobNumber + "' and  materialNo = '" + MaterialNo + "'  and process = '" + Process + "' and bomProcess = '" + BomProcess + "'  ")[0][DefectCode].ToString();
-                        double curRej = sCurRej == "" ? 0 : double.Parse(sCurRej);
-
-
-                        dtPQCDefect.Select(" jobnumber = '" + JobNumber + "' and  materialNo = '" + MaterialNo + "' and process = '" + Process + "' and bomProcess = '" + BomProcess + "' ")[0][DefectCode] = curRej + RejQty;
-                    }
-
-                    //没加过的job material, add new row
-                    else
-                    {
-                        DataRow drPQCDefect = dtPQCDefect.NewRow();
-
-                        drPQCDefect["LotNo"] = sLotNo;
-                        drPQCDefect["jobnumber"] = JobNumber;
-                        drPQCDefect["materialNo"] = MaterialNo;
-                        drPQCDefect[DefectCode] = RejQty;
-                        drPQCDefect["LotQty"] =  sLotQty;
-                        drPQCDefect["process"] = Process;
-                        drPQCDefect["BomProcess"] = BomProcess;
-                        dtPQCDefect.Rows.Add(drPQCDefect);
-                    }
-                }
-                catch (Exception ee)
-                {
-                    //由于修改defect setting中的修改后.  
-                    //defect tracking中历史的defect code无法对应到 defect setting中. 
-                    //在根据defect setting动态生成的dtDefect中无法找到这些修改后的 defect code.导致报错.
-                    //这里做跳过, 既然舍弃了code,  同样也舍弃这些数量.
-
-                    continue;
-                }
-            }
-
-            
-            
-            #region 汇总每个job的material的  mould, Paint, laser, other的ng数量
-            foreach (DataRow drPQCDefect in dtPQCDefect.Rows)
-            {
-                string MaterialNo = drPQCDefect["materialNo"].ToString();
-                string JobNumber = drPQCDefect["jobnumber"].ToString();
-                string sTempLotQty = drPQCDefect["LotQty"].ToString();
-                double LotQty = sTempLotQty == "" ? 0 : double.Parse(sTempLotQty);
-
-                string process = drPQCDefect["process"].ToString();
-                string BomProcess = drPQCDefect["BomProcess"].ToString();
-
-
-                //等shortage, buyoff, setup从defect setting中去掉后, defect tracking中没有该defectcode的记录
-                //没法在defect tracking中遍历 获取该code加到dtPQCDefect
-                //而在dtPQCDefect中遍历, 从inventory找对应job的shortage, buyoff, setup
-                double setup = 0;
-                double shortage = 0;
-                double buyoff = 0;
-                DataRow[] drArrInventoryTemp = dtInventory.Select(string.Format(" jobnumber = '{0}'", JobNumber));
-                //只有laser过的才会维护setup, buyoff, shortage. 所以赋值给laser的check#1
-                if (drArrInventoryTemp.Length > 0  && process=="Check#1" &&BomProcess=="LASER")
-                {
-                    DataRow drInventory = drArrInventoryTemp[0];
-                    setup = double.Parse(drInventory["Setup"].ToString());
-                    shortage = double.Parse(drInventory["Shortage"].ToString());
-                    buyoff = double.Parse(drInventory["Buyoff"].ToString());
-                    
-
-                    //setup, buyoff, shortage都是set.
-                    drPQCDefect["LASER Set-up"] = setup;
-                    drPQCDefect["LASER Buyoff"] = buyoff;
-                    drPQCDefect["PAINTING Shortage"] = shortage;
-                }
-
-
-                //Others
-                string tempOthersTotalRejQty = dtDefectTrakcingList.Compute("sum(rejectQty)", " materialNo = '"+ MaterialNo + "'  and JobNumber = '"+ JobNumber + "' and defectDescription = 'Others' and process = '"+process+"' and BomProcess = '"+BomProcess+"' ").ToString();
-                double OthersTotalRejQty = tempOthersTotalRejQty == "" ? 0 : double.Parse(tempOthersTotalRejQty);
-
-                //Mould
-                string tempMouldingTotalRejQty = dtDefectTrakcingList.Compute("sum(rejectQty)", " materialNo = '" + MaterialNo + "'  and JobNumber = '" + JobNumber + "' and defectDescription = 'Mould'  and process = '" + process + "' and BomProcess = '" + BomProcess + "'  ").ToString();
-                double MouldingTotalRejQty = tempMouldingTotalRejQty == "" ? 0 : double.Parse(tempMouldingTotalRejQty);
-
-                //Paint
-                string tempPaintingTotalRejQty = dtDefectTrakcingList.Compute("sum(rejectQty)", " materialNo = '" + MaterialNo + "'  and JobNumber = '" + JobNumber + "' and defectDescription = 'Paint'  and process = '" + process + "' and BomProcess = '" + BomProcess + "'  ").ToString();
-                double PaintingTotalRejQty = tempPaintingTotalRejQty == "" ? 0 : double.Parse(tempPaintingTotalRejQty) + shortage;
-
-                //Laser
-                string tempLaserTotalRejQty = dtDefectTrakcingList.Compute("sum(rejectQty)", " materialNo = '" + MaterialNo + "'  and JobNumber = '" + JobNumber + "' and defectDescription = 'laser'  and process = '" + process + "' and BomProcess = '" + BomProcess + "'  ").ToString();
-                double laserTotalRejQty = tempLaserTotalRejQty == "" ? 0 : double.Parse(tempLaserTotalRejQty) + setup + buyoff;
-
-                if (LotQty == 0)
-                {
-                    drPQCDefect["OTHERSRejRate"] = "0.00%";
-                    drPQCDefect["MOULDINGRejRate"] = "0.00%";
-                    drPQCDefect["PAINTINGRejRate"] = "0.00%";
-                    drPQCDefect["LASERRejRate"] = "0.00%";
-                }
-                else
-                {
-                    drPQCDefect["OTHERSRejRate"] = Math.Round(OthersTotalRejQty / LotQty * 100, 2).ToString("#0.00") + "%";
-                    drPQCDefect["MOULDINGRejRate"] = Math.Round(MouldingTotalRejQty / LotQty * 100, 2).ToString("#0.00") + "%";
-                    drPQCDefect["PAINTINGRejRate"] = Math.Round(PaintingTotalRejQty / LotQty * 100, 2).ToString("#0.00") + "%"; ;
-                    drPQCDefect["LASERRejRate"] = Math.Round(laserTotalRejQty / LotQty * 100, 2).ToString("#0.00") + "%";
-                }
-
-                drPQCDefect["OTHERSRejQty"] = OthersTotalRejQty;
-                drPQCDefect["MOULDINGRejQty"] = MouldingTotalRejQty;
-                drPQCDefect["PAINTINGRejQty"] = PaintingTotalRejQty;
-                drPQCDefect["LASERRejQty"] = laserTotalRejQty;
-            }
-            #endregion
-
-
-            return dtPQCDefect;
-        }
-
+    
 
         public DataTable getPQCDefectForBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription,string sNumber)
         {
@@ -641,6 +407,12 @@ namespace Common.Class.BLL
                 dc.Caption = dr["defectCode"].ToString();
                 dtPQCDefectOutPut.Columns.Add(dc);
             }
+
+
+
+
+
+
             dtPQCDefectOutPut.Columns.Add("Total REJ QTY");
             dtPQCDefectOutPut.Columns.Add("Total REJ AMT");
             dtPQCDefectOutPut.Columns.Add("Total Mould REJ%");
@@ -766,9 +538,14 @@ namespace Common.Class.BLL
                 
             }
 
-            #region  赋值 shortage, setup, buyoff
+            #region  赋值 shortage, setup, buyoff,    painting qa &setup
             Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
             DataTable dtInventory = inventoryBLL.GetListForPQCReport(dDateFrom.AddDays(-20), dDateTo);
+
+            //painting qa &setup
+            Common.Class.BLL.PaintingTempInfo paintTempBLL = new PaintingTempInfo();
+            DataTable dtPaintTemp = paintTempBLL.GetList(dDateFrom.AddDays(-20), dDateTo, "", "");
+
 
             //等shortage, buyoff, setup从defect setting中去掉后, defect tracking中没有该defectcode的记录
             //没法在defect tracking中遍历 获取该code加到dtPQCDefect
@@ -781,7 +558,9 @@ namespace Common.Class.BLL
                 double setup = 0;
                 double shortage = 0;
                 double buyoff = 0;
+                double qa = 0;              
                 DataRow[] drArrInventoryTemp = dtInventory.Select(string.Format(" jobnumber = '{0}'", JobNumber));
+                DataRow[] drArrPaintTemp = dtPaintTemp.Select(string.Format(" jobnumber = '{0}'", JobNumber));
                 if (drArrInventoryTemp.Length > 0)
                 {
                     DataRow drInventory = drArrInventoryTemp[0];
@@ -804,7 +583,32 @@ namespace Common.Class.BLL
                     dicPaintingRejForJob[JobNumber] += (int)buyoff;
                     dicLaserRejForJob[JobNumber] += (int)setup;
                 }
+
+                if (drArrPaintTemp.Length > 0)
+                {
+                    DataRow drPaintTemp = drArrPaintTemp[0];
+                    qa = double.Parse(drPaintTemp["qaTestQty"].ToString());
+                    double paintSetup = double.Parse(drPaintTemp["setupRejQty"].ToString());
+
+
+                    //setup, buyoff, shortage都是set.
+                    try { drPQCDefect["101"] = shortage + paintSetup; } catch { }
+                    try { drPQCDefect["104"] = qa; } catch { }
+
+
+                    dicTotalRejForJob[JobNumber] += (int)paintSetup;
+                    dicTotalRejForJob[JobNumber] += (int)qa;
+
+                    dicPaintingRejForJob[JobNumber] += (int)paintSetup;
+                    dicPaintingRejForJob[JobNumber] += (int)qa;
+                }                
             }
+
+           
+          
+
+
+
             #endregion
 
 
@@ -914,26 +718,32 @@ namespace Common.Class.BLL
             {
                 dt = dal.GetPaintDefect(sJobID, sTrackingID);
                 
-                #region 处理shortage
+                #region 处理shortage, qa
                 Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
                 DataTable dtInventory = inventoryBLL.GetList(sJobID);
 
+                Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
+                DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
 
                 foreach (DataRow dr in dt.Rows)
                 {
+                    double shortage = 0;
+                    double qa = 0;
+
                     if (dtInventory != null && dtInventory.Rows.Count != 0)
+                        shortage += double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
+
+                    if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
                     {
-                        double shortage = double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
-
-                        dr["Shortage"] = shortage;
-
-                        dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage);
+                        shortage += double.Parse(dtPaintTemp.Rows[0]["setupRejQty"].ToString());
+                        qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
                     }
+
+
+                    dr["Shortage"] = shortage;
+                    dr["QA"] = qa;
+                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage + qa);
                 }
-
-
-                
-
                 #endregion
             }
             else if (sDefectDescription == "Laser")

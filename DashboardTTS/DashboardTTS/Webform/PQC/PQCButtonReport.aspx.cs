@@ -71,11 +71,11 @@ namespace DashboardTTS.Webform.PQC
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
-
+                string sDescription = "BUTTON";
 
 
                 //先拉取满足条件的所有job id.
-                List<string> jobs = GetAllDisplayJobs(DateFrom, DateTo, partNumber, JobNo, model, supplier, color, coating);
+                List<string> jobs = GetAllDisplayJobs(DateFrom, DateTo, sDescription, partNumber, JobNo, model, supplier, color, coating);
                 if (jobs == null || jobs.Count() == 0)
                 {
                     Common.CommFunctions.ShowMessage(this.Page, "There is no data, Please change searching condition!");
@@ -149,8 +149,9 @@ namespace DashboardTTS.Webform.PQC
                     reportModel.materialNo = pqcdetailModel.materialNo;
                     reportModel.lotQty = paintDeliveryModel.mrpQty;
                     reportModel.pass = pqcdetailModel.passQty;
-                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty);//defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup
-                    reportModel.rejRate = Math.Round(jobDefectList.Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
+                    //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
+                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty;
+                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty) / paintDeliveryModel.mrpQty * 100, 2);
                     reportModel.supplier = pqcdetailModel.supplier;
 
 
@@ -359,7 +360,7 @@ namespace DashboardTTS.Webform.PQC
                     reportModel.InspBy = pqcdetailModel.OP;
 
                     reportList.Add(reportModel);
-                        #endregion                    
+                    #endregion                    
                 }
 
 
@@ -372,8 +373,8 @@ namespace DashboardTTS.Webform.PQC
                                                partNo = "",
                                                lotQty = modelGroup.Sum(p => p.lotQty),
                                                pass = modelGroup.Sum(p => p.pass),
-                                               rejQty = modelGroup.Sum(p => p.rejQty + p.Paint_SetupRej + p.Paint_QATestRej),
-                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty + p.Paint_SetupRej + p.Paint_QATestRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                               rejQty = modelGroup.Sum(p => p.rejQty),
+                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
 
                                                //TTS defect code
@@ -1580,6 +1581,7 @@ namespace DashboardTTS.Webform.PQC
             {
                 DBHelp.Reports.LogFile.Log("PQCButtonReport_New", "BtnGenerate_Click   error : " + ex.ToString());
                 Common.CommFunctions.ShowMessage(this.Page, "Warning!  catch exception: " + ex.ToString());
+                return;
             }
         }
 
@@ -1590,11 +1592,11 @@ namespace DashboardTTS.Webform.PQC
 
 
         //获取所有满足条件的job
-        public List<string> GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        public List<string> GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
 
-            DataTable dt = bll.GetAllDisplayJobs(dDateFrom, dDateTo, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+            DataTable dt = bll.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 

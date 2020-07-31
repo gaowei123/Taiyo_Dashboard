@@ -100,40 +100,6 @@ namespace Common.Class.BLL
             }            
         }
 
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			return dal.GetList(Top,strWhere,filedOrder);
-		}
-	
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public List<Common.Class.Model.PaintingTempInfo_Model> DataTableToList(DataTable dt)
-		{
-			List<Common.Class.Model.PaintingTempInfo_Model> modelList = new List<Common.Class.Model.PaintingTempInfo_Model>();
-			int rowsCount = dt.Rows.Count;
-			if (rowsCount > 0)
-			{
-				Common.Class.Model.PaintingTempInfo_Model model;
-				for (int n = 0; n < rowsCount; n++)
-				{
-					model = dal.DataRowToModel(dt.Rows[n]);
-					if (model != null)
-					{
-						modelList.Add(model);
-					}
-				}
-			}
-			return modelList;
-		}
-
-        /// <summary>
-        /// 获得数据列表
-        /// </summary>
-
 
 
         #endregion  BasicMethod
