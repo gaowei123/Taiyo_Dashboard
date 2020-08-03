@@ -2,9 +2,6 @@
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
   
-      
-
-
     <div class="container container-fluid" >
         <div class="row">
             <div class="col-md-4"></div>

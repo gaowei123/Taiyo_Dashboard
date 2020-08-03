@@ -41,6 +41,11 @@ namespace Common.Class.BLL
             return dal.Add(model);
         }
 
+        public SqlCommand AddCommand(Common.Class.Model.PQCQaViBinning model)
+        {
+            return dal.AddCommand(model);
+        }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>

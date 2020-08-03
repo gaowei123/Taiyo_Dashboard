@@ -282,6 +282,7 @@ namespace DashboardTTS.ViewModel
         {
             public string jobNo = "";
             public string lotNo = "";
+            public string paintProcess = "";
             public int mrpQty = 0;
         }
 

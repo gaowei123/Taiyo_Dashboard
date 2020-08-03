@@ -521,9 +521,7 @@ namespace DashboardTTS.Controllers
             string result = vBLL.GetPicList(dateFrom, dateTo, partNo, station, pic, jobNo, type);
             return Content(result);
         }
-
-
-
+        
        
         public ActionResult GetProductTrendList()
         {

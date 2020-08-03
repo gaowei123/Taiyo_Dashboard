@@ -48,15 +48,12 @@
     <%--<script src="/Dashboard_DEV/Scripts/jquery-3.4.1.min.js"></script>
     <script src="/Dashboard_DEV/Plugins/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
     <link href="/Dashboard_DEV/Plugins/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
     <script src="/Dashboard_DEV/Dashboard CSS JS/JS/GlobalConfig.js"></script>
     <link href="/Dashboard_DEV/Dashboard CSS JS/CSS/MasterPage.css" rel="stylesheet" />
     <link href="/Dashboard_DEV/Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
-    <script src="/Dashboard_DEV/Dashboard CSS JS/JS/SharedJS.js"></script>
-    
+    <script src="/Dashboard_DEV/Dashboard CSS JS/JS/SharedJS.js"></script>    
     <script src="/Dashboard_DEV/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
     <link href="/Dashboard_DEV/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
     <script src="/Dashboard_DEV/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
     <link href="/Dashboard_DEV/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />--%>
 
@@ -66,15 +63,12 @@
     <%--<script src="/Dashboard/Scripts/jquery-3.4.1.min.js"></script>
     <script src="/Dashboard/Plugins/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
     <link href="/Dashboard/Plugins/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
     <script src="/Dashboard/Dashboard CSS JS/JS/GlobalConfig.js"></script>
     <link href="/Dashboard/Dashboard CSS JS/CSS/MasterPage.css" rel="stylesheet" />
     <link href="/Dashboard/Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
-    <script src="/Dashboard/Dashboard CSS JS/JS/SharedJS.js"></script>
-    
+    <script src="/Dashboard/Dashboard CSS JS/JS/SharedJS.js"></script>    
     <script src="/Dashboard/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
     <link href="/Dashboard/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
     <script src="/Dashboard/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
     <link href="/Dashboard/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />--%>
 
@@ -256,12 +250,6 @@
                         </ul>
                     </li>
 
-                    <%--<li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Assy</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
-                           
-                        </ul>
-                    </li>--%>
 
                
                     <li class="dropdown menu-top">
@@ -351,5 +339,6 @@
         }); 
 
     </script>
+
 </body>
 </html>

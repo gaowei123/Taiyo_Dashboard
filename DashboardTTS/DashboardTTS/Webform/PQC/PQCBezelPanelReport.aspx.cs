@@ -20,6 +20,8 @@ namespace DashboardTTS.Webform.PQC
                     string reportType = Request.QueryString["Description"].ToString();
                     this.lblUserHeader.Text = "PQC " + reportType + " Report";
 
+                    this.title.Text = "Taiyo - "+ reportType + " Report";
+
 
                     this.lbBezelPanelName.Text = reportType + " No:";
 

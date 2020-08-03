@@ -467,6 +467,7 @@ select
 jobNumber
 ,lotNo
 ,convert(float,isnull(inQuantity,0)) as MrpQty
+,paintProcess
 from PaintingDeliveryHis 
 where 1=1 and jobNumber in " + strWhere);
 

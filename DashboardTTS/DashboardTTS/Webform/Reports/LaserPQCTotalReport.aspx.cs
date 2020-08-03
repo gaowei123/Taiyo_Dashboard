@@ -43,7 +43,6 @@ namespace DashboardTTS.Webform.Reports
         {
             try
             {
-
                 //搜索条件
                 string JobNo = "";// this.txtJobNo.Text.Trim();
                 string partNumber = "";//this.txtPartNo.Text.Trim();
@@ -54,7 +53,7 @@ namespace DashboardTTS.Webform.Reports
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
-                string sDescription = "";//不指定, button, bezel, panel都显示.
+                string sDescription = "BUTTON";
 
 
                 //先拉取满足条件的所有job id.
@@ -95,6 +94,8 @@ namespace DashboardTTS.Webform.Reports
 
 
 
+
+
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
                 foreach (var pqcdetailModel in pqcDetailList)
                 {
@@ -111,7 +112,7 @@ namespace DashboardTTS.Webform.Reports
 
                     ViewModel.PQCButtonReport_ViewModel.PaintDelivery paintDeliveryModel = new ViewModel.PQCButtonReport_ViewModel.PaintDelivery();
                     paintDeliveryModel = (from a in paintDeliveryList
-                                          where a.jobNo == pqcdetailModel.jobID
+                                          where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper().Replace("PAINT#", "") == pqcdetailModel.process.ToUpper().Replace("CHECK#", "")
                                           select a).FirstOrDefault();
 
                     List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> jobDefectList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
@@ -132,7 +133,7 @@ namespace DashboardTTS.Webform.Reports
                     reportModel.pass = pqcdetailModel.passQty;
                     //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
                     reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty;
-                    reportModel.rejRate = Math.Round(jobDefectList.Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
+                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty) / paintDeliveryModel.mrpQty * 100, 2);
                     reportModel.supplier = pqcdetailModel.supplier;
 
 
@@ -341,7 +342,7 @@ namespace DashboardTTS.Webform.Reports
                     reportModel.InspBy = pqcdetailModel.OP;
 
                     reportList.Add(reportModel);
-                    #endregion
+                    #endregion                    
                 }
 
 
@@ -355,7 +356,7 @@ namespace DashboardTTS.Webform.Reports
                                                lotQty = modelGroup.Sum(p => p.lotQty),
                                                pass = modelGroup.Sum(p => p.pass),
                                                rejQty = modelGroup.Sum(p => p.rejQty),
-                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty ) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                               rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
 
                                                //TTS defect code
@@ -1557,17 +1558,14 @@ namespace DashboardTTS.Webform.Reports
 
                 Display(dtReport);
 
-
-
             }
             catch (Exception ex)
             {
-                DBHelp.Reports.LogFile.Log("LaserPQCTotalReport",  "BtnGenerate_Click error : " + ex.ToString());
-                Common.CommFunctions.ShowMessage(this.Page, "BtnGenerate Click catch exception: "+ ex.ToString());
+                DBHelp.Reports.LogFile.Log("PQCButtonReport_New", "BtnGenerate_Click   error : " + ex.ToString());
+                Common.CommFunctions.ShowMessage(this.Page, "Warning!  catch exception: " + ex.ToString());
+                return;
             }
         }
-
-
 
 
 
@@ -1594,6 +1592,7 @@ namespace DashboardTTS.Webform.Reports
 
             return jobList;
         }
+
 
         //获取pqc detail tracking的信息
         public List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> GetPQCDetialList(string strWhere)
@@ -1627,7 +1626,7 @@ namespace DashboardTTS.Webform.Reports
                 models.Add(model);
             }
 
-            return models;
+            return models.OrderBy(P => P.jobID).ToList();
         }
 
 
@@ -1929,6 +1928,7 @@ namespace DashboardTTS.Webform.Reports
                 model.jobNo = dr["jobNumber"].ToString().ToUpper();
                 model.lotNo = dr["lotNo"].ToString();
                 model.mrpQty = int.Parse(dr["MrpQty"].ToString());
+                model.paintProcess = dr["paintProcess"].ToString();
 
                 paintDeliveryList.Add(model);
             }

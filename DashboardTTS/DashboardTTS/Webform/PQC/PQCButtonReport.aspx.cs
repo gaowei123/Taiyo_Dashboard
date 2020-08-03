@@ -18,6 +18,8 @@ namespace DashboardTTS.Webform.PQC
                 {
                     this.lblUserHeader.Text = "PQC Button Report";
 
+                    this.title.Text = "Taiyo - Button Report";
+
 
                     //周日, 周一显示 上周五的. 默认显示前一天的.
                     DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
@@ -130,7 +132,7 @@ namespace DashboardTTS.Webform.PQC
 
                     ViewModel.PQCButtonReport_ViewModel.PaintDelivery paintDeliveryModel = new ViewModel.PQCButtonReport_ViewModel.PaintDelivery();
                     paintDeliveryModel = (from a in paintDeliveryList
-                                          where a.jobNo == pqcdetailModel.jobID
+                                          where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper().Replace("PAINT#","") == pqcdetailModel.process.ToUpper().Replace("CHECK#","")
                                           select a).FirstOrDefault();
 
                     List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> jobDefectList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
@@ -1643,7 +1645,7 @@ namespace DashboardTTS.Webform.PQC
                 models.Add(model);
             }
 
-            return models;
+            return models.OrderBy(P => P.jobID).ToList();
         }
 
 
@@ -1945,6 +1947,7 @@ namespace DashboardTTS.Webform.PQC
                 model.jobNo = dr["jobNumber"].ToString().ToUpper();
                 model.lotNo = dr["lotNo"].ToString();
                 model.mrpQty = int.Parse(dr["MrpQty"].ToString());
+                model.paintProcess = dr["paintProcess"].ToString();
                 
                 paintDeliveryList.Add(model);
             }

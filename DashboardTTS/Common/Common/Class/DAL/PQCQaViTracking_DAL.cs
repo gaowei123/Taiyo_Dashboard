@@ -364,7 +364,7 @@ a.jobID
 ,Sum(b.passQty) as passQty
 ,sum(b.rejectQty) as rejectQty
 ,c.remark_1 as supplier
-,case when c.processes like '%Laser%' then 'Laser'  else 'WIP' end as PartsType
+,case when c.processes like '%Laser%' and a.processes ='CHECK#1'  then 'Laser'  else 'WIP' end as PartsType
 ,a.processes
 ,OP = stuff((SELECT  ',' +  t.userID 
 			FROM (select jobId,processes, userID from PQCQaViTracking group by jobId,processes,userID) t  

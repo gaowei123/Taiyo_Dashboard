@@ -38,13 +38,13 @@
                     <div class="form-inline" role="form">
 
                         <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
-                            <label>Date From:</label>
+                            <label>PQC Date:</label>
                             <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd"></asp:TextBox>
                         </div>
-                        <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
+                       <%-- <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
                             <label>Date To:</label>
                             <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd"></asp:TextBox>
-                        </div>
+                        </div>--%>
 
                         <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
                             <label><asp:label runat="server" ID="lbBezelPanelName"/></label>

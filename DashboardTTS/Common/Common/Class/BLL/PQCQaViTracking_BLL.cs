@@ -949,7 +949,8 @@ namespace Common.Class.BLL
             List<Common.Class.Model.PQCQaViDetailTracking_Model> detailModelList, 
             List<Model.PQCQaViDefectTracking_Model> defectModelList,
             List<Common.Class.Model.PQCQaViBinning> binList, 
-            List<Common.Class.Model.PQCQaViBinHistory_Model> binHisList)
+            List<Common.Class.Model.PQCQaViBinHistory_Model> binHisList,
+            bool isUpdateBin)
         {
             List<SqlCommand> cmdList = new List<SqlCommand>();
 
@@ -984,7 +985,6 @@ namespace Common.Class.BLL
             foreach (var model in defectModelList)
             {
                 cmdList.Add(defectDAL.UpdateCommand(model));
-
                 cmdList.Add(defectHisBLL.AddCommand(defectHisBLL.CopyObj(model)));
             }
 
@@ -994,7 +994,8 @@ namespace Common.Class.BLL
             Common.Class.BLL.PQCQaViBinning binBLL = new PQCQaViBinning();
             foreach (var binModel in binList)
             {
-                cmdList.Add(binBLL.UpdateCommand(binModel));
+                SqlCommand binCMD = isUpdateBin ? binBLL.UpdateCommand(binModel) : binBLL.AddCommand(binModel);
+                cmdList.Add(binCMD);
             }
 
 

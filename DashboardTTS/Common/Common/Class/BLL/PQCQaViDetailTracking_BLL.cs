@@ -186,6 +186,31 @@ namespace Common.Class.BLL
             {
                 model.updatedTime = DateTime.Parse(dr["updatedTime"].ToString());
             }
+
+
+            model.materialName = dr["materialName"].ToString();
+            model.PackingTrays = dr["packingTrays"].ToString();
+            model.Customer = dr["customer"].ToString();
+            model.ShipTo = dr["shipTo"].ToString();
+            model.Module = dr["module"].ToString();
+
+
+            if (dr["module"].ToString() != "")
+            {
+                model.outerBoxQty = decimal.Parse(dr["outerBoxQty"].ToString());
+            }
+
+            if (dr["sn"].ToString() != "")
+            {
+                model.Sn = int.Parse(dr["sn"].ToString());
+            }
+
+            if (dr["indexId"].ToString() != "")
+            {
+                model.IndexId = int.Parse(dr["indexId"].ToString());
+            }
+
+
             return model;
 
 

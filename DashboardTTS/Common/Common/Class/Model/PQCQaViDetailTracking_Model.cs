@@ -12,45 +12,60 @@ namespace Common.Class.Model
 		{}
 		#region Model
 		private int _id;
-        private string _jobid;
         private string _trackingid;
-		private string _machineid;
-		private DateTime? _datetime;
-		private string _materialpartno;
-		private string _jigno;
-		private string _model;
-        private string _color;
+        private string _machineid;
+        private DateTime? _datetime;
+        private string _materialpartno;
+        private string _jigno;
+        private string _model;
         private decimal? _cavitycount;
-		private string _username;
-		private string _userid;
-		private DateTime? _starttime;
-		private DateTime? _stoptime;
-		private DateTime? _day;
-		private string _shift;
-		private string _status;
-		private string _remark_1;
-		private string _remark_2;
+        private string _username;
+        private string _userid;
+        private DateTime? _starttime;
+        private DateTime? _stoptime;
+        private DateTime? _day;
+        private string _shift;
+        private string _status;
+        private string _remark_1;
+        private string _remark_2;
+        private decimal? _rejectqty;
+        private string _rejectqtyhour01;
+        private string _rejectqtyhour02;
+        private string _rejectqtyhour03;
+        private string _rejectqtyhour04;
+        private string _rejectqtyhour05;
+        private string _rejectqtyhour06;
+        private string _rejectqtyhour07;
+        private string _rejectqtyhour08;
+        private string _rejectqtyhour09;
+        private string _rejectqtyhour10;
+        private string _rejectqtyhour11;
+        private string _rejectqtyhour12;
+        private DateTime? _lastupdatedtime;
+        private string _remarks;
+        private string _processes;
+        private string _jobid;
         private decimal? _totalqty;
+        private DateTime? _updated_time;
+        private decimal? _passqty;
         private decimal? _totalpassqty;
         private decimal? _totalrejectqty;
-        private decimal? _passqty;
-        private decimal? _rejectqty;
-		private string _rejectqtyhour01;
-		private string _rejectqtyhour02;
-		private string _rejectqtyhour03;
-		private string _rejectqtyhour04;
-		private string _rejectqtyhour05;
-		private string _rejectqtyhour06;
-		private string _rejectqtyhour07;
-		private string _rejectqtyhour08;
-		private string _rejectqtyhour09;
-		private string _rejectqtyhour10;
-		private string _rejectqtyhour11;
-		private string _rejectqtyhour12;
-		private DateTime? _lastupdatedtime;
-		private string _remarks;
-        private string _processes;
-        private DateTime? _updated_time;
+        private string _color;
+
+
+
+        private string _materialName;
+        private decimal? _outerBoxQty;
+        private string _packingTrays;
+        private string _customer;
+        private string _shipTo;
+        private string _module;
+        private int? _sn;
+        private int? _indexId;
+
+
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -371,6 +386,101 @@ namespace Common.Class.Model
             set { _updated_time = value; }
             get { return _updated_time; }
         }
+        
+
+        public string materialName
+        {
+            set { _materialName = value; }
+            get { return _materialName; }
+        }
+
+        public decimal? outerBoxQty
+        {
+            set { _outerBoxQty = value; }
+            get { return _outerBoxQty; }
+        }
+
+        public string PackingTrays
+        {
+            get
+            {
+                return _packingTrays;
+            }
+
+            set
+            {
+                _packingTrays = value;
+            }
+        }
+
+        public string Customer
+        {
+            get
+            {
+                return _customer;
+            }
+
+            set
+            {
+                _customer = value;
+            }
+        }
+
+        public string ShipTo
+        {
+            get
+            {
+                return _shipTo;
+            }
+
+            set
+            {
+                _shipTo = value;
+            }
+        }
+
+        public string Module
+        {
+            get
+            {
+                return _module;
+            }
+
+            set
+            {
+                _module = value;
+            }
+        }
+
+        public int? Sn
+        {
+            get
+            {
+                return _sn;
+            }
+
+            set
+            {
+                _sn = value;
+            }
+        }
+
+        public int? IndexId
+        {
+            get
+            {
+                return _indexId;
+            }
+
+            set
+            {
+                _indexId = value;
+            }
+        }
+        
+
+
+
         #endregion Model
 
     }
