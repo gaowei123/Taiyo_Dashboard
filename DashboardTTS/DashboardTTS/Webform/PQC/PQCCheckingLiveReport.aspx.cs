@@ -28,14 +28,15 @@ namespace DashboardTTS.Webform.PQC
 
                     if (sJobNo != "")
                     {
-                        dDateFrom = DateTime.Now.AddHours(-8).Date.AddYears(-1);
-                        dDateTo = DateTime.Now.AddHours(-8).Date;
+                        dDateFrom = DateTime.Parse("2019-1-1");
+                        dDateTo = DateTime.Now.Date;
 
                         this.txtJobNo.Text = sJobNo;
-                    }else
+                    }
+                    else
                     {
-                        dDateFrom = DateTime.Now.AddHours(-8).Date;
-                        dDateTo = DateTime.Now.AddHours(-8).Date;
+                        dDateFrom = DateTime.Now.Date;
+                        dDateTo = DateTime.Now.Date;
                     }
 
 
@@ -68,7 +69,11 @@ namespace DashboardTTS.Webform.PQC
                 string sTrackingID = e.Item.Cells[0].Text;
                 string sJobID = e.Item.Cells[4].Text;
 
-                DataTable dt = trackingBLL.GetList("", sJobID, DateTime.Now.AddYears(-1), DateTime.Now, "", "", "", "", "");
+
+                DateTime dateFrom = DateTime.Parse(txtDateFrom.Text).AddMonths(-6);
+                DateTime dateTo = DateTime.Parse(txtDateTo.Text).AddDays(1);
+
+                DataTable dt = trackingBLL.GetList("", sJobID, dateFrom, dateTo, "", "", "", "", "");
 
 
 

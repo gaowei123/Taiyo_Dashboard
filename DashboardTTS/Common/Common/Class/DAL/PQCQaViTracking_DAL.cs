@@ -83,38 +83,44 @@ where a.nextviflag = 'true' ");
         public DataTable GetList(string sPartNumber, string sJobNumber, DateTime dDateFrom, DateTime dDateTo, string sShift,string sMachineType,string sLotNo,string sDateNotIn, string sTrackingID)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" SELECT distinct
-	                            CONVERT(varchar(100), a.day, 111)  + ' - ' + a.shift  as  shift
-                                ,trackingID
-	                            ,day
-	                            ,'Station' + a.machineID as machineID
-                                ,a.datetime
-	                            ,a.customer
-	                            ,a.model
-	                            ,jobId
-                                ,c.lotno
-	                            ,a.partNumber
-	                            ,b.color
-	                            ,a.processes
-                                ,a.status
-                                ,a.nextViFlag
-	                            ,[startTime]
-                                ,stopTime as stopTime
-                                ,case when isnull(stopTime,'') = '' then '' else  convert(varchar,convert(datetime,stopTime) - convert(datetime,startTime), 108) end as Time
-	                            ,[rejectQty] as NG
-                                ,[acceptQty] as OK
-	                            ,[TotalQty]  as Total
-	                            ,rejectQty + acceptQty as Output
-                                ,a.userID
-	                            ,case when acceptQty + rejectQty =0 then '0%' else  convert(varchar,convert(decimal(18,2), rejectQty/(acceptQty + rejectQty)*100)) + '%' end  as RejRate
-                                ,convert(float, inquantity) as LotQty
-                            FROM PQCQaViTracking  a
-                            left join PQCBom b on a.partNumber = b.partNumber ");
-            strSql.Append("left join OPENDATASOURCE( 'SQLOLEDB', "+StaticRes.Global.SqlConnection.SqlconnPainting+" ).taiyo_painting.dbo.PaintingDeliveryHis c on a.jobId COLLATE Chinese_PRC_CI_AS = c.jobNumber COLLATE Chinese_PRC_CI_AS");
-
-            strSql.Append("  where 1 = 1  and c.paintProcess= 'Paint#1' ");
-            strSql.Append(" and a.day >= @DateFrom ");
-            strSql.Append(" and a.day < @DateTo ");
+            strSql.AppendFormat(@"
+SELECT distinct
+	CONVERT(varchar(100), a.day, 111)  + ' - ' + a.shift  as  shift
+    ,trackingID
+	,day
+	,'Station' + a.machineID as machineID
+    ,a.datetime
+	,a.customer
+	,a.model
+	,jobId
+    ,c.lotno
+	,a.partNumber
+	,b.color
+	,a.processes
+    ,a.status
+    ,a.nextViFlag
+	,[startTime]
+    ,stopTime as stopTime
+    ,case when isnull(stopTime,'') = '' then '' else  convert(varchar,convert(datetime,stopTime) - convert(datetime,startTime), 108) end as Time
+	,[rejectQty] as NG
+    ,[acceptQty] as OK
+	,[TotalQty]  as Total
+	,rejectQty + acceptQty as Output
+    ,a.userID
+	,case when acceptQty + rejectQty =0 then '0%' else  convert(varchar,convert(decimal(18,2), rejectQty/(acceptQty + rejectQty)*100)) + '%' end  as RejRate
+    ,c.LotQty
+FROM PQCQaViTracking  a
+left join PQCBom b on a.partNumber = b.partNumber 
+left join
+(
+	select distinct jobNumber, lotno, convert(float,inQuantity) as LotQty  from OPENDATASOURCE( 'SQLOLEDB', {0} ).taiyo_painting.dbo.PaintingDeliveryHis
+    where paintProcess is null or paintProcess =  'Paint#1'
+) c 
+on a.jobId COLLATE Chinese_PRC_CI_AS = c.jobNumber COLLATE Chinese_PRC_CI_AS 
+where 1 = 1  and a.day >= @DateFrom  and a.day < @DateTo ", StaticRes.Global.SqlConnection.SqlconnPainting);
+            
+            
+         
             
             if (!string.IsNullOrEmpty(sPartNumber))
             {

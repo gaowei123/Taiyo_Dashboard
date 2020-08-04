@@ -53,7 +53,7 @@ namespace DashboardTTS.Webform.Reports
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
-                string sDescription = "BUTTON";
+                string sDescription = "";
 
 
                 //先拉取满足条件的所有job id.

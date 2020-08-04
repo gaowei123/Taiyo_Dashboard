@@ -215,7 +215,11 @@ namespace Common.Class.BLL
 
 
 
-        public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, List<Model.PQCPackDetailTracking_Model> detailModelList, List<Model.PQCQaViBinning> packBinList, List<Model.PQCQaViBinHistory_Model> packBinHisList)
+        public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, 
+            List<Model.PQCPackDetailTracking_Model> detailModelList, 
+            List<Model.PQCQaViBinning> packBinList, 
+            List<Model.PQCQaViBinHistory_Model> packBinHisList, 
+            bool isUpdate)
         {
 
             Common.Class.DAL.PQCPackDetailTracking_DAL detailTrackingDAL = new DAL.PQCPackDetailTracking_DAL();
@@ -246,7 +250,8 @@ namespace Common.Class.BLL
             //update bin
             foreach (var model in packBinList)
             {
-                cmdList.Add(binDAL.PackMaintenanceCommand(model));
+                SqlCommand sqlCMD = isUpdate ? binDAL.PackMaintenanceCommand(model) : binDAL.AddCommand(model);
+                cmdList.Add(sqlCMD);
             }
 
             //add bin his

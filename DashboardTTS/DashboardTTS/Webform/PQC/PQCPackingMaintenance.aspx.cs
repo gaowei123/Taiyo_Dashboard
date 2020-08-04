@@ -155,12 +155,7 @@ namespace DashboardTTS.Webform.PQC
                 //pack detail tracking model
                 List<Common.Class.Model.PQCPackDetailTracking_Model> packDetailList = detailBLL.GetModelList(this.lbTrackingID.Text);
 
-                //bin model
-                List< Common.Class.Model.PQCQaViBinning> binModelList = binBLL.GetModelList(this.lbTrackingID.Text);
-                var packBinList = (from a in binModelList
-                                where a.processes == "PACKING"
-                                select a).ToList();
-
+               
 
 
                 //set pack detail list
@@ -189,31 +184,114 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-                List<Common.Class.Model.PQCQaViBinHistory_Model> binHisModelList = new List<Common.Class.Model.PQCQaViBinHistory_Model>();
+
+
+
+
+
+
 
                 //set pack bin list
-                foreach (var model in packBinList)
+
+
+                List<Common.Class.Model.PQCQaViBinning> packBinList = new List<Common.Class.Model.PQCQaViBinning>();
+
+
+                List<Common.Class.Model.PQCQaViBinning> binModelList = binBLL.GetModelList(this.lbTrackingID.Text);
+                if (binModelList != null)
                 {
-                    //bin联动累加, 增长量.
-                    model.materialQty = model.materialQty + increaseQty;
-                    model.updatedTime = DateTime.Now;
-                    model.remarks = "Updated by " + txtUserName.Text;
-
-                    DBHelp.Reports.LogFile.Log("PQCPackingMaintenance", string.Format("[btn Submit Click] set bin, trackingID: {0}, materialQty: {1}", model.trackingID, model.materialQty));
-
-
-                    //copy his model
-                    Common.Class.Model.PQCQaViBinHistory_Model binHisModel = binHisBLL.CopyModel(model);
-                    binHisModel.materialFromQty = model.materialQty - increaseQty;
-                    binHisModelList.Add(binHisModel);
+                    packBinList = (from a in binModelList where a.processes == "PACKING" select a).ToList();
                 }
+                else
+                {
+                    packBinList = null;
+                }
+
+               
+
+                bool isUpdate;
+                List<Common.Class.Model.PQCQaViBinHistory_Model> binHisModelList = new List<Common.Class.Model.PQCQaViBinHistory_Model>();
+
+                if (packBinList == null || packBinList .Count == 0)
+                {
+                    #region insert new 
+                    isUpdate = false;
+
+                    packBinList = new List<Common.Class.Model.PQCQaViBinning>();
+                    foreach (var model in packDetailList)
+                    {
+                        Common.Class.Model.PQCQaViBinning binModel = new Common.Class.Model.PQCQaViBinning();
+                        binModel.PartNumber = packTrackingModel.partNumber;
+                        binModel.jobId = model.jobId;
+                        binModel.trackingID = model.trackingID;
+                        binModel.materialPartNo = model.materialPartNo;
+                        binModel.materialName = model.materialName;                    
+                        binModel.model = model.model;
+                        binModel.jigNo = model.jigNo;
+
+                        binModel.updatedTime = DateTime.Now;
+                        binModel.status = "LOAD";
+                        binModel.nextViFlag = "true";
+                        binModel.remark_1 = model.remark_1;
+                        binModel.remark_2 = model.remark_2;
+                        binModel.remark_3 = "";
+                        binModel.remark_4 = "";
+                        binModel.remarks = model.remarks;
+                        binModel.processes = model.processes;
+                        binModel.shipTo = model.shipTo;
+
+                        binModel.day = model.day;
+                        binModel.shift = model.shift;
+                        binModel.userName = model.userName;
+                        binModel.userID = model.userID;
+
+                        binModel.id = Guid.NewGuid().ToString();
+                        binModel.materialQty = model.passQty;
+                        binModel.dateTime = DateTime.Now;
+
+
+                        packBinList.Add(binModel);
+
+
+                        //copy his model
+                        Common.Class.Model.PQCQaViBinHistory_Model binHisModel = binHisBLL.CopyModel(binModel);
+                        binHisModel.materialFromQty = 0;
+                        binHisModelList.Add(binHisModel);
+                    }
+                    #endregion 
+                }
+                else
+                {
+                    #region update 
+                    isUpdate = true;
+
+                    foreach (var model in packBinList)
+                    {
+                        //bin联动累加, 增长量.
+                        model.materialQty = model.materialQty + increaseQty;
+                        model.updatedTime = DateTime.Now;
+                        model.remarks = "Updated by " + txtUserName.Text;
+
+                        DBHelp.Reports.LogFile.Log("PQCPackingMaintenance", string.Format("[btn Submit Click] set bin, trackingID: {0}, materialQty: {1}", model.trackingID, model.materialQty));
+
+
+                        //copy his model
+                        Common.Class.Model.PQCQaViBinHistory_Model binHisModel = binHisBLL.CopyModel(model);
+                        binHisModel.materialFromQty = model.materialQty - increaseQty;
+                        binHisModelList.Add(binHisModel);
+                    }
+
+                    #endregion 
+                }
+
+            
 
 
 
 
 
                 //update pqc data rollback
-                bool updateResult = trackingBLL.UpdatePQCJobMaintenance(packTrackingModel, packDetailList, packBinList, binHisModelList);
+                bool updateResult = trackingBLL.UpdatePQCJobMaintenance(packTrackingModel, packDetailList, packBinList, binHisModelList, isUpdate);
                 if (updateResult == false)
                 {
                     DBHelp.Reports.LogFile.Log("PQCPackingMaintenance", "[btn Submit Click] :update PQC Job Fail");
