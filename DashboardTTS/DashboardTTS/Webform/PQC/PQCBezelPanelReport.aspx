@@ -55,7 +55,7 @@
                                 <asp:ListItem Value="831">831</asp:ListItem>
                             </asp:DropDownList>
                         </div>
-                        <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
+                        <%--<div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
                             <label>MFG Date:</label>
                             <asp:TextBox runat="server" ID="txtMFGDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" ></asp:TextBox>
                         </div>
@@ -68,7 +68,7 @@
                         <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">
                             <label>PIC:</label>
                             <asp:TextBox runat="server" ID="txtPIC" CssClass="form-control"></asp:TextBox>
-                        </div>
+                        </div>--%>
 
                         <div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px; float:right;">
                             <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="BtnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />

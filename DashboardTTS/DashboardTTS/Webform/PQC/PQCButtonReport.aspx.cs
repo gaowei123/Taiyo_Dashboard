@@ -534,9 +534,6 @@ namespace DashboardTTS.Webform.PQC
                                                Paint_QATestRej = modelGroup.Sum(p => p.Paint_QATestRej),
                                                Paint_QATestRejRate = Math.Round(modelGroup.Sum(p => p.Paint_QATestRej) / modelGroup.Sum(p => p.lotQty) * 100, 2)
                                            };
-
-
-
                 #endregion
 
 
@@ -1628,7 +1625,6 @@ namespace DashboardTTS.Webform.PQC
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.PQCButtonReport_ViewModel.PQCDetail model = new ViewModel.PQCButtonReport_ViewModel.PQCDetail();
-
                 model.jobID = dr["jobID"].ToString().ToUpper();
                 model.model = dr["model"].ToString();
                 model.partNumber = dr["partNumber"].ToString();

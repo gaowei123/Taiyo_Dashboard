@@ -728,7 +728,7 @@ namespace Common.Class.BLL
                 foreach (DataRow dr in dt.Rows)
                 {
                     double shortage = 0;
-                    double qa = 0;
+                    //double qa = 0;
 
                     if (dtInventory != null && dtInventory.Rows.Count != 0)
                         shortage += double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
@@ -736,13 +736,13 @@ namespace Common.Class.BLL
                     if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
                     {
                         shortage += double.Parse(dtPaintTemp.Rows[0]["setupRejQty"].ToString());
-                        qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
+                        //qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
                     }
 
 
                     dr["Shortage"] = shortage;
-                    dr["QA"] = qa;
-                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage + qa);
+                    //dr["QA"] = qa;
+                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage );
                 }
                 #endregion
             }
@@ -796,6 +796,26 @@ namespace Common.Class.BLL
             else if (sDefectDescription == "Others")
             {
                 dt = dal.GetOthersDefect(sJobID, sTrackingID);
+
+                #region 处理 qa
+                Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
+                DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                  
+                    double qa = 0;
+                    
+
+                    if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
+                        qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
+
+
+                    //dr["Shortage"] = shortage;
+                    dr["QA"] = qa;
+                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + qa);
+                }
+                #endregion
             }
 
 

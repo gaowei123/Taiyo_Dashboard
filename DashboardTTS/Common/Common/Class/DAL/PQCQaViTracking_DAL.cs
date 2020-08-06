@@ -370,7 +370,7 @@ a.jobID
 ,Sum(b.passQty) as passQty
 ,sum(b.rejectQty) as rejectQty
 ,c.remark_1 as supplier
-,case when c.processes like '%Laser%' and a.processes ='CHECK#1'  then 'Laser'  else 'WIP' end as PartsType
+,case when  CHARINDEX('Laser', c.processes,0)> 0 then 'Laser' else 'WIP' end as PartsType
 ,a.processes
 ,OP = stuff((SELECT  ',' +  t.userID 
 			FROM (select jobId,processes, userID from PQCQaViTracking group by jobId,processes,userID) t  
@@ -402,33 +402,63 @@ where 1=1 ");
 
             //查询出所有job到临时表
             strSql.Append(@"
-select distinct jobid from pqcqavitracking a
-left join pqcbom b on a.partnumber = b.partnumber  
-where  1=1 
-and a.nextViFlag = 'true'
-and a.day >= @DateFrom
-and a.day < @DateTo ");
+select a.jobId
+from (
+	select distinct jobid from pqcqavitracking 
+	where  1=1 and nextViFlag = 'true'
+	and day >= @DateFrom
+	and day < @DateTo
+) a 
 
-            if (sDescription.Trim() != "")
-                strSql.AppendLine(" and b.description = @description ");
 
-            if (sPartNumber.Trim() != "")
-                strSql.AppendLine(" and a.partnumber = @PartNumber ");
+left join 
+(
+	select jobId, partnumber, max(processes) as curCheckProcess  from PQCQaViTracking   
+	group by jobid, partNumber
+) b  on a.jobId = b.jobId
+
+
+left join (
+	select 
+	partNumber,
+	case when charindex('Check#3',processes,0) > 0 then 'CHECK#3'
+		 when charindex('Check#2',processes,0) > 0 then 'CHECK#2' else 'CHECK#1' 
+	end as lastCheckingProcess,
+	description,
+	coating,
+	color,
+	remark_1,
+	model
+	from pqcbom 
+) c   on c.partNumber = b.partNumber 
+
+
+where b.curCheckProcess = c.lastCheckingProcess ");
+
+            if (sDescription.Trim() == "BUTTON")
+                strSql.AppendLine(" and c.description != 'BEZEL' and  c.description != 'PANEL'  ");
+            else if (sDescription.Trim() == "BEZEL"  || sDescription.Trim() == "PANEL")
+                strSql.AppendLine(" and c.description = '"+ sDescription + "' ");
+
+
 
             if (sJobNo.Trim() != "")
                 strSql.AppendLine(" and a.JobID = @JobNo ");
 
+            if (sPartNumber.Trim() != "")
+                strSql.AppendLine(" and c.partnumber = @PartNumber ");
+            
             if (sModel.Trim() != "")
-                strSql.AppendLine(" and b.model = @Model");
+                strSql.AppendLine(" and c.model = @Model");
 
             if (sColor.Trim() != "")
-                strSql.AppendLine(" and b.color = @Color  ");
+                strSql.AppendLine(" and c.color = @Color  ");
 
             if (sSupplier.Trim() != "")
-                strSql.AppendLine(" and b.remark_1 = @supplier");
+                strSql.AppendLine(" and c.remark_1 = @supplier");
 
             if (sCoating.Trim() != "")
-                strSql.AppendLine(" and b.coating = @coating");
+                strSql.AppendLine(" and c.coating = @coating");
 
          
           
@@ -441,8 +471,7 @@ and a.day < @DateTo ");
                 new SqlParameter("@Model", SqlDbType.VarChar,50),
                 new SqlParameter("@Color", SqlDbType.VarChar,50),
                 new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50),
-                new SqlParameter("@description", SqlDbType.VarChar,50)
+                new SqlParameter("@coating", SqlDbType.VarChar,50)
             };
 
 
@@ -454,7 +483,6 @@ and a.day < @DateTo ");
             if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
             if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
             if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
-            if (sDescription != "") parameters[8].Value = sDescription; else parameters[8] = null;
 
 
 

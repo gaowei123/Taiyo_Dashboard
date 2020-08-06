@@ -67,33 +67,6 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.DropDownList ddlNumber;
         
         /// <summary>
-        /// txtMFGDate 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMFGDate;
-        
-        /// <summary>
-        /// txtPaintDate 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPaintDate;
-        
-        /// <summary>
-        /// txtPIC 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPIC;
-        
-        /// <summary>
         /// Button1 控件。
         /// </summary>
         /// <remarks>

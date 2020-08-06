@@ -219,6 +219,7 @@ namespace DashboardTTS.ViewModel
             public double other { get; set; }
 
             public double totalRej { get; set; }
+            public double qa { get; set; }
         }
 
 

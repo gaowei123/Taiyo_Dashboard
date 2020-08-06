@@ -1496,6 +1496,7 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Light Bubble' then rejectQty end),0) as [Light Bubble]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='White Dot in Material' then rejectQty end),0) as [White Dot in Material]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Other' then rejectQty end),0) as [Other]
+,'0' as QA
 from PQCQaViDefectTracking 
 where 1=1  ");
 

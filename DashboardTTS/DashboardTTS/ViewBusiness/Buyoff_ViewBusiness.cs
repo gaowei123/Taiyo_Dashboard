@@ -440,7 +440,7 @@ namespace DashboardTTS.ViewBusiness
                     model.dented = double.Parse(dr["Dented"].ToString());
                     model.particleForLaserSetup = double.Parse(dr["Particle for laser setup"].ToString());
                     model.buyoff = double.Parse(dr["Buyoff"].ToString());
-                    model.qa = double.Parse(dr["QA"].ToString());
+                    //model.qa = double.Parse(dr["QA"].ToString());
 
                     model.shortage = double.Parse(dr["Shortage"].ToString());
 
@@ -559,7 +559,7 @@ namespace DashboardTTS.ViewBusiness
                     model.lightBubble = double.Parse(dr["Light Bubble"].ToString());
                     model.whiteDotInMaterial = double.Parse(dr["White Dot in Material"].ToString());
                     model.other = double.Parse(dr["Other"].ToString());
-
+                    model.qa = double.Parse(dr["QA"].ToString());
                     model.totalRej = double.Parse(dr["rejectQty"].ToString());
 
                     othersDefectList.Add(model);

@@ -19,10 +19,7 @@ namespace DashboardTTS.Webform.PQC
 
                     string reportType = Request.QueryString["Description"].ToString();
                     this.lblUserHeader.Text = "PQC " + reportType + " Report";
-
                     this.title.Text = "Taiyo - "+ reportType + " Report";
-
-
                     this.lbBezelPanelName.Text = reportType + " No:";
 
 
@@ -56,12 +53,13 @@ namespace DashboardTTS.Webform.PQC
                 //搜索条件
                 DateTime? dDateFrom = new DateTime();
                 DateTime? dDateTo = new DateTime();
-                DateTime? dMFGDate = new DateTime();
-                DateTime? dPaintDate = new DateTime();
+                DateTime? dMFGDate = null;
+                DateTime? dPaintDate = null;
 
                 try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }             
-                try { dPaintDate = DateTime.Parse(txtPaintDate.Text); } catch { dPaintDate = null; }
-                try { dMFGDate = DateTime.Parse(txtMFGDate.Text); } catch { dMFGDate = null; }
+                //try { dPaintDate = DateTime.Parse(txtPaintDate.Text); } catch { dPaintDate = null; }
+                //try { dMFGDate = DateTime.Parse(txtMFGDate.Text); } catch { dMFGDate = null; }
+
 
                 if (dDateFrom == null || dDateTo == null)
                 {
@@ -88,7 +86,7 @@ namespace DashboardTTS.Webform.PQC
                 string sDescription = Request.QueryString["Description"].ToString();
                 string sNumber = this.ddlNumber.SelectedValue;
 
-                string sPIC = this.txtPIC.Text.Trim();
+                string sPIC = "";// this.txtPIC.Text.Trim();
 
 
 
@@ -328,8 +326,7 @@ namespace DashboardTTS.Webform.PQC
 
                 #region add a summary row for dtoutput
 
-                double totalMRPQty = 0;
-                double totalCheckQty = 0;
+                double totalMRPQty = 0;              
                 int totalOKQty = 0;
                 decimal totalRejCost = 0;
                 int totalPaintingParticleRej = 0;
@@ -345,8 +342,7 @@ namespace DashboardTTS.Webform.PQC
                 foreach (DataRow dr in dtOutput.Rows)
                 {
                     totalMRPQty += double.Parse(dr["Lot Qty"].ToString());
-
-                    //totalCheckQty += double.Parse(dr["Total Checked Qty"].ToString());
+               
                     totalOKQty += int.Parse(dr["OK QTY"].ToString());
                     totalRejCost += decimal.Parse(dr["Total REJ AMT"].ToString().Trim('$'));
 
@@ -417,8 +413,6 @@ namespace DashboardTTS.Webform.PQC
                 DataRow drOutputSummaryRate = dtOutput.NewRow();
 
                 drOutputSummary["Lot Qty"] = totalMRPQty;
-                //drOutputSummary["Total Checked Qty"] = totalCheckQty;
-                //drOutputSummaryRate["Total Checked Qty"] = "Rej%";
 
 
                 int totalMouldingRej = 0;
@@ -431,21 +425,14 @@ namespace DashboardTTS.Webform.PQC
                 {
                     totalMouldingRej += kv.Value;
                     totalRej += kv.Value;
-                    //drOutputSummary[kv.Key] = kv.Value;
-                    //drOutputSummaryRate[kv.Key] = Math.Round(kv.Value / totalCheckQty * 100.0, 2).ToString() + "%";
-
 
                     drOutputSummary[kv.Key] = string.Format("{0} ({1})", kv.Value, Math.Round(kv.Value / totalMRPQty * 100.0, 2).ToString() + "%");
-
                 }
 
                 foreach (KeyValuePair<string, int> kv in dicPaintingRejTotal)
                 {
                     totalPaintingRej += kv.Value;
                     totalRej += kv.Value;
-                    //drOutputSummary[kv.Key] = kv.Value;
-                    //drOutputSummaryRate[kv.Key] = Math.Round(kv.Value / totalCheckQty * 100.0, 2).ToString() + "%";
-
 
                     drOutputSummary[kv.Key] = string.Format("{0} ({1})", kv.Value, Math.Round(kv.Value / totalMRPQty * 100.0, 2).ToString() + "%");
                 }
@@ -454,9 +441,6 @@ namespace DashboardTTS.Webform.PQC
                 {
                     totalLaserRej += kv.Value;
                     totalRej += kv.Value;
-                    //drOutputSummary[kv.Key] = kv.Value;
-                    //drOutputSummaryRate[kv.Key] = Math.Round(kv.Value / totalCheckQty * 100.0, 2).ToString() + "%";
-
 
                     drOutputSummary[kv.Key] = string.Format("{0} ({1})", kv.Value, Math.Round(kv.Value / totalMRPQty * 100.0, 2).ToString() + "%");
                 }
@@ -465,36 +449,17 @@ namespace DashboardTTS.Webform.PQC
                 {
                     totalOthersRej += kv.Value;
                     totalRej += kv.Value;
-                    //drOutputSummary[kv.Key] = kv.Value;
-                    //drOutputSummaryRate[kv.Key] = Math.Round(kv.Value / totalCheckQty * 100.0, 2).ToString() + "%";
-
 
                     drOutputSummary[kv.Key] = string.Format("{0} ({1})", kv.Value, Math.Round(kv.Value / totalMRPQty * 100.0, 2).ToString() + "%");
                 }
 
-                drOutputSummary["Moulding Defect"] = totalMouldingRej;
-                drOutputSummary["Painting Defect"] = totalPaintingRej;
-                drOutputSummary["Laser Defect"] = totalLaserRej;
-                drOutputSummary["Others Defect"] = totalOthersRej;
-                drOutputSummary["Total REJ QTY"] = totalRej;
+                drOutputSummary["Moulding Defect"] = string.Format("{0} ({1})", totalMouldingRej, Math.Round(totalMouldingRej / totalMRPQty * 100.0, 2).ToString() + "%");
+                drOutputSummary["Painting Defect"] = string.Format("{0} ({1})", totalPaintingRej, Math.Round(totalPaintingRej / totalMRPQty * 100.0, 2).ToString() + "%"); ;
+                drOutputSummary["Laser Defect"] = string.Format("{0} ({1})", totalLaserRej, Math.Round(totalLaserRej / totalMRPQty * 100.0, 2).ToString() + "%");
+                drOutputSummary["Others Defect"] = string.Format("{0} ({1})", totalOthersRej, Math.Round(totalOthersRej / totalMRPQty * 100.0, 2).ToString() + "%") ;
+                drOutputSummary["Total REJ QTY"] = string.Format("{0} ({1})", totalRej, Math.Round(totalRej / totalMRPQty * 100.0, 2).ToString() + "%");
                 drOutputSummary["Total REJ AMT"] = "$" + Math.Round(totalRejCost, 2).ToString();
-
-
-
-                //drOutputSummaryRate["Total Mould REJ%"] = Math.Round(totalMouldingRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-
-                //drOutputSummaryRate["Painting Particle REJ%"] = Math.Round(totalPaintingParticleRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Painting Fiber REJ%"] = Math.Round(totalPaintingFiberRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Painting Many Particle REJ%"] = Math.Round(totalPaintingManyParticleRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Painting Dust REJ%"] = Math.Round(totalPaintingDustRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Painting Scratch REJ%"] = Math.Round(totalPaintingScratchRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-
-                //drOutputSummaryRate["Painting REJ%"] = Math.Round(totalPaintingRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Total Laser REJ%"] = Math.Round(totalLaserRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Total Others REJ%"] = Math.Round(totalOthersRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-                //drOutputSummaryRate["Total REJ%"] = Math.Round(totalRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
-
-
+                
 
                 drOutputSummary["Total Mould REJ%"] = Math.Round(totalMouldingRej / totalMRPQty * 100.0, 2).ToString("0.00") + "%";
 
@@ -512,7 +477,6 @@ namespace DashboardTTS.Webform.PQC
                 drOutputSummary["OK QTY"] = totalOKQty;
 
                 dtOutput.Rows.Add(drOutputSummary);
-                //dtOutput.Rows.Add(drOutputSummaryRate);
 
 
                 #endregion
@@ -1022,9 +986,16 @@ namespace DashboardTTS.Webform.PQC
             if (dt == null || dt.Rows.Count == 0)
                 return;
 
+
+
+
             DataRow[] drArr = dt.Select(" description = '" + reportType.ToUpper() + "' ", " number asc ");
             if (drArr.Length == 0)
                 return;
+
+
+
+
 
             foreach (DataRow dr in drArr)
             {
@@ -1032,11 +1003,12 @@ namespace DashboardTTS.Webform.PQC
 
                 string number = dr["number"].ToString();
                 string description = dr["description"].ToString();
+                string partNo = dr["partNumber"].ToString();
 
                 if (description.ToUpper() == reportType.ToUpper() && number.Trim() != "")
                 {
-                    li.Text = number;
-                    li.Value = number;
+                    li.Text = partNo;
+                    li.Value = partNo;
                     if (!this.ddlNumber.Items.Contains(li))
                     {
                         this.ddlNumber.Items.Add(li);

@@ -1193,11 +1193,6 @@
                 title: 'Shortage',
                 align: 'center',
                 valign: 'middle'
-            }, {
-                field: 'qa',
-                title: 'QA',
-                align: 'center',
-                valign: 'middle'
             },
             {
                 field: 'other',
@@ -1242,7 +1237,7 @@
                 var particleForLaserSetup = 0;
                 var buyoff = 0;
                 var shortage = 0;
-                var qa = 0;
+                //var qa = 0;
                 var other = 0;
               
 
@@ -1276,7 +1271,7 @@
                     particleForLaserSetup += data[i].particleForLaserSetup;
                     buyoff += data[i].buyoff;
                     shortage += data[i].shortage;
-                    qa += data[i].qa;
+                    //qa += data[i].qa;
                     other += data[i].other;
                 }
 
@@ -1306,7 +1301,7 @@
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
                 if (buyoff == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'buyoff');
                 if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
-                if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
+                //if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 
 
@@ -1715,6 +1710,12 @@
                 align: 'center',
                 valign: 'middle',
             },
+             {
+                 field: 'qa',
+                 title: 'QA',
+                 align: 'center',
+                 valign: 'middle'
+             },
             {
                 field: 'other',
                 title: 'Other',
@@ -1744,6 +1745,7 @@
                 var lightBubble = 0;
                 var whiteDotInMaterial = 0;
                 var other = 0;
+                var qa = 0;
 
 
 
@@ -1759,6 +1761,7 @@
                     lightBubble += data[i].lightBubble;
                     whiteDotInMaterial += data[i].whiteDotInMaterial;
                     other += data[i].other;
+                    qa += data[i].qa;
                 }
 
 
@@ -1773,6 +1776,7 @@
                 if (lightBubble == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'lightBubble');
                 if (whiteDotInMaterial == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'whiteDotInMaterial');
                 if (other == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'other');
+                if (qa == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'qa');
 
 
             },
