@@ -73,7 +73,7 @@ namespace DashboardTTS.Webform.PQC
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
-                string sDescription = "BUTTON";
+                string sDescription = "BUTTON";//除了panel, bezel的part都显示.
 
 
                 //先拉取满足条件的所有job id.
@@ -132,12 +132,12 @@ namespace DashboardTTS.Webform.PQC
 
                     ViewModel.PQCButtonReport_ViewModel.PaintDelivery paintDeliveryModel = new ViewModel.PQCButtonReport_ViewModel.PaintDelivery();
                     paintDeliveryModel = (from a in paintDeliveryList
-                                          where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper().Replace("PAINT#","") == pqcdetailModel.process.ToUpper().Replace("CHECK#","")
+                                          where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper()== "PAINT#1"
                                           select a).FirstOrDefault();
 
                     List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> jobDefectList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
                     jobDefectList = (from a in pqcDefectList
-                                     where a.jobID == pqcdetailModel.jobID && a.process == pqcdetailModel.process && a.materialNo == pqcdetailModel.materialNo
+                                     where a.jobID == pqcdetailModel.jobID && a.materialNo == pqcdetailModel.materialNo
                                      select a).ToList();
 
 
@@ -1641,7 +1641,27 @@ namespace DashboardTTS.Webform.PQC
                 models.Add(model);
             }
 
-            return models.OrderBy(P => P.jobID).ToList();
+
+
+            var jobList = from a in models
+                          group a by a.jobID into b
+                          select new
+                          {
+                              b.Key,
+                              lastProcess = b.Max(p => p.process)
+                          };
+
+
+            var result = (from a in models
+                          join b in jobList on a.jobID equals b.Key
+                          where a.process == b.lastProcess
+                          orderby a.jobID ascending
+                          select a).ToList();
+
+
+
+
+            return result;
         }
 
 

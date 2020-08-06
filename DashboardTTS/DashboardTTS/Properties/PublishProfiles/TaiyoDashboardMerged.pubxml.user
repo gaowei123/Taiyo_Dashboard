@@ -1966,13 +1966,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>08/05/2020 16:28:56</publishTime>
+      <publishTime>08/06/2020 10:15:37</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>08/05/2020 16:29:01</publishTime>
+      <publishTime>08/06/2020 15:43:09</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>08/05/2020 10:27:49</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2122,7 +2122,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>08/05/2020 10:27:49</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="bin/stdole.dll">
       <publishTime>06/20/2016 14:45:20</publishTime>
@@ -10849,13 +10849,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Buyoff/OverallBuyoff.cshtml">
-      <publishTime>08/05/2020 14:12:12</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Views/Buyoff/PQCBuyoffList.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Buyoff/TouchPCBuyoff.cshtml">
-      <publishTime>08/05/2020 14:14:31</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>01/15/2020 14:05:31</publishTime>
@@ -11308,7 +11308,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Laser/LaserEquipmentCheckForm.aspx">
-      <publishTime>08/05/2020 11:20:40</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Webform/Laser/LaserEquipmentCheckList.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11509,7 +11509,7 @@
       <publishTime>07/30/2020 09:55:51</publishTime>
     </File>
     <File Include="Webform/PQC/PQCBezelPanelReport.aspx">
-      <publishTime>08/04/2020 15:28:43</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Webform/PQC/PQCBomFormMenu.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11593,7 +11593,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Reports/LaserPQCTotalReport.aspx">
-      <publishTime>08/04/2020 14:42:03</publishTime>
+      <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Webform/Reports/Output.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
