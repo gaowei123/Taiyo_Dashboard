@@ -340,7 +340,7 @@
         var jobNo = getUrlParam("JobNumber");
 
 
-        if (jobNo == '') {
+        if (jobNo == '' || jobNo== null) {
             return;
         }
 
@@ -373,7 +373,7 @@
 
 
     //set job no list
-    $('#txtDate').change( setJobList());
+    $('#txtDate').change(function () { setJobList(); });
 
 
     function setJobList() {
@@ -407,7 +407,7 @@
                 $('#ddlJobNo').selectpicker("refresh");
 
                 var jobNo = getUrlParam("JobNumber");
-                if (jobNo != '') {
+                if (jobNo != '' && jobNo != null) {
                     $('#ddlJobNo').val(jobNo);
                     $('#ddlJobNo').selectpicker("refresh");
 
