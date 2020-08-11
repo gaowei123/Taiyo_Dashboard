@@ -56,7 +56,7 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-            //Summary Report     job 不做限制
+            //Summary Report     job不做限制
 
             //laser btn
                 //1.process有laser工序, 并且当前工序是Check#1

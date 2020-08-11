@@ -280,6 +280,16 @@ where 1 = 1  and a.day >= @DateFrom  and a.day < @DateTo ", StaticRes.Global.Sql
             }
         }
 
+
+
+
+
+
+
+       
+
+
+
      
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
@@ -328,7 +338,60 @@ left join PQCBom c on a.partNumber = c.partNumber
 
 where day >= @datefrom and day < @dateto 
 {1} {2}", searchShift, searchShift,searchPartNo);
-            
+
+
+
+            //new sql
+//            string aaaa = @"
+//select 
+// a.trackingID
+//,a.partnumber  
+//,a.TotalQty
+//,a.acceptQty
+//,a.rejectQty
+//,a.processes as currentProcess
+//,c.description
+//,c.number
+//,c.IsContainLaser
+//,c.lastCheckProcess
+
+//,isnull( case when c.MouldRejType  = 'TTS' then b.mouldRej end ,0) as ttsRejQty
+//,isnull( case when c.MouldRejType != 'TTS' then b.mouldrej end ,0) as vendorRejQty
+//,b.paintRej
+//,b.laserRej
+//,b.othersRej
+
+//from PQCQaViTracking a
+
+//left join (
+//	select 
+//	trackingID
+//	,ISNULL(SUM( case when defectdescription = 'Mould' then rejectQty end),0) as mouldRej
+//	,ISNULL(SUM( case when defectdescription = 'Paint' then rejectQty end),0) as paintRej
+//	,ISNULL(SUM( case when defectdescription = 'Laser' then rejectQty end),0) as laserRej
+//	,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
+//	from PQCQaViDefectTracking
+//	where day >= '2020-1-1' and day < '2020-8-1'
+//	group by trackingID
+//) b on a.trackingID = b.trackingID
+
+//left join (
+//	select 
+//	partNumber
+//	,description
+//	,isnull(number,'') as number
+//	,case when charindex('Laser', processes,0) > 0 then 'TRUE' ELSE 'FALSE' END AS IsContainLaser
+//	,case when charindex('Check#3',processes,0) > 0 then 'CHECK#3' 
+//		  when charindex('Check#2',processes,0) > 0 then 'CHECK#2'
+//		  else 'CHECK#1' 
+//	END as lastCheckProcess
+//	,case when remark_1 = 'TTS' then 'TTS' else 'Vendor' end as MouldRejType
+//	from PQCBom
+//) c on a.partNumber = c.partNumber
+
+//where a.day >= '2020-1-1' and a.day < '2020-8-1'";
+
+
 
             SqlParameter[] parameters = {
                 new SqlParameter("@DateFrom", SqlDbType.DateTime),
