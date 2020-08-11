@@ -667,33 +667,15 @@ namespace Common.DAL
             StringBuilder strSql = new StringBuilder();
             
             strSql.Append(@"
-select
-'Machine'+ a.machineID as MachineID
-,ISNULL(sum(case when b.Number = 'Laser' then totalPass  end),0) as LaserBTN
-,ISNULL(sum(case when b.Number = 'Print' then totalPass  end),0) as PrintBTN
-,ISNULL(sum(case when b.Number = '784'	 then totalPass  end),0) as Lens784
-,ISNULL(sum(case when b.Number = '824'   then totalPass  end),0) as Lens824
-,ISNULL(sum(case when b.Number = '833'   then totalPass  end),0) as Lens833
-,ISNULL(sum(case when b.Number = '257'   then totalPass  end),0) as Bezel257
-,ISNULL(sum(case when b.Number = '830'   then totalPass  end),0) as Bezel830
-,ISNULL(sum(case when b.Number = '831'   then totalPass  end),0) as Bezel831
-,ISNULL(sum(case when b.Number = '452'   then totalPass  end),0) as Panel452
-,ISNULL(sum(case when b.Number = '656'   then totalPass  end),0) as Panel656
-,ISNULL(sum(case when b.Number = '869'   then totalPass  end),0) as Tks869
-
-,sum(totalPass) as OK
-,sum(totalFail) as NG
-,sum(totalFail) + sum(totalPass) as Output
-
-,case when sum(totalFail) + sum(totalPass) = 0 
-then 0
-else  Round(CONVERT(float, sum(totalFail)) / convert(float,Sum(totalFail + totalPass)) * 100 ,2) 
-end as RejRate
-
-
-from lmmswatchdog_shift a
-left join LMMSBom b on a.partNumber = b.partNumber and a.machineid = b.machineid
-where 1=1  and a.totalPass + a.totalFail > 0 and a.totalQuantity > 0 and day >= @dateFrom and day < @dateTo ");
+select 
+a.machineID
+,ISNULL(b.number ,'') as number
+,SUM(a.totalpass) as totalpass
+,SUM(a.totalfail) as totalfail
+,SUM(a.totalpass + a.totalfail)  as output
+from LMMSWatchDog_Shift a 
+left join lmmsbom b  on a.partnumber = b.partnumber and a.machineID=b.machineID
+where 1=1 and a.day >= @dateFrom and a.day < @dateTo ");
 
 
             if (sPartNo != "")
@@ -703,7 +685,7 @@ where 1=1  and a.totalPass + a.totalFail > 0 and a.totalQuantity > 0 and day >= 
                 strSql.Append(" and a.shift = @shift ");
 
 
-            strSql.Append(" group by a.machineID  order by machineID asc ");
+            strSql.Append(" group by b.number , a.machineID ");
 
 
 

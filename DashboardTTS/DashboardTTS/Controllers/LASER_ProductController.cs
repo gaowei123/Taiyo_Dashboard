@@ -4,12 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Data;
 
 namespace DashboardTTS.Controllers
 {
     public class LASER_ProductController : Controller
     {
         private readonly ViewBusiness.LaserProduction vBLL = new ViewBusiness.LaserProduction();
+        private JavaScriptSerializer _js = new JavaScriptSerializer();
+
 
 
         #region View
@@ -27,19 +30,40 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-        
+
         #endregion
 
 
 
 
+        
 
 
-        #region laser summary report 
+        #region laser summary report
+
+
+        public ActionResult GetColumn()
+        {
+            List<ViewModel.LaserSummaryReport_ViewModel.typeColumn> modelList = new List<ViewModel.LaserSummaryReport_ViewModel.typeColumn>();
+
+            modelList = vBLL.GetTypeColumn();
+
+
+            string jsonResult = "";
+
+
+            if (modelList == null || modelList.Count == 0)
+                jsonResult = _js.Serialize("");
+            else
+                jsonResult = _js.Serialize(modelList);
+
+
+            return Content(jsonResult);
+        }
+        
 
         public ActionResult GetSummaryData()
         {
-
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"].ToString());
             dateTo = dateTo.AddDays(1);
@@ -49,24 +73,13 @@ namespace DashboardTTS.Controllers
 
 
 
-            string jsonResult = "";
-
-            List<ViewModel.LaserSummaryReport_ViewModel> models = new List<ViewModel.LaserSummaryReport_ViewModel>();
-            models = vBLL.GetSummaryList(dateFrom, dateTo, partNo, shift);
-
-            if (models != null && models.Count != 0)
-            {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                jsonResult = js.Serialize(models);
-            }
-
+            string jsonResult = vBLL.GetSummaryList(dateFrom, dateTo, partNo, shift);
+            
           
 
             return Content(jsonResult);
         }
-
-
-
+        
         #endregion
 
 
@@ -84,26 +97,20 @@ namespace DashboardTTS.Controllers
 
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+          
 
             ViewModel.LaserMaintenance_ViewModel model = vBLL.GetMaintainJobInfo(day, shift, machineID, jobID);
 
             if (model == null)
             {
-                return Content(js.Serialize(""));
+                return Content(_js.Serialize(""));
             }
             else
             {
-                return Content(js.Serialize(model));
+                return Content(_js.Serialize(model));
             }
         }
-
-
-
-
-
-
-
+        
 
         #endregion
 

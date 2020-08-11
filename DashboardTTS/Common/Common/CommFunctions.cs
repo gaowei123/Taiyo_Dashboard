@@ -434,17 +434,17 @@ namespace Common
             #region part no
             if (sControlID_Part != "")
             {
-                DataTable dt = bll.GetPartList();
-                if (dt == null || dt.Rows.Count == 0)
+                List<string> partNoList = bll.GetPatNoList();
+                if (partNoList == null)
                     return;
 
 
                 strJS.AppendLine("  jQuery(function($){  $(function(){");
                 strJS.AppendLine(" $(\"" + sControlID_Part + "\").bigAutocomplete({");
                 strJS.AppendLine(" data:[ ");
-                foreach (DataRow dr in dt.Rows)
+                foreach (string str in partNoList)
                 {
-                    strJS.Append("{\"title\":\"" + dr["PartNumber"].ToString() + "\"},");
+                    strJS.Append("{\"title\":\"" + str + "\"},");
                 }
                 strJS.Remove(strJS.Length - 1, 1);
                 strJS.AppendLine(" ], ");
@@ -459,17 +459,17 @@ namespace Common
             #region model
             if (sControlID_Model != "")
             {
-                DataTable dt = bll.GetModelList();
-                if (dt == null || dt.Rows.Count == 0)
+                List<string> modelList = bll.GetModelList();
+                if (modelList == null)
                     return;
 
 
                 strJS.AppendLine("  jQuery(function($){  $(function(){");
                 strJS.AppendLine(" $(\"" + sControlID_Model + "\").bigAutocomplete({");
                 strJS.AppendLine(" data:[ ");
-                foreach (DataRow dr in dt.Rows)
+                foreach (string str in modelList)
                 {
-                    strJS.Append("{\"title\":\"" + dr["Model"].ToString() + "\"},");
+                    strJS.Append("{\"title\":\"" + str + "\"},");
                 }
                 strJS.Remove(strJS.Length - 1, 1);
                 strJS.AppendLine(" ], ");

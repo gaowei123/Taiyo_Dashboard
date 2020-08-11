@@ -80,6 +80,7 @@
 
 <script type="text/javascript">
 
+    var apiGetColumn = window.globalConfig.rootDirectory + '/LASER_Product/GetColumn';
     var apiGetSummaryData = window.globalConfig.rootDirectory + '/LASER_Product/GetSummaryData';
 
 
@@ -134,212 +135,174 @@
 
     function search() {
 
-
-        //重新加载必须将原本table清空
-        $('#tableLaserSummary').bootstrapTable('destroy');
-
-        $('#tableLaserSummary').bootstrapTable({ // 对应table标签的id
-
-
-            //call后台数据
-            method: 'post',
-            dataType: 'json',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            url: apiGetSummaryData,
-
-            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-
-            //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    DateFrom: $("#txtDateFrom").val(),
-                    DateTo: $("#txtDateTo").val(),
-                    PartNo: $("#ddlPartNo").val(),
-                    Shift: $("#ddlShift").val()
-                }
-            },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
+        //通过ajax先获取bom中所有的num.
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetColumn,
+            data: { },
+            success: function (colData) {
 
 
-            //表头样式 undefined, thead-light, thead-dark, 
-            theadClasses: 'thead-title',
+                var column = [
+                   {
+                       field: 'machineID',
+                       title: 'Machine ID',
+                       align: 'center',
+                       valign: 'middle'
+                   },
+                    {
+                        field: 'laser',
+                        title: 'Laser Btn',
+                        align: 'center',
+                        valign: 'middle'
+                    }
+                ];
 
-            //表格样式
-            classes: 'table table-bordered table-hover table-striped',
-
-            visibleSearch: true,
-
-            striped: false,  //表格显示条纹，默认为false
-            pagination: false, // 在表格底部显示分页组件，默认false
-            //pageList: [10, 20], // 设置页面可以显示的数据条数
-            //pageSize: 10, // 页面数据条数
-            //pageNumber: 1, // 首页页码
-
-
-            rowStyle: function (row, index) {
-                return {
-                    //防止数据自动换行
-                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" } 
+                //设置num小分类的列
+                for (var i = 0; i < colData.length; i++) {
+                    column.push({
+                        field: colData[i].dataField.toUpperCase(),
+                        title: colData[i].name,
+                        align: 'center',
+                        valign: 'middle'                        
+                    });
                 }
 
-            },
-
-            columns: [
-            {
-                field: 'machineID',
-                title: 'Machine ID',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'laserBtn',
-                title: 'Laser Btn',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'printBtn',
-                title: 'Print Btn',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'lens784',
-                title: 'Lens784',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'lens824',
-                title: 'Lens824',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'lens833',
-                title: 'Lens833',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'bezel257',
-                title: 'Bezel257',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'bezel830',
-                title: 'Bezel830',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'bezel831',
-                title: 'Bezel831',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'panel452',
-                title: 'Panel452',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'panel656',
-                title: 'Panel656',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'tks869',
-                title: 'TKS869',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'ok',
-                title: 'OK Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'ng',
-                title: 'NG Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'output',
-                title: 'Output',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'rejRate',
-                title: 'Rej%',
-                align: 'center',
-                valign: 'middle'
-            }
-
-            ],
-
-            onLoadSuccess: function (data) {  //加载成功时执行
-                console.log(data);
+                column.push(
+                    {
+                        field: 'ok',
+                        title: 'OK Qty',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'ng',
+                        title: 'NG Qty',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'output',
+                        title: 'Output',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'rejRate',
+                        title: 'Rej%',
+                        align: 'center',
+                        valign: 'middle'
+                    }
+                )
 
 
-                var printBtn = 0;
-                var laserBtn = 0;
-                var lens784 = 0;
-                var lens824 = 0;
-                var lens833 = 0;
-                var bezel257 = 0;
-                var bezel830 = 0;
-                var bezel831 =0;
-                var panel452 =0;
-                var panel656 =0;
 
+                //重新加载必须将原本table清空
+                $('#tableLaserSummary').bootstrapTable('destroy');
+                $('#tableLaserSummary').bootstrapTable({ // 对应table标签的id
+
+
+                    //call后台数据
+                    method: 'post',
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    url: apiGetSummaryData,
+
+                    cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+                    //sidePagination: 'server', // 设置为服务器端分页
+                    queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                        return {
+                            //pageSize: params.limit, // 每页要显示的数据条数
+                            //offset: params.offset, // 每页显示数据的开始行号
+                            //sort: params.sort, // 要排序的字段
+                            //sortOrder: params.order, // 排序规则
+                            //dataId: $("#dataId").val() // 额外添加的参数
+
+                            DateFrom: $("#txtDateFrom").val(),
+                            DateTo: $("#txtDateTo").val(),
+                            PartNo: $("#ddlPartNo").val(),
+                            Shift: $("#ddlShift").val()
+                        }
+                    },
+                    //sortName: 'id', // 要排序的字段
+                    //sortOrder: 'desc', // 排序规则
+
+
+                    //表头样式 undefined, thead-light, thead-dark, 
+                    theadClasses: 'thead-title',
+
+                    //表格样式
+                    classes: 'table table-bordered table-hover table-striped',
+
+                    visibleSearch: true,
+
+                    striped: false,  //表格显示条纹，默认为false
+                    pagination: false, // 在表格底部显示分页组件，默认false
+                    //pageList: [10, 20], // 设置页面可以显示的数据条数
+                    //pageSize: 10, // 页面数据条数
+                    //pageNumber: 1, // 首页页码
+
+
+                    rowStyle: function (row, index) {
+                        return {
+                            //防止数据自动换行
+                            css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                        }
+
+                    },
+
+
+                    columns: column,
+
+
+                    onLoadSuccess: function (data) {  //加载成功时执行
+                       
+
+
+                        var totalRow = data[data.length - 1];
+                        console.log(totalRow);
+
+                        //if (lens784 == 0) 
 
                 
 
-                for (var i = 0; i < data.length; i++) {
-                    printBtn = data[i].printBtn;
-                    laserBtn = data[i].laserBtn;
-                    lens784 = data[i].lens784;
-                    lens824 = data[i].lens824;
-                    lens833 = data[i].lens833;
-                    bezel257 = data[i].bezel257;
-                    bezel830 = data[i].bezel830;
-                    bezel831 = data[i].bezel831;
-                    panel452 = data[i].panel452;
-                    panel656 = data[i].panel656;
-                }
+                        for (var key in totalRow) {
 
-                if (printBtn == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'printBtn');
-                if (laserBtn == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'laserBtn');
-                if (lens784 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'lens784');
-                if (lens824 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'lens824');
-                if (lens833 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'lens833');
-                if (bezel257 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'bezel257');
-                if (bezel830 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'bezel830');
-                if (bezel831 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'bezel831');
-                if (panel452 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'panel452');
-                if (panel656 == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', 'panel656');
+                            if (key.toUpperCase() == 'LASER' ||
+                                key.toUpperCase() == 'PRINT' ||
+                                key =='machineID'||
+                                key =='ok'||
+                                key =='ng'||
+                                key == 'output'||
+                                key == 'rejRate'
+                                ) {
+                                continue;
+                            }
+
+                            var value = totalRow[key];
+
+                            console.log('key: ' + key + ', ' + 'value: ' + value);
+
+                            if (value == 0) $('#tableLaserSummary').bootstrapTable('hideColumn', key);
+                        }
+
+
+                    },
+                    onLoadError: function () {  //加载失败时执行
+                        console.log("加载数据失败");
+                    }
+
+                });
 
 
             },
-            onLoadError: function () {  //加载失败时执行
-                console.log("加载数据失败");
+            error: function () {
+                alert("Get column fail!");
             }
-
         });
+      
 
     }
 
@@ -347,26 +310,6 @@
     $(window).resize(function () {
         $('#tableLaserSummary').bootstrapTable('resetView');
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

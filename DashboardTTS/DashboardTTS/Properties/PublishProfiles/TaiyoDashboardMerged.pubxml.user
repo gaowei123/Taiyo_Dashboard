@@ -1966,10 +1966,10 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>08/07/2020 10:46:01</publishTime>
+      <publishTime>08/10/2020 16:41:55</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>08/07/2020 10:46:05</publishTime>
+      <publishTime>08/10/2020 16:41:59</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
       <publishTime>08/06/2020 09:51:24</publishTime>
@@ -10771,7 +10771,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>08/05/2020 11:00:03</publishTime>
+      <publishTime>08/07/2020 11:01:20</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10873,7 +10873,7 @@
       <publishTime>07/02/2020 17:00:49</publishTime>
     </File>
     <File Include="Views/LASER_Product/SummaryReport.cshtml">
-      <publishTime>07/02/2020 17:00:49</publishTime>
+      <publishTime>08/10/2020 16:39:43</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10963,7 +10963,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>07/31/2020 15:26:20</publishTime>
+      <publishTime>08/07/2020 11:01:32</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>

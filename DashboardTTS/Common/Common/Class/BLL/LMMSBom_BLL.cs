@@ -12,10 +12,105 @@ namespace Common.Class.BLL
         private readonly Common.Class.DAL.LMMSBom_DAL dal = new DAL.LMMSBom_DAL();
         private readonly Common.Class.DAL.LMMSBomDetail_DAL dal_BomDetail = new DAL.LMMSBomDetail_DAL();
 
+        
+
+
         public LMMSBom_BLL()
         {
              
         }
+
+
+        /// <summary>
+        /// 获取 part no, model, supplier, customer, Number信息列表
+        /// 用于自动填充下拉框选择项.
+        /// </summary>
+        #region 
+
+        const string constPartNo = "partNo";
+        const string constModel = "model";
+        const string constSupplier = "supplier";
+        const string constCustomer = "customer";
+        const string constNumber = "number";
+
+
+        private List<string> GetGroupByList(string sGroupByField)
+        {
+            DataTable dt = dal.GetALL();
+
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+
+
+            List<string> modelList = new List<string>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                string partNo = dr["partNumber"].ToString();
+                string model = dr["module"].ToString();
+                string supplier = dr["Supplier"].ToString();
+                string customer = dr["customer"].ToString();
+                string number = dr["number"].ToString().ToUpper();
+
+                switch (sGroupByField)
+                {
+                    case constPartNo:
+                        modelList.Add(partNo);
+                        break;
+                    case constModel:
+                        modelList.Add(model);
+                        break;
+                    case constSupplier:
+                        modelList.Add(supplier);
+                        break;
+                    case constCustomer:
+                        modelList.Add(customer);
+                        break;
+                    case constNumber:
+                        modelList.Add(number);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+
+            //去重
+            modelList = modelList.Distinct().ToList();
+
+            //正序排序
+            modelList.Sort();
+
+            return modelList;
+        }
+
+        public List<string> GetModelList()
+        {
+            return GetGroupByList(constModel);
+        }
+
+        public List<string> GetPatNoList()
+        {
+            return GetGroupByList(constPartNo);
+        }
+        public List<string> GetSupplierList()
+        {
+            return GetGroupByList(constSupplier);
+        }
+        public List<string> GetCustomerList()
+        {
+            return GetGroupByList(constCustomer);
+        }
+        public List<string> GetNumberList()
+        {
+            return GetGroupByList(constNumber);
+        }
+        #endregion
+
+
+
 
         public DataTable GetList(string sPartNo, string sMachineID)
         {
@@ -31,52 +126,14 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetPartList()
-        {
-            DataSet ds = dal.GetAllPartList();
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
 
 
-        public List<string> GetPartNoList()
-        {
-            DataTable dt = dal.GetAllPartNoList();
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
 
 
-            List<string> partList = new List<string>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                string partNo = dr["PartNumber"].ToString();
-                if (partNo != "")
-                    partList.Add(partNo);
-            }
 
-            return partList;
-        }
 
-     
 
-        public DataTable GetModelList()
-        {
-            DataSet ds = dal.GetAllModelList();
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
 
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
 
 
         public Common.Class.Model.LMMSBom_Model GetBomModel(string sPartNumber,string sMachineID)
@@ -116,7 +173,7 @@ namespace Common.Class.BLL
 
         public bool IsExist(string sPartNo, string sMachineID)
         {
-            
+
             DataTable dt = GetList(sPartNo, sMachineID);
 
             bool Result = dt.Rows.Count > 0 ? true : false;
@@ -139,26 +196,9 @@ namespace Common.Class.BLL
         }
         
 
-        public DataTable GetOnefoldPartList()
+        public DataTable GetNumberForColumn()
         {
-            DataSet ds = dal.GetOnefoldPartList();
-
-            DataTable dt = new DataTable();
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                dt = ds.Tables[0];
-            }
-
-            DataRow dr = dt.NewRow();
-
-            dr[0] = "Total :";
-            dt.Rows.Add(dr);
-            return dt;
+            return dal.GetNumberForColumn();
         }
 
 
@@ -247,50 +287,7 @@ namespace Common.Class.BLL
 
             return DBHelp.SqlDB.SetData_Rollback(list_cmd);
         }
-
-        public bool Insert(Common.Class.Model.LMMSBom_Model model)
-        {
-            try
-            {
-                int result = dal.Add(model);
-                if (result == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ee)
-            {
-                DBHelp.Reports.LogFile.Log("Exception", "LMMSBom insert error " + ee.ToString());
-                return false;
-            }
-        }
-
-        public bool UpdateByPartNo(Common.Class.Model.LMMSBom_Model model)
-        {
-            try
-            {
-                int result = dal.UpdateByPartNumber(model);
-
-                if (result == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-            catch (Exception ee)
-            {
-                DBHelp.Reports.LogFile.Log("Exception", "LMMSBom Update error " + ee.ToString());
-                return false;
-            }
-        }
+        
 
         public bool DeleteByPartNo(string PartNo,string machineID)
         {
