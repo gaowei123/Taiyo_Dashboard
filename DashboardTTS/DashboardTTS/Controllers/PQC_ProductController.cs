@@ -11,6 +11,8 @@ namespace DashboardTTS.Controllers
     {
         private readonly ViewBusiness.PQCProduct vBLL = new ViewBusiness.PQCProduct();
 
+
+
         #region View
         public ActionResult Index()
         {
@@ -62,10 +64,7 @@ namespace DashboardTTS.Controllers
         }
         #endregion
 
-
-
-       
-
+        
 
         
         //summary report
