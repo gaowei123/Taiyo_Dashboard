@@ -187,7 +187,11 @@ namespace DashboardTTS.Webform.PQC
                 {
                     lotNo = dtPaint.Rows[0]["LotNo"].ToString();
                     lotQty = double.Parse(dtPaint.Rows[0]["InQtySET"].ToString());
-                    MFGDate = DateTime.Parse(dtPaint.Rows[0]["dateTime"].ToString());
+
+                    //MFGDate = DateTime.Parse(dtPaint.Rows[0]["dateTime"].ToString());
+                    MFGDate = DateTime.Parse(this.txtMFGDate.Text);
+
+                    
                     partNumber = dtPaint.Rows[0]["partNumber"].ToString();
 
                     if (partNumber == "")

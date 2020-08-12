@@ -171,17 +171,7 @@ namespace Common.Class.BLL
 
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
-            DataTable dt = dal.GetSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
-
-            
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return dt;
-            }
+           return  dal.GetSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
         }
         
         public Common.Class.Model.PQCQaViTracking GetModelByTrackingID(string sTrackingID)

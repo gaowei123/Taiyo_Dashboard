@@ -29,11 +29,6 @@ namespace DashboardTTS.ViewModel
             public string laserRejRate { get; set; }
             public string othersRejRate { get; set; }
             public string totalRejRate { get; set; }
-
-
-
-
-
         }
 
         public class ViDetail
@@ -42,7 +37,16 @@ namespace DashboardTTS.ViewModel
             public string partNo { get; set; }
             public double totalQty { get; set; }
             public double acceptQty { get; set; }
-            public double totalRej { get; set; }
+            public double rejectQty { get; set; }
+            public string currentProcess { get; set; }
+
+
+            public string description { get; set; }
+            public string number { get; set; }
+            public bool isContainLaser { get; set; }
+            public string lastCheckProcess { get; set; }
+
+
 
             public double ttsRej { get; set; }
             public double vendorRej { get; set; }
@@ -50,9 +54,7 @@ namespace DashboardTTS.ViewModel
             public double laserRej { get; set; }
             public double othersRej { get; set; }
 
-            public string checkProcess { get; set; }
-            public string allProcess { get; set; }
-            public string number { get; set; }
+          
             
         }
 

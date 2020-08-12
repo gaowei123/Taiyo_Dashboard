@@ -583,7 +583,18 @@ namespace Common.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
 
-
+        public DataTable GetALL()
+        {
+            string strSql = "select * FROM PQCBom";
+            DataSet ds = DBHelp.SqlDB.Query(strSql, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds== null || ds.Tables.Count == 0)
+            {
+                return null;
+            }else
+            {
+                return ds.Tables[0];
+            }
+        }
 
 
 

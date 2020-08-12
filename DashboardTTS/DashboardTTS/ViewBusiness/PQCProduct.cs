@@ -33,490 +33,142 @@ namespace DashboardTTS.ViewBusiness
 
         #region summary report
 
+        /// <summary>
+        /// job查询不做限制
+        /// laser btn: 有laser process, 并且当前process为check1.  并且不包括num设定的小分类.
+        /// wip btn: wip part 和有laser process并且当前process不是check1的job, 并且不包括num设定的小分类.
+        /// num小分类: 取最后一道check process的数量,  并且按照bom中设置的num 动态汇总.
+        /// packing: 分online, wip显示.
+        ///     online: 同laser btn逻辑
+        ///     wip: 同wip btn逻辑
+        /// </summary>
         public List<ViewModel.PQCSummaryReport_ViewModel.Report> GetSummaryList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             List<ViewModel.PQCSummaryReport_ViewModel.ViDetail> viDetailList = GetViDetailList(dDateFrom, dDateTo, sShift, sPartNo);
-
-
             if (viDetailList == null)
                 return null;
-
-
-            double totalOutput = 0;
-            double totalActualOutput = 0;
-            double totalRej = 0;
-            double totalTTSRej = 0;
-            double totalVendorRej = 0;
-            double totalPaintRej = 0;
-            double totalLaserRej = 0;
-            double totalOthersRej = 0;
+            
 
 
 
+            List<ViewModel.PQCSummaryReport_ViewModel.Report> reportList = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
+
+
+            #region 添加 laser model
+            var laserGroupList = from a in viDetailList
+                                 where a.number == "" && a.isContainLaser == true && a.currentProcess.ToUpper() == "CHECK#1"
+                                 select a;
+
+            ViewModel.PQCSummaryReport_ViewModel.Report modelForLaser = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            modelForLaser.pqcDept = "Laser BTN";
+            modelForLaser.totalOutput = laserGroupList.Sum(p => p.totalQty);
+            modelForLaser.actualOutput = laserGroupList.Sum(p => p.acceptQty);
+            modelForLaser.totalRej = laserGroupList.Sum(p => p.rejectQty);
+            modelForLaser.ttsMouldRej = laserGroupList.Sum(p => p.ttsRej);
+            modelForLaser.vendorsModelRej = laserGroupList.Sum(p => p.vendorRej);
+            modelForLaser.paintRej = laserGroupList.Sum(p => p.paintRej);
+            modelForLaser.laserRej = laserGroupList.Sum(p => p.laserRej);
+            modelForLaser.othersRej = laserGroupList.Sum(p => p.othersRej);
+
+            modelForLaser.totalRejRate = string.Format("{0}({1}%)", modelForLaser.totalRej, Math.Round(modelForLaser.totalRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.ttsMouldRejRate = string.Format("{0}({1}%)", modelForLaser.vendorsModelRej, Math.Round(modelForLaser.vendorsModelRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.vendorsModelRejRate = string.Format("{0}({1}%)", modelForLaser.ttsMouldRej, Math.Round(modelForLaser.ttsMouldRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.paintRejRate = string.Format("{0}({1}%)", modelForLaser.paintRej, Math.Round(modelForLaser.paintRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.laserRejRate = string.Format("{0}({1}%)", modelForLaser.laserRej, Math.Round(modelForLaser.laserRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.othersRejRate = string.Format("{0}({1}%)", modelForLaser.othersRej, Math.Round(modelForLaser.othersRej / modelForLaser.totalOutput * 100, 2));
+
+            reportList.Add(modelForLaser);
+            #endregion
 
 
 
-            //Summary Report     job不做限制
 
-            //laser btn
-                //1.process有laser工序, 并且当前工序是Check#1
-                //2.其中452, 830, 831(只有check#1的小分类) 不算在laser btn, 独立显示
-                //3. 833, 784, 824(有check#2的小分类),  check#1的数量计算在laser btn中.
-		
-
-            //wip btn
-                //1.process没有laser工序.
-                //2.process有laser工序, 并且当前的工序是Check#2,3.
-                //3.其中833, 784, 824 有check#2的小分类,  check#2的数量 独立显示. 
-		
-
-            //452, 830, 831, 656, 595(只有Check#1的小分类)
-                //1.独立显示, 均不算在laser, wip中.
-
-
-            //833, 784, 824(有check#2的小分类)
-                //1.Check#1算在laser btn中, 不独立显示.      
-                //2.Check#2独立显示, 均不算在laser,wip中.
-                
-
-            List <ViewModel.PQCSummaryReport_ViewModel.Report> reportList = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
-
-            #region laser btn
-            var laserBtnList = from a in viDetailList
-                               where a.allProcess.Split('-').Contains("Laser")  //必须是包含laser工序
-                               && a.checkProcess == "CHECK#1"//并且当前工序必须是check#1
-                               //&& (!(new string[] { "784", "824", "833", "452", "595", "656", "830", "831" }).Contains(a.number))//并且不包括784,824....等小分类
-
-
-                               && (!(new string[] {  "452", "656","830", "831", "869"}).Contains(a.number))//452, 656, 830, 831,869等只有check#1的小分类, 独立显示不计入 laser btn
-                                                                                                     //784, 833, 824等有check#2的小分类, check#1记入laser btn不独立显示.
+            #region 添加 wip model
+            var wipGroupList = from a in viDetailList
+                               where a.number == "" && !(a.isContainLaser == true && a.currentProcess.ToUpper() == "CHECK#1")
                                select a;
 
+            ViewModel.PQCSummaryReport_ViewModel.Report modelForWIP = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            modelForWIP.pqcDept = "WIP BTN";
+            modelForWIP.totalOutput = wipGroupList.Sum(p => p.totalQty);
+            modelForWIP.actualOutput = wipGroupList.Sum(p => p.acceptQty);
+            modelForWIP.totalRej = wipGroupList.Sum(p => p.rejectQty);
+            modelForWIP.ttsMouldRej = wipGroupList.Sum(p => p.ttsRej);
+            modelForWIP.vendorsModelRej = wipGroupList.Sum(p => p.vendorRej);
+            modelForWIP.paintRej = wipGroupList.Sum(p => p.paintRej);
+            modelForWIP.laserRej = wipGroupList.Sum(p => p.laserRej);
+            modelForWIP.othersRej = wipGroupList.Sum(p => p.othersRej);
+
+            modelForWIP.totalRejRate = string.Format("{0}({1}%)", modelForWIP.totalRej, Math.Round(modelForWIP.totalRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.ttsMouldRejRate = string.Format("{0}({1}%)", modelForWIP.vendorsModelRej, Math.Round(modelForWIP.vendorsModelRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.vendorsModelRejRate = string.Format("{0}({1}%)", modelForWIP.ttsMouldRej, Math.Round(modelForWIP.ttsMouldRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.paintRejRate = string.Format("{0}({1}%)", modelForWIP.paintRej, Math.Round(modelForWIP.paintRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.laserRejRate = string.Format("{0}({1}%)", modelForWIP.laserRej, Math.Round(modelForWIP.laserRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.othersRejRate = string.Format("{0}({1}%)", modelForWIP.othersRej, Math.Round(modelForWIP.othersRej / modelForWIP.totalOutput * 100, 2));
 
 
-
-       
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report laserBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            laserBtnModel.pqcDept = "Laser BTN";
-            laserBtnModel.totalOutput = laserBtnList.Sum(p => p.totalQty);
-            laserBtnModel.actualOutput = laserBtnList.Sum(p => p.acceptQty);
-            laserBtnModel.totalRej = laserBtnList.Sum(p => p.totalRej);
-            laserBtnModel.ttsMouldRej = laserBtnList.Sum(p => p.ttsRej);
-            laserBtnModel.vendorsModelRej = laserBtnList.Sum(p => p.vendorRej);
-            laserBtnModel.paintRej = laserBtnList.Sum(p => p.paintRej);
-            laserBtnModel.laserRej = laserBtnList.Sum(p => p.laserRej);
-            laserBtnModel.othersRej = laserBtnList.Sum(p => p.othersRej);
-
-            laserBtnModel.totalRejRate = string.Format("{0}({1}%)", laserBtnModel.totalRej, Math.Round(laserBtnModel.totalRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-            laserBtnModel.ttsMouldRejRate = string.Format("{0}({1}%)", laserBtnModel.ttsMouldRej, Math.Round(laserBtnModel.ttsMouldRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-            laserBtnModel.vendorsModelRejRate = string.Format("{0}({1}%)", laserBtnModel.vendorsModelRej, Math.Round(laserBtnModel.vendorsModelRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-            laserBtnModel.paintRejRate = string.Format("{0}({1}%)", laserBtnModel.paintRej, Math.Round(laserBtnModel.paintRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-            laserBtnModel.laserRejRate = string.Format("{0}({1}%)", laserBtnModel.laserRej, Math.Round(laserBtnModel.laserRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-            laserBtnModel.othersRejRate = string.Format("{0}({1}%)", laserBtnModel.othersRej, Math.Round(laserBtnModel.othersRej / laserBtnModel.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(laserBtnModel);
-
-            totalOutput += laserBtnModel.totalOutput;
-            totalActualOutput += laserBtnModel.actualOutput;
-            totalRej += laserBtnModel.totalRej;
-            totalTTSRej += laserBtnModel.ttsMouldRej;
-            totalVendorRej += laserBtnModel.vendorsModelRej;
-            totalPaintRej += laserBtnModel.paintRej;
-            totalLaserRej += laserBtnModel.laserRej;
-            totalOthersRej += laserBtnModel.othersRej;
-
+            reportList.Add(modelForWIP);
             #endregion
-
-            #region wip btn
-            var temp = from a in viDetailList
-                       where (!a.allProcess.Split('-').Contains("Laser"))//没有laser工序
-                       || (a.allProcess.Split('-').Contains("Laser") && a.allProcess.Split('-').Contains("Check#2") && a.checkProcess == "CHECK#2")//或者有laser工序并且有check2工序, 并且当前工序是check#2
-                       || (a.allProcess.Split('-').Contains("Laser") && a.allProcess.Split('-').Contains("Check#3") && a.checkProcess == "CHECK#3")//或者有laser工序并且有check3工序, 并且当前工序是check#3
-                       select a;
-
-            var wipBtnList = from a in temp
-                             //where (!(new string[] { "784", "833", "824", "595", "656", "830", "831" }).Contains(a.number))//并且不包括784,824....等小分类
-                             where (!(new string[] { "784", "833", "824" }).Contains(a.number))//784, 833,824等有check#2的, check#2独立显示, 不计入wip中.
-                             select a;
-
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report wipBtnModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            wipBtnModel.pqcDept = "WIP BTN";
-            wipBtnModel.totalOutput = wipBtnList.Sum(p => p.totalQty);
-            wipBtnModel.actualOutput = wipBtnList.Sum(p => p.acceptQty);
-            wipBtnModel.totalRej = wipBtnList.Sum(p => p.totalRej);
-            wipBtnModel.ttsMouldRej = wipBtnList.Sum(p => p.ttsRej);
-            wipBtnModel.vendorsModelRej = wipBtnList.Sum(p => p.vendorRej);
-            wipBtnModel.paintRej = wipBtnList.Sum(p => p.paintRej);
-            wipBtnModel.laserRej = wipBtnList.Sum(p => p.laserRej);
-            wipBtnModel.othersRej = wipBtnList.Sum(p => p.othersRej);
-
-            wipBtnModel.totalRejRate = string.Format("{0}({1})", wipBtnModel.totalRej, Math.Round(wipBtnModel.totalRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-            wipBtnModel.ttsMouldRejRate = string.Format("{0}({1})", wipBtnModel.ttsMouldRej, Math.Round(wipBtnModel.ttsMouldRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-            wipBtnModel.vendorsModelRejRate = string.Format("{0}({1})", wipBtnModel.vendorsModelRej, Math.Round(wipBtnModel.vendorsModelRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-            wipBtnModel.paintRejRate = string.Format("{0}({1})", wipBtnModel.paintRej, Math.Round(wipBtnModel.paintRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-            wipBtnModel.laserRejRate = string.Format("{0}({1})", wipBtnModel.laserRej, Math.Round(wipBtnModel.laserRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-            wipBtnModel.othersRejRate = string.Format("{0}({1})", wipBtnModel.othersRej, Math.Round(wipBtnModel.othersRej / wipBtnModel.totalOutput * 100, 2).ToString("0.00") + "%");
-
-            reportList.Add(wipBtnModel);
-
-            totalOutput += wipBtnModel.totalOutput;
-            totalActualOutput += wipBtnModel.actualOutput;
-            totalRej += wipBtnModel.totalRej;
-            totalTTSRej += wipBtnModel.ttsMouldRej;
-            totalVendorRej += wipBtnModel.vendorsModelRej;
-            totalPaintRej += wipBtnModel.paintRej;
-            totalLaserRej += wipBtnModel.laserRej;
-            totalOthersRej += wipBtnModel.othersRej;
-            #endregion
-
-
-            #region tks 784
-            var tks784List = from a in viDetailList
-                             where a.number == "784" && a.checkProcess == "CHECK#2"//有check#2的小分类, 只独立显示check#2的数量, check#1算入laserbtn中.
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks784Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks784Model.pqcDept = "SBW TKS784";
-            tks784Model.totalOutput = tks784List.Sum(p => p.totalQty);
-            tks784Model.actualOutput = tks784List.Sum(p => p.acceptQty);
-            tks784Model.totalRej = tks784List.Sum(p => p.totalRej);
-            tks784Model.ttsMouldRej = tks784List.Sum(p => p.ttsRej);
-            tks784Model.vendorsModelRej = tks784List.Sum(p => p.vendorRej);
-            tks784Model.paintRej = tks784List.Sum(p => p.paintRej);
-            tks784Model.laserRej = tks784List.Sum(p => p.laserRej);
-            tks784Model.othersRej = tks784List.Sum(p => p.othersRej);
-
-            tks784Model.totalRejRate = string.Format("{0}({1}%)", tks784Model.totalRej, Math.Round(tks784Model.totalRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-            tks784Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks784Model.ttsMouldRej, Math.Round(tks784Model.ttsMouldRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-            tks784Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks784Model.vendorsModelRej, Math.Round(tks784Model.vendorsModelRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-            tks784Model.paintRejRate = string.Format("{0}({1}%)", tks784Model.paintRej, Math.Round(tks784Model.paintRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-            tks784Model.laserRejRate = string.Format("{0}({1}%)", tks784Model.laserRej, Math.Round(tks784Model.laserRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-            tks784Model.othersRejRate = string.Format("{0}({1}%)", tks784Model.othersRej, Math.Round(tks784Model.othersRej / tks784Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks784Model);
-
-            totalOutput += tks784Model.totalOutput;
-            totalActualOutput += tks784Model.actualOutput;
-            totalRej += tks784Model.totalRej;
-            totalTTSRej += tks784Model.ttsMouldRej;
-            totalVendorRej += tks784Model.vendorsModelRej;
-            totalPaintRej += tks784Model.paintRej;
-            totalLaserRej += tks784Model.laserRej;
-            totalOthersRej += tks784Model.othersRej;
-            #endregion
-
-            #region tks 824
-            var tks824List = from a in viDetailList
-                             where a.number == "824" && a.checkProcess == "CHECK#2"//有check#2的小分类, 只独立显示check#2的数量, check#1算入laserbtn中.
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks824Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks824Model.pqcDept = "TMS TKS824";
-            tks824Model.totalOutput = tks824List.Sum(p => p.totalQty);
-            tks824Model.actualOutput = tks824List.Sum(p => p.acceptQty);
-            tks824Model.totalRej = tks824List.Sum(p => p.totalRej);
-            tks824Model.ttsMouldRej = tks824List.Sum(p => p.ttsRej);
-            tks824Model.vendorsModelRej = tks824List.Sum(p => p.vendorRej);
-            tks824Model.paintRej = tks824List.Sum(p => p.paintRej);
-            tks824Model.laserRej = tks824List.Sum(p => p.laserRej);
-            tks824Model.othersRej = tks824List.Sum(p => p.othersRej);
-
-            tks824Model.totalRejRate = string.Format("{0}({1}%)", tks824Model.totalRej, Math.Round(tks824Model.totalRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-            tks824Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks824Model.ttsMouldRej, Math.Round(tks824Model.ttsMouldRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-            tks824Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks824Model.vendorsModelRej, Math.Round(tks824Model.vendorsModelRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-            tks824Model.paintRejRate = string.Format("{0}({1}%)", tks824Model.paintRej, Math.Round(tks824Model.paintRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-            tks824Model.laserRejRate = string.Format("{0}({1}%)", tks824Model.laserRej, Math.Round(tks824Model.laserRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-            tks824Model.othersRejRate = string.Format("{0}({1}%)", tks824Model.othersRej, Math.Round(tks824Model.othersRej / tks824Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks824Model);
-
-            totalOutput += tks824Model.totalOutput;
-            totalActualOutput += tks824Model.actualOutput;
-            totalRej += tks824Model.totalRej;
-            totalTTSRej += tks824Model.ttsMouldRej;
-            totalVendorRej += tks824Model.vendorsModelRej;
-            totalPaintRej += tks824Model.paintRej;
-            totalLaserRej += tks824Model.laserRej;
-            totalOthersRej += tks824Model.othersRej;
-            #endregion
-
-            #region tks 833
-            var tks833List = from a in viDetailList
-                             where a.number == "833" && a.checkProcess == "CHECK#2"//有check#2的小分类, 只独立显示check#2的数量, check#1算入laserbtn中.
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks833Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks833Model.pqcDept = "TAC TKS833";
-            tks833Model.totalOutput = tks833List.Sum(p => p.totalQty);
-            tks833Model.actualOutput = tks833List.Sum(p => p.acceptQty);
-            tks833Model.totalRej = tks833List.Sum(p => p.totalRej);
-            tks833Model.ttsMouldRej = tks833List.Sum(p => p.ttsRej);
-            tks833Model.vendorsModelRej = tks833List.Sum(p => p.vendorRej);
-            tks833Model.paintRej = tks833List.Sum(p => p.paintRej);
-            tks833Model.laserRej = tks833List.Sum(p => p.laserRej);
-            tks833Model.othersRej = tks833List.Sum(p => p.othersRej);
-
-            tks833Model.totalRejRate = string.Format("{0}({1}%)", tks833Model.totalRej, Math.Round(tks833Model.totalRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-            tks833Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks833Model.ttsMouldRej, Math.Round(tks833Model.ttsMouldRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-            tks833Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks833Model.vendorsModelRej, Math.Round(tks833Model.vendorsModelRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-            tks833Model.paintRejRate = string.Format("{0}({1}%)", tks833Model.paintRej, Math.Round(tks833Model.paintRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-            tks833Model.laserRejRate = string.Format("{0}({1}%)", tks833Model.laserRej, Math.Round(tks833Model.laserRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-            tks833Model.othersRejRate = string.Format("{0}({1}%)", tks833Model.othersRej, Math.Round(tks833Model.othersRej / tks833Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks833Model);
-
-            totalOutput += tks833Model.totalOutput;
-            totalActualOutput += tks833Model.actualOutput;
-            totalRej += tks833Model.totalRej;
-            totalTTSRej += tks833Model.ttsMouldRej;
-            totalVendorRej += tks833Model.vendorsModelRej;
-            totalPaintRej += tks833Model.paintRej;
-            totalLaserRej += tks833Model.laserRej;
-            totalOthersRej += tks833Model.othersRej;
-            #endregion
-
-            #region 452
-            var b452List = from a in viDetailList
-                           where a.number == "452"
-                           select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report b452Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            b452Model.pqcDept = "601B 452";
-            b452Model.totalOutput = b452List.Sum(p => p.totalQty);
-            b452Model.actualOutput = b452List.Sum(p => p.acceptQty);
-            b452Model.totalRej = b452List.Sum(p => p.totalRej);
-            b452Model.ttsMouldRej = b452List.Sum(p => p.ttsRej);
-            b452Model.vendorsModelRej = b452List.Sum(p => p.vendorRej);
-            b452Model.paintRej = b452List.Sum(p => p.paintRej);
-            b452Model.laserRej = b452List.Sum(p => p.laserRej);
-            b452Model.othersRej = b452List.Sum(p => p.othersRej);
-
-            b452Model.totalRejRate = string.Format("{0}({1}%)", b452Model.totalRej, Math.Round(b452Model.totalRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-            b452Model.ttsMouldRejRate = string.Format("{0}({1}%)", b452Model.ttsMouldRej, Math.Round(b452Model.ttsMouldRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-            b452Model.vendorsModelRejRate = string.Format("{0}({1}%)", b452Model.vendorsModelRej, Math.Round(b452Model.vendorsModelRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-            b452Model.paintRejRate = string.Format("{0}({1}%)", b452Model.paintRej, Math.Round(b452Model.paintRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-            b452Model.laserRejRate = string.Format("{0}({1}%)", b452Model.laserRej, Math.Round(b452Model.laserRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-            b452Model.othersRejRate = string.Format("{0}({1}%)", b452Model.othersRej, Math.Round(b452Model.othersRej / b452Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(b452Model);
-
-            totalOutput += b452Model.totalOutput;
-            totalActualOutput += b452Model.actualOutput;
-            totalRej += b452Model.totalRej;
-            totalTTSRej += b452Model.ttsMouldRej;
-            totalVendorRej += b452Model.vendorsModelRej;
-            totalPaintRej += b452Model.paintRej;
-            totalLaserRej += b452Model.laserRej;
-            totalOthersRej += b452Model.othersRej;
-            #endregion
-
-            #region 595
-            var b595List = from a in viDetailList
-                           where a.number == "595"
-                           select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report b595Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            b595Model.pqcDept = "601B 595";
-            b595Model.totalOutput = b595List.Sum(p => p.totalQty);
-            b595Model.actualOutput = b595List.Sum(p => p.acceptQty);
-            b595Model.totalRej = b595List.Sum(p => p.totalRej);
-            b595Model.ttsMouldRej = b595List.Sum(p => p.ttsRej);
-            b595Model.vendorsModelRej = b595List.Sum(p => p.vendorRej);
-            b595Model.paintRej = b595List.Sum(p => p.paintRej);
-            b595Model.laserRej = b595List.Sum(p => p.laserRej);
-            b595Model.othersRej = b595List.Sum(p => p.othersRej);
-
-            b595Model.totalRejRate = string.Format("{0}({1}%)", b595Model.totalRej, Math.Round(b595Model.totalRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-            b595Model.ttsMouldRejRate = string.Format("{0}({1}%)", b595Model.ttsMouldRej, Math.Round(b595Model.ttsMouldRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-            b595Model.vendorsModelRejRate = string.Format("{0}({1}%)", b595Model.vendorsModelRej, Math.Round(b595Model.vendorsModelRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-            b595Model.paintRejRate = string.Format("{0}({1}%)", b595Model.paintRej, Math.Round(b595Model.paintRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-            b595Model.laserRejRate = string.Format("{0}({1}%)", b595Model.laserRej, Math.Round(b595Model.laserRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-            b595Model.othersRejRate = string.Format("{0}({1}%)", b595Model.othersRej, Math.Round(b595Model.othersRej / b595Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(b595Model);
-
-            totalOutput += b595Model.totalOutput;
-            totalActualOutput += b595Model.actualOutput;
-            totalRej += b595Model.totalRej;
-            totalTTSRej += b595Model.ttsMouldRej;
-            totalVendorRej += b595Model.vendorsModelRej;
-            totalPaintRej += b595Model.paintRej;
-            totalLaserRej += b595Model.laserRej;
-            totalOthersRej += b595Model.othersRej;
-            #endregion
-
-            #region 656
-            var b656List = from a in viDetailList
-                           where a.number == "656"
-                           select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report b656Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            b656Model.pqcDept = "601B 656";
-            b656Model.totalOutput = b656List.Sum(p => p.totalQty);
-            b656Model.actualOutput = b656List.Sum(p => p.acceptQty);
-            b656Model.totalRej = b656List.Sum(p => p.totalRej);
-            b656Model.ttsMouldRej = b656List.Sum(p => p.ttsRej);
-            b656Model.vendorsModelRej = b656List.Sum(p => p.vendorRej);
-            b656Model.paintRej = b656List.Sum(p => p.paintRej);
-            b656Model.laserRej = b656List.Sum(p => p.laserRej);
-            b656Model.othersRej = b656List.Sum(p => p.othersRej);
-
-            b656Model.totalRejRate = string.Format("{0}({1}%)", b656Model.totalRej, Math.Round(b656Model.totalRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-            b656Model.ttsMouldRejRate = string.Format("{0}({1}%)", b656Model.ttsMouldRej, Math.Round(b656Model.ttsMouldRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-            b656Model.vendorsModelRejRate = string.Format("{0}({1}%)", b656Model.vendorsModelRej, Math.Round(b656Model.vendorsModelRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-            b656Model.paintRejRate = string.Format("{0}({1}%)", b656Model.paintRej, Math.Round(b656Model.paintRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-            b656Model.laserRejRate = string.Format("{0}({1}%)", b656Model.laserRej, Math.Round(b656Model.laserRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-            b656Model.othersRejRate = string.Format("{0}({1}%)", b656Model.othersRej, Math.Round(b656Model.othersRej / b656Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(b656Model);
-
-            totalOutput += b656Model.totalOutput;
-            totalActualOutput += b656Model.actualOutput;
-            totalRej += b656Model.totalRej;
-            totalTTSRej += b656Model.ttsMouldRej;
-            totalVendorRej += b656Model.vendorsModelRej;
-            totalPaintRej += b656Model.paintRej;
-            totalLaserRej += b656Model.laserRej;
-            totalOthersRej += b656Model.othersRej;
-            #endregion
-
-            #region tks 830
-            var tks830List = from a in viDetailList
-                             where a.number == "830"
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks830Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks830Model.pqcDept = "320B TKS830";
-            tks830Model.totalOutput = tks830List.Sum(p => p.totalQty);
-            tks830Model.actualOutput = tks830List.Sum(p => p.acceptQty);
-            tks830Model.totalRej = tks830List.Sum(p => p.totalRej);
-            tks830Model.ttsMouldRej = tks830List.Sum(p => p.ttsRej);
-            tks830Model.vendorsModelRej = tks830List.Sum(p => p.vendorRej);
-            tks830Model.paintRej = tks830List.Sum(p => p.paintRej);
-            tks830Model.laserRej = tks830List.Sum(p => p.laserRej);
-            tks830Model.othersRej = tks830List.Sum(p => p.othersRej);
-
-            tks830Model.totalRejRate = string.Format("{0}({1}%)", tks830Model.totalRej, Math.Round(tks830Model.totalRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-            tks830Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks830Model.ttsMouldRej, Math.Round(tks830Model.ttsMouldRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-            tks830Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks830Model.vendorsModelRej, Math.Round(tks830Model.vendorsModelRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-            tks830Model.paintRejRate = string.Format("{0}({1}%)", tks830Model.paintRej, Math.Round(tks830Model.paintRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-            tks830Model.laserRejRate = string.Format("{0}({1}%)", tks830Model.laserRej, Math.Round(tks830Model.laserRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-            tks830Model.othersRejRate = string.Format("{0}({1}%)", tks830Model.othersRej, Math.Round(tks830Model.othersRej / tks830Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks830Model);
-
-            totalOutput += tks830Model.totalOutput;
-            totalActualOutput += tks830Model.actualOutput;
-            totalRej += tks830Model.totalRej;
-            totalTTSRej += tks830Model.ttsMouldRej;
-            totalVendorRej += tks830Model.vendorsModelRej;
-            totalPaintRej += tks830Model.paintRej;
-            totalLaserRej += tks830Model.laserRej;
-            totalOthersRej += tks830Model.othersRej;
-            #endregion
-
-            #region tks 831
-            var tks831List = from a in viDetailList
-                             where a.number == "831"
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks831Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks831Model.pqcDept = "320B TKS831";
-            tks831Model.totalOutput = tks831List.Sum(p => p.totalQty);
-            tks831Model.actualOutput = tks831List.Sum(p => p.acceptQty);
-            tks831Model.totalRej = tks831List.Sum(p => p.totalRej);
-            tks831Model.ttsMouldRej = tks831List.Sum(p => p.ttsRej);
-            tks831Model.vendorsModelRej = tks831List.Sum(p => p.vendorRej);
-            tks831Model.paintRej = tks831List.Sum(p => p.paintRej);
-            tks831Model.laserRej = tks831List.Sum(p => p.laserRej);
-            tks831Model.othersRej = tks831List.Sum(p => p.othersRej);
-
-            tks831Model.totalRejRate = string.Format("{0}({1}%)", tks831Model.totalRej, Math.Round(tks831Model.totalRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-            tks831Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks831Model.ttsMouldRej, Math.Round(tks831Model.ttsMouldRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-            tks831Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks831Model.vendorsModelRej, Math.Round(tks831Model.vendorsModelRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-            tks831Model.paintRejRate = string.Format("{0}({1}%)", tks831Model.paintRej, Math.Round(tks831Model.paintRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-            tks831Model.laserRejRate = string.Format("{0}({1}%)", tks831Model.laserRej, Math.Round(tks831Model.laserRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-            tks831Model.othersRejRate = string.Format("{0}({1}%)", tks831Model.othersRej, Math.Round(tks831Model.othersRej / tks831Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks831Model);
-
-
-            totalOutput += tks831Model.totalOutput;
-            totalActualOutput += tks831Model.actualOutput;
-            totalRej += tks831Model.totalRej;
-            totalTTSRej += tks831Model.ttsMouldRej;
-            totalVendorRej += tks831Model.vendorsModelRej;
-            totalPaintRej += tks831Model.paintRej;
-            totalLaserRej += tks831Model.laserRej;
-            totalOthersRej += tks831Model.othersRej;
-            #endregion
-            
-            #region tks 869
-            var tks869List = from a in viDetailList
-                             where a.number == "869"
-                             select a;
-
-
-            ViewModel.PQCSummaryReport_ViewModel.Report tks869Model = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            tks869Model.pqcDept = "TP1 TKS869";
-            tks869Model.totalOutput = tks869List.Sum(p => p.totalQty);
-            tks869Model.actualOutput = tks869List.Sum(p => p.acceptQty);
-            tks869Model.totalRej = tks869List.Sum(p => p.totalRej);
-            tks869Model.ttsMouldRej = tks869List.Sum(p => p.ttsRej);
-            tks869Model.vendorsModelRej = tks869List.Sum(p => p.vendorRej);
-            tks869Model.paintRej = tks869List.Sum(p => p.paintRej);
-            tks869Model.laserRej = tks869List.Sum(p => p.laserRej);
-            tks869Model.othersRej = tks869List.Sum(p => p.othersRej);
-
-            tks869Model.totalRejRate = string.Format("{0}({1}%)", tks869Model.totalRej, Math.Round(tks869Model.totalRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-            tks869Model.ttsMouldRejRate = string.Format("{0}({1}%)", tks869Model.ttsMouldRej, Math.Round(tks869Model.ttsMouldRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-            tks869Model.vendorsModelRejRate = string.Format("{0}({1}%)", tks869Model.vendorsModelRej, Math.Round(tks869Model.vendorsModelRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-            tks869Model.paintRejRate = string.Format("{0}({1}%)", tks869Model.paintRej, Math.Round(tks869Model.paintRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-            tks869Model.laserRejRate = string.Format("{0}({1}%)", tks869Model.laserRej, Math.Round(tks869Model.laserRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-            tks869Model.othersRejRate = string.Format("{0}({1}%)", tks869Model.othersRej, Math.Round(tks869Model.othersRej / tks869Model.totalOutput * 100, 2).ToString("0.00"));
-
-            reportList.Add(tks869Model);
-
-
-            totalOutput += tks869Model.totalOutput;
-            totalActualOutput += tks869Model.actualOutput;
-            totalRej += tks869Model.totalRej;
-            totalTTSRej += tks869Model.ttsMouldRej;
-            totalVendorRej += tks869Model.vendorsModelRej;
-            totalPaintRej += tks869Model.paintRej;
-            totalLaserRej += tks869Model.laserRej;
-            totalOthersRej += tks869Model.othersRej;
-            #endregion
-
-
 
             
 
-            ViewModel.PQCSummaryReport_ViewModel.Report totalModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            totalModel.pqcDept = "Total";
-            totalModel.totalOutput = totalOutput;
-            totalModel.actualOutput = totalActualOutput;
-            totalModel.ttsMouldRejRate = string.Format("{0}({1}%)", totalTTSRej, Math.Round(totalTTSRej / totalOutput * 100, 2).ToString("0.00"));
-            totalModel.vendorsModelRejRate = string.Format("{0}({1}%)", totalVendorRej, Math.Round(totalVendorRej / totalOutput * 100, 2).ToString("0.00"));
-            totalModel.paintRejRate = string.Format("{0}({1}%)", totalPaintRej, Math.Round(totalPaintRej / totalOutput * 100, 2).ToString("0.00"));
-            totalModel.laserRejRate = string.Format("{0}({1}%)", totalLaserRej, Math.Round(totalLaserRej / totalOutput * 100, 2).ToString("0.00"));
-            totalModel.othersRejRate = string.Format("{0}({1}%)", totalOthersRej, Math.Round(totalOthersRej / totalOutput * 100, 2).ToString("0.00"));
-            totalModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalOutput * 100, 2).ToString("0.00"));
-            reportList.Add(totalModel);
+
+            #region  按num汇总
+            var numGroupList = from a in viDetailList
+                               where a.number != "" && a.lastCheckProcess == a.currentProcess//取最后一道check process
+                               group a by new { a.number, a.description, a.lastCheckProcess} into groupList
+                               select new
+                               {
+                                   groupList.Key.number,
+                                   groupList.Key.description,
+                                   output = groupList.Sum(p => p.totalQty),
+                                   passQty = groupList.Sum(p => p.acceptQty),
+                                   rejQty = groupList.Sum(p => p.rejectQty),
+
+                                   ttsRej = groupList.Sum(p=>p.ttsRej),
+                                   vendorRej = groupList.Sum(p => p.vendorRej),
+                                   paintRej = groupList.Sum(p => p.paintRej),
+                                   laserRej = groupList.Sum(p => p.laserRej),
+                                   othersRej = groupList.Sum(p => p.othersRej)
+                               };
 
 
+          
+            //获取bom中所有的number
+            List<string> numList = bomBLL.GetNumberList();
+
+            //添加 num model
+            foreach (string num in numList)
+            {
+                var numModel = (from a in numGroupList where a.number == num select a).FirstOrDefault();
+                if (numModel == null)
+                    continue;
+
+
+                ViewModel.PQCSummaryReport_ViewModel.Report modelForNum = new ViewModel.PQCSummaryReport_ViewModel.Report();
+                modelForNum.pqcDept = numModel.description + numModel.number;
+                modelForNum.totalOutput = numModel.output;
+                modelForNum.actualOutput = numModel.passQty;
+                modelForNum.totalRej = numModel.rejQty;
+                modelForNum.ttsMouldRej = numModel.ttsRej;
+                modelForNum.vendorsModelRej = numModel.vendorRej;
+                modelForNum.paintRej = numModel.paintRej;
+                modelForNum.laserRej = numModel.laserRej;
+                modelForNum.othersRej = numModel.laserRej;
+                         
+                modelForNum.totalRejRate = string.Format("{0}({1}%)", modelForNum.totalRej, Math.Round(modelForNum.totalRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.ttsMouldRejRate = string.Format("{0}({1}%)", modelForNum.vendorsModelRej, Math.Round(modelForNum.vendorsModelRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.vendorsModelRejRate = string.Format("{0}({1}%)", modelForNum.ttsMouldRej, Math.Round(modelForNum.ttsMouldRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.paintRejRate = string.Format("{0}({1}%)", modelForNum.paintRej, Math.Round(modelForNum.paintRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.laserRejRate = string.Format("{0}({1}%)", modelForNum.laserRej, Math.Round(modelForNum.laserRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.othersRejRate = string.Format("{0}({1}%)", modelForNum.othersRej, Math.Round(modelForNum.othersRej / modelForNum.totalOutput * 100, 2));
+
+                
+                reportList.Add(modelForNum);
+            }
+            #endregion
+
+            
 
 
             ViewModel.PQCSummaryReport_ViewModel.Report packModel = GetPack(dDateFrom, dDateTo, sShift);
@@ -529,18 +181,17 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
+      
         private List<ViewModel.PQCSummaryReport_ViewModel.ViDetail> GetViDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
             DataTable dt = bll.GetSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
-
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
 
 
             List<ViewModel.PQCSummaryReport_ViewModel.ViDetail> defectList = new List<ViewModel.PQCSummaryReport_ViewModel.ViDetail>();
-
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.PQCSummaryReport_ViewModel.ViDetail model = new ViewModel.PQCSummaryReport_ViewModel.ViDetail();
@@ -548,17 +199,19 @@ namespace DashboardTTS.ViewBusiness
                 model.partNo = dr["partNumber"].ToString();
                 model.totalQty = double.Parse(dr["TotalQty"].ToString());
                 model.acceptQty = double.Parse(dr["acceptQty"].ToString());
-                model.totalRej = double.Parse(dr["rejectQty"].ToString());
+                model.rejectQty = double.Parse(dr["rejectQty"].ToString());
+                model.currentProcess = dr["currentProcess"].ToString();
 
-                model.ttsRej = double.Parse(dr["ttsRejQty"].ToString());
-                model.vendorRej = double.Parse(dr["vendorRejQty"].ToString());
+                model.description = dr["description"].ToString();
+                model.number = dr["number"].ToString();
+                model.isContainLaser = bool.Parse(dr["isContainLaser"].ToString());
+                model.lastCheckProcess = dr["lastCheckProcess"].ToString();
+
+                model.ttsRej = double.Parse(dr["ttsRej"].ToString());
+                model.vendorRej = double.Parse(dr["vendorRej"].ToString());
                 model.paintRej = double.Parse(dr["paintRej"].ToString());
                 model.laserRej = double.Parse(dr["laserRej"].ToString());
-                model.othersRej = double.Parse(dr["othersRej"].ToString());
-
-                model.checkProcess = dr["checkProcess"].ToString();
-                model.allProcess = dr["allProcess"].ToString();
-                model.number = dr["number"].ToString();
+                model.othersRej = double.Parse(dr["othersRej"].ToString());            
 
                 defectList.Add(model);
             }

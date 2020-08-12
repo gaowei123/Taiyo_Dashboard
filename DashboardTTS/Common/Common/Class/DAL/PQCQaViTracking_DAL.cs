@@ -286,113 +286,79 @@ where 1 = 1  and a.day >= @DateFrom  and a.day < @DateTo ", StaticRes.Global.Sql
 
 
 
-       
 
 
 
-     
+
+        /// <summary>
+        /// new logic , 以tracking为一条记录, 汇总defect中 mould,paint,laser,other的rejqty, 以及bom中num, type等设定值
+        /// 在代码中在判断归类.
+        /// </summary>
+        /// <param name="dDateFrom">UI查询参数</param>
+        /// <param name="dDateTo">UI查询参数</param>
+        /// <param name="sShift">UI查询参数</param>
+        /// <param name="sPartNo">UI查询参数</param>
+        /// <returns></returns>
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             StringBuilder strSql = new StringBuilder();
 
 
-            string searchShift = sShift == "" ? "" : " and shift = @shift";
+            string searchShift = sShift == "" ? "" : " and a.shift = @shift";
             string searchPartNo = sPartNo == "" ? "" : " and a.partNumber = @partNumber";
 
             strSql.AppendFormat(@"
-select
-a.trackingID
-,a.partNumber 
+select 
+ a.trackingID
+,a.partnumber  
 ,a.TotalQty
 ,a.acceptQty
 ,a.rejectQty
-,isnull(case when c.remark_1 = 'TTS' then b.mouldRej end,0) as ttsRejQty
-,isnull(case when c.remark_1 != 'TTS' then b.mouldRej end,0) as vendorRejQty
+,a.processes as currentProcess
+,c.description
+,c.number
+,c.isContainLaser
+,c.lastCheckProcess
+
+,isnull( case when c.MouldRejType  = 'TTS' then b.mouldRej end ,0) as ttsRej
+,isnull( case when c.MouldRejType != 'TTS' then b.mouldrej end ,0) as vendorRej
 ,b.paintRej
 ,b.laserRej
 ,b.othersRej
 
-
-,a.processes as checkProcess
-,c.processes as allProcess
-,ISNULL( c.number,'') as number
-
 from PQCQaViTracking a
-left join 
-(
+
+left join (
 	select 
 	trackingID
 	,ISNULL(SUM( case when defectdescription = 'Mould' then rejectQty end),0) as mouldRej
 	,ISNULL(SUM( case when defectdescription = 'Paint' then rejectQty end),0) as paintRej
 	,ISNULL(SUM( case when defectdescription = 'Laser' then rejectQty end),0) as laserRej
 	,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
-
-	from PQCQaViDefectTracking a
-	where day >= @datefrom and day < @dateto
-    {0}
+	from PQCQaViDefectTracking
+	where day >= @DateFrom and day < @DateTo
 	group by trackingID
-
 ) b on a.trackingID = b.trackingID
 
-left join PQCBom c on a.partNumber = c.partNumber
+left join (
+	select 
+	partNumber
+	,description
+	,isnull(number,'') as number
+	,case when charindex('Laser', processes,0) > 0 then 'TRUE' ELSE 'FALSE' END AS isContainLaser
+	,case when charindex('Check#3',processes,0) > 0 then 'CHECK#3' 
+		  when charindex('Check#2',processes,0) > 0 then 'CHECK#2'
+		  else 'CHECK#1' 
+	END as lastCheckProcess
+	,case when remark_1 = 'TTS' then 'TTS' else 'Vendor' end as MouldRejType
+	from PQCBom
+) c on a.partNumber = c.partNumber
 
-where day >= @datefrom and day < @dateto 
-{1} {2}", searchShift, searchShift,searchPartNo);
-
-
-
-            //new sql
-//            string aaaa = @"
-//select 
-// a.trackingID
-//,a.partnumber  
-//,a.TotalQty
-//,a.acceptQty
-//,a.rejectQty
-//,a.processes as currentProcess
-//,c.description
-//,c.number
-//,c.IsContainLaser
-//,c.lastCheckProcess
-
-//,isnull( case when c.MouldRejType  = 'TTS' then b.mouldRej end ,0) as ttsRejQty
-//,isnull( case when c.MouldRejType != 'TTS' then b.mouldrej end ,0) as vendorRejQty
-//,b.paintRej
-//,b.laserRej
-//,b.othersRej
-
-//from PQCQaViTracking a
-
-//left join (
-//	select 
-//	trackingID
-//	,ISNULL(SUM( case when defectdescription = 'Mould' then rejectQty end),0) as mouldRej
-//	,ISNULL(SUM( case when defectdescription = 'Paint' then rejectQty end),0) as paintRej
-//	,ISNULL(SUM( case when defectdescription = 'Laser' then rejectQty end),0) as laserRej
-//	,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
-//	from PQCQaViDefectTracking
-//	where day >= '2020-1-1' and day < '2020-8-1'
-//	group by trackingID
-//) b on a.trackingID = b.trackingID
-
-//left join (
-//	select 
-//	partNumber
-//	,description
-//	,isnull(number,'') as number
-//	,case when charindex('Laser', processes,0) > 0 then 'TRUE' ELSE 'FALSE' END AS IsContainLaser
-//	,case when charindex('Check#3',processes,0) > 0 then 'CHECK#3' 
-//		  when charindex('Check#2',processes,0) > 0 then 'CHECK#2'
-//		  else 'CHECK#1' 
-//	END as lastCheckProcess
-//	,case when remark_1 = 'TTS' then 'TTS' else 'Vendor' end as MouldRejType
-//	from PQCBom
-//) c on a.partNumber = c.partNumber
-
-//where a.day >= '2020-1-1' and a.day < '2020-8-1'";
+where a.day >= @DateFrom and a.day < @DateTo
+ {1}  {2}", searchShift, searchShift,searchPartNo);
 
 
-
+            
             SqlParameter[] parameters = {
                 new SqlParameter("@DateFrom", SqlDbType.DateTime),
                 new SqlParameter("@DateTo", SqlDbType.DateTime),
@@ -985,7 +951,7 @@ with allJobsForReports as (
 		then  case when a.processes = 'CHECK#2' and a.nextViFlag = 'True' then 'True' else 'False' end
 		--只有check1的, 直接以nextViFlag定
 		else a.nextViFlag
-	end = 'True' 
+	end = 'True'
 ");
             if (sType.Trim() != "")
                 strSql.AppendLine(" and b.type =@Type ");
@@ -1046,9 +1012,6 @@ with allJobsForReports as (
     ,[humidityFront]
     ,[humidityRear]
 
-    
-
-
     from  OPENDATASOURCE( 'SQLOLEDB', {0} ).Taiyo_Painting.dbo.paintingtempinfo
 )", StaticRes.Global.SqlConnection.SqlconnPainting);
 
@@ -1073,7 +1036,7 @@ b.partNumber
 
 --Painting Info
 ,d.Lotno
-,d.[MFG Date]
+,f.dateTime as [MFG Date]
 ,d.[Painting Under Coat Date]
 ,d.pMachine_1st as [Painting Under Coat M/C No]
 ,d.paintingRunningTime_1st as [Painting Under Coat M/C running time]
@@ -1127,7 +1090,12 @@ left join
 
 left join laserInfo c  on a.jobid collate chinese_prc_ci_as = c.JOB_ID collate chinese_prc_ci_as 
 
-left join paintingInfo d  on a.jobid collate chinese_prc_ci_as = d.JobNumber collate chinese_prc_ci_as ", StaticRes.Global.SqlConnection.SqlconnPainting);
+left join paintingInfo d  on a.jobid collate chinese_prc_ci_as = d.JobNumber collate chinese_prc_ci_as 
+
+left join 
+(
+    select distinct jobnumber , datetime from  OPENDATASOURCE( 'SQLOLEDB', {0} ).Taiyo_Painting.dbo.PaintingDeliveryHis
+) f  on a.jobid collate chinese_prc_ci_as = f.JobNumber collate chinese_prc_ci_as  ", StaticRes.Global.SqlConnection.SqlconnPainting);
 
             strSql.AppendLine(" where 1=1 ");
 

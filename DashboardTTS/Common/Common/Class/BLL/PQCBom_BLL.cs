@@ -145,7 +145,6 @@ namespace Common.Class.BLL
 
 
 
-        #region  ==========  Dwyane  ==========
 
         public DataTable GetList(string sPartNo)
         {
@@ -341,28 +340,7 @@ namespace Common.Class.BLL
         }
 
 
-        public List<string> GetSupplierList()
-        {
-            DataSet ds = dal.GetList("");
-            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                return null;
-
-
-
-            List<string> supplierList = new List<string>();
-
-            foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                string supplier = dr["Supplier"].ToString();
-
-                if (supplier != "" && (!supplierList.Contains(supplier)))
-                    supplierList.Add(supplier);
-            }
-
-
-            return supplierList.OrderBy(p => p).ToList();
-        }
-
+      
 
 
 
@@ -427,7 +405,95 @@ namespace Common.Class.BLL
         }
 
 
+        /// <summary>
+        /// 获取 part no, model, supplier, customer, Number信息列表
+        /// 用于自动填充下拉框选择项.
+        /// </summary>
+        #region 
+
+        const string constPartNo = "partNo";
+        const string constModel = "model";
+        const string constSupplier = "supplier";
+        const string constCustomer = "customer";
+        const string constNumber = "number";
+
+
+        private List<string> GetGroupByList(string sGroupByField)
+        {
+            DataTable dt = dal.GetALL();
+
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+
+
+            List<string> modelList = new List<string>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                string partNo = dr["partNumber"].ToString();
+                string model = dr["model"].ToString();
+                string supplier = dr["remark_1"].ToString();
+                string customer = dr["customer"].ToString();
+                string number = dr["number"].ToString().ToUpper();
+
+                switch (sGroupByField)
+                {
+                    case constPartNo:
+                        modelList.Add(partNo);
+                        break;
+                    case constModel:
+                        modelList.Add(model);
+                        break;
+                    case constSupplier:
+                        modelList.Add(supplier);
+                        break;
+                    case constCustomer:
+                        modelList.Add(customer);
+                        break;
+                    case constNumber:
+                        modelList.Add(number);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+
+            //去重
+            modelList = modelList.Distinct().ToList();
+
+            //正序排序
+            modelList.Sort();
+
+            return modelList;
+        }
+
+      
+
+        public List<string> GetPatNoList()
+        {
+            return GetGroupByList(constPartNo);
+        }
+        public List<string> GetSupplierList()
+        {
+            return GetGroupByList(constSupplier);
+        }
+        public List<string> GetCustomerList()
+        {
+            return GetGroupByList(constCustomer);
+        }
+        public List<string> GetNumberList()
+        {
+            return GetGroupByList(constNumber);
+        }
         #endregion
+
+
+
+
+
 
     }
 }
