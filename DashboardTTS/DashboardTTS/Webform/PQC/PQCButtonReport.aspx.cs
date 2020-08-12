@@ -1154,7 +1154,7 @@ namespace DashboardTTS.Webform.PQC
                 overallOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.lotQty);
                 overallOverallSummaryModel.pass = partsTypeSummaryList.Sum(p => p.pass);
                 overallOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.rejQty);
-                overallOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.rejRate);
+                overallOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.rejQty) / partsTypeSummaryList.Sum(p => p.lotQty) *100 ,2);
 
                 OverallSummaryInfo.Add(overallOverallSummaryModel);
 
