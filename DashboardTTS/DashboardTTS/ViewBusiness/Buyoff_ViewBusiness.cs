@@ -400,6 +400,7 @@ namespace DashboardTTS.ViewBusiness
         {
             List<ViewModel.BuyoffReport_ViewModel.PaintDefect> paintDefectList = new List<ViewModel.BuyoffReport_ViewModel.PaintDefect>();
 
+         
             try
             {
                 

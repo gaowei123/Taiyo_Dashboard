@@ -1364,7 +1364,6 @@ where 1=1  ");
         
         public DataTable GetPaintDefect(string sJobId, string sTrackingID)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
@@ -1415,6 +1414,8 @@ where 1=1  ");
             if (sJobId != "") parameters[0].Value = sJobId; else parameters[0] = null;
             if (sTrackingID != "") parameters[1].Value = sTrackingID; else parameters[1] = null;
 
+
+            
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0)

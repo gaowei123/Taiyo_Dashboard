@@ -710,12 +710,16 @@ namespace Common.Class.BLL
             DataTable dt = new DataTable();
 
 
+         
+
             if (sDefectDescription == "Mould")
             {
                 dt = dal.GetMouldDefect(sJobID, sTrackingID);
             }
             else if (sDefectDescription == "Paint")
             {
+                DBHelp.Reports.LogFile.Log("TouchPCBuyoff", "GetDefectDetail,  in paint branch");
+
                 dt = dal.GetPaintDefect(sJobID, sTrackingID);
                 
                 #region 处理shortage, qa

@@ -163,6 +163,9 @@ namespace DashboardTTS.Controllers
             string trackingID = Request.Form["TrackingID"];
 
 
+
+            DBHelp.Reports.LogFile.Log("TouchPCBuyoff", string.Format("GetPaintDefect, receive para JobID:{0},trackingID:{1}", jobID, trackingID));
+
             List<ViewModel.BuyoffReport_ViewModel.PaintDefect> paintDefectList = vbBuyoff.GetMaterialPaintDefectList(jobID, trackingID);
 
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -176,6 +179,7 @@ namespace DashboardTTS.Controllers
             {
                 jsonResult = js.Serialize(paintDefectList);
             }
+            
 
 
 
