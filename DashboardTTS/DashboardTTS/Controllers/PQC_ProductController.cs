@@ -11,7 +11,7 @@ namespace DashboardTTS.Controllers
     {
         private readonly ViewBusiness.PQCProduct vBLL = new ViewBusiness.PQCProduct();
 
-
+        private JavaScriptSerializer _js = new JavaScriptSerializer();
 
         #region View
         public ActionResult Index()
@@ -77,7 +77,7 @@ namespace DashboardTTS.Controllers
             string partNo = Request.Form["PartNo"] == null ? "" : Request.Form["PartNo"].ToString();
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+           
             string jsonResult = "";
 
             List<ViewModel.PQCSummaryReport_ViewModel.Report> models = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
@@ -85,11 +85,11 @@ namespace DashboardTTS.Controllers
 
             if (models != null && models.Count != 0)
             {
-                jsonResult = js.Serialize(models);
+                jsonResult = _js.Serialize(models);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -114,7 +114,7 @@ namespace DashboardTTS.Controllers
             string type = Request.Form["Type"];
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+          
             string jsonResult = "";
 
 
@@ -133,10 +133,10 @@ namespace DashboardTTS.Controllers
 
             if (modelList != null && modelList.Count != 0)
             {
-                jsonResult = js.Serialize(modelList);
+                jsonResult = _js.Serialize(modelList);
             }else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -155,7 +155,7 @@ namespace DashboardTTS.Controllers
             string pic = Request.Form["PIC"];
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+         
             string jsonResult = "";
 
 
@@ -166,11 +166,11 @@ namespace DashboardTTS.Controllers
 
             if (modelList != null && modelList.Count != 0)
             {
-                jsonResult = js.Serialize(modelList);
+                jsonResult = _js.Serialize(modelList);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -192,7 +192,7 @@ namespace DashboardTTS.Controllers
           
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+           
             string jsonResult = "";
 
 
@@ -212,11 +212,11 @@ namespace DashboardTTS.Controllers
 
             if (model != null)
             {
-                jsonResult = js.Serialize(model);
+                jsonResult = _js.Serialize(model);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -228,7 +228,7 @@ namespace DashboardTTS.Controllers
             string trackingID = Request.Form["TrackingID"];
             
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+         
             string jsonResult = "";
 
 
@@ -246,11 +246,11 @@ namespace DashboardTTS.Controllers
 
             if (modelList != null)
             {
-                jsonResult = js.Serialize(modelList);
+                jsonResult = _js.Serialize(modelList);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -265,7 +265,7 @@ namespace DashboardTTS.Controllers
             string tabSN = Request.Form["TabSN"];
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+          
             string jsonResult = "";
 
 
@@ -284,11 +284,11 @@ namespace DashboardTTS.Controllers
 
             if (modelList != null)
             {
-                jsonResult = js.Serialize(modelList);
+                jsonResult = _js.Serialize(modelList);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -319,10 +319,10 @@ namespace DashboardTTS.Controllers
 
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+        
 
 
-            return Content(js.Serialize(updateResult));
+            return Content(_js.Serialize(updateResult));
         }
         
         public ActionResult UpdateQty()
@@ -341,9 +341,9 @@ namespace DashboardTTS.Controllers
 
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+           
 
-            return Content(js.Serialize(updateResult));
+            return Content(_js.Serialize(updateResult));
         }
 
         #endregion
@@ -378,16 +378,16 @@ namespace DashboardTTS.Controllers
             List<ViewModel.PQCWIPInventory_ViewModel> modelList = vBLL.GetJobOrderDetailList(dateFrom, dateTo, partNo, model, jobNo, jobStatus);
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+          
             string jsonResult = "";
 
             if (modelList != null)
             {
-                jsonResult = js.Serialize(modelList);
+                jsonResult = _js.Serialize(modelList);
             }
             else
             {
-                jsonResult = js.Serialize("");
+                jsonResult = _js.Serialize("");
             }
 
 
@@ -396,17 +396,17 @@ namespace DashboardTTS.Controllers
         
         public ActionResult DeleteWIPJob()
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
+           
         
             if (Request.Form["JobNo"] == null || Request.Form["JobNo"] == "")
-                return Content(js.Serialize("Job No Can not be empty!"));
+                return Content(_js.Serialize("Job No Can not be empty!"));
 
 
             Common.Class.BLL.PQCInventory_BLL bll = new Common.Class.BLL.PQCInventory_BLL();
             bool result =  bll.Delete(Request.Form["JobNo"]);
 
 
-            return Content(js.Serialize(result));
+            return Content(_js.Serialize(result));
         }
 
         #endregion
@@ -433,14 +433,13 @@ namespace DashboardTTS.Controllers
 
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
+          
             if (modelList == null)
             {
-                return Content(js.Serialize(""));
+                return Content(_js.Serialize(""));
             }else
             {
-                return Content(js.Serialize(modelList));
+                return Content(_js.Serialize(modelList));
             }
         }
 
@@ -465,15 +464,15 @@ namespace DashboardTTS.Controllers
 
 
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+        
 
             if (modelList == null)
             {
-                return Content(js.Serialize(""));
+                return Content(_js.Serialize(""));
             }
             else
             {
-                return Content(js.Serialize(modelList));
+                return Content(_js.Serialize(modelList));
             }
         }
         

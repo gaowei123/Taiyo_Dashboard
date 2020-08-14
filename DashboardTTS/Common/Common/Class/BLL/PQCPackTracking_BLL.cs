@@ -121,6 +121,12 @@ namespace Common.Class.BLL
         }
 
 
+        public DataTable GetPackForSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
+        {
+            return dal.GetPackForSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
+        }
+
+
 
         public DataTable GetProductDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sMachineID, string sJobNumber, string sLotNo)
         {

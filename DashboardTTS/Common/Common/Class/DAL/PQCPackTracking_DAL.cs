@@ -323,6 +323,59 @@ namespace Common.Class.DAL
 		}
 
 
+        public DataTable GetPackForSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"select 
+sum(a.TotalQty) as TotalQty
+,sum(a.acceptQty ) as acceptQty
+,sum(a.rejectQty ) as rejectQty
+,case when charindex('Laser',  b.processes,0) > 0  and charindex('Check#2',b.processes,0) = 0 and charindex('Check#3',b.processes,0) = 0 
+then 'Online' else 'Offline' end as packType
+from pqcpacktracking a 
+left join PQCBom b on a.partNumber = b.partNumber
+where 1=1 and a.day >= @dateFrom and a.day < @dateTo ");
+
+
+            if (sShift != "") strSql.Append(" and a.shift = @shift ");
+            if (sPartNo != "") strSql.Append(" and a.partNumber  = @partNumber ");
+
+            strSql.Append(@"group by 
+case when charindex('Laser', b.processes, 0) > 0  and charindex('Check#2', b.processes, 0) = 0 and charindex('Check#3', b.processes, 0) = 0
+then 'Online' else 'Offline' end ");
+
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@dateFrom",SqlDbType.DateTime),
+                new SqlParameter("@dateTo",SqlDbType.DateTime),
+                new SqlParameter("@shift",SqlDbType.VarChar),
+                new SqlParameter("@partNumber", SqlDbType.VarChar)
+            };
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+            if (sShift != "") paras[2].Value = sShift; else paras[2] = null;        
+            if (sPartNo != "") paras[3].Value = sPartNo; else paras[3] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+
+
+
+
         public DataTable GetProductDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sMachineID, string sJobNumber)
         {
             StringBuilder strSql = new StringBuilder();

@@ -34,6 +34,7 @@ namespace DashboardTTS.ViewBusiness
         #region summary report
 
         /// <summary>
+        /// pqc summary report动态版本  --2020 08 14--
         /// job查询不做限制
         /// laser btn: 有laser process, 并且当前process为check1.  并且不包括num设定的小分类.
         /// wip btn: wip part 和有laser process并且当前process不是check1的job, 并且不包括num设定的小分类.
@@ -168,11 +169,36 @@ namespace DashboardTTS.ViewBusiness
             }
             #endregion
 
+
+
+
+            #region checking total
+            ViewModel.PQCSummaryReport_ViewModel.Report checkTotalModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            checkTotalModel.pqcDept = "Checking Total";
+            checkTotalModel.totalOutput = reportList.Sum(p => p.totalOutput);
+            checkTotalModel.actualOutput = reportList.Sum(p => p.actualOutput);
+            checkTotalModel.totalRej = reportList.Sum(p => p.totalRej);
+            checkTotalModel.ttsMouldRej = reportList.Sum(p => p.ttsMouldRej);
+            checkTotalModel.vendorsModelRej = reportList.Sum(p => p.vendorsModelRej);
+            checkTotalModel.paintRej = reportList.Sum(p => p.paintRej);
+            checkTotalModel.laserRej = reportList.Sum(p => p.laserRej);
+            checkTotalModel.othersRej = reportList.Sum(p => p.othersRej);
+
+            checkTotalModel.totalRejRate = string.Format("{0}({1}%)", checkTotalModel.totalRej, Math.Round(checkTotalModel.totalRej / checkTotalModel.totalOutput * 100, 2));
+            checkTotalModel.ttsMouldRejRate = string.Format("{0}({1}%)", checkTotalModel.vendorsModelRej, Math.Round(checkTotalModel.vendorsModelRej / checkTotalModel.totalOutput * 100, 2));
+            checkTotalModel.vendorsModelRejRate = string.Format("{0}({1}%)", checkTotalModel.ttsMouldRej, Math.Round(checkTotalModel.ttsMouldRej / checkTotalModel.totalOutput * 100, 2));
+            checkTotalModel.paintRejRate = string.Format("{0}({1}%)", checkTotalModel.paintRej, Math.Round(checkTotalModel.paintRej / checkTotalModel.totalOutput * 100, 2));
+            checkTotalModel.laserRejRate = string.Format("{0}({1}%)", checkTotalModel.laserRej, Math.Round(checkTotalModel.laserRej / checkTotalModel.totalOutput * 100, 2));
+            checkTotalModel.othersRejRate = string.Format("{0}({1}%)", checkTotalModel.othersRej, Math.Round(checkTotalModel.othersRej / checkTotalModel.totalOutput * 100, 2));
             
+            reportList.Add(checkTotalModel);
+            #endregion
 
 
-            ViewModel.PQCSummaryReport_ViewModel.Report packModel = GetPack(dDateFrom, dDateTo, sShift);
-            reportList.Add(packModel);
+
+
+            //packing online, offline, total 
+            reportList.AddRange(GetPackList(dDateFrom, dDateTo, sShift, sPartNo));
 
 
 
@@ -221,34 +247,120 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-        private ViewModel.PQCSummaryReport_ViewModel.Report GetPack(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        /// <summary>
+        /// 生成pqc summary report对应packing的3条信息
+        /// online: process只有laser,check#1
+        /// offline: process没有laser, 或者有laser并且有check#2,3的.
+        /// </summary>     
+        private List<ViewModel.PQCSummaryReport_ViewModel.Report> GetPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
 
-            ViewModel.PQCSummaryReport_ViewModel.Report packModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
-            packModel.pqcDept = "Packing";
+            ViewModel.PQCSummaryReport_ViewModel.Report packOnlineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            packOnlineModel.pqcDept = "Packing Online";       
+            packOnlineModel.ttsMouldRejRate = "-";
+            packOnlineModel.vendorsModelRejRate = "-";
+            packOnlineModel.paintRejRate = "-";
+            packOnlineModel.laserRejRate = "-";
+            packOnlineModel.othersRejRate = "-";
+
+            ViewModel.PQCSummaryReport_ViewModel.Report packOfflineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            packOfflineModel.pqcDept = "Packing Offline";
+            packOfflineModel.ttsMouldRejRate = "-";
+            packOfflineModel.vendorsModelRejRate = "-";
+            packOfflineModel.paintRejRate = "-";
+            packOfflineModel.laserRejRate = "-";
+            packOfflineModel.othersRejRate = "-";
+
+            ViewModel.PQCSummaryReport_ViewModel.Report packTotalModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
+            packTotalModel.pqcDept = "Packing Total";
+            packTotalModel.ttsMouldRejRate = "-";
+            packTotalModel.vendorsModelRejRate = "-";
+            packTotalModel.paintRejRate = "-";
+            packTotalModel.laserRejRate = "-";
+            packTotalModel.othersRejRate = "-";
 
 
+            double totalQty = 0;
+            double totalPass = 0;
+            double totalRej = 0;
 
-            Common.Class.BLL.PQCPackTracking bll = new Common.Class.BLL.PQCPackTracking();
 
-            DataTable dt = bll.GetList(dDateFrom, dDateTo, sShift,"","","","");
+            DataTable dt = packTrackBLL.GetPackForSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
             if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+            DataRow drOnline;
+            DataRow drOffline;
+
+
+            DataRow[] temp = dt.Select(" packType = 'Online'", "");
+            if (temp != null)
             {
-                packModel.totalOutput = 0;
-                packModel.actualOutput = 0;
-                packModel.totalRej = 0;
+                drOnline = temp[0];
+                totalQty = double.Parse(drOnline["TotalQty"].ToString());
+                totalPass = double.Parse(drOnline["acceptQty"].ToString());
+                totalRej = double.Parse(drOnline["rejectQty"].ToString());
+                
+                packOnlineModel.totalOutput = totalQty;
+                packOnlineModel.actualOutput = totalPass;
+                packOnlineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+               
             }
             else
             {
-                packModel.totalOutput = double.Parse(dt.Compute("sum(TotalQty)", "").ToString());
-                packModel.actualOutput = double.Parse(dt.Compute("sum(acceptQty)", "").ToString());
-                packModel.totalRej = double.Parse(dt.Compute("sum(rejectQty)", "").ToString());
-
-                packModel.totalRejRate = string.Format("{0}({1}%)", packModel.totalRej, Math.Round(packModel.totalRej / packModel.totalOutput * 100, 2).ToString("0.00"));
+                packOnlineModel.totalOutput = 0;
+                packOnlineModel.totalRejRate = "0(0.00%)";
+                packOnlineModel.actualOutput = 0;
             }
 
 
-            return packModel;
+
+            temp = dt.Select(" packType = 'Offline'", "");
+            if (temp != null)
+            {
+                drOffline = temp[0];
+                totalQty = double.Parse(drOffline["TotalQty"].ToString());
+                totalPass = double.Parse(drOffline["acceptQty"].ToString());
+                totalRej = double.Parse(drOffline["rejectQty"].ToString());
+                
+                packOfflineModel.totalOutput = totalQty;
+                packOfflineModel.actualOutput = totalPass;
+                packOfflineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+            }
+            else
+            {
+                packOfflineModel.totalOutput = 0;
+                packOfflineModel.totalRejRate = "0(0.00%)";
+                packOfflineModel.actualOutput = 0;
+            }
+
+
+
+
+
+           
+            totalQty = double.Parse( dt.Compute("sum(TotalQty)","").ToString());
+            totalPass = double.Parse(dt.Compute("sum(acceptQty)", "").ToString());
+            totalRej = double.Parse(dt.Compute("sum(rejectQty)", "").ToString());      
+
+            packTotalModel.totalOutput = totalQty;
+            packTotalModel.actualOutput = totalPass;
+            packTotalModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+
+
+
+
+            List<ViewModel.PQCSummaryReport_ViewModel.Report> packList = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
+            packList.Add(packOnlineModel);
+            packList.Add(packOfflineModel);
+            packList.Add(packTotalModel);
+
+
+
+
+
+            return packList;
         }
 
         #endregion
@@ -969,7 +1081,7 @@ namespace DashboardTTS.ViewBusiness
                 //根据bom中process设定type
                 var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
                 //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
-                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")) && (!bomModel.processes.ToUpper().Contains("CHECK#3")))
                 {
                     model.type = "Online";
                 }
@@ -1078,7 +1190,7 @@ namespace DashboardTTS.ViewBusiness
                     //根据bom中process设定type
                     var bomModel = (from a in bomList where a.partNumber == model.partNo select a).FirstOrDefault();
                     //只有 有laser process 并且只有check#1的是 Online, 其余都是offline
-                    if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")))
+                    if (bomModel.processes.ToUpper().Contains("LASER") && (!bomModel.processes.ToUpper().Contains("CHECK#2")) && (!bomModel.processes.ToUpper().Contains("CHECK#3")))
                     {
                         model.type = "Online";
                     }
