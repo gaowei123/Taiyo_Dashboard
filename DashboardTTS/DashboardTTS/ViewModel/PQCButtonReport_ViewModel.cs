@@ -21,7 +21,14 @@ namespace DashboardTTS.ViewModel
             public double pass { get; set; }
             public double rejQty { get; set; }
             public double rejRate { get; set; }
+            public string rejRateDisplay { get; set; }
             public string supplier { get; set; }
+
+
+
+            public double ttsLotQty { get; set; }
+            public double vendorLotQty { get; set; }
+
 
             //mould TTS defect code
             public double TTS_Raw_Part_Scratch { get; set; }
@@ -222,6 +229,8 @@ namespace DashboardTTS.ViewModel
             public string supplier = "";
             public string process = "";
             public string partsType = "";
+            public string mouldType = "";
+
 
             public string OP = "";
             

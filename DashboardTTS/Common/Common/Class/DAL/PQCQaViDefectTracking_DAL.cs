@@ -1143,7 +1143,7 @@ with allJobsForReports as (
                 strSql.AppendLine(" and b.description =@Description");
 
             if (sNumber.Trim() != "")
-                strSql.AppendLine(" and b.Number = @Number ");
+                strSql.AppendLine(" and b.partNumber = @Number ");
 
             strSql.AppendLine(")");
             //所有check完成的jobs 临时表

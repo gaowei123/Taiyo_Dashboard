@@ -198,12 +198,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             //packing online, offline, total 
-            reportList.AddRange(GetPackList(dDateFrom, dDateTo, sShift, sPartNo));
-
-
-
-
-            return reportList;
+            return AddPackList(dDateFrom, dDateTo, sShift, sPartNo, reportList);
         }
 
 
@@ -252,7 +247,7 @@ namespace DashboardTTS.ViewBusiness
         /// online: process只有laser,check#1
         /// offline: process没有laser, 或者有laser并且有check#2,3的.
         /// </summary>     
-        private List<ViewModel.PQCSummaryReport_ViewModel.Report> GetPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
+        private List<ViewModel.PQCSummaryReport_ViewModel.Report> AddPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, List<ViewModel.PQCSummaryReport_ViewModel.Report> packList)
         {
 
             ViewModel.PQCSummaryReport_ViewModel.Report packOnlineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
@@ -295,7 +290,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             DataRow[] temp = dt.Select(" packType = 'Online'", "");
-            if (temp != null)
+            if (temp != null && temp.Count() != 0)
             {
                 drOnline = temp[0];
                 totalQty = double.Parse(drOnline["TotalQty"].ToString());
@@ -317,7 +312,7 @@ namespace DashboardTTS.ViewBusiness
 
 
             temp = dt.Select(" packType = 'Offline'", "");
-            if (temp != null)
+            if (temp != null && temp.Count() != 0)
             {
                 drOffline = temp[0];
                 totalQty = double.Parse(drOffline["TotalQty"].ToString());
@@ -349,9 +344,8 @@ namespace DashboardTTS.ViewBusiness
             packTotalModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
 
 
-
-
-            List<ViewModel.PQCSummaryReport_ViewModel.Report> packList = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
+            
+       
             packList.Add(packOnlineModel);
             packList.Add(packOfflineModel);
             packList.Add(packTotalModel);

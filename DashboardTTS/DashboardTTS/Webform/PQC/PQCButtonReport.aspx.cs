@@ -17,7 +17,6 @@ namespace DashboardTTS.Webform.PQC
                 try
                 {
                     this.lblUserHeader.Text = "PQC Button Report";
-
                     this.title.Text = "Taiyo - Button Report";
 
 
@@ -63,6 +62,8 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
+
+
                 //搜索条件
                 string JobNo = "";// this.txtJobNo.Text.Trim();
                 string partNumber = "";//this.txtPartNo.Text.Trim();
@@ -74,6 +75,28 @@ namespace DashboardTTS.Webform.PQC
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
                 string sDescription = "BUTTON";//除了panel, bezel的part都显示.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 //先拉取满足条件的所有job id.
@@ -100,6 +123,25 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 //获取数据源
                 List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> pqcDetailList = GetPQCDetialList(sqlWhere);
                 
@@ -110,12 +152,7 @@ namespace DashboardTTS.Webform.PQC
                 List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> paintTempInfoList = GetPaintTempInfoList(sqlWhere);
                 
                 List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> paintDeliveryList = GetPaintDeliveryList(sqlWhere);
-
-
                 
-             
-
-
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
                 foreach (var pqcdetailModel in pqcDetailList)
                 {
@@ -154,8 +191,17 @@ namespace DashboardTTS.Webform.PQC
                     //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
                     reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty;
                     reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty) / paintDeliveryModel.mrpQty * 100, 2);
+
+                    reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate);
+
                     reportModel.supplier = pqcdetailModel.supplier;
 
+
+                    //tts = tts rej/tts total,    vendor = vendor rej/ vendor total
+                    if (pqcdetailModel.mouldType == "TTS")
+                        reportModel.ttsLotQty = paintDeliveryModel.mrpQty;
+                    else
+                        reportModel.vendorLotQty = paintDeliveryModel.mrpQty;
 
 
 
@@ -366,6 +412,29 @@ namespace DashboardTTS.Webform.PQC
                 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
                 #region 获取laser, wip类型汇总信息 
                 var partsTypeSummaryList = from a in reportList
                                            group a by new { a.partsType } into modelGroup
@@ -377,6 +446,13 @@ namespace DashboardTTS.Webform.PQC
                                                pass = modelGroup.Sum(p => p.pass),
                                                rejQty = modelGroup.Sum(p => p.rejQty),
                                                rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+
+                                               
+
+                                               ttsLotQty = modelGroup.Sum(p => p.ttsLotQty),
+                                               vendorLotQty = modelGroup.Sum(p => p.vendorLotQty),
+
+
 
 
                                                //TTS defect code
@@ -513,12 +589,12 @@ namespace DashboardTTS.Webform.PQC
                                                Other = modelGroup.Sum(p => p.Other),
 
 
-
+                                              
                                                TTS_Mould_TotalRej = modelGroup.Sum(p => p.TTS_Mould_TotalRej),
-                                               TTS_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                               TTS_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.ttsLotQty) * 100, 2),
 
                                                Vendor_Mould_TotalRej = modelGroup.Sum(p => p.Vendor_Mould_TotalRej),
-                                               Vendor_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                               Vendor_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.vendorLotQty) * 100, 2),
 
                                                Paint_TotalRej = modelGroup.Sum(p => p.Paint_TotalRej),
                                                Paint_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Paint_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
@@ -547,6 +623,9 @@ namespace DashboardTTS.Webform.PQC
                     othersLaserSummaryModel.partNo = "OTHERS >";
                     othersLaserSummaryModel.rejQty = laserPartModel.Others_TotalRej;
                     othersLaserSummaryModel.rejRate = laserPartModel.Others_TotalRejRate;
+                    othersLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersLaserSummaryModel.rejQty, othersLaserSummaryModel.rejRate);
+
+
 
                     othersLaserSummaryModel.PQC_Scratch = laserPartModel.PQC_Scratch;
                     othersLaserSummaryModel.Over_Spray = laserPartModel.Over_Spray;
@@ -558,14 +637,20 @@ namespace DashboardTTS.Webform.PQC
                     othersLaserSummaryModel.White_Dot_in_Material = laserPartModel.White_Dot_in_Material;
                     othersLaserSummaryModel.Other = laserPartModel.Other;
 
+                    othersLaserSummaryModel.Others_TotalRej = laserPartModel.Others_TotalRej;
+                    othersLaserSummaryModel.Others_TotalRejRate = laserPartModel.Others_TotalRejRate;
+
+
                     laserPartSummaryInfo.Add(othersLaserSummaryModel);
                     #endregion
 
                     #region add  laser summary part   tts - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    ttsMouldingLaserSummaryModel.partNo = "TTS - MOULDING >";
+                    ttsMouldingLaserSummaryModel.partNo = "TTS MOULD >";
+                    ttsMouldingLaserSummaryModel.lotQty = laserPartModel.ttsLotQty;
                     ttsMouldingLaserSummaryModel.rejQty = laserPartModel.TTS_Mould_TotalRej;
                     ttsMouldingLaserSummaryModel.rejRate = laserPartModel.TTS_Mould_TotalRejRate;
+                    ttsMouldingLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingLaserSummaryModel.rejQty, ttsMouldingLaserSummaryModel.rejRate);
 
                     ttsMouldingLaserSummaryModel.TTS_Raw_Part_Scratch = laserPartModel.TTS_Raw_Part_Scratch;
                     ttsMouldingLaserSummaryModel.TTS_Oil_Stain = laserPartModel.TTS_Oil_Stain;
@@ -601,15 +686,19 @@ namespace DashboardTTS.Webform.PQC
                     ttsMouldingLaserSummaryModel.TTS_Wrong_Orietation = laserPartModel.TTS_Wrong_Orietation;
                     ttsMouldingLaserSummaryModel.TTS_Other = laserPartModel.TTS_Other;
 
+                    ttsMouldingLaserSummaryModel.TTS_Mould_TotalRej = laserPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingLaserSummaryModel.TTS_Mould_TotalRejRate = laserPartModel.TTS_Mould_TotalRejRate;
 
                     laserPartSummaryInfo.Add(ttsMouldingLaserSummaryModel);
                     #endregion
 
                     #region add  laser summary part   vendor - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    vendorMouldingLaserSummaryModel.partNo = "VENDOR - MOULDING >";
+                    vendorMouldingLaserSummaryModel.partNo = "VENDOR MOULD >";
+                    vendorMouldingLaserSummaryModel.lotQty = laserPartModel.vendorLotQty;
                     vendorMouldingLaserSummaryModel.rejQty = laserPartModel.Vendor_Mould_TotalRej;
                     vendorMouldingLaserSummaryModel.rejRate = laserPartModel.Vendor_Mould_TotalRejRate;
+                    vendorMouldingLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingLaserSummaryModel.rejQty, vendorMouldingLaserSummaryModel.rejRate);
 
                     vendorMouldingLaserSummaryModel.Vendor_Raw_Part_Scratch = laserPartModel.Vendor_Raw_Part_Scratch;
                     vendorMouldingLaserSummaryModel.Vendor_Oil_Stain = laserPartModel.Vendor_Oil_Stain;
@@ -645,6 +734,9 @@ namespace DashboardTTS.Webform.PQC
                     vendorMouldingLaserSummaryModel.Vendor_Wrong_Orietation = laserPartModel.Vendor_Wrong_Orietation;
                     vendorMouldingLaserSummaryModel.Vendor_Other = laserPartModel.Vendor_Other;
 
+                    vendorMouldingLaserSummaryModel.Vendor_Mould_TotalRej = laserPartModel.Vendor_Mould_TotalRej;
+                    vendorMouldingLaserSummaryModel.Vendor_Mould_TotalRejRate = laserPartModel.Vendor_Mould_TotalRejRate;
+
                     laserPartSummaryInfo.Add(vendorMouldingLaserSummaryModel);
                     #endregion
 
@@ -653,6 +745,7 @@ namespace DashboardTTS.Webform.PQC
                     paintLaserSummaryModel.partNo = "PAINTING >";
                     paintLaserSummaryModel.rejQty = laserPartModel.Paint_TotalRej;
                     paintLaserSummaryModel.rejRate = laserPartModel.Paint_TotalRejRate;
+                    paintLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintLaserSummaryModel.rejQty, paintLaserSummaryModel.rejRate);
 
                     paintLaserSummaryModel.Paint_Particle = laserPartModel.Paint_Particle;
                     paintLaserSummaryModel.Paint_Fibre = laserPartModel.Paint_Fibre;
@@ -681,6 +774,9 @@ namespace DashboardTTS.Webform.PQC
                     paintLaserSummaryModel.Paint_Buyoff = laserPartModel.Paint_Buyoff;
                     paintLaserSummaryModel.Paint_Shortage = laserPartModel.Paint_Shortage;
 
+                    paintLaserSummaryModel.Paint_TotalRej = laserPartModel.Paint_TotalRej;
+                    paintLaserSummaryModel.Paint_TotalRejRate = laserPartModel.Paint_TotalRejRate;
+
                     laserPartSummaryInfo.Add(paintLaserSummaryModel);
                     #endregion
 
@@ -689,6 +785,7 @@ namespace DashboardTTS.Webform.PQC
                     paintSetupLaserSummaryModel.partNo = "PAINTING SETUP >";
                     paintSetupLaserSummaryModel.rejQty = laserPartModel.Paint_SetupRej;
                     paintSetupLaserSummaryModel.rejRate = laserPartModel.Paint_SetupRejRate;
+                    paintSetupLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupLaserSummaryModel.rejQty, paintSetupLaserSummaryModel.rejRate);
                     laserPartSummaryInfo.Add(paintSetupLaserSummaryModel);
 
                     // add laser summary part   paint qa test >
@@ -696,6 +793,7 @@ namespace DashboardTTS.Webform.PQC
                     paintQALaserSummaryModel.partNo = "QA PAINT TEST >";
                     paintQALaserSummaryModel.rejQty = laserPartModel.Paint_QATestRej;
                     paintQALaserSummaryModel.rejRate = laserPartModel.Paint_QATestRejRate;
+                    paintQALaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQALaserSummaryModel.rejQty, paintQALaserSummaryModel.rejRate);
                     laserPartSummaryInfo.Add(paintQALaserSummaryModel);
 
                     #region add  laser summary part   laser >
@@ -703,6 +801,7 @@ namespace DashboardTTS.Webform.PQC
                     laserLaserSummaryModel.partNo = "LASER >";
                     laserLaserSummaryModel.rejQty = laserPartModel.Laser_TotalRej;
                     laserLaserSummaryModel.rejRate = laserPartModel.Laser_TotalRejRate;
+                    laserLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserLaserSummaryModel.rejQty, laserLaserSummaryModel.rejRate);
 
                     laserLaserSummaryModel.Laser_Black_Mark = laserPartModel.Laser_Black_Mark;
                     laserLaserSummaryModel.Laser_Black_Dot = laserPartModel.Laser_Black_Dot;
@@ -727,6 +826,9 @@ namespace DashboardTTS.Webform.PQC
                     laserLaserSummaryModel.Laser_Buyoff = laserPartModel.Laser_Buyoff;
                     laserLaserSummaryModel.Laser_Setup = laserPartModel.Laser_Setup;
 
+                    laserLaserSummaryModel.Laser_TotalRej = laserPartModel.Laser_TotalRej;
+                    laserLaserSummaryModel.Laser_TotalRejRate = laserPartModel.Laser_TotalRejRate;
+
                     laserPartSummaryInfo.Add(laserLaserSummaryModel);
                     #endregion
 
@@ -738,6 +840,7 @@ namespace DashboardTTS.Webform.PQC
                     overallLaserSummaryModel.pass = laserPartModel.pass;
                     overallLaserSummaryModel.rejQty = laserPartModel.rejQty;
                     overallLaserSummaryModel.rejRate = laserPartModel.rejRate;
+                    overallLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallLaserSummaryModel.rejQty, overallLaserSummaryModel.rejRate);
 
                     laserPartSummaryInfo.Add(overallLaserSummaryModel);
                 }
@@ -755,6 +858,7 @@ namespace DashboardTTS.Webform.PQC
                     othersWIPSummaryModel.partNo = "OTHERS >";
                     othersWIPSummaryModel.rejQty = wipPartModel.Others_TotalRej;
                     othersWIPSummaryModel.rejRate = wipPartModel.Others_TotalRejRate;
+                    othersWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersWIPSummaryModel.rejQty, othersWIPSummaryModel.rejRate);
 
                     othersWIPSummaryModel.PQC_Scratch = wipPartModel.PQC_Scratch;
                     othersWIPSummaryModel.Over_Spray = wipPartModel.Over_Spray;
@@ -774,9 +878,11 @@ namespace DashboardTTS.Webform.PQC
 
                     #region add  laser summary part   tts - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    ttsMouldingWIPSummaryModel.partNo = "TTS - MOULDING >";
+                    ttsMouldingWIPSummaryModel.partNo = "TTS MOULD >";
+                    ttsMouldingWIPSummaryModel.lotQty = wipPartModel.ttsLotQty;
                     ttsMouldingWIPSummaryModel.rejQty = wipPartModel.TTS_Mould_TotalRej;
                     ttsMouldingWIPSummaryModel.rejRate = wipPartModel.TTS_Mould_TotalRejRate;
+                    ttsMouldingWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingWIPSummaryModel.rejQty, ttsMouldingWIPSummaryModel.rejRate);
 
                     ttsMouldingWIPSummaryModel.TTS_Raw_Part_Scratch = wipPartModel.TTS_Raw_Part_Scratch;
                     ttsMouldingWIPSummaryModel.TTS_Oil_Stain = wipPartModel.TTS_Oil_Stain;
@@ -814,14 +920,20 @@ namespace DashboardTTS.Webform.PQC
                     ttsMouldingWIPSummaryModel.TTS_Mould_TotalRej = wipPartModel.TTS_Mould_TotalRej;
                     ttsMouldingWIPSummaryModel.TTS_Mould_TotalRejRate = wipPartModel.TTS_Mould_TotalRejRate;
 
+                    ttsMouldingWIPSummaryModel.TTS_Mould_TotalRej = wipPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingWIPSummaryModel.TTS_Mould_TotalRejRate = wipPartModel.TTS_Mould_TotalRejRate;
+
                     WIPPartSummaryInfo.Add(ttsMouldingWIPSummaryModel);
                     #endregion
 
                     #region add  laser summary part   vendor - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    vendorMouldingWIPSummaryModel.partNo = "VENDOR - MOULDING >";
+                    vendorMouldingWIPSummaryModel.partNo = "VENDOR MOULD >";
+                    vendorMouldingWIPSummaryModel.lotQty = wipPartModel.vendorLotQty;
                     vendorMouldingWIPSummaryModel.rejQty = wipPartModel.Vendor_Mould_TotalRej;
                     vendorMouldingWIPSummaryModel.rejRate = wipPartModel.Vendor_Mould_TotalRejRate;
+                    vendorMouldingWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingWIPSummaryModel.rejQty, vendorMouldingWIPSummaryModel.rejRate);
+
 
                     vendorMouldingWIPSummaryModel.Vendor_Raw_Part_Scratch = wipPartModel.Vendor_Raw_Part_Scratch;
                     vendorMouldingWIPSummaryModel.Vendor_Oil_Stain = wipPartModel.Vendor_Oil_Stain;
@@ -857,6 +969,9 @@ namespace DashboardTTS.Webform.PQC
                     vendorMouldingWIPSummaryModel.Vendor_Wrong_Orietation = wipPartModel.Vendor_Wrong_Orietation;
                     vendorMouldingWIPSummaryModel.Vendor_Other = wipPartModel.Vendor_Other;
 
+                    vendorMouldingWIPSummaryModel.Vendor_Mould_TotalRej = wipPartModel.Vendor_Mould_TotalRej;
+                    vendorMouldingWIPSummaryModel.Vendor_Mould_TotalRejRate = wipPartModel.Vendor_Mould_TotalRejRate;
+
                     WIPPartSummaryInfo.Add(vendorMouldingWIPSummaryModel);
                     #endregion
 
@@ -865,6 +980,7 @@ namespace DashboardTTS.Webform.PQC
                     paintWIPSummaryModel.partNo = "PAINTING >";
                     paintWIPSummaryModel.rejQty = wipPartModel.Paint_TotalRej;
                     paintWIPSummaryModel.rejRate = wipPartModel.Paint_TotalRejRate;
+                    paintWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintWIPSummaryModel.rejQty, paintWIPSummaryModel.rejRate);
 
                     paintWIPSummaryModel.Paint_Particle = wipPartModel.Paint_Particle;
                     paintWIPSummaryModel.Paint_Fibre = wipPartModel.Paint_Fibre;
@@ -893,6 +1009,10 @@ namespace DashboardTTS.Webform.PQC
                     paintWIPSummaryModel.Paint_Buyoff = wipPartModel.Paint_Buyoff;
                     paintWIPSummaryModel.Paint_Shortage = wipPartModel.Paint_Shortage;
 
+                    paintWIPSummaryModel.Paint_TotalRej = wipPartModel.Paint_TotalRej;
+                    paintWIPSummaryModel.Paint_TotalRejRate = wipPartModel.Paint_TotalRejRate;
+
+
                     WIPPartSummaryInfo.Add(paintWIPSummaryModel);
                     #endregion
 
@@ -901,6 +1021,8 @@ namespace DashboardTTS.Webform.PQC
                     paintSetupWIPSummaryModel.partNo = "PAINTING SETUP >";
                     paintSetupWIPSummaryModel.rejQty = wipPartModel.Paint_SetupRej;
                     paintSetupWIPSummaryModel.rejRate = wipPartModel.Paint_SetupRejRate;
+                    paintSetupWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupWIPSummaryModel.rejQty, paintSetupWIPSummaryModel.rejRate);
+
                     WIPPartSummaryInfo.Add(paintSetupWIPSummaryModel);
 
                     // add laser summary part   paint qa test >
@@ -908,6 +1030,8 @@ namespace DashboardTTS.Webform.PQC
                     paintQAWIPSummaryModel.partNo = "QA PAINT TEST >";
                     paintQAWIPSummaryModel.rejQty = wipPartModel.Paint_QATestRej;
                     paintQAWIPSummaryModel.rejRate = wipPartModel.Paint_QATestRejRate;
+                    paintQAWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAWIPSummaryModel.rejQty, paintQAWIPSummaryModel.rejRate);
+
                     WIPPartSummaryInfo.Add(paintQAWIPSummaryModel);
 
                     #region add  laser summary part   laser >
@@ -915,6 +1039,7 @@ namespace DashboardTTS.Webform.PQC
                     laserWIPSummaryModel.partNo = "LASER >";
                     laserWIPSummaryModel.rejQty = wipPartModel.Laser_TotalRej;
                     laserWIPSummaryModel.rejRate = wipPartModel.Laser_TotalRejRate;
+                    laserWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserWIPSummaryModel.rejQty, laserWIPSummaryModel.rejRate);
 
                     laserWIPSummaryModel.Laser_Black_Mark = wipPartModel.Laser_Black_Mark;
                     laserWIPSummaryModel.Laser_Black_Dot = wipPartModel.Laser_Black_Dot;
@@ -939,6 +1064,9 @@ namespace DashboardTTS.Webform.PQC
                     laserWIPSummaryModel.Laser_Buyoff = wipPartModel.Laser_Buyoff;
                     laserWIPSummaryModel.Laser_Setup = wipPartModel.Laser_Setup;
 
+                    laserWIPSummaryModel.Laser_TotalRej = wipPartModel.Laser_TotalRej;
+                    laserWIPSummaryModel.Laser_TotalRejRate  = wipPartModel.Laser_TotalRejRate;
+
                     WIPPartSummaryInfo.Add(laserWIPSummaryModel);
                     #endregion
 
@@ -949,6 +1077,7 @@ namespace DashboardTTS.Webform.PQC
                     overallWIPSummaryModel.pass = wipPartModel.pass;
                     overallWIPSummaryModel.rejQty = wipPartModel.rejQty;
                     overallWIPSummaryModel.rejRate = wipPartModel.rejRate;
+                    overallWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallWIPSummaryModel.rejQty, overallWIPSummaryModel.rejRate);
 
                     WIPPartSummaryInfo.Add(overallWIPSummaryModel);
                 }
@@ -956,15 +1085,34 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 #region 生成 overall part summary 信息
 
-                List<ViewModel.PQCButtonReport_ViewModel.Report> OverallSummaryInfo = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
+                List< ViewModel.PQCButtonReport_ViewModel.Report> OverallSummaryInfo = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
 
                 #region add  laser summary part   others >
                 ViewModel.PQCButtonReport_ViewModel.Report othersOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 othersOverallSummaryModel.partNo = "OTHERS >";
                 othersOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
-                othersOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Others_TotalRejRate);
+                othersOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                othersOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersOverallSummaryModel.rejQty, othersOverallSummaryModel.rejRate);
 
                 othersOverallSummaryModel.PQC_Scratch = partsTypeSummaryList.Sum(p => p.PQC_Scratch);
                 othersOverallSummaryModel.Over_Spray = partsTypeSummaryList.Sum(p => p.Over_Spray);
@@ -976,14 +1124,20 @@ namespace DashboardTTS.Webform.PQC
                 othersOverallSummaryModel.White_Dot_in_Material = partsTypeSummaryList.Sum(p => p.White_Dot_in_Material);
                 othersOverallSummaryModel.Other = partsTypeSummaryList.Sum(p => p.Other);
 
+                othersOverallSummaryModel.Others_TotalRej = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
+                othersOverallSummaryModel.Others_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+
                 OverallSummaryInfo.Add(othersOverallSummaryModel);
                 #endregion
 
                 #region add  laser summary part   tts - moulding >
                 ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                ttsMouldingOverallSummaryModel.partNo = ("TTS - MOULDING >");
+                ttsMouldingOverallSummaryModel.partNo = ("TTS MOULD >");
+                ttsMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.ttsLotQty);
                 ttsMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej);
-                ttsMouldingOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRejRate);
+                ttsMouldingOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.ttsLotQty) * 100 , 2);
+                ttsMouldingOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingOverallSummaryModel.rejQty, ttsMouldingOverallSummaryModel.rejRate);
+
 
                 ttsMouldingOverallSummaryModel.TTS_Raw_Part_Scratch = partsTypeSummaryList.Sum(p => p.TTS_Raw_Part_Scratch);
                 ttsMouldingOverallSummaryModel.TTS_Oil_Stain = partsTypeSummaryList.Sum(p => p.TTS_Oil_Stain);
@@ -1019,15 +1173,21 @@ namespace DashboardTTS.Webform.PQC
                 ttsMouldingOverallSummaryModel.TTS_Wrong_Orietation = partsTypeSummaryList.Sum(p => p.TTS_Wrong_Orietation);
                 ttsMouldingOverallSummaryModel.TTS_Other = partsTypeSummaryList.Sum(p => p.TTS_Other);
 
+                ttsMouldingOverallSummaryModel.TTS_Mould_TotalRej = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej);
+                ttsMouldingOverallSummaryModel.TTS_Mould_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.ttsLotQty) * 100, 2);
+
 
                 OverallSummaryInfo.Add(ttsMouldingOverallSummaryModel);
                 #endregion
 
                 #region add  laser summary part   vendor - moulding >
                 ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                vendorMouldingOverallSummaryModel.partNo = ("VENDOR - MOULDING >");
+                vendorMouldingOverallSummaryModel.partNo = ("VENDOR MOULD >");
+                vendorMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.vendorLotQty);
                 vendorMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej);
-                vendorMouldingOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRejRate);
+                vendorMouldingOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.vendorLotQty) * 100, 2);
+                vendorMouldingOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingOverallSummaryModel.rejQty, vendorMouldingOverallSummaryModel.rejRate);
+
 
                 vendorMouldingOverallSummaryModel.Vendor_Raw_Part_Scratch = partsTypeSummaryList.Sum(p => p.Vendor_Raw_Part_Scratch);
                 vendorMouldingOverallSummaryModel.Vendor_Oil_Stain = partsTypeSummaryList.Sum(p => p.Vendor_Oil_Stain);
@@ -1063,6 +1223,9 @@ namespace DashboardTTS.Webform.PQC
                 vendorMouldingOverallSummaryModel.Vendor_Wrong_Orietation = partsTypeSummaryList.Sum(p => p.Vendor_Wrong_Orietation);
                 vendorMouldingOverallSummaryModel.Vendor_Other = partsTypeSummaryList.Sum(p => p.Vendor_Other);
 
+                vendorMouldingOverallSummaryModel.Vendor_Mould_TotalRej = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej);
+                vendorMouldingOverallSummaryModel.Vendor_Mould_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.vendorLotQty) * 100, 2);
+
                 OverallSummaryInfo.Add(vendorMouldingOverallSummaryModel);
                 #endregion
 
@@ -1070,7 +1233,9 @@ namespace DashboardTTS.Webform.PQC
                 ViewModel.PQCButtonReport_ViewModel.Report paintOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintOverallSummaryModel.partNo = ("PAINTING >");
                 paintOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_TotalRej);
-                paintOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Paint_TotalRejRate);
+                paintOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                paintOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintOverallSummaryModel.rejQty, paintOverallSummaryModel.rejRate);
+
 
                 paintOverallSummaryModel.Paint_Particle = partsTypeSummaryList.Sum(p => p.Paint_Particle);
                 paintOverallSummaryModel.Paint_Fibre = partsTypeSummaryList.Sum(p => p.Paint_Fibre);
@@ -1099,6 +1264,9 @@ namespace DashboardTTS.Webform.PQC
                 paintOverallSummaryModel.Paint_Buyoff = partsTypeSummaryList.Sum(p => p.Paint_Buyoff);
                 paintOverallSummaryModel.Paint_Shortage = partsTypeSummaryList.Sum(p => p.Paint_Shortage);
 
+                paintOverallSummaryModel.Paint_TotalRej = partsTypeSummaryList.Sum(p => p.Paint_TotalRej);
+                paintOverallSummaryModel.Paint_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+
                 OverallSummaryInfo.Add(paintOverallSummaryModel);
                 #endregion
 
@@ -1106,21 +1274,26 @@ namespace DashboardTTS.Webform.PQC
                 ViewModel.PQCButtonReport_ViewModel.Report paintSetupOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintSetupOverallSummaryModel.partNo = "PAINTING SETUP >";
                 paintSetupOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_SetupRej);
-                paintSetupOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Paint_SetupRejRate);
+                paintSetupOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_SetupRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                paintSetupOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupOverallSummaryModel.rejQty, paintSetupOverallSummaryModel.rejRate);
+
                 OverallSummaryInfo.Add(paintSetupOverallSummaryModel);
 
                 // add summary part   paint qa test >
                 ViewModel.PQCButtonReport_ViewModel.Report paintQAOveralSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintQAOveralSummaryModel.partNo = "QA PAINT TEST >";
                 paintQAOveralSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_QATestRej);
-                paintQAOveralSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Paint_QATestRejRate);
+                paintQAOveralSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_QATestRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                paintQAOveralSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAOveralSummaryModel.rejQty, paintQAOveralSummaryModel.rejRate);
+
                 OverallSummaryInfo.Add(paintQAOveralSummaryModel);
 
                 #region add  summary part   laser >
                 ViewModel.PQCButtonReport_ViewModel.Report laserOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 laserOverallSummaryModel.partNo = ("LASER >");
                 laserOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Laser_TotalRej);
-                laserOverallSummaryModel.rejRate = partsTypeSummaryList.Sum(p => p.Laser_TotalRejRate);
+                laserOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Laser_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                laserOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserOverallSummaryModel.rejQty, laserOverallSummaryModel.rejRate);
 
                 laserOverallSummaryModel.Laser_Black_Mark = partsTypeSummaryList.Sum(p => p.Laser_Black_Mark);
                 laserOverallSummaryModel.Laser_Black_Dot = partsTypeSummaryList.Sum(p => p.Laser_Black_Dot);
@@ -1145,6 +1318,9 @@ namespace DashboardTTS.Webform.PQC
                 laserOverallSummaryModel.Laser_Buyoff = partsTypeSummaryList.Sum(p => p.Laser_Buyoff);
                 laserOverallSummaryModel.Laser_Setup = partsTypeSummaryList.Sum(p => p.Laser_Setup);
 
+                laserOverallSummaryModel.Laser_TotalRej = partsTypeSummaryList.Sum(p => p.Laser_TotalRej);
+                laserOverallSummaryModel.Laser_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Laser_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+
                 OverallSummaryInfo.Add(laserOverallSummaryModel);
                 #endregion
 
@@ -1155,10 +1331,31 @@ namespace DashboardTTS.Webform.PQC
                 overallOverallSummaryModel.pass = partsTypeSummaryList.Sum(p => p.pass);
                 overallOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.rejQty);
 				overallOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.rejQty) / partsTypeSummaryList.Sum(p => p.lotQty) * 100 ,2);
+                overallOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallOverallSummaryModel.rejQty, overallOverallSummaryModel.rejRate);
 
                 OverallSummaryInfo.Add(overallOverallSummaryModel);
 
                 #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1174,12 +1371,15 @@ namespace DashboardTTS.Webform.PQC
                                        {
                                            partsType = modelGroup.Key.partsType,
                                            model = modelGroup.Key.model,
+                                           
 
                                            partNo = "SUB TOTAL>>",
                                            lotQty = modelGroup.Sum(p => p.lotQty),
                                            pass = modelGroup.Sum(p => p.pass),
                                            rejQty = modelGroup.Sum(p => p.rejQty),
                                            rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+
+                                           rejRateDisplay =  string.Format("{0}({1}%)", modelGroup.Sum(p => p.rejQty), Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2)),
 
                                            //TTS defect code
                                            TTS_Raw_Part_Scratch = modelGroup.Sum(p => p.TTS_Raw_Part_Scratch),
@@ -1346,11 +1546,13 @@ namespace DashboardTTS.Webform.PQC
 
                     reportModel.partsType = modelSummary.partsType;
                     reportModel.model = modelSummary.model;
+                    reportModel.jobID = "<b>"+ modelSummary.model + "</b>" ;
                     reportModel.partNo = modelSummary.partNo;
                     reportModel.lotQty = modelSummary.lotQty;
                     reportModel.pass = modelSummary.pass;
                     reportModel.rejQty = modelSummary.rejQty;
                     reportModel.rejRate = modelSummary.rejRate;
+                    reportModel.rejRateDisplay = modelSummary.rejRateDisplay;
 
                     //tts
                     reportModel.TTS_Raw_Part_Scratch = modelSummary.TTS_Raw_Part_Scratch;
@@ -1510,6 +1712,26 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 #region 拼datatable
                 DataTable dtWIP = Common.CommFunctions.ListToDt<ViewModel.PQCButtonReport_ViewModel.Report>(from a in reportList where a.partsType == "WIP" orderby a.model ascending select a);
                 DataTable dtLaser = Common.CommFunctions.ListToDt<ViewModel.PQCButtonReport_ViewModel.Report>(from a in reportList where a.partsType == "Laser" orderby a.model ascending select a);
@@ -1528,6 +1750,8 @@ namespace DashboardTTS.Webform.PQC
                 {
                     DataRow drWIPTitle = dtReport.NewRow();
                     drWIPTitle["model"] = "PART 1: PAINTING ONLY PARTS";
+                    drWIPTitle["jobID"] = "PART 1: PAINTING ONLY PARTS";
+
                     dtReport.Rows.Add(drWIPTitle);//添加wip标题
                     dtReport.Merge(dtWIP.Copy());//合并 wip
                     dtReport.Rows.Add(dtReport.NewRow());//加个空行隔开
@@ -1538,6 +1762,7 @@ namespace DashboardTTS.Webform.PQC
                 {
                     DataRow drLaserTitle = dtReport.NewRow();
                     drLaserTitle["model"] = "PART 2: LASER PARTS";
+                    drLaserTitle["jobID"] = "PART 2: LASER PARTS";
                     dtReport.Rows.Add(drLaserTitle);//添加laser标题
                     dtReport.Merge(dtLaser.Copy());//合并 laser
                     dtReport.Rows.Add(dtReport.NewRow());//加个空行隔开
@@ -1548,6 +1773,7 @@ namespace DashboardTTS.Webform.PQC
                 {
                     DataRow drWIPTitle = dtReport.NewRow();
                     drWIPTitle["model"] = "PART 1: PAINTING ONLY PARTS";
+                    drWIPTitle["jobID"] = "PART 1: PAINTING ONLY PARTS";
                     dtReport.Rows.Add(drWIPTitle);//添加wip标题
                     dtReport.Merge(dtWIP.Copy());//合并 wip
                     dtReport.Rows.Add(dtReport.NewRow());//加个空行隔开
@@ -1556,6 +1782,7 @@ namespace DashboardTTS.Webform.PQC
 
                     DataRow drLaserTitle = dtReport.NewRow();
                     drLaserTitle["model"] = "PART 2: LASER PARTS";
+                    drLaserTitle["jobID"] = "PART 2: LASER PARTS";
                     dtReport.Rows.Add(drLaserTitle);//添加laser标题
                     dtReport.Merge(dtLaser.Copy());//合并 laser
                     dtReport.Rows.Add(dtReport.NewRow());//加个空行隔开
@@ -1564,16 +1791,174 @@ namespace DashboardTTS.Webform.PQC
 
                     DataRow drSummaryTitle = dtReport.NewRow();
                     drSummaryTitle["model"] = "SUMMARY:";
+                    drSummaryTitle["jobID"] = "SUMMARY:";
                     dtReport.Rows.Add(drSummaryTitle);//添加summary标题
                     dtReport.Merge(dtOverallSummary.Copy());//合并 summary 信息
                 }
-                                
+
                 #endregion
 
 
 
 
-                Display(dtReport);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                #region  get model for display,   =0 hide,  >0 display
+
+                ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();
+
+                modelForDisplay.TTS_Raw_Part_Scratch = partsTypeSummaryList.Sum(p => p.TTS_Raw_Part_Scratch);
+                modelForDisplay.TTS_Oil_Stain = partsTypeSummaryList.Sum(p => p.TTS_Oil_Stain);
+                modelForDisplay.TTS_Dented = partsTypeSummaryList.Sum(p => p.TTS_Dented);
+                modelForDisplay.TTS_Dust = partsTypeSummaryList.Sum(p => p.TTS_Dust);
+                modelForDisplay.TTS_Flyout = partsTypeSummaryList.Sum(p => p.TTS_Flyout);
+                modelForDisplay.TTS_Over_Spray = partsTypeSummaryList.Sum(p => p.TTS_Over_Spray);
+                modelForDisplay.TTS_Weld_line = partsTypeSummaryList.Sum(p => p.TTS_Weld_line);
+                modelForDisplay.TTS_Crack = partsTypeSummaryList.Sum(p => p.TTS_Crack);
+                modelForDisplay.TTS_Gas_mark = partsTypeSummaryList.Sum(p => p.TTS_Gas_mark);
+                modelForDisplay.TTS_Sink_mark = partsTypeSummaryList.Sum(p => p.TTS_Sink_mark);
+                modelForDisplay.TTS_Bubble = partsTypeSummaryList.Sum(p => p.TTS_Bubble);
+                modelForDisplay.TTS_White_dot = partsTypeSummaryList.Sum(p => p.TTS_White_dot);
+                modelForDisplay.TTS_Black_dot = partsTypeSummaryList.Sum(p => p.TTS_Black_dot);
+                modelForDisplay.TTS_Red_Dot = partsTypeSummaryList.Sum(p => p.TTS_Red_Dot);
+                modelForDisplay.TTS_Poor_Gate_Cut = partsTypeSummaryList.Sum(p => p.TTS_Poor_Gate_Cut);
+                modelForDisplay.TTS_High_Gate = partsTypeSummaryList.Sum(p => p.TTS_High_Gate);
+                modelForDisplay.TTS_White_Mark = partsTypeSummaryList.Sum(p => p.TTS_White_Mark);
+                modelForDisplay.TTS_Drag_mark = partsTypeSummaryList.Sum(p => p.TTS_Drag_mark);
+                modelForDisplay.TTS_Foreigh_Material = partsTypeSummaryList.Sum(p => p.TTS_Foreigh_Material);
+                modelForDisplay.TTS_Double_Claim = partsTypeSummaryList.Sum(p => p.TTS_Double_Claim);
+                modelForDisplay.TTS_Short_mould = partsTypeSummaryList.Sum(p => p.TTS_Short_mould);
+                modelForDisplay.TTS_Flashing = partsTypeSummaryList.Sum(p => p.TTS_Flashing);
+                modelForDisplay.TTS_Pink_Mark = partsTypeSummaryList.Sum(p => p.TTS_Pink_Mark);
+                modelForDisplay.TTS_Deform = partsTypeSummaryList.Sum(p => p.TTS_Deform);
+                modelForDisplay.TTS_Damage = partsTypeSummaryList.Sum(p => p.TTS_Damage);
+                modelForDisplay.TTS_Mould_Dirt = partsTypeSummaryList.Sum(p => p.TTS_Mould_Dirt);
+                modelForDisplay.TTS_Yellowish = partsTypeSummaryList.Sum(p => p.TTS_Yellowish);
+                modelForDisplay.TTS_Oil_Mark = partsTypeSummaryList.Sum(p => p.TTS_Oil_Mark);
+                modelForDisplay.TTS_Printing_Mark = partsTypeSummaryList.Sum(p => p.TTS_Printing_Mark);
+                modelForDisplay.TTS_Printing_Uneven = partsTypeSummaryList.Sum(p => p.TTS_Printing_Uneven);
+                modelForDisplay.TTS_Printing_Color_Dark = partsTypeSummaryList.Sum(p => p.TTS_Printing_Color_Dark);
+                modelForDisplay.TTS_Wrong_Orietation = partsTypeSummaryList.Sum(p => p.TTS_Wrong_Orietation);
+                modelForDisplay.TTS_Other = partsTypeSummaryList.Sum(p => p.TTS_Other);
+
+
+                modelForDisplay.Vendor_Raw_Part_Scratch = partsTypeSummaryList.Sum(p => p.Vendor_Raw_Part_Scratch);
+                modelForDisplay.Vendor_Oil_Stain = partsTypeSummaryList.Sum(p => p.Vendor_Oil_Stain);
+                modelForDisplay.Vendor_Dented = partsTypeSummaryList.Sum(p => p.Vendor_Dented);
+                modelForDisplay.Vendor_Dust = partsTypeSummaryList.Sum(p => p.Vendor_Dust);
+                modelForDisplay.Vendor_Flyout = partsTypeSummaryList.Sum(p => p.Vendor_Flyout);
+                modelForDisplay.Vendor_Over_Spray = partsTypeSummaryList.Sum(p => p.Vendor_Over_Spray);
+                modelForDisplay.Vendor_Weld_line = partsTypeSummaryList.Sum(p => p.Vendor_Weld_line);
+                modelForDisplay.Vendor_Crack = partsTypeSummaryList.Sum(p => p.Vendor_Crack);
+                modelForDisplay.Vendor_Gas_mark = partsTypeSummaryList.Sum(p => p.Vendor_Gas_mark);
+                modelForDisplay.Vendor_Sink_mark = partsTypeSummaryList.Sum(p => p.Vendor_Sink_mark);
+                modelForDisplay.Vendor_Bubble = partsTypeSummaryList.Sum(p => p.Vendor_Bubble);
+                modelForDisplay.Vendor_White_dot = partsTypeSummaryList.Sum(p => p.Vendor_White_dot);
+                modelForDisplay.Vendor_Black_dot = partsTypeSummaryList.Sum(p => p.Vendor_Black_dot);
+                modelForDisplay.Vendor_Red_Dot = partsTypeSummaryList.Sum(p => p.Vendor_Red_Dot);
+                modelForDisplay.Vendor_Poor_Gate_Cut = partsTypeSummaryList.Sum(p => p.Vendor_Poor_Gate_Cut);
+                modelForDisplay.Vendor_High_Gate = partsTypeSummaryList.Sum(p => p.Vendor_High_Gate);
+                modelForDisplay.Vendor_White_Mark = partsTypeSummaryList.Sum(p => p.Vendor_White_Mark);
+                modelForDisplay.Vendor_Drag_mark = partsTypeSummaryList.Sum(p => p.Vendor_Drag_mark);
+                modelForDisplay.Vendor_Foreigh_Material = partsTypeSummaryList.Sum(p => p.Vendor_Foreigh_Material);
+                modelForDisplay.Vendor_Double_Claim = partsTypeSummaryList.Sum(p => p.Vendor_Double_Claim);
+                modelForDisplay.Vendor_Short_mould = partsTypeSummaryList.Sum(p => p.Vendor_Short_mould);
+                modelForDisplay.Vendor_Flashing = partsTypeSummaryList.Sum(p => p.Vendor_Flashing);
+                modelForDisplay.Vendor_Pink_Mark = partsTypeSummaryList.Sum(p => p.Vendor_Pink_Mark);
+                modelForDisplay.Vendor_Deform = partsTypeSummaryList.Sum(p => p.Vendor_Deform);
+                modelForDisplay.Vendor_Damage = partsTypeSummaryList.Sum(p => p.Vendor_Damage);
+                modelForDisplay.Vendor_Mould_Dirt = partsTypeSummaryList.Sum(p => p.Vendor_Mould_Dirt);
+                modelForDisplay.Vendor_Yellowish = partsTypeSummaryList.Sum(p => p.Vendor_Yellowish);
+                modelForDisplay.Vendor_Oil_Mark = partsTypeSummaryList.Sum(p => p.Vendor_Oil_Mark);
+                modelForDisplay.Vendor_Printing_Mark = partsTypeSummaryList.Sum(p => p.Vendor_Printing_Mark);
+                modelForDisplay.Vendor_Printing_Uneven = partsTypeSummaryList.Sum(p => p.Vendor_Printing_Uneven);
+                modelForDisplay.Vendor_Printing_Color_Dark = partsTypeSummaryList.Sum(p => p.Vendor_Printing_Color_Dark);
+                modelForDisplay.Vendor_Wrong_Orietation = partsTypeSummaryList.Sum(p => p.Vendor_Wrong_Orietation);
+                modelForDisplay.Vendor_Other = partsTypeSummaryList.Sum(p => p.Vendor_Other);
+
+
+                modelForDisplay.Paint_Particle = partsTypeSummaryList.Sum(p => p.Paint_Particle);
+                modelForDisplay.Paint_Fibre = partsTypeSummaryList.Sum(p => p.Paint_Fibre);
+                modelForDisplay.Paint_Many_particle = partsTypeSummaryList.Sum(p => p.Paint_Many_particle);
+                modelForDisplay.Paint_Stain_mark = partsTypeSummaryList.Sum(p => p.Paint_Stain_mark);
+                modelForDisplay.Paint_Uneven_paint = partsTypeSummaryList.Sum(p => p.Paint_Uneven_paint);
+                modelForDisplay.Paint_Under_coat_uneven_paint = partsTypeSummaryList.Sum(p => p.Paint_Under_coat_uneven_paint);
+                modelForDisplay.Paint_Under_spray = partsTypeSummaryList.Sum(p => p.Paint_Under_spray);
+                modelForDisplay.Paint_White_dot = partsTypeSummaryList.Sum(p => p.Paint_White_dot);
+                modelForDisplay.Paint_Silver_dot = partsTypeSummaryList.Sum(p => p.Paint_Silver_dot);
+                modelForDisplay.Paint_Dust = partsTypeSummaryList.Sum(p => p.Paint_Dust);
+                modelForDisplay.Paint_Paint_crack = partsTypeSummaryList.Sum(p => p.Paint_Paint_crack);
+                modelForDisplay.Paint_Bubble = partsTypeSummaryList.Sum(p => p.Paint_Bubble);
+                modelForDisplay.Paint_Scratch = partsTypeSummaryList.Sum(p => p.Paint_Scratch);
+                modelForDisplay.Paint_Abrasion_Mark = partsTypeSummaryList.Sum(p => p.Paint_Abrasion_Mark);
+                modelForDisplay.Paint_Paint_Dripping = partsTypeSummaryList.Sum(p => p.Paint_Paint_Dripping);
+                modelForDisplay.Paint_Rough_Surface = partsTypeSummaryList.Sum(p => p.Paint_Rough_Surface);
+                modelForDisplay.Paint_Shinning = partsTypeSummaryList.Sum(p => p.Paint_Shinning);
+                modelForDisplay.Paint_Matt = partsTypeSummaryList.Sum(p => p.Paint_Matt);
+                modelForDisplay.Paint_Paint_Pin_Hole = partsTypeSummaryList.Sum(p => p.Paint_Paint_Pin_Hole);
+                modelForDisplay.Paint_Light_Leakage = partsTypeSummaryList.Sum(p => p.Paint_Light_Leakage);
+                modelForDisplay.Paint_White_Mark = partsTypeSummaryList.Sum(p => p.Paint_White_Mark);
+                modelForDisplay.Paint_Dented = partsTypeSummaryList.Sum(p => p.Paint_Dented);
+                modelForDisplay.Paint_Other = partsTypeSummaryList.Sum(p => p.Paint_Other);
+                modelForDisplay.Paint_Particle_for_laser_setup = partsTypeSummaryList.Sum(p => p.Paint_Particle_for_laser_setup);
+                modelForDisplay.Paint_Buyoff = partsTypeSummaryList.Sum(p => p.Paint_Buyoff);
+                modelForDisplay.Paint_Shortage = partsTypeSummaryList.Sum(p => p.Paint_Shortage);
+
+
+                modelForDisplay.Laser_Black_Mark = partsTypeSummaryList.Sum(p => p.Laser_Black_Mark);
+                modelForDisplay.Laser_Black_Dot = partsTypeSummaryList.Sum(p => p.Laser_Black_Dot);
+                modelForDisplay.Laser_Graphic_Shift_check_by_PQC = partsTypeSummaryList.Sum(p => p.Laser_Graphic_Shift_check_by_PQC);
+                modelForDisplay.Laser_Graphic_Shift_check_by_MC = partsTypeSummaryList.Sum(p => p.Laser_Graphic_Shift_check_by_MC);
+                modelForDisplay.Laser_Scratch = partsTypeSummaryList.Sum(p => p.Laser_Scratch);
+                modelForDisplay.Laser_Jagged = partsTypeSummaryList.Sum(p => p.Laser_Jagged);
+                modelForDisplay.Laser_Laser_Bubble = partsTypeSummaryList.Sum(p => p.Laser_Laser_Bubble);
+                modelForDisplay.Laser_double_outer_line = partsTypeSummaryList.Sum(p => p.Laser_double_outer_line);
+                modelForDisplay.Laser_Pin_hold = partsTypeSummaryList.Sum(p => p.Laser_Pin_hold);
+                modelForDisplay.Laser_Poor_Laser = partsTypeSummaryList.Sum(p => p.Laser_Poor_Laser);
+                modelForDisplay.Laser_Burm_Mark = partsTypeSummaryList.Sum(p => p.Laser_Burm_Mark);
+                modelForDisplay.Laser_Stain_Mark = partsTypeSummaryList.Sum(p => p.Laser_Stain_Mark);
+                modelForDisplay.Laser_Graphic_Small = partsTypeSummaryList.Sum(p => p.Laser_Graphic_Small);
+                modelForDisplay.Laser_Double_Laser = partsTypeSummaryList.Sum(p => p.Laser_Double_Laser);
+                modelForDisplay.Laser_Color_Yellow = partsTypeSummaryList.Sum(p => p.Laser_Color_Yellow);
+                modelForDisplay.Laser_Crack = partsTypeSummaryList.Sum(p => p.Laser_Crack);
+                modelForDisplay.Laser_Smoke = partsTypeSummaryList.Sum(p => p.Laser_Smoke);
+                modelForDisplay.Laser_Wrong_Orientation = partsTypeSummaryList.Sum(p => p.Laser_Wrong_Orientation);
+                modelForDisplay.Laser_Dented = partsTypeSummaryList.Sum(p => p.Laser_Dented);
+                modelForDisplay.Laser_Other = partsTypeSummaryList.Sum(p => p.Laser_Other);
+                modelForDisplay.Laser_Buyoff = partsTypeSummaryList.Sum(p => p.Laser_Buyoff);
+                modelForDisplay.Laser_Setup = partsTypeSummaryList.Sum(p => p.Laser_Setup);
+
+
+                modelForDisplay.PQC_Scratch = partsTypeSummaryList.Sum(p => p.PQC_Scratch);
+                modelForDisplay.Over_Spray = partsTypeSummaryList.Sum(p => p.Over_Spray);
+                modelForDisplay.Bubble = partsTypeSummaryList.Sum(p => p.Bubble);
+                modelForDisplay.Oil_Stain = partsTypeSummaryList.Sum(p => p.Oil_Stain);
+                modelForDisplay.Drag_Mark = partsTypeSummaryList.Sum(p => p.Drag_Mark);
+                modelForDisplay.Light_Leakage = partsTypeSummaryList.Sum(p => p.Light_Leakage);
+                modelForDisplay.Light_Bubble = partsTypeSummaryList.Sum(p => p.Light_Bubble);
+                modelForDisplay.White_Dot_in_Material = partsTypeSummaryList.Sum(p => p.White_Dot_in_Material);
+                modelForDisplay.Other = partsTypeSummaryList.Sum(p => p.Other);
+                
+                #endregion
+
+                Display(dtReport, modelForDisplay);
 
             }
             catch (Exception ex)
@@ -1636,6 +2021,8 @@ namespace DashboardTTS.Webform.PQC
                 model.supplier = dr["supplier"].ToString();
                 model.process = dr["processes"].ToString();
                 model.partsType = dr["PartsType"].ToString();
+                model.mouldType = dr["mouldType"].ToString();
+             
                 model.OP = dr["OP"].ToString();
 
                 models.Add(model);
@@ -1998,7 +2385,7 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-        void Display(DataTable dt)
+        void Display(DataTable dt, ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
         {
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -2045,6 +2432,9 @@ namespace DashboardTTS.Webform.PQC
                     //处理reject rate列信息, 加上 '%'
                     if (columnName.Contains("%"))
                     {
+                        if (columnName == "Rej(%)")
+                            continue;
+
                         string sRej = item.Cells[i].Text;
                         if (sRej != "" && sRej != "&nbsp;")
                             item.Cells[i].Text = sRej + "%";
@@ -2059,18 +2449,20 @@ namespace DashboardTTS.Webform.PQC
                         else if (columnName == "Lot Qty" || columnName == "Pass")
                             item.Cells[i].Text = "";
                     }
-                    else if (sPartRowText == "TTS - MOULDING >")
+                    else if (sPartRowText == "TTS MOULD >")
                     {
                         if (columnName.Contains("(VM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                             item.Cells[i].Text = "";
-                        else if (columnName == "Lot Qty" || columnName == "Pass")
+                        //else if (columnName == "Lot Qty" || columnName == "Pass")
+                        else if (columnName == "Pass")
                             item.Cells[i].Text = "";
                     }
-                    else if (sPartRowText == "VENDOR - MOULDING >")
+                    else if (sPartRowText == "VENDOR MOULD >")
                     {
                         if (columnName.Contains("(TM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                             item.Cells[i].Text = "";
-                        else if (columnName == "Lot Qty" || columnName == "Pass")
+                        //else if (columnName == "Lot Qty" || columnName == "Pass")
+                        else if (columnName == "Pass")
                             item.Cells[i].Text = "";
                     }
                     else if (sPartRowText == "PAINTING >")
@@ -2115,9 +2507,8 @@ namespace DashboardTTS.Webform.PQC
                     if (columnName.Contains("(TM)") || columnName.Contains("(VM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                     {
                         //特殊行跳过
-
-                        if (sPartRowText == "OTHERS >" || sPartRowText == "TTS - MOULDING >" ||
-                            sPartRowText == "VENDOR - MOULDING >" || sPartRowText == "PAINTING >" || sPartRowText == "PAINTING SETUP >" ||
+                        if (sPartRowText == "OTHERS >" || sPartRowText == "TTS MOULD >" ||
+                            sPartRowText == "VENDOR MOULD >" || sPartRowText == "PAINTING >" || sPartRowText == "PAINTING SETUP >" ||
                             sPartRowText == "QA PAINT TEST >" || sPartRowText == "LASER >" || sPartRowText == "OVERALL >")
                             continue;
 
@@ -2163,6 +2554,12 @@ namespace DashboardTTS.Webform.PQC
                     item.Cells[1].Font.Underline = true;
                     item.Cells[1].ColumnSpan = 3;
 
+                    item.Cells[2].ForeColor = System.Drawing.Color.Brown;
+                    item.Cells[2].Font.Bold = true;
+                    item.Cells[2].Font.Underline = true;
+                    item.Cells[2].ColumnSpan = 3;
+
+
                     for (int i = 0; i < item.Cells.Count; i++)
                     {
                         item.Cells[i].BorderStyle = BorderStyle.None;
@@ -2172,6 +2569,7 @@ namespace DashboardTTS.Webform.PQC
 
                     item.Cells[3].Visible = false;
                     item.Cells[4].Visible = false;
+                    item.Cells[5].Visible = false;
 
                 }
                 //part 2 title  style
@@ -2181,6 +2579,13 @@ namespace DashboardTTS.Webform.PQC
                     item.Cells[1].Font.Bold = true;
                     item.Cells[1].Font.Underline = true;
                     item.Cells[1].ColumnSpan = 3;
+
+                    item.Cells[2].ForeColor = System.Drawing.Color.Blue;
+                    item.Cells[2].Font.Bold = true;
+                    item.Cells[2].Font.Underline = true;
+                    item.Cells[2].ColumnSpan = 3;
+
+
                     for (int i = 0; i < item.Cells.Count; i++)
                     {
                         item.Cells[i].BorderStyle = BorderStyle.None;
@@ -2189,6 +2594,7 @@ namespace DashboardTTS.Webform.PQC
 
                     item.Cells[3].Visible = false;
                     item.Cells[4].Visible = false;
+                    item.Cells[5].Visible = false;
 
                     iPart2TitleRowIndex = item.ItemIndex;
                 }
@@ -2198,6 +2604,11 @@ namespace DashboardTTS.Webform.PQC
                     item.Cells[1].ForeColor = System.Drawing.Color.DeepPink;
                     item.Cells[1].Font.Bold = true;
                     item.Cells[1].ColumnSpan = 3;
+
+                    item.Cells[2].ForeColor = System.Drawing.Color.DeepPink;
+                    item.Cells[2].Font.Bold = true;
+                    item.Cells[2].ColumnSpan = 3;
+
                     for (int i = 0; i < item.Cells.Count; i++)
                     {
                         item.Cells[i].BorderStyle = BorderStyle.None;
@@ -2206,6 +2617,7 @@ namespace DashboardTTS.Webform.PQC
 
                     item.Cells[3].Visible = false;
                     item.Cells[4].Visible = false;
+                    item.Cells[5].Visible = false;
                 }
                 //sub total row style
                 else if (modelSummaryRowText == "SUB TOTAL>>")
@@ -2214,11 +2626,10 @@ namespace DashboardTTS.Webform.PQC
                     item.Cells[1].Font.Bold = true;
                     item.Cells[4].Font.Bold = true;
                 }
-                else if (summaryRowText == "OTHERS >" || summaryRowText == "TTS - MOULDING >" || summaryRowText == "VENDOR - MOULDING >" || summaryRowText == "PAINTING >"
+                else if (summaryRowText == "OTHERS >" || summaryRowText == "TTS MOULD >" || summaryRowText == "VENDOR MOULD >" || summaryRowText == "PAINTING >"
                     || summaryRowText == "PAINTING SETUP >" || summaryRowText == "QA PAINT TEST >" || summaryRowText == "LASER >" || summaryRowText == "OVERALL >")
                 {
-
-                    for (int i = 3; i < 9; i++)
+                    for (int i = 3; i < 11; i++)
                     {
                         item.Cells[i].Font.Bold = true;
                         item.Cells[i].ForeColor = System.Drawing.Color.Black;
@@ -2235,7 +2646,7 @@ namespace DashboardTTS.Webform.PQC
             //part 1 summary row 前一行
             int iPart1LastRowIndex = iPart2TitleRowIndex - 10;
 
-            for (int i = 0; i < iPart1LastRowIndex; i++)
+            for (int i = 1; i < iPart1LastRowIndex; i++)
             {
                 for (int x = 0; x < dgButton.Columns.Count; x++)
                 {
@@ -2250,6 +2661,145 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+            #endregion
+
+
+
+
+
+
+
+
+
+
+            #region defect rej 0的列隐藏
+            this.dgButton.Columns[12].Visible = modelForDisplay.TTS_Raw_Part_Scratch == 0 ? false : true;
+            this.dgButton.Columns[13].Visible = modelForDisplay.TTS_Oil_Stain == 0 ? false : true;
+            this.dgButton.Columns[14].Visible = modelForDisplay.TTS_Dented == 0 ? false : true;
+            this.dgButton.Columns[15].Visible = modelForDisplay.TTS_Dust == 0 ? false : true;
+            this.dgButton.Columns[16].Visible = modelForDisplay.TTS_Flyout == 0 ? false : true;
+            this.dgButton.Columns[17].Visible = modelForDisplay.TTS_Over_Spray == 0 ? false : true;
+            this.dgButton.Columns[18].Visible = modelForDisplay.TTS_Weld_line == 0 ? false : true;
+            this.dgButton.Columns[19].Visible = modelForDisplay.TTS_Crack == 0 ? false : true;
+            this.dgButton.Columns[20].Visible = modelForDisplay.TTS_Gas_mark == 0 ? false : true;
+            this.dgButton.Columns[21].Visible = modelForDisplay.TTS_Sink_mark == 0 ? false : true;
+            this.dgButton.Columns[22].Visible = modelForDisplay.TTS_Bubble == 0 ? false : true;
+            this.dgButton.Columns[23].Visible = modelForDisplay.TTS_White_dot == 0 ? false : true;
+            this.dgButton.Columns[24].Visible = modelForDisplay.TTS_Black_dot == 0 ? false : true;
+            this.dgButton.Columns[25].Visible = modelForDisplay.TTS_Red_Dot == 0 ? false : true;
+            this.dgButton.Columns[26].Visible = modelForDisplay.TTS_Poor_Gate_Cut == 0 ? false : true;
+            this.dgButton.Columns[27].Visible = modelForDisplay.TTS_High_Gate == 0 ? false : true;
+            this.dgButton.Columns[28].Visible = modelForDisplay.TTS_White_Mark == 0 ? false : true;
+            this.dgButton.Columns[29].Visible = modelForDisplay.TTS_Drag_mark == 0 ? false : true;
+            this.dgButton.Columns[30].Visible = modelForDisplay.TTS_Foreigh_Material == 0 ? false : true;
+            this.dgButton.Columns[31].Visible = modelForDisplay.TTS_Double_Claim == 0 ? false : true;
+            this.dgButton.Columns[32].Visible = modelForDisplay.TTS_Short_mould == 0 ? false : true;
+            this.dgButton.Columns[33].Visible = modelForDisplay.TTS_Flashing == 0 ? false : true;
+            this.dgButton.Columns[34].Visible = modelForDisplay.TTS_Pink_Mark == 0 ? false : true;
+            this.dgButton.Columns[35].Visible = modelForDisplay.TTS_Deform == 0 ? false : true;
+            this.dgButton.Columns[36].Visible = modelForDisplay.TTS_Damage == 0 ? false : true;
+            this.dgButton.Columns[37].Visible = modelForDisplay.TTS_Mould_Dirt == 0 ? false : true;
+            this.dgButton.Columns[38].Visible = modelForDisplay.TTS_Yellowish == 0 ? false : true;
+            this.dgButton.Columns[39].Visible = modelForDisplay.TTS_Oil_Mark == 0 ? false : true;
+            this.dgButton.Columns[40].Visible = modelForDisplay.TTS_Printing_Mark == 0 ? false : true;
+            this.dgButton.Columns[41].Visible = modelForDisplay.TTS_Printing_Uneven == 0 ? false : true;
+            this.dgButton.Columns[42].Visible = modelForDisplay.TTS_Printing_Color_Dark == 0 ? false : true;
+            this.dgButton.Columns[43].Visible = modelForDisplay.TTS_Wrong_Orietation == 0 ? false : true;
+            this.dgButton.Columns[44].Visible = modelForDisplay.TTS_Other == 0 ? false : true;
+
+            this.dgButton.Columns[47].Visible =modelForDisplay.Vendor_Raw_Part_Scratch == 0 ? false : true;
+            this.dgButton.Columns[48].Visible =modelForDisplay.Vendor_Oil_Stain == 0 ? false : true;
+            this.dgButton.Columns[49].Visible =modelForDisplay.Vendor_Dented == 0 ? false : true;
+            this.dgButton.Columns[50].Visible =modelForDisplay.Vendor_Dust == 0 ? false : true;
+            this.dgButton.Columns[51].Visible =modelForDisplay.Vendor_Flyout == 0 ? false : true;
+            this.dgButton.Columns[52].Visible =modelForDisplay.Vendor_Over_Spray == 0 ? false : true;
+            this.dgButton.Columns[53].Visible =modelForDisplay.Vendor_Weld_line == 0 ? false : true;
+            this.dgButton.Columns[54].Visible =modelForDisplay.Vendor_Crack == 0 ? false : true;
+            this.dgButton.Columns[55].Visible =modelForDisplay.Vendor_Gas_mark == 0 ? false : true;
+            this.dgButton.Columns[56].Visible =modelForDisplay.Vendor_Sink_mark == 0 ? false : true;
+            this.dgButton.Columns[57].Visible =modelForDisplay.Vendor_Bubble == 0 ? false : true;
+            this.dgButton.Columns[58].Visible =modelForDisplay.Vendor_White_dot == 0 ? false : true;
+            this.dgButton.Columns[59].Visible =modelForDisplay.Vendor_Black_dot == 0 ? false : true;
+            this.dgButton.Columns[60].Visible =modelForDisplay.Vendor_Red_Dot == 0 ? false : true;
+            this.dgButton.Columns[61].Visible =modelForDisplay.Vendor_Poor_Gate_Cut == 0 ? false : true;
+            this.dgButton.Columns[62].Visible =modelForDisplay.Vendor_High_Gate == 0 ? false : true;
+            this.dgButton.Columns[63].Visible =modelForDisplay.Vendor_White_Mark == 0 ? false : true;
+            this.dgButton.Columns[64].Visible =modelForDisplay.Vendor_Drag_mark == 0 ? false : true;
+            this.dgButton.Columns[65].Visible =modelForDisplay.Vendor_Foreigh_Material == 0 ? false : true;
+            this.dgButton.Columns[66].Visible =modelForDisplay.Vendor_Double_Claim == 0 ? false : true;
+            this.dgButton.Columns[67].Visible =modelForDisplay.Vendor_Short_mould == 0 ? false : true;
+            this.dgButton.Columns[68].Visible =modelForDisplay.Vendor_Flashing == 0 ? false : true;
+            this.dgButton.Columns[69].Visible =modelForDisplay.Vendor_Pink_Mark == 0 ? false : true;
+            this.dgButton.Columns[70].Visible =modelForDisplay.Vendor_Deform == 0 ? false : true;
+            this.dgButton.Columns[71].Visible =modelForDisplay.Vendor_Damage == 0 ? false : true;
+            this.dgButton.Columns[72].Visible =modelForDisplay.Vendor_Mould_Dirt == 0 ? false : true;
+            this.dgButton.Columns[73].Visible =modelForDisplay.Vendor_Yellowish == 0 ? false : true;
+            this.dgButton.Columns[74].Visible =modelForDisplay.Vendor_Oil_Mark == 0 ? false : true;
+            this.dgButton.Columns[75].Visible =modelForDisplay.Vendor_Printing_Mark == 0 ? false : true;
+            this.dgButton.Columns[76].Visible =modelForDisplay.Vendor_Printing_Uneven == 0 ? false : true;
+            this.dgButton.Columns[77].Visible =modelForDisplay.Vendor_Printing_Color_Dark == 0 ? false : true;
+            this.dgButton.Columns[78].Visible =modelForDisplay.Vendor_Wrong_Orietation == 0 ? false : true;
+            this.dgButton.Columns[79].Visible =modelForDisplay.Vendor_Other == 0 ? false : true;
+
+            this.dgButton.Columns[83].Visible =modelForDisplay.Paint_Particle == 0 ? false : true;
+            this.dgButton.Columns[84].Visible =modelForDisplay.Paint_Fibre == 0 ? false : true;
+            this.dgButton.Columns[85].Visible =modelForDisplay.Paint_Many_particle == 0 ? false : true;
+            this.dgButton.Columns[86].Visible =modelForDisplay.Paint_Stain_mark == 0 ? false : true;
+            this.dgButton.Columns[87].Visible =modelForDisplay.Paint_Uneven_paint == 0 ? false : true;
+            this.dgButton.Columns[88].Visible =modelForDisplay.Paint_Under_coat_uneven_paint == 0 ? false : true;
+            this.dgButton.Columns[89].Visible =modelForDisplay.Paint_Under_spray == 0 ? false : true;
+            this.dgButton.Columns[90].Visible =modelForDisplay.Paint_White_dot == 0 ? false : true;
+            this.dgButton.Columns[91].Visible =modelForDisplay.Paint_Silver_dot == 0 ? false : true;
+            this.dgButton.Columns[92].Visible =modelForDisplay.Paint_Dust == 0 ? false : true;
+            this.dgButton.Columns[93].Visible =modelForDisplay.Paint_Paint_crack == 0 ? false : true;
+            this.dgButton.Columns[94].Visible =modelForDisplay.Paint_Bubble == 0 ? false : true;
+            this.dgButton.Columns[95].Visible =modelForDisplay.Paint_Scratch == 0 ? false : true;
+            this.dgButton.Columns[96].Visible =modelForDisplay.Paint_Abrasion_Mark == 0 ? false : true;
+            this.dgButton.Columns[97].Visible =modelForDisplay.Paint_Paint_Dripping == 0 ? false : true;
+            this.dgButton.Columns[98].Visible =modelForDisplay.Paint_Rough_Surface == 0 ? false : true;
+            this.dgButton.Columns[99].Visible =modelForDisplay.Paint_Shinning == 0 ? false : true;
+            this.dgButton.Columns[100].Visible =modelForDisplay.Paint_Matt == 0 ? false : true;
+            this.dgButton.Columns[101].Visible =modelForDisplay.Paint_Paint_Pin_Hole == 0 ? false : true;
+            this.dgButton.Columns[102].Visible =modelForDisplay.Paint_Light_Leakage == 0 ? false : true;
+            this.dgButton.Columns[103].Visible =modelForDisplay.Paint_White_Mark == 0 ? false : true;
+            this.dgButton.Columns[104].Visible =modelForDisplay.Paint_Dented == 0 ? false : true;
+            this.dgButton.Columns[105].Visible =modelForDisplay.Paint_Other == 0 ? false : true;
+            this.dgButton.Columns[106].Visible =modelForDisplay.Paint_Particle_for_laser_setup == 0 ? false : true;
+            this.dgButton.Columns[107].Visible =modelForDisplay.Paint_Buyoff == 0 ? false : true;
+            this.dgButton.Columns[108].Visible =modelForDisplay.Paint_Shortage == 0 ? false : true;
+
+            this.dgButton.Columns[124].Visible =modelForDisplay.Laser_Black_Mark == 0 ? false : true;
+            this.dgButton.Columns[125].Visible =modelForDisplay.Laser_Black_Dot == 0 ? false : true;
+            this.dgButton.Columns[126].Visible =modelForDisplay.Laser_Graphic_Shift_check_by_PQC == 0 ? false : true;
+            this.dgButton.Columns[127].Visible =modelForDisplay.Laser_Graphic_Shift_check_by_MC == 0 ? false : true;
+            this.dgButton.Columns[128].Visible =modelForDisplay.Laser_Scratch == 0 ? false : true;
+            this.dgButton.Columns[129].Visible =modelForDisplay.Laser_Jagged == 0 ? false : true;
+            this.dgButton.Columns[130].Visible =modelForDisplay.Laser_Laser_Bubble == 0 ? false : true;
+            this.dgButton.Columns[131].Visible =modelForDisplay.Laser_double_outer_line == 0 ? false : true;
+            this.dgButton.Columns[132].Visible =modelForDisplay.Laser_Pin_hold == 0 ? false : true;
+            this.dgButton.Columns[133].Visible =modelForDisplay.Laser_Poor_Laser == 0 ? false : true;
+            this.dgButton.Columns[134].Visible =modelForDisplay.Laser_Burm_Mark == 0 ? false : true;
+            this.dgButton.Columns[135].Visible =modelForDisplay.Laser_Stain_Mark == 0 ? false : true;
+            this.dgButton.Columns[136].Visible =modelForDisplay.Laser_Graphic_Small == 0 ? false : true;
+            this.dgButton.Columns[137].Visible =modelForDisplay.Laser_Double_Laser == 0 ? false : true;
+            this.dgButton.Columns[138].Visible =modelForDisplay.Laser_Color_Yellow == 0 ? false : true;
+            this.dgButton.Columns[139].Visible =modelForDisplay.Laser_Crack == 0 ? false : true;
+            this.dgButton.Columns[140].Visible =modelForDisplay.Laser_Smoke == 0 ? false : true;
+            this.dgButton.Columns[141].Visible =modelForDisplay.Laser_Wrong_Orientation == 0 ? false : true;
+            this.dgButton.Columns[142].Visible =modelForDisplay.Laser_Dented == 0 ? false : true;
+            this.dgButton.Columns[143].Visible =modelForDisplay.Laser_Other == 0 ? false : true;
+            this.dgButton.Columns[144].Visible =modelForDisplay.Laser_Buyoff == 0 ? false : true;
+            this.dgButton.Columns[145].Visible =modelForDisplay.Laser_Setup == 0 ? false : true;
+
+            this.dgButton.Columns[151].Visible =modelForDisplay.PQC_Scratch == 0 ? false : true;
+            this.dgButton.Columns[152].Visible =modelForDisplay.Over_Spray == 0 ? false : true;
+            this.dgButton.Columns[153].Visible =modelForDisplay.Bubble == 0 ? false : true;
+            this.dgButton.Columns[154].Visible =modelForDisplay.Oil_Stain == 0 ? false : true;
+            this.dgButton.Columns[155].Visible =modelForDisplay.Drag_Mark == 0 ? false : true;
+            this.dgButton.Columns[156].Visible =modelForDisplay.Light_Leakage == 0 ? false : true;
+            this.dgButton.Columns[157].Visible =modelForDisplay.Light_Bubble == 0 ? false : true;
+            this.dgButton.Columns[158].Visible =modelForDisplay.White_Dot_in_Material == 0 ? false : true;
+            this.dgButton.Columns[159].Visible = modelForDisplay.Other == 0 ? false : true;
             #endregion
         }
 
@@ -2302,7 +2852,7 @@ namespace DashboardTTS.Webform.PQC
 
 
         //    Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
-            
+
         //    List<string> modelList = bll.GetModelNoList();
         //    if (modelList == null)
         //        return;
@@ -2332,7 +2882,7 @@ namespace DashboardTTS.Webform.PQC
         //private void SetSupplierDDL()
         //{
         //    this.ddlSupplier.Items.Clear();
-            
+
         //    Common.Class.BLL.PQCBom_BLL bll = new Common.Class.BLL.PQCBom_BLL();
 
         //    List<string> supplierList = bll.GetSupplierList();

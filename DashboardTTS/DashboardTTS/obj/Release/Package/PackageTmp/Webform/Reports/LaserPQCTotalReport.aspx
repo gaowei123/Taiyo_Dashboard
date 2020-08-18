@@ -102,7 +102,7 @@
 
         <div id="divTableContainer" style="overflow: auto;" >
 
-            <asp:DataGrid runat="server" Width ="100%" ID ="dgTotalReport" CellPadding="10" BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" ForeColor="#333333"  CellSpacing="2" AutoGenerateColumns="false" CssClass="table">
+            <asp:DataGrid runat="server" Width ="100%" ID ="dgButton" CellPadding="10" BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" ForeColor="#333333"  CellSpacing="2" AutoGenerateColumns="false" CssClass="table">
                 <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
                 <EditItemStyle BackColor="#999999" />
                 <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
@@ -111,20 +111,22 @@
                 <PagerStyle BackColor="#284775" HorizontalAlign="Center" BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" PageButtonCount="5" />
                 <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
                 <Columns>
+
                     <asp:BoundColumn DataField="SN" HeaderText="SN"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="model" HeaderText="Model"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="model" HeaderText="Model" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="jobID" HeaderText="Job No"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="lotNo" HeaderText="Lot No"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="lotNo" HeaderText="Lot No" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="partNo" HeaderText="Part No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="materialNo" HeaderText="Material No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="lotQty" HeaderText="Lot Qty"></asp:BoundColumn>
                     <asp:BoundColumn DataField="pass" HeaderText="Pass"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="rejQty" HeaderText="Rej Qty"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="rejRate" HeaderText="Rej%"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="supplier" HeaderText="Supplier"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="rejQty" HeaderText="Rej Qty" Visible="false"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="rejRate" HeaderText="Rej%" Visible="false"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="rejRateDisplay" HeaderText="Rej(%)"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="supplier" HeaderText="Supplier" Visible="false"></asp:BoundColumn>
 
 
-                          
+                    <%--12--%>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Raw_Part_Scratch" HeaderText="(TM)Raw Part Scratch"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Stain" HeaderText="(TM)Oil Stain"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dented" HeaderText="(TM)Dented"></asp:BoundColumn>
@@ -161,6 +163,7 @@
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRej" HeaderText="(TM)TotalRej"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRejRate" HeaderText="(TM)TotalRej%"></asp:BoundColumn>
 
+                    <%--47--%>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Raw_Part_Scratch" HeaderText="(VM)Raw Part Scratch"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Stain" HeaderText="(VM)Oil Stain"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dented" HeaderText="(VM)Dented"></asp:BoundColumn>
@@ -200,6 +203,7 @@
                     <asp:BoundColumn DataField="MFGDate" HeaderText="MFG Date"></asp:BoundColumn>
                             
 
+                    <%--83--%>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle" HeaderText="(P)Particle"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Fibre" HeaderText="(P)Fibre"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Many_particle" HeaderText="(P)Many particle"></asp:BoundColumn>
@@ -243,7 +247,7 @@
                     <asp:BoundColumn DataField="paintMachine3rd" HeaderText="(P)3rd Machine"></asp:BoundColumn>
                     <asp:BoundColumn DataField="paintDate3rd" HeaderText="(P)3rd Date"></asp:BoundColumn>
 
-
+                    <%--124--%>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Mark" HeaderText="(L)Black Mark"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Dot" HeaderText="(L)Black Dot"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Shift_check_by_PQC" HeaderText="(L)Graphic Shift check by PQC"></asp:BoundColumn>
@@ -274,6 +278,7 @@
                     <asp:BoundColumn DataField="laserDate" HeaderText="(L)Date"></asp:BoundColumn>
 
 
+                    <%--152--%>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="PQC_Scratch" HeaderText="(O)PQC Scratch"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Over_Spray" HeaderText="(O)Over Spray"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Bubble" HeaderText="(O)Bubble"></asp:BoundColumn>
@@ -296,8 +301,8 @@
 
 
 
-   <%-- <link href="../../plugins/bigautocomplete/jquery.bigautocomplete.css" rel="stylesheet" />
-    <script src="../../plugins/bigautocomplete/jquery.bigautocomplete.js"></script>--%>
+    <link href="../../plugins/bigautocomplete/jquery.bigautocomplete.css" rel="stylesheet" />
+    <script src="../../plugins/bigautocomplete/jquery.bigautocomplete.js"></script>
 
     <script type='text/javascript'>
         $('.formDateTimePicker').datetimepicker({
@@ -314,7 +319,7 @@
 
         $(document).ready(function () {
 
-            //setAutoComplete($('#txtPartNo'), 'Laser');
+            setAutoComplete($('#txtPartNo'), 'Laser');
 
             var height = $(window).height() - 120;
             var width = $(window).width() + 10;
@@ -324,7 +329,7 @@
 
             
             
-            $("#dgTotalReport").FrozenTable(1, 0, 10);
+            $("#dgButton").FrozenTable(1, 0, 7);
 
         });
 

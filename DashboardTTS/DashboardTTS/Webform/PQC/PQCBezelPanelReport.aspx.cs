@@ -61,27 +61,15 @@ namespace DashboardTTS.Webform.PQC
                 //try { dMFGDate = DateTime.Parse(txtMFGDate.Text); } catch { dMFGDate = null; }
 
 
-                if (dDateFrom == null || dDateTo == null)
+                if (dDateFrom == null)
                 {
-                    Common.CommFunctions.ShowMessage(this.Page, "Please choose date from - to!");
+                    Common.CommFunctions.ShowMessage(this.Page, "Please choose date !");
                     return;
                 }
 
 
                 dDateFrom = dDateFrom.Value;
                 dDateTo = dDateFrom.Value.AddDays(1);
-
-
-
-           
-                if ((dDateTo.Value - dDateFrom.Value).TotalDays > 30)
-                {
-                    Common.CommFunctions.ShowMessage(this.Page, "Please reduce searching days");
-                    return;
-                }
-
-
-
                 string sType = "";
                 string sDescription = Request.QueryString["Description"].ToString();
                 string sNumber = this.ddlNumber.SelectedValue;
@@ -97,7 +85,8 @@ namespace DashboardTTS.Webform.PQC
                 DataTable dtMain = trackingBLL.getBezelPanelReport(dDateFrom.Value, dDateTo.Value, sType, sDescription, sNumber, dPaintDate, sPIC, dMFGDate);
                 if (dtMain == null || dtMain.Rows.Count == 0)
                 {
-                    Common.CommFunctions.ShowMessage(this.Page, "No any data found,  Please change searching date!");
+                    this.dgBezelPanel.Visible = false;
+                    Common.CommFunctions.ShowMessage(this.Page, "No any data found for main,  Please change searching date!");
                     return;
                 }
 
@@ -107,12 +96,14 @@ namespace DashboardTTS.Webform.PQC
                 DataTable dtPQCDefect = defectBLL.getPQCDefectForBezelPanelReport(dDateFrom.Value, dDateTo.Value, sType, sDescription, sNumber);
                 if (dtPQCDefect == null || dtPQCDefect.Rows.Count == 0)
                 {
-                    Common.CommFunctions.ShowMessage(this.Page, "No any data found,  Please change searching date!");
+                    this.dgBezelPanel.Visible = false;
+                    Common.CommFunctions.ShowMessage(this.Page, "No any data found for detail,  Please change searching date!");
                     return;
                 }
 
                 Common.Class.BLL.PQCDefectSetting_BLL defectSettingBLL = new Common.Class.BLL.PQCDefectSetting_BLL();
                 DataTable dtAllDefectCode = defectSettingBLL.GetAllForPQCLaserTotalReport();
+
 
 
 
@@ -222,6 +213,7 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+
                 #region combine data
                 foreach (DataRow dr in dtMain.Rows)
                 {
@@ -317,11 +309,7 @@ namespace DashboardTTS.Webform.PQC
                 }
                 #endregion
 
-
-
-
-
-
+                
 
 
                 #region add a summary row for dtoutput
@@ -506,6 +494,7 @@ namespace DashboardTTS.Webform.PQC
 
         void Display(DataTable dt)
         {
+            this.dgBezelPanel.Visible = true;
             this.dgBezelPanel.DataSource = dt.DefaultView;
             this.dgBezelPanel.DataBind();
             this.dgBezelPanel.ShowHeader = false;

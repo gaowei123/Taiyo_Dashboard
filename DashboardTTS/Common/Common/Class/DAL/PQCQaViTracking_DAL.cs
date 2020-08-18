@@ -355,7 +355,7 @@ left join (
 ) c on a.partNumber = c.partNumber
 
 where a.day >= @DateFrom and a.day < @DateTo
- {1}  {2}", searchShift, searchShift,searchPartNo);
+ {1}  {2} ", searchShift, searchShift,searchPartNo);
 
 
             
@@ -400,15 +400,15 @@ a.jobID
 ,sum(b.rejectQty) as rejectQty
 ,c.remark_1 as supplier
 ,case when  CHARINDEX('Laser', c.processes,0)> 0 then 'Laser' else 'WIP' end as PartsType
+,case when c.remark_1 = 'TTS' then 'TTS' else 'Vendor' end as mouldType
 ,a.processes
 ,OP = stuff((SELECT  ',' +  t.userID 
 			FROM (select jobId,processes, userID from PQCQaViTracking group by jobId,processes,userID) t  
 			WHERE t.jobId = a.jobId and t.processes = a.processes  FOR xml path('')) 
 			, 1 , 1 , '')
-
 from PQCQaViTracking a
 left join PQCQaViDetailTracking b on a.trackingID = b.trackingID
-left join PQCBom c on a.partNumber = c.partnumber 
+left join PQCBom c on a.partNumber = c.partnumber
 where 1=1 ");
 
             strSql.Append(" and a.jobId in " + strWhere);
@@ -960,7 +960,7 @@ with allJobsForReports as (
                 strSql.AppendLine(" and b.description =@Description");
 
             if (sNumber.Trim() != "")
-                strSql.AppendLine(" and b.Number = @Number ");
+                strSql.AppendLine(" and b.partNumber = @Number ");
 
             strSql.AppendLine(")");
             //所有check完成的jobs 临时表
@@ -1036,7 +1036,7 @@ b.partNumber
 
 --Painting Info
 ,d.Lotno
-,f.dateTime as [MFG Date]
+,f.MFGDate as [MFG Date]
 ,d.[Painting Under Coat Date]
 ,d.pMachine_1st as [Painting Under Coat M/C No]
 ,d.paintingRunningTime_1st as [Painting Under Coat M/C running time]
@@ -1094,10 +1094,12 @@ left join paintingInfo d  on a.jobid collate chinese_prc_ci_as = d.JobNumber col
 
 left join 
 (
-    select distinct jobnumber , datetime from  OPENDATASOURCE( 'SQLOLEDB', {0} ).Taiyo_Painting.dbo.PaintingDeliveryHis
+    select distinct jobnumber , convert(varchar(50), datetime,103) as MFGDate from  OPENDATASOURCE( 'SQLOLEDB', {0} ).Taiyo_Painting.dbo.PaintingDeliveryHis
 ) f  on a.jobid collate chinese_prc_ci_as = f.JobNumber collate chinese_prc_ci_as  ", StaticRes.Global.SqlConnection.SqlconnPainting);
 
             strSql.AppendLine(" where 1=1 ");
+
+            strSql.AppendLine(" and b.partNumber != 'TKS869AA-A1' ");
 
 
             if (dPaintingDate != null)
