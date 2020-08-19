@@ -20,8 +20,6 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCBom_BLL pqcBomBLL = new Common.Class.BLL.PQCBom_BLL();
         private readonly Common.Class.BLL.PQCQaViTracking_BLL viTrackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
         private readonly Common.Class.BLL.PQCInventory_BLL pqcInventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
-
-
         private readonly Common.Class.BLL.LMMSInventoty_BLL laserInventoryBLL = new Common.Class.BLL.LMMSInventoty_BLL();
 
 
@@ -502,11 +500,51 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-     
+
 
 
         #endregion
 
+
+
+        #region overall output chart
+
+        public List<ViewModel.OverallOutputChart_ViewModel> GetChartDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            //paint delivery   --total qty
+
+
+            //paint temp info  --setup   paint rej
+
+
+
+            //mould vitracking  --total qty  rej qty
+
+
+
+            //laser lmmswatchlog  --total qty, rej qty
+
+
+            //laser inventory  --setup, buyoff, shortage
+
+
+
+            //pqc qa vitracking  --total qty
+
+
+
+            //pqc qa vi defect tracking  --paint, mould, laser, others defect rej
+
+
+           
+            
+        }
+
+
+        
+
+
+        #endregion
 
 
 

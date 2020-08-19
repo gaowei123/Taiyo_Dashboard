@@ -24,12 +24,25 @@ namespace DashboardTTS.Controllers
         }
 
 
-         
+        
+        public ActionResult OutputSummaryChart()
+        {
+            return View();
+        }
+
+        public ActionResult OutputTrendChart()
+        {
+            return View();
+        }
+
+
+
+
+
 
         #endregion
 
-
-
+        
 
 
         public ActionResult GetAllSectionInventoryReport()
@@ -47,6 +60,9 @@ namespace DashboardTTS.Controllers
             return Content(result);
         }
 
+
+
+        
 
 
 

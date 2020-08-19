@@ -119,8 +119,6 @@ namespace DashboardTTS.Webform
             try
             {
                 //获取并处理查询参数
-
-
                 DateTime dDateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime dDateTo = DateTime.Parse(this.txtDateTo.Text).Date;
                 dDateTo = dDateTo.AddDays(1);

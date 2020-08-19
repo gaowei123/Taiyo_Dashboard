@@ -319,6 +319,7 @@
     <Compile Include="ViewModel\MouldMaterialTraceability.cs" />
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
+    <Compile Include="ViewModel\OverallOutputChart_ViewModel.cs" />
     <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
     <Compile Include="ViewModel\PackingInventory_ViewModel.cs" />
     <Compile Include="ViewModel\PackingProductChart_ViewModel.cs" />
