@@ -163,6 +163,7 @@ namespace DashboardTTS.Webform.PQC
                 {
                     model.totalQty = dPackQty;
                     model.passQty = dPackQty;
+                    model.status = "End";
                     model.updatedTime = DateTime.Now;
                     model.lastUpdatedTime = DateTime.Now;
                     model.remarks = "Updated by " + txtUserName.Text;

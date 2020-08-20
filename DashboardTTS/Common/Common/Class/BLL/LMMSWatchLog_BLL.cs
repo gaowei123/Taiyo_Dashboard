@@ -38,6 +38,13 @@ namespace Common.BLL
 		}
 
 
+        
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            return dal.GetList(dDateFrom, dDateTo, sShift);
+        }
+
+
 
 
         public DataTable GetMaterialList(string sDay, string sShift, DateTime dDateFrom, DateTime dDateTo, string sJobnumber, string sMachineID, string sPartNumber, string sModule)

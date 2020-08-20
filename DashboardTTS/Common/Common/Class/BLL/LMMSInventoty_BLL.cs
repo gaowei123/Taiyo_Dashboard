@@ -15,6 +15,10 @@ namespace Common.Class.BLL
 
         }
 
+
+
+       
+
   
 
         public bool Add(Common.Class.Model.LMMSInventory_Model model)
@@ -364,6 +368,11 @@ namespace Common.Class.BLL
         }
 
 
+
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo)
+        {
+            return dal.GetList(dDateFrom, dDateTo);
+        }
 
         public DataTable GetJobDetailForMaintenance(string JobNumber)
         {

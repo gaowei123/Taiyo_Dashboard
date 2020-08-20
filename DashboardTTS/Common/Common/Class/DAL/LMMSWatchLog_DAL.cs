@@ -15,6 +15,44 @@ namespace Common.DAL
         { }
       
 
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" select * from LMMSWatchDog_Shift where 1=1 and day >= @dateFrom and day < @dateTo ");
+
+            if (sShift != "")
+            {
+                strSql.Append(" and  shift = @shift ");
+            }
+        
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom",SqlDbType.DateTime),
+                new SqlParameter("@dateTo",SqlDbType.DateTime),
+                new SqlParameter("@shift",SqlDbType.VarChar,50)
+            };
+
+
+            parameters[0].Value = dDateFrom;
+            parameters[1].Value = dDateTo;
+            if (sShift != "") parameters[2].Value = sShift; else parameters[2] = null;
+
+
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }else
+            {
+                return ds.Tables[0];
+            }
+
+        }
+
    
         public DataSet Exists(string sJobNumber)
         {

@@ -607,6 +607,31 @@ group by a.ID");
 
         }
 
+        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"SELECT *   FROM LMMSInventory where 1=1 and dateTime >= @dateFrom and dateTime < @dateTo");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom", SqlDbType.DateTime),
+                new SqlParameter("@dateTo", SqlDbType.DateTime)
+            };
+
+            parameters[0].Value = dDateFrom;
+            parameters[1].Value = dDateTo;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
 
 
         //laser inventory - watch log,  

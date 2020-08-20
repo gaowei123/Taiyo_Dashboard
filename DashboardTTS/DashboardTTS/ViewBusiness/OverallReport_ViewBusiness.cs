@@ -21,6 +21,7 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCQaViTracking_BLL viTrackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
         private readonly Common.Class.BLL.PQCInventory_BLL pqcInventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
         private readonly Common.Class.BLL.LMMSInventoty_BLL laserInventoryBLL = new Common.Class.BLL.LMMSInventoty_BLL();
+        private readonly Common.Class.BLL.PaintingTempInfo paintTempBLL = new Common.Class.BLL.PaintingTempInfo();
 
 
 
@@ -511,33 +512,56 @@ namespace DashboardTTS.ViewBusiness
 
         public List<ViewModel.OverallOutputChart_ViewModel> GetChartDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift)
         {
+
+
+
+
+
+            SELECT DATENAME(HOUR, '2020-1-1 12:19')
+
+
+
+
+
+
+
+
             //paint delivery   --total qty
+            DataTable dtPaintDelivery = paintDeliveryBLL.GetList(dDateFrom, dDateTo, "");
+
+
 
 
             //paint temp info  --setup   paint rej
+            DataTable dtPaintTempInfo = paintTempBLL.GetList(dDateFrom, dDateTo, "", "");
 
 
 
             //mould vitracking  --total qty  rej qty
+          
 
 
 
-            //laser lmmswatchlog  --total qty, rej qty
+            //laser lmmswatchdog  --total qty, rej qty
+            DataTable dtWatchDog = watchLogBLL.GetList(dDateFrom, dDateTo, sShift);
+
 
 
             //laser inventory  --setup, buyoff, shortage
+            DataTable dtLaserInventory = laserInventoryBLL.GetList(dDateFrom, dDateTo);
 
 
 
             //pqc qa vitracking  --total qty
+            DataTable dtCheckVitracking = viTrackingBLL.GetList("", "", dDateFrom, dDateTo, sShift, "", "", "", "");
 
 
 
             //pqc qa vi defect tracking  --paint, mould, laser, others defect rej
 
 
-           
-            
+
+
         }
 
 
