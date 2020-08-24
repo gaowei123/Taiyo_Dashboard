@@ -247,7 +247,7 @@ namespace DashboardTTS.ViewBusiness
         /// online: process只有laser,check#1
         /// offline: process没有laser, 或者有laser并且有check#2,3的.
         /// </summary>     
-        private List<ViewModel.PQCSummaryReport_ViewModel.Report> AddPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, List<ViewModel.PQCSummaryReport_ViewModel.Report> packList)
+        private List<ViewModel.PQCSummaryReport_ViewModel.Report> AddPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, List<ViewModel.PQCSummaryReport_ViewModel.Report> reportList)
         {
 
             ViewModel.PQCSummaryReport_ViewModel.Report packOnlineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
@@ -257,6 +257,9 @@ namespace DashboardTTS.ViewBusiness
             packOnlineModel.paintRejRate = "-";
             packOnlineModel.laserRejRate = "-";
             packOnlineModel.othersRejRate = "-";
+            packOnlineModel.totalOutput = 0;
+            packOnlineModel.totalRejRate = "0(0.00%)";
+            packOnlineModel.actualOutput = 0;
 
             ViewModel.PQCSummaryReport_ViewModel.Report packOfflineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
             packOfflineModel.pqcDept = "Packing Offline";
@@ -265,6 +268,9 @@ namespace DashboardTTS.ViewBusiness
             packOfflineModel.paintRejRate = "-";
             packOfflineModel.laserRejRate = "-";
             packOfflineModel.othersRejRate = "-";
+            packOfflineModel.totalOutput = 0;
+            packOfflineModel.totalRejRate = "0(0.00%)";
+            packOfflineModel.actualOutput = 0;
 
             ViewModel.PQCSummaryReport_ViewModel.Report packTotalModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
             packTotalModel.pqcDept = "Packing Total";
@@ -273,88 +279,69 @@ namespace DashboardTTS.ViewBusiness
             packTotalModel.paintRejRate = "-";
             packTotalModel.laserRejRate = "-";
             packTotalModel.othersRejRate = "-";
-
-
-            double totalQty = 0;
-            double totalPass = 0;
-            double totalRej = 0;
-
-
-            DataTable dt = packTrackBLL.GetPackForSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-
-
-            DataRow drOnline;
-            DataRow drOffline;
-
-
-            DataRow[] temp = dt.Select(" packType = 'Online'", "");
-            if (temp != null && temp.Count() != 0)
-            {
-                drOnline = temp[0];
-                totalQty = double.Parse(drOnline["TotalQty"].ToString());
-                totalPass = double.Parse(drOnline["acceptQty"].ToString());
-                totalRej = double.Parse(drOnline["rejectQty"].ToString());
-                
-                packOnlineModel.totalOutput = totalQty;
-                packOnlineModel.actualOutput = totalPass;
-                packOnlineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
-               
-            }
-            else
-            {
-                packOnlineModel.totalOutput = 0;
-                packOnlineModel.totalRejRate = "0(0.00%)";
-                packOnlineModel.actualOutput = 0;
-            }
-
-
-
-            temp = dt.Select(" packType = 'Offline'", "");
-            if (temp != null && temp.Count() != 0)
-            {
-                drOffline = temp[0];
-                totalQty = double.Parse(drOffline["TotalQty"].ToString());
-                totalPass = double.Parse(drOffline["acceptQty"].ToString());
-                totalRej = double.Parse(drOffline["rejectQty"].ToString());
-                
-                packOfflineModel.totalOutput = totalQty;
-                packOfflineModel.actualOutput = totalPass;
-                packOfflineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
-            }
-            else
-            {
-                packOfflineModel.totalOutput = 0;
-                packOfflineModel.totalRejRate = "0(0.00%)";
-                packOfflineModel.actualOutput = 0;
-            }
-
-
-
+            packTotalModel.totalOutput = 0;
+            packTotalModel.totalRejRate = "0(0.00%)";
+            packTotalModel.actualOutput = 0;
 
 
            
-            totalQty = double.Parse( dt.Compute("sum(TotalQty)","").ToString());
-            totalPass = double.Parse(dt.Compute("sum(acceptQty)", "").ToString());
-            totalRej = double.Parse(dt.Compute("sum(rejectQty)", "").ToString());      
-
-            packTotalModel.totalOutput = totalQty;
-            packTotalModel.actualOutput = totalPass;
-            packTotalModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
 
 
+            DataTable dt = packTrackBLL.GetPackForSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
+            if (dt != null && dt.Rows.Count != 0)
+            {
+                double totalQty = 0;
+                double totalPass = 0;
+                double totalRej = 0;
+                DataRow drOnline;
+                DataRow drOffline;
+
+                DataRow[] temp = dt.Select(" packType = 'Online'", "");
+                if (temp != null && temp.Count() != 0)
+                {
+                    drOnline = temp[0];
+                    totalQty = double.Parse(drOnline["TotalQty"].ToString());
+                    totalPass = double.Parse(drOnline["acceptQty"].ToString());
+                    totalRej = double.Parse(drOnline["rejectQty"].ToString());
+
+                    packOnlineModel.totalOutput = totalQty;
+                    packOnlineModel.actualOutput = totalPass;
+                    packOnlineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+
+                }
+
+
+                temp = dt.Select(" packType = 'Offline'", "");
+                if (temp != null && temp.Count() != 0)
+                {
+                    drOffline = temp[0];
+                    totalQty = double.Parse(drOffline["TotalQty"].ToString());
+                    totalPass = double.Parse(drOffline["acceptQty"].ToString());
+                    totalRej = double.Parse(drOffline["rejectQty"].ToString());
+
+                    packOfflineModel.totalOutput = totalQty;
+                    packOfflineModel.actualOutput = totalPass;
+                    packOfflineModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+                }
+
+
+                totalQty = double.Parse(dt.Compute("sum(TotalQty)", "").ToString());
+                totalPass = double.Parse(dt.Compute("sum(acceptQty)", "").ToString());
+                totalRej = double.Parse(dt.Compute("sum(rejectQty)", "").ToString());
+
+                packTotalModel.totalOutput = totalQty;
+                packTotalModel.actualOutput = totalPass;
+                packTotalModel.totalRejRate = string.Format("{0}({1}%)", totalRej, Math.Round(totalRej / totalQty * 100, 2));
+                
+            }
+
+            reportList.Add(packOnlineModel);
+            reportList.Add(packOfflineModel);
+            reportList.Add(packTotalModel);
             
-       
-            packList.Add(packOnlineModel);
-            packList.Add(packOfflineModel);
-            packList.Add(packTotalModel);
 
 
-
-
-
-            return packList;
+            return reportList;
         }
 
         #endregion

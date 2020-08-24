@@ -512,12 +512,9 @@ namespace DashboardTTS.ViewBusiness
 
         public List<ViewModel.OverallOutputChart_ViewModel> GetChartDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift)
         {
+            
 
-
-
-
-
-            SELECT DATENAME(HOUR, '2020-1-1 12:19')
+            //SELECT DATENAME(HOUR, '2020-1-1 12:19')
 
 
 
@@ -561,7 +558,7 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
+            return null;
         }
 
 
