@@ -98,7 +98,7 @@ namespace DashboardTTS.Controllers
             viModel.PartNumber = partNo;
             viModel.JigNo = jigNo;
             viModel.AcountReading = totalQty;
-            viModel.AcceptQty = totalQty - viModel.RejectQty;
+            viModel.AcceptQty = totalQty - viModel.RejectQty - viModel.QCNGQTY;
             viModel.Setup = setup;
             viModel.WastageMaterial01 = wastedMaterial01;
             viModel.WastageMaterial02 = wastedMaterial02;
@@ -106,9 +106,7 @@ namespace DashboardTTS.Controllers
 
 
 
-            Common.Class.BLL.MouldingViDefectTracking_BLL defectBLL = new Common.Class.BLL.MouldingViDefectTracking_BLL();
-          
-
+            
 
 
 
