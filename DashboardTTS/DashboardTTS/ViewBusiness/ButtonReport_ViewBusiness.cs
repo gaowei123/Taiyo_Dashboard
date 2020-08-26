@@ -489,6 +489,10 @@ namespace DashboardTTS.ViewBusiness
 
             try
             {
+
+              
+
+
                 //先拉取满足条件的所有job id.
                 string strSqlJobIn = GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
                 if (string.IsNullOrEmpty(strSqlJobIn))
@@ -500,64 +504,67 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
-
-
-
                 //获取数据源
                 List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> pqcDetailList = GetPQCDetialList(strSqlJobIn);
-
                 List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> pqcDefectList = GetPQCDefectList(strSqlJobIn);
-
                 List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> laserInfoList = GetLaserInfoList(strSqlJobIn);
-
                 List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> paintTempInfoList = GetPaintTempInfoList(strSqlJobIn);
-
                 List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> paintDeliveryList = GetPaintDeliveryList(strSqlJobIn);
 
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
                 foreach (var pqcdetailModel in pqcDetailList)
                 {
+
+                    DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "job - " + pqcdetailModel.jobID);
+
+
                     #region 合并数据源 赋值到 PQCButtonReport_ViewModel.Report
                     ViewModel.PQCButtonReport_ViewModel.LaserInfo laserInfoModel = new ViewModel.PQCButtonReport_ViewModel.LaserInfo();
                     laserInfoModel = (from a in laserInfoList
                                       where a.jobNo == pqcdetailModel.jobID
                                       select a).FirstOrDefault();
-
+                    
                     ViewModel.PQCButtonReport_ViewModel.PaintTempInfo paintTempInfoModel = new ViewModel.PQCButtonReport_ViewModel.PaintTempInfo();
                     paintTempInfoModel = (from a in paintTempInfoList
                                           where a.jobNo == pqcdetailModel.jobID
                                           select a).FirstOrDefault();
-
+                    
                     ViewModel.PQCButtonReport_ViewModel.PaintDelivery paintDeliveryModel = new ViewModel.PQCButtonReport_ViewModel.PaintDelivery();
                     paintDeliveryModel = (from a in paintDeliveryList
                                           where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper() == "PAINT#1"
                                           select a).FirstOrDefault();
-
+                    
                     List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> jobDefectList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
                     jobDefectList = (from a in pqcDefectList
                                      where a.jobID == pqcdetailModel.jobID && a.materialNo == pqcdetailModel.materialNo
                                      select a).ToList();
 
 
+                
                     ViewModel.PQCButtonReport_ViewModel.Report reportModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     reportModel.partsType = pqcdetailModel.partsType;//区分laser, wip part.   
                     reportModel.model = pqcdetailModel.model;
                     reportModel.jobID = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", pqcdetailModel.jobID, pqcdetailModel.jobID);
 
-                    reportModel.lotNo = paintDeliveryModel.lotNo;
-                    reportModel.partNo = pqcdetailModel.partNumber;
-                    reportModel.materialNo = pqcdetailModel.materialNo;
+
+
+                  
+                    reportModel.lotNo = paintDeliveryModel.lotNo; 
+                    reportModel.partNo = pqcdetailModel.partNumber; 
+                    reportModel.materialNo = pqcdetailModel.materialNo; 
                     reportModel.lotQty = paintDeliveryModel.mrpQty;
-                    reportModel.pass = pqcdetailModel.passQty;
+                    reportModel.pass = pqcdetailModel.passQty; 
+
+
                     //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
-                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty;
-                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintTempInfoModel.paintQAQty + paintTempInfoModel.paintSetUpQty) / paintDeliveryModel.mrpQty * 100, 2);
+                    double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
+                    double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
+                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
+                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup) / paintDeliveryModel.mrpQty * 100, 2);
+                    reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate); 
+                    
 
-                    reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate);
-
-                    reportModel.supplier = pqcdetailModel.supplier;
-
+                    
 
                     //tts = tts rej/tts total,    vendor = vendor rej/ vendor total
                     if (pqcdetailModel.mouldType == "TTS")
@@ -565,7 +572,7 @@ namespace DashboardTTS.ViewBusiness
                     else
                         reportModel.vendorLotQty = paintDeliveryModel.mrpQty;
 
-
+                 
 
                     #region  TTS defect code
                     reportModel.TTS_Raw_Part_Scratch = GetDefectCodeRejQty(jobDefectList, "Raw Part Scratch", "TTS");
@@ -602,7 +609,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.TTS_Wrong_Orietation = GetDefectCodeRejQty(jobDefectList, "Wrong Orietation", "TTS");
                     reportModel.TTS_Other = GetDefectCodeRejQty(jobDefectList, "Other", "TTS");
                     #endregion
-
+                 
                     #region Vendor defect code
                     reportModel.Vendor_Raw_Part_Scratch = GetDefectCodeRejQty(jobDefectList, "Raw Part Scratch", "Vendor");
                     reportModel.Vendor_Oil_Stain = GetDefectCodeRejQty(jobDefectList, "Oil Stain", "Vendor");
@@ -638,7 +645,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.Vendor_Wrong_Orietation = GetDefectCodeRejQty(jobDefectList, "Wrong Orietation", "Vendor");
                     reportModel.Vendor_Other = GetDefectCodeRejQty(jobDefectList, "Other", "Vendor");
                     #endregion
-
+               
                     #region Paint defect code
                     reportModel.Paint_Particle = GetDefectCodeRejQty(jobDefectList, "Particle", "Paint");
                     reportModel.Paint_Fibre = GetDefectCodeRejQty(jobDefectList, "Fibre", "Paint");
@@ -667,7 +674,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.Paint_Buyoff = GetDefectCodeRejQty(jobDefectList, "Buyoff", "Paint");
                     reportModel.Paint_Shortage = GetDefectCodeRejQty(jobDefectList, "Shortage", "Paint");//laser维护的shortage数量
                     #endregion
-
+                
                     #region Laser defect code
                     reportModel.Laser_Black_Mark = GetDefectCodeRejQty(jobDefectList, "Black Mark", "Laser");
                     reportModel.Laser_Black_Dot = GetDefectCodeRejQty(jobDefectList, "Black Dot", "Laser");
@@ -692,7 +699,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.Laser_Buyoff = GetDefectCodeRejQty(jobDefectList, "Buyoff", "Laser");//laser维护的buyoff数量
                     reportModel.Laser_Setup = GetDefectCodeRejQty(jobDefectList, "Setup", "Laser");//laser维护的setup数量
                     #endregion
-
+              
                     #region Others defect code
                     reportModel.PQC_Scratch = GetDefectCodeRejQty(jobDefectList, "PQC Scratch", "Others");
                     reportModel.Over_Spray = GetDefectCodeRejQty(jobDefectList, "Over Spray", "Others");
@@ -705,21 +712,21 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.Other = GetDefectCodeRejQty(jobDefectList, "Other", "Others");
                     #endregion
 
-
+              
                     //TTS total Rej Qty & Reject Rate
                     reportModel.TTS_Mould_TotalRej = (from a in jobDefectList where a.defectDescription == "TTS" select a).Sum(p => p.rejectQty);
                     reportModel.TTS_Mould_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "TTS" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
-
+             
                     //Vendor total rej qty & Reject Rate
                     reportModel.Vendor_Mould_TotalRej = (from a in jobDefectList where a.defectDescription == "Vendor" select a).Sum(p => p.rejectQty);
                     reportModel.Vendor_Mould_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Vendor" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
-
+                 
 
 
                     //Paint total Rej Qty & Reject Rate
                     reportModel.Paint_TotalRej = (from a in jobDefectList where a.defectDescription == "Paint" select a).Sum(p => p.rejectQty);
                     reportModel.Paint_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Paint" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
-
+                  
 
                     #region paint buyoff 信息
                     //早期job没有buyoff记录, 会找不到信息. 
@@ -746,12 +753,12 @@ namespace DashboardTTS.ViewBusiness
                         reportModel.paintDate3rd = paintTempInfoModel.paintDate3rd;
                     }
                     #endregion
-
+                
 
                     //laser total rej & Rate
                     reportModel.Laser_TotalRej = (from a in jobDefectList where a.defectDescription == "Laser" select a).Sum(p => p.rejectQty);
                     reportModel.Laser_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Laser" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
-
+                 
 
                     //没有laser工序的是找不到laser信息
                     if (laserInfoModel != null)
@@ -761,22 +768,20 @@ namespace DashboardTTS.ViewBusiness
                         reportModel.laserOP = laserInfoModel.laserOP;
                         reportModel.laserDate = laserInfoModel.laserDate;
                     }
-
+              
 
                     //others total rej qty & rej rate
                     reportModel.Others_TotalRej = (from a in jobDefectList where a.defectDescription == "Others" select a).Sum(p => p.rejectQty);
                     reportModel.Others_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Others" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
 
                     reportModel.InspBy = pqcdetailModel.OP;
-
+                  
                     reportList.Add(reportModel);
                     #endregion
                 }
 
 
-
-
-
+              
 
 
 
@@ -936,10 +941,10 @@ namespace DashboardTTS.ViewBusiness
 
 
                                                TTS_Mould_TotalRej = modelGroup.Sum(p => p.TTS_Mould_TotalRej),
-                                               TTS_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.ttsLotQty) * 100, 2),
+                                               TTS_Mould_TotalRejRate = modelGroup.Sum(p => p.ttsLotQty) == 0? 0: Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.ttsLotQty) * 100, 2),
 
                                                Vendor_Mould_TotalRej = modelGroup.Sum(p => p.Vendor_Mould_TotalRej),
-                                               Vendor_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.vendorLotQty) * 100, 2),
+                                               Vendor_Mould_TotalRejRate = modelGroup.Sum(p => p.vendorLotQty) ==0?0: Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.vendorLotQty) * 100, 2),
 
                                                Paint_TotalRej = modelGroup.Sum(p => p.Paint_TotalRej),
                                                Paint_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Paint_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
@@ -1673,9 +1678,6 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
-
-
                 //在添加summary row之后, 再获取根据model汇总的信息.   
                 //mark:若在添加model汇总信息后, 再添加summary信息会导致summary数量翻倍.  
                 //model汇总信息也是添加在最初的reportlist中.  select出来的summary信息会随着reportlist中内容改变而改变.  
@@ -1855,6 +1857,9 @@ namespace DashboardTTS.ViewBusiness
 
                 #endregion
 
+
+              
+
                 #region 合并model汇总信息到 report list中
                 foreach (var modelSummary in modelSummaryList)
                 {
@@ -2025,8 +2030,7 @@ namespace DashboardTTS.ViewBusiness
                 }
                 #endregion
 
-
-
+                
 
 
 
@@ -2111,8 +2115,7 @@ namespace DashboardTTS.ViewBusiness
 
                 #endregion
 
-
-
+                
 
 
 
@@ -2255,8 +2258,7 @@ namespace DashboardTTS.ViewBusiness
                 modelForDisplay.Other = partsTypeSummaryList.Sum(p => p.Other);
 
                 #endregion
-
-
+                
 
 
                 return dtReport;

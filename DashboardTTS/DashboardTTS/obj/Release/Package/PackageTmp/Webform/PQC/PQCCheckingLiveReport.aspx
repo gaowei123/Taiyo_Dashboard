@@ -126,6 +126,8 @@
                         <asp:BoundColumn DataField="NG" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="Output" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="RejRate" HeaderText="REJ%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="userID" HeaderText="PIC" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+
                     </Columns>
                 </asp:DataGrid>
 

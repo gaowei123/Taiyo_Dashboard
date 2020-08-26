@@ -118,7 +118,7 @@
                     <asp:BoundColumn DataField="lotNo" HeaderText="Lot No" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="partNo" HeaderText="Part No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="materialNo" HeaderText="Material No"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="lotQty" HeaderText="Lot Qty"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="lotQty" HeaderText="Lot<br/>Qty"></asp:BoundColumn>
                     <asp:BoundColumn DataField="pass" HeaderText="Pass"></asp:BoundColumn>
                     <asp:BoundColumn DataField="rejQty" HeaderText="Rej Qty" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="rejRate" HeaderText="Rej%" Visible="false"></asp:BoundColumn>
@@ -127,169 +127,169 @@
 
 
                     <%--12--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Raw_Part_Scratch" HeaderText="(TM)Raw Part Scratch"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Stain" HeaderText="(TM)Oil Stain"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dented" HeaderText="(TM)Dented"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dust" HeaderText="(TM)Dust"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Flyout" HeaderText="(TM)Flyout"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Over_Spray" HeaderText="(TM)Over Spray"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Weld_line" HeaderText="(TM)Weld line"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Crack" HeaderText="(TM)Crack"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Gas_mark" HeaderText="(TM)Gas mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Sink_mark" HeaderText="(TM)Sink mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Bubble" HeaderText="(TM)Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_White_dot" HeaderText="(TM)White dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Black_dot" HeaderText="(TM)Black dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Red_Dot" HeaderText="(TM)Red Dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Poor_Gate_Cut" HeaderText="(TM)Poor Gate Cut"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_High_Gate" HeaderText="(TM)High Gate"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_White_Mark" HeaderText="(TM)White Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Drag_mark" HeaderText="(TM)Drag mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Foreigh_Material" HeaderText="(TM)Foreigh Material"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Double_Claim" HeaderText="(TM)Double Claim"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Short_mould" HeaderText="(TM)Short mould"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Flashing" HeaderText="(TM)Flashing"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Pink_Mark" HeaderText="(TM)Pink Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Deform" HeaderText="(TM)Deform"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Damage" HeaderText="(TM)Damage"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_Dirt" HeaderText="(TM)Mould Dirt"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Yellowish" HeaderText="(TM)Yellowish"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Mark" HeaderText="(TM)Oil Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Mark" HeaderText="(TM)Printing Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Uneven" HeaderText="(TM)Printing Uneven"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Color_Dark" HeaderText="(TM)Printing Color Dark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Wrong_Orietation" HeaderText="(TM)Wrong Orietation"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Other" HeaderText="(TM)Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRej" HeaderText="(TM)TotalRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRejRate" HeaderText="(TM)TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Raw_Part_Scratch" HeaderText="(TM)<br/>Raw Part<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Stain" HeaderText="(TM)<br/>Oil Stain"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dented" HeaderText="(TM)<br/>Dented"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dust" HeaderText="(TM)<br/>Dust"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Flyout" HeaderText="(TM)<br/>Flyout"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Over_Spray" HeaderText="(TM)<br/>Over<br/>Spray"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Weld_line" HeaderText="(TM)<br/>Weld<br/>line"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Crack" HeaderText="(TM)<br/>Crack"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Gas_mark" HeaderText="(TM)<br/>Gas<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Sink_mark" HeaderText="(TM)<br/>Sink<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Bubble" HeaderText="(TM)<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_White_dot" HeaderText="(TM)<br/>White<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Black_dot" HeaderText="(TM)<br/>Black<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Red_Dot" HeaderText="(TM)<br/>Red<br/>Dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Poor_Gate_Cut" HeaderText="(TM)<br/>Poor<br/>Gate Cut"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_High_Gate" HeaderText="(TM)<br/>High<br/>Gate"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_White_Mark" HeaderText="(TM)<br/>White<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Drag_mark" HeaderText="(TM)<br/>Drag<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Foreigh_Material" HeaderText="(TM)<br/>Foreigh<br/>Material"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Double_Claim" HeaderText="(TM)<br/>Double<br/>Claim"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Short_mould" HeaderText="(TM)<br/>Short<br/>mould"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Flashing" HeaderText="(TM)<br/>Flashing"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Pink_Mark" HeaderText="(TM)<br/>Pink<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Deform" HeaderText="(TM)<br/>Deform"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Damage" HeaderText="(TM)<br/>Damage"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_Dirt" HeaderText="(TM)<br/>Mould<br/>Dirt"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Yellowish" HeaderText="(TM)<br/>Yellowish"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Mark" HeaderText="(TM)<br/>Oil<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Mark" HeaderText="(TM)<br/>Printing<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Uneven" HeaderText="(TM)<br/>Printing<br/>Uneven"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Printing_Color_Dark" HeaderText="(TM)<br/>Printing<br/>Color Dark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Wrong_Orietation" HeaderText="(TM)<br/>Wrong<br/>Orietation"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Other" HeaderText="(TM)<br/>Other"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRej" HeaderText="(TM)<br/>TotalRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRejRate" HeaderText="(TM)<br/>TotalRej%"></asp:BoundColumn>
 
                     <%--47--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Raw_Part_Scratch" HeaderText="(VM)Raw Part Scratch"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Stain" HeaderText="(VM)Oil Stain"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dented" HeaderText="(VM)Dented"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dust" HeaderText="(VM)Dust"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Flyout" HeaderText="(VM)Flyout"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Over_Spray" HeaderText="(VM)Over Spray"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Weld_line" HeaderText="(VM)Weld line"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Crack" HeaderText="(VM)Crack"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Gas_mark" HeaderText="(VM)Gas mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Sink_mark" HeaderText="(VM)Sink mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Bubble" HeaderText="(VM)Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_White_dot" HeaderText="(VM)White dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Black_dot" HeaderText="(VM)Black dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Red_Dot" HeaderText="(VM)Red Dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Poor_Gate_Cut" HeaderText="(VM)Poor Gate Cut"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_High_Gate" HeaderText="(VM)High Gate"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_White_Mark" HeaderText="(VM)White Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Drag_mark" HeaderText="(VM)Drag mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Foreigh_Material" HeaderText="(VM)Foreigh Material"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Double_Claim" HeaderText="(VM)Double Claim"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Short_mould" HeaderText="(VM)Short mould"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Flashing" HeaderText="(VM)Flashing"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Pink_Mark" HeaderText="(VM)Pink Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Deform" HeaderText="(VM)Deform"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Damage" HeaderText="(VM)Damage"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_Dirt" HeaderText="(VM)Mould Dirt"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Yellowish" HeaderText="(VM)Yellowish"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Mark" HeaderText="(VM)Oil Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Mark" HeaderText="(VM)Printing Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Uneven" HeaderText="(VM)Printing Uneven"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Color_Dark" HeaderText="(VM)Printing Color Dark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Wrong_Orietation" HeaderText="(VM)Wrong Orietation"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Other" HeaderText="(VM)Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_TotalRej" HeaderText="(VM)TotalRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fce4d6" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_TotalRejRate" HeaderText="(VM)TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Raw_Part_Scratch" HeaderText="(VM)<br/>Raw Part<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Stain" HeaderText="(VM)<br/>Oil Stain"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dented" HeaderText="(VM)<br/>Dented"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dust" HeaderText="(VM)<br/>Dust"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Flyout" HeaderText="(VM)<br/>Flyout"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Over_Spray" HeaderText="(VM)<br/>Over<br/>Spray"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Weld_line" HeaderText="(VM)<br/>Weld<br/>line"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Crack" HeaderText="(VM)<br/>Crack"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Gas_mark" HeaderText="(VM)<br/>Gas<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Sink_mark" HeaderText="(VM)<br/>Sink<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Bubble" HeaderText="(VM)<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_White_dot" HeaderText="(VM)<br/>White<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Black_dot" HeaderText="(VM)<br/>Black<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Red_Dot" HeaderText="(VM)<br/>Red<br/>Dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Poor_Gate_Cut" HeaderText="(VM)<br/>Poor<br/>Gate Cut"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_High_Gate" HeaderText="(VM)<br/>High<br/>Gate"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_White_Mark" HeaderText="(VM)<br/>White<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Drag_mark" HeaderText="(VM)<br/>Drag<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Foreigh_Material" HeaderText="(VM)<br/>Foreigh<br/>Material"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Double_Claim" HeaderText="(VM)<br/>Double<br/>Claim"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Short_mould" HeaderText="(VM)<br/>Short<br/>mould"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Flashing" HeaderText="(VM)<br/>Flashing"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Pink_Mark" HeaderText="(VM)<br/>Pink<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Deform" HeaderText="(VM)<br/>Deform"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Damage" HeaderText="(VM)<br/>Damage"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_Dirt" HeaderText="(VM)<br/>Mould<br/>Dirt"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Yellowish" HeaderText="(VM)<br/>Yellowish"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Mark" HeaderText="(VM)<br/>Oil<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Mark" HeaderText="(VM)<br/>Printing<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Uneven" HeaderText="(VM)<br/>Printing<br/>Uneven"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Printing_Color_Dark" HeaderText="(VM)<br/>Printing<br/>Color Dark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Wrong_Orietation" HeaderText="(VM)<br/>Wrong<br/>Orietation"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Other" HeaderText="(VM)<br/>Other"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_TotalRej" HeaderText="(VM)<br/>TotalRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Mould_TotalRejRate" HeaderText="(VM)<br/>TotalRej%"></asp:BoundColumn>
 
                     <asp:BoundColumn DataField="MFGDate" HeaderText="MFG Date"></asp:BoundColumn>
                             
 
                     <%--83--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle" HeaderText="(P)Particle"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Fibre" HeaderText="(P)Fibre"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Many_particle" HeaderText="(P)Many particle"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Stain_mark" HeaderText="(P)Stain mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Uneven_paint" HeaderText="(P)Uneven (P)"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Under_coat_uneven_paint" HeaderText="(P)Under coat uneven (P)"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Under_spray" HeaderText="(P)Under spray"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_White_dot" HeaderText="(P)White dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Silver_dot" HeaderText="(P)Silver dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Dust" HeaderText="(P)Dust"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_crack" HeaderText="(P)(P) crack"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Bubble" HeaderText="(P)Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Scratch" HeaderText="(P)Scratch"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Abrasion_Mark" HeaderText="(P)Abrasion Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_Dripping" HeaderText="(P)(P) Dripping"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Rough_Surface" HeaderText="(P)Rough Surface"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Shinning" HeaderText="(P)Shinning"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Matt" HeaderText="(P)Matt"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_Pin_Hole" HeaderText="(P)(P) Pin Hole"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Light_Leakage" HeaderText="(P)Light Leakage"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_White_Mark" HeaderText="(P)White Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Dented" HeaderText="(P)Dented"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Other" HeaderText="(P)Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle_for_laser_setup" HeaderText="(P)Particle for laser setup"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Buyoff" HeaderText="(P)Buyoff"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Shortage" HeaderText="(P)Shortage"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRej" HeaderText="(P)TotalRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRejRate" HeaderText="(P)TotalRej%"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRej" HeaderText="(P)SetupRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRejRate" HeaderText="(P)SetupRej%"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRej" HeaderText="(P)QA Reliability test Qty"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRejRate" HeaderText="(P)Qty%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle" HeaderText="(P)<br/>Particle"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Fibre" HeaderText="(P)<br/>Fibre"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Many_particle" HeaderText="(P)<br/>Many<br/>particle"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Stain_mark" HeaderText="(P)<br/>Stain<br/>mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Uneven_paint" HeaderText="(P)<br/>Uneven"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Under_coat_uneven_paint" HeaderText="(P)<br/>Under coat<br/>uneven"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Under_spray" HeaderText="(P)<br/>Under<br/>spray"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_White_dot" HeaderText="(P)<br/>White<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Silver_dot" HeaderText="(P)<br/>Silver<br/>dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Dust" HeaderText="(P)<br/>Dust"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_crack" HeaderText="(P)<br/>crack"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Bubble" HeaderText="(P)<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Scratch" HeaderText="(P)<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Abrasion_Mark" HeaderText="(P)<br/>Abrasion<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_Dripping" HeaderText="(P)<br/>Dripping"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Rough_Surface" HeaderText="(P)<br/>Rough<br/>Surface"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Shinning" HeaderText="(P)<br/>Shinning"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Matt" HeaderText="(P)<br/>Matt"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Paint_Pin_Hole" HeaderText="(P)<br/>Pin<br/>Hole"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Light_Leakage" HeaderText="(P)<br/>Light<br/>Leakage"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_White_Mark" HeaderText="(P)<br/>White<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Dented" HeaderText="(P)<br/>Dented"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Other" HeaderText="(P)<br/>Other"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle_for_laser_setup" HeaderText="(P)<br/>Particle for<br/>laser setup"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Buyoff" HeaderText="(P)<br/>Buyoff"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Shortage" HeaderText="(P)<br/>Shortage"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRej" HeaderText="(P)<br/>TotalRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRejRate" HeaderText="(P)<br/>TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRej" HeaderText="(P)<br/>SetupRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRejRate" HeaderText="(P)<br/>SetupRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRej" HeaderText="(P)QA<br/>Reliability<br/>test Qty"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRejRate" HeaderText="(P)<br/>Qty%"></asp:BoundColumn>
 
-                    <asp:BoundColumn DataField="paintCoat1st" HeaderText="(P)U/C 1st Coat"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintMachine1st" HeaderText="(P)1st Machine"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintDate1st" HeaderText="(P)1st Date"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintCoat2nd" HeaderText="(P)M/C 2nd Coat"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintMachine2nd" HeaderText="(P)2nd Machine"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintDate2nd" HeaderText="(P)2nd Date"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintCoat3rd" HeaderText="(P)T/C 3rd Coat"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintMachine3rd" HeaderText="(P)3rd Machine"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="paintDate3rd" HeaderText="(P)3rd Date"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintCoat1st" HeaderText="(P)U/C<br/>1st Coat"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintMachine1st" HeaderText="(P)1st<br/>Machine"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintDate1st" HeaderText="(P)1st<br/>Date"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintCoat2nd" HeaderText="(P)M/C<br/>2nd Coat"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintMachine2nd" HeaderText="(P)2nd<br/>Machine"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintDate2nd" HeaderText="(P)2nd<br/>Date"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintCoat3rd" HeaderText="(P)T/C<br/>3rd Coat"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintMachine3rd" HeaderText="(P)3rd<br/>Machine"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="paintDate3rd" HeaderText="(P)3rd<br/>Date"></asp:BoundColumn>
 
                     <%--124--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Mark" HeaderText="(L)Black Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Dot" HeaderText="(L)Black Dot"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Shift_check_by_PQC" HeaderText="(L)Graphic Shift check by PQC"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Shift_check_by_MC" HeaderText="(L)Graphic Shift check by MC"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Scratch" HeaderText="(L)Scratch"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Jagged" HeaderText="(L)Jagged"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Laser_Bubble" HeaderText="(L)(L) Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_double_outer_line" HeaderText="(L)double outer line"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Pin_hold" HeaderText="(L)Pin hold"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Poor_Laser" HeaderText="(L)Poor (L)"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Burm_Mark" HeaderText="(L)Burm Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Stain_Mark" HeaderText="(L)Stain Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Small" HeaderText="(L)Graphic Small"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Double_Laser" HeaderText="(L)Double (L)"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Color_Yellow" HeaderText="(L)Color Yellow"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Crack" HeaderText="(L)Crack"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Smoke" HeaderText="(L)Smoke"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Wrong_Orientation" HeaderText="(L)Wrong Orientation"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Dented" HeaderText="(L)Dented"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Other" HeaderText="(L)Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Buyoff" HeaderText="(L)Buyoff"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Setup" HeaderText="(L)Setup"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_TotalRej" HeaderText="(L)TotalRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_TotalRejRate" HeaderText="(L)TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Mark" HeaderText="(L)<br/>Black<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Black_Dot" HeaderText="(L)<br/>Black<br/>Dot"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Shift_check_by_PQC" HeaderText="(L)Graphic<br/>Shift check<br/>by PQC"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Shift_check_by_MC" HeaderText="(L)Graphic<br/>Shift check<br/>by MC"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Scratch" HeaderText="(L)<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Jagged" HeaderText="(L)<br/>Jagged"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Laser_Bubble" HeaderText="(L)<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_double_outer_line" HeaderText="(L)double<br/>outer<br/>line"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Pin_hold" HeaderText="(L)<br/>Pin<br/>hold"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Poor_Laser" HeaderText="(L)<br/>Poor"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Burm_Mark" HeaderText="(L)<br/>Burm<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Stain_Mark" HeaderText="(L)<br/>Stain<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Graphic_Small" HeaderText="(L)<br/>Graphic<br/>Small"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Double_Laser" HeaderText="(L)<br/>Double"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Color_Yellow" HeaderText="(L)<br/>Color<br/>Yellow"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Crack" HeaderText="(L)<br/>Crack"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Smoke" HeaderText="(L)<br/>Smoke"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Wrong_Orientation" HeaderText="(L)<br/>Wrong<br/>Orientation"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Dented" HeaderText="(L)<br/>Dented"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Other" HeaderText="(L)<br/>Other"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Buyoff" HeaderText="(L)<br/>Buyoff"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_Setup" HeaderText="(L)<br/>Setup"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_TotalRej" HeaderText="(L)<br/>TotalRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e2efda" ItemStyle-HorizontalAlign="Center" DataField="Laser_TotalRejRate" HeaderText="(L)<br/>TotalRej%"></asp:BoundColumn>
 
-                    <asp:BoundColumn DataField="laserMachine" HeaderText="(L)Machine"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="laserMachine" HeaderText="(L)<br/>Machine"></asp:BoundColumn>
                     <asp:BoundColumn DataField="laserOP" HeaderText="(L)OP"></asp:BoundColumn>
                     <asp:BoundColumn DataField="laserDate" HeaderText="(L)Date"></asp:BoundColumn>
 
 
                     <%--152--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="PQC_Scratch" HeaderText="(O)PQC Scratch"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Over_Spray" HeaderText="(O)Over Spray"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Bubble" HeaderText="(O)Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Oil_Stain" HeaderText="(O)Oil Stain"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Drag_Mark" HeaderText="(O)Drag Mark"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Light_Leakage" HeaderText="(O)Light Leakage"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Light_Bubble" HeaderText="(O)Light Bubble"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="White_Dot_in_Material" HeaderText="(O)White Dot in Material"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Other" HeaderText="(O)Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRej" HeaderText="(O)TotalRej"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRejRate" HeaderText="(O)TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="PQC_Scratch" HeaderText="(O)<br/>PQC<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Over_Spray" HeaderText="(O)<br/>Over<br/>Spray"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Bubble" HeaderText="(O)<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Oil_Stain" HeaderText="(O)<br/>Oil<br/>Stain"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Drag_Mark" HeaderText="(O)<br/>Drag<br/>Mark"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Light_Leakage" HeaderText="(O)<br/>Light<br/>Leakage"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Light_Bubble" HeaderText="(O)<br/>Light<br/>Bubble"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="White_Dot_in_Material" HeaderText="(O)White Dot<br/>in Material"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Other" HeaderText="(O)<br/>Other"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRej" HeaderText="(O)<br/>TotalRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRejRate" HeaderText="(O)<br/>TotalRej%"></asp:BoundColumn>
 
                     <asp:BoundColumn DataField="InspBy" HeaderText="Insp By"></asp:BoundColumn>
                             
