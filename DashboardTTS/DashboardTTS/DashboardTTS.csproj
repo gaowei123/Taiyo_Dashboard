@@ -233,6 +233,7 @@
     <Compile Include="Controllers\OverallReportController.cs" />
     <Compile Include="Controllers\PQC_ProductController.cs" />
     <Compile Include="ViewBusiness\Attendance_ViewBusiness.cs" />
+    <Compile Include="ViewBusiness\ButtonReport_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\Buyoff_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\HomePage_ViewBusiness.cs" />
     <Compile Include="Controllers\AccountController.cs" />
