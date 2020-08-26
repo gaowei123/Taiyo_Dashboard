@@ -3,19 +3,10 @@
 
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent"  >
-  
-<link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-<link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-
-
-<script src="../js/Dashboard.js"></script>
-<script src="../js/wz_tooltip.js"></script>
- 
- 
 
 <div style="width: 1550px; align-items:center;margin:auto">
   
-    <div >
+    <div>
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">
             <tr style ="width: 100%">
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; font-family: 'Arial Unicode MS'; height: 50px; background-color: #003366; font-weight: bold;" colspan="5"> 
@@ -55,53 +46,31 @@
                 <h3><asp:Label ID="lblResult" runat="server" CssClass="col-xs-11"></asp:Label></h3>
 
                 <asp:DataGrid runat="server" CssClass="table table-hover" ID ="dg_inventoryDetail" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" Width="100%"  HorizontalAlign="Center"  AutoGenerateColumns="False" >
-                <AlternatingItemStyle BackColor="White" ForeColor="#284775"  />
-                <EditItemStyle BackColor="#999999" />
-                <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-                <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Wrap="False" Height="30px" HorizontalAlign="left" VerticalAlign="Middle" />
-                <ItemStyle BackColor="#F7F6F3" ForeColor="#333333" Wrap="False" BorderStyle="None"  HorizontalAlign="left" VerticalAlign="Middle" />
-                <PagerStyle BackColor="#284775" HorizontalAlign="Center" BorderStyle="None" PageButtonCount="5" />
-                <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
-                <Columns>
-                                        <asp:BoundColumn DataField="jobNumber" HeaderText="JobNumber"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="partNumber" HeaderText="PartNumber"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="description" HeaderText="Description"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="quantity" HeaderText="Quantity"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="pqcQuantity" HeaderText="PqcQuantity"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="startOnTime" HeaderText="StartOnTime"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="dateTime" HeaderText="DateTime" Visible="true"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="day" HeaderText="Day" Visible="true"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="month" HeaderText="Month"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="year" HeaderText="Year"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="showFlag" HeaderText="ShowFlag" Visible="true"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="setUpQTY" HeaderText="SetUpQTY"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="buyOffQty" HeaderText="BuyOffQty"></asp:BoundColumn>
-                                        <asp:BoundColumn DataField="lotNo" HeaderText="LotNo"></asp:BoundColumn>
-<%--                    <asp:BoundColumn DataField="Customer"  HeaderText="Customer"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="Module"  HeaderText="Model"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="PartNumber"  HeaderText="Part No"></asp:BoundColumn>
-                    <asp:ButtonColumn DataTextField="JobNumber"  CommandName="LinkJobDetail"   HeaderText="Job No"></asp:ButtonColumn>
-                    <asp:BoundColumn DataField="JobNumber" HeaderText="Job No" Visible="false"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="MRPSet_PCS" HeaderText="MRP Set(PCS)" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="BeforeLaser" HeaderText="Before Set(PCS)" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="AfterLaser" HeaderText="After Set(PCS)" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                    <asp:ButtonColumn DataTextField="JobCount" CommandName="LinkJobDetail" HeaderText="Job Count" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:ButtonColumn>
-                    <asp:BoundColumn DataField="CycleTime" HeaderText="CycleTime" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="Hourly" HeaderText="Hourly" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="MFGDate" HeaderText="MFG Date"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="EstProcessTime" HeaderText="Est Time"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="BomExistFlag" HeaderText="Bom List"></asp:BoundColumn>
-                  
-                    
-                    <asp:TemplateColumn ItemStyle-HorizontalAlign="Center" Visible="False">
-                        <ItemTemplate>
-                            <asp:Button ID="btn_GetRowNo" Runat="server" Text="" Index='<%# ((DataGridItem)Container).ItemIndex %>'/>
-                        </ItemTemplate>
-                        <ItemStyle HorizontalAlign="Center"></ItemStyle>
-                    </asp:TemplateColumn>
+                    <AlternatingItemStyle BackColor="White" ForeColor="#284775"  />
+                    <EditItemStyle BackColor="#999999" />
+                    <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                    <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Wrap="False" Height="30px" HorizontalAlign="left" VerticalAlign="Middle" />
+                    <ItemStyle BackColor="#F7F6F3" ForeColor="#333333" Wrap="False" BorderStyle="None"  HorizontalAlign="left" VerticalAlign="Middle" />
+                    <PagerStyle BackColor="#284775" HorizontalAlign="Center" BorderStyle="None" PageButtonCount="5" />
+                    <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
 
-                    <asp:BoundColumn DataField="ID"  HeaderText="S/N" Visible="false"></asp:BoundColumn>--%>
-                </Columns>
+                    <Columns>
+                        <asp:BoundColumn DataField="jobNumber" HeaderText="JobNumber"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="partNumber" HeaderText="PartNumber"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="description" HeaderText="Description"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="quantity" HeaderText="Quantity"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="pqcQuantity" HeaderText="PqcQuantity"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="startOnTime" HeaderText="StartOnTime"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="dateTime" HeaderText="DateTime" Visible="true"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="day" HeaderText="Day" Visible="true"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="month" HeaderText="Month"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="year" HeaderText="Year"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="showFlag" HeaderText="ShowFlag" Visible="true"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="setUpQTY" HeaderText="SetUpQTY"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="buyOffQty" HeaderText="BuyOffQty"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="lotNo" HeaderText="LotNo"></asp:BoundColumn>
+                    </Columns>
+
                 </asp:DataGrid>
                 </td>
             </tr>

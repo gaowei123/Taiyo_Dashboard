@@ -358,9 +358,7 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-
-
-
+                
 
 
                 #region defect rej 0的列隐藏
@@ -492,6 +490,8 @@ namespace DashboardTTS.Webform.PQC
                 this.dgButton.Columns[158].Visible = modelForDisplay.White_Dot_in_Material == 0 ? false : true;
                 this.dgButton.Columns[159].Visible = modelForDisplay.Other == 0 ? false : true;
                 #endregion
+
+
             }
             catch (Exception ee)
             {
