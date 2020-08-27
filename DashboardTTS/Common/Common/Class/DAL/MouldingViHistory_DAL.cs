@@ -370,10 +370,10 @@ end as Accumulate
 
 ,convert(varchar(50),a.acountReading ) + '(' + convert(varchar(50), convert(numeric(10,0), a.acountReading/a.cavityCount) )  + ')'  as Output
 ,ISNULL(a.acceptQty,0) as OK
-,CONVERT(decimal(18,0), ISNULL(a.rejectQty,0) + ISNULL(a.Setup,0 ) + ISNULL(a.QCNGQTY ,0))  as NG
+,CONVERT(decimal(18,0), ISNULL(a.rejectQty,0))  as NG
 ,a.QCNGQTY as QCNGQTY
 
-,CONVERT(varchar(50), CONVERT(decimal(18,2),Round((ISNULL(a.rejectQty,0) + ISNULL(a.Setup,0 ) + ISNULL(a.QCNGQTY ,0))/a.acountReading * 100,2 ))) + '%' as RejRate
+,CONVERT(varchar(50), CONVERT(decimal(18,2),Round(ISNULL(a.rejectQty,0)/a.acountReading * 100,2 ))) + '%' as RejRate
 
 
 ,convert(varchar(50),	case when a.stopTime IS not null 
@@ -413,7 +413,7 @@ then	CONVERT(VARCHAR(8),
 else '0'
 end as NeedProductionTime
 
-
+,isnull(a.WastageMaterial01,0.00)  + isnull(a.WastageMaterial02,0.00) as AdjustScrap
 
 from MouldingViTracking a 
 left join MouldingPqm b on a.MachineID = SUBSTRING( b.machineID ,4,1 )  left join MouldingBom c on c.partNumber = a.partNumber                  

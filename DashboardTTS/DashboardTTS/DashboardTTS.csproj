@@ -3734,6 +3734,7 @@
     <Content Include="Views\LASER_Product\LaserMaintenance.cshtml" />
     <Content Include="Views\PQC_Product\PackingPicChart.cshtml" />
     <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
+    <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
