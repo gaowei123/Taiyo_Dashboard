@@ -327,6 +327,7 @@
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\PQCDailyReport_ViewModel.cs" />
+    <Compile Include="ViewModel\PQCOperatorDailyReport.cs" />
     <Compile Include="ViewModel\PQCRealTime_ViewModel.cs" />
     <Compile Include="ViewModel\PQCSummaryReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCWIPInventory_ViewModel.cs" />
