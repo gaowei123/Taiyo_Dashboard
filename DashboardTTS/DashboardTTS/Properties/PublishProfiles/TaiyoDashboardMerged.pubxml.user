@@ -1966,10 +1966,10 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>08/26/2020 13:20:33</publishTime>
+      <publishTime>08/28/2020 14:39:48</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>08/26/2020 13:20:38</publishTime>
+      <publishTime>08/28/2020 14:39:52</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
       <publishTime>08/25/2020 16:43:19</publishTime>
@@ -2272,7 +2272,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Dashboard CSS JS/JS/SharedJS.js">
-      <publishTime>07/31/2020 13:31:40</publishTime>
+      <publishTime>08/27/2020 10:32:48</publishTime>
     </File>
     <File Include="email-templates/action.html">
       <publishTime>08/20/2016 15:33:42</publishTime>
@@ -10771,7 +10771,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>08/11/2020 14:39:56</publishTime>
+      <publishTime>08/28/2020 14:38:14</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10927,7 +10927,7 @@
       <publishTime>07/07/2020 14:39:00</publishTime>
     </File>
     <File Include="Views/PQC_Product/DailyReport.cshtml">
-      <publishTime>06/22/2020 11:10:56</publishTime>
+      <publishTime>08/28/2020 13:47:18</publishTime>
     </File>
     <File Include="Views/PQC_Product/JobOrderDetail.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10950,8 +10950,11 @@
     <File Include="Views/PQC_Product/PackingProductionTrendChart.cshtml">
       <publishTime>07/10/2020 16:49:50</publishTime>
     </File>
+    <File Include="Views/PQC_Product/PICDailyOutputReport.cshtml">
+      <publishTime>08/28/2020 14:28:57</publishTime>
+    </File>
     <File Include="Views/PQC_Product/SummaryReport.cshtml">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>08/27/2020 10:29:51</publishTime>
     </File>
     <File Include="Views/PQC_Product/WIPInventory.cshtml">
       <publishTime>06/30/2020 15:35:40</publishTime>
@@ -10963,7 +10966,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>08/11/2020 14:39:56</publishTime>
+      <publishTime>08/28/2020 14:37:47</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10978,7 +10981,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/15/2020 19:58:43</publishTime>
+      <publishTime>08/28/2020 14:40:16</publishTime>
     </File>
     <File Include="Webform/Assy/AssyUserAttendance.aspx">
       <publishTime>01/19/2020 15:52:12</publishTime>
@@ -11473,7 +11476,7 @@
       <publishTime>01/15/2020 16:59:30</publishTime>
     </File>
     <File Include="Webform/Moulding/ProductionReport.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>08/27/2020 10:04:27</publishTime>
     </File>
     <File Include="Webform/Moulding/QAProductionReport.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11497,7 +11500,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Painting/PaintingJobOrder.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>08/26/2020 15:55:56</publishTime>
     </File>
     <File Include="Webform/Painting/PaintingUserAttendance.aspx">
       <publishTime>01/19/2020 16:03:16</publishTime>

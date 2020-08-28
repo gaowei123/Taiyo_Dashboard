@@ -273,6 +273,12 @@ namespace Common.Class.BLL
 
 
 
+        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+            return dal.GetDailyOperatorList(dDate, sShift, sUserID);
+        }
+
+
 
 
     }

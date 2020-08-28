@@ -165,8 +165,7 @@ namespace Common.Class.BLL
                 return int.Parse(dt.Rows[0]["OK"].ToString());
             }
         }
-
-
+        
    
 
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
@@ -1051,6 +1050,16 @@ namespace Common.Class.BLL
             return DateTime.Parse(sDay);
         }
             
+
+
+
+        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+
+            return dal.GetDailyOperatorList(dDate, sShift, sUserID);
+
+
+        }
 
 
     }

@@ -475,9 +475,5 @@ where 1=1 and jobNumber in " + strWhere);
         }
 
 
-
-
-
-
     }
 }

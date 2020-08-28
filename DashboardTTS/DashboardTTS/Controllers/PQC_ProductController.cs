@@ -566,5 +566,33 @@ namespace DashboardTTS.Controllers
         }
 
 
+
+
+        public ActionResult GetDailyOperatorList()
+        {
+            DateTime date = DateTime.Parse(Request.Form["Date"]);
+
+            string shift = Request.Form["Shift"];
+            string userID = Request.Form["UserID"];
+
+
+
+            List<ViewModel.PQCOperatorDailyReport> modelList = vBLL.GetDailyOperatorList(date, shift, userID);
+
+            if (modelList == null)
+            {
+              
+            }else
+            {
+                return Content(_js.Serialize(modelList));
+            }
+
+            string result = modelList == null ? _js.Serialize("") : _js.Serialize(modelList);
+
+
+            return Content(result);
+        }
+
+
     }
 }
