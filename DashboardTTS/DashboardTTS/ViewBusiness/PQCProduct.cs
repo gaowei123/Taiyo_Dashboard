@@ -1566,6 +1566,7 @@ namespace DashboardTTS.ViewBusiness
                 summaryModel.totalRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.totalRej), Math.Round(reportList.Sum(p => p.totalRej) / summaryModel.lotQty * 100, 2));
                 summaryModel.passQty = reportList.Sum(p => p.passQty);
                 summaryModel.rejPrice = reportList.Sum(p => p.rejPrice);
+                summaryModel.operatedTime = Common.CommFunctions.ConvertDateTimeShort(reportList.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.operatedTime)).ToString());
 
 
                 reportList.Add(summaryModel);
