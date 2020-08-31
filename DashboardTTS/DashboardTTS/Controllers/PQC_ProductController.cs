@@ -579,8 +579,18 @@ namespace DashboardTTS.Controllers
 
             List<ViewModel.PQCOperatorDailyReport> modelList = vBLL.GetDailyOperatorList(date, shift, userID);
 
+            if (modelList == null)
+            {
+              
+            }else
+            {
+                return Content(_js.Serialize(modelList));
+            }
 
-            return Json(modelList);
+            string result = modelList == null ? _js.Serialize("") : _js.Serialize(modelList);
+
+
+            return Content(result);
         }
 
 
