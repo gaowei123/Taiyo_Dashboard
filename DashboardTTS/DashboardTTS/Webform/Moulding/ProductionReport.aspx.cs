@@ -53,6 +53,7 @@ namespace DashboardTTS.Webform.Molding
                         ClientScript.RegisterStartupScript(this.GetType(), "", "alert('Fail!');", true);
                     }
                     #endregion
+
                 }
 
                 this.dg_Report.ItemCommand += Dg_Report_ItemCommand;
@@ -201,8 +202,7 @@ namespace DashboardTTS.Webform.Molding
         {
             try
             {
-
-                //DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 1 ====");
+                
 
 
                 Common.Class.BLL.MouldingViHistory_BLL bll = new Common.Class.BLL.MouldingViHistory_BLL();
@@ -214,8 +214,7 @@ namespace DashboardTTS.Webform.Molding
                 string Shift = this.ddl_Shift.SelectedValue;
                 string Module = this.txt_module.Text;
 
-
-                //DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 2 ====");
+                
 
                 DataTable dt = bll.ProductionReport(dTimeFrom, dTimeTo, MachineID, PartNo, Shift, Module);
 
@@ -254,28 +253,6 @@ namespace DashboardTTS.Webform.Molding
             this.lblResult.Visible = false;
         }
 
-        protected void btn_Update_Click(object sender, EventArgs e)
-        {
-            string buttonText = this.btn_Update.Text;
-            if (buttonText == "Update")
-            {
-                this.dg_Report.Columns[21].Visible = true;
-                this.dg_Report.Columns[22].Visible = true;
-                this.dg_Report.Columns[23].Visible = true;
-                this.dg_Report.Columns[24].Visible = true;
-                //this.dg_Report.Columns[26].Visible = true;
-                this.btn_Update.Text = "Hide";
-
-            }
-            else if (buttonText == "Hide")
-            {
-                this.dg_Report.Columns[21].Visible = false;
-                this.dg_Report.Columns[22].Visible = false;
-                this.dg_Report.Columns[23].Visible = false;
-                this.dg_Report.Columns[24].Visible = false;
-                //this.dg_Report.Columns[26].Visible = false;
-                this.btn_Update.Text = "Update";
-            }
-        }
+  
     }
 }
