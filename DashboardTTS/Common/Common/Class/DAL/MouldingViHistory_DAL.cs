@@ -413,7 +413,7 @@ then	CONVERT(VARCHAR(8),
 else '0'
 end as NeedProductionTime
 
-,isnull(a.WastageMaterial01,0.00)  + isnull(a.WastageMaterial02,0.00) as AdjustScrap
+,convert(float, isnull(a.setup,0)) as AdjustScrap
 
 from MouldingViTracking a 
 left join MouldingPqm b on a.MachineID = SUBSTRING( b.machineID ,4,1 )  left join MouldingBom c on c.partNumber = a.partNumber                  

@@ -499,7 +499,7 @@ namespace Common.Class.BLL
                         drNew["Output"] = string.Format("{0}({1})", OutputPCS, OutputShot);
                         drNew["Accumulate"] = TotalAccumulate;
                         drNew["NeedProductionTime"] = Common.CommFunctions.ConvertDateTimeShort(drNew["NeedProductionTime"].ToString().ToString() + "H");
-                        drNew["AdjustScrap"] = AdjustScrap.ToString("0.00");
+                        drNew["AdjustScrap"] = AdjustScrap.ToString("0");
 
                         dtMerged.Rows.Add(drNew.ItemArray);
                         #endregion
@@ -579,7 +579,7 @@ namespace Common.Class.BLL
             dr_toal["Accumulate"] = DBNull.Value; //Total_Accumulate;
             dr_toal["RejRate"] = Math.Round( Total_NG/ Total_OutputPerPCS * 100,2).ToString("0.00") + "%";
             dr_toal["Time"] = SecondToDateTime(Total_Time);
-            dr_toal["AdjustScrap"] = Total_AdjustScrap.ToString("0.00");
+            dr_toal["AdjustScrap"] = Total_AdjustScrap.ToString("0");
 
 
             dtMerged.Rows.Add(dr_toal);
