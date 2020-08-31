@@ -80,6 +80,43 @@ where a.nextviflag = 'true' ");
                 return ds.Tables[0];
         }
 
+
+        public DataTable GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobNo, string sProcess)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select * from PQCQaViTracking where 1=1 ");
+
+
+
+
+            if (dDateFrom != null) strSql.Append("  and day >= @dateFrom ");
+            if (dDateTo != null) strSql.Append("  and day < @dateTo ");
+            if (!string.IsNullOrEmpty(sJobNo)) strSql.Append("  and jobID = @jobID ");
+            if (!string.IsNullOrEmpty(sProcess)) strSql.Append("  and processes = @processes ");
+
+       
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom", SqlDbType.DateTime2),
+                new SqlParameter("@dateTo", SqlDbType.DateTime2),
+                new SqlParameter("@jobID", SqlDbType.VarChar),
+                new SqlParameter("@processes", SqlDbType.VarChar)             
+            };
+            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
+            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sJobNo)) parameters[2].Value = sJobNo; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(sProcess)) parameters[3].Value = sProcess; else parameters[3] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+
         public DataTable GetList(string sPartNumber, string sJobNumber, DateTime dDateFrom, DateTime dDateTo, string sShift,string sMachineType,string sLotNo,string sDateNotIn, string sTrackingID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2081,6 +2118,41 @@ and a.day=@day ");
 
 
 
+        public SqlCommand UpdateForQASetup(Common.Class.Model.PQCQaViTracking model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@" update PQCQaViTracking set                              
+                                totalQty = @totalQty, 
+                                acceptQty = @acceptQty, 
+                                lastUpdatedTime = @lastUpdatedTime,
+                                updatedTime =  @updatedTime,
+                                remarks = @remarks
+                            where trackingID  =@trackingID ");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@totalQty", SqlDbType.Decimal),
+                new SqlParameter("@acceptQty", SqlDbType.Decimal),
+                new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
+                new SqlParameter("@updatedTime", SqlDbType.DateTime),
+                new SqlParameter("@remarks", SqlDbType.VarChar)
+            };
+
+            parameters[0].Value = model.trackingID;
+            parameters[1].Value = model.TotalQty;
+            parameters[2].Value = model.acceptQty;
+            parameters[3].Value = model.lastUpdatedTime;
+            parameters[4].Value = model.updatedTime;
+            parameters[5].Value = model.remarks;
+
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+     
+        
 
         public DataTable GetBuyoffJobList(DateTime? dDay)
         {
