@@ -564,6 +564,7 @@ namespace DashboardTTS.Webform.PQC
                 DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "Update MFG Date for Paint Delivery His Failed! ");
         }
 
+
         void UpdatePaintRejQty(string jobNumber, int paintRejQty, string process)
         {
             Common.Class.BLL.PaintingDeliveryHis_BLL bll = new Common.Class.BLL.PaintingDeliveryHis_BLL();
@@ -573,6 +574,15 @@ namespace DashboardTTS.Webform.PQC
                 DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "Update Paint Rej Qty for Paint Delivery His Failed! ");
             }
         }
+
+
+
+
+        void UpdatePaintQaSetup(string trackingID, double qaQty, double setupQty)
+        {
+
+        }
+
 
     }
 }
