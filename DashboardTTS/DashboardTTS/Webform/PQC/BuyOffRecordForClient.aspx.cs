@@ -361,17 +361,29 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-                //从mrp接口获取的datetime不是mfgdate, 只能通过pqc op在buyoff reocord中手动选择mfg date.
+                //从mrp接口获取的datetime不是mfgdate, 
+                //只能通过pqc op手动选择mfg date. 并更新回各个表.
                 MFGDate = DateTime.Parse(this.txtMFGDate.Text);
-
-                //更新回各个表.
                 UpdateMFGDate(txtJobNumber.Text, MFGDate.Value);
+
+
 
 
 
                 //setup的数量为 painting rej的数量.
                 int paintRej = int.Parse(this.txtSetupRejQty.Text.Trim());
                 UpdatePaintRejQty(txtJobNumber.Text, paintRej, lbCheckProcess.Text);
+
+
+
+
+
+                //pqc vi tracking的total, pass qty要扣除paint qa, setup的数量. 
+                //其中wip part在end后提交buyoff,client无法获取该数量, 需要在buyoff record中扣除.
+                int qaQty = string.IsNullOrEmpty(this.txtQATestQty.Text) ? 0 : int.Parse(this.txtQATestQty.Text);
+                int setupQty = string.IsNullOrEmpty(this.txtSetupRejQty.Text) ? 0 : int.Parse(this.txtSetupRejQty.Text);
+                UpdatePaintQaSetup(qaQty, setupQty);
+
 
 
 
