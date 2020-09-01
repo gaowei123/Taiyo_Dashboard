@@ -80,6 +80,42 @@ where a.nextviflag = 'true' ");
                 return ds.Tables[0];
         }
 
+
+
+        public DataTable GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobNo, string sProcess)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("select * from PQCQaViTracking where 1=1 ");
+
+
+
+
+            if (dDateFrom != null) strSql.Append("  and day >= @dateFrom ");
+            if (dDateTo != null) strSql.Append("  and day < @dateTo ");
+            if (!string.IsNullOrEmpty(sJobNo)) strSql.Append("  and jobID = @jobID ");
+            if (!string.IsNullOrEmpty(sProcess)) strSql.Append("  and processes = @processes ");
+
+
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom", SqlDbType.DateTime2),
+                new SqlParameter("@dateTo", SqlDbType.DateTime2),
+                new SqlParameter("@jobID", SqlDbType.VarChar),
+                new SqlParameter("@processes", SqlDbType.VarChar)
+            };
+            if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
+            if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sJobNo)) parameters[2].Value = sJobNo; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(sProcess)) parameters[3].Value = sProcess; else parameters[3] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
         public DataTable GetList(string sPartNumber, string sJobNumber, DateTime dDateFrom, DateTime dDateTo, string sShift,string sMachineType,string sLotNo,string sDateNotIn, string sTrackingID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1986,6 +2022,42 @@ and a.day=@day ");
                 return ds.Tables[0];
         }
 
+
+
+        public SqlCommand UpdateForQASetup(Common.Class.Model.PQCQaViTracking model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@" update PQCQaViTracking set                              
+                                totalQty = @totalQty, 
+                                acceptQty = @acceptQty, 
+                                lastUpdatedTime = @lastUpdatedTime,
+                                updatedTime =  @updatedTime,
+                                remarks = @remarks
+                            where trackingID  =@trackingID ");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@totalQty", SqlDbType.Decimal),
+                new SqlParameter("@acceptQty", SqlDbType.Decimal),
+                new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
+                new SqlParameter("@updatedTime", SqlDbType.DateTime),
+                new SqlParameter("@remarks", SqlDbType.VarChar)
+            };
+
+            parameters[0].Value = model.trackingID;
+            parameters[1].Value = model.TotalQty;
+            parameters[2].Value = model.acceptQty;
+            parameters[3].Value = model.lastUpdatedTime;
+            parameters[4].Value = model.updatedTime;
+            parameters[5].Value = model.remarks;
+
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+
         public DataTable GetRealTimeForPack(DateTime day)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2265,6 +2337,74 @@ where day >= @dateFrom and day < @dateTo ");
             };
 
             parameters[0].Value = sJob;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select
+jobID 
+,startTime
+,stopTime
+,a.partNumber
+,case when  CHARINDEX('Laser',c.processes,0) > 0 and a.processes = 'CHECK#1' 
+	then 'Laser'
+	else 'WIP' 
+end as Process
+,b.MouldRej
+,b.PaintRej
+,b.LaserRej
+,b.OthersRej
+,rejectQty
+,acceptQty
+,rejectQty *  isnull( c.unitCost,0) as rejPrice
+,Upper(userID) as userID
+,d.materialCount
+from PQCQaViTracking a
+left join (
+	select 
+	trackingID
+	,isnull(sum(case when defectDescription = 'Mould' then isnull(rejectQty,0) end),0) as MouldRej
+	,isnull(sum(case when defectDescription = 'Paint' then isnull(rejectQty,0) end) ,0) as PaintRej
+	,isnull(sum(case when defectDescription = 'Laser' then isnull(rejectQty,0) end) ,0) as LaserRej
+	,isnull(sum(case when defectDescription = 'Others' then isnull(rejectQty,0) end),0)  as OthersRej
+	from PQCQaViDefectTracking
+    where day = @date
+	group by trackingID
+) b on a.trackingID = b.trackingID
+left join PQCBom c on a.partNumber = c.partNumber
+left join  (
+    select partNumber , count(1) as materialCount 
+    from PQCBomDetail 
+    group by partnumber 
+) d  on c.partNumber = d.partNumber
+where 1=1  ");
+
+            strSql.AppendLine(" and a.day = @date ");
+            if (!string.IsNullOrEmpty(sShift)) strSql.AppendLine(" and a.shift = @shift ");
+            if (!string.IsNullOrEmpty(sUserID)) strSql.AppendLine(" and a.userID = @userID");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@date", SqlDbType.DateTime2),
+                new SqlParameter("@shift", SqlDbType.VarChar,50),
+                new SqlParameter("@userID", SqlDbType.VarChar,50),
+            };
+
+            parameters[0].Value = dDate;
+            if (!string.IsNullOrEmpty(sShift)) parameters[1].Value = sShift; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sUserID)) parameters[2].Value = sUserID; else parameters[2] = null;
+            
 
 
 

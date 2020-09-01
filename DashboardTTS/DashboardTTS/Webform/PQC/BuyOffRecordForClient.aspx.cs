@@ -361,17 +361,29 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-                //从mrp接口获取的datetime不是mfgdate, 只能通过pqc op在buyoff reocord中手动选择mfg date.
+                //从mrp接口获取的datetime不是mfgdate, 
+                //只能通过pqc op手动选择mfg date. 并更新回各个表.
                 MFGDate = DateTime.Parse(this.txtMFGDate.Text);
-
-                //更新回各个表.
                 UpdateMFGDate(txtJobNumber.Text, MFGDate.Value);
+
+
 
 
 
                 //setup的数量为 painting rej的数量.
                 int paintRej = int.Parse(this.txtSetupRejQty.Text.Trim());
                 UpdatePaintRejQty(txtJobNumber.Text, paintRej, lbCheckProcess.Text);
+
+
+
+
+
+                //pqc vi tracking的total, pass qty要扣除paint qa, setup的数量. 
+                //其中wip part在end后提交buyoff,client无法获取该数量, 需要在buyoff record中扣除.
+                int qaQty = string.IsNullOrEmpty(this.txtQATestQty.Text) ? 0 : int.Parse(this.txtQATestQty.Text);
+                int setupQty = string.IsNullOrEmpty(this.txtSetupRejQty.Text) ? 0 : int.Parse(this.txtSetupRejQty.Text);
+                UpdatePaintQaSetup(qaQty, setupQty);
+
 
 
 
@@ -564,6 +576,7 @@ namespace DashboardTTS.Webform.PQC
                 DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "Update MFG Date for Paint Delivery His Failed! ");
         }
 
+
         void UpdatePaintRejQty(string jobNumber, int paintRejQty, string process)
         {
             Common.Class.BLL.PaintingDeliveryHis_BLL bll = new Common.Class.BLL.PaintingDeliveryHis_BLL();
@@ -573,6 +586,51 @@ namespace DashboardTTS.Webform.PQC
                 DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "Update Paint Rej Qty for Paint Delivery His Failed! ");
             }
         }
+
+
+
+        //当天当班, 该job在当前process, 只做过一次, 并且当前数量不是0, 则更新total, pass qty
+        void UpdatePaintQaSetup(int qaQty, int setupQty)
+        {
+
+            string jobNo = this.txtJobNumber.Text.Trim();
+            string checkProcess = this.lbCheckProcess.Text.Trim();
+
+            DateTime currentDay = DateTime.Now.AddHours(-8).Date;
+            string currentShift = DateTime.Now >= currentDay.AddHours(8) && DateTime.Now < currentDay.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
+
+
+            
+
+            //根据job, process获取所有记录.
+            Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
+            List<Common.Class.Model.PQCQaViTracking> modelList = bll.GetModelList(null, null, jobNo, checkProcess);
+            if (modelList == null || modelList.Count == 0)
+            {
+                DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find record!");
+                return;
+            }
+            
+
+
+            var currentTracking = (from a in modelList
+                                   where a.day == currentDay && a.shift == currentShift
+                                   select a).FirstOrDefault();
+            if (currentTracking == null)
+            {
+                DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find current tracking!");
+                return;
+            }
+            
+            int totalQty = int.Parse(string.IsNullOrEmpty(currentTracking.TotalQty) ? "0" : currentTracking.TotalQty);
+            if (totalQty != 0 && modelList.Count == 1)
+            {
+               bool result =  bll.UpdateQASetupForWipPart(currentTracking.trackingID, qaQty, setupQty);
+            }
+            
+
+        }
+
 
     }
 }

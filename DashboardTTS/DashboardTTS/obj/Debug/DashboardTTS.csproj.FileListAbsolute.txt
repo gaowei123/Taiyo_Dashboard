@@ -1,3 +1,4 @@
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\ApplicationInsights.config
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\roslyn\csc.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -103,6 +104,5 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\Microsoft.Owin.Security.Google.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\Microsoft.Owin.Security.Twitter.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.pdb
