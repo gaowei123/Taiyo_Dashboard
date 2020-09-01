@@ -14,7 +14,14 @@
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 
-<div class="container">
+<style>
+    .container-fluid{
+        max-width:1600px;
+    }
+</style>
+
+
+<div class="container-fluid">
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
@@ -69,7 +76,8 @@
 
 <script type="text/javascript">
 
-    var apiGetOperatorList = window.globalConfig.rootDirectory + '/PQC_Product/GetOperatorList';
+
+    var apiGetOperatorList = window.globalConfig.rootDirectory + '/PQC_Product/GetDailyOperatorList';
 
 
     //初始化时间框
@@ -92,8 +100,10 @@
 
         setUserIDDDL($('#ddlUserID'), 'PQC');
 
-        var today = dateFormat(new Date(), 'yyyy-MM-dd');
-        $('#txtDate').val(today);
+
+        var lastDay = getLastReportDay();
+        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+        $('#txtDate').val(strLastDay);
 
 
         search();
@@ -165,68 +175,132 @@
 
             },
 
+
+          
+
             columns: [
+            {              
+                title: 'SN',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
             {
-                field: 'pqcDept',
-                title: 'PQC Dept',
+                field: 'startTime',
+                title: 'Start Time',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.sDate == '-' || value == null) {
+                        return 'Total';
+                    }
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('HH:mm:ss', date);
+                }
+            },
+            {
+                field: 'endTime',
+                title: 'End Time',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (row.sDate == 'Total' || value == null) {
+                        return '-';
+                    }
+                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('HH:mm:ss', date);
+                }
+            },
+            {
+                field: 'operatedTime',
+                title: 'Operated Time',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'totalOutput',
-                title: 'Total Output',
+                field: 'partNo',
+                title: 'Part No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'ttsMouldRejRate',
-                title: 'TTS Mould Rej(%)',
+                field: 'lotNo',
+                title: 'Lot No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'vendorsModelRejRate',
-                title: 'Vendors Mould Rej(%)',
+                field: 'process',
+                title: 'Process',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'paintRejRate',
+                field: 'lotQty',
+                title: 'Lot Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'mouldRejDisplay',
+                title: 'Mould Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'paintRejDisplay',
                 title: 'Paint Rej(%)',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'laserRejRate',
+                field: 'laserRejDisplay',
                 title: 'Laser Rej(%)',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'othersRejRate',
+                field: 'othersRejDisplay',
                 title: 'Others Rej(%)',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'totalRejRate',
+                field: 'totalRejDisplay',
                 title: 'Total Rej(%)',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'actualOutput',
-                title: 'Actual Output',
+                field: 'passQty',
+                title: 'Pass Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'rejPrice',
+                title: 'Lose Amounts',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'userID',
+                title: 'Operator',
                 align: 'center',
                 valign: 'middle'
             }
+            
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
             
 
+                $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 210 });
 
             },
+
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
             }
@@ -237,7 +311,7 @@
 
 
     $(window).resize(function () {
-        $('#tbOperator').bootstrapTable('resetView');
+        $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 210 });
     });
 
 
