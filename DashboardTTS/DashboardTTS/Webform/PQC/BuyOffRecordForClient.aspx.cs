@@ -577,51 +577,6 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-        //当天当班, 按job, process去最新的一条
-        //如果只做过一次, 并且当前数量不是0, 则更新total, pass qty
-        void UpdatePaintQaSetup(int qaQty, int setupQty)
-        {
-
-            string jobNo = this.txtJobNumber.Text.Trim();
-            string checkProcess = this.lbCheckProcess.Text.Trim();
-
-            DateTime currentDay = DateTime.Now.AddHours(-8).Date;
-            string currentShift = DateTime.Now >= currentDay.AddHours(8) && DateTime.Now < currentDay.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
-
-
-            
-
-            //根据job, process获取所有记录.
-            Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
-            List<Common.Class.Model.PQCQaViTracking> modelList = bll.GetModelList(null, null, jobNo, checkProcess);
-            if (modelList == null || modelList.Count == 0)
-            {
-                DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find record!");
-                return;
-            }
-            
-
-
-            var currentTracking = (from a in modelList
-                                   where a.day == currentDay && a.shift == currentShift
-                                   orderby a.updatedTime descending
-                                   select a).FirstOrDefault();
-            if (currentTracking == null)
-            {
-                DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find current tracking!");
-                return;
-            }
-            
-            int totalQty = int.Parse(string.IsNullOrEmpty(currentTracking.TotalQty) ? "0" : currentTracking.TotalQty);
-            if (totalQty != 0 && modelList.Count == 1)
-            {
-               bool result =  bll.UpdateQASetupForWipPart(currentTracking.trackingID, qaQty, setupQty);
-            }
-       
-
-      
-
-        }
 
 
     }
