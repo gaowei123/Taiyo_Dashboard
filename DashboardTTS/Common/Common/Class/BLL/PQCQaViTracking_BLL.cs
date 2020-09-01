@@ -82,24 +82,6 @@ namespace Common.Class.BLL
             return model;
         }
 
-
-        public List<Common.Class.Model.PQCQaViTracking> GetModelList(DateTime? dDateFrom, DateTime? dDateTo, string sJobNo, string sProcess)
-        {
-            DataTable dt = dal.GetList(dDateFrom, dDateTo, sJobNo, sProcess);
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-
-
-            List<Common.Class.Model.PQCQaViTracking> modelList = new List<Model.PQCQaViTracking>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                modelList.Add(dataRowToModel(dr));
-            }
-
-            return modelList;
-        }
-
-
         public DataTable GetList(string sPartNumber, string sJobNumber, DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineType, string sLotNo, string sDateNotIn, string sTrackingID)
         {
             DataTable dt = dal.GetList(sPartNumber, sJobNumber, dDateFrom, dDateTo, sShift, sMachineType, sLotNo, sDateNotIn, sTrackingID);
@@ -183,8 +165,7 @@ namespace Common.Class.BLL
                 return int.Parse(dt.Rows[0]["OK"].ToString());
             }
         }
-
-
+        
    
 
         public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
@@ -1021,60 +1002,12 @@ namespace Common.Class.BLL
 
 
 
-        public bool UpdateQASetupForWipPart(string sTrackingID, int iQa, int iSetup)
-        {
-           
-            Common.DAL.PQCQaViDetailTracking_DAL viDetailTracking = new Common.DAL.PQCQaViDetailTracking_DAL();
-            Common.Class.BLL.PQCQaViDetailTracking_BLL detailBLL = new PQCQaViDetailTracking_BLL();
-
-
-
-            //处理 vi detail tracking 
-            List<Common.Class.Model.PQCQaViDetailTracking_Model> detailList = detailBLL.GetModelList(sTrackingID, "", null, null);            
-            foreach (var detailModel in detailList)
-            {
-                detailModel.totalQty = detailModel.totalQty - iQa - iSetup;
-                detailModel.passQty = detailModel.passQty - iQa - iSetup;
-
-                detailModel.remarks = "Updated from buyoff record";
-                detailModel.lastUpdatedTime = DateTime.Now;
-                detailModel.updatedTime = DateTime.Now;  
-            }
-
-
-            //处理 vi tracking
-            Common.Class.Model.PQCQaViTracking viModel = GetModelByTrackingID(sTrackingID);
-            viModel.TotalQty = (int.Parse(viModel.TotalQty) - (iQa + iSetup) * detailList.Count()).ToString();
-            viModel.acceptQty = (int.Parse(viModel.acceptQty) - (iQa + iSetup) * detailList.Count()).ToString();
-
-            viModel.remarks = "Updated from buyoff record";
-            viModel.lastUpdatedTime = DateTime.Now;
-            viModel.updatedTime = DateTime.Now;
-
-
-
-
-
-
-            List<SqlCommand> cmdList = new List<SqlCommand>();
-            cmdList.Add(dal.UpdateForQASetup(viModel));
-            foreach (var detailModel in detailList)
-            {
-                cmdList.Add(viDetailTracking.UpdateForQASetup(detailModel));
-            }
-
-
-
-            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-        }
-
-
 
 
         public List<string> GetBuyoffJobList(DateTime? dDate)
         {
             DataTable dt = dal.GetBuyoffJobList(dDate);
+
             if (dt == null || dt.Rows.Count  == 0)
             {
                 return null;
@@ -1084,10 +1017,13 @@ namespace Common.Class.BLL
 
 
             List<string> jobList = new List<string>();
+
             foreach (DataRow dr in dt.Rows)
             {
                 string jobId = dr["JobId"].ToString();
+
                 jobList.Add(jobId);
+
             }
 
 
@@ -1114,6 +1050,16 @@ namespace Common.Class.BLL
             return DateTime.Parse(sDay);
         }
             
+
+
+
+        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+
+            return dal.GetDailyOperatorList(dDate, sShift, sUserID);
+
+
+        }
 
 
     }

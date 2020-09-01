@@ -392,14 +392,13 @@ namespace Common.Class.BLL
 
         public DataTable ProductionReport(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sPartNo, string sShift, string sModule)
         {
-            DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 3 ====");
+          
 
             DataSet ds = dal.GetProductionList( dDateFrom,  dDateTo,  sMachineID,  sPartNo, sShift, sModule);
-            DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 4 ====");
+        
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-            {
                 return null;
-            }
+
 
             DataTable dt = ds.Tables[0];
 
@@ -407,7 +406,7 @@ namespace Common.Class.BLL
             DataTable dtMerged = new DataTable();
             dtMerged = dt.Clone();
 
-            DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 4 ====");
+       
             if (sShift != "")
             {
                 dtMerged = dt;
@@ -416,10 +415,10 @@ namespace Common.Class.BLL
             {
                 #region merge day night 
 
-                DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 5 ====");
+              
                 foreach (DataRow dr in dt.Rows)
                 {
-                    DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 6 ====");
+               
                     string Day = dr["Day"].ToString();
                     string MachineID = dr["MachineID"].ToString();
                     string PartNumber = dr["PartNumber"].ToString();
@@ -441,6 +440,8 @@ namespace Common.Class.BLL
                         double MaxAccumulate = 0;
                         double TotalAccumulate = 0;
 
+                        double AdjustScrap = 0;
+
 
                         DataRow drNew = dt.NewRow();
                         drNew.ItemArray = RowArr[0].ItemArray;
@@ -451,7 +452,7 @@ namespace Common.Class.BLL
                         foreach (DataRow x in RowArr)
                         {
 
-                            DBHelp.Reports.LogFile.Log("ProductionReport_debug", "==== step 6.1 ====");
+                        
 
                             DBHelp.Reports.LogFile.Log("ProductionReport_debug", string.Format("ok:{0}, ng:{1}, qcngqty:{2}, accumulate:{3}, output: {4}, time:{5}", x["OK"].ToString(), x["NG"].ToString(), x["QCNGQTY"].ToString(), x["Accumulate"].ToString(), x["Output"].ToString(), x["Time"].ToString()));
 
@@ -484,8 +485,9 @@ namespace Common.Class.BLL
                                     TotalAccumulate = MaxAccumulate;
                                 Accumulate = 0;
                             }
-                            
-                            
+
+                            AdjustScrap += double.Parse(x["AdjustScrap"].ToString());
+
                         }
 
                         drNew["Shift"] = StaticRes.Global.Shift.ALL;
@@ -497,6 +499,7 @@ namespace Common.Class.BLL
                         drNew["Output"] = string.Format("{0}({1})", OutputPCS, OutputShot);
                         drNew["Accumulate"] = TotalAccumulate;
                         drNew["NeedProductionTime"] = Common.CommFunctions.ConvertDateTimeShort(drNew["NeedProductionTime"].ToString().ToString() + "H");
+                        drNew["AdjustScrap"] = AdjustScrap.ToString("0.00");
 
                         dtMerged.Rows.Add(drNew.ItemArray);
                         #endregion
@@ -514,7 +517,7 @@ namespace Common.Class.BLL
 
                 //distinct
                 DataView dataView = dtMerged.DefaultView;
-                DataTable DataTableDistinct = dataView.ToTable(true, "Day", "Shift", "MachineID", "Model", "Type", "PartNumberAll", "PartNumber", "JigNo", "Status", "TargetQty", "Accumulate", "Output",  "OK", "NG", "QCNGQTY", "RejRate",  "Time", "NeedProductionTime");
+                DataTable DataTableDistinct = dataView.ToTable(true, "Day", "Shift", "MachineID", "Model", "Type", "PartNumberAll", "PartNumber", "JigNo", "Status", "TargetQty", "Accumulate", "Output",  "OK", "NG", "QCNGQTY", "RejRate",  "Time", "NeedProductionTime", "AdjustScrap");
                 //distinct
 
                 //Add column ID
@@ -541,6 +544,7 @@ namespace Common.Class.BLL
             double Total_TargetQty = 0;
             double Total_QCNG = 0;
             int Total_Time = 0;
+            double Total_AdjustScrap = 0;
     
 
             foreach (DataRow dr in dtMerged.Rows)
@@ -553,7 +557,9 @@ namespace Common.Class.BLL
                 //Total_TargetQty += double.Parse(dr["TargetQty"].ToString());
                 Total_QCNG += double.Parse(dr["QCNGQTY"].ToString());
 
-        
+                Total_AdjustScrap += double.Parse(dr["AdjustScrap"].ToString());
+
+
 
                 try
                 {
@@ -573,7 +579,8 @@ namespace Common.Class.BLL
             dr_toal["Accumulate"] = DBNull.Value; //Total_Accumulate;
             dr_toal["RejRate"] = Math.Round( Total_NG/ Total_OutputPerPCS * 100,2).ToString("0.00") + "%";
             dr_toal["Time"] = SecondToDateTime(Total_Time);
-            
+            dr_toal["AdjustScrap"] = Total_AdjustScrap.ToString("0.00");
+
 
             dtMerged.Rows.Add(dr_toal);
             #endregion 

@@ -537,7 +537,55 @@ group by day  ");
         }
 
 
-       
+
+        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+jobID
+,startTime
+,stopTime
+,a.partNumber
+,'Packing' as Process
+,rejectQty
+,acceptQty
+,rejectQty *  isnull( c.unitCost,0) as rejPrice
+,Upper(userID) as userID
+,d.materialCount
+from PQCPackTracking a
+left join PQCBom c on a.partNumber = c.partNumber
+left join  (
+    select partNumber, count(1) as materialCount
+    from PQCBomDetail
+    group by partnumber
+) d on c.partNumber = d.partNumber
+where 1=1  ");
+
+            strSql.AppendLine(" and a.day = @date ");
+            if (!string.IsNullOrEmpty(sShift)) strSql.AppendLine(" and a.shift = @shift ");
+            if (!string.IsNullOrEmpty(sUserID)) strSql.AppendLine(" and a.userID = @userID");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@date", SqlDbType.DateTime2),
+                new SqlParameter("@shift", SqlDbType.VarChar,50),
+                new SqlParameter("@userID", SqlDbType.VarChar,50),
+            };
+
+            parameters[0].Value = dDate;
+            if (!string.IsNullOrEmpty(sShift)) parameters[1].Value = sShift; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(sUserID)) parameters[2].Value = sUserID; else parameters[2] = null;
+
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
 
 
 

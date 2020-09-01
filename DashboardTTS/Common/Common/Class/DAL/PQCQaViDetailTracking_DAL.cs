@@ -330,40 +330,6 @@ namespace Common.DAL
 
 
 
-        public SqlCommand UpdateForQASetup(Common.Class.Model.PQCQaViDetailTracking_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" update PQCQaViDetailTracking set
-                                totalQty = @totalQty, 
-                                passQty = @passQty, 
-                                lastUpdatedTime = @lastUpdatedTime,
-                                updatedTime =  @updatedTime,
-                                remarks = @remarks
-                            where trackingID  =@trackingID and materialPartNo = @materialPartNo");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@trackingID", SqlDbType.VarChar),
-                new SqlParameter("@totalQty", SqlDbType.Decimal),
-                new SqlParameter("@passQty", SqlDbType.Decimal),
-                new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
-                new SqlParameter("@updatedTime", SqlDbType.DateTime),
-                new SqlParameter("@remarks", SqlDbType.VarChar),
-                new SqlParameter("@materialPartNo", SqlDbType.VarChar)
-            };
-
-            parameters[0].Value = model.trackingID;
-            parameters[1].Value = model.totalQty;
-            parameters[2].Value = model.passQty;
-            parameters[3].Value = model.lastUpdatedTime;
-            parameters[4].Value = model.updatedTime;
-            parameters[5].Value = model.remarks;
-            parameters[6].Value = model.materialPartNo;
-
-
-            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
-
 
         #endregion  Method
 

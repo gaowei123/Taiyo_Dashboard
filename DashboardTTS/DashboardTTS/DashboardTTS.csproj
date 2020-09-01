@@ -327,6 +327,7 @@
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\PQCDailyReport_ViewModel.cs" />
+    <Compile Include="ViewModel\PQCOperatorDailyReport.cs" />
     <Compile Include="ViewModel\PQCRealTime_ViewModel.cs" />
     <Compile Include="ViewModel\PQCSummaryReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCWIPInventory_ViewModel.cs" />
@@ -3734,6 +3735,7 @@
     <Content Include="Views\LASER_Product\LaserMaintenance.cshtml" />
     <Content Include="Views\PQC_Product\PackingPicChart.cshtml" />
     <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
+    <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
