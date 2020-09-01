@@ -590,7 +590,8 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-        //当天当班, 该job在当前process, 只做过一次, 并且当前数量不是0, 则更新total, pass qty
+        //当天当班, 按job, process去最新的一条
+        //如果只做过一次, 并且当前数量不是0, 则更新total, pass qty
         void UpdatePaintQaSetup(int qaQty, int setupQty)
         {
 
@@ -616,6 +617,7 @@ namespace DashboardTTS.Webform.PQC
 
             var currentTracking = (from a in modelList
                                    where a.day == currentDay && a.shift == currentShift
+                                   orderby a.updatedTime descending
                                    select a).FirstOrDefault();
             if (currentTracking == null)
             {
