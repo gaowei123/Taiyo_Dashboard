@@ -1419,5 +1419,176 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+        #region pqc operator output report
+
+        public List<ViewModel.PQCOperatorDailyReport> GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
+        {
+            try
+            {
+                List<ViewModel.PQCOperatorDailyReport> reportList = new List<ViewModel.PQCOperatorDailyReport>();
+
+
+
+                //get checking info
+                DataTable dt = viTrackingBLL.GetDailyOperatorList(dDate, sShift, sUserID);
+                if (dt == null || dt.Rows.Count == 0)
+                    return null;
+
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
+
+
+                    model.jobID = dr["jobID"].ToString();
+
+                    if (string.IsNullOrEmpty(dr["startTime"].ToString()))
+                        model.startTime = null;
+                    else
+                        model.startTime = DateTime.Parse(dr["startTime"].ToString());
+
+                    if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
+                        model.endTime = null;
+                    else
+                        model.endTime = DateTime.Parse(dr["stopTime"].ToString());
+
+
+                    if (model.startTime != null && model.endTime != null)
+                    {
+                        double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
+                        model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                    }
+
+                    model.partNo = dr["partNumber"].ToString();
+                    model.process = dr["Process"].ToString();
+                    model.mouldRej = double.Parse(dr["MouldRej"].ToString());
+                    model.paintRej = double.Parse(dr["PaintRej"].ToString());
+                    model.laserRej = double.Parse(dr["LaserRej"].ToString());
+                    model.othersRej = double.Parse(dr["OthersRej"].ToString());
+                    model.totalRej = double.Parse(dr["rejectQty"].ToString());
+                    model.passQty = double.Parse(dr["acceptQty"].ToString());
+                    model.rejPrice = double.Parse(dr["rejPrice"].ToString());
+                    model.userID = dr["userID"].ToString();
+
+                    model.materialCount = int.Parse(dr["materialCount"].ToString());
+
+                    reportList.Add(model);
+                }
+
+
+                //merge packing info
+                DataTable dtPack = packTrackBLL.GetDailyOperatorList(dDate, sShift, sUserID);
+                foreach (DataRow dr in dtPack.Rows)
+                {
+                    ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
+
+                    model.jobID = dr["jobID"].ToString();
+
+                    if (string.IsNullOrEmpty(dr["startTime"].ToString()))
+                        model.startTime = null;
+                    else
+                        model.startTime = DateTime.Parse(dr["startTime"].ToString());
+
+                    if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
+                        model.endTime = null;
+                    else
+                        model.endTime = DateTime.Parse(dr["stopTime"].ToString());
+
+
+                    if (model.startTime != null && model.endTime != null)
+                    {
+                        double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
+                        model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                    }
+
+                    model.partNo = dr["partNumber"].ToString();
+                    model.process = dr["Process"].ToString();
+                    model.totalRej = double.Parse(dr["rejectQty"].ToString());
+                    model.passQty = double.Parse(dr["acceptQty"].ToString());
+                    model.rejPrice = double.Parse(dr["rejPrice"].ToString());
+                    model.userID = dr["userID"].ToString();
+
+
+
+                    model.materialCount = int.Parse(dr["materialCount"].ToString());
+
+                    reportList.Add(model);
+                }
+
+
+                string strJobIn = "(";
+                foreach (var model in reportList)
+                {
+                    strJobIn += string.Format("'{0}',", model.jobID);
+                }
+                strJobIn = strJobIn.Substring(0, strJobIn.Length - 1);
+                strJobIn += ")";
+
+
+
+                DataTable dtPaintDelivery = paintBLL.GetPaintDeliveryForButtonReport_NEW(strJobIn);
+
+
+                foreach (var model in reportList)
+                {
+                    DataRow[] drArrTemp = dtPaintDelivery.Select(" jobNumber = '" + model.jobID + "'  and  paintProcess = 'Paint#1'");
+
+                    if (drArrTemp != null && drArrTemp.Count() != 0)
+                    {
+                        model.lotNo = drArrTemp[0]["lotNo"].ToString();
+                        model.lotQty = double.Parse(drArrTemp[0]["MrpQty"].ToString()) * model.materialCount;
+
+                        model.totalRejDisplay = string.Format("{0}({1}%)", model.totalRej, Math.Round(model.totalRej / model.lotQty * 100, 2));
+                        model.mouldRejDisplay = string.Format("{0}({1}%)", model.mouldRej, Math.Round(model.mouldRej / model.lotQty * 100, 2));
+                        model.paintRejDisplay = string.Format("{0}({1}%)", model.paintRej, Math.Round(model.paintRej / model.lotQty * 100, 2));
+                        model.laserRejDisplay = string.Format("{0}({1}%)", model.laserRej, Math.Round(model.laserRej / model.lotQty * 100, 2));
+                        model.othersRejDisplay = string.Format("{0}({1}%)", model.othersRej, Math.Round(model.othersRej / model.lotQty * 100, 2));
+
+                    }
+                }
+
+                reportList = reportList.OrderBy(p => p.startTime).ToList();
+
+
+                ViewModel.PQCOperatorDailyReport summaryModel = new ViewModel.PQCOperatorDailyReport();
+
+                //summaryModel.operatedTime = Common.CommFunctions.ConvertDateTimeShort((reportList.Sum(p => (p.endTime.Value - p.startTime.Value).TotalSeconds) / 3600).ToString());
+                summaryModel.lotQty = (from a in reportList
+                                       group a by new { a.jobID, a.process } into b
+                                       select new
+                                       {
+                                           lotQty = b.Sum(p => p.lotQty)
+                                       }).Sum(p => p.lotQty);
+                summaryModel.mouldRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.mouldRej), Math.Round(reportList.Sum(p => p.mouldRej) / summaryModel.lotQty * 100, 2));
+                summaryModel.paintRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.paintRej), Math.Round(reportList.Sum(p => p.paintRej) / summaryModel.lotQty * 100, 2));
+                summaryModel.laserRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.laserRej), Math.Round(reportList.Sum(p => p.laserRej) / summaryModel.lotQty * 100, 2));
+                summaryModel.othersRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.othersRej), Math.Round(reportList.Sum(p => p.othersRej) / summaryModel.lotQty * 100, 2));
+                summaryModel.totalRejDisplay = string.Format("{0}({1}%)", reportList.Sum(p => p.totalRej), Math.Round(reportList.Sum(p => p.totalRej) / summaryModel.lotQty * 100, 2));
+                summaryModel.passQty = reportList.Sum(p => p.passQty);
+                summaryModel.rejPrice = reportList.Sum(p => p.rejPrice);
+                summaryModel.operatedTime = Common.CommFunctions.ConvertDateTimeShort(reportList.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.operatedTime)).ToString());
+
+
+                reportList.Add(summaryModel);
+
+
+                return reportList;
+            }
+            catch (Exception ee)
+            {
+                DBHelp.Reports.LogFile.Log("OperatorDailyOutput_Debug", "GetDailyOperatorList catch exception:" + ee.ToString());
+                return null;
+            }
+
+
+        }
+
+
+
+        #endregion
+
+
     }
 }

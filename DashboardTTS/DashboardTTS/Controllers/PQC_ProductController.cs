@@ -63,11 +63,16 @@ namespace DashboardTTS.Controllers
             return View();
         }
 
+        public ActionResult PICDailyOutputReport()
+        {
+            return View();
+        }
+
         #endregion
 
-        
 
-        
+
+
         //summary report
         public ActionResult GetSummaryData()
         {
