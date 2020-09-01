@@ -1093,7 +1093,7 @@ namespace Common.Class.BLL
                 detailModel.totalQty = detailModel.totalQty - iQa - iSetup;
                 detailModel.passQty = detailModel.passQty - iQa - iSetup;
 
-                detailModel.remarks = "Updated from buyoff record";
+                detailModel.remarks = "Updated by buyoff record";
                 detailModel.lastUpdatedTime = DateTime.Now;
                 detailModel.updatedTime = DateTime.Now;
             }
@@ -1104,22 +1104,58 @@ namespace Common.Class.BLL
             viModel.TotalQty = (int.Parse(viModel.TotalQty) - (iQa + iSetup) * detailList.Count()).ToString();
             viModel.acceptQty = (int.Parse(viModel.acceptQty) - (iQa + iSetup) * detailList.Count()).ToString();
 
-            viModel.remarks = "Updated from buyoff record";
+            viModel.remarks = "Updated by buyoff record";
             viModel.lastUpdatedTime = DateTime.Now;
             viModel.updatedTime = DateTime.Now;
 
 
-
-
-
+            
 
             List<SqlCommand> cmdList = new List<SqlCommand>();
+
             cmdList.Add(dal.UpdateForQASetup(viModel));
+
             foreach (var detailModel in detailList)
             {
                 cmdList.Add(viDetailTracking.UpdateForQASetup(detailModel));
             }
 
+
+            //add vi tracking his
+            Common.DAL.PQCQaViHistory_DAL viHisDAL = new Common.DAL.PQCQaViHistory_DAL();
+            cmdList.Add(viHisDAL.AddCommand(CopyModel(viModel)));
+
+            //add detail tracking his
+            Common.Class.BLL.PQCQaViDetailHistory_BLL detailHisBLL = new PQCQaViDetailHistory_BLL();
+            foreach (var model in detailList)
+            {
+                cmdList.Add(detailHisBLL.AddCommand(detailHisBLL.CopyObj(model)));
+            }
+
+
+
+
+
+            //update vi bin 
+            Common.Class.BLL.PQCQaViBinning binBLL = new PQCQaViBinning();
+            Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new PQCQaViBinHistory_BLL();
+
+            List<Common.Class.Model.PQCQaViBinning> viBinList = binBLL.GetModelList(null, null, viModel.jobId, viModel.processes);
+            foreach (var binModel in viBinList)
+            {
+                binModel.materialQty = binModel.materialQty - iQa - iSetup;
+                binModel.updatedTime = DateTime.Now;
+                binModel.remarks = "Updated by buyoff record";
+                cmdList.Add(binBLL.UpdateCommand(binModel));
+
+
+
+                Common.Class.Model.PQCQaViBinHistory_Model binHisModel = new Common.Class.Model.PQCQaViBinHistory_Model();
+                binHisModel = binHisBLL.CopyModel(binModel);
+                cmdList.Add(binHisBLL.AddCommand(binHisModel));
+            }
+         
+         
 
 
             return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
