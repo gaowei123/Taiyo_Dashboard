@@ -3,17 +3,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server" >
 
-
-
-
-
-
-
-
-
-
-
-
     <div class="container-fluid">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />

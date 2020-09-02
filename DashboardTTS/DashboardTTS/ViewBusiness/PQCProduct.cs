@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
 namespace DashboardTTS.ViewBusiness
@@ -20,6 +21,8 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCBom_BLL bomBLL = new Common.Class.BLL.PQCBom_BLL();
 
 
+
+        JavaScriptSerializer _js = new JavaScriptSerializer();
 
 
         public PQCProduct()
@@ -1588,6 +1591,129 @@ namespace DashboardTTS.ViewBusiness
 
 
         #endregion
+
+
+
+
+
+        #region packing inventory
+        
+     
+        public string GetPackingInventory(DateTime dDateFrom, string sPartNo)
+        {
+
+            List<ViewModel.PackingInventory_ViewModel.Detail> detailList = GetPackBinDetailList(dDateFrom, sPartNo);
+            if (detailList == null)
+                return _js.Serialize("");
+
+
+            List<Common.Class.Model.PaintingDeliveryHis_Model> paintList = paintBLL.GetModels("", dDateFrom.AddMonths(-6), DateTime.Now);
+
+            //join paint delivery
+            var detailJoinList = from a in detailList
+                                 join b in paintList on a.jobID equals b.jobNumber
+                                 select new
+                                 {
+                                     a.customer,
+                                     a.model,
+                                     a.partNo,
+                                     a.jobID,
+                                     lotQty = b.inQuantity,
+                                     a.materialQty,
+                                     mfgDate = b.dateTime,
+                                     a.bomFlag,
+                                     a.materialCount
+                                 };
+
+            //将material 按job group
+            var groupByJobList = from a in detailJoinList
+                                 group a by new { a.customer, a.model, a.partNo, a.jobID, a.mfgDate, a.lotQty, a.materialCount, a.bomFlag }
+                                 into grouped
+                                 select new
+                                 {
+                                     grouped.Key.customer,
+                                     grouped.Key.model,
+                                     grouped.Key.partNo,
+                                     grouped.Key.jobID,
+
+                                     lotQtyPCS = (double)grouped.Key.lotQty * grouped.Key.materialCount,
+                                     lotQtySET = grouped.Key.lotQty,
+                                     
+                                     afterQtyPCS = grouped.Sum(p => p.materialQty),
+                                     afterQtySET = grouped.Min(p => p.materialQty),
+
+                                     grouped.Key.mfgDate,
+                                     grouped.Key.bomFlag
+
+                                 };
+
+            //将job 按照part group by.
+            var groupByPartList = from a in groupByJobList
+                                  orderby a.customer ascending, a.model ascending, a.partNo ascending
+                                  group a by new { a.customer, a.model, a.partNo } into grouped
+                                  select new
+                                  {
+                                      grouped.Key.customer,
+                                      grouped.Key.model,
+                                      grouped.Key.partNo,
+
+                                      jobID = grouped.Count() == 1 ? grouped.Max(p => p.jobID) : "JOT###",
+
+                                      lotQty = string.Format("{0}({1})", grouped.Sum(p => p.lotQtySET), grouped.Sum(p => p.lotQtyPCS)),
+
+                                      beforeQty = string.Format("{0}({1})", grouped.Sum(p => (double)p.lotQtySET - p.afterQtySET), grouped.Sum(p => (double)p.lotQtyPCS - p.afterQtyPCS)),
+
+                                      afterQty = string.Format("{0}({1})", grouped.Sum(p => p.afterQtySET), grouped.Sum(p => p.afterQtyPCS)),
+
+                                      jobCount = grouped.Count(),
+
+                                      mfgDate = grouped.Count() == 1 ? grouped.Max(p => p.mfgDate.Value.ToString("dd/MM/yyyy")) : "",
+
+                                      bomFlag = grouped.Max(p => p.bomFlag)
+
+                                  };
+
+            return _js.Serialize(groupByPartList);
+        }
+
+
+        private List<ViewModel.PackingInventory_ViewModel.Detail> GetPackBinDetailList(DateTime dDateFrom, string sPartNo)
+        {
+            DataTable dt = packTrackBLL.GetPackInventoryDetailList(dDateFrom, sPartNo);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+            List<ViewModel.PackingInventory_ViewModel.Detail> detailList = new List<ViewModel.PackingInventory_ViewModel.Detail>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ViewModel.PackingInventory_ViewModel.Detail detialModel = new ViewModel.PackingInventory_ViewModel.Detail();
+
+
+                detialModel.customer = dr["customer"].ToString();
+                detialModel.model = dr["model"].ToString();
+                detialModel.partNo = dr["PartNumber"].ToString();
+                detialModel.jobID = dr["jobid"].ToString();
+                detialModel.materialPartNo = dr["materialPartNo"].ToString();
+                detialModel.materialQty = double.Parse(dr["materialQty"].ToString());
+                detialModel.materialCount = double.Parse(dr["materialCount"].ToString());
+                detialModel.bomFlag = dr["bomFlag"].ToString();
+
+
+                detailList.Add(detialModel);
+            }
+
+
+            return detailList;
+        }
+
+
+
+
+
+        #endregion
+
+
 
 
     }

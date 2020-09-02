@@ -1814,7 +1814,7 @@ select
     isnull( b.cavityCount,0) as cavityCount,
 	convert(varchar, Sum(isnull(acountReading,0))) as Total_Parts_Produce,
 	sum(isnull(acceptQty,0)) as OK_QTY,
-	sum(isnull(acceptQty * b.unitCount,0))  as Amount_SGD,
+	sum(isnull(acceptQty * b.unitCount,0))  as Amount_SGD, --unitCount是unit cost, 单个pcs的价格.
 	CONVERT(decimal(18,0) , sum(isnull(rejectQty,0))) as Reject_Qty,
 	CONVERT(decimal(18,4), sum((isnull(rejectQty,0)) *  b.unitCount))  as Reject_Cost_SGD
 

@@ -8,6 +8,7 @@ namespace DashboardTTS.ViewModel
     public class PackingInventory_ViewModel
     {
 
+
         public string customer { get; set; }
         public string model { get; set; }
         public string partNo { get; set; }
@@ -39,6 +40,19 @@ namespace DashboardTTS.ViewModel
 
         public string type { get; set; }
 
+
+
+        public class Detail
+        {
+            public string customer { get; set; }
+            public string model { get; set; }
+            public string partNo { get; set; }
+            public string jobID { get; set; }
+            public string materialPartNo { get; set; }
+            public double materialQty { get; set; }
+            public double materialCount { get; set; }
+            public string bomFlag { get; set; }
+        }
 
     }
 }

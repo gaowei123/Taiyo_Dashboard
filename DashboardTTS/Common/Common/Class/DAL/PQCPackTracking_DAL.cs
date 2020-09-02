@@ -587,6 +587,66 @@ where 1=1  ");
         }
 
 
+        public DataTable GetPackInventoryDetailList(DateTime dDateFrom, string sPartNo)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select
+b.customer
+,b.model
+,a.PartNumber
+,jobid
+,materialPartNo
+,a.materialQty
+,isnull(c.materialCount ,1) as materialCount
+,case when b.partNumber is null then 'false' else 'true' end as bomFlag
+from PQCQaViBinning a
+left join (
+	select 
+	partNumber
+	,customer
+	,model
+	,case when charindex('check#3',processes,0)>0 then 'CHECK#3' 
+		  when charindex('check#2',processes,0)>0 then 'CHECK#2'
+		  else 'CHECK#1'
+		  end as lastCheckProcess
+	from PQCBom
+) b on a.partnumber = b.partNumber
+left join (
+	select 
+	partNumber
+	,count(1) as materialCount 
+	from PQCBomDetail 
+	group by partNumber
+) c on a.partNumber  = c.partNumber
+where 1=1 
+and a.processes = b.lastCheckProcess
+and a.day >= @dateFrom ");
+
+        
+            if (!string.IsNullOrEmpty(sPartNo)) strSql.AppendLine(" and a.PartNumber = @partNo ");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@dateFrom", SqlDbType.DateTime2),
+                new SqlParameter("@partNo", SqlDbType.VarChar,50)
+            };
+
+            parameters[0].Value = dDateFrom;
+            if (!string.IsNullOrEmpty(sPartNo)) parameters[1].Value = sPartNo; else parameters[1] = null;
+
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+
+        }
+
+
 
 
     }

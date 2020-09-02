@@ -481,32 +481,6 @@ namespace DashboardTTS.Controllers
                 return Content(_js.Serialize(modelList));
             }
         }
-        
-
-
-        #region Packing Inventory
-        
-        public ActionResult GetPackingInventoryList()
-        {
-            string partNo = Request.Form["PartNo"];
-            string type = Request.Form["Type"];
-
-
-
-
-
-            return Content("");
-        }
-     
-        public ActionResult GetPackingJobOrderList()
-        {
-            return Content("");
-        }
-        
-
-        #endregion
-        
-
 
        
         public ActionResult GetPicList()
@@ -581,19 +555,38 @@ namespace DashboardTTS.Controllers
 
             List<ViewModel.PQCOperatorDailyReport> modelList = vBLL.GetDailyOperatorList(date, shift, userID);
 
-            if (modelList == null)
-            {
-              
-            }else
-            {
-                return Content(_js.Serialize(modelList));
-            }
 
-            string result = modelList == null ? _js.Serialize("") : _js.Serialize(modelList);
+            return Json(modelList);          
+        }
 
 
+
+        #region Packing Inventory
+
+        public ActionResult GetPackingInventoryList()
+        {
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            string partNo = Request.Form["PartNo"];
+            //string type = Request.Form["Type"];
+
+
+            string result = vBLL.GetPackingInventory(dateFrom, partNo);
             return Content(result);
         }
+
+
+
+        public ActionResult GetPackingJobOrderList()
+        {
+            return Content("");
+        }
+
+
+
+
+
+        #endregion
+
 
 
     }
