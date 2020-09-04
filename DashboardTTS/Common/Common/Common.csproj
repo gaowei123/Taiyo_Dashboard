@@ -246,6 +246,10 @@
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
+    <Compile Include="ExtendClass\BLL\OverallOutputChart_BLL.cs" />
+    <Compile Include="ExtendClass\DAL\OverallOutputChart_DAL.cs" />
+    <Compile Include="ExtendClass\Model\OverallOutputChart_Model.cs" />
+    <Compile Include="MyChart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

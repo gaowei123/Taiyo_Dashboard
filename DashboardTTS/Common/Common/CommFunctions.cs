@@ -549,6 +549,8 @@ namespace Common
         }
 
 
+
+
         public static DateTime  GetDefaultReportsSearchingDay()
         {
             //默认显示前一天的.   周日, 周一显示 上周五的.

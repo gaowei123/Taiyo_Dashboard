@@ -562,8 +562,51 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-        
 
+        private ViewModel.OverallOutputChart_ViewModel GetMoulding(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            ViewModel.OverallOutputChart_ViewModel model = new ViewModel.OverallOutputChart_ViewModel();
+            model.department = StaticRes.Global.Department.Moulding;
+            
+
+            return model;
+        }
+
+        private ViewModel.OverallOutputChart_ViewModel GetPainting(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            ViewModel.OverallOutputChart_ViewModel model = new ViewModel.OverallOutputChart_ViewModel();
+            model.department = StaticRes.Global.Department.Painting;
+
+
+            return model;
+        }
+
+        private ViewModel.OverallOutputChart_ViewModel GetLaser(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            ViewModel.OverallOutputChart_ViewModel model = new ViewModel.OverallOutputChart_ViewModel();
+            model.department = StaticRes.Global.Department.Laser;
+
+
+            return model;
+        }
+
+        private ViewModel.OverallOutputChart_ViewModel GetPQC(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            ViewModel.OverallOutputChart_ViewModel model = new ViewModel.OverallOutputChart_ViewModel();
+            model.department = StaticRes.Global.Department.PQC;
+
+
+            return model;
+        }
+
+        private ViewModel.OverallOutputChart_ViewModel GetPacking(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        {
+            ViewModel.OverallOutputChart_ViewModel model = new ViewModel.OverallOutputChart_ViewModel();
+            model.department = StaticRes.Global.Department.Packing;
+
+
+            return model;
+        }
 
         #endregion
 

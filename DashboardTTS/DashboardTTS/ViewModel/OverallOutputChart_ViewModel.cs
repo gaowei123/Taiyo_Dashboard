@@ -7,12 +7,6 @@ namespace DashboardTTS.ViewModel
 {
     public class OverallOutputChart_ViewModel
     {
-
-        public int year { get; set; }
-        public int month { get; set; }
-        public int day { get; set; }
-
-
         public string department { get; set; }
 
         public double lotQty { get; set; }
@@ -25,11 +19,5 @@ namespace DashboardTTS.ViewModel
         public double paintRej { get; set; }
         public double laserRej { get; set; }
         public double othersRej { get; set; }
-
-
-
-
-
-
     }
 }

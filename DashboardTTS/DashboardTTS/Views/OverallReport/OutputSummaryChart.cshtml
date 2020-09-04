@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewBag.Title = "OutputSummaryChart";
+}
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">User Attendance Chart</span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel">
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label for="ddlShift">Shift:</label>
+                    <select id="ddlShift" class="form-control">
+                        <option value="">All</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                    </select>
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="generateChart();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row panel panel-default">
+        <div class="col-lg-12">
+            <div id="chartOutput" style="width:100%; height:700px;"></div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+
+    var apiGetOutputChartData = window.globalConfig.rootDirectory + '/OverallReport/GetOutputChartData';
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    //初始化echart
+    var outputChart = echarts.init(document.getElementById('chartOutput'));
+
+    function generateChart() {
+
+
+        if ($("#txtDateFrom").val() == '') {
+            alert('Date From can not be empty, please choose !')
+            return false;
+        }
+        if ($("#txtDateTo").val() == '') {
+            alert('Date To can not be empty, please choose !')
+            return false;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetOutputChartData,
+            data: {
+                "DateFrom": $("#txtDateFrom").val(),
+                "DateTo": $("#txtDateTo").val(),
+                "Shift": $("#ddlShift").val()
+            },
+            success: function (data) {
+
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('There is no record found, Please try again!');
+                    return false;
+                }
+
+           
+                var outputSeries = {
+                    name: 'Output',
+                    type: 'bar',
+                    stack: 'output',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+
+                var rejSeries = {
+                    name: 'Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+                var ttsMouldRejSeries = {
+                    name: 'TTS Moulding Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+                var vendorMouldRejSeries = {
+                    name: 'Vendor Moulding Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+                var paintRejSeries = {
+                    name: 'Painting Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+                var laserRejSeries = {
+                    name: 'Laser Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+                var othersRejSeries = {
+                    name: 'Others Rej',
+                    type: 'bar',
+                    stack: 'rej',
+                    data: [],
+                    label: {
+                        show: true,
+                        position: 'insideTop'
+                    }
+                };
+
+
+
+                for (var i = 0; i < data.length; i++) {
+
+                    var model = data[i];
+
+                    outputSeries.data.push(model.TotalQty);
+                    rejSeries.data.push(model.RejQty);
+                    ttsMouldRejSeries.data.push(model.TTSMouldRej);
+                    vendorMouldRejSeries.data.push(model.VendorMouldRej);
+                    paintRejSeries.data.push(model.PaintRej);
+                    laserRejSeries.data.push(model.LaserRej);
+                    othersRejSeries.data.push(model.OthersRej);
+                }
+
+
+                var option = {
+
+                    title: {
+                        text: 'Overall Output Summary Chart'
+                    },
+
+                    legend: {
+                        data: ['Output', 'Rej', 'TTSMouldRej', 'VendorMouldRej', 'PaintRej', 'LaserRej', 'OthersRej']
+                    },
+
+                    //tooltip: {
+                    //    show: true,
+                    //    //trigger: 'axis',
+                    //    crossStyle: {
+                    //        color: '#999'
+                    //    },
+                    //    //自定义tooltip格式
+                    //    formatter: function (params) {
+                    //        var dataModel = data.find(function (x) {
+                    //            return x.empoyeeID == params.name;
+                    //        })
+                    //        var res = '<div>';
+                    //        res += '<p><b>' + dataModel.empoyeeID + '  -  ' + dataModel.userName + '</b></p>';
+                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#91c7ae;"></span>Attendance:' + dataModel.attendanceDays + ' Days</p>';
+                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#c23531;"></span>Leave: ' + dataModel.leaveDays + ' Days</p>';
+                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#FFA500;"></span>Attend Rate: ' + dataModel.attendaneRate + '% </p>';
+                    //        res += "</div>";
+                    //        return res;
+                    //    }
+                    //},
+
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',                    
+                            data: ['Moulding', 'Painting', 'Laser', 'PQC', 'Packing']        
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+
+
+                    series: [
+                       outputSeries,
+                       rejSeries,
+                       ttsMouldRejSeries,
+                       vendorMouldRejSeries,
+                       paintRejSeries,
+                       laserRejSeries,
+                       othersRejSeries
+                    ]
+                };
+
+
+                outputChart.clear();
+                outputChart.setOption(option);
+
+            },
+            error: function () {
+                alert("Get chart data error !");
+            }
+        });
+    }
+
+
+
+
+
+    $(window).resize(function () {
+        outputChart.resize();
+    });
+
+
+
+
+
+
+
+</script>

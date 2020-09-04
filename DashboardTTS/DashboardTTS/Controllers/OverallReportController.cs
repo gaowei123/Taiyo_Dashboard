@@ -29,13 +29,7 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
-        public ActionResult OutputTrendChart()
-        {
-            return View();
-        }
-
-
+        
 
 
 
@@ -56,11 +50,21 @@ namespace DashboardTTS.Controllers
 
 
 
-            string result = vBLL.GetAllSectionList(startTime, model, shipTo);            
+            string result = vBLL.GetAllSectionList(startTime, model, shipTo);
             return Content(result);
         }
 
 
+        public JsonResult GetOutputChartData()
+        {
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+            string shift = Request.Form["Shift"];
+
+            Common.ExtendClass.BLL.OverallOutputChart_BLL bll = new Common.ExtendClass.BLL.OverallOutputChart_BLL();
+            return Json(bll.GetDataList(dateFrom, dateTo, shift));
+        }
 
         
 

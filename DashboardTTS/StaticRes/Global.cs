@@ -25,6 +25,7 @@ namespace StaticRes
             public const string Laser = "Laser";
             public const string PQC = "PQC";
             public const string Assembly = "Assembly";
+            public const string Packing = "Packing";
 
             public const string Office = "Office";
 
