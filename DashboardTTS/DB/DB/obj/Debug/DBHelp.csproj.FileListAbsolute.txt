@@ -2,4 +2,3 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.dl
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.csprojResolveAssemblyReference.cache

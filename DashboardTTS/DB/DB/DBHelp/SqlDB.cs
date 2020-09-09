@@ -218,7 +218,6 @@ namespace DBHelp
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }

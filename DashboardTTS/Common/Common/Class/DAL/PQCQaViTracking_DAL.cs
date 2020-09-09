@@ -2417,6 +2417,22 @@ where 1=1  ");
         }
 
 
+        public SqlCommand DeleteJobCommand(string sJobNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from PQCQaViTracking where jobId = @jobID ");
+
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobID", SqlDbType.VarChar,50)
+            };
+
+            parameters[0].Value = sJobNo;
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
 
     }
 }

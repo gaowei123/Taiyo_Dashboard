@@ -13,7 +13,6 @@
 <script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-
 <style>
     .container-fluid{
         max-width:1600px;
@@ -76,7 +75,6 @@
 
 <script type="text/javascript">
 
-
     var apiGetOperatorList = window.globalConfig.rootDirectory + '/PQC_Product/GetDailyOperatorList';
 
 
@@ -99,7 +97,6 @@
     $(document).ready(function () {
 
         setUserIDDDL($('#ddlUserID'), 'PQC');
-
 
         var lastDay = getLastReportDay();
         var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
@@ -163,6 +160,8 @@
             //pageSize: 10, // 页面数据条数
             //pageNumber: 1, // 首页页码
 
+            
+
 
             rowStyle: function (row, index) {
                 //console.log(row);
@@ -174,7 +173,6 @@
                 }
 
             },
-
 
           
 
@@ -296,7 +294,6 @@
 
             onLoadSuccess: function (data) {  //加载成功时执行
             
-
                 $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 210 });
 
             },

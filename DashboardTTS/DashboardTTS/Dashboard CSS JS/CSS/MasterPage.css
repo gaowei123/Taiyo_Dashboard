@@ -38,6 +38,8 @@
     border-left-color:#cccccc;
     margin-top:5px;
     margin-right:-10px;
+
+    background-color:red;
 }
 
 .dropdown-submenu:hover > a:after{

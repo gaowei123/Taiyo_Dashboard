@@ -381,9 +381,24 @@ namespace Common.Class.DAL
 		}
 
 
+        public SqlCommand DeleteJobCommand(string sJobNo)
+        {
+            //该表无主键信息，请自定义主键/条件字段
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from PQCQaViBinning where jobId = @jobID ");
+           
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobID", SqlDbType.VarChar,50)
+            };
+
+            parameters[0].Value = sJobNo;
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
 
 
-		public Common.Class.Model.PQCQaViBinning GetModel(string sTrackingID)
+
+        public Common.Class.Model.PQCQaViBinning GetModel(string sTrackingID)
 		{
 
             if (string.IsNullOrEmpty(sTrackingID))

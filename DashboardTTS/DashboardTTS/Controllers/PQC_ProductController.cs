@@ -62,13 +62,15 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
         public ActionResult PICDailyOutputReport()
         {
             return View();
         }
-
         #endregion
+
+
+
+
 
 
 
@@ -402,8 +404,6 @@ namespace DashboardTTS.Controllers
         
         public ActionResult DeleteWIPJob()
         {
-           
-        
             if (Request.Form["JobNo"] == null || Request.Form["JobNo"] == "")
                 return Content(_js.Serialize("Job No Can not be empty!"));
 
@@ -578,9 +578,30 @@ namespace DashboardTTS.Controllers
 
         public ActionResult GetPackingJobOrderList()
         {
-            return Content("");
+
+            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
+            dateTo = dateTo.AddDays(1);
+            string partNo = Request.Form["PartNo"];
+            string jobNo = Request.Form["JobNo"];
+
+
+            string result = vBLL.GetPackingInventoryDetail(dateFrom,dateTo, partNo, jobNo);
+
+            return Content(result);
         }
 
+        public JsonResult DeletePackInventory()
+        {
+            string jobNo = Request.Form["JobNo"];
+
+
+            Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
+            bool result = bll.DeleteJobRollBack(jobNo);
+
+
+            return Json(result);
+        }
 
 
 

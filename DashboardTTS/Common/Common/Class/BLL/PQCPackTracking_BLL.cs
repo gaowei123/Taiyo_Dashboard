@@ -279,9 +279,9 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetPackInventoryDetailList(DateTime dDateFrom, string sPartNo)
+        public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
-            return dal.GetPackInventoryDetailList(dDateFrom, sPartNo);
+            return dal.GetPackInventoryDetailList(dDateFrom, dDateTo, sPartNo, sJobNo);
         }
 
 

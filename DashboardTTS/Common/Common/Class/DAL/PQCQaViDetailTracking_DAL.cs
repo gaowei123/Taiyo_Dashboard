@@ -365,6 +365,22 @@ namespace Common.DAL
 
 
 
+          public SqlCommand DeleteJobCommand(string  sJobNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@" delete from PQCQaViDetailTracking where jobId  =@jobID");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobID", SqlDbType.VarChar),
+            };
+
+            parameters[0].Value = sJobNo;
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
 
         #endregion  Method
 

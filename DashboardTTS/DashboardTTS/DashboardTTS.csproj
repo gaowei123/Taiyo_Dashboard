@@ -745,13 +745,6 @@
     <Compile Include="Webform\PQC\PQCButtonReport.aspx.designer.cs">
       <DependentUpon>PQCButtonReport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\PQC\BuyOffRecord.aspx.cs">
-      <DependentUpon>BuyOffRecord.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\PQC\BuyOffRecord.aspx.designer.cs">
-      <DependentUpon>BuyOffRecord.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\PQC\BuyOffRecordForClient.aspx.cs">
       <DependentUpon>BuyOffRecordForClient.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -850,40 +843,12 @@
     <Compile Include="Webform\PQC\PQC_PIC_PerformReport.aspx.designer.cs">
       <DependentUpon>PQC_PIC_PerformReport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\Reports\AllMachineUtilizationRate.aspx.cs">
-      <DependentUpon>AllMachineUtilizationRate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Reports\AllMachineUtilizationRate.aspx.designer.cs">
-      <DependentUpon>AllMachineUtilizationRate.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Reports\BuyOffReport.aspx.cs">
-      <DependentUpon>BuyOffReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Reports\BuyOffReport.aspx.designer.cs">
-      <DependentUpon>BuyOffReport.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Reports\DailyInventoryReport.aspx.cs">
-      <DependentUpon>DailyInventoryReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Reports\DailyInventoryReport.aspx.designer.cs">
-      <DependentUpon>DailyInventoryReport.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\Reports\LaserPQCTotalReport.aspx.cs">
       <DependentUpon>LaserPQCTotalReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Webform\Reports\LaserPQCTotalReport.aspx.designer.cs">
       <DependentUpon>LaserPQCTotalReport.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Reports\Output.aspx.cs">
-      <DependentUpon>Output.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Reports\Output.aspx.designer.cs">
-      <DependentUpon>Output.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Reports\Productivity.aspx.cs">
       <DependentUpon>Productivity.aspx</DependentUpon>
@@ -2882,7 +2847,6 @@
     <Content Include="UserControl\WebUserControlTimeBar.ascx" />
     <Content Include="Webform\MachineOEETimeBar.aspx" />
     <Content Include="Webform\PQC\PQCButtonReport.aspx" />
-    <Content Include="Webform\PQC\BuyOffRecord.aspx" />
     <Content Include="Webform\PQC\BuyOffRecordForClient.aspx" />
     <Content Include="Webform\PQC\PQCBezelPanelReport.aspx" />
     <Content Include="Webform\PQC\PQCBomFormMenu.aspx" />
@@ -2897,11 +2861,7 @@
     <Content Include="Webform\PQC\PQCRealTime.aspx" />
     <Content Include="Webform\PQC\PQCRejectDetail.aspx" />
     <Content Include="Webform\PQC\PQC_PIC_PerformReport.aspx" />
-    <Content Include="Webform\Reports\AllMachineUtilizationRate.aspx" />
-    <Content Include="Webform\Reports\BuyOffReport.aspx" />
-    <Content Include="Webform\Reports\DailyInventoryReport.aspx" />
     <Content Include="Webform\Reports\LaserPQCTotalReport.aspx" />
-    <Content Include="Webform\Reports\Output.aspx" />
     <Content Include="Webform\Reports\Productivity.aspx" />
     <Content Include="Webform\TTSHomePage.aspx" />
     <Content Include="plugins\bootstrap-3.3.7\.editorconfig" />

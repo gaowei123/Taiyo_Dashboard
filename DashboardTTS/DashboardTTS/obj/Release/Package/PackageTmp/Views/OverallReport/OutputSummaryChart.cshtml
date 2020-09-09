@@ -48,7 +48,7 @@
 
     <div class="row panel panel-default">
         <div class="col-lg-12">
-            <div id="chartOutput" style="width:100%;"></div>
+            <div id="chartOutput" style="width:100%; height:700px;"></div>
         </div>
     </div>
 
@@ -373,9 +373,6 @@
                 outputChart.clear();
                 outputChart.setOption(option);
 
-                var bHeight = $(window).height() - 220;
-                outputChart.resize({ height: bHeight });
-
             },
             error: function () {
                 alert("Get chart data error !");
@@ -388,8 +385,7 @@
 
 
     $(window).resize(function () {
-        var bHeight = $(window).height() - 220;
-        outputChart.resize({ height: bHeight });
+        outputChart.resize();
     });
 
 

@@ -113,6 +113,9 @@
                                 <li><a runat="server" href="./Webform/Moulding/MouldingMonthlyMaterial.aspx">Material Usage Report</a></li>
                             </ul>
                         </li>
+
+                        <li class="divider"></li>
+
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Production</a>
                             <ul class="dropdown-menu">
@@ -137,6 +140,7 @@
                             </ul>
                         </li>
 
+                        <li class="divider"></li>
 
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Machine</a>
@@ -147,6 +151,7 @@
                             </ul>
                         </li>
 
+                        <li class="divider"></li>
 
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Monitor/Analysis</a>
@@ -166,6 +171,8 @@
                                 <li><a runat="server" href="./MOULD_MonthlyHightestReject/Index">Production Rejected Parts Analysis</a></li>                                
                             </ul>
                         </li>
+
+                        <li class="divider"></li>
 
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">General</a>
@@ -221,9 +228,10 @@
                             <li class="divider"></li>
 
                             <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>
+                            <%--<li><a runat="server" href="./PQC_Product/CheckingDetailReport">Checking Report</a></li>--%>
                             <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
                             <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
+                            <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">PQC Button Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">PQC Bezel Report</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">PQC Panel Report</a></li>
@@ -233,16 +241,18 @@
 
                             <li class="divider"></li>
                             
+
+                            <li><a runat="server" href="./PQC_Product/PackingInventory">Packing Inventory</a></li>
+                            <li><a runat="server" href="./PQC_Product/PackingJobOrder">Packing Job Order Detail</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>
+                            <%--<li><a runat="server" href="./PQC_Product/PackingDetailReport">Packing Report</a></li>--%>
                             <li><a runat="server" href="./PQC_Product/PackingPicChart">Packing PIC Chart</a></li>
                             <li><a runat="server" href="./PQC_Product/PackingProductionTrendChart">Packing Production Trend Chart</a></li>
 
                            
                             <li class="divider"></li>
 
-                            <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output</a></li>
+                            <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>                            
                             <li><a runat="server" href="./Webform/PQC/PQCProductionChart.aspx">Production Chart</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCCheckerOutputChart.aspx">Checker Output Chart</a></li>
                             <li><a runat="server" href="./Webform/PQC/PQCBomList.aspx">Bom List</a></li>
@@ -260,7 +270,8 @@
                             <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
                             <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
-                            <li><a runat="server" href="./Webform/Reports/AllMachineUtilizationRate.aspx">All Machine Utilization</a></li>
+                            <li><a runat="server" href="./OverallReport/OutputSummaryChart">Overall Output Chart</a></li>
+                            <%--<li><a runat="server" href="./Webform/Reports/AllMachineUtilizationRate.aspx">All Machine Utilization</a></li>--%>
                             <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>
 
                         </ul>

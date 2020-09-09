@@ -483,7 +483,7 @@ namespace Common.BLL
                 double setupQty = double.Parse(dr["setupQty"].ToString());
 
                 double setOK = double.Parse(dr["setOK"].ToString());
-                double setNG = double.Parse(dr["setNG"].ToString());                
+                double setNG = double.Parse(dr["setNG"].ToString());
                 double setOutput = double.Parse(dr["setOutput"].ToString());
                 double setMrpTotal = double.Parse(dr["setMrpTotal"].ToString());
                 double setSetupQty = double.Parse(dr["setSetupQty"].ToString());

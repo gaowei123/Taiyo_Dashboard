@@ -1162,5 +1162,36 @@ namespace Common.Class.BLL
 
         }
 
+
+
+
+        public bool DeleteJobRollBack(string sJobNo)
+        {
+
+            if (string.IsNullOrEmpty(sJobNo))
+                return false;
+
+
+            List<SqlCommand> cmdList = new List<SqlCommand>();
+
+
+            cmdList.Add(dal.DeleteJobCommand(sJobNo));
+
+
+            Common.DAL.PQCQaViDetailTracking_DAL detailDAL = new Common.DAL.PQCQaViDetailTracking_DAL();
+            cmdList.Add(detailDAL.DeleteJobCommand(sJobNo));
+
+
+            Common.Class.DAL.PQCQaViDefectTracking_DAL defectDAL = new DAL.PQCQaViDefectTracking_DAL();
+            cmdList.Add(defectDAL.DeleteJobCommand(sJobNo));
+
+
+            Common.Class.DAL.PQCQaViBinning binDAL = new DAL.PQCQaViBinning();
+            cmdList.Add(binDAL.DeleteJobCommand(sJobNo));
+
+
+
+            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
     }
 }

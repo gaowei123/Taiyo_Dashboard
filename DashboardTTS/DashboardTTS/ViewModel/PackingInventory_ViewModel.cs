@@ -49,7 +49,11 @@ namespace DashboardTTS.ViewModel
             public string partNo { get; set; }
             public string jobID { get; set; }
             public string materialPartNo { get; set; }
-            public double materialQty { get; set; }
+           
+            public double beforeQty { get; set; }
+            public double afterQty { get; set; }
+
+
             public double materialCount { get; set; }
             public string bomFlag { get; set; }
         }

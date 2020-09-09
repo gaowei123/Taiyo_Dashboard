@@ -525,8 +525,7 @@ namespace DashboardTTS.Webform.PQC
                 this.ddlTopCoatMachineNo.Items.Add(liTopMachine);
             }
         }
-
-
+        
         void setPICDDL()
         {
             Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();

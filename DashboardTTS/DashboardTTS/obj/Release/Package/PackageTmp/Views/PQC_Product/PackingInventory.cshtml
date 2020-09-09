@@ -19,7 +19,7 @@
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">PQC Packing Inventory</span>
+        <span class="titleText">Packing Inventory</span>
     </div>
 
 
@@ -58,7 +58,7 @@
 
 <script type="text/javascript">
 
-    var apiGetPackInventory = window.globalConfig.rootDirectory + '/PQC_Product/GetWIPInventory';
+    var apiGetPackInventory = window.globalConfig.rootDirectory + '/PQC_Product/GetPackingInventoryList';
 
 
 
@@ -96,7 +96,8 @@
             //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) {
                 return {
-                    PartNo: $("#txtPartNo").val()
+                    DateFrom: '2020-6-1',
+                    PartNo: $("#ddlPartNo").val()
                 }
             },
             //sortName: 'id', // 要排序的字段
@@ -144,28 +145,28 @@
                 valign: 'middle'
             },
             {
-                field: 'jobNo',
+                field: 'jobID',
                 title: 'Job No',
                 align: 'left',
                 valign: 'middle',
                 formatter:function(value, row, index){
-                    return '<a href="JobOrderDetail?PartNo=' + row.partNo + '" target="_blank"  >' + value + '</a>';
+                    return '<a href="PackingJobOrder?PartNo=' + row.partNo + '" target="_blank"  >' + value + '</a>';
                 }
             },
             {
-                field: 'sMrpQty',
+                field: 'lotQty',
                 title: 'MRP Qty',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'sBeforeQty',
+                field: 'beforeQty',
                 title: 'Before Qty',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'sAfterQty',
+                field: 'afterQty',
                 title: 'After Qty',
                 align: 'center',
                 valign: 'middle'
@@ -180,16 +181,7 @@
                 field: 'mfgDate',
                 title: 'MFG Date',
                 align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    if (value != "" && value != null) {
-                        var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
-
-                        return dateFormat('dd/MM/yyyy', date);
-                    } else {
-                        return "";
-                    }
-                }
+                valign: 'middle'
             },
             {
                 field: 'bomFlag',
@@ -213,31 +205,38 @@
 
 
                 data.forEach(function (val, index) {
-                    //console.log(val);
+                  
 
-                    totalMrpSET += val.mrpQtySET;
-                    totalMrpPCS += val.mrpQtyPCS;
-                    totalAfterSET += val.afterQtySET;
-                    totalAfterPCS += val.afterQtyPCS;
-                    totalBeforeSET += val.beforeQtySET;
-                    totalBeforePCS += val.beforeQtyPCS;
+                    var lotQty = val.lotQty.replace(')', '');
+                    lotQty = lotQty.split('(');
+                    var afterQty = val.afterQty.replace(')', '');
+                    afterQty = afterQty.split('(');
+                    var beforeQty = val.beforeQty.replace(')', '');
+                    beforeQty = beforeQty.split('(');
+
+                    totalMrpSET += Number( lotQty[0]);
+                    totalMrpPCS += Number(lotQty[1]);
+                    totalAfterSET +=Number( afterQty[0]);
+                    totalAfterPCS += Number(afterQty[1]);
+                    totalBeforeSET += Number(beforeQty[0]);
+                    totalBeforePCS += Number(beforeQty[1]);
                     totalJobCount += val.jobCount;
                 });
 
 
 
-                var count = $('#tableWIPInventory').bootstrapTable('getData').length;
+                var count = $('#tablePackingInventory').bootstrapTable('getData').length;
           
-                $('#tableWIPInventory').bootstrapTable('insertRow', {
+                $('#tablePackingInventory').bootstrapTable('insertRow', {
                     index: count,
                     row: {
                         customer: "Total",
                         model: "",
                         partNo: "",
-                        jobNo: "",
-                        sMrpQty: totalMrpSET + "(" + totalMrpPCS + ")",
-                        sBeforeQty: totalBeforeSET + "(" + totalBeforePCS + ")",
-                        sAfterQty: totalAfterSET + "(" + totalAfterPCS + ")",
+                        jobID: "",
+                        lotQty: totalMrpSET + "(" + totalMrpPCS + ")",
+                        beforeQty: totalBeforeSET + "(" + totalBeforePCS + ")",
+                        afterQty: totalAfterSET + "(" + totalAfterPCS + ")",
                         jobCount: totalJobCount,
                         mfgDate: "",
                         bomFlag: ""

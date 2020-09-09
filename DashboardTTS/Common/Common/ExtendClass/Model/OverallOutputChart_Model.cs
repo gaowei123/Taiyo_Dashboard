@@ -33,6 +33,7 @@ namespace Common.ExtendClass.Model
         public double? PaintSetupRej { get; set; }
 
 
+
         public double? LaserSetup { get; set; }
         public double? LaserBuyoff { get; set; }
         public double? LaserShortage { get; set; }

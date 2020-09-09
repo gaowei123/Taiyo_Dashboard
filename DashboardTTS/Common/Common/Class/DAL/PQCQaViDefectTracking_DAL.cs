@@ -702,10 +702,28 @@ namespace Common.Class.DAL
 			return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
 		}
 
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public SqlCommand DeleteAllCommand( )
+
+        public SqlCommand DeleteJobCommand(string sJobNo)
+        {
+            
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from PQCQaViDefectTracking where jobId = @jobNo");
+        
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobNo", SqlDbType.VarChar,50)
+            };
+
+            parameters[0].Value = sJobNo;
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+        /// <summary>
+        /// 删除一条数据
+        /// </summary>
+        public SqlCommand DeleteAllCommand( )
 		{
 			//该表无主键信息，请自定义主键/条件字段
 			StringBuilder strSql=new StringBuilder();

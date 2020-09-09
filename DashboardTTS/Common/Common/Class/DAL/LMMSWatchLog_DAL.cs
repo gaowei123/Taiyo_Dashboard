@@ -493,7 +493,7 @@ select
 	,a.totalFail as ng
 	,a.totalpass + a.totalFail as output
 	,totalQuantity as mrpTotal
-    ,isnull(a.setUpQTY,0) * c.materialCount as setupQty
+    ,isnull(a.setUpQTY,0) *  isnull(c.materialCount,1) as setupQty
 	--PCS
 
 	--SET
@@ -502,7 +502,7 @@ select
 	,dbo.GetMaxNG(ng1Count,ng2Count,ng3Count,ng4Count,ng5Count,ng6Count,ng7Count,ng8Count,ng9Count,ng10Count,ng11Count,ng12Count,ng13Count,ng14Count,ng15Count,ng16Count) 
 	 +
 	 dbo.GetMinOK(ok1Count,ok2Count,ok3Count,ok4Count,ok5Count,ok6Count,ok7Count,ok8Count,ok9Count,ok10Count,ok11Count,ok12Count,ok13Count,ok14Count,ok15Count,ok16Count) as setOutput
-	,totalQuantity / c.materialcount as setMrpTotal
+	,totalQuantity / isnull(c.materialcount,1) as setMrpTotal
 	,isnull(a.setUpQTY,0) as setSetupQty
 	--SET
 

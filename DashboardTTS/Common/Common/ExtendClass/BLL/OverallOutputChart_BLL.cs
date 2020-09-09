@@ -52,6 +52,8 @@ namespace Common.ExtendClass.BLL
                 model.IPQCRej = double.Parse(dr["IPQCRej"].ToString());
             }
 
+            model.RejQty += model.IPQCRej.Value;
+
             return model;
         }
 
@@ -84,6 +86,8 @@ namespace Common.ExtendClass.BLL
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
 
+            
+
             if (drQaSetup["PaintSetupRej"] != null || drQaSetup["PaintSetupRej"].ToString() != "")
             {
                 model.PaintSetupRej = double.Parse(drQaSetup["PaintSetupRej"].ToString());
@@ -94,6 +98,9 @@ namespace Common.ExtendClass.BLL
                 model.PaintQARej = double.Parse(drQaSetup["PaintQARej"].ToString());
             }
 
+            model.RejQty = model.PaintSetupRej.Value + model.PaintQARej.Value;
+
+            model.PassQty = model.TotalQty - model.RejQty;
 
 
 
@@ -152,7 +159,7 @@ namespace Common.ExtendClass.BLL
                 model.LaserShortage = double.Parse(drSetupBuyoffShortage["LaserShortage"].ToString());
             }
 
-
+            model.RejQty += (model.LaserSetup.Value + model.LaserBuyoff.Value);
 
 
 
@@ -211,6 +218,8 @@ namespace Common.ExtendClass.BLL
             {
                 model.OthersRej = double.Parse(dr["OthersRej"].ToString());
             }
+
+            model.RejQty = model.TTSMouldRej.Value + model.VendorMouldRej.Value + model.PaintRej.Value + model.LaserRej.Value + model.OthersRej.Value;
 
 
 
@@ -281,6 +290,7 @@ namespace Common.ExtendClass.BLL
 
             return modelList;
         }
+
 
     }
 }

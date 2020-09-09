@@ -12,7 +12,6 @@ namespace DashboardTTS.Controllers
         private readonly ViewBusiness.OverallReport_ViewBusiness vBLL = new ViewBusiness.OverallReport_ViewBusiness();
 
         #region  view 
-        // GET: OverallReport
         public ActionResult Index()
         {
             return View();
@@ -22,18 +21,11 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
-
-        
+                
         public ActionResult OutputSummaryChart()
         {
             return View();
         }
-        
-
-
-
-
         #endregion
 
         

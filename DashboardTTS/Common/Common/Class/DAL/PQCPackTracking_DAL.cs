@@ -587,21 +587,28 @@ where 1=1  ");
         }
 
 
-        public DataTable GetPackInventoryDetailList(DateTime dDateFrom, string sPartNo)
+        public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
 
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select
-b.customer
+
+ b.customer
 ,b.model
 ,a.PartNumber
-,jobid
-,materialPartNo
-,a.materialQty
+,a.jobid
+,a.materialPartNo
+
+,d.output - a.materialQty as beforeQty
+,a.materialQty as afterQty
+
 ,isnull(c.materialCount ,1) as materialCount
 ,case when b.partNumber is null then 'false' else 'true' end as bomFlag
+
 from PQCQaViBinning a
+
+
 left join (
 	select 
 	partNumber
@@ -613,6 +620,8 @@ left join (
 		  end as lastCheckProcess
 	from PQCBom
 ) b on a.partnumber = b.partNumber
+
+
 left join (
 	select 
 	partNumber
@@ -620,20 +629,40 @@ left join (
 	from PQCBomDetail 
 	group by partNumber
 ) c on a.partNumber  = c.partNumber
-where 1=1 
+
+
+left join (
+	select
+		jobID
+		,materialPartNo
+		,processes
+		,SUM(passQty) as output
+	from PQCQaViDetailTracking 
+	where 1=1 
+	group by jobID, materialPartNo, processes
+) d on a.jobId = d.jobid and a.materialPartNo = d.materialPartNo and a.processes = d.processes
+
+
+where 1=1 and d.output - a.materialQty > 0
 and a.processes = b.lastCheckProcess
-and a.day >= @dateFrom ");
+and a.day >= @dateFrom 
+and a.day < @dateTo ");
 
         
             if (!string.IsNullOrEmpty(sPartNo)) strSql.AppendLine(" and a.PartNumber = @partNo ");
+            if (!string.IsNullOrEmpty(sJobNo)) strSql.AppendLine(" and a.jobid = @jobID ");
 
             SqlParameter[] parameters = {
                 new SqlParameter("@dateFrom", SqlDbType.DateTime2),
-                new SqlParameter("@partNo", SqlDbType.VarChar,50)
+                new SqlParameter("@dateTo", SqlDbType.DateTime2),
+                new SqlParameter("@partNo", SqlDbType.VarChar,50),
+                new SqlParameter("@jobID", SqlDbType.VarChar,50)
             };
 
             parameters[0].Value = dDateFrom;
-            if (!string.IsNullOrEmpty(sPartNo)) parameters[1].Value = sPartNo; else parameters[1] = null;
+            parameters[1].Value = dDateTo;
+            if (!string.IsNullOrEmpty(sPartNo)) parameters[2].Value = sPartNo; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(sJobNo)) parameters[3].Value = sJobNo; else parameters[3] = null;
 
 
 
