@@ -96,7 +96,7 @@
             //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) {
                 return {
-                    DateFrom: '2020-6-1',
+                    DateFrom: '2020-9-1',
                     PartNo: $("#ddlPartNo").val()
                 }
             },
@@ -192,8 +192,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-
-
+                
                 var totalMrpSET = 0;
                 var totalMrpPCS = 0;
                 var totalAfterSET = 0;
@@ -203,26 +202,27 @@
                 var totalJobCount = 0;
 
 
+                if (data != undefined && data.length != 0) {
 
-                data.forEach(function (val, index) {
-                  
+                    data.forEach(function (val, index) {
+                        var lotQty = val.lotQty.replace(')', '');
+                        lotQty = lotQty.split('(');
+                        var afterQty = val.afterQty.replace(')', '');
+                        afterQty = afterQty.split('(');
+                        var beforeQty = val.beforeQty.replace(')', '');
+                        beforeQty = beforeQty.split('(');
 
-                    var lotQty = val.lotQty.replace(')', '');
-                    lotQty = lotQty.split('(');
-                    var afterQty = val.afterQty.replace(')', '');
-                    afterQty = afterQty.split('(');
-                    var beforeQty = val.beforeQty.replace(')', '');
-                    beforeQty = beforeQty.split('(');
+                        totalMrpSET += Number(lotQty[0]);
+                        totalMrpPCS += Number(lotQty[1]);
+                        totalAfterSET += Number(afterQty[0]);
+                        totalAfterPCS += Number(afterQty[1]);
+                        totalBeforeSET += Number(beforeQty[0]);
+                        totalBeforePCS += Number(beforeQty[1]);
+                        totalJobCount += val.jobCount;
+                    });
+                }
 
-                    totalMrpSET += Number( lotQty[0]);
-                    totalMrpPCS += Number(lotQty[1]);
-                    totalAfterSET +=Number( afterQty[0]);
-                    totalAfterPCS += Number(afterQty[1]);
-                    totalBeforeSET += Number(beforeQty[0]);
-                    totalBeforePCS += Number(beforeQty[1]);
-                    totalJobCount += val.jobCount;
-                });
-
+              
 
 
                 var count = $('#tablePackingInventory').bootstrapTable('getData').length;

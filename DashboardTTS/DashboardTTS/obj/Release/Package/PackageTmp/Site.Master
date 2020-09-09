@@ -113,9 +113,6 @@
                                 <li><a runat="server" href="./Webform/Moulding/MouldingMonthlyMaterial.aspx">Material Usage Report</a></li>
                             </ul>
                         </li>
-
-                        <li class="divider"></li>
-
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Production</a>
                             <ul class="dropdown-menu">
@@ -139,9 +136,6 @@
                                 <li><a runat="server" href="./Webform/Moulding/MouldingDeliveryOperatingHis.aspx">Parts Transfer History</a></li>
                             </ul>
                         </li>
-
-                        <li class="divider"></li>
-
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Machine</a>
                             <ul class="dropdown-menu">
@@ -150,9 +144,6 @@
                                 <li><a runat="server" href="./Webform/Moulding/MachineRealStatus.aspx">Machine Real Time</a></li>
                             </ul>
                         </li>
-
-                        <li class="divider"></li>
-
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Monitor/Analysis</a>
                             <ul class="dropdown-menu">
@@ -171,9 +162,6 @@
                                 <li><a runat="server" href="./MOULD_MonthlyHightestReject/Index">Production Rejected Parts Analysis</a></li>                                
                             </ul>
                         </li>
-
-                        <li class="divider"></li>
-
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">General</a>
                             <ul class="dropdown-menu">

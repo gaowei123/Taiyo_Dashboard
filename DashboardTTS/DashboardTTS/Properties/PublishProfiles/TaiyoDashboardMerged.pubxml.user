@@ -1966,10 +1966,10 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>09/08/2020 16:09:13</publishTime>
+      <publishTime>09/09/2020 14:26:45</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>09/08/2020 16:09:19</publishTime>
+      <publishTime>09/09/2020 14:26:51</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
       <publishTime>09/08/2020 16:09:12</publishTime>
@@ -2248,7 +2248,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/MasterPage.css">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/09/2020 14:06:16</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/SharedCSS.css">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10924,7 +10924,7 @@
       <publishTime>06/30/2020 15:35:40</publishTime>
     </File>
     <File Include="Views/OverallReport/OutputSummaryChart.cshtml">
-      <publishTime>09/07/2020 10:32:11</publishTime>
+      <publishTime>09/09/2020 10:34:59</publishTime>
     </File>
     <File Include="Views/PQC_Product/CheckingDetailReport.cshtml">
       <publishTime>07/07/2020 14:39:00</publishTime>
@@ -10942,7 +10942,7 @@
       <publishTime>07/02/2020 17:00:49</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingInventory.cshtml">
-      <publishTime>09/08/2020 16:07:56</publishTime>
+      <publishTime>09/09/2020 11:56:36</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingJobOrder.cshtml">
       <publishTime>09/08/2020 16:00:17</publishTime>
@@ -10969,7 +10969,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/08/2020 11:18:17</publishTime>
+      <publishTime>09/09/2020 14:12:15</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
