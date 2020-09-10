@@ -14,7 +14,13 @@ namespace DashboardTTS.Webform
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //直接跳转到新 home page, 旧home page地址保留,  taiyo多数人保存旧地址.
+            //旧home page地址保留.
+            //taiyo都保存旧地址
+            
+
+
+
+            //直接跳转到新 home page
             string rootPath = Page.Request.ApplicationPath;
 
             if (rootPath == "/")

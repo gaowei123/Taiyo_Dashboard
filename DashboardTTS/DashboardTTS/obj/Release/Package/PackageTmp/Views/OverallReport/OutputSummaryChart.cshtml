@@ -85,6 +85,25 @@
     //初始化echart
     var outputChart = echarts.init(document.getElementById('chartOutput'));
 
+
+
+
+    $(document).ready(function () {
+
+        var lastDay = getLastReportDay();
+        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+
+        $('#txtDateFrom').val(strLastDay);
+        $('#txtDateTo').val(strLastDay);
+        
+
+        generateChart();
+    });
+
+
+
+
+
     function generateChart() {
 
 
@@ -107,6 +126,11 @@
                 "DateTo": $("#txtDateTo").val(),
                 "Shift": $("#ddlShift").val()
             },
+
+            beforeSend: function () {
+                outputChart.showLoading();
+            },
+
             success: function (data) {
 
                 if (data == null || data == undefined || data.length == 0) {
@@ -369,6 +393,7 @@
                     ]
                 };
 
+                outputChart.hideLoading();
 
                 outputChart.clear();
                 outputChart.setOption(option);
@@ -382,8 +407,6 @@
             }
         });
     }
-
-
 
 
 

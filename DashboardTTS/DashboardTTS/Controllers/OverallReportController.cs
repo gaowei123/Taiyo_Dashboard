@@ -54,8 +54,12 @@ namespace DashboardTTS.Controllers
             dateTo = dateTo.AddDays(1);
             string shift = Request.Form["Shift"];
 
-            Common.ExtendClass.BLL.OverallOutputChart_BLL bll = new Common.ExtendClass.BLL.OverallOutputChart_BLL();
-            return Json(bll.GetDataList(dateFrom, dateTo, shift));
+            Common.ExtendClass.BLL.OverallOutputChart_BLL bll = new Common.ExtendClass.BLL.OverallOutputChart_BLL();            
+            var  result = bll.GetDataList(dateFrom, dateTo, shift);
+
+
+
+            return Json(result);
         }
 
         

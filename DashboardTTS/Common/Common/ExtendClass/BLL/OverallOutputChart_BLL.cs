@@ -25,29 +25,28 @@ namespace Common.ExtendClass.BLL
 
             Model.OverallOutputChart_Model model = new Model.OverallOutputChart_Model();
             model.Department = StaticRes.Global.Department.Moulding;
+            
 
-
-
-            if (dr["TotalQty"] != null || dr["TotalQty"].ToString() != "")
+            if (dr["TotalQty"] != null && dr["TotalQty"].ToString() != "")
             {
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
-            if (dr["PassQty"] != null || dr["PassQty"].ToString() != "")
+            if (dr["PassQty"] != null && dr["PassQty"].ToString() != "")
             {
                 model.PassQty = double.Parse(dr["PassQty"].ToString());
             }
-            if (dr["RejQty"] != null || dr["RejQty"].ToString() != "")
+            if (dr["RejQty"] != null && dr["RejQty"].ToString() != "")
             {
                 model.RejQty = double.Parse(dr["RejQty"].ToString());
             }
 
 
 
-            if (dr["MouldSetup"] != null || dr["MouldSetup"].ToString() != "")
+            if (dr["MouldSetup"] != null && dr["MouldSetup"].ToString() != "")
             {
                 model.MouldSetup = double.Parse(dr["MouldSetup"].ToString());
             }
-            if (dr["IPQCRej"] != null || dr["IPQCRej"].ToString() != "")
+            if (dr["IPQCRej"] != null && dr["IPQCRej"].ToString() != "")
             {
                 model.IPQCRej = double.Parse(dr["IPQCRej"].ToString());
             }
@@ -81,19 +80,19 @@ namespace Common.ExtendClass.BLL
 
 
 
-            if (dr["TotalQty"] != null || dr["TotalQty"].ToString() != "")
+            if (dr["TotalQty"] != null && dr["TotalQty"].ToString() != "")
             {
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
 
             
 
-            if (drQaSetup["PaintSetupRej"] != null || drQaSetup["PaintSetupRej"].ToString() != "")
+            if (drQaSetup["PaintSetupRej"] != null && drQaSetup["PaintSetupRej"].ToString() != "")
             {
                 model.PaintSetupRej = double.Parse(drQaSetup["PaintSetupRej"].ToString());
             }
 
-            if (drQaSetup["PaintQARej"] != null || drQaSetup["PaintQARej"].ToString() != "")
+            if (drQaSetup["PaintQARej"] != null && drQaSetup["PaintQARej"].ToString() != "")
             {
                 model.PaintQARej = double.Parse(drQaSetup["PaintQARej"].ToString());
             }
@@ -132,29 +131,29 @@ namespace Common.ExtendClass.BLL
 
 
 
-            if (dr["TotalQty"] != null || dr["TotalQty"].ToString() != "")
+            if (dr["TotalQty"] != null && dr["TotalQty"].ToString() != "")
             {
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
-            if (dr["PassQty"] != null || dr["PassQty"].ToString() != "")
+            if (dr["PassQty"] != null && dr["PassQty"].ToString() != "")
             {
                 model.PassQty = double.Parse(dr["PassQty"].ToString());
             }
-            if (dr["RejQty"] != null || dr["RejQty"].ToString() != "")
+            if (dr["RejQty"] != null && dr["RejQty"].ToString() != "")
             {
                 model.RejQty = double.Parse(dr["RejQty"].ToString());
             }
 
 
-            if (drSetupBuyoffShortage["LaserBuyoff"] != null || drSetupBuyoffShortage["LaserBuyoff"].ToString() != "")
+            if (drSetupBuyoffShortage["LaserBuyoff"] != null && drSetupBuyoffShortage["LaserBuyoff"].ToString() != "")
             {
                 model.LaserBuyoff = double.Parse(drSetupBuyoffShortage["LaserBuyoff"].ToString());
             }
-            if (drSetupBuyoffShortage["LaserSetup"] != null || drSetupBuyoffShortage["LaserSetup"].ToString() != "")
+            if (drSetupBuyoffShortage["LaserSetup"] != null && drSetupBuyoffShortage["LaserSetup"].ToString() != "")
             {
                 model.LaserSetup = double.Parse(drSetupBuyoffShortage["LaserSetup"].ToString());
             }
-            if (drSetupBuyoffShortage["LaserShortage"] != null || drSetupBuyoffShortage["LaserShortage"].ToString() != "")
+            if (drSetupBuyoffShortage["LaserShortage"] != null && drSetupBuyoffShortage["LaserShortage"].ToString() != "")
             {
                 model.LaserShortage = double.Parse(drSetupBuyoffShortage["LaserShortage"].ToString());
             }
@@ -186,11 +185,11 @@ namespace Common.ExtendClass.BLL
 
 
 
-            if (dr["TotalQty"] != null || dr["TotalQty"].ToString() != "")
+            if (dr["TotalQty"] != null && dr["TotalQty"].ToString() != "")
             {
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
-            if (dr["PassQty"] != null || dr["PassQty"].ToString() != "")
+            if (dr["PassQty"] != null && dr["PassQty"].ToString() != "")
             {
                 model.PassQty = double.Parse(dr["PassQty"].ToString());
             }
@@ -198,23 +197,23 @@ namespace Common.ExtendClass.BLL
 
 
 
-            if (dr["TTSMouldRej"] != null || dr["TTSMouldRej"].ToString() != "")
+            if (dr["TTSMouldRej"] != null && dr["TTSMouldRej"].ToString() != "")
             {
                 model.TTSMouldRej = double.Parse(dr["TTSMouldRej"].ToString());
             }
-            if (dr["VendorMouldRej"] != null || dr["VendorMouldRej"].ToString() != "")
+            if (dr["VendorMouldRej"] != null && dr["VendorMouldRej"].ToString() != "")
             {
                 model.VendorMouldRej = double.Parse(dr["VendorMouldRej"].ToString());
             }
-            if (dr["PaintRej"] != null || dr["PaintRej"].ToString() != "")
+            if (dr["PaintRej"] != null && dr["PaintRej"].ToString() != "")
             {
                 model.PaintRej = double.Parse(dr["PaintRej"].ToString());
             }
-            if (dr["LaserRej"] != null || dr["LaserRej"].ToString() != "")
+            if (dr["LaserRej"] != null && dr["LaserRej"].ToString() != "")
             {
                 model.LaserRej = double.Parse(dr["LaserRej"].ToString());
             }
-            if (dr["OthersRej"] != null || dr["OthersRej"].ToString() != "")
+            if (dr["OthersRej"] != null && dr["OthersRej"].ToString() != "")
             {
                 model.OthersRej = double.Parse(dr["OthersRej"].ToString());
             }
@@ -246,15 +245,15 @@ namespace Common.ExtendClass.BLL
 
 
 
-            if (dr["TotalQty"] != null || dr["TotalQty"].ToString() != "")
+            if (dr["TotalQty"] != null && dr["TotalQty"].ToString() != "")
             {
                 model.TotalQty = double.Parse(dr["TotalQty"].ToString());
             }
-            if (dr["PassQty"] != null || dr["PassQty"].ToString() != "")
+            if (dr["PassQty"] != null && dr["PassQty"].ToString() != "")
             {
                 model.PassQty = double.Parse(dr["PassQty"].ToString());
             }
-            if (dr["RejQty"] != null || dr["RejQty"].ToString() != "")
+            if (dr["RejQty"] != null && dr["RejQty"].ToString() != "")
             {
                 model.RejQty = double.Parse(dr["RejQty"].ToString());
             }

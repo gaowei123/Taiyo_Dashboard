@@ -13,24 +13,20 @@ namespace DashboardTTS.Controllers
         private readonly ViewBusiness.LaserProduction vBLL = new ViewBusiness.LaserProduction();
         private JavaScriptSerializer _js = new JavaScriptSerializer();
 
-
-
+        
         #region View
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult SummaryReport()
         {
             return View();
         }
-
-        public ActionResult LaserMaintenance()
+        public ActionResult MachineDailyReport()
         {
             return View();
         }
-
         #endregion
 
 
@@ -40,28 +36,12 @@ namespace DashboardTTS.Controllers
 
 
         #region laser summary report
-
-
-        public ActionResult GetColumn()
+        public JsonResult GetColumn()
         {
-            List<ViewModel.LaserSummaryReport_ViewModel.typeColumn> modelList = new List<ViewModel.LaserSummaryReport_ViewModel.typeColumn>();
-
-            modelList = vBLL.GetTypeColumn();
-
-
-            string jsonResult = "";
-
-
-            if (modelList == null || modelList.Count == 0)
-                jsonResult = _js.Serialize("");
-            else
-                jsonResult = _js.Serialize(modelList);
-
-
-            return Content(jsonResult);
+            List<ViewModel.LaserSummaryReport_ViewModel.typeColumn> modelList = vBLL.GetTypeColumn();
+            return Json(modelList);
         }
         
-
         public ActionResult GetSummaryData()
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
@@ -75,47 +55,18 @@ namespace DashboardTTS.Controllers
 
             string jsonResult = vBLL.GetSummaryList(dateFrom, dateTo, partNo, shift);
             
-          
-
             return Content(jsonResult);
         }
-        
-        #endregion
-
-
-
-        #region Laser Maintenance 
-
-        public ActionResult GetMaintainJobInfo()
-        {
-            DateTime day = DateTime.Parse(Request.Form["Day"].ToString());
-            string shift = Request.Form["Shift"];
-            string machineID = Request.Form["MachineID"];
-            string jobID = Request.Form["JobID"];
-
-            DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[GetMaintainJobInfo] receive job info --  jobno:{0}, day:{1}, shift:{2}, machineID:{3}", jobID, day.ToString("yyyy-MM-dd"), shift, machineID));
-
-
-
-          
-
-            ViewModel.LaserMaintenance_ViewModel model = vBLL.GetMaintainJobInfo(day, shift, machineID, jobID);
-
-            if (model == null)
-            {
-                return Content(_js.Serialize(""));
-            }
-            else
-            {
-                return Content(_js.Serialize(model));
-            }
-        }
-        
 
         #endregion
 
 
 
+        #region Machine Daily Output
+
+
+
+        #endregion
 
 
 

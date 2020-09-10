@@ -1695,6 +1695,24 @@ group by a.partNumber, a.materialNo  ");
 
 
 
+        public DataTable asdf()
+        {
+            StringBuilder strSql = new StringBuilder();
+
+
+            strSql.Append(@"   select top 10  * from View_1  ");
+
+
+
+          
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
+
+
+            return ds.Tables[0];
+        }
+
+
 
 
     }

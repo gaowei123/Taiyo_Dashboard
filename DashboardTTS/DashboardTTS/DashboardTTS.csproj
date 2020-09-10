@@ -3692,11 +3692,11 @@
     <Content Include="Views\PQC_Product\CheckingDetailReport.cshtml" />
     <Content Include="Views\PQC_Product\PackingInventory.cshtml" />
     <Content Include="Views\PQC_Product\PackingJobOrder.cshtml" />
-    <Content Include="Views\LASER_Product\LaserMaintenance.cshtml" />
     <Content Include="Views\PQC_Product\PackingPicChart.cshtml" />
     <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
     <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
     <Content Include="Views\OverallReport\OutputSummaryChart.cshtml" />
+    <Content Include="Views\LASER_Product\MachineDailyReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
