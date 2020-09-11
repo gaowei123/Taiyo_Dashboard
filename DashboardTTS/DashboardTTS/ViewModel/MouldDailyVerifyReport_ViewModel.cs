@@ -24,8 +24,8 @@ namespace DashboardTTS.ViewModel
             public double totalQty { get; set; }
             public double ipqcRejQty { get; set; }
             public double setUp { get; set; }
-            public double wastageMaterial01 { get; set; }
-            public double wastageMaterial02 { get; set; }
+            public decimal wastageMaterial01 { get; set; }
+            public decimal wastageMaterial02 { get; set; }
             public string userID { get; set; }
             public string supervisor { get; set; }
             public string partNoALL { get; set; }
@@ -118,7 +118,7 @@ namespace DashboardTTS.ViewModel
 
 
             public double ipqcRejQty { get; set; }
-            public double wastageMaterial { get; set; }
+            public decimal wastageMaterial { get; set; }
             public double setUp { get; set; }
             public string setUpRate { get; set; }
             public string userID { get; set; }

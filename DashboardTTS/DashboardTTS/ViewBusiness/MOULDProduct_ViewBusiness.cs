@@ -153,6 +153,10 @@ namespace DashboardTTS.ViewBusiness
                     model.gasMark = item.b.gasMark;
 
                     model.ipqcRejQty = item.a.ipqcRejQty;
+
+                 
+
+
                     model.wastageMaterial = item.a.wastageMaterial01 + item.a.wastageMaterial02;
                     model.setUp = item.a.setUp;
                     model.setUpRate = Math.Round(item.a.setUp / item.a.totalQty * 100, 2).ToString("0.00") + "%";
@@ -524,8 +528,8 @@ namespace DashboardTTS.ViewBusiness
             double totalSetup = 0;
             decimal totalSetupCost = 0;
 
-            double totalWastageMaterial01 = 0;
-            double totalWastageMaterial02 = 0;
+            decimal totalWastageMaterial01 = 0;
+            decimal totalWastageMaterial02 = 0;
             decimal totalWastageMaterialCost = 0;
 
 
@@ -628,8 +632,8 @@ namespace DashboardTTS.ViewBusiness
                 model.ipqcRejQty = dr["QCNGQTY"].ToString() == "" ? 0 : double.Parse(dr["QCNGQTY"].ToString());
 
                 model.setUp = dr["Setup"].ToString() == "" ? 0 : double.Parse(dr["Setup"].ToString());
-                model.wastageMaterial01 = dr["WastageMaterial01"].ToString() == "" ? 0 : double.Parse(dr["WastageMaterial01"].ToString());
-                model.wastageMaterial02 = dr["WastageMaterial02"].ToString() == "" ? 0 : double.Parse(dr["WastageMaterial02"].ToString());
+                model.wastageMaterial01 = dr["WastageMaterial01"].ToString() == "" ? 0 : decimal.Parse(dr["WastageMaterial01"].ToString());
+                model.wastageMaterial02 = dr["WastageMaterial02"].ToString() == "" ? 0 : decimal.Parse(dr["WastageMaterial02"].ToString());
                 model.userID = dr["userID"].ToString();
                 model.supervisor = dr["SupervisorCheck"].ToString();
                 model.startTime = DateTime.Parse(dr["startTime"].ToString());
