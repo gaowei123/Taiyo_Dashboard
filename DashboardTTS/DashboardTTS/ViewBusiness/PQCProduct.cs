@@ -1436,89 +1436,96 @@ namespace DashboardTTS.ViewBusiness
 
                 //get checking info
                 DataTable dt = viTrackingBLL.GetDailyOperatorList(dDate, sShift, sUserID);
-                if (dt == null || dt.Rows.Count == 0)
-                    return null;
-
-
-                foreach (DataRow dr in dt.Rows)
+                if (dt != null && dt.Rows.Count != 0)
                 {
-                    ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
-
-
-                    model.jobID = dr["jobID"].ToString();
-
-                    if (string.IsNullOrEmpty(dr["startTime"].ToString()))
-                        model.startTime = null;
-                    else
-                        model.startTime = DateTime.Parse(dr["startTime"].ToString());
-
-                    if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
-                        model.endTime = null;
-                    else
-                        model.endTime = DateTime.Parse(dr["stopTime"].ToString());
-
-
-                    if (model.startTime != null && model.endTime != null)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
-                        model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                        ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
+
+
+                        model.jobID = dr["jobID"].ToString();
+
+                        if (string.IsNullOrEmpty(dr["startTime"].ToString()))
+                            model.startTime = null;
+                        else
+                            model.startTime = DateTime.Parse(dr["startTime"].ToString());
+
+                        if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
+                            model.endTime = null;
+                        else
+                            model.endTime = DateTime.Parse(dr["stopTime"].ToString());
+
+
+                        if (model.startTime != null && model.endTime != null)
+                        {
+                            double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
+                            model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                        }
+
+                        model.partNo = dr["partNumber"].ToString();
+                        model.process = dr["Process"].ToString();
+                        model.mouldRej = double.Parse(dr["MouldRej"].ToString());
+                        model.paintRej = double.Parse(dr["PaintRej"].ToString());
+                        model.laserRej = double.Parse(dr["LaserRej"].ToString());
+                        model.othersRej = double.Parse(dr["OthersRej"].ToString());
+                        model.totalRej = double.Parse(dr["rejectQty"].ToString());
+                        model.passQty = double.Parse(dr["acceptQty"].ToString());
+                        model.rejPrice = double.Parse(dr["rejPrice"].ToString());
+                        model.userID = dr["userID"].ToString();
+
+                        model.materialCount = int.Parse(dr["materialCount"].ToString());
+
+                        reportList.Add(model);
                     }
-
-                    model.partNo = dr["partNumber"].ToString();
-                    model.process = dr["Process"].ToString();
-                    model.mouldRej = double.Parse(dr["MouldRej"].ToString());
-                    model.paintRej = double.Parse(dr["PaintRej"].ToString());
-                    model.laserRej = double.Parse(dr["LaserRej"].ToString());
-                    model.othersRej = double.Parse(dr["OthersRej"].ToString());
-                    model.totalRej = double.Parse(dr["rejectQty"].ToString());
-                    model.passQty = double.Parse(dr["acceptQty"].ToString());
-                    model.rejPrice = double.Parse(dr["rejPrice"].ToString());
-                    model.userID = dr["userID"].ToString();
-
-                    model.materialCount = int.Parse(dr["materialCount"].ToString());
-
-                    reportList.Add(model);
                 }
+           
+
+              
 
 
                 //merge packing info
                 DataTable dtPack = packTrackBLL.GetDailyOperatorList(dDate, sShift, sUserID);
-                foreach (DataRow dr in dtPack.Rows)
+                if (dtPack != null || dtPack.Rows.Count != 0)
                 {
-                    ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
-
-                    model.jobID = dr["jobID"].ToString();
-
-                    if (string.IsNullOrEmpty(dr["startTime"].ToString()))
-                        model.startTime = null;
-                    else
-                        model.startTime = DateTime.Parse(dr["startTime"].ToString());
-
-                    if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
-                        model.endTime = null;
-                    else
-                        model.endTime = DateTime.Parse(dr["stopTime"].ToString());
-
-
-                    if (model.startTime != null && model.endTime != null)
+                    foreach (DataRow dr in dtPack.Rows)
                     {
-                        double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
-                        model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                        ViewModel.PQCOperatorDailyReport model = new ViewModel.PQCOperatorDailyReport();
+
+                        model.jobID = dr["jobID"].ToString();
+
+                        if (string.IsNullOrEmpty(dr["startTime"].ToString()))
+                            model.startTime = null;
+                        else
+                            model.startTime = DateTime.Parse(dr["startTime"].ToString());
+
+                        if (string.IsNullOrEmpty(dr["stopTime"].ToString()))
+                            model.endTime = null;
+                        else
+                            model.endTime = DateTime.Parse(dr["stopTime"].ToString());
+
+
+                        if (model.startTime != null && model.endTime != null)
+                        {
+                            double totalSeconds = (model.endTime.Value - model.startTime.Value).TotalSeconds;
+                            model.operatedTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds / 3600).ToString());
+                        }
+
+                        model.partNo = dr["partNumber"].ToString();
+                        model.process = dr["Process"].ToString();
+                        model.totalRej = double.Parse(dr["rejectQty"].ToString());
+                        model.passQty = double.Parse(dr["acceptQty"].ToString());
+                        model.rejPrice = double.Parse(dr["rejPrice"].ToString());
+                        model.userID = dr["userID"].ToString();
+
+
+
+                        model.materialCount = int.Parse(dr["materialCount"].ToString());
+
+                        reportList.Add(model);
                     }
-
-                    model.partNo = dr["partNumber"].ToString();
-                    model.process = dr["Process"].ToString();
-                    model.totalRej = double.Parse(dr["rejectQty"].ToString());
-                    model.passQty = double.Parse(dr["acceptQty"].ToString());
-                    model.rejPrice = double.Parse(dr["rejPrice"].ToString());
-                    model.userID = dr["userID"].ToString();
-
-
-
-                    model.materialCount = int.Parse(dr["materialCount"].ToString());
-
-                    reportList.Add(model);
                 }
+
+               
 
 
                 string strJobIn = "(";
@@ -1584,8 +1591,6 @@ namespace DashboardTTS.ViewBusiness
                 DBHelp.Reports.LogFile.Log("OperatorDailyOutput_Debug", "GetDailyOperatorList catch exception:" + ee.ToString());
                 return null;
             }
-
-
         }
 
 

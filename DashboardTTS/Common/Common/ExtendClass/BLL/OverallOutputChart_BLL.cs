@@ -14,6 +14,8 @@ namespace Common.ExtendClass.BLL
         private Model.OverallOutputChart_Model GetMouldModel(DateTime dDateFrom, DateTime dDateTo, string sShift)
         {
 
+          
+
             DataTable dt = _dal.GetMouldOutput(dDateFrom,  dDateTo, sShift);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
@@ -53,6 +55,8 @@ namespace Common.ExtendClass.BLL
 
             model.RejQty += model.IPQCRej.Value;
 
+
+           
             return model;
         }
 
@@ -272,9 +276,10 @@ namespace Common.ExtendClass.BLL
             Model.OverallOutputChart_Model Laser = GetLaserModel(dDateFrom, dDateTo, sShift);
             Model.OverallOutputChart_Model Checcking = GetCheckModel(dDateFrom, dDateTo, sShift);
             Model.OverallOutputChart_Model Packing = GetPackModel(dDateFrom, dDateTo, sShift);
+        
 
 
-
+            
             Painting.PaintSetupRej = Laser.LaserShortage;
             Laser.LaserShortage = 0;
 

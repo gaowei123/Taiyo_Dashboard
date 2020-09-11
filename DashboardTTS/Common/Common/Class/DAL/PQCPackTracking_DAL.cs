@@ -589,7 +589,6 @@ where 1=1  ");
 
         public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select
@@ -600,8 +599,8 @@ select
 ,a.jobid
 ,a.materialPartNo
 
-,d.output - a.materialQty as beforeQty
-,a.materialQty as afterQty
+,ISNULL( d.output,0) as afterQty
+,a.materialQty as beforeQty
 
 ,isnull(c.materialCount ,1) as materialCount
 ,case when b.partNumber is null then 'false' else 'true' end as bomFlag
@@ -634,17 +633,15 @@ left join (
 left join (
 	select
 		jobID
-		,materialPartNo
-		,processes
+		,materialPartNo		
 		,SUM(passQty) as output
-	from PQCQaViDetailTracking 
+	from PQCPackDetailTracking 
 	where 1=1 
-	group by jobID, materialPartNo, processes
-) d on a.jobId = d.jobid and a.materialPartNo = d.materialPartNo and a.processes = d.processes
+	group by jobID, materialPartNo
+) d on a.jobId = d.jobid and a.materialPartNo = d.materialPartNo
 
 
-where 1=1 and d.output - a.materialQty > 0
-and a.processes = b.lastCheckProcess
+where 1=1 and a.processes = b.lastCheckProcess
 and a.day >= @dateFrom 
 and a.day < @dateTo ");
 

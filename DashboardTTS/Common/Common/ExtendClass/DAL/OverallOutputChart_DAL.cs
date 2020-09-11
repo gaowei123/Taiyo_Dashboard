@@ -263,7 +263,8 @@ left join (
 	from PQCQaViDefectTracking a
 	left join PQCQaViTracking b on a.trackingID = b.trackingID
 	left join PQCBom c on b.partNumber = c.partNumber
-	where a.day >= @dateFrom and a.day < @dateTo {0}
+	where a.day >= @dateFrom and a.day < @dateTo
+    and b.day >= @dateFrom and b.day < @dateTo {0}
 	group by a.trackingID
 ) b on a.trackingID = b.trackingID
 where a.day >= @dateFrom and a.day < @dateTo {1}", strSearching, strSearching);
