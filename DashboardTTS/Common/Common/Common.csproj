@@ -84,6 +84,7 @@
     <Compile Include="Class\BLL\LMMSUserAttendanceTracking_BLL.cs" />
     <Compile Include="Class\BLL\LMMSUserEventLog_BLL.cs" />
     <Compile Include="Class\BLL\LMMSVisionMachineSettingHis_BLL.cs" />
+    <Compile Include="Class\BLL\LMMSWatchDog_BLL.cs" />
     <Compile Include="Class\BLL\LMMSWatchDog_His_BLL.cs" />
     <Compile Include="Class\BLL\LMMSWatchLog_BLL.cs" />
     <Compile Include="Class\BLL\Material_Inventory_BLL.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Class\DAL\LMMSUserAttendanceTracking_DAL.cs" />
     <Compile Include="Class\DAL\LMMSUserEventLog_DAL.cs" />
     <Compile Include="Class\DAL\LMMSVisionMachineSettingHis_DAL.cs" />
+    <Compile Include="Class\DAL\LMMSWatchDog_DAL.cs" />
     <Compile Include="Class\DAL\LMMSWatchDog_His_DAL.cs" />
     <Compile Include="Class\DAL\LMMSWatchLog_DAL.cs" />
     <Compile Include="Class\DAL\Material_Inventory_Bom_DAL.cs" />
@@ -246,8 +248,11 @@
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
+    <Compile Include="ExtendClass\BLL\LaserMachineDailyReport_BLL.cs" />
     <Compile Include="ExtendClass\BLL\OverallOutputChart_BLL.cs" />
+    <Compile Include="ExtendClass\DAL\LaserMachineDailyReport_DAL.cs" />
     <Compile Include="ExtendClass\DAL\OverallOutputChart_DAL.cs" />
+    <Compile Include="ExtendClass\Model\LaserMachineDailyReport_Model.cs" />
     <Compile Include="ExtendClass\Model\OverallOutputChart_Model.cs" />
     <Compile Include="MyChart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

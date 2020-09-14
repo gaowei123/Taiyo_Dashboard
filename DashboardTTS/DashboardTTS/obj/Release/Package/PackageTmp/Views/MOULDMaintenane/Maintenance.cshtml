@@ -552,25 +552,25 @@
 
 
 
-
-
-
-        var regMaterial = new RegExp("^(([^0][0-9]+|0)\.([0-9]{1,2}))$");
-
+        var regMaterial = new RegExp("^[0-9]+(.[0-9]{1,3})?$");
         if (!regMaterial.test(wastedMaterial01) && wastedMaterial01 != '') {
-            alert("please input number!");
+            alert("Wasted Material 01 number format error!");
             $('#txtWastedMaterial01').val('');
             $('#txtWastedMaterial01').focus();
             return false;
         }
 
         if (!regMaterial.test(wastedMaterial02) && wastedMaterial02 != '') {
-            alert("please input number!");
+            alert("Wasted Material 02 number format error!");
             $('#txtWastedMaterial02').val('');
             $('#txtWastedMaterial02').focus();
             return false;
         }
 
+
+
+     
+     
 
         $('#modalLogin').modal('show');
     }

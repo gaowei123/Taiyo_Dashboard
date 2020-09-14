@@ -1966,13 +1966,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>09/10/2020 14:43:12</publishTime>
+      <publishTime>09/14/2020 14:02:20</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>09/10/2020 14:43:18</publishTime>
+      <publishTime>09/14/2020 14:02:24</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>09/08/2020 16:09:12</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2122,7 +2122,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>09/08/2020 16:09:12</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="bin/stdole.dll">
       <publishTime>06/20/2016 14:45:20</publishTime>
@@ -2248,7 +2248,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/MasterPage.css">
-      <publishTime>09/10/2020 11:47:42</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/SharedCSS.css">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10771,7 +10771,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>09/08/2020 11:17:50</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10873,7 +10873,7 @@
       <publishTime>07/02/2020 17:00:49</publishTime>
     </File>
     <File Include="Views/LASER_Product/MachineDailyReport.cshtml">
-      <publishTime>09/09/2020 16:12:10</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/LASER_Product/SummaryReport.cshtml">
       <publishTime>08/11/2020 14:39:56</publishTime>
@@ -10906,13 +10906,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/MOULDMaintenane/Maintenance.cshtml">
-      <publishTime>09/07/2020 12:24:59</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/MOULDMaterial/Traceability.cshtml">
       <publishTime>06/30/2020 15:35:40</publishTime>
     </File>
     <File Include="Views/MOULDProduct/DailyVerifyReport.cshtml">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/MOULDProduct/RejectionDetailReport.cshtml">
       <publishTime>06/30/2020 15:35:40</publishTime>
@@ -10927,7 +10927,7 @@
       <publishTime>06/30/2020 15:35:40</publishTime>
     </File>
     <File Include="Views/OverallReport/OutputSummaryChart.cshtml">
-      <publishTime>09/10/2020 14:32:38</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/CheckingDetailReport.cshtml">
       <publishTime>07/07/2020 14:39:00</publishTime>
@@ -10936,7 +10936,7 @@
       <publishTime>09/08/2020 15:24:31</publishTime>
     </File>
     <File Include="Views/PQC_Product/JobOrderDetail.cshtml">
-      <publishTime>09/08/2020 09:58:24</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/Maintenance.cshtml">
       <publishTime>06/29/2020 11:13:24</publishTime>
@@ -10945,7 +10945,7 @@
       <publishTime>07/02/2020 17:00:49</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingInventory.cshtml">
-      <publishTime>09/09/2020 11:56:36</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingJobOrder.cshtml">
       <publishTime>09/09/2020 14:34:22</publishTime>
@@ -10957,7 +10957,7 @@
       <publishTime>07/10/2020 16:49:50</publishTime>
     </File>
     <File Include="Views/PQC_Product/PICDailyOutputReport.cshtml">
-      <publishTime>09/01/2020 15:20:35</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/SummaryReport.cshtml">
       <publishTime>08/27/2020 10:29:51</publishTime>
@@ -10972,7 +10972,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/09/2020 14:12:15</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11455,7 +11455,7 @@
       <publishTime>01/15/2020 16:58:15</publishTime>
     </File>
     <File Include="Webform/Moulding/MouldingMonthlySummary.aspx">
-      <publishTime>09/01/2020 16:29:57</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Webform/Moulding/MouldingPartsInventory.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11614,7 +11614,7 @@
       <publishTime>01/15/2020 17:07:53</publishTime>
     </File>
     <File Include="Webform/TTSHomePage.aspx">
-      <publishTime>09/10/2020 12:47:39</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Webform/UserDetail.aspx">
       <publishTime>01/15/2020 16:02:51</publishTime>

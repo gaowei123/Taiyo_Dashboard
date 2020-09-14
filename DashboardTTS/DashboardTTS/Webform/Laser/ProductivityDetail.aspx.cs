@@ -95,6 +95,16 @@ namespace DashboardTTS.Webform
             }
             else if (e.CommandName == "LaserJobMaintain")
             {
+
+                Common.Class.BLL.LMMSWatchDog_BLL watchDogBLL = new Common.Class.BLL.LMMSWatchDog_BLL();
+                if (watchDogBLL.IsJobRunning(jobNo))
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "This job is running, can not maintain!");
+                    return;
+                }
+
+
+
                 //有跨班多条记录的, 并且没有自跳转过的.
                 Common.BLL.LMMSWatchDog_His_BLL bll = new Common.BLL.LMMSWatchDog_His_BLL();
                 DataTable dt = bll.GetList(jobNo);

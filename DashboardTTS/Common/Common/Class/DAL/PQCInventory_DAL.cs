@@ -589,55 +589,80 @@ a group by a.ID ");
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
-
-b.customer
-,b.model
-,b.partNumber
-,a.jobNumber
-,a.InMRPQuantity as MrpQtySET
-,a.InMrpQuantity * d.materialCount as MrpQtyPCS
-
-
-,a.InMRPQuantity - ISNULL(e.totalQtySET,0) as BeforeSET
-,a.InMrpQuantity * d.materialCount - ISNULL(c.TotalQty,0) as BeforePCS
-
-
-,ISNULL(e.totalQtySET,0) as AfterSET
-,ISNULL(c.TotalQty,0) as AfterPCS
-
-,a.MFGDate
-
-,case when (select 1 from PQCBom where partNumber = a.PartNumber) is null then 'False' else 'True' end as BomFlag
-
-,case	when ISNULL(c.TotalQty,0) = 0
-			then 'Pending'
-		when ISNULL(c.TotalQty,0) > 0 and ISNULL(c.TotalQty,0) < a.InMrpQuantity * d.materialCount
-			then 'Inprocess' 
-		when ISNULL(c.TotalQty,0) = a.InMrpQuantity * d.materialCount
-			then 'Complete' 
-end as jobStatus
+	 b.customer
+	,b.model
+	,b.partNumber
+	,a.jobNumber
+	,a.MFGDate
+	,case when (select 1 from PQCBom where partNumber = a.PartNumber) is null then 'False' else 'True' end as BomFlag
+	,case	when ISNULL(c.TotalQtyPCS,0) = 0
+				then 'Pending'
+			when ISNULL(c.TotalQtyPCS,0) > 0 and ISNULL(c.TotalQtyPCS,0) < a.InMrpQuantity * b.materialCount
+				then 'Inprocess' 
+			when ISNULL(c.TotalQtyPCS,0) = a.InMrpQuantity * b.materialCount
+				then 'Complete' 
+	end as jobStatus
 
 
+
+	,a.InMRPQuantity as MrpQtySET
+	,a.InMrpQuantity * b.materialCount as MrpQtyPCS
+
+	,a.InMRPQuantity - ISNULL(d.totalQtySET,0) as BeforeSET
+	,a.InMrpQuantity * b.materialCount - ISNULL(c.TotalQtyPCS,0) as BeforePCS
+
+	,ISNULL(d.totalQtySET,0) as AfterSET
+	,ISNULL(c.TotalQtyPCS,0) as AfterPCS
 
 from PQCInventory a 
-left join PQCBom b on a.PartNumber = b.PartNumber 
-left join (select jobId, sum(totalQty) as totalQty from PQCQaViTracking group by jobId) c on a.jobNumber = c.jobId
-left join (select PartNumber , count(1) as materialCount from PQCBomDetail group by partNumber ) d on a.PartNumber = d.partNumber
+
 left join
-(
-	select jobid , min(totalQty) as totalQtySET from (
+	(
+		select 
+			a.partNumber
+			,a.customer
+			,a.model
+			,b.materialCount 
+		from PQCBom a left join (select partNumber , count(1) as materialCount from PQCBomDetail group by partNumber) b 
+		on a.partNumber = b.partNumber 
+	) b 
+on b.partNumber = a.PartNumber
 
-		select jobId,materialPartNo, sum(passQty) + sum(rejectQty) as totalQty  
-		from PQCQaViDetailTracking 
-		group by jobId, materialPartNo
-	) a group by a.jobId
-) e on a.JobNumber = e.jobId
 
-where 1=1 
+left join 
+	(
+		--vi tracking按照jobid, processes分组, 汇总total qty作为 PCS output
+		select 
+			jobId
+			,processes
+			,sum(totalQty) as TotalQtyPCS
+		from PQCQaViTracking 
+		group by jobId, processes
+	) c
+on a.jobnumber = c.jobId and a.CheckProcess = c.processes
 
---charindex 从process中查询laser出现在第几个位置, 0就是没有laser 即wip.
---(允许processes是null. 否则无bom的记录无法显示)
-and (CHARINDEX('Laser', b.processes,0) = 0 or CHARINDEX('Laser', b.processes,0) is null) ");
+left join
+	(
+		--detail tracking按照jobid, processes分组 取material part no数量最小的为  SET output
+		select 
+		jobId
+		,processes
+		,min(totalQty) as totalQtySET
+		from 
+			(
+				select
+					jobId
+					,materialPartNo
+					,processes
+					,Sum(passQty + rejectQty) as totalQty
+				from PQCQaViDetailTracking
+				group by jobId, materialPartNo, processes
+			) a
+		group by a.jobId, a.processes
+	) d 
+on a.JobNumber = d.jobId and a.CheckProcess = d.processes
+
+where 1=1   ");
 
             if (dDateFrom != null)
                 strSql.Append(" and a.updatedTime >= @dateFrom ");
