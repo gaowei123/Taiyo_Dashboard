@@ -7,18 +7,10 @@ using System.Web.Script.Serialization;
 
 namespace DashboardTTS.Controllers
 {
-
-    
     public class MOULDMaterialController : Controller
     {
-
-
-
         private readonly ViewBusiness.MOULDMaterial vBLL = new ViewBusiness.MOULDMaterial();
-
-
-
-
+        
 
         #region view 
         // GET: MOULDMaterial
@@ -38,31 +30,19 @@ namespace DashboardTTS.Controllers
 
 
 
-        public ActionResult GetMaterialTraceability()
+        public JsonResult GetMaterialTraceability()
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
             dateTo = dateTo.AddDays(1);
-
             string machineID = Request.Form["machineID"];
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-
+            
             List<ViewModel.MouldMaterialTraceability> modelList = vBLL.GetMaterialTraceability(dateFrom, dateTo, machineID);
 
-            if (modelList == null|| modelList.Count == 0)
-            {
-                return Content(js.Serialize(""));
-            }
-            else
-            {
-                return Content(js.Serialize(modelList));
-            }
+        
+            return Json(modelList);
         }
-
-
-
+        
 
     }
 }
