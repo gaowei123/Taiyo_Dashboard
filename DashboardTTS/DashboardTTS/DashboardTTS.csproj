@@ -236,11 +236,9 @@
     <Compile Include="ViewBusiness\ButtonReport_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\Buyoff_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\HomePage_ViewBusiness.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LASER_MachineSettingController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MOULD_DailyReportController.cs" />
     <Compile Include="Controllers\MOULD_MonthlyHightestRejectController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -3640,24 +3638,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Site.Master" />
@@ -3697,6 +3677,10 @@
     <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
     <Content Include="Views\OverallReport\OutputSummaryChart.cshtml" />
     <Content Include="Views\LASER_Product\MachineDailyReport.cshtml" />
+    <Content Include="Views\Test\LaserProductionChart.cshtml" />
+    <Content Include="Views\Test\LaserMachineChart.cshtml" />
+    <Content Include="Views\Test\PQCOperatorChart.cshtml" />
+    <Content Include="Views\Test\PQCProductionChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

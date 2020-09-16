@@ -551,11 +551,11 @@ where 1=1
             SqlParameter[] parameters = {
                 new SqlParameter("@dateFrom", SqlDbType.DateTime),
                 new SqlParameter("@dateTo", SqlDbType.DateTime),
-                new SqlParameter("@shift", SqlDbType.DateTime),
-                new SqlParameter("@model", SqlDbType.DateTime),
-                new SqlParameter("@partNumber", SqlDbType.VarChar,50 ),
+                new SqlParameter("@shift", SqlDbType.VarChar),
+                new SqlParameter("@model", SqlDbType.VarChar),
+                new SqlParameter("@partNumber", SqlDbType.VarChar),
                 new SqlParameter("@machineID", SqlDbType.VarChar),
-                new SqlParameter("@jobNumber", SqlDbType.VarChar)                
+                new SqlParameter("@jobNumber", SqlDbType.VarChar)
             };
 
 

@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewBag.Title = "PQCProductionChart";
+}
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+<div class="container">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText"></span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Shift:</label>
+                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
+                </div>
+            </div>
+
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-3">
+
+                </div>
+                <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default" style="padding:0px; margin-top:10px;">
+            <div id="divMyChart" style="height:700px;"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+
+
+    //初始化 echart
+    var chart = echarts.init(document.getElementById('divMyChart'));
+
+
+    var optionBase = {
+        title:{
+            text: 'Laser Production Chart'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '直接访问',
+                type: 'bar',
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name: '邮件营销',
+                type: 'bar',
+                stack: '广告',
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '联盟广告',
+                type: 'bar',
+                stack: '广告',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '视频广告',
+                type: 'bar',
+                stack: '广告',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '搜索引擎',
+                type: 'bar',
+                data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+                markLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    },
+                    data: [
+                        [{ type: 'min' }, { type: 'max' }]
+                    ]
+                }
+            },
+            {
+                name: '百度',
+                type: 'bar',
+                barWidth: 5,
+                stack: '搜索引擎',
+                data: [620, 732, 701, 734, 1090, 1130, 1120]
+            },
+            {
+                name: '谷歌',
+                type: 'bar',
+                stack: '搜索引擎',
+                data: [120, 132, 101, 134, 290, 230, 220]
+            },
+            {
+                name: '必应',
+                type: 'bar',
+                stack: '搜索引擎',
+                data: [60, 72, 71, 74, 190, 130, 110]
+            },
+            {
+                name: '其他',
+                type: 'bar',
+                stack: '搜索引擎',
+                data: [62, 82, 91, 84, 109, 110, 120]
+            }
+        ]
+    };
+
+
+    var optionLaserProduction = {
+        title: {
+            text: 'Laser Production Chart'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['pass', 'ng']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: ['Machine1', 'Machine2', 'Machine3', 'Machine4', 'Machine5', 'Machine6', 'Machine7','Machine8']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: 'pass',
+                type: 'bar',
+                stack: 'output',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                itemStyle: {
+                    normal: {
+                        color: "green"
+                    }
+                },
+
+                data: [799, 899, 1300, 599, 987, 330, 320, 1000]
+            },
+            {
+                name: 'ng',
+                type: 'bar',
+                stack: 'output',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                itemStyle: {
+                    normal: {
+                        color: "red"
+                    }
+                },
+
+                data: [35, 65, 34, 14, 67, 43, 22, 19]               
+            }
+        ]
+    };
+
+
+    chart.setOption(optionBase, true);
+
+
+</script>
