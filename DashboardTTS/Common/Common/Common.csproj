@@ -254,7 +254,6 @@
     <Compile Include="ExtendClass\DAL\OverallOutputChart_DAL.cs" />
     <Compile Include="ExtendClass\Model\LaserMachineDailyReport_Model.cs" />
     <Compile Include="ExtendClass\Model\OverallOutputChart_Model.cs" />
-    <Compile Include="MyChart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

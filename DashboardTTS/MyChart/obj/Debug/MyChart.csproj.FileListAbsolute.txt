@@ -1,0 +1,5 @@
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\MyChart.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\MyChart.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb

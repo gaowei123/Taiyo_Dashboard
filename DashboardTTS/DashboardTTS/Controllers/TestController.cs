@@ -25,6 +25,11 @@ namespace DashboardTTS.Controllers
         }
 
 
+        public ActionResult ChartIndex()
+        {
+            return View();
+        }
+
         public ActionResult LaserProductionChart()
         {
             return View();
@@ -83,6 +88,53 @@ namespace DashboardTTS.Controllers
             return Json(listModels);
         }
 
+
+
+
+
+
+
+
+
+        MyChart.ChartFactory _chartFactory = new MyChart.ChartFactory();
+        JavaScriptSerializer _js = new JavaScriptSerializer();
+
+
+        public ActionResult TestLaserMachineChart()
+        {
+            MyChart.SearchingCondition.LaserMachineCondition cond = new MyChart.SearchingCondition.LaserMachineCondition();
+            cond.DateFrom = DateTime.Now;
+            cond.DateTo = DateTime.Now.AddDays(1);
+            cond.MachineID = "1";
+            cond.PartNo = "TKS908";
+
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserMachine");
+            MyChart.ChartModel chart = chartProvidor.GetChartData(cond);
+            
+            
+            return Content(_js.Serialize(chart));
+        }
+
+
+        public ActionResult TestLaserProductionChart()
+        {
+            MyChart.SearchingCondition.LaserMachineCondition cond = new MyChart.SearchingCondition.LaserMachineCondition();
+            cond.DateFrom = DateTime.Now;
+            cond.DateTo = DateTime.Now.AddDays(1);
+            cond.MachineID = "1";
+            cond.PartNo = "TKS908";
+
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserProduction");
+            MyChart.ChartModel chart = chartProvidor.GetChartData(cond);
+      
+
+            return Content(_js.Serialize(chart));
+        }
+
+
+        
 
     }
 }

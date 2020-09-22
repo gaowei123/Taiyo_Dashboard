@@ -3681,6 +3681,7 @@
     <Content Include="Views\Test\LaserMachineChart.cshtml" />
     <Content Include="Views\Test\PQCOperatorChart.cshtml" />
     <Content Include="Views\Test\PQCProductionChart.cshtml" />
+    <Content Include="Views\Test\ChartIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3700,6 +3701,10 @@
     <ProjectReference Include="..\DB\DB\DBHelp.csproj">
       <Project>{c6ac93b9-faa8-4488-b2e7-56f278d67a24}</Project>
       <Name>DBHelp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyChart\MyChart.csproj">
+      <Project>{c3722565-1d97-4472-ae3c-a4d255a5788d}</Project>
+      <Name>MyChart</Name>
     </ProjectReference>
     <ProjectReference Include="..\StaticRes\StaticRes.csproj">
       <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>

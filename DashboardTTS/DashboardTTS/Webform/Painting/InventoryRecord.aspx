@@ -83,7 +83,7 @@
 
             <tr style ="width: 100%">
                 <td style = "padding: 10px 10px 10px 10px; border: 1px solid #CCCCCC; font-family: 'Arial Unicode MS'; height: 50px;  font-weight: bold;" colspan="4">
-                    <asp:DataGrid runat="server" ID ="dg_AddedInventoryList" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" Width="100%"  HorizontalAlign="Center"  AutoGenerateColumns="False" >
+                    <asp:DataGrid runat="server" ID ="dg_AddedInventoryList" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" Width="100%" CssClass="table table-striped"  HorizontalAlign="Center"  AutoGenerateColumns="False" >
                         <AlternatingItemStyle BackColor="White" ForeColor="#284775"  />
                         <EditItemStyle BackColor="#999999" />
                         <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />

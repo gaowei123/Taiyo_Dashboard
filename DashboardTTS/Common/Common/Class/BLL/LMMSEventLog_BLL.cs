@@ -672,6 +672,8 @@ namespace Common.BLL
 
 
 
+
+
         #region 将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds整理 
 
         private List<string> GetMachineStatusList()
@@ -1050,7 +1052,22 @@ namespace Common.BLL
 
 
             #region 添加 running model,   = 12*3600 - 其他各状态总时长 
-            
+
+           
+            DateTime curDay = DateTime.Now.AddHours(-8).Date;
+            string curShift = string.Empty;
+            if (DateTime.Now >= curDay.AddHours(8) && DateTime.Now < curDay.AddHours(20) )
+            {
+                curShift = StaticRes.Global.Shift.Day;
+            }
+            else
+            {
+                curShift = StaticRes.Global.Shift.Night;
+            }
+
+
+
+
             dTemp = dDateFrom.Date;
             while (dTemp < dDateTo)
             {
@@ -1070,7 +1087,17 @@ namespace Common.BLL
                     model.status = "RUNNING";
                     model.startTime = null;
                     model.stopTime = null;
-                    model.totalSeconds = 12 * 3600 - machineDayList.Sum(p => p.totalSeconds);
+
+                    if (curDay == model.day && curShift == model.shift)
+                    {
+                        model.totalSeconds = (DateTime.Now - model.day.AddHours(8)).TotalSeconds - machineDayList.Sum(p => p.totalSeconds);
+                    }
+                    else
+                    {
+                        model.totalSeconds = 12 * 3600 - machineDayList.Sum(p => p.totalSeconds);
+                    }
+
+                 
                     modelList.Add(model);
                     
 
@@ -1087,7 +1114,17 @@ namespace Common.BLL
                     model.status = "RUNNING";
                     model.startTime = null;
                     model.stopTime = null;
-                    model.totalSeconds = 12 * 3600 - machineNightList.Sum(p => p.totalSeconds);
+
+
+                    if (curDay == model.day && curShift == model.shift)
+                    {
+                        model.totalSeconds = (DateTime.Now - model.day.AddHours(20)).TotalSeconds - machineDayList.Sum(p => p.totalSeconds);
+                    }
+                    else
+                    {
+                        model.totalSeconds = 12 * 3600 - machineNightList.Sum(p => p.totalSeconds);
+                    }
+                 
                     modelList.Add(model);
                 }
 
@@ -1111,13 +1148,14 @@ namespace Common.BLL
                 return null;
 
 
+          
+
 
             //添加缺失的天, 机器, 状态数据.
             baseList = AddLackData(baseList, dDateFrom, dDateTo);
 
 
-
-
+           
             //按条件删选记录.   
             sStatus = sStatus == "UTILIZATION" ? "RUNNING" : sStatus;
             string[] arrStatus = string.IsNullOrEmpty(sStatus) ? new string[] { "RUNNING", "BUYOFF", "SETUP", "NO SCHEDULE", "TESTING", "MAINTAINENCE", "BREAKDOWN", "POWER OFF" } : new string[] { sStatus };
@@ -1139,9 +1177,215 @@ namespace Common.BLL
 
             return result;
         }
-        
+
         #endregion
 
+
+
+
+
+        #region  no use
+
+
+        ///// <summary>
+        ///// 从数据库获取的原始数据, machine, status, start/stop time.
+        ///// </summary>
+        //private List<Model.LMMSEventLog_Model.BaseModel> GetBaseModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        //{
+        //    //源数据   前延2天,后延1天, 防止漏查.
+        //    DataTable dtEvent = dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "");
+        //    if (dtEvent == null || dtEvent.Rows.Count == 0)
+        //        return null;
+
+
+        //    List<Model.LMMSEventLog_Model.BaseModel> baseList = new List<LMMSEventLog_Model.BaseModel>();
+        //    foreach (DataRow dr in dtEvent.Rows)
+        //    {
+        //        try
+        //        {
+        //            Model.LMMSEventLog_Model.BaseModel model = new LMMSEventLog_Model.BaseModel();
+        //            model.MachineID = dr["MachineID"].ToString();
+        //            model.Status = dr["eventTrigger"].ToString();
+        //            model.StartTime = DateTime.Parse(dr["startTime"].ToString());
+        //            model.StopTime = DateTime.Parse(dr["stopTime"].ToString());
+        //            model.TotalMinutes = double.Parse(dr["totalMinutes"].ToString());
+        //            baseList.Add(model);
+
+        //        }
+        //        catch (Exception ee)
+        //        {
+        //            DBHelp.Reports.LogFile.Log("LaserMachineStatus_Exception", "GetBaseModelList, catch exception:" + ee.ToString());
+        //        }
+        //    }
+
+        //    return baseList;
+        //}
+
+        ///// <summary>
+        ///// 将原始数据分割成8-20, 20-8 2个区间的数据, 用于区分shift.
+        ///// </summary>
+        //private List<Model.LMMSEventLog_Model.BaseModel> SplitDate(List<Model.LMMSEventLog_Model.BaseModel> modelList)
+        //{
+        //    List<Model.LMMSEventLog_Model.BaseModel> extendList = new List<LMMSEventLog_Model.BaseModel>();
+
+        //    bool isFinish = false;
+
+        //    foreach (var model in modelList)
+        //    {
+        //        DateTime splitPointMorning = model.StartTime.Date.AddHours(8);
+        //        DateTime splitPointNight = model.StartTime.Date.AddHours(20);
+
+
+        //        //跨8:00这个时刻
+        //        if (model.StartTime < splitPointMorning && model.StopTime > splitPointMorning)
+        //        {
+        //            //前一部分 starttime - 8:00
+        //            Model.LMMSEventLog_Model.BaseModel frontModel = new LMMSEventLog_Model.BaseModel();
+        //            frontModel.MachineID = model.MachineID;
+        //            frontModel.Status = model.Status;
+        //            frontModel.StartTime = model.StartTime;
+        //            frontModel.StopTime = splitPointMorning;//结束时间为8:00
+        //            frontModel.TotalMinutes = (frontModel.StopTime - frontModel.StartTime).TotalSeconds;
+        //            extendList.Add(frontModel);
+
+
+        //            //后一部分 8:00 - stopTime
+        //            Model.LMMSEventLog_Model.BaseModel rearModel = new LMMSEventLog_Model.BaseModel();
+        //            rearModel.MachineID = model.MachineID;
+        //            rearModel.Status = model.Status;
+        //            rearModel.StartTime = splitPointMorning;//开始时间为8:00
+        //            rearModel.StopTime = model.StopTime;
+        //            rearModel.TotalMinutes = (rearModel.StopTime - rearModel.StartTime).TotalSeconds;
+        //            extendList.Add(rearModel);
+
+        //            isFinish = false;
+        //        }
+        //        //跨20:00这个时刻
+        //        else if (model.StartTime > splitPointMorning && model.StopTime > splitPointMorning)
+        //        {
+        //            //前一部分 starttime - 20:00
+        //            Model.LMMSEventLog_Model.BaseModel frontModel = new LMMSEventLog_Model.BaseModel();
+        //            frontModel.MachineID = model.MachineID;
+        //            frontModel.Status = model.Status;
+        //            frontModel.StartTime = model.StartTime;
+        //            frontModel.StopTime = splitPointNight;//结束时间为 20:00
+        //            frontModel.TotalMinutes = (frontModel.StopTime - frontModel.StartTime).TotalSeconds;
+        //            extendList.Add(frontModel);
+
+
+        //            //后一部分 20:00 - stopTime
+        //            Model.LMMSEventLog_Model.BaseModel rearModel = new LMMSEventLog_Model.BaseModel();
+        //            rearModel.MachineID = model.MachineID;
+        //            rearModel.Status = model.Status;
+        //            rearModel.StartTime = splitPointNight;//开始时间为 20:00
+        //            rearModel.StopTime = model.StopTime;
+        //            rearModel.TotalMinutes = (rearModel.StopTime - rearModel.StartTime).TotalSeconds;
+        //            extendList.Add(rearModel);
+
+        //            isFinish = false;
+        //        }
+        //        else
+        //        {
+        //            extendList.Add(model);
+        //            isFinish = isFinish == false ? false : true;
+        //        }
+        //    }
+
+
+        //    //递归 直到每一条数据的时间段都在 8:00- 20:00,   20:00 - 8:00区间.
+        //    if (isFinish)
+        //    {
+        //        return extendList;
+        //    }
+        //    else
+        //    {
+        //        return SplitDate(extendList);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// 转换成 包含 year, month, day, shift, machine, status的集合.
+        ///// </summary>
+        //private List<Common.Model.LMMSEventLog_Model.StandardModel> GetStandardBaseList(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        //{
+        //    List<Model.LMMSEventLog_Model.BaseModel> baseModelList = GetBaseModelList(dDateFrom, dDateTo, sMachineID);
+        //    if (baseModelList == null)
+        //        return null;
+
+        //    List<Model.LMMSEventLog_Model.BaseModel> splitedList = SplitDate(baseModelList);
+
+        //    List<Common.Model.LMMSEventLog_Model.StandardModel> standardList = new List<LMMSEventLog_Model.StandardModel>();
+
+
+        //    Common.Model.LMMSEventLog_Model.StandardModel standardModel;
+        //    foreach (var model in splitedList)
+        //    {
+        //        standardModel = new LMMSEventLog_Model.StandardModel();
+
+
+        //        standardModel.Year = model.StartTime.Year;
+        //        standardModel.Month = model.StartTime.Month;
+        //        standardModel.Day = model.StartTime.Date;
+
+        //        string shift = "";
+        //        if (model.StartTime >= standardModel.Day.AddHours(8) && model.StartTime < standardModel.Day.AddHours(20))
+        //        {
+        //            shift = StaticRes.Global.Shift.Day;
+        //        }
+        //        else
+        //        {
+        //            shift = StaticRes.Global.Shift.Night;
+        //        }
+        //        standardModel.Shift = shift;
+
+
+        //        standardModel.MachineID = model.MachineID;
+        //        standardModel.Status = model.Status;
+        //        standardModel.StartTime = model.StartTime;
+        //        standardModel.StopTime = model.StopTime;
+        //        standardModel.TotalMinutes = (standardModel.StopTime.Value - standardModel.StartTime.Value).TotalMinutes;
+
+        //        standardList.Add(standardModel);
+        //    }
+
+
+        //    #region   add run  model
+        //    var groudList = from a in standardList
+        //                    group a by new { a.Year, a.Month, a.Day, a.Shift, a.MachineID } into b
+        //                    select new
+        //                    {
+        //                        b.Key.Year,
+        //                        b.Key.Month,
+        //                        b.Key.Day,
+        //                        b.Key.Shift,
+        //                        b.Key.MachineID,
+        //                        TotalMinutes = b.Sum(p => p.TotalMinutes)
+        //                    };
+
+
+        //    List<Common.Model.LMMSEventLog_Model.StandardModel> extendList = new List<LMMSEventLog_Model.StandardModel>();
+        //    foreach (var model in groudList)
+        //    {
+        //        Common.Model.LMMSEventLog_Model.StandardModel runModel = new LMMSEventLog_Model.StandardModel();
+        //        runModel.Year = model.Year;
+        //        runModel.Month = model.Month;
+        //        runModel.Day = model.Day;
+        //        runModel.Shift = model.Shift;
+        //        runModel.MachineID = model.MachineID;
+        //        runModel.TotalMinutes = 720 - model.TotalMinutes;
+
+        //        extendList.Add(runModel);
+        //    }
+
+        //    extendList.AddRange(standardList);
+        //    #endregion
+
+
+        //    return extendList;
+        //}
+
+
+        #endregion
 
     }
 }

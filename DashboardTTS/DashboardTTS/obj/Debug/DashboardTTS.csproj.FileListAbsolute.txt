@@ -106,3 +106,5 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\MyChart.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\MyChart.pdb
