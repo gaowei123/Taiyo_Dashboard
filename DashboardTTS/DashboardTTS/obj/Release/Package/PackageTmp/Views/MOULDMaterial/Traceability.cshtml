@@ -54,8 +54,7 @@
             </div>
         </div>
     </div>
-
-
+   
     <div class="row">
         <div class="col-md-12 panel panel-default" style="padding:10px;">
             <table id="tableMaterial" class="table table-bordered">
@@ -132,10 +131,17 @@
                 DateTo: $('#txtDateTo').val(),
                 MachineID: $('#ddlMachineID').val()
             },
+
+            beforeSend: function () {
+                $('#tbMaterial').html('');
+            },
+
             success: function (data) {
 
+                
+
                 if (data == null || data.length == 0) {
-                    alert('No data found!');
+                    alert('No data found!');                   
                     return false;
                 }
 

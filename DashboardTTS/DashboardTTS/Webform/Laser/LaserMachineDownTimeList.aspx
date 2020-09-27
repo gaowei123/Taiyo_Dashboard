@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LaserMachineDownTimeList.aspx.cs" MasterPageFile="~/Site.Master" Inherits="DashboardTTS.Webform.Laser.LaserMachineDownTimeList" %>
-<%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" >
 
@@ -69,7 +68,7 @@
                         <asp:BoundColumn DataField="Action" HeaderText="Corrective Action Taken"></asp:BoundColumn>
                         <asp:BoundColumn DataField="StartTime" HeaderText="Start Time"></asp:BoundColumn>
                         <asp:BoundColumn DataField="stopTime" HeaderText="End Time"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="Time" HeaderText="Time"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="Time" HeaderText="Taken Hour"></asp:BoundColumn>
                         <asp:BoundColumn DataField="Checker" HeaderText="Sign"></asp:BoundColumn>
                         <asp:ButtonColumn DataTextField="fileName" HeaderText="Attachment" CommandName="OpenPDF"></asp:ButtonColumn>
                         <asp:BoundColumn DataField="fileName" HeaderText="Attachment" Visible="false"></asp:BoundColumn>
@@ -84,7 +83,7 @@
         </div>
 
     </div>
-        <script type="text/javascript">
+    <script type="text/javascript">
        
         $('#MainContent_txtDateFrom').datetimepicker({
             weekStart: 1,

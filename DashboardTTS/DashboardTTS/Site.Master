@@ -202,7 +202,7 @@
                             <li><a runat="server" href="./Webform/Laser/LaserSparePartsInventory.aspx">Spare Parts Record</a></li>  
                             <li><a runat="server" href="./Webform/Laser/LaserSparePartsUsageHis.aspx">Spare Parts History</a></li>  
                             <li><a runat="server" href="./Webform/Laser/LaserSettingList.aspx">Machine Parameters</a></li> 
-                            <li><a runat="server" href="./LASER_MachineSetting/Index">Product Analysis Record Chart</a></li>
+                            <li><a runat="server" href="./LASER_MachineSetting/Index">Product Parameter Chart</a></li>
                         </ul>
                     </li>
 

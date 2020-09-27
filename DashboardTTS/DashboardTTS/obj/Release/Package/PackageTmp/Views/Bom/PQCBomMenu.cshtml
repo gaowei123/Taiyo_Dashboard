@@ -1,0 +1,526 @@
+﻿
+@{
+    ViewBag.Title = "PQCBomMenu";
+}
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*bootstrap组件*@
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+
+<link rel="stylesheet" href="~/plugins/bootstrap-fileinput-master/css/fileinput.min.css" />
+<script src="~/plugins/bootstrap-fileinput-master/js/fileinput.js" type="text/javascript"></script>
+<script src="~/plugins/bootstrap-fileinput-master/js/fileinput_locale_LANG.js" type="text/javascript"></script>
+
+
+<div class="container">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">PQC Bom Form</span>
+    </div>
+
+
+    <div class="row" style="margin-top:10px;">
+        <div class="col-sm-12 panel panel-default" style="padding:10px;">
+            <form class="form-horizontal" role="form">
+
+                <!-- main info -->   
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Part No:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtPartNo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Customer:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtCustomer">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Supplier:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtSupplier">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Type:</label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="ddlType">
+                                    <option value=""></option>
+                                    <option value="LASER">LASER</option>
+                                    <option value="WIP">WIP</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Number:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtNumber">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Ship To:</label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="ddlShipTo">
+                                    <option value=""></option>
+                                    <option value="LASER">LASER</option>
+                                    <option value="WIP">WIP</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Cycle Time(s):</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtCycleTime" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Unit Cost:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtUnitCost" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Model:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtModel" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Description:</label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="ddlDescription">
+                                    <option value=""></option>
+                                    <option value="BUTTON">BUTTON</option>
+                                    <option value="LENS">LENS</option>
+                                    <option value="BEZEL">BEZEL</option>
+                                    <option value="PANEL">PANEL</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Color:</label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="ddlColor">
+                                    <option value=""></option>
+                                    <option value="Black">Black</option>
+                                    <option value="Silver">Silver</option>
+                                    <option value="High gloss">High gloss</option>
+                                    <option value="Mat black">Mat black</option>
+                                    <option value="Texture line">Texture line</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Coating:</label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="ddlCoating">
+                                    <option value=""></option>
+                                    <option value="One Coat">One Coat</option>
+                                    <option value="Two Coat">Two Coat</option>
+                                    <option value="Three Coat">Three Coat</option>
+                                    <option value="Print Coat">Print Coat</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- process -->   
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Process:</label>
+                            <div class="col-sm-10">
+
+                                <div class="panel panel-default" style="margin:0px;padding:3px;">
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="txtProcess" placeholder="">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="button" id="btnProcessBack" class="btn btn-danger" value="Back">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12" style="margin-top:6px;">
+                                            <input type="button" id="btnMould" class="btn btn-sm btn-info" value="Mould" onclick="generateProcess('Mould')" />
+                                            <input type="button" id="btnPrint" class="btn btn-sm btn-info" value="Print" onclick="generateProcess('Print')" />
+                                            <input type="button" id="btnPaint1" class="btn btn-sm btn-info" value="Paint#1" onclick="generateProcess('Paint#1')" />
+                                            <input type="button" id="btnPaint2" class="btn btn-sm btn-info" value="Paint#2" onclick="generateProcess('Paint#2')" />
+                                            <input type="button" id="btnLaser" class="btn btn-sm btn-info" value="Laser" onclick="generateProcess('Laser')" />
+                                            <input type="button" id="btnCheck1" class="btn btn-sm btn-info" value="Check#1" onclick="generateProcess('Check#1')" />
+                                            <input type="button" id="btnCheck2" class="btn btn-sm btn-info" value="Check#2" onclick="generateProcess('Check#2')" />
+                                            <input type="button" id="btnCheck3" class="btn btn-sm btn-info" value="Check#3" onclick="generateProcess('Check#3')" />
+                                            <input type="button" id="btnQA" class="btn btn-sm btn-info" value="QA" onclick="generateProcess('QA')" />
+                                            <input type="button" id="btnPacking" class="btn btn-sm btn-info" value="Packing" onclick="generateProcess('Packing')" />
+                                            <input type="button" id="btnAssembly" class="btn btn-sm btn-info" value="Assembly" onclick="generateProcess('Assembly')" />
+                                            <input type="button" id="btnFG" class="btn btn-sm btn-info" value="FG" onclick="generateProcess('FG')" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- remarks -->   
+                <div class="row">
+                    <div class="col-sm-12" style="margin:0px;">
+                        <div class="form-group" style="margin-bottom:0px;">
+                            <label class="col-sm-2 control-label">Remarks:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr/>
+
+
+                <!-- material table -->
+                <div class="row">
+                    <div class="col-sm-12" style="margin:0px;">
+                        <div class="form-group" style="margin-bottom:0px;">
+                            <label class="col-sm-2 control-label">Material Detail Info:</label>
+                            <div class="col-sm-10">
+                                <table class="table table-bordered">
+                                    <thead class="thead-title">
+                                        <tr>
+                                            <th>S/N</th>
+                                            <th>Material Part</th>
+                                            <th>Material Name</th>
+                                            <th>Module</th>
+                                            <th>Part Count</th>
+                                            <th>Outer Box Qty</th>
+                                            <th>Packing Trays</th>
+                                            <th>Img</th>
+                                            <th>Operation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbMaterial" class="table table-bordered">
+                                        <tr>
+                                            <td style="line-height:75px;">aefawef</td>
+                                            <td style="line-height:75px;">ger</td>
+                                            <td style="line-height:75px;">fwef</td>
+                                            <td style="line-height:75px;">awef</td>
+                                            <td style="line-height:75px;">awefad</td>
+                                            <td style="line-height:75px;">awefasdf</td>
+                                            <td style="line-height:75px;">asdfawe</td>
+                                            <td style="line-height:75px;"><img src="~/MaterialPartImg/testpart1/asdf.png" style="width:75px;height:75px;" /></td>
+                                            <td style="line-height:75px;">
+                                                <button class="btn btn-warning" onclick="editMaterial();">Edit</button>
+                                                <button class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <input type="button" id="btnAddMaterial" value="Add Material" class="btn btn-success" style="float:right;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr />
+
+               
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-success" style="display:block; margin:0 auto; width:150px;">Submit</button>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-danger" style="display:block;margin:0 auto; width:150px;">Cancel</button>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- Bom Detail Form 拟态框 -->
+<div class="modal fade" id="modalUpdateForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="resetPartNoEnable();">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>Material Form</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="txtModel" class="col-sm-2 control-label">S/N:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtSN"/>
+                        </div>
+                        <label for="txtPartNo" class="col-sm-2 control-label">Material Part:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtMaterialPart"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtModel" class="col-sm-2 control-label">Part Count:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtPartCount"/>
+                        </div>
+                        <label for="txtPartNo" class="col-sm-2 control-label">Module:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtModule"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtModel" class="col-sm-2 control-label">Outer Box Qty:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtOuterBoxQty"/>
+                        </div>
+                        <label for="txtPartNo" class="col-sm-2 control-label">Material Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtMaterialName" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtModel" class="col-sm-2 control-label">Packing Trays:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtPackingTrays"/>
+                        </div>                        
+                    </div>
+
+                    <hr/>
+
+                    <div class="form-group">
+                        <label for="txtModel" class="col-sm-2 control-label">Material Icon:</label>
+                        <div class="col-sm-8">
+                            <input id="file-1" type="file" class="file" data-overwrite-initial="false" data-min-file-count="1">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetPartNoEnable();">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="updateValidation();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Login 拟态框 -->
+<div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    <b>User Login</b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">User Name :</label>
+                        <input type="text" class="form-control" id="txtUsername" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-12 form-inline">
+                        <label style="width:35%">Password :</label>
+                        <input type="password" class="form-control" id="txtPassword" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="loginSubmit();">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script> 
+
+    var apiGetMaterialList = window.globalConfig.rootDirectory + '/Bom/GetPQCBomDetialList';
+
+
+    //========== 处理process ==========//
+    function generateProcess(process) {
+        if ($('#txtProcess').val() === '')
+            $('#txtProcess').val(process);
+        else
+            $('#txtProcess').val($('#txtProcess').val() + '-' + process);
+    }
+    $('#btnProcessBack').click(function () {
+        if ($('#txtProcess').val() == '')
+            return;
+
+        var arrProcess = $('#txtProcess').val().split('-');
+        if (arrProcess.length == 1) {
+            $('#txtProcess').val('');
+        } else {
+            var newProcess = '';
+            for (var i = 0; i < arrProcess.length-1; i++) {
+                newProcess += (arrProcess[i] + '-');
+            }
+            newProcess = newProcess.substring(0, newProcess.length - 1);
+        }
+
+        $('#txtProcess').val(newProcess);
+    })
+    //========== 处理process ==========//
+
+
+
+    
+    $('#btnAddMaterial').click(function () {
+        if ($('#txtPartNo').val() =='') {
+            alert('Please input part no!');
+            $('#txtPartNo').focus();
+        } else {
+            $('#txtPartNo').attr('disabled', 'disabled');
+            $('#modalUpdateForm').modal('show');
+        }
+    })
+
+    //去除part no的disable效果
+    function resetPartNoEnable() {
+        if ($('#tbMaterial')[0].children.length == 0) {
+            $('#txtPartNo').removeAttr("disabled");
+        } 
+    }
+
+
+
+    function setMaterialList(partNo) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetMaterialList,
+            data: {
+                PartNo: partNo
+            },
+            success: function (data) {
+                if (data == undefined || data.length== 0) {
+                    return;
+                }
+
+                $('#tbMaterial').html('');
+
+                var strHtml;
+                for (var i = 0; i < data.length; i++) {
+                    strHtml += '<tr>\
+                                    <td style="line-height:75px;">' + data[i].sn + '</td>\
+                                    <td style="line-height:75px;">' + data[i].materialPartNo + '</td>\
+                                    <td style="line-height:75px;">' + data[i].materialName + '</td>\
+                                    <td style="line-height:75px;">' + data[i].module + '</td>\
+                                    <td style="line-height:75px;">' + data[i].partCount + '</td>\
+                                    <td style="line-height:75px;">' + data[i].outerBoxQty + '</td>\
+                                    <td style="line-height:75px;">' + data[i].packingTrays + '</td>\
+                                    <td style="line-height:75px;"><img src="' + data[i].imagePath + '" style="width:75px;height:75px;" /></td>\
+                                    <td style="line-height:75px;">\
+                                        <button class="btn btn-warning"  onclick="editMaterial(' + data[i].materialPartNo + ');">>Edit</button>\
+                                        <button class="btn btn-danger" onclick="editMaterial(' + data[i].partNumber + ',' + data[i].materialPartNo + ');"><i class="fa fa-trash-o fa-lg"></i></button>\
+                                    </td>\
+                                </tr>';
+                }
+             
+           
+                $('#tbMaterial').html(strHtml);
+            },
+
+            error: function () {
+                alert("Get material list error  !");
+            }
+        });
+    }
+
+    function editMaterial(materialNo) {
+        $('#modalUpdateForm').modal('show');
+
+        var trs = $('#tbMaterial')[0].children;
+
+        for (var i = 0; i < trs.length; i++) {
+
+            var value = trs[i].materialPartNo;
+
+            if (value == materialNo){
+
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+                $('#txtSN').val(trs[i].sn);
+
+                break;
+            }
+
+        }
+       
+
+    }
+
+    function deleteMaterial(partNo, materialNo) {
+
+    }
+
+
+</script>
+
+
+<script>
+    var iconUploadURL = window.globalConfig.rootDirectory + '/Test/GetFile';
+
+    $("#file-1").fileinput({
+        uploadUrl: iconUploadURL,
+        allowedFileExtensions: ['jpg', 'png', 'gif'],
+        overwriteInitial: false,
+        maxFileSize: 1000,
+        maxFilesNum: 10,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+    });
+</script>

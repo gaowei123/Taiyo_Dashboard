@@ -8,14 +8,12 @@ namespace MyChart
 {
     public interface IChartMethod
     {
-        List<string> GetLegend(SearchingCondition.BaseCondition condition);
+        List<string> GetLegend(Common.SearchingCondition.BaseCondition condition);
 
-        List<string> GetXAxisData(SearchingCondition.BaseCondition condition);
+        List<string> GetXAxisData(Common.SearchingCondition.BaseCondition condition);
 
-        List<MyChart.Series> GetSeries(SearchingCondition.BaseCondition condition);
+        List<MyChart.Series> GetSeries(Common.SearchingCondition.BaseCondition condition);
 
-        ChartModel GetChartData(SearchingCondition.BaseCondition condition);
+        ChartModel GetChartData(Common.SearchingCondition.BaseCondition condition);
     }
-
-
 }

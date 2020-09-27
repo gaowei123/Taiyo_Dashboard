@@ -3,28 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyChart.SearchingCondition;
 
 namespace MyChart.ConcreteChartMethod
 {
     public class PQCProduction : IChartMethod
     {
-        public ChartModel GetChartData(BaseCondition condition)
+        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition condition)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetLegend(BaseCondition condition)
+        public List<string> GetLegend(Common.SearchingCondition.BaseCondition condition)
         {
             throw new NotImplementedException();
         }
 
-        public List<Series> GetSeries(BaseCondition condition)
+        public List<Series> GetSeries(Common.SearchingCondition.BaseCondition condition)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetXAxisData(BaseCondition condition)
+        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition condition)
         {
             throw new NotImplementedException();
         }

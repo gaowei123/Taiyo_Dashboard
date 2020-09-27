@@ -18,6 +18,11 @@ namespace MyChart
 
     public class Series
     {
+        public Series()
+        {
+            this.Data = new List<decimal>();
+        }
+
         public string Name { get; set; }
         public string Type { get; set; }
         public string Stack { get; set; }

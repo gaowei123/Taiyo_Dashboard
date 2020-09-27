@@ -3,37 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyChart.SearchingCondition;
+
 
 namespace MyChart.ConcreteChartMethod
 {
     public class LaserMachine : IChartMethod
     {
 
-        LaserMachineCondition condition = new LaserMachineCondition();
+    
 
-
-
-        public ChartModel GetChartData(BaseCondition bCondition)
+        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition bCondition)
         {
-            this.condition = (LaserMachineCondition)bCondition;
+            
 
 
             ChartModel chart = new ChartModel();
-            chart.LegendData = GetLegend(condition);
-            chart.XAxisData = GetXAxisData(condition);
-            chart.SeriesData = GetSeries(condition);
+            //chart.LegendData = GetLegend(condition);
+            //chart.XAxisData = GetXAxisData(condition);
+            //chart.SeriesData = GetSeries(condition);
 
             return chart;
         }
 
 
-        public List<string> GetLegend(BaseCondition bCondition)
+        public List<string> GetLegend(Common.SearchingCondition.BaseCondition bCondition)
         {
             return new List<string>() { "Run", "Shutdown", "Idle", "Breakdown" };
         }
 
-        public List<MyChart.Series> GetSeries(BaseCondition bCondition)
+        public List<MyChart.Series> GetSeries(Common.SearchingCondition.BaseCondition bCondition)
         {
             List<MyChart.Series> listSeries = new List<MyChart.Series>();
 
@@ -72,7 +70,7 @@ namespace MyChart.ConcreteChartMethod
             return listSeries;
         }
 
-        public List<string> GetXAxisData(BaseCondition bCondition)
+        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition bCondition)
         {
             return new List<string>() { "Machine1", "Machine2", "Machine3", "Machine4", "Machine5", "Machine6", "Machine7", "Machine8" };
         }

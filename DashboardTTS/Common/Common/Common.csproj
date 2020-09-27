@@ -44,24 +44,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="CPCLib">
-      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\CPCLib.dll</HintPath>
-    </Reference>
-    <Reference Include="RMS.Business">
-      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="RMS.DB">
-      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.DB.dll</HintPath>
-    </Reference>
-    <Reference Include="RMS.DBEntity">
-      <HintPath>..\..\..\..\..\DOC\ref codes\RMS.Server\RMS.Business\bin\Debug\RMS.DBEntity.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http">
-      <HintPath>bin\Debug\System.Net.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -248,13 +233,16 @@
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
-    <Compile Include="ExtendClass\BLL\LaserMachineDailyReport_BLL.cs" />
-    <Compile Include="ExtendClass\BLL\OverallOutputChart_BLL.cs" />
-    <Compile Include="ExtendClass\DAL\LaserMachineDailyReport_DAL.cs" />
-    <Compile Include="ExtendClass\DAL\OverallOutputChart_DAL.cs" />
-    <Compile Include="ExtendClass\Model\LaserMachineDailyReport_Model.cs" />
-    <Compile Include="ExtendClass\Model\OverallOutputChart_Model.cs" />
+    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_BLL.cs" />
+    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_DAL.cs" />
+    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_Model.cs" />
+    <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_BLL.cs" />
+    <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_DAL.cs" />
+    <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchingCondition\BaseCondition.cs" />
+    <Compile Include="SearchingCondition\LaserMachineCondition.cs" />
+    <Compile Include="SearchingCondition\LaserProductionCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DB\DB\DBHelp.csproj">

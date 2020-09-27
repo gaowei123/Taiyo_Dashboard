@@ -1,0 +1,4 @@
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\MyChart.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\MyChart.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.pdb

@@ -319,6 +319,8 @@ namespace DashboardTTS.Webform
                     list_detailModel.Add(model);
                 }
 
+
+
                 Session["list_detailModel"] = list_detailModel;
                 #endregion
 

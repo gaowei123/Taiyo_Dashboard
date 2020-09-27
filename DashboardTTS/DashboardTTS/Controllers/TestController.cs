@@ -25,6 +25,13 @@ namespace DashboardTTS.Controllers
         }
 
 
+
+        public ActionResult TestFileInput()
+        {
+            return View();
+        }
+
+
         public ActionResult ChartIndex()
         {
             return View();
@@ -88,53 +95,30 @@ namespace DashboardTTS.Controllers
             return Json(listModels);
         }
 
-
-
-
-
-
-
-
-
-        MyChart.ChartFactory _chartFactory = new MyChart.ChartFactory();
-        JavaScriptSerializer _js = new JavaScriptSerializer();
-
-
-        public ActionResult TestLaserMachineChart()
-        {
-            MyChart.SearchingCondition.LaserMachineCondition cond = new MyChart.SearchingCondition.LaserMachineCondition();
-            cond.DateFrom = DateTime.Now;
-            cond.DateTo = DateTime.Now.AddDays(1);
-            cond.MachineID = "1";
-            cond.PartNo = "TKS908";
-
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserMachine");
-            MyChart.ChartModel chart = chartProvidor.GetChartData(cond);
-            
-            
-            return Content(_js.Serialize(chart));
-        }
-
-
-        public ActionResult TestLaserProductionChart()
-        {
-            MyChart.SearchingCondition.LaserMachineCondition cond = new MyChart.SearchingCondition.LaserMachineCondition();
-            cond.DateFrom = DateTime.Now;
-            cond.DateTo = DateTime.Now.AddDays(1);
-            cond.MachineID = "1";
-            cond.PartNo = "TKS908";
-
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserProduction");
-            MyChart.ChartModel chart = chartProvidor.GetChartData(cond);
-      
-
-            return Content(_js.Serialize(chart));
-        }
-
-
         
+
+
+        #region test file 
+        [HttpPost]
+        public JsonResult GetFile()
+        {
+
+            var files = Request.Files;
+            var file = Request.Files[0];
+
+
+            string aaa = file.FileName;
+            
+
+            file.SaveAs("D://test.jpg");
+
+            return Json("success");
+        }
+
+        #endregion
+
+
+
 
     }
 }

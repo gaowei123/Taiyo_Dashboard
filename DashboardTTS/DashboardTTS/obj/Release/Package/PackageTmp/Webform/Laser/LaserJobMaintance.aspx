@@ -76,7 +76,7 @@
                      </div>
                  </div>
 
-                <hr />
+                <hr />pI23HNROQNFWKSD MC203[EWOP
 
                 <div class="row">
                     <div class="col-md-12" style="padding:0px 30px 0 30px;">
@@ -112,9 +112,9 @@
                 
                 <hr />
                 
-                <asp:RadioButtonList runat="server" ID="radiobtnList" >
-                    <asp:ListItem Text="Yes"></asp:ListItem>
+                <asp:RadioButtonList runat="server" ID="radiobtnList" RepeatDirection="Horizontal"  RepeatLayout="Flow">
                     <asp:ListItem Text="No"></asp:ListItem>
+                    <asp:ListItem Text="Yes" style="margin-left:100px;"></asp:ListItem> 
                 </asp:RadioButtonList>
 
             </div>

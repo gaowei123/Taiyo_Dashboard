@@ -296,14 +296,39 @@ namespace DashboardTTS.Webform
             if (!dir.Exists)
                 dir.Create();
 
+
             if (fpImg.HasFile)
             {
                 fpImg.SaveAs(RootPath + fileName);
             }
             else
             {
-                Common.CommFunctions.ShowMessage(this.Page, "Please choose image for the material part " + txt_materialPart.Text + " to update");
-                return;
+                //判断下server文件下有没有这个图片
+                Common.Class.BLL.PQCBomDetail_BLL bll = new Common.Class.BLL.PQCBomDetail_BLL();
+                List<Common.Class.Model.PQCBomDetail_Model> materialList = bll.GetModelList(txtPartNo.Text);
+
+                if (materialList == null)
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "Please choose image for the material part " + txt_materialPart.Text + " to update");
+                    return;
+                }
+
+                var material = (from a in materialList where a.sn == int.Parse(txt_sn.Text) select a).FirstOrDefault();
+                if (material == null)
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "Please choose image for the material part " + txt_materialPart.Text + " to update");
+                    return;
+                }
+
+
+                string[] arrPath = material.imagePath.Split('/');
+                fileName = arrPath[arrPath.Length - 1];
+
+                if (!System.IO.File.Exists(Server.MapPath(material.imagePath)))
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "Please choose image for the material part " + txt_materialPart.Text + " to update");
+                    return;
+                }
             }
 
             dr["imageAbsolutePath"] = RootPath + fileName;

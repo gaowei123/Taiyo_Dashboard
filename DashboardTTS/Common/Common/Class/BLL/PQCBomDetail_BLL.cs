@@ -164,6 +164,18 @@ namespace Common.Class.BLL
                     model.dateTime = DateTime.Parse(dr["dateTime"].ToString() ?? System.DateTime.Now.ToString());
                     model.color = dr["color"].ToString() ?? "";
                     model.imagePath = dr["imagePath"].ToString() ?? "";
+
+
+
+                    model.imageAbsolutePath = dr["imageAbsolutePath"].ToString() ?? "";
+                    model.materialName = dr["materialName"].ToString() ?? "";
+                    model.customer = dr["customer"].ToString() ?? "";
+                    model.outerBoxQty =  dr["outerBoxQty"].ToString() ==""? 0: int.Parse(dr["outerBoxQty"].ToString());
+                    model.packingTrays = dr["packingTrays"].ToString() ?? "";
+                    model.module = dr["module"].ToString() ?? "";
+
+
+
                     modelList.Add(model);
                 }
 

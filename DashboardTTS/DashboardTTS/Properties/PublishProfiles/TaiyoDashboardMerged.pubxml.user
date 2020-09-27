@@ -1966,13 +1966,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>09/14/2020 14:02:20</publishTime>
+      <publishTime>09/25/2020 10:59:00</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>09/14/2020 14:02:24</publishTime>
+      <publishTime>09/25/2020 10:59:04</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>09/25/2020 10:58:59</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2079,6 +2079,9 @@
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
+    <File Include="bin/MyChart.dll">
+      <publishTime>09/25/2020 10:58:59</publishTime>
+    </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
@@ -2122,7 +2125,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>09/25/2020 10:58:59</publishTime>
     </File>
     <File Include="bin/stdole.dll">
       <publishTime>06/20/2016 14:45:20</publishTime>
@@ -2272,7 +2275,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Dashboard CSS JS/JS/SharedJS.js">
-      <publishTime>08/27/2020 10:32:48</publishTime>
+      <publishTime>09/24/2020 14:13:04</publishTime>
     </File>
     <File Include="email-templates/action.html">
       <publishTime>08/20/2016 15:33:42</publishTime>
@@ -2735,6 +2738,9 @@
     </File>
     <File Include="js/wz_tooltip.js">
       <publishTime>05/03/2018 22:27:54</publishTime>
+    </File>
+    <File Include="MaterialPartImg/testpart1/adsf.png">
+      <publishTime>06/08/2020 13:53:23</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>08/03/2020 13:52:15</publishTime>
@@ -4226,6 +4232,108 @@
     </File>
     <File Include="plugins/bootstrap-datetimepicker-master/tests/_coverage.html">
       <publishTime>06/15/2020 19:58:42</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap-theme.css">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap-theme.css.map">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap-theme.min.css">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap.css">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap.css.map">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/css/bootstrap.min.css">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>12/09/2016 20:31:12</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/js/bootstrap.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/js/bootstrap.min.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/bootstrap-3.3.4-dist/js/npm.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/css/bootstrap.min.css">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/css/fileinput.css">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/css/fileinput.min.css">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/examples/index-2.html">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/examples/index.html">
+      <publishTime>09/23/2020 15:39:38</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/examples/mydemo.html">
+      <publishTime>09/24/2020 10:18:38</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/img/loading-sm.gif">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/img/loading.gif">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/bootstrap.min.js">
+      <publishTime>12/09/2016 20:31:14</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput.js">
+      <publishTime>12/09/2016 20:31:14</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput.min.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_de.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_es.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_hu.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_LANG.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_ru.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_uk.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/fileinput_locale_zh.js">
+      <publishTime>12/09/2016 20:31:13</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-fileinput-master/js/jquery-2.0.3.min.js">
+      <publishTime>12/09/2016 20:31:14</publishTime>
     </File>
     <File Include="plugins/bootstrap-select-1.13.0/.eslintignore">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10771,7 +10879,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>09/24/2020 16:06:38</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10848,6 +10956,9 @@
     <File Include="Views/Attendance/UserManagement.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
+    <File Include="Views/Bom/PQCBomMenu.cshtml">
+      <publishTime>09/25/2020 10:18:23</publishTime>
+    </File>
     <File Include="Views/Buyoff/OverallBuyoff.cshtml">
       <publishTime>08/11/2020 14:39:56</publishTime>
     </File>
@@ -10867,7 +10978,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/LASER_MachineSetting/Index.cshtml">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/24/2020 16:06:02</publishTime>
     </File>
     <File Include="Views/LASER_Product/LaserMaintenance.cshtml">
       <publishTime>07/02/2020 17:00:49</publishTime>
@@ -10906,10 +11017,10 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/MOULDMaintenane/Maintenance.cshtml">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>09/24/2020 15:12:15</publishTime>
     </File>
     <File Include="Views/MOULDMaterial/Traceability.cshtml">
-      <publishTime>06/30/2020 15:35:40</publishTime>
+      <publishTime>09/23/2020 10:28:54</publishTime>
     </File>
     <File Include="Views/MOULDProduct/DailyVerifyReport.cshtml">
       <publishTime>09/11/2020 11:03:22</publishTime>
@@ -10927,10 +11038,10 @@
       <publishTime>06/30/2020 15:35:40</publishTime>
     </File>
     <File Include="Views/OverallReport/OutputSummaryChart.cshtml">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>09/21/2020 15:41:31</publishTime>
     </File>
     <File Include="Views/PQC_Product/CheckingDetailReport.cshtml">
-      <publishTime>07/07/2020 14:39:00</publishTime>
+      <publishTime>09/24/2020 10:41:34</publishTime>
     </File>
     <File Include="Views/PQC_Product/DailyReport.cshtml">
       <publishTime>09/08/2020 15:24:31</publishTime>
@@ -10951,7 +11062,7 @@
       <publishTime>09/09/2020 14:34:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingPicChart.cshtml">
-      <publishTime>07/10/2020 16:49:50</publishTime>
+      <publishTime>09/16/2020 14:46:57</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingProductionTrendChart.cshtml">
       <publishTime>07/10/2020 16:49:50</publishTime>
@@ -10977,11 +11088,29 @@
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
+    <File Include="Views/Test/ChartIndex.cshtml">
+      <publishTime>09/21/2020 15:41:28</publishTime>
+    </File>
+    <File Include="Views/Test/LaserMachineChart.cshtml">
+      <publishTime>09/17/2020 10:05:24</publishTime>
+    </File>
+    <File Include="Views/Test/LaserProductionChart.cshtml">
+      <publishTime>09/21/2020 15:41:32</publishTime>
+    </File>
+    <File Include="Views/Test/PQCOperatorChart.cshtml">
+      <publishTime>09/16/2020 14:59:09</publishTime>
+    </File>
+    <File Include="Views/Test/PQCProductionChart.cshtml">
+      <publishTime>09/16/2020 15:37:30</publishTime>
+    </File>
+    <File Include="Views/Test/TestFileInput.cshtml">
+      <publishTime>09/24/2020 11:45:50</publishTime>
+    </File>
     <File Include="Views/Test/Test_Bootstrap_Table.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Web.config">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/14/2020 14:13:15</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11002,7 +11131,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Laser/BomFormMenu.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/25/2020 10:13:53</publishTime>
     </File>
     <File Include="Webform/Laser/BOMList.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11323,7 +11452,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Laser/LaserJobMaintance.aspx">
-      <publishTime>07/10/2020 16:49:50</publishTime>
+      <publishTime>09/24/2020 10:09:09</publishTime>
     </File>
     <File Include="Webform/Laser/LaserMachineDownTimeForm.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11356,7 +11485,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityDetail.aspx">
-      <publishTime>07/10/2020 16:49:50</publishTime>
+      <publishTime>09/16/2020 13:51:47</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityNGDetail.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11500,7 +11629,7 @@
       <publishTime>01/19/2020 15:55:52</publishTime>
     </File>
     <File Include="Webform/Painting/InventoryRecord.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/22/2020 09:44:41</publishTime>
     </File>
     <File Include="Webform/Painting/PaintingDeliveryOperatingHis.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11521,7 +11650,7 @@
       <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Webform/PQC/PQCBomFormMenu.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>09/22/2020 15:23:37</publishTime>
     </File>
     <File Include="Webform/PQC/PQCBomList.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
