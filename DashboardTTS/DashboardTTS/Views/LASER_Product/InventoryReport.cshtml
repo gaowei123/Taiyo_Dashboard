@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewBag.Title = "InventoryReport";
+}
+
+
+<style>
+    .container-fluid{
+        max-width:1400px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Laser Inventory Report</span>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" style="padding:0px; margin-top:10px;">
+            <table id="tbReport" data-toggle="table"></table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetData = window.globalConfig.rootDirectory + '/LASER_Product/GetInventoryList';
+
+    $(document).ready(function () {
+
+        $('#tbReport').bootstrapTable('destroy');
+        $('#tbReport').bootstrapTable({
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetData,
+            queryParams: function (params) {
+                return {
+
+                }
+            },
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover',
+            cache: false,
+            search: true,
+            striped: true,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            pageNumber: 1, // 首页页码
+
+            rowStyle: function (row, index) {
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+
+            columns: [
+                {
+                    field: 'Customer',
+                    title: 'Customer',
+                    align: 'left',
+                    valign: 'middle'
+                },
+                {
+                    field: 'Model',
+                    title: 'Model',
+                    align: 'left',
+                    valign: 'middle'
+                },
+                {
+                    field: 'PartNo',
+                    title: 'Part No',
+                    align: 'left',
+                    valign: 'middle'
+                },
+                {
+                    field: 'JobNo',
+                    title: 'Job No',
+                    align: 'left',
+                    valign: 'middle',
+                    formatter: function (val, row, index) {
+                        return '<a href="../Webform/Laser/InventoryDetail.aspx?Partnumber=' + row.PartNo + '">' + row.JobNo + '</a>'
+                    }
+                },
+                {
+                    field: 'MRPQty',
+                    title: 'MRP Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'BeforeQty',
+                    title: 'Before Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'AfterQty',
+                    title: 'After Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'JobCount',
+                    title: 'Job Count',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (val, row, index) {
+                        return '<a href="~/Webform/Laser/InventoryDetail.aspx?Partnumber=' + row.PartNo + '">' + row.JobCount + '</a>'
+                    }
+                },
+                {
+                    field: 'HourlyQty',
+                    title: 'Hourly Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'CycleTime',
+                    title: 'Set(Pcs)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'MFGDate',
+                    title: 'MFG Date',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'BomFlag',
+                    title: 'Bom List',
+                    align: 'center',
+                    valign: 'middle'
+                }
+            ],
+
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("Error, get data fail!");
+            }
+
+        });
+    });
+
+
+
+    $(window).resize(function () {
+        $('#tbReport').bootstrapTable('resetView');
+    });
+
+
+
+
+
+</script>

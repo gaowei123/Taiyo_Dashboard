@@ -263,16 +263,30 @@ namespace Common.Class.DAL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public DataSet GetList(string strWhere)
+		public DataSet GetList(DateTime dDateFrom, DateTime dDateTo)
 		{
 			StringBuilder strSql=new StringBuilder();
 			strSql.Append("select id,machineID,dateTime,partNumber,jobId,processes,jigNo,model,cavityCount,cycleTime,targetQty,userName,userID,TotalQty,rejectQty,acceptQty,startTime,stopTime,nextViFlag,day,shift,status,remark_1,remark_2,refField01,refField02,refField03,refField04,refField05,refField06,refField07,refField08,refField09,refField10,refField11,refField12,customer,lastUpdatedTime,trackingID,lastTrackingID,remarks,department,totalRejectQty,updatedTime,totalPassQty,shipTo,indexId ");
-			strSql.Append(" FROM PQCPackTracking ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			return DBHelp.SqlDB.Query(strSql.ToString());
+			strSql.Append(" FROM PQCPackTracking where 1=1  ");
+
+            strSql.Append(" and day >= @dateFrom");
+            strSql.Append(" and day < @dateTo");
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@dateFrom",SqlDbType.DateTime),
+                new SqlParameter("@dateTo",SqlDbType.DateTime)
+            };
+
+
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+
+
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
 
 		/// <summary>

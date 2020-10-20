@@ -11,16 +11,6 @@ namespace DashboardTTS.Webform
 {
     public partial class InventoryDetail : System.Web.UI.Page
     {
-        static string jobNumber = "";
-
-        public class ClsUpdateSetPara
-        {
-            public string Jobnumber = "";
-            public int SetQTY = 0;
-            public DateTime DateFrom = DateTime.Now;
-            public string PartNumber = "";
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -81,10 +71,10 @@ namespace DashboardTTS.Webform
 
 
                 //check job is run. 
-                Common.BLL.LMMSWatchLog_BLL bll = new Common.BLL.LMMSWatchLog_BLL();
-                if (bll.Exists(sJobnumber))
+                Common.Class.BLL.LMMSWatchDog_BLL bll = new Common.Class.BLL.LMMSWatchDog_BLL();
+                if (bll.IsJobRunning(sJobnumber))
                 {
-                    Common.CommFunctions.ShowMessage(this.Page, "This job has been run, can not delete!");
+                    Common.CommFunctions.ShowMessage(this.Page, "This job is running, please scan stop first!");
                     return;
                 }
 

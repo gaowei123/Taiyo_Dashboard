@@ -12,11 +12,18 @@ namespace DashboardTTS.Controllers
 
        public readonly ViewBusiness.HomePage_ViewBusiness homepageVBLL = new ViewBusiness.HomePage_ViewBusiness();
 
+        #region view
         public ActionResult Index()
         {
             return View();
         }
 
+        public ActionResult Index1()
+        {
+            return View();
+        }
+
+        #endregion
 
 
         public ActionResult GetRefreshData()

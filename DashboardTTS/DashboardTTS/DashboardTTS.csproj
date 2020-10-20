@@ -367,13 +367,6 @@
     <Compile Include="Webform\Laser\InventoryDetail.aspx.designer.cs">
       <DependentUpon>InventoryDetail.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\Laser\InventoryReport.aspx.cs">
-      <DependentUpon>InventoryReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Laser\InventoryReport.aspx.designer.cs">
-      <DependentUpon>InventoryReport.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\Laser\LaserEquipmentCheckForm.aspx.cs">
       <DependentUpon>LaserEquipmentCheckForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2869,6 +2862,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="TempImages\temp.txt" />
+    <Content Include="test.html" />
     <Content Include="UserControl\WebUserControlMachineStatus.ascx" />
     <Content Include="UserControl\WebUserControlMouldingMachineStatus.ascx" />
     <Content Include="UserControl\WebUserControlPQCStatus.ascx" />
@@ -3597,7 +3591,6 @@
     <Content Include="Webform\Laser\BOMList.aspx" />
     <Content Include="Webform\Laser\Buy_Off_List.aspx" />
     <Content Include="Webform\Laser\InventoryDetail.aspx" />
-    <Content Include="Webform\Laser\InventoryReport.aspx" />
     <Content Include="Webform\Laser\LaserEquipmentCheckForm.aspx" />
     <Content Include="Webform\Laser\LaserEquipmentCheckList.aspx" />
     <Content Include="Webform\Laser\LaserJobMaintance.aspx" />
@@ -3713,7 +3706,6 @@
     <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
     <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
     <Content Include="Views\OverallReport\OutputSummaryChart.cshtml" />
-    <Content Include="Views\LASER_Product\MachineDailyReport.cshtml" />
     <Content Include="Views\Test\LaserProductionChart.cshtml" />
     <Content Include="Views\Test\LaserMachineChart.cshtml" />
     <Content Include="Views\Test\PQCOperatorChart.cshtml" />
@@ -3725,6 +3717,10 @@
     <Content Include="Views\Charts\LaserMachineChart.cshtml" />
     <Content Include="Views\Charts\PQCProductionChart.cshtml" />
     <Content Include="Views\Charts\PQCOperatorChart.cshtml" />
+    <Content Include="Views\LASER_Product\InventoryReport.cshtml" />
+    <Content Include="Views\Charts\LaserMachineActivityChart.cshtml" />
+    <Content Include="Views\LASER_Product\DailyReport.cshtml" />
+    <Content Include="Views\Home\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -340,7 +340,21 @@ where a.materialNo != '' or okQty !=0 or ngQty !=0  ");
         }
 
 
-        
+        public SqlCommand DeleteJob(string sJobNo)
+        {
+            if (string.IsNullOrEmpty(sJobNo))
+                throw new ArgumentNullException("Job No can not be empty!");
+
+
+            string str = "delete from lmmswatchdog_shift where jobNumber = @jobNo";
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobNo",SqlDbType.VarChar)
+            };
+            parameters[0].Value = sJobNo;
+
+            return DBHelp.SqlDB.generateCommand(str, parameters);
+        }
+
     }
 }
 

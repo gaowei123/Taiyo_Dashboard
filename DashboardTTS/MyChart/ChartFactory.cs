@@ -28,6 +28,10 @@ namespace MyChart
             {
                 return new ConcreteChartMethod.PQCOperator();
             }
+            else if (sChartName == "Activity")
+            {
+                return new ConcreteChartMethod.LaserMachineActivity();
+            }
             else
             {
                 throw new NullReferenceException();

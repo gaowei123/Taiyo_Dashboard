@@ -1966,13 +1966,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>09/25/2020 10:59:00</publishTime>
+      <publishTime>10/16/2020 10:23:15</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>09/25/2020 10:59:04</publishTime>
+      <publishTime>10/16/2020 10:23:22</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>09/25/2020 10:58:59</publishTime>
+      <publishTime>10/13/2020 13:49:07</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2080,7 +2080,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>09/25/2020 10:58:59</publishTime>
+      <publishTime>10/16/2020 10:23:16</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2125,7 +2125,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>09/25/2020 10:58:59</publishTime>
+      <publishTime>10/16/2020 10:23:15</publishTime>
     </File>
     <File Include="bin/stdole.dll">
       <publishTime>06/20/2016 14:45:20</publishTime>
@@ -2260,7 +2260,7 @@
       <publishTime>01/15/2020 11:02:35</publishTime>
     </File>
     <File Include="Dashboard CSS JS/JS/GlobalConfig.js">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/12/2020 16:50:27</publishTime>
     </File>
     <File Include="Dashboard CSS JS/JS/HomePage.js">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2275,7 +2275,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Dashboard CSS JS/JS/SharedJS.js">
-      <publishTime>09/24/2020 14:13:04</publishTime>
+      <publishTime>10/14/2020 11:28:08</publishTime>
     </File>
     <File Include="email-templates/action.html">
       <publishTime>08/20/2016 15:33:42</publishTime>
@@ -10879,13 +10879,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>09/24/2020 16:06:38</publishTime>
+      <publishTime>10/16/2020 10:22:16</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="test.html">
-      <publishTime>04/16/2020 10:57:02</publishTime>
+      <publishTime>10/12/2020 15:54:26</publishTime>
     </File>
     <File Include="testBootstrapTable.html">
       <publishTime>01/20/2020 15:57:43</publishTime>
@@ -10894,7 +10894,7 @@
       <publishTime>10/26/2018 10:52:01</publishTime>
     </File>
     <File Include="UserControl/WebUserControlMachineStatus.ascx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/16/2020 10:14:53</publishTime>
     </File>
     <File Include="UserControl/WebUserControlMachineStatusMINI.ascx">
       <publishTime>02/02/2020 20:38:41</publishTime>
@@ -10903,7 +10903,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="UserControl/WebUserControlPQCStatus.ascx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/16/2020 10:14:42</publishTime>
     </File>
     <File Include="UserControl/WebUserControlTimeBar.ascx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10945,7 +10945,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Attendance/Attendance.cshtml">
-      <publishTime>08/03/2020 16:22:54</publishTime>
+      <publishTime>09/28/2020 16:05:27</publishTime>
     </File>
     <File Include="Views/Attendance/AttendanceChart.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -10960,13 +10960,28 @@
       <publishTime>09/25/2020 10:18:23</publishTime>
     </File>
     <File Include="Views/Buyoff/OverallBuyoff.cshtml">
-      <publishTime>08/11/2020 14:39:56</publishTime>
+      <publishTime>09/29/2020 10:44:30</publishTime>
     </File>
     <File Include="Views/Buyoff/PQCBuyoffList.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Buyoff/TouchPCBuyoff.cshtml">
       <publishTime>08/14/2020 14:30:36</publishTime>
+    </File>
+    <File Include="Views/Charts/LaserMachineActivityChart.cshtml">
+      <publishTime>10/15/2020 11:35:42</publishTime>
+    </File>
+    <File Include="Views/Charts/LaserMachineChart.cshtml">
+      <publishTime>09/27/2020 11:12:48</publishTime>
+    </File>
+    <File Include="Views/Charts/LaserProductionChart.cshtml">
+      <publishTime>09/27/2020 16:16:53</publishTime>
+    </File>
+    <File Include="Views/Charts/PQCOperatorChart.cshtml">
+      <publishTime>09/27/2020 11:12:58</publishTime>
+    </File>
+    <File Include="Views/Charts/PQCProductionChart.cshtml">
+      <publishTime>09/27/2020 11:13:08</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
       <publishTime>01/15/2020 14:05:31</publishTime>
@@ -10980,6 +10995,12 @@
     <File Include="Views/LASER_MachineSetting/Index.cshtml">
       <publishTime>09/24/2020 16:06:02</publishTime>
     </File>
+    <File Include="Views/LASER_Product/DailyReport.cshtml">
+      <publishTime>10/15/2020 11:33:34</publishTime>
+    </File>
+    <File Include="Views/LASER_Product/InventoryReport.cshtml">
+      <publishTime>10/15/2020 10:35:32</publishTime>
+    </File>
     <File Include="Views/LASER_Product/LaserMaintenance.cshtml">
       <publishTime>07/02/2020 17:00:49</publishTime>
     </File>
@@ -10987,7 +11008,7 @@
       <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/LASER_Product/SummaryReport.cshtml">
-      <publishTime>08/11/2020 14:39:56</publishTime>
+      <publishTime>10/14/2020 14:12:30</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11038,10 +11059,10 @@
       <publishTime>06/30/2020 15:35:40</publishTime>
     </File>
     <File Include="Views/OverallReport/OutputSummaryChart.cshtml">
-      <publishTime>09/21/2020 15:41:31</publishTime>
+      <publishTime>09/27/2020 10:51:07</publishTime>
     </File>
     <File Include="Views/PQC_Product/CheckingDetailReport.cshtml">
-      <publishTime>09/24/2020 10:41:34</publishTime>
+      <publishTime>10/14/2020 14:03:41</publishTime>
     </File>
     <File Include="Views/PQC_Product/DailyReport.cshtml">
       <publishTime>09/08/2020 15:24:31</publishTime>
@@ -11050,7 +11071,7 @@
       <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/Maintenance.cshtml">
-      <publishTime>06/29/2020 11:13:24</publishTime>
+      <publishTime>10/13/2020 17:07:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingDetailReport.cshtml">
       <publishTime>07/02/2020 17:00:49</publishTime>
@@ -11059,7 +11080,7 @@
       <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingJobOrder.cshtml">
-      <publishTime>09/09/2020 14:34:22</publishTime>
+      <publishTime>09/11/2020 11:03:22</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingPicChart.cshtml">
       <publishTime>09/16/2020 14:46:57</publishTime>
@@ -11083,19 +11104,19 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>10/16/2020 10:21:31</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Test/ChartIndex.cshtml">
-      <publishTime>09/21/2020 15:41:28</publishTime>
+      <publishTime>09/27/2020 10:56:51</publishTime>
     </File>
     <File Include="Views/Test/LaserMachineChart.cshtml">
       <publishTime>09/17/2020 10:05:24</publishTime>
     </File>
     <File Include="Views/Test/LaserProductionChart.cshtml">
-      <publishTime>09/21/2020 15:41:32</publishTime>
+      <publishTime>09/28/2020 09:34:38</publishTime>
     </File>
     <File Include="Views/Test/PQCOperatorChart.cshtml">
       <publishTime>09/16/2020 14:59:09</publishTime>
@@ -11134,10 +11155,10 @@
       <publishTime>09/25/2020 10:13:53</publishTime>
     </File>
     <File Include="Webform/Laser/BOMList.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:44:58</publishTime>
     </File>
     <File Include="Webform/Laser/Buy_Off_List.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:45:24</publishTime>
     </File>
     <File Include="Webform/Laser/ChartImages/Chart_0.png">
       <publishTime>11/19/2018 19:23:46</publishTime>
@@ -11440,7 +11461,7 @@
       <publishTime>11/19/2018 19:23:46</publishTime>
     </File>
     <File Include="Webform/Laser/InventoryDetail.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:45:46</publishTime>
     </File>
     <File Include="Webform/Laser/InventoryReport.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11449,46 +11470,46 @@
       <publishTime>08/06/2020 09:51:24</publishTime>
     </File>
     <File Include="Webform/Laser/LaserEquipmentCheckList.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:46:04</publishTime>
     </File>
     <File Include="Webform/Laser/LaserJobMaintance.aspx">
-      <publishTime>09/24/2020 10:09:09</publishTime>
+      <publishTime>10/13/2020 13:46:35</publishTime>
     </File>
     <File Include="Webform/Laser/LaserMachineDownTimeForm.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Laser/LaserMachineDownTimeList.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:47:03</publishTime>
     </File>
     <File Include="Webform/Laser/LaserSettingList.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:47:19</publishTime>
     </File>
     <File Include="Webform/Laser/LaserSparePartsInventory.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:41:43</publishTime>
     </File>
     <File Include="Webform/Laser/LaserSparePartsUsageHis.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:47:45</publishTime>
     </File>
     <File Include="Webform/Laser/Login.aspx">
       <publishTime>08/05/2020 13:23:12</publishTime>
     </File>
     <File Include="Webform/Laser/MachineCapability.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 14:16:22</publishTime>
     </File>
     <File Include="Webform/Laser/MachineStatus.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/16/2020 10:19:57</publishTime>
     </File>
     <File Include="Webform/Laser/MachineStatusChart.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:48:31</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityChart.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:44:25</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityDetail.aspx">
-      <publishTime>09/16/2020 13:51:47</publishTime>
+      <publishTime>10/13/2020 13:42:38</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityNGDetail.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/13/2020 13:43:57</publishTime>
     </File>
     <File Include="Webform/Laser/UserAttendance.aspx">
       <publishTime>01/19/2020 00:01:42</publishTime>
@@ -11629,7 +11650,7 @@
       <publishTime>01/19/2020 15:55:52</publishTime>
     </File>
     <File Include="Webform/Painting/InventoryRecord.aspx">
-      <publishTime>09/22/2020 09:44:41</publishTime>
+      <publishTime>10/12/2020 11:05:44</publishTime>
     </File>
     <File Include="Webform/Painting/PaintingDeliveryOperatingHis.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11698,7 +11719,7 @@
       <publishTime>03/01/2020 16:18:12</publishTime>
     </File>
     <File Include="Webform/PQC/PQCRealTime.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>10/16/2020 10:20:17</publishTime>
     </File>
     <File Include="Webform/PQC/PQCRealTime_OffLine.aspx">
       <publishTime>01/15/2020 16:01:53</publishTime>

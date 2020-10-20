@@ -15,36 +15,9 @@ namespace Common.BLL
 		public LMMSWatchLog_BLL()
 		{}
 		#region  Method
-		/// <summary>
-		/// 是否存在该记录
-		/// </summary>
-		public bool Exists(string sJobNumber)
-		{
-            if (sJobNumber.Trim() == "")
-            {
-                return false;
-            }
-
-			DataSet ds = new DataSet();
-			ds = dal.Exists(sJobNumber);
-			if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-
+		
 
         
-        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
-        {
-            return dal.GetList(dDateFrom, dDateTo, sShift);
-        }
-
-
 
 
         public DataTable GetMaterialList(string sDay, string sShift, DateTime dDateFrom, DateTime dDateTo, string sJobnumber, string sMachineID, string sPartNumber, string sModule)
@@ -408,7 +381,7 @@ namespace Common.BLL
 
 	
 
-        public List<Common.Model.LMMSWatchLog_Model> GetQty_CurrentnToday()
+        public List<Common.Model.LMMSWatchLog_Model> GetCurJobList()
         {
             List<Common.Model.LMMSWatchLog_Model> lJobList = new List<LMMSWatchLog_Model>();
             DataSet ds = dal.getRealJobInfo();
@@ -424,7 +397,7 @@ namespace Common.BLL
                 int iTotalQty = dr["totalQuantity"].ToString() == "" ? 0 : int.Parse(dr["totalQuantity"].ToString());
                 string sJobnumber = dr["jobNumber"].ToString();
                 string sPartNumber = dr["partNumber"].ToString();
-                string sMachineID = "Machine " + dr["machineID"].ToString();
+                string sMachineID = dr["machineID"].ToString();
                 string sLotNo = dr["LotNo"].ToString();
 
                 
@@ -866,260 +839,7 @@ namespace Common.BLL
             }
         }
 
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <param name="dDay"></param>
-        /// <param name="sShift"></param>
-        /// <returns></returns>
-        public DataTable getOutput(DateTime dDay, string sShift,string sDepartment)
-        { 
-            DataSet ds = new DataSet();
-            //Columns: Module -- MachineCount -- OK -- NG -- Output -- Target -- ProdHrs
-            ds = dal.getOutput(dDay, sShift);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                //dwyane  get running & testing Time
-                Dictionary<string, double> dicTestingTimeCount = new Dictionary<string, double>();
-                for (int i = 1; i < 9; i++)
-                {
-                    Common.BLL.LMMSEventLog_BLL bll = new LMMSEventLog_BLL();
-                    double TestingTimeCount = bll.GetStatusTime(dDay, sShift, i.ToString(), StaticRes.Global.clsConstValue.ConstStatus.Testing,StaticRes.Global.clsConstValue.ConstStatus.PowerOn);
-
-                    dicTestingTimeCount.Add(i.ToString(), TestingTimeCount);
-                }
-                //dwyane  get testing Time
-
-
-                //< asp:BoundColumn DataField = "Seq" HeaderText = "Seq" ></ asp:BoundColumn >
-                //< asp:ButtonColumn DataTextField = "PartNo"  HeaderText = "Day_Shift_Total_MC_Used" CommandName = "Update" FooterText = "Text" >
-                //< asp:BoundColumn DataField = "Customer" HeaderText = "Customer" >
-                //< asp:BoundColumn DataField = "ProductType" HeaderText = "Pruduct Type" >
-                //< asp:BoundColumn DataField = "MaterialName" HeaderText = "Material Name" >
-                //< asp:BoundColumn DataField = "Model" HeaderText = "Model" >   
-                //< asp:BoundColumn DataField = "TargetMCRunning" HeaderText = "TargetMC Running HR" >
-                //< asp:BoundColumn DataField = "ActualMCRunning" HeaderText = "ActualMC Running" >
-                //< asp:BoundColumn DataField = "EachUtilizationRate" HeaderText = "Each Utilization Rate" >
-                //< asp:BoundColumn DataField = "TargetQty" HeaderText = "TARGET OUTPUT" >
-                //< asp:BoundColumn DataField = "TotalQty" HeaderText = "TOTAL OUTPUT" >
-                //< asp:BoundColumn DataField = "SetupUsage" HeaderText = "Setup Usage QTY (%)" >
-                //< asp:BoundColumn DataField = "BuyoffUsage" HeaderText = "Buyoff Usage QTY (%)" >
-                //< asp:BoundColumn DataField = "DefectedQTY" HeaderText = "Defected QTY (%)" >      
-                //< asp:BoundColumn DataField = "RejectQty" HeaderText = "REJ QTY (%)" >                               
-                //< asp:BoundColumn DataField = "Productivity" HeaderText = "Productivity%" >
-
-                DataTable dtOutput = new DataTable();
-                dtOutput.Columns.Add("MCID");
-                dtOutput.Columns.Add("PartNo");
-                dtOutput.Columns.Add("Customer");
-                dtOutput.Columns.Add("ProductType");
-                dtOutput.Columns.Add("MaterialName");
-                dtOutput.Columns.Add("Model");
-                dtOutput.Columns.Add("TargetMCRunning");
-                dtOutput.Columns.Add("ActualMCRunning");
-                dtOutput.Columns.Add("EachUtilizationRate"); 
-                dtOutput.Columns.Add("TargetQty");
-                dtOutput.Columns.Add("TotalQty");
-                dtOutput.Columns.Add("SetupUsage");
-                dtOutput.Columns.Add("BuyoffUsage");
-                dtOutput.Columns.Add("DefectedQTY");
-                dtOutput.Columns.Add("RejectQty");
-                dtOutput.Columns.Add("Productivity");
-
-                try
-                {
-                    string sModel = "Total:";
-                    int dTargetMCRunning = 0;
-                    decimal dActualMCRunning = 0;
-                    decimal dProdHours = 0;
-                    int iTargetQty = 0;
-                    int iTotalQty = 0;
-                    int iSetupQty = 0;
-                    int iBuyoffQty = 0;
-                    int iDefectedQty = 0;
-                    int iRejectQty = 0;
-                    int iPassQty = 0;
-                    string sRejRate = "";
-
-
-                    Common.Class.BLL.LMMSBomDetail_BLL bll_BomDetail = new Class.BLL.LMMSBomDetail_BLL();
-                   
-
-                    foreach (DataRow tmpDr in ds.Tables[0].Rows)
-                    {
-                        DataRow dr = dtOutput.NewRow();
-                        dr["MCID"] = tmpDr["MCID"].ToString();
-                        dr["PartNo"] = tmpDr["PartNo"].ToString();
-                        dr["Model"] = tmpDr["Module"].ToString();
-                        dr["Customer"] = tmpDr["Customer"].ToString();
-                        dr["ProductType"] = tmpDr["Type"].ToString();
-
-                        DataTable dt_bomDetail = bll_BomDetail.GetBomDetailListByPartNumber(tmpDr["PartNo"].ToString());
-                        if (dt_bomDetail == null || dt_bomDetail.Rows.Count == 0)
-                        {
-                            dr["MaterialName"] = "";
-                        }
-                        else
-                        {
-                            string sMaterialPart = "";
-                            foreach (DataRow tmpdr in dt_bomDetail.Rows)
-                            {
-                                sMaterialPart = sMaterialPart + "," + tmpdr["materialPartNo"].ToString();
-                            }
-                            sMaterialPart = sMaterialPart.Trim(char.Parse(","));
-                            dr["MaterialName"] = sMaterialPart;
-                        }
-                         
-                        dr["TargetMCRunning"] = "12"; // let user input  
-                        dTargetMCRunning += 0;                                               //dwyane add testing time
-                        dr["ActualMCRunning"] = double.Parse(tmpDr["ProdHrs"].ToString()) + dicTestingTimeCount[tmpDr["MCID"].ToString()];                                    //dwyane add testing time
-                        dr["EachUtilizationRate"] = Math.Round(((    (double.Parse(tmpDr["ProdHrs"].ToString()) + dicTestingTimeCount[tmpDr["MCID"].ToString()])   * 100.0) / double.Parse(dr["TargetMCRunning"].ToString())), 2).ToString() + "%";
-                        //dr["ActualMCRunning"] = tmpDr["MachineCount"].ToString();
-                        //dActualMCRunning += decimal.Parse(tmpDr["MachineCount"].ToString());
-                        //dr["ProdHours"] = tmpDr["ProdHrs"].ToString();
-                        dProdHours += decimal.Parse(tmpDr["ProdHrs"].ToString());
-                        dProdHours += decimal.Parse(dicTestingTimeCount[tmpDr["MCID"].ToString()].ToString());//dwyane add testing time
-                        dr["TargetQty"] = tmpDr["Target"].ToString();
-                        iTargetQty += int.Parse(tmpDr["Target"].ToString());
-                        dr["TotalQty"] = tmpDr["Output"].ToString();
-                        iTotalQty += int.Parse(tmpDr["Output"].ToString());
-
-
-                        if (decimal.Parse(tmpDr["Output"].ToString()) > 0)
-                        {
-
-                            dr["SetupUsage"] = tmpDr["SetupQTY"].ToString() + "(" + Math.Round(((double.Parse(tmpDr["SetupQTY"].ToString()) * 100.0) / double.Parse(tmpDr["Output"].ToString())), 2).ToString() + "%)";
-                            iSetupQty += int.Parse(tmpDr["SetupQTY"].ToString());
-
-                            dr["BuyoffUsage"] = tmpDr["BuyoffQTY"].ToString() + "(" + Math.Round(((double.Parse(tmpDr["BuyoffQTY"].ToString()) * 100.0) / double.Parse(tmpDr["Output"].ToString())), 2).ToString() + "%)";
-                            iBuyoffQty += int.Parse(tmpDr["BuyoffQty"].ToString());
-
-                            dr["DefectedQTY"] = tmpDr["DefectedQTY"].ToString() + "(" + Math.Round(((double.Parse(tmpDr["DefectedQTY"].ToString()) * 100.0) / double.Parse(tmpDr["Output"].ToString())), 2).ToString() + "%)";
-                            iDefectedQty += int.Parse(tmpDr["DefectedQTY"].ToString());
-
-
-                            dr["RejectQty"] = tmpDr["NG"].ToString() + "(" + Math.Round(((double.Parse(tmpDr["NG"].ToString()) * 100.0) / double.Parse(tmpDr["Output"].ToString())), 2).ToString() + "%)";
-                            iRejectQty += int.Parse(tmpDr["NG"].ToString());
-                        }
-                        else
-                        {
-                            dr["SetupUsage"] = "0(0%)";
-                            iSetupQty += 0;
-
-                            dr["BuyoffUsage"] = "0(0%)";
-                            iBuyoffQty += 0;
-
-                            dr["DefectedQTY"] = "0(0%)";
-                            iDefectedQty += 0;
-
-                            dr["RejectQty"] = "0(0%)";
-                            iRejectQty += 0;
-                        }
-                        //if (decimal.Parse(tmpDr["Output"].ToString()) > 0)
-                        //{
-                        //    dr["RejRate"] = (Math.Round(decimal.Parse(tmpDr["NG"].ToString()) * 100 / decimal.Parse(tmpDr["Output"].ToString()), 2)).ToString() + "%"; ;
-                        //}
-                        //else
-                        //{
-                        //    dr["RejRate"] = "0%";
-                        //}
-                        dr["Productivity"] = Math.Round(((double.Parse(tmpDr["Output"].ToString()) * 100.0) / double.Parse(tmpDr["Target"].ToString())), 2).ToString() + "%";// let user input
-
-                        dtOutput.Rows.Add(dr);
-                    }
-
-                    //total data.
-                    DataRow drTotal = dtOutput.NewRow();
-
-                    drTotal["MCID"] = "Total:";
-
-                    #region "Attendance Data"
-                    DataTable dtLaserShiftAttendance = this.getAttendance(dDay, sShift, sDepartment);
-                    //drTotal["PartNo"] = "";
-                    //drTotal["Customer"] = "";
-                    //drTotal["ProductType"] = "";
-                    if (dtLaserShiftAttendance != null && dtLaserShiftAttendance.Rows.Count > 0)
-                    {
-                        drTotal["PartNo"] = "Target Attendance: " +  dtLaserShiftAttendance.Rows[0]["Man Power"].ToString();
-                        drTotal["Customer"] = "Actual Attendance: " + dtLaserShiftAttendance.Rows[0]["Attendance"].ToString();
-                        drTotal["ProductType"] = "Persentage: " + Math.Round(((double.Parse(dtLaserShiftAttendance.Rows[0]["Attendance"].ToString()) * 100.0) / double.Parse(dtLaserShiftAttendance.Rows[0]["Man Power"].ToString())), 2).ToString() + "%"; 
-                    }
-                    else
-                    {
-                        drTotal["PartNo"] = "Target Attendance: 0";
-                        drTotal["Customer"] = "Actual Attendance: 0";
-                        drTotal["ProductType"] = "Persentage: 0%"; 
-                    }  
-                    #endregion 
-                   
-                    drTotal["MaterialName"] = "";
-                    drTotal["Model"] = "";
-                    drTotal["TargetMCRunning"] = "";
-                    drTotal["ActualMCRunning"] = Math.Ceiling(dProdHours).ToString();
-                    drTotal["EachUtilizationRate"] = Math.Round(((double.Parse(dProdHours.ToString()) * 100.0) / double.Parse((12*8).ToString())), 2).ToString() + "%";
-                    drTotal["TargetQty"] = iTargetQty.ToString();
-                    drTotal["TotalQty"] = iTotalQty.ToString();
-                    if (iTotalQty == 0)
-                    {
-                        drTotal["SetupUsage"] = "0(0%)";
-                        drTotal["BuyoffUsage"] = "0(0%)";
-                        drTotal["DefectedQTY"] = "0(0%)";
-                        drTotal["RejectQty"] = "0(0%)";
-                        drTotal["Productivity"] = "0(0%)";
-                    }
-                    else
-                    {
-                        drTotal["SetupUsage"] = iSetupQty.ToString() + "(" + Math.Round(((double.Parse(iSetupQty.ToString()) * 100.0) / double.Parse(iTotalQty.ToString())), 2).ToString() + "%)";
-                        drTotal["BuyoffUsage"] = iBuyoffQty.ToString() + "(" + Math.Round(((double.Parse(iBuyoffQty.ToString()) * 100.0) / double.Parse(iTotalQty.ToString())), 2).ToString() + "%)";
-                        drTotal["DefectedQTY"] = iDefectedQty.ToString() + "(" + Math.Round(((double.Parse(iDefectedQty.ToString()) * 100.0) / double.Parse(iTotalQty.ToString())), 2).ToString() + "%)";
-                        drTotal["RejectQty"] = iRejectQty.ToString() + "(" + Math.Round(((double.Parse(iRejectQty.ToString()) * 100.0) / double.Parse(iTotalQty.ToString())), 2).ToString() + "%)";
-                        drTotal["Productivity"] = Math.Round(((double.Parse(iTotalQty.ToString()) * 100.0) / double.Parse(iTargetQty.ToString())), 2).ToString() + "%";
-                    }
-                    
-
-                    dtOutput.Rows.Add(drTotal);
-
-
-
-                    #region dwyane:  同一mc 不同part, target time, actual time, utilization只显示一行.
-                    for (int i = 1; i < 9; i++)
-                    {
-                        double Total_ActualTime = 0;
-
-                        foreach (DataRow dr in dtOutput.Select("MCID = '" + i + "'"))
-                        {
-                            Total_ActualTime += double.Parse(dr["ActualMCRunning"].ToString());
-                            dr["TargetMCRunning"] = "";
-                            dr["ActualMCRunning"] = "";
-                            dr["EachUtilizationRate"] = "";
-                        }
-
-                        dtOutput.Select("MCID = '" + i + "'")[0]["TargetMCRunning"] = 12;
-                        dtOutput.Select("MCID = '" + i + "'")[0]["ActualMCRunning"] = Total_ActualTime;
-                        dtOutput.Select("MCID = '" + i + "'")[0]["EachUtilizationRate"] = Math.Round((Total_ActualTime) / 12 * 100, 2).ToString() + "%";
-                    }
-                    #endregion
-
-
-
-
-
-                    return dtOutput;
-
-                }
-                catch (Exception ex)
-                {
-                    DBHelp.Reports.LogFile.DebugLog("AUTOCODE", "NameSpace:Common.BLL", "Class:LMMSWatchLog_BLL", "Function:  internal DataSet getOutput(DateTime dDay, string sShift)" + "TableName:LMMSWatchLog", " sShift =" + sShift + "; dDay = " + dDay.ToString() + ") [" + ex.ToString() + "]");
-                    return dtOutput;
-                }
-            }
-        }
-
-
+   
 
 
         public DataTable getProductivityReportForLaser(DateTime dDay, string sShift, string sDepartment)
@@ -1321,20 +1041,6 @@ namespace Common.BLL
         }
 
 
-
-        public DataTable GetOuputForAllMachineChart(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            DataTable dt = dal.GetOuput(DateFrom, DateTo, Shift, DateNotIn, ExceptWeekends);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            else
-            {
-                return dt;
-            }
-        }
 
 
 

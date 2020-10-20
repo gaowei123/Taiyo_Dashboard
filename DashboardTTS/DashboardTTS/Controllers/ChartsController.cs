@@ -28,9 +28,15 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+
+        public ActionResult LaserMachineActivityChart()
+        {
+            return View();
+        }
         #endregion
 
-        
+
 
         MyChart.ChartFactory _chartFactory = new MyChart.ChartFactory();
         public JsonResult GetLaserProductionData()
@@ -88,6 +94,18 @@ namespace DashboardTTS.Controllers
         }
 
 
+        public JsonResult GetLaserActivityData()
+        {
+            Common.SearchingCondition.LaserActivityCondition condition = new Common.SearchingCondition.LaserActivityCondition();
+            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
+            condition.Shift = Request.Form["Shift"];
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("Activity");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+            return Json(chartData);
+        }
 
 
     }

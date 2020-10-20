@@ -94,9 +94,7 @@ namespace Common.Model
 		}
 		#endregion Model
 
-
-
-        public class EventLogModelForChart
+        public class Detail
         {
             private int _year;
             private int _month;
@@ -159,8 +157,6 @@ namespace Common.Model
                 get { return _totalSeconds; }
             }
         }
-
-
 
 
     }

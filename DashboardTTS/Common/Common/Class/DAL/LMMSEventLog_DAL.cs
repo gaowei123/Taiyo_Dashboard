@@ -170,7 +170,7 @@ namespace Common.DAL
 			strSql.Append(" where id=@id");
 			SqlParameter[] parameters = {
 					new SqlParameter("@id", SqlDbType.Int,4)
-};
+            };
 			parameters[0].Value = id;
 
 			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public bool Delete(int id)"  + "TableName:LMMSEventLog" , "");
@@ -214,7 +214,7 @@ namespace Common.DAL
 			strSql.Append(" where id=@id");
 			SqlParameter[] parameters = {
 					new SqlParameter("@id", SqlDbType.Int,4)
-};
+            };
 			parameters[0].Value = id;
 
 			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public SqlCommand DeleteCommand(int id)"  + "TableName:LMMSEventLog" , "");
@@ -244,7 +244,7 @@ namespace Common.DAL
 			strSql.Append(" where id=@id");
 			SqlParameter[] parameters = {
 					new SqlParameter("@id", SqlDbType.Int,4)
-};
+            };
 			parameters[0].Value = id;
 
 			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public Common.Model.LMMSEventLog_Model GetModel(int id)"  + "TableName:LMMSEventLog" , "");
@@ -282,42 +282,7 @@ namespace Common.DAL
 		}
 
 
-        /// <summary>
-        /// 获得数据列表
-        /// </summary>
-        public DataSet GetList(string strWhere)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select id,dateTime,machineID,currentOperation,ownerID,eventTrigger,startTime,stopTime,ipSetting ");
-			strSql.Append(" FROM LMMSEventLog ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			return DBHelp.SqlDB.Query(strSql.ToString());
-		}
-
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select ");
-			if(Top>0)
-			{
-				strSql.Append(" top "+Top.ToString());
-			}
-			strSql.Append(" id,dateTime,machineID,currentOperation,ownerID,eventTrigger,startTime,stopTime,ipSetting ");
-			strSql.Append(" FROM LMMSEventLog ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			strSql.Append(" order by " + filedOrder);
-			return DBHelp.SqlDB.Query(strSql.ToString());
-		}
-
+		
         public DataSet GetTodayList()
         {
             StringBuilder strSql = new StringBuilder();
@@ -327,30 +292,6 @@ namespace Common.DAL
             return DBHelp.SqlDB.Query(strSql.ToString());
         }
 
-        /*
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetList(int PageSize,int PageIndex,string strWhere)
-		{
-			SqlParameter[] parameters = {
-					new SqlParameter("@tblName", SqlDbType.VarChar, 255),
-					new SqlParameter("@fldName", SqlDbType.VarChar, 255),
-					new SqlParameter("@PageSize", SqlDbType.Int),
-					new SqlParameter("@PageIndex", SqlDbType.Int),
-					new SqlParameter("@IsReCount", SqlDbType.Bit),
-					new SqlParameter("@OrderType", SqlDbType.Bit),
-					new SqlParameter("@strWhere", SqlDbType.VarChar,1000),
-					};
-			parameters[0].Value = "LMMSEventLog";
-			parameters[1].Value = "";
-			parameters[2].Value = PageSize;
-			parameters[3].Value = PageIndex;
-			parameters[4].Value = 0;
-			parameters[5].Value = 0;
-			parameters[6].Value = strWhere;	
-			return DBHelp.SqlDB.RunProcedure("UP_GetRecordByPage",parameters,"ds");
-		}*/
 
         #endregion  Method
 
@@ -401,116 +342,9 @@ namespace Common.DAL
 
             return ds;
         }
-        internal DataSet getOEE_Detail(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sPartNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT id  ");
-            strSql.Append("  , machineID  ");
-            strSql.Append("  , currentOperation  "); 
-            strSql.Append("  , eventTrigger  ");
-            strSql.Append("  , startTime  ");
-            strSql.Append("  , stopTime  ");
-            strSql.Append("   , convert(varchar, [stopTime] - [startTime], 108) as Time ");
-            //strSql.Append("  , ownerID  ");
-            strSql.Append(" FROM LMMSEventLog  ");
-            strSql.Append(" WHERE currentOperation like '%OEE'  ");
+ 
 
-            if (sMachineNo != "")
-            {
-                strSql.Append(" and MACHINEID = @MachineNo    ");
-            }
-            
-
-            strSql.Append(" and dateTime >= @TimeFrom  ");
-            strSql.Append(" and dateTime < @TimeTo + 1   ");
-
-            // strSql.Append(" and currentOperation like '%oee'  ");
-            strSql.Append(" ORDER BY starttime  asc  ");
-            SqlParameter[] parameters = {
-                        new SqlParameter("@MachineNo", SqlDbType.VarChar,4) ,
-                        new SqlParameter("@TimeFrom", SqlDbType.DateTime) ,
-                        new SqlParameter("@TimeTo", SqlDbType.DateTime) };
-
-
-            parameters[0].Value = sMachineNo;
-            parameters[1].Value = dTimeFrom;
-            parameters[2].Value = dTimeTo;
-
-
-            DBHelp.Reports.LogFile.DebugLog("AUTOCODE", "NameSpace:Common.DAL", "Class:LMMSEventLog_DAL", "Function:		public Common.Model.LMMSEventLog_Model getOEE_Detial(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sPartNo)" + "TableName:LMMSEventLog", "");
-            Common.Model.LMMSEventLog_Model model = new Common.Model.LMMSEventLog_Model();
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-
-            return ds;
-        }
-        
-        internal DataSet getCurrentStatus(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sPartNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT id  ");
-            strSql.Append("  , machineID  ");
-            strSql.Append("  , currentOperation  ");
-            strSql.Append("  , eventTrigger  ");
-            strSql.Append("  , startTime  ");
-            strSql.Append("  , stopTime  ");
-            strSql.Append("   , convert(varchar, [stopTime] - [startTime], 108) as Time ");
-            strSql.Append(" FROM LMMSEventLog  ");
-            strSql.Append(" WHERE MACHINEID = @MachineNo  and  currentOperation like '%OEE'");
-            strSql.Append(" and dateTime >= @TimeFrom  ");
-            strSql.Append(" and dateTime < @TimeTo + 1   ");
-            
-            strSql.Append(" ORDER BY stopTime  desc ,currentOperation desc  ");
-            SqlParameter[] parameters = {
-                        new SqlParameter("@MachineNo", SqlDbType.VarChar,4) ,
-                        new SqlParameter("@TimeFrom", SqlDbType.DateTime) ,
-                        new SqlParameter("@TimeTo", SqlDbType.DateTime) };
-            parameters[0].Value = sMachineNo;
-            parameters[1].Value = dTimeFrom;
-            parameters[2].Value = dTimeTo;
-
-
-            
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-
-            return ds;
-        }
-        
-        public DataTable SelectAdjustEvent(string sMachineID ,DateTime dStartTime, DateTime dStopTime)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(" select * from lmmseventlog where 1=1 ");
-            strSql.Append(" and currentOperation in ('TECHNICIAN_OEE','SYSTEM_OEE')  ");
-            strSql.Append(" and eventTrigger in ('ADJUSTMENT','TESTING','NO SCHEDULE','POWER OFF','SETUP','BUYOFF','MAINTAINENCE') ");
-            if (sMachineID != "")
-            {
-                strSql.Append(" and machineID = @machineID ");
-            }
-            strSql.Append(" and startTime >= @startTime ");
-            strSql.Append(" and stopTime <= @stopTime ");
-            strSql.Append(" order by datetime desc ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@machineID",SqlDbType.VarChar,16),
-                new SqlParameter("@startTime",SqlDbType.DateTime),
-                new SqlParameter("@stopTime",SqlDbType.DateTime)
-            };
-
-            paras[0].Value = sMachineID.Replace("Machine", "");
-            paras[1].Value = dStartTime.AddMinutes(-5);
-            paras[2].Value = dStopTime.AddMinutes(5);
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
-
-            if (ds == null||ds.Tables.Count ==0)
-            {
-                return null;
-            }
-
-            return ds.Tables[0];
-        }
+     
 
         public DataTable GetTimeByStatus(DateTime dDateFrom, DateTime dDateTo, string sMachineID, params string[] sStatus)
         {
@@ -558,6 +392,33 @@ namespace Common.DAL
         }
 
 
+        internal DataTable GetLastestTop50()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+SELECT TOP 50 
+	[id]
+    ,[dateTime]
+    ,[machineID]
+    ,[currentOperation]
+    ,[ownerID]
+    ,case when eventTrigger = 'ADJUSTMENT' then 'BUYOFF' 
+    when eventTrigger = 'POWER ON' then 'RUN'
+    when eventTrigger = 'POWER OFF' then 'SHUTDOWN'
+    else eventTrigger end as eventTrigger
+    ,[startTime]
+    ,[stopTime]
+    ,[ipSetting]
+FROM [LMMSEventLog]
+where currentOperation in ('TECHNICIAN_OEE','SYSTEM_OEE')
+order by stoptime desc ,currentOperation desc");
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
+
+            return ds == null || ds.Tables.Count == 0 ? null : ds.Tables[0];
+
+        }
+
         public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus)
         {
             StringBuilder strSql = new StringBuilder();
@@ -565,7 +426,10 @@ namespace Common.DAL
 select id
 ,machineID
 ,currentOperation
-,case when eventTrigger = 'ADJUSTMENT' then 'BUYOFF' else eventTrigger end as eventTrigger
+,case when eventTrigger = 'ADJUSTMENT' then 'BUYOFF' 
+when eventTrigger = 'POWER ON' then 'RUN'
+when eventTrigger = 'POWER OFF' then 'SHUTDOWN'
+else eventTrigger end as eventTrigger
 ,startTime
 ,stopTime
 from LMMSEventLog 

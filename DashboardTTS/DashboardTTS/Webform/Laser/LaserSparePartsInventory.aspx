@@ -10,13 +10,15 @@
 
         <div class="row">
             <div class="col-md-12 panel panel-default searchingPanel" >
-
                 <div class="row form-inline searchingBar ">
-                    <div class="col-md-3">
-                        <label style="width:35%">Part Name:</label>
-                        <asp:TextBox runat="server" ID="txtPartName" CssClass="form-control" Width="60%" AutoCompleteType="Disabled"></asp:TextBox>
+                    <div class="col-sm-3">
+                        <%--<label style="width:35%">Part Name:</label>
+                        <asp:TextBox runat="server" ID="txtPartName" CssClass="form-control" Width="60%" AutoCompleteType="Disabled"></asp:TextBox>--%>
                     </div>
-                    <div class="col-md-6">
+                     <div class="col-sm-3" align="right" style="padding-right:2%;">
+                        <%--<asp:Button ID="btn_Generate" runat="server" Text="Generate" OnClick="btn_Generate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;"/>--%>
+                    </div>
+                    <div class="col-sm-6">
                         <asp:Label runat="server" ID="lbSparePart" ></asp:Label> &nbsp;&nbsp;
                         <asp:Label runat="server" ID="lbCurQty_Text" Text="Current Qty:" ></asp:Label>
                         <asp:Label runat="server" ID="lbCurQty"  ></asp:Label>&nbsp;&nbsp;
@@ -24,23 +26,18 @@
                         <asp:Button ID="btnLoad" runat="server" Text="IN" OnClick="btnLoad_Click" CssClass="btn-primary" style="width:50px; height:34px; border-radius:4px;"/> &nbsp;
                         <asp:Button ID="btnUnload" runat="server" Text="OUT" OnClick="btnUnload_Click"  CssClass="btn-primary" style="width:50px; height:34px; border-radius:4px;" />
                     </div>
-                    <div class="col-md-3" align="right" style="padding-right:2%;">
-                        <asp:Button ID="btn_Generate" runat="server" Text="Generate" OnClick="btn_Generate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;"/>
-                    </div>
+                   
                 </div>
             </div>
         </div>
 
-
-        <div class="row">
-           <h3> <asp:Label ID="lblResult" runat="server" /> </h3>
-        </div>
+        
 
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
-
+            <div class="col-sm-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
+                 <h3> <asp:Label ID="lblResult" runat="server" /> </h3>
                 <asp:DataGrid runat="server" ID ="dgSparePartsInventory" AutoGenerateColumns="false" CssClass="table" Width ="100%" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2">
                         <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
                         <EditItemStyle BackColor="#999999" />

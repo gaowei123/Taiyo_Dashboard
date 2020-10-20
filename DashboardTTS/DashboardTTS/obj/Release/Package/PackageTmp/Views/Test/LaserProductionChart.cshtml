@@ -71,7 +71,13 @@
 
     <div class="row">
         <div class="col-md-12 panel panel-default" style="padding:0px; margin-top:10px;">
-            <div id="divMyChart" style="height:700px;"></div>
+            <div id="divMonthChart" style="height:700px;"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default" style="padding:0px; margin-top:10px;">
+            <div id="divMachineChart" style="height:700px;"></div>
         </div>
     </div>
 
@@ -87,7 +93,8 @@
 
 
     //初始化 echart
-    var chart = echarts.init(document.getElementById('divMyChart'));
+    var monthChart = echarts.init(document.getElementById('divMonthChart'));
+    var machineChart = echarts.init(document.getElementById('divMachineChart'));
 
 
     var optionBase = {
@@ -187,7 +194,7 @@
 
 
 
-    var optionLaserProduction = {
+    var optionMachine = {
         title: {
             text: 'Laser Production Chart'
         },
@@ -198,7 +205,7 @@
             }
         },
         legend: {
-            data: ['pass', 'ng']
+            data: ['pass','ng']
         },
         grid: {
             left: '3%',
@@ -219,22 +226,6 @@
         ],
         series: [
             {
-                name: 'pass',
-                type: 'bar',
-                stack: 'output',
-                label: {
-                    show: true,
-                    position: 'inside'
-                },
-                itemStyle: {
-                    normal: {
-                        color: "green"
-                    }
-                },
-
-                data: [799, 899, 1300, 599, 987, 330, 320, 1000]
-            },
-            {
                 name: 'ng',
                 type: 'bar',
                 stack: 'output',
@@ -249,6 +240,22 @@
                 },
 
                 data: [35, 65, 34, 14, 67, 43, 22, 19]
+            },
+            {
+                name: 'pass',
+                type: 'bar',
+                stack: 'output',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                itemStyle: {
+                    normal: {
+                        color: "green"
+                    }
+                },
+
+                data: [799, 899, 1300, 599, 987, 330, 320, 1000]
             }
         ]
     };
@@ -323,8 +330,11 @@
 
 
 
+    machineChart.setOption(optionMachine, true);
 
-    chart.setOption(optionMonth, true);
+    monthChart.setOption(optionMonth, true);
+
+   
 
 
 </script>

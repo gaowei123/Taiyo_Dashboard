@@ -777,20 +777,6 @@ namespace Common.Class.BLL
         
         
         
-        public DataTable GetOuputForAllMachineChart(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            DataTable dt = dal.GetOuput(DateFrom, DateTo, Shift, DateNotIn, ExceptWeekends);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            else
-            {
-                return dt;
-            }
-        }
-        
         public DataTable GetRealTimeData(string sType)
         {
 
@@ -845,28 +831,13 @@ namespace Common.Class.BLL
 
 
 
-     
 
-        public Common.Class.Model.PQCQaViTracking GetLatestModelByJob(string sJobNo)
+
+        public DataTable GetRealTime()
         {
-
-            DataTable dt = dal.GetLatestModelByJob(sJobNo);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }else
-            {
-                Common.Class.Model.PQCQaViTracking model = dataRowToModel(dt.Rows[0]);
-
-
-                return model;
-            }
+            return dal.GetRealTime();
         }
-
-
         
-
-
 
         public bool MaintenanceUpdateEndFlag(string sTrackingID, bool bEndFlag)
         {

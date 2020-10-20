@@ -42,11 +42,7 @@
         @*多级菜单栏*@
         <div class="collapse navbar-collapse" id="target-menu">
             <ul class="nav navbar-nav">
-
                 <li><a href="~/Home/Index"><font size="4">HOME</font></a></li>
-
-                
-                
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Moulding</font><span class="caret"></span></a>
                     <ul class="dropdown-menu menu-top">
@@ -131,6 +127,9 @@
                     <ul class="dropdown-menu menu-top">
                         <li><a href="~/Webform/Laser/MachineStatus.aspx">Machine Real Time</a></li>
                         <li><a href="~/LASER_Product/SummaryReport">Laser Summary Report</a></li>
+
+                        <li><a href="~/LASER_Product/DailyReport">Laser Daily Report</a></li>
+
                         <li><a href="~/Webform/Laser/ProductivityChart.aspx">Productivity Chart</a></li>
                         <li><a href="~/Webform/Laser/ProductivityDetail.aspx">Productivity Detail Report</a></li>
                         <li><a href="~/Webform/Laser/ProductivityNGDetail.aspx">Material Detail Report</a></li>
@@ -138,7 +137,9 @@
                         <li><a href="~/Webform/Laser/MachineCapability.aspx">Machine Capacity</a></li>
                         <li><a href="~/Webform/MachineOEETimeBar.aspx">Operation Status</a></li>
                         <li><a href="~/Webform/Laser/BOMList.aspx">Bom List</a></li>
-                        <li><a href="~/Webform/Laser/InventoryReport.aspx">Laser Inventory</a></li>
+                        @*<li><a href="~/Webform/Laser/InventoryReport.aspx">Laser Inventory</a></li>*@
+
+                        <li><a href="~/LASER_Product/InventoryReport">Inventory Report</a></li>
                         <li><a href="~/Webform/Laser/InventoryDetail.aspx">Job Order Detail</a></li>
                         <li><a href="~/Webform/Laser/Buy_Off_List.aspx">Buy Off List</a></li>
                         <li><a href="~/Webform/Laser/LaserEquipmentCheckList.aspx">Equipment Check List</a></li>
@@ -147,18 +148,16 @@
                         <li><a href="~/Webform/Laser/LaserSparePartsUsageHis.aspx">Spare Parts History</a></li>
                         <li><a href="~/Webform/Laser/LaserSettingList.aspx">Machine Parameters</a></li>
                         <li><a href="~/LASER_MachineSetting/Index">Product Parameter Chart</a></li>
+                        <li><a href="~/Charts/LaserMachineActivityChart">Machine Activity Chart</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown menu-top">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">PQC</font><span class="caret"></span></a>
                     <ul class="dropdown-menu menu-top">
-                        <li><a href="~/Webform/PQC/PQCRealTime.aspx?type=Online">OnLine Real Time</a></li>
-                        <li><a href="~/Webform/PQC/PQCRealTime.aspx?type=WIP">WIP Real Time</a></li>
-                        <li><a href="~/Webform/PQC/PQCRealTime.aspx?type=Packing">Packing Real Time</a></li>
+                        <li><a href="~/Webform/PQC/PQCRealTime.aspx?type=Online">PQC Station Real Time</a></li>
 
-                        <li class="divider"></li>
-
+                        
                         <li><a href="~/Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>
                         @*<li><a href="~/PQC_Product/CheckingDetailReport">Checking Report</a></li>*@
                         <li><a href="~/PQC_Product/SummaryReport">PQC Summary Report</a></li>

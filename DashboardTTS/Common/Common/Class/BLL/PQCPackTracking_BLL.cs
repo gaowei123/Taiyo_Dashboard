@@ -47,23 +47,9 @@ namespace Common.Class.BLL
 
 
 	
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetList(string strWhere)
+		public List<Common.Class.Model.PQCPackTracking_Model> GetModelList(DateTime dDateFrom , DateTime dDateTo)
 		{
-			return dal.GetList(strWhere);
-		}
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public List<Common.Class.Model.PQCPackTracking_Model> GetModelList(string strWhere)
-		{
-			DataSet ds = dal.GetList(strWhere);
+			DataSet ds = dal.GetList(dDateFrom, dDateTo);
 			return DataTableToList(ds.Tables[0]);
 		}
 
@@ -87,13 +73,7 @@ namespace Common.Class.BLL
 			return modelList;
 		}
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetAllList()
-		{
-			return GetList("");
-		}
+	
 
 
         public DataTable GetDayOutput(DateTime dDay)

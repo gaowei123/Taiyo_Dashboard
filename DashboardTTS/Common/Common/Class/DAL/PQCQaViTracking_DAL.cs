@@ -1871,6 +1871,37 @@ from
 
 
 
+        public DataTable GetRealTime()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+	machineID,'CHECKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,stopTime,datetime 
+from PQCQaViTracking where day = @day
+union all 
+select
+	machineID,'PACKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,stopTime,datetime 
+from pqcpacktracking where day =@day ");
+
+
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@day", SqlDbType.DateTime)
+            };
+
+            parameters[0].Value = DateTime.Now.AddHours(-8).Date;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+
 
         public DataTable GetOnlineDayOutput(DateTime dDay)
         {

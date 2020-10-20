@@ -807,34 +807,30 @@ namespace DashboardTTS.Webform.Laser
                 watchlogModel.totalFail = curWatchdogModel.totalFail + (summaryModel == null ? 0 : summaryModel.totalFail);
 
                 watchlogModel.ok1Count = curWatchdogModel.ok1Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok2Count = curWatchdogModel.ok2Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok3Count = curWatchdogModel.ok3Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok4Count = curWatchdogModel.ok4Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok5Count = curWatchdogModel.ok5Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok6Count = curWatchdogModel.ok6Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok7Count = curWatchdogModel.ok7Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok8Count = curWatchdogModel.ok8Count + (summaryModel == null ? 0 : summaryModel.ok1Count); ;
-                watchlogModel.ok9Count = curWatchdogModel.ok9Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok10Count = curWatchdogModel.ok10Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
-                watchlogModel.ok11Count = curWatchdogModel.ok11Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
+                watchlogModel.ok2Count = curWatchdogModel.ok2Count + (summaryModel == null ? 0 : summaryModel.ok2Count);
+                watchlogModel.ok3Count = curWatchdogModel.ok3Count + (summaryModel == null ? 0 : summaryModel.ok3Count);
+                watchlogModel.ok4Count = curWatchdogModel.ok4Count + (summaryModel == null ? 0 : summaryModel.ok4Count);
+                watchlogModel.ok5Count = curWatchdogModel.ok5Count + (summaryModel == null ? 0 : summaryModel.ok5Count);
+                watchlogModel.ok6Count = curWatchdogModel.ok6Count + (summaryModel == null ? 0 : summaryModel.ok6Count);
+                watchlogModel.ok7Count = curWatchdogModel.ok7Count + (summaryModel == null ? 0 : summaryModel.ok7Count);
+                watchlogModel.ok8Count = curWatchdogModel.ok8Count + (summaryModel == null ? 0 : summaryModel.ok8Count); 
+                watchlogModel.ok9Count = curWatchdogModel.ok9Count + (summaryModel == null ? 0 : summaryModel.ok9Count);
+                watchlogModel.ok10Count = curWatchdogModel.ok10Count + (summaryModel == null ? 0 : summaryModel.ok10Count);
+                watchlogModel.ok11Count = curWatchdogModel.ok11Count + (summaryModel == null ? 0 : summaryModel.ok11Count);
                 
                 watchlogModel.ng1Count = curWatchdogModel.ng1Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng2Count = curWatchdogModel.ng2Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng3Count = curWatchdogModel.ng3Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng4Count = curWatchdogModel.ng4Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng5Count = curWatchdogModel.ng5Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng6Count = curWatchdogModel.ng6Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng7Count = curWatchdogModel.ng7Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng8Count = curWatchdogModel.ng8Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng9Count = curWatchdogModel.ng9Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng10Count = curWatchdogModel.ng10Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
-                watchlogModel.ng11Count = curWatchdogModel.ng11Count + (summaryModel == null ? 0 : summaryModel.ng1Count);
+                watchlogModel.ng2Count = curWatchdogModel.ng2Count + (summaryModel == null ? 0 : summaryModel.ng2Count);
+                watchlogModel.ng3Count = curWatchdogModel.ng3Count + (summaryModel == null ? 0 : summaryModel.ng3Count);
+                watchlogModel.ng4Count = curWatchdogModel.ng4Count + (summaryModel == null ? 0 : summaryModel.ng4Count);
+                watchlogModel.ng5Count = curWatchdogModel.ng5Count + (summaryModel == null ? 0 : summaryModel.ng5Count);
+                watchlogModel.ng6Count = curWatchdogModel.ng6Count + (summaryModel == null ? 0 : summaryModel.ng6Count);
+                watchlogModel.ng7Count = curWatchdogModel.ng7Count + (summaryModel == null ? 0 : summaryModel.ng7Count);
+                watchlogModel.ng8Count = curWatchdogModel.ng8Count + (summaryModel == null ? 0 : summaryModel.ng8Count);
+                watchlogModel.ng9Count = curWatchdogModel.ng9Count + (summaryModel == null ? 0 : summaryModel.ng9Count);
+                watchlogModel.ng10Count = curWatchdogModel.ng10Count + (summaryModel == null ? 0 : summaryModel.ng10Count);
+                watchlogModel.ng11Count = curWatchdogModel.ng11Count + (summaryModel == null ? 0 : summaryModel.ng11Count);
 
-
-
-
-
-
+                
 
 
 

@@ -233,6 +233,14 @@
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
+    <Compile Include="ExtendClass\LaserActivityChart\LaserActivityChart_BLL.cs" />
+    <Compile Include="ExtendClass\LaserActivityChart\LaserActivityChart_Model.cs" />
+    <Compile Include="ExtendClass\LaserDailyReport\LaserDailyReport_BLL.cs" />
+    <Compile Include="ExtendClass\LaserDailyReport\LaserDailyReport_DAL.cs" />
+    <Compile Include="ExtendClass\LaserDailyReport\LaserDailyReport_Model.cs" />
+    <Compile Include="ExtendClass\LaserInventory\LaserInventory_BLL.cs" />
+    <Compile Include="ExtendClass\LaserInventory\LaserInventory_DAL.cs" />
+    <Compile Include="ExtendClass\LaserInventory\LaserInventory_Model.cs" />
     <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_BLL.cs" />
     <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_DAL.cs" />
     <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_Model.cs" />
@@ -241,6 +249,7 @@
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchingCondition\BaseCondition.cs" />
+    <Compile Include="SearchingCondition\LaserActivityCondition.cs" />
     <Compile Include="SearchingCondition\LaserMachineCondition.cs" />
     <Compile Include="SearchingCondition\LaserProductionCondition.cs" />
   </ItemGroup>

@@ -13,15 +13,6 @@ namespace DashboardTTS.Webform.Laser {
     public partial class LaserSparePartsInventory {
         
         /// <summary>
-        /// txtPartName 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPartName;
-        
-        /// <summary>
         /// lbSparePart 控件。
         /// </summary>
         /// <remarks>
@@ -74,15 +65,6 @@ namespace DashboardTTS.Webform.Laser {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUnload;
-        
-        /// <summary>
-        /// btn_Generate 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_Generate;
         
         /// <summary>
         /// lblResult 控件。

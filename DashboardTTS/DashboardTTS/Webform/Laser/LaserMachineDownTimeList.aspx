@@ -18,22 +18,22 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default searchingPanel" >
+            <div class="col-sm-12 panel panel-default searchingPanel" >
                 <div class="row form-inline searchingBar">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date From:</label>
                         <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date To:</label>
                         <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Machine No:</label>
                         <asp:DropDownList runat="server" ID="ddlMachineNo" CssClass="form-control" Width="60%"></asp:DropDownList>
                     </div>
 
-                     <div class="col-md-3" align="right" style="padding-right:2%;">
+                     <div class="col-sm-3" align="right" style="padding-right:2%;">
                         <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="btn_Generate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />&nbsp;
                         <asp:Button ID="Button2" runat="server" Text="Maintain" OnClick="btn_Maintenance_Click" CssClass="btn-danger" style="width:100px; height:34px; border-radius:4px;" />
                      </div>
@@ -49,7 +49,7 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
+            <div class="col-sm-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
 
                  <asp:DataGrid runat="server" ID ="dg_DownTime" AutoGenerateColumns="false" CssClass="table" Width ="100%" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" style="margin-top:10px;">
                     <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
@@ -77,8 +77,6 @@
                         <asp:BoundColumn DataField="CauseComplete" Visible="false"></asp:BoundColumn>
                     </Columns>
                 </asp:DataGrid>
-
-                
             </div>
         </div>
 

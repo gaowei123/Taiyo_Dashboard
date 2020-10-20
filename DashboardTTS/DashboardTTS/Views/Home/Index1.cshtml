@@ -1,0 +1,558 @@
+﻿
+@{
+    ViewBag.Title = "Index1";
+}
+
+
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+<style>
+
+
+    .topTitleRow{
+        background-color: #003366;
+        color:white;
+        font-family:Arial;
+        font-weight:bold;
+        padding:14px 10px 10px 13px;
+        height:56px;
+        border-radius:4px;
+    }
+    .topTitleRow span{
+        font-size:24px;
+    }
+    .topTitleRow label{
+        font-size:20px;
+    }
+
+
+    .area{
+        background-color:#FBF2EF;
+        border-style:solid;
+        border-radius:6px;
+        border-width:1px;
+        border-color:#ddd;
+    }
+    .areaL{
+         margin:20px 10px 0px 0px;
+    }
+    .areaR{
+        margin:20px 0px 0px 10px;  
+    }
+    .areaM{
+        margin:20px 10px 0px 10px;  
+    }
+    .areaChart{
+        height:330px;
+    }
+
+
+    .divController{
+        width:100px; 
+        height:70px;
+        border-radius:6px;
+        border-width:1px;
+        border-style:solid;
+        border-color:gray;
+        margin:4px;       
+        text-align:center;
+        padding-top:10px;
+    }
+
+    .run{
+        background-color:lawngreen; 
+    }
+    .idle{
+        background-color:orange; 
+    }
+    .breakdown{
+        background-color:red; 
+    }
+    .shutdown{
+        background-color:gray; 
+    }
+     
+
+     .statusTitle{
+        width:100%; 
+        font-weight:bold;
+        text-align:center;
+        line-height:40px;
+    }    
+
+   
+    .statusFont{
+        width:100%;
+        font-size:15px;
+        font-weight:700;
+        line-height:25px;
+    }
+
+   
+    
+</style>
+
+
+<div class="container-fluid" style="width:1500px;">
+    <div class="row topTitleRow">
+        <div class="col-md-9">
+            <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span>Production Home Page</span>
+        </div>
+        <div class="col-md-3">
+            <label id="lbTime" style="color:white; width:100%; text-align:right;"></label>
+        </div>
+    </div>
+       
+
+    <div class="row">
+        <div class="col-sm-9" style="margin:0px;padding:0px;">
+            <div id="divOutputTrendChart"  class="area areaL areaChart" ></div>
+        </div>
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div id="divDayPieChart" class="area areaR areaChart" ></div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div class="area areaL">
+                <h4 class="statusTitle">Moulding</h4>
+
+                <div class="row">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;">                        
+                        <div class="divController run" id="ctrl" >
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController idle">
+                            <span class="statusFont">MC.2</span><br /><span class="statusFont">No Schedule</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.3</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.4</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.5</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController breakdown">
+                            <span class="statusFont">MC.6</span><br /><span class="statusFont">Breakdown</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.7</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.8</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.9</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div class="area areaM">
+                <h4 class="statusTitle">Laser</h4>
+
+                <div class="row">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;">
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController idle">
+                            <span class="statusFont">MC.2</span><br /><span class="statusFont">No Schedule</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.3</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.4</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.5</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController breakdown">
+                            <span class="statusFont">MC.6</span><br /><span class="statusFont">Breakdown</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.7</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.8</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" style="margin:0px;padding:0px;">
+            <div class="area areaR">
+                <h4 class="statusTitle">PQC</h4>
+
+                <div class="row" style="margin:auto;">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;">
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .test{
+            width:200px;
+            height:200px;
+            background-color:pink;
+            z-index:999;
+            display:none;
+            position: absolute;
+        }
+    </style>
+
+
+    <div id="jobDetail" class="test">
+        
+    </div>
+
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+    var trendChart = echarts.init(document.getElementById('divOutputTrendChart'));
+    var pieChart = echarts.init(document.getElementById('divDayPieChart'));
+
+
+
+    $("#ctrl").mouseover(function (e) {
+     
+
+        var strHTML = ' <p>jobno: jot190013134</p> \
+        <p>lotno: 1827-9865</p> \
+        <p>pass: 876</p> \
+        <p>ng:9</p> ';
+
+
+        $("#jobDetail").html(strHTML);
+
+        $("#jobDetail").css('display', 'block');
+        $("#jobDetail").css("left", e.pageX).css("top", e.pageY);
+    })
+
+    $("#ctrl").mouseout(function () {
+      
+
+        $("#jobDetail").html('');
+        $("#jobDetail").css('display', 'none');
+    })
+
+    $("#ctrl").mousemove(function (e) {
+      
+    })
+
+
+
+    $(document).ready(function () {
+
+        var trendOption = {
+            title: {
+                text: 'Production Output Trend'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                }
+            },
+            legend: {
+                data: ['Mould', 'Laser', 'Online', 'WIP', 'Pack'],
+                show:true
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+
+
+            series: [
+                {
+                    data: [
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100),
+                        Math.round(Math.random() * 100)
+                    ],
+                    name: 'Mould',
+                    type: 'line',
+                    smooth: true
+                },
+                {
+                    data: [
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500),
+                        Math.round(Math.random() * 500)
+                    ],
+                    name: 'Laser',
+                    type: 'line',
+                    smooth: true
+                },
+                {
+                    data: [
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700),
+                        Math.round(Math.random() * 700)
+                    ],
+                    name: 'Online',
+                    type: 'line',
+                    smooth: true
+                },
+                {
+                    data: [
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000),
+                        Math.round(Math.random() * 1000)
+                    ],
+                    name: 'WIP',
+                    type: 'line',
+                    smooth: true
+                },
+                {
+                    data: [
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500),
+                        Math.round(Math.random() * 1500)
+                    ],
+                    name: 'Pack',
+                    type: 'line',
+                    smooth: true
+                }
+            ]
+        };
+        trendChart.setOption(trendOption, true);
+
+        var pieOption = {
+            title: {
+                text: 'Today Output: 19000',
+                //subtext: '纯属虚构',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                type: 'scroll',
+                orient: 'vertical',
+                right: 0,
+                top: 20,
+                bottom: 20,
+                data: ['Mould', 'Laser', 'Online', 'WIP', 'Pack']
+            },
+            series: [
+                {
+                    name: 'Output',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['43%', '55%'],
+                    data: [
+                        {
+                            name: 'Mould',
+                            value: Math.round(Math.random() * 1000)
+                        },
+                        {
+                            name: 'Laser',
+                            value: Math.round(Math.random() * 1000)
+                        },
+                        {
+                            name: 'Online',
+                            value: Math.round(Math.random() * 1000)
+                        },
+                        {
+                            name: 'WIP',
+                            value: Math.round(Math.random() * 1000)
+                        },
+                        {
+                            name: 'Pack',
+                            value: Math.round(Math.random() * 1000)
+                        }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 30,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        pieChart.setOption(pieOption, true);
+
+
+
+        var bHeight = 300;//$(window).height() - 500;
+        trendChart.resize({ height: bHeight });
+        pieChart.resize({ height: bHeight });
+    });
+
+
+
+
+
+    
+
+
+
+    $(window).resize(function () {
+        //var bHeight = 500;//$(window).height() - 500;
+        //trendChart.resize({ height: bHeight });
+        //pieChart.resize({ height: bHeight });
+        trendChart.resize();
+        pieChart.resize();
+    });
+  
+
+
+    
+    var strDate = dateFormat('dd/MM/yyyy HH:mm', new Date());
+    $('#lbTime').text(strDate);
+
+
+
+</script>

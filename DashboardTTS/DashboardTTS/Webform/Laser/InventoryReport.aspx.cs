@@ -81,7 +81,7 @@ namespace DashboardTTS.Webform
                 string sCustomer = "";
 
 
-                DataTable dt = inventory_bll.Report(sPartNumber, sCustomer);
+                DataTable dt = new DataTable();// inventory_bll.Report(sPartNumber, sCustomer);
                 if (dt == null)
                 {
                     Common.CommFunctions.ShowWarning(lblResult, dg_inventoryDetail, StaticRes.Global.ErrorLevel.Warning, "");

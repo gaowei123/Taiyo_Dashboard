@@ -8,7 +8,50 @@ using System.Drawing;
 
 namespace StaticRes
 {
- 
+    public static class LaserStautsColor
+    {
+        public static System.Drawing.Color Run = System.Drawing.Color.LawnGreen;
+        public static System.Drawing.Color NoSchedule = System.Drawing.Color.Orange;
+        public static System.Drawing.Color Breakdown = System.Drawing.Color.Red;
+        public static System.Drawing.Color Shutdown = System.Drawing.Color.Gray;
+    }
+
+
+    public static class LaserStatusDetailColor
+    {
+        //run
+        public static System.Drawing.Color Operating = System.Drawing.Color.LawnGreen;
+        public static System.Drawing.Color Setup = System.Drawing.Color.Orange;
+        public static System.Drawing.Color Adjustment = System.Drawing.Color.Orange; //adjustment后期改名成setup了, 其实是同一种状态
+        public static System.Drawing.Color Buyoff = System.Drawing.Color.MediumPurple;
+        public static System.Drawing.Color Testing = System.Drawing.Color.RoyalBlue;
+
+
+        //idle
+        public static System.Drawing.Color NoSchedule = System.Drawing.Color.Yellow;
+
+
+        //breakdown
+        public static System.Drawing.Color Maintainence = System.Drawing.Color.Brown;
+        public static System.Drawing.Color BreakDown = System.Drawing.Color.Red;
+
+
+        //shutdown
+        public static System.Drawing.Color ShutDown = System.Drawing.Color.Gray;
+    }
+
+    public static class PQCStautsColor
+    {
+        public static System.Drawing.Color Run = System.Drawing.Color.LawnGreen;
+        public static System.Drawing.Color NoSchedule = System.Drawing.Color.Orange;
+        public static System.Drawing.Color Shutdown = System.Drawing.Color.Gray;
+    }
+
+
+
+
+
+
     public static class McStatusColor
     {
         public static System.Drawing.Color Operating    = System.Drawing.Color.LawnGreen;

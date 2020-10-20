@@ -9,7 +9,33 @@ namespace StaticRes
 {
     public class Global
     {
+
         
+        public static class LaserStatus
+        {
+            public const string Run = "RUN";
+            public const string Breakdown = "BREAKDOWN";
+            public const string Maintenance = "MAINTAINENCE";
+            public const string Buyoff = "BUYOFF";
+            public const string NoSchedule = "NO SCHEDULE";
+            public const string Setup = "SETUP";
+            public const string Testing = "TESTING";
+            public const string Shutdown = "SHUTDOWN";
+        }
+
+        public static class PQCStatus
+        {
+            public const string Checking = "CHECKING";
+            public const string Packing = "PACKING";
+            public const string NoSchedule = "NO SCHEDULE";
+            public const string Shutdown = "SHUTDOWN";
+        }
+
+
+
+
+
+
         public static class ErrorLevel
         {
             public const string Warning = "WARNING";
@@ -26,10 +52,12 @@ namespace StaticRes
             public const string PQC = "PQC";
             public const string Assembly = "Assembly";
             public const string Packing = "Packing";
-
             public const string Office = "Office";
-
         }
+        
+    
+
+        
        
         //OEE 
         public enum StatusType

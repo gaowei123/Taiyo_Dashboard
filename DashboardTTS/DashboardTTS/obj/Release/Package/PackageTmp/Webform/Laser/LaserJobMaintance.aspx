@@ -19,12 +19,12 @@
 
 
         <div class="row" style="margin-top:10px;">
-            <div class="col-md-12 panel panel-default" role="form">
+            <div class="col-sm-12 panel panel-default" role="form">
                 <div class="row form-inline" style="padding:10px 10px 0px 18px;">
-                    <div class="col-md-2">
+                    <div class="col-sm-2">
                         <b>Job Info :</b>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-sm-9">
                         <asp:Label runat="server" ID="lbDay" Font-Bold="true"></asp:Label> &nbsp-&nbsp
                         <asp:Label runat="server" ID="lbShift" Font-Bold="true"></asp:Label>&nbsp-&nbsp
                         <asp:Label runat="server" ID="lbMachineID" Font-Bold="true"></asp:Label>&nbsp-&nbsp
@@ -35,7 +35,7 @@
                 <hr />
 
                 <div class="row form-inline" style="margin:4px;"> 
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         Set Up Usage :
                     </div>
                     <div class="col-sm-8">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="row form-inline" style="margin:4px;">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         Buyoff Usage :
                     </div>
                     <div class="col-md-8">
@@ -55,10 +55,10 @@
                     </div>
                 </div>
                 <div class="row form-inline" style="margin:4px;">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         Shortage Qty :
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-sm-8">
                         <asp:Label runat="server" ID="lbShortage" Width="50px" ToolTip="Total shortage for the job"></asp:Label>
                         <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
                         <asp:TextBox runat="server"  ID="txtShortage" CssClass="form-control" Width="100px" AutoCompleteType="Disabled" ToolTip="Total shortage for the job"></asp:TextBox>
@@ -69,9 +69,9 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default">
+            <div class="col-sm-12 panel panel-default">
                  <div class="row" style="padding:10px 10px 0px 20px;">
-                     <div class="col-md-12">
+                     <div class="col-sm-12">
                        <b>Material Detail Info</b>
                      </div>
                  </div>
@@ -79,7 +79,7 @@
                 <hr />pI23HNROQNFWKSD MC203[EWOP
 
                 <div class="row">
-                    <div class="col-md-12" style="padding:0px 30px 0 30px;">
+                    <div class="col-sm-12" style="padding:0px 30px 0 30px;">
                         <asp:Label runat="server" ID="lbResult"></asp:Label>
                         <asp:DataGrid runat="server" Width ="300" ID ="dgMaterialMaintain" CellPadding="10" ForeColor="#333333" GridLines="none" CellSpacing="2" AutoGenerateColumns="false"  CssClass="table">
                             <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Wrap="False" Height="30px" HorizontalAlign="Center" VerticalAlign="Middle" />
@@ -107,7 +107,7 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default" style="padding:10px 10px 0px 40px;">
+            <div class="col-sm-12 panel panel-default" style="padding:10px 10px 0px 40px;">
                 <asp:Label runat="server" Font-Bold="true">Lot Complete:</asp:Label>
                 
                 <hr />

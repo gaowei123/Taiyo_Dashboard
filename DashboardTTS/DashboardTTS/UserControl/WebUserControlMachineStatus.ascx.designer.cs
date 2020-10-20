@@ -13,49 +13,31 @@ namespace DashboardTTS.UserControl {
     public partial class WebUserControlMachineStatus {
         
         /// <summary>
-        /// pnlAll 控件。
+        /// lbMachineID 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAll;
+        protected global::System.Web.UI.WebControls.Label lbMachineID;
         
         /// <summary>
-        /// lblMachineNo 控件。
+        /// lbPartNo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMachineNo;
+        protected global::System.Web.UI.WebControls.Label lbPartNo;
         
         /// <summary>
-        /// lblPartNo 控件。
+        /// lbStatus 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPartNo;
-        
-        /// <summary>
-        /// lblPartNo0 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPartNo0;
-        
-        /// <summary>
-        /// lblStatus 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblStatus;
+        protected global::System.Web.UI.WebControls.Label lbStatus;
         
         /// <summary>
         /// lbLotNo 控件。
@@ -76,129 +58,57 @@ namespace DashboardTTS.UserControl {
         protected global::System.Web.UI.WebControls.Image imgLogo;
         
         /// <summary>
-        /// lblJobID 控件。
+        /// lbJobNo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblJobID;
+        protected global::System.Web.UI.WebControls.Label lbJobNo;
         
         /// <summary>
-        /// lblJobID0 控件。
+        /// lbLotQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblJobID0;
+        protected global::System.Web.UI.WebControls.Label lbLotQty;
         
         /// <summary>
-        /// lblTotal 控件。
+        /// lbOKQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotal;
+        protected global::System.Web.UI.WebControls.Label lbOKQty;
         
         /// <summary>
-        /// lblTotal0 控件。
+        /// lbNGQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotal0;
+        protected global::System.Web.UI.WebControls.Label lbNGQty;
         
         /// <summary>
-        /// lblOK 控件。
+        /// lbRejRate 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOK;
+        protected global::System.Web.UI.WebControls.Label lbRejRate;
         
         /// <summary>
-        /// lblOK0 控件。
+        /// lbUsedRate 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblOK0;
-        
-        /// <summary>
-        /// lblNG 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNG;
-        
-        /// <summary>
-        /// lblNG0 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNG0;
-        
-        /// <summary>
-        /// lblPerformence 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPerformence;
-        
-        /// <summary>
-        /// lb_RejRate 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lb_RejRate;
-        
-        /// <summary>
-        /// lblQuality 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblQuality;
-        
-        /// <summary>
-        /// lb_RejPPM 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lb_RejPPM;
-        
-        /// <summary>
-        /// Label1 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
-        
-        /// <summary>
-        /// lbUtilization 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbUtilization;
+        protected global::System.Web.UI.WebControls.Label lbUsedRate;
     }
 }

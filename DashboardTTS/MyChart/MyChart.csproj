@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcreteChartMethod\LaserMachineActivity.cs" />
     <Compile Include="ConcreteChartMethod\LaserProduction.cs" />
     <Compile Include="ConcreteChartMethod\PQCOperator.cs" />
     <Compile Include="ConcreteChartMethod\PQCProduction.cs" />
@@ -54,6 +55,10 @@
     <ProjectReference Include="..\Common\Common\Common.csproj">
       <Project>{11b39656-6562-41f7-a926-4d2202cd64ea}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StaticRes\StaticRes.csproj">
+      <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
+      <Name>StaticRes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

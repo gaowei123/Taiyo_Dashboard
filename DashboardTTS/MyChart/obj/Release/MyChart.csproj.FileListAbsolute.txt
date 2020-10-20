@@ -2,3 +2,10 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\MyCha
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\MyChart.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Common.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\StaticRes.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\DBHelp.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Common.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\StaticRes.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\DBHelp.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.csprojResolveAssemblyReference.cache

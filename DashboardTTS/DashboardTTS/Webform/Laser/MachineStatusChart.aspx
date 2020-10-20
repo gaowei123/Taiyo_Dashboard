@@ -12,10 +12,10 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default searchingPanel">
+            <div class="col-sm-12 panel panel-default searchingPanel">
 
                 <div class="row form-inline searchingBar ">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Report Type:</label>
                         <asp:DropDownList runat="server" ID="ddlReportType"  CssClass="form-control" Width="60%">
                             <asp:ListItem Value="Daily">Daily</asp:ListItem>
@@ -25,15 +25,15 @@
                             <asp:ListItem Value="Status">Status</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Year:</label>
                         <asp:DropDownList runat="server" ID="ddlYear" CssClass="form-control" Width="60%"></asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date From:</label>
                         <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date To:</label>
                         <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
@@ -42,7 +42,7 @@
 
 
                 <div class="row form-inline searchingBar ">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Type:</label>
                         <asp:DropDownList runat="server" ID="ddlType" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="UTILIZATION">Utilization</asp:ListItem>
@@ -56,7 +56,7 @@
                             <asp:ListItem Value="POWER OFF">ShutDown</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Shift:</label>
                         <asp:DropDownList runat="server" ID="ddlShift" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="">All</asp:ListItem>
@@ -64,12 +64,12 @@
                             <asp:ListItem Value="Night">Night</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Machine No:</label>
                         <asp:DropDownList runat="server" ID="ddlMachineNo"  CssClass="form-control" Width="60%" />
                     </div>
                     
-                    <div class="col-md-3" >
+                    <div class="col-sm-3" >
                         <asp:CheckBox ID="ckbExceptWeekend" Text=" Except Weekend" runat="server" />
                         <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="btnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
                     </div>
@@ -86,7 +86,7 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default" style="padding-top:10px; padding-bottom:10px;">
+            <div class="col-sm-12 panel panel-default" style="padding-top:10px; padding-bottom:10px;">
                 <asp:Chart ID="ProdChart"  runat="server" Width="1140px" Height="600px" BackColor="245, 245, 250" BorderlineColor="Black" ImageType="Bmp" ImageLocation="~/TempImages/ChartPic_#SEQ(300,3)">
                     <Series>
                         <asp:Series Name="Series1" ChartArea="ChartArea1">

@@ -86,7 +86,7 @@ namespace DashboardTTS.Webform.Laser
                 
 
                 Common.BLL.LMMSEventLog_BLL bll = new Common.BLL.LMMSEventLog_BLL();
-                List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models = bll.GetStatusModelList(dSearchingFrom, dSearchingTo, sSearchingMachineID, sSearchingStatus, sSearchingShift, exceptWeekend);
+                List<Common.Model.LMMSEventLog_Model.Detail> models = bll.GetStatusModelList(dSearchingFrom, dSearchingTo, sSearchingMachineID, sSearchingStatus, sSearchingShift, exceptWeekend);
                 if (models == null || models.Count()== 0)
                 {
                     this.ProdChart.Visible = false;
@@ -141,7 +141,7 @@ namespace DashboardTTS.Webform.Laser
         }
 
 
-        void Display(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        void Display(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
             try
             {
@@ -305,7 +305,7 @@ namespace DashboardTTS.Webform.Laser
         }
 
 
-        public Series YearlySeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        public Series YearlySeries(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
             //yearly data
             var result = from a in models
@@ -363,7 +363,7 @@ namespace DashboardTTS.Webform.Laser
             }
             return dataSeries_JobOutPut;
         }
-        public Series MonthlySeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        public Series MonthlySeries(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
 
             var result = from a in models
@@ -417,7 +417,7 @@ namespace DashboardTTS.Webform.Laser
 
             return dataSeries_JobOutPut;
         }
-        public Series DailySeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        public Series DailySeries(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
             var result = from a in models                    
                          orderby a.day ascending
@@ -469,7 +469,7 @@ namespace DashboardTTS.Webform.Laser
 
             return dataSeries_JobOutPut;
         }
-        public Series MachineSeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        public Series MachineSeries(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
             DateTime dateFrom = DateTime.Parse(this.txtDateFrom.Text);
             DateTime dateTo = DateTime.Parse(this.txtDateTo.Text).AddDays(1);
@@ -524,7 +524,7 @@ namespace DashboardTTS.Webform.Laser
 
             return dataSeries_JobOutPut;
         }
-        public Series StatusSeries(List<Common.Model.LMMSEventLog_Model.EventLogModelForChart> models)
+        public Series StatusSeries(List<Common.Model.LMMSEventLog_Model.Detail> models)
         {
             var result = from a in models
                          group a by a.status into dayList

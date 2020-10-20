@@ -11,19 +11,19 @@ namespace DashboardTTS.Controllers
     public class LASER_ProductController : Controller
     {
         private readonly ViewBusiness.LaserProduction vBLL = new ViewBusiness.LaserProduction();
-        private JavaScriptSerializer _js = new JavaScriptSerializer();
+        private readonly Common.ExtendClass.LaserInventory.LaserInventory_BLL _inventoryBLL = new Common.ExtendClass.LaserInventory.LaserInventory_BLL();
 
-        
+
         #region View
-        public ActionResult Index()
-        {
-            return View();
-        }
         public ActionResult SummaryReport()
         {
             return View();
         }
-        public ActionResult MachineDailyReport()
+        public ActionResult InventoryReport()
+        {
+            return View();
+        }
+        public ActionResult DailyReport()
         {
             return View();
         }
@@ -61,8 +61,44 @@ namespace DashboardTTS.Controllers
         #endregion
 
 
+        public JsonResult GetInventoryList()
+        {
+            return Json(_inventoryBLL.GetInventoryList());
+        }
 
-        #region Machine Daily Output
+
+
+        #region Laesr Daily Report
+        //暂时不用
+        public JsonResult GetDailyMain()
+        {
+            DateTime dDay = DateTime.Parse(Request.Form["Day"]);
+
+
+            Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL bll = new Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL();
+            return Json(bll.GetMainList(dDay));
+        }
+
+
+        public JsonResult GetDailyDetailOutput()
+        {
+            DateTime dDay = DateTime.Parse(Request.Form["Day"]);
+            string sMachineID = Request.Form["MachineID"];
+            string sShift = Request.Form["Shift"];
+
+            Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL bll = new Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL();
+            return Json(bll.GetDetailOutputList(dDay, sShift, sMachineID));
+        }
+
+        public JsonResult GetDailyDetailStatus()
+        {
+            DateTime dDay = DateTime.Parse(Request.Form["Day"]);
+            string sMachineID = Request.Form["MachineID"];
+            string sShift = Request.Form["Shift"];
+
+            Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL bll = new Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL();
+            return Json(bll.GetDetailStatusList(dDay, sShift, sMachineID));
+        }
 
 
 

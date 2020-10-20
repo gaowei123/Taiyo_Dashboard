@@ -15,57 +15,22 @@ namespace Common.DAL
         { }
       
 
-        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift)
+        public SqlCommand DeleteJob(string sJobNo)
         {
+            if (string.IsNullOrEmpty(sJobNo))
+                throw new ArgumentNullException("Job No can not be empty!");
 
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(" select * from LMMSWatchDog_Shift where 1=1 and day >= @dateFrom and day < @dateTo ");
 
-            if (sShift != "")
-            {
-                strSql.Append(" and  shift = @shift ");
-            }
-        
+            string str = "delete from lmmswatchlog where jobNumber = @jobNo";
             SqlParameter[] parameters = {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@shift",SqlDbType.VarChar,50)
+                new SqlParameter("@jobNo",SqlDbType.VarChar)
             };
+            parameters[0].Value = sJobNo;
 
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-            if (sShift != "") parameters[2].Value = sShift; else parameters[2] = null;
-
-
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }else
-            {
-                return ds.Tables[0];
-            }
-
+            return  DBHelp.SqlDB.generateCommand(str, parameters);
         }
 
    
-        public DataSet Exists(string sJobNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(" select * from LMMSWatchLog ");
-            strSql.Append(" where jobnumber = @jobnumber ");
-            SqlParameter[] parameters = {
-                new SqlParameter("@jobnumber",SqlDbType.VarChar,50)
-            };
-            parameters[0].Value = sJobNumber;
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
         
 
         public SqlCommand UpdateJobMaintenanceCMD(Common.Model.LMMSWatchLog_Model model)
@@ -1691,29 +1656,7 @@ group by a.partNumber, a.materialNo  ");
 
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
         }
-
-
-
-
-        public DataTable asdf()
-        {
-            StringBuilder strSql = new StringBuilder();
-
-
-            strSql.Append(@"   select top 10  * from View_1  ");
-
-
-
-          
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
-
-
-            return ds.Tables[0];
-        }
-
-
-
+         
 
     }
     #endregion

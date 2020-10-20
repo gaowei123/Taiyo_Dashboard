@@ -9,216 +9,57 @@ namespace DashboardTTS.UserControl
 {
     public partial class WebUserControlPQCStatus : System.Web.UI.UserControl
     {
-
-        public class MachineStatus
-        {
-            public const string Checking = "Checking";
-            public const string Packing = "Packing";
-            public const string NoWIP = "No Schedule";
-            public const string ShutDown = "ShutDown";
-        }
-
-
-        #region property
-
-        private string _station = "";
-        public string Station
-        {
-            get
-            {
-                return _station;
-            }
-            set
-            {
-                _station = value;
-                this.lbStation.Text = value;
-            }
+        public class UIModel {
+            public string Station { get; set; }
+            public string Status { get; set; }
+            public string LotNo { get; set; }
+            public string JobNo { get; set; }
+            public string PartNo { get; set; }
+            public double LotQty { get; set; }
+            public double OK { get; set; }
+            public double NG { get; set; }
+            public double RejRate { get; set; }
+            public string Operator { get; set; }
+          
         }
         
-
-        private string _status = MachineStatus.ShutDown;
-        public string Status
+        public void SetUI(UIModel model)
         {
-            get
-            {
-                return _status;
-            }
-            set
-            {
-                _status = value;
-                this.lbStatus.Text = _status.ToString();
-                switch (_status)
-                {
-                    case (MachineStatus.NoWIP):
-                        this.lbStatus.BackColor = StaticRes.McStatusColor.NoWIP;
-                        break;
-                    case (MachineStatus.Checking):
-                        this.lbStatus.BackColor = StaticRes.McStatusColor.Operating;
-                        break;
-                    case (MachineStatus.Packing):
-                        this.lbStatus.BackColor = StaticRes.McStatusColor.Operating;
-                        break;
-                    case (MachineStatus.ShutDown):
-                        this.lbStatus.BackColor = StaticRes.McStatusColor.ShutDown;
-                        break;
-                }
-            }
+            this.lbStation.Text = model.Station;
+            this.lbStatus.Text = model.Status;
+            this.lbLotNo.Text = model.LotNo;
+            this.lbJobNo.Text = model.JobNo;
+            this.lbPartNo.Text = model.PartNo;
+            this.lbLotQty.Text = model.LotQty.ToString();
+            this.lbOK.Text = model.OK.ToString();
+            this.lbNG.Text = model.NG.ToString();
+            this.lbRejRate.Text = model.RejRate.ToString("0.00")+ "%";
+            this.lbOP.Text = model.Operator;
+            
+            this.lbStatus.BackColor = GetStatusColor(model.Status);
         }
-
-        private string _lotno = "";
-        public string LotNo
+        
+        private System.Drawing.Color GetStatusColor(string status)
         {
-            get
+            System.Drawing.Color statusColor = new System.Drawing.Color();
+            switch (status)
             {
-                return _lotno;
-            }
-            set
-            {
-                _lotno = value;
-                this.lbLotno.Text = _lotno.Trim();
-            }
-        }
+                case StaticRes.Global.PQCStatus.Checking:
+                case StaticRes.Global.PQCStatus.Packing:              
+                    statusColor = StaticRes.PQCStautsColor.Run;
+                    break;
+                case StaticRes.Global.PQCStatus.NoSchedule:
+                    statusColor = StaticRes.PQCStautsColor.NoSchedule;
+                    break;
+                case StaticRes.Global.PQCStatus.Shutdown:
+                    statusColor = StaticRes.PQCStautsColor.Shutdown;
+                    break;
 
-        private string _jobID = "";
-        public string JobID
-        {
-            get
-            {
-                return _jobID;
+                default:
+                    throw new NullReferenceException("no such status " + status);
             }
-            set
-            {
-                _jobID = value;
-                this.lbJobNumber.Text = _jobID.Trim();
-            }
-        }
 
-        private string _partNo = "";
-        public string PartNo
-        {
-            get
-            {
-                return _partNo;
-            }
-            set
-            {
-                _partNo = value;
-                this.lbPartNo.Text = _partNo.Trim();
-            }
-        }
-
-        private double _totalQtyCurrent = 0;
-        public double TotalQtyCurrent
-        {
-            get
-            {
-                return _totalQtyCurrent;
-            }
-            set
-            {
-                _totalQtyCurrent = value;
-                this.lbLotQty.Text = _totalQtyCurrent.ToString().Trim();
-            }
-        }
-
-
-
-
-        private double _okQtyCurrent = 0;
-        public double OkQtyCurrent
-        {
-            get
-            {
-                return _okQtyCurrent;
-            }
-            set
-            {
-                _okQtyCurrent = value;
-                this.lbOK.Text = _okQtyCurrent.ToString().Trim();
-            }
-        }
-
-
-        private double _ngQtyCurrent = 0;
-        public double NgQtyCurrent
-        {
-            get
-            {
-                return _ngQtyCurrent;
-            }
-            set
-            {
-                _ngQtyCurrent = value;
-                this.lbNG.Text = _ngQtyCurrent.ToString().Trim();
-            }
-        }
-
-        private string _Rejrate = "";
-        public string Rejrate
-        {
-            get
-            {
-                return _Rejrate;
-            }
-            set
-            {
-                _Rejrate = value;
-                this.lbRejRate.Text = _Rejrate.Trim();
-            }
-        }
-
-        private double _RejPPM = 0.0;
-        public double RejPPM
-        {
-            get
-            {
-                return _RejPPM;
-            }
-            set
-            {
-                _RejPPM = value;
-                this.lbRejPPM.Text = _RejPPM.ToString().Trim(); //+ "%";
-            }
-        }
-
-        private string _imageUrl = "";
-        public string ImageUrl
-        {
-            get
-            {
-                return _imageUrl;
-            }
-            set
-            {
-                _imageUrl = value;
-                imgLogo.ImageUrl = _imageUrl;
-            }
-        }
-
-        private string _operator = "";
-        public string Operator
-        {
-            get
-            {
-                return _operator;
-            }
-            set
-            {
-                _operator = value;
-                this.lbOperator.Text = _operator;
-            }
-        }
-
-
-
-
-
-
-        #endregion
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-           
+            return statusColor;
         }
     }
 }

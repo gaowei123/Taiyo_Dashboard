@@ -135,7 +135,7 @@ namespace DashboardTTS.Webform.Laser
         {
             try
             {
-                string sPartsName = this.txtPartName.Text.Trim();
+                string sPartsName = "";// this.txtPartName.Text.Trim();
 
 
                 Common.Class.BLL.LMMSSparePartsInventory_BLL bll = new Common.Class.BLL.LMMSSparePartsInventory_BLL();
