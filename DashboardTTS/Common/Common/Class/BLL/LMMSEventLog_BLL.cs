@@ -16,173 +16,7 @@ namespace Common.BLL
         private readonly Common.DAL.LMMSEventLog_DAL dal = new Common.DAL.LMMSEventLog_DAL();
         public LMMSEventLog_BLL()
         { }
-        #region  Method
-        /// <summary>
-        /// 是否存在该记录
-        /// </summary>
-        public bool Exists()
-        {
-            DataSet ds = new DataSet();
-            ds = dal.Exists();
-            if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// 增加一条数据
-        /// </summary>
-        public int Add(Common.Model.LMMSEventLog_Model model)
-        {
-            return dal.Add(model);
-        }
-
-        /// <summary>
-        /// 增加一条数据
-        /// </summary>
-        public SqlCommand AddCommand(Common.Model.LMMSEventLog_Model model)
-        {
-            return dal.AddCommand(model);
-        }
-
-        /// <summary>
-        /// 更新一条数据
-        /// </summary>
-        public bool Update(Common.Model.LMMSEventLog_Model model)
-        {
-            return dal.Update(model);
-        }
-
-        /// <summary>
-        /// 更新一条数据
-        /// </summary>
-        public SqlCommand UpdateCommand(Common.Model.LMMSEventLog_Model model)
-        {
-            return dal.UpdateCommand(model);
-        }
-
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public bool Delete(int id)
-        {
-
-            return dal.Delete(id);
-        }
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public bool DeleteList(string idlist)
-        {
-            return dal.DeleteList(idlist);
-        }
-
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public SqlCommand DeleteCommand(int id)
-        {
-
-            return dal.DeleteCommand(id);
-        }
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public SqlCommand DeleteAllCommand()
-        {
-
-            return dal.DeleteAllCommand();
-        }
-
-        /// <summary>
-        /// 得到一个对象实体
-        /// </summary>
-        public Common.Model.LMMSEventLog_Model GetModel(int id)
-        {
-
-            return dal.GetModel(id);
-        }
-
-
-        /// <summary>
-        /// 获得数据列表
-        /// </summary>
-        public List<Common.Model.LMMSEventLog_Model> DataTableToList(DataTable dt)
-        {
-            List<Common.Model.LMMSEventLog_Model> modelList = new List<Common.Model.LMMSEventLog_Model>();
-            int rowsCount = dt.Rows.Count;
-            if (rowsCount > 0)
-            {
-                Common.Model.LMMSEventLog_Model model;
-                for (int n = 0; n < rowsCount; n++)
-                {
-                    model = new Common.Model.LMMSEventLog_Model();
-                    if (dt.Rows[n]["id"].ToString() != "")
-                    {
-                        model.id = int.Parse(dt.Rows[n]["id"].ToString());
-                    }
-                    if (dt.Rows[n]["dateTime"].ToString() != "")
-                    {
-                        model.dateTime = DateTime.Parse(dt.Rows[n]["dateTime"].ToString());
-                    }
-                    model.machineID = dt.Rows[n]["machineID"].ToString();
-                    model.currentOperation = dt.Rows[n]["currentOperation"].ToString();
-                    model.ownerID = dt.Rows[n]["ownerID"].ToString();
-                    model.eventTrigger = dt.Rows[n]["eventTrigger"].ToString();
-                    if (dt.Rows[n]["startTime"].ToString() != "")
-                    {
-                        model.startTime = DateTime.Parse(dt.Rows[n]["startTime"].ToString());
-                    }
-                    if (dt.Rows[n]["stopTime"].ToString() != "")
-                    {
-                        model.stopTime = DateTime.Parse(dt.Rows[n]["stopTime"].ToString());
-                    }
-                    model.ipSetting = dt.Rows[n]["ipSetting"].ToString();
-                    modelList.Add(model);
-                }
-            }
-            return modelList;
-        }
-
-
-
-        /// <summary>
-        /// 分页获取数据列表
-        /// </summary>
-        //public DataSet GetList(int PageSize,int PageIndex,string strWhere)
-        //{
-        //return dal.GetList(PageSize,PageIndex,strWhere);
-        //}
-
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public Common.Model.LMMSEventLog_Model CopyObj(Common.Model.LMMSEventLog_Model objModel)
-        {
-            Common.Model.LMMSEventLog_Model model;
-            model = new Common.Model.LMMSEventLog_Model();
-            model.id = objModel.id;
-            model.dateTime = objModel.dateTime;
-            model.machineID = objModel.machineID;
-            model.currentOperation = objModel.currentOperation;
-            model.ownerID = objModel.ownerID;
-            model.eventTrigger = objModel.eventTrigger;
-            model.startTime = objModel.startTime;
-            model.stopTime = objModel.stopTime;
-            model.ipSetting = objModel.ipSetting;
-            return model;
-        }
-
-
-        #endregion  Method
-
         
-
 
         bool IsRightShift(DateTime dt, string shift)
         {
@@ -235,8 +69,7 @@ namespace Common.BLL
 
             return result;
         }
-
-    
+        
         bool IsDateTimeIn(DateTime dTime, string sDateNotIn, DateTime dTimeFrom, bool bExceptWeekend)
         {
             bool Result = false;
@@ -283,8 +116,7 @@ namespace Common.BLL
             }
             return Result;
         }
-
-
+        
         public DataTable GetTodayList()
         {
             DataSet ds = dal.GetTodayList();
@@ -503,12 +335,7 @@ namespace Common.BLL
             }
 
         }
-
-      
-
-       
-
-
+        
         public double GetStatusTime(DateTime dDay, string sShift, string sMachineID, params string[] sStatus)
         {
             DateTime dDateFrom = new DateTime();

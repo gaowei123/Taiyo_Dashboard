@@ -233,6 +233,9 @@
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
+    <Compile Include="ExtendClass\Home\Home_BLL.cs" />
+    <Compile Include="ExtendClass\Home\Home_DAL.cs" />
+    <Compile Include="ExtendClass\Home\Home_Model.cs" />
     <Compile Include="ExtendClass\LaserActivityChart\LaserActivityChart_BLL.cs" />
     <Compile Include="ExtendClass\LaserActivityChart\LaserActivityChart_Model.cs" />
     <Compile Include="ExtendClass\LaserDailyReport\LaserDailyReport_BLL.cs" />

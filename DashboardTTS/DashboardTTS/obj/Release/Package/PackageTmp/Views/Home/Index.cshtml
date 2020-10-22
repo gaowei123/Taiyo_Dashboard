@@ -1,245 +1,573 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
+
+
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+<script src="~/Dashboard CSS JS/JS/HomePage.js"></script>
 <link href="~/Dashboard CSS JS/CSS/HomePage.css" rel="stylesheet" />
 
 
 
 
-<div class="container-fluid" style="width:1900px;">
+<div class="container-fluid" style="width:1500px;">
+
     <div class="row topTitleRow">
         <div class="col-md-9">
             <img class="titleImg" src="~/Resources/Images/headericon.gif" />
             <span>Production Home Page</span>
         </div>
         <div class="col-md-3">
-            <label id="lbDate" style="color:white; width:100%; text-align:right;"></label>
+            <label id="lbTime" style="color:white; width:100%; text-align:right;"></label>
         </div>
     </div>
 
 
-
-    <div class="row panel panel-default" style="margin-top:10px; padding:0px;">
-        <div class="col-sm-12 col-md-12">
-
-            @*标题行*@
-            <div class="row secondTitleRow">
-                <div class="col-md-1">
-                    <label>Section</label>
-                </div>
-                <div class="col-md-1">
-                    <label>Real Output</label>
-                </div>
-                <div class="col-md-1">
-                    <label>Real Inventory</label>
-                </div>
-                <div class="col-md-1">
-                    <label>Utilization</label>
-                </div>
-                <div class="col-md-8">
-                    <label>Operating Status</label>
-                </div>
-            </div>
-
-
-            @*moulding*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divMouldingSection" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divMouldingOutput" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divMouldingInventory" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div id="divMouldingMachineStatus" class="col-md-8"></div>
-            </div>
-
-
-            @*painting*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divPaintingSection" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divPaintingOutput" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divPaintingInventory" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div id="divPaintingMachineStatus" class="col-md-8"></div>
-            </div>
-
-
-            @*laser*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divLaserSection" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divLaserOutput" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divLaserInventory" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div id="divLaserMachineStatus" class="col-md-8"></div>
-            </div>
-
-
-            @*pqc online*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divOnlineSection" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divOnlineOutput" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div id="divOnlineInventory" class="cell"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div id="divOnlineMachineStatus" class="col-md-8"></div>
-            </div>
-
-
-            @*pqc wip*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divWIPSection"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divWIPOutput"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divWIPInventory"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div class="col-md-8" id="divWIPMachineStatus"></div>
-            </div>
-
-
-            @*pqc packing*@
-            <div class="row divRowBorder">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divPackSection"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divPackOutput"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell" id="divPackInventory"></div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">NA</div>
-                    </div>
-                </div>
-                <div class="col-md-8" id="divPackMachineStatus"></div>
-            </div>
-
-
-            @*assmbly*@
-            <div class="row">
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">
-                            Assembly
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">
-                            NA
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">
-                            NA
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-1 divColBorder">
-                    <div class="wrapper">
-                        <div class="cell">
-                            NA
-                        </div>
-                    </div>
-                </div>
-                <div id="divAssyMachineStatus" class="col-md-8"></div>
-            </div>
-
-
+    <div class="row">
+        <div class="col-sm-9" style="margin:0px;padding:0px;">
+            <div id="divOutputTrendChart" class="area areaL areaChart"></div>
+        </div>
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div id="divDayPieChart" class="area areaR areaChart"></div>
         </div>
     </div>
 
 
+    <div class="row">
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div class="area areaL">
+                <h4 class="statusTitle">Moulding</h4>
 
+                <div class="row">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divMouldingContain">
+                        <div class="divController run" id="ctrl">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController idle">
+                            <span class="statusFont">MC.2</span><br /><span class="statusFont">No Schedule</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.3</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.4</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.5</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController breakdown">
+                            <span class="statusFont">MC.6</span><br /><span class="statusFont">Breakdown</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.7</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.8</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.9</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        <div class="col-sm-3" style="margin:0px;padding:0px;">
+            <div class="area areaM">
+                <h4 class="statusTitle">Laser</h4>
+
+                <div class="row">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divLaserContain">
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController idle">
+                            <span class="statusFont">MC.2</span><br /><span class="statusFont">No Schedule</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.3</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.4</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.5</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController breakdown">
+                            <span class="statusFont">MC.6</span><br /><span class="statusFont">Breakdown</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.7</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.8</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6" style="margin:0px;padding:0px;">
+            <div class="area areaR">
+                <h4 class="statusTitle">PQC</h4>
+
+                <div class="row" style="margin:auto;">
+                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divPQCContain">
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                        <div class="divController run">
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
-<script src="~/Dashboard CSS JS/JS/HomePage.js"></script>
+<script>
+    var apiGetTrendChartData = window.globalConfig.rootDirectory + '/Charts/GetHomeTrendData';
+    var apiGetPieChartData = window.globalConfig.rootDirectory + '/Charts/GetTotalPieChartData';
+    var apiGetMouldStatus = window.globalConfig.rootDirectory + '/Home/GetMouldStatus';
+    var apiGetLaserStatus = window.globalConfig.rootDirectory + '/Home/GetLaserStatus';
+    var apiGetPQCStatus = window.globalConfig.rootDirectory + '/Home/GetPQCStatus';
+
+    //init chart
+    var trendChart = echarts.init(document.getElementById('divOutputTrendChart'));
+    var pieChart = echarts.init(document.getElementById('divDayPieChart'));
+
+
+
+    $(document).ready(function () {
+
+        generateTrendChart();
+
+        generatePieChart();
+
+        generateMouldStatus();
+
+        generateLaserStatus();
+
+        generatePQCStatus();
+
+        generateLabelTime();
+
+
+        //5min 刷新
+        setInterval("generateTrendChart()", 300000);
+        setInterval("generatePieChart()", 300000);
+
+        //30s 刷新
+        setInterval("generateMouldStatus()", 30000);
+        setInterval("generateLaserStatus()", 30000);
+        setInterval("generatePQCStatus()", 30000);
+
+        //1min 刷新
+        setInterval("generateLabelTime()", 60000);
+    });
+
+
+
+
+
+
+    function generateLabelTime() {
+        var strDate = dateFormat('dd/MM/yyyy HH:mm', new Date());
+        $('#lbTime').text(strDate);
+    }
+
+    function generateTrendChart() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetTrendChartData,
+            data: {},
+
+            beforeSend: function () {
+                trendChart.showLoading();
+            },
+
+            success: function (data) {
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('There is no record found, Please try again!');
+                    return false;
+                }
+
+                var series = [];
+                for (var i = 0; i < data.SeriesData.length; i++) {
+                    series.push({
+                        name: data.SeriesData[i].Name,
+                        type: data.SeriesData[i].Type,
+                        data: data.SeriesData[i].Data,
+                        label: {
+                            show: true,
+                        }
+                    });
+                }
+
+                var option = {
+                    title: {
+                        text: 'Production Daily Output Trend'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'line'
+                        }
+                    },
+                    legend: {
+                        data: data.LegendData,
+                        show: true
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: data.XAxisData
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: series
+                };
+
+                trendChart.clear();
+                trendChart.setOption(option, true);
+            },
+
+            complete: function () {
+                trendChart.hideLoading();
+                trendChart.resize({ height: 300 });
+            },
+
+            error: function () {
+                alert("Get chart data error !");
+                trendChart.hideLoading();
+            }
+        });
+    }
+
+    function generatePieChart() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetPieChartData,
+            data: {},
+
+            beforeSend: function () {
+                pieChart.showLoading();
+            },
+
+            success: function (data) {
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('There is no record found, Please try again!');
+                    return false;
+                }
+
+                var totalOutput = 0;
+
+                var seriesData = [];
+                for (var i = 0; i < data.length; i++) {
+                    seriesData.push({
+                        name: data[i].Department,
+                        value: data[i].Output
+                    });
+
+                    totalOutput += Number(data[i].Output);
+                }
+
+                var option = {
+                    title: {
+                        text: 'Today Output: ' + totalOutput,
+                        //subtext: '纯属虚构',
+                        left: 'left'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    },
+                    legend: {
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 0,
+                        top: 20,
+                        bottom: 20,
+                        data: ['Moulding', 'Laser', 'Online', 'WIP', 'Packing']
+                    },
+                    series: [
+                        {
+                            name: 'Output',
+                            type: 'pie',
+                            radius: '60%',
+                            center: ['43%', '55%'],
+                            data: seriesData,
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 30,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+
+                pieChart.clear();
+                pieChart.setOption(option, true);
+            },
+
+            complete: function () {
+                pieChart.hideLoading();
+                pieChart.resize({ height: 300 });
+            },
+
+            error: function () {
+                alert("Get pie chart data error !");
+                pieChart.hideLoading();
+            }
+        });
+    }
+
+    function generateMouldStatus() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetMouldStatus,
+            data: {},
+
+            beforeSend: function () {
+                $("#divMouldingContain").empty();
+                var strHtml = ' <div class="row text-center">\
+                                    <i class="fa fa-spinner fa-spin fa-5x"></i>\
+                                </div>';
+                $("#divMouldingContain").append(strHtml);
+            },
+
+            success: function (data) {
+
+                $("#divMouldingContain").empty();
+
+                for (var i = 1; i < 10; i++) {
+
+                    var strMc = 'Mc.' + i;
+                    var strStatus = data[i].toUpperCase();
+
+                    var classStatus = '';
+                    if (strStatus == 'RUNNING' || strStatus == 'ADJUSTMENT' || strStatus == 'CHANGE MODEL' || strStatus == 'MOULD TESTING' || strStatus=='MATERIAL TESTING') {
+                        classStatus = 'run';
+                    } else if (strStatus == 'NO_SCHEDULE' || strStatus == "NO OPERATOR" || strStatus == "NO MATERIAL" || strStatus == "LOGIN LATE" || strStatus == 'BREAK TIME') {
+                        classStatus = 'idle';
+                    } else if (strStatus == 'DAMAGEMOULD') {
+                        classStatus = 'breakdown';
+                    } else {
+                        classStatus = 'shutdown';
+                    }
+
+
+                    var strHtml = ' <div class="divController ' + classStatus + '">\
+                                        <span class="statusFont">' + strMc + '</span><br /><span class="statusFont">' + strStatus + '</span>\
+                                    </div>';
+                    $("#divMouldingContain").append(strHtml);
+                }
+
+
+            },
+
+            complete: function () {
+
+            },
+
+            error: function () {
+                alert("Get mould status data error !");
+            }
+        });
+    }
+
+    function generateLaserStatus() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetLaserStatus,
+            data: {},
+
+            beforeSend: function () {
+                $("#divLaserContain").empty();
+                var strHtml = ' <div class="row text-center">\
+                                    <i class="fa fa-spinner fa-spin fa-5x"></i>\
+                                </div>';
+                $("#divLaserContain").append(strHtml);
+            },
+
+            success: function (data) {
+
+                $("#divLaserContain").empty();
+
+                for (var i = 1; i < 9; i++) {
+
+                    var strMc = 'Mc.' + i;
+                    var strStatus = data[i];
+
+                    var classStatus = '';
+                    if (strStatus == 'RUN' || strStatus == 'TESTING' || strStatus == 'SETUP' || strStatus == 'BUYOFF') {
+                        classStatus = 'run';
+                    } else if (strStatus == 'NO SCHEDULE' || strStatus == "MAINTAINENCE") {
+                        classStatus = 'idle';
+                    } else if (strStatus == 'BREAKDOWN') {
+                        classStatus = 'breakdown';
+                    } else {
+                        classStatus = 'shutdown';
+                    }
+
+
+                    var strHtml = ' <div class="divController ' + classStatus + '">\
+                                        <span class="statusFont">' + strMc + '</span><br /><span class="statusFont">' + strStatus + '</span>\
+                                    </div>';
+                    $("#divLaserContain").append(strHtml);
+                }
+            },
+
+            complete: function () {
+
+            },
+
+            error: function () {
+                alert("Get laser status data error !");
+            }
+        });
+    }
+
+    function generatePQCStatus() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetPQCStatus,
+            data: {},
+
+            beforeSend: function () {
+                $("#divPQCContain").empty();
+                var strHtml = ' <div class="row text-center">\
+                                    <i class="fa fa-spinner fa-spin fa-5x"></i>\
+                                </div>';
+                $("#divPQCContain").append(strHtml);
+            },
+
+            success: function (data) {
+
+                $("#divPQCContain").empty();
+                for (var i = 0; i < data.length; i++) {
+
+                    var strMc = 'Sta.' + (i + 1);
+                    var strStatus = data[i].Status;
+
+                    var classStatus = '';
+                    if (strStatus == 'CHECKING' || strStatus == 'PACKING') {
+                        classStatus = 'run';
+                    } else if (strStatus == 'NO SCHEDULE') {
+                        classStatus = 'idle';
+                    } else {
+                        classStatus = 'shutdown';
+                    }
+
+
+                    var strHtml = ' <div class="divController ' + classStatus + '">\
+                                        <span class="statusFont">' + strMc + '</span><br /><span class="statusFont">' + strStatus + '</span>\
+                                    </div>';
+                    $("#divPQCContain").append(strHtml);
+                }
+            },
+
+            complete: function () {
+
+            },
+
+            error: function () {
+                alert("Get pqc status data error !");
+            }
+        });
+    }
+
+
+
+
+    $(window).resize(function () {
+        trendChart.resize({ height: 300 });
+        pieChart.resize({ height: 300 });
+    });
+
+</script>

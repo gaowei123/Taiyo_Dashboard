@@ -12,30 +12,14 @@ namespace MyChart
     {
         public  MyChart.IChartMethod CreateInstance(string sChartName)
         {
-            if (sChartName == "LaserMachine")
-            {
-                return new ConcreteChartMethod.LaserMachine();               
-            }
-            else if (sChartName == "LaserProduction")
-            {
-                return new ConcreteChartMethod.LaserProduction();
-            }
-            else if (sChartName == "PQCProduction")
-            {
-                return new ConcreteChartMethod.PQCProduction();
-            }
-            else if (sChartName == "PQCOperator")
-            {
-                return new ConcreteChartMethod.PQCOperator();
-            }
-            else if (sChartName == "Activity")
-            {
-                return new ConcreteChartMethod.LaserMachineActivity();
-            }
-            else
-            {
-                throw new NullReferenceException();
-            }
+            string name = "MyChart.ConcreteChartMethod." + sChartName;
+
+
+            //加载程序集，创建程序集里面的 命名空间.类型名 实例
+            object obj = Assembly.GetExecutingAssembly().CreateInstance(name, true, System.Reflection.BindingFlags.Default, null, null, null, null);
+
+            IChartMethod chart = (IChartMethod)obj;
+            return chart;
         }
     }
 }

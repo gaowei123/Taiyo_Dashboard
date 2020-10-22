@@ -127,12 +127,7 @@
 
             success: function (data) {
 
-                console.log(data);
-
-
-
                 var series = [];
-
                 for (var i = 0; i < data.SeriesData.length; i++) {
                     series.push({
                         name: data.SeriesData[i].Name,
@@ -148,6 +143,30 @@
                                 } else {
                                     return data.data;
                                 }
+                            },
+                            color:'black'
+                        },
+                        itemStyle: {
+                            color: function (para) {
+                                if (para.seriesName == 'RUN') {
+                                    return window.globalConfig.laserColor[0];
+                                } else if (para.seriesName == 'SETUP') {
+                                    return window.globalConfig.laserColor[1];
+                                } else if (para.seriesName == 'BUYOFF') {
+                                    return window.globalConfig.laserColor[2];
+                                } else if (para.seriesName == 'TESTING') {
+                                    return window.globalConfig.laserColor[3];
+                                } else if (para.seriesName == 'NO SCHEDULE') {
+                                    return window.globalConfig.laserColor[4];
+                                }else if (para.seriesName == 'MAINTAINENCE') {
+                                    return window.globalConfig.laserColor[5];
+                                } else if (para.seriesName == 'BREAKDOWN') {
+                                    return window.globalConfig.laserColor[6];
+                                } else if (para.seriesName == 'SHUTDOWN') {
+                                    return window.globalConfig.laserColor[7];
+                                } else {
+                                    return window.globalConfig.laserColor[7];
+                                }                               
                             }
                         }
                     });
@@ -155,7 +174,7 @@
 
 
                 option = {
-                    //color: window.globalConfig.laserColor,
+                    color: window.globalConfig.laserColor,
                     title: {
                         text: ''
                     },
@@ -166,7 +185,7 @@
                         }
                     },
                     legend: {
-                        data: data.LegendData
+                        data: data.LegendData                     
                     },
                     grid: {
                         left: '3%',

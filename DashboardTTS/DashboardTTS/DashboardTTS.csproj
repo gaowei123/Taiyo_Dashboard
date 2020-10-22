@@ -237,7 +237,6 @@
     <Compile Include="ViewBusiness\Attendance_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\ButtonReport_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\Buyoff_ViewBusiness.cs" />
-    <Compile Include="ViewBusiness\HomePage_ViewBusiness.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LASER_MachineSettingController.cs" />
@@ -3720,7 +3719,6 @@
     <Content Include="Views\LASER_Product\InventoryReport.cshtml" />
     <Content Include="Views\Charts\LaserMachineActivityChart.cshtml" />
     <Content Include="Views\LASER_Product\DailyReport.cshtml" />
-    <Content Include="Views\Home\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
