@@ -1464,6 +1464,10 @@ namespace DashboardTTS.ViewBusiness
 
                         model.partNo = dr["partNumber"].ToString();
                         model.process = dr["Process"].ToString();
+
+
+                    
+
                         model.mouldRej = double.Parse(dr["MouldRej"].ToString());
                         model.paintRej = double.Parse(dr["PaintRej"].ToString());
                         model.laserRej = double.Parse(dr["LaserRej"].ToString());
@@ -1472,6 +1476,15 @@ namespace DashboardTTS.ViewBusiness
                         model.passQty = double.Parse(dr["acceptQty"].ToString());
                         model.rejPrice = double.Parse(dr["rejPrice"].ToString());
                         model.userID = dr["userID"].ToString();
+
+
+
+                        //莫名其妙 要加2列checking, packing. 显示output
+                        model.checking = model.passQty + model.totalRej;
+                        model.packing = 0;
+                        //莫名其妙 要加2列checking, packing. 显示output
+
+
 
                         model.materialCount = int.Parse(dr["materialCount"].ToString());
 
@@ -1517,6 +1530,11 @@ namespace DashboardTTS.ViewBusiness
                         model.rejPrice = double.Parse(dr["rejPrice"].ToString());
                         model.userID = dr["userID"].ToString();
 
+
+                        //莫名其妙 要加2列checking, packing. 显示output
+                        model.checking = 0;
+                        model.packing = model.passQty + model.totalRej;
+                        //莫名其妙 要加2列checking, packing. 显示output
 
 
                         model.materialCount = int.Parse(dr["materialCount"].ToString());
@@ -1579,6 +1597,12 @@ namespace DashboardTTS.ViewBusiness
                 summaryModel.passQty = reportList.Sum(p => p.passQty);
                 summaryModel.rejPrice = reportList.Sum(p => p.rejPrice);
                 summaryModel.operatedTime = Common.CommFunctions.ConvertDateTimeShort(reportList.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.operatedTime)).ToString());
+
+
+                //莫名其妙 要加2列checking, packing. 显示output
+                summaryModel.checking = reportList.Sum(p => p.checking);
+                summaryModel.packing = reportList.Sum(p => p.packing);
+                //莫名其妙 要加2列checking, packing. 显示output
 
 
                 reportList.Add(summaryModel);

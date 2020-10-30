@@ -7,90 +7,108 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace DashboardTTS.Webform.Molding {
+namespace DashboardTTS.UserControl {
     
     
-    public partial class MachineRealStatus {
+    public partial class UcMoulding {
         
         /// <summary>
-        /// uc1 控件。
+        /// lbMachineID 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc1;
+        protected global::System.Web.UI.WebControls.Label lbMachineID;
         
         /// <summary>
-        /// uc2 控件。
+        /// lbPartNo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc2;
+        protected global::System.Web.UI.WebControls.Label lbPartNo;
         
         /// <summary>
-        /// uc3 控件。
+        /// lbStatus 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc3;
+        protected global::System.Web.UI.WebControls.Label lbStatus;
         
         /// <summary>
-        /// uc4 控件。
+        /// lbModel 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc4;
+        protected global::System.Web.UI.WebControls.Label lbModel;
         
         /// <summary>
-        /// uc5 控件。
+        /// imgLogo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc5;
+        protected global::System.Web.UI.WebControls.Image imgLogo;
         
         /// <summary>
-        /// uc6 控件。
+        /// lbJigNo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc6;
+        protected global::System.Web.UI.WebControls.Label lbJigNo;
         
         /// <summary>
-        /// uc7 控件。
+        /// lbTotalQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc7;
+        protected global::System.Web.UI.WebControls.Label lbTotalQty;
         
         /// <summary>
-        /// uc8 控件。
+        /// lbOKQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc8;
+        protected global::System.Web.UI.WebControls.Label lbOKQty;
         
         /// <summary>
-        /// uc9 控件。
+        /// lbNGQty 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.UcMoulding uc9;
+        protected global::System.Web.UI.WebControls.Label lbNGQty;
+        
+        /// <summary>
+        /// lbRejRate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbRejRate;
+        
+        /// <summary>
+        /// lbUsedRate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbUsedRate;
     }
 }

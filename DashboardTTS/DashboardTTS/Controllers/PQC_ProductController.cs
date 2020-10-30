@@ -556,7 +556,7 @@ namespace DashboardTTS.Controllers
             List<ViewModel.PQCOperatorDailyReport> modelList = vBLL.GetDailyOperatorList(date, shift, userID);
 
 
-            return Json(modelList);          
+            return Json(modelList);
         }
 
 

@@ -14,25 +14,18 @@ namespace Common.Class.DAL
 
         }
 
-        public DataSet SelectCurrentStatus()
+        public DataTable GetTodayList()
         {
-            DateTime CurrentDay = DateTime.Now.AddHours(-8).Date;
-            string CurrentShift = DateTime.Now >= CurrentDay.AddHours(8) && DateTime.Now < CurrentDay.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
-
-            string strSql = " Select * from MouldingMachineStatus where  Day = @Day and Shif = @Shift  ";
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@Day", SqlDbType.DateTime),
-                new SqlParameter("@Shift", SqlDbType.VarChar,16)
-            };
-
-            paras[0].Value = CurrentDay;
-            paras[1].Value = CurrentShift;
-
-            return DBHelp.SqlDB.Query(strSql, paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+            string strSql = @"select * from mouldingmachinestatus where convert(varchar, Day,102)  = convert(varchar, DATEADD(Hour, -8, getdate()), 102)";
+            
+            DataSet ds = DBHelp.SqlDB.Query(strSql, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
         }
-        
+
+       
         public DataSet SelectList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sShift)
         {
             StringBuilder strSql = new StringBuilder();

@@ -234,6 +234,13 @@
     <Compile Include="Controllers\OverallReportController.cs" />
     <Compile Include="Controllers\BomController.cs" />
     <Compile Include="Controllers\PQC_ProductController.cs" />
+    <Compile Include="UserControl\UcMoulding.ascx.cs">
+      <DependentUpon>UcMoulding.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControl\UcMoulding.ascx.designer.cs">
+      <DependentUpon>UcMoulding.ascx</DependentUpon>
+    </Compile>
     <Compile Include="ViewBusiness\Attendance_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\ButtonReport_ViewBusiness.cs" />
     <Compile Include="ViewBusiness\Buyoff_ViewBusiness.cs" />
@@ -274,13 +281,6 @@
     </Compile>
     <Compile Include="UserControl\WebUserControlMachineStatus.ascx.designer.cs">
       <DependentUpon>WebUserControlMachineStatus.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="UserControl\WebUserControlMouldingMachineStatus.ascx.cs">
-      <DependentUpon>WebUserControlMouldingMachineStatus.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="UserControl\WebUserControlMouldingMachineStatus.ascx.designer.cs">
-      <DependentUpon>WebUserControlMouldingMachineStatus.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControl\WebUserControlPQCStatus.ascx.cs">
       <DependentUpon>WebUserControlPQCStatus.ascx</DependentUpon>
@@ -2860,10 +2860,9 @@
     <Content Include="Service References\LMMS_Webservice\DashboardTTS.LMMS_Webservice.MRP_SearchResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="TempImages\temp.txt" />
     <Content Include="test.html" />
+    <Content Include="UserControl\UcMoulding.ascx" />
     <Content Include="UserControl\WebUserControlMachineStatus.ascx" />
-    <Content Include="UserControl\WebUserControlMouldingMachineStatus.ascx" />
     <Content Include="UserControl\WebUserControlPQCStatus.ascx" />
     <Content Include="UserControl\WebUserControlTimeBar.ascx" />
     <Content Include="Webform\MachineOEETimeBar.aspx" />
@@ -3715,13 +3714,15 @@
     <Content Include="Views\Charts\LaserProductionChart.cshtml" />
     <Content Include="Views\Charts\LaserMachineChart.cshtml" />
     <Content Include="Views\Charts\PQCProductionChart.cshtml" />
-    <Content Include="Views\Charts\PQCOperatorChart.cshtml" />
     <Content Include="Views\LASER_Product\InventoryReport.cshtml" />
     <Content Include="Views\Charts\LaserMachineActivityChart.cshtml" />
     <Content Include="Views\LASER_Product\DailyReport.cshtml" />
+    <Content Include="Views\Charts\PQCOperatorPerformanceChart.cshtml" />
+    <Content Include="Views\Charts\PQCOperatorSummaryChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="TempImages\" />
     <Folder Include="Views\Common\" />
   </ItemGroup>
   <ItemGroup>

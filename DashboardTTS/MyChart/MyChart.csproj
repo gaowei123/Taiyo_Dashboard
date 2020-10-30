@@ -45,6 +45,7 @@
     <Compile Include="ConcreteChartMethod\LaserMachineActivity.cs" />
     <Compile Include="ConcreteChartMethod\LaserProduction.cs" />
     <Compile Include="ConcreteChartMethod\PQCOperator.cs" />
+    <Compile Include="ConcreteChartMethod\PQCOperatorPerformance.cs" />
     <Compile Include="ConcreteChartMethod\PQCProduction.cs" />
     <Compile Include="IChartMethod.cs" />
     <Compile Include="ChartFactory.cs" />

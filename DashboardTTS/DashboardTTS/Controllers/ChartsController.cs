@@ -13,24 +13,24 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
         public ActionResult LaserMachineChart()
         {
             return View();
         }
-
         public ActionResult PQCProductionChart()
         {
             return View();
         }
-
-        public ActionResult PQCOperatorChart()
+      
+        public ActionResult LaserMachineActivityChart()
         {
             return View();
         }
-
-
-        public ActionResult LaserMachineActivityChart()
+        public ActionResult PQCOperatorPerformanceChart()
+        {
+            return View();
+        }
+        public ActionResult PQCOperatorSummaryChart()
         {
             return View();
         }
@@ -107,7 +107,7 @@ namespace DashboardTTS.Controllers
 
 
 
-
+        #region Home Page
         public JsonResult GetHomeTrendData()
         {
             Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
@@ -142,6 +142,8 @@ namespace DashboardTTS.Controllers
           
             return Json(modelList);
         }
+        #endregion
+
 
     }
 }

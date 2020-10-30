@@ -14,6 +14,10 @@ namespace DashboardTTS.ViewModel
         public string partNo { get; set; }
         public string lotNo { get; set; }
         public string process { get; set; }
+
+        public double checking { get; set; }
+        public double packing { get; set; }
+
         public double lotQty { get; set; }
         public double mouldRej { get; set; }
         public double paintRej { get; set; }

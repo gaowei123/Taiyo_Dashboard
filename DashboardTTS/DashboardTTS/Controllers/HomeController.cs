@@ -23,21 +23,8 @@ namespace DashboardTTS.Controllers
         public ActionResult GetMouldStatus()
         {
             Common.Class.BLL.MouldingMachineStatus_BLL MachineStatus = new Common.Class.BLL.MouldingMachineStatus_BLL();
-            DataTable dtMouldingStatus = MachineStatus.GetCurrentStatus();
-
-            Dictionary<int, string> dicStatus = new Dictionary<int, string>();
-            foreach (DataRow row in dtMouldingStatus.Rows)
-            {
-                int machineID = int.Parse(row["MachineID"].ToString().Replace("Machine", ""));
-                string status = row["MachineStatus"].ToString();
-
-                if (machineID > 9)
-                    continue;
-                
-                dicStatus.Add(machineID, status);
-            }
-           
-
+            Dictionary<int,string> dicStatus = MachineStatus.GetCurrentStatus();
+            
             return Content(JsonConvert.SerializeObject(dicStatus));
         }
 

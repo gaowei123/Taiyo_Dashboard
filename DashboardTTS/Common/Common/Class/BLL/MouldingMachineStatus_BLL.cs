@@ -11,90 +11,41 @@ namespace Common.Class.BLL
     public class MouldingMachineStatus_BLL
     {
         Common.Class.DAL.MouldingMachineStatus_DAL dal = new DAL.MouldingMachineStatus_DAL();
-        public DataTable GetCurrentStatus()
+
+        public Dictionary<int, string> GetCurrentStatus()
         {
-            DataSet ds = dal.SelectCurrentStatus();
+            Dictionary<int, string> dicStatus = new Dictionary<int, string>();
 
-            if (ds == null || ds.Tables.Count == 0)
+            DataTable dt = dal.GetTodayList();
+            if (dt == null ||dt.Rows.Count == 0)
             {
-                return null;
+                for (int i = 1; i < 10; i++)
+                {
+                    dicStatus.Add(i, StaticRes.Global.MouldingStatus.ShutDown);
+                }               
             }
-            DataTable dt = ds.Tables[0];
-
-            #region table struction
-            //("MachineID");
-            //("Day");
-            //("Shif");
-            //("MachineStatus");
-            //("OEEStatus");
-            //("StartTime");
-            //("EndTime");
-            //("PartNo");
-            //("UserID");
-            //("Remark");
-            #endregion
-            DataTable dt_CurrentStatus = new DataTable();
-            dt_CurrentStatus = dt.Clone();
-
-            
-
-            for (int i = 1; i < 12; i++)
+            else
             {
-
-                DataRow[] Rows = dt.Select("MachineID = " + i.ToString() + "");
-
-              
-                if (Rows.Length == 0)
+                for (int i = 1; i < 10; i++)
                 {
-                    //No Record for this machine   add an empty row
-
-                    DataRow dr_new = dt_CurrentStatus.NewRow();
-                    dr_new["MachineID"] = i.ToString();
-                    dr_new["Day"] = DateTime.Now.AddHours(8).Date;
-                    dr_new["Shif"] = DateTime.Now >= DateTime.Now.AddHours(8).Date.AddHours(8) && DateTime.Now < DateTime.Now.AddHours(8).Date.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
-                    dr_new["MachineStatus"] = "Shutdown";
-                    dr_new["OEEStatus"] = "";
-                    dr_new["StartTime"] = DateTime.Now;
-                    dr_new["EndTime"] = DateTime.Now;
-                    dr_new["PartNo"] = "";
-                    dr_new["UserID"] = "";
-                    dr_new["Remark"] = "";
-                    dt_CurrentStatus.Rows.Add(dr_new);
+                    DataRow[] arrDrTemp = dt.Select(" MachineID = '" + i.ToString() + "'");
+                    if (arrDrTemp == null || arrDrTemp.Count() == 0)
+                    {
+                        dicStatus.Add(i, StaticRes.Global.MouldingStatus.ShutDown);
+                    }
+                    else
+                    {
+                        dicStatus.Add(i, arrDrTemp[0]["MachineStatus"].ToString());
+                    }
                 }
-                else
-                {
-                    //Get Lastest status
+            }           
 
-                    DataTable dt_temp = dt.Select("MachineID = " + i.ToString() + "").CopyToDataTable();
-                 
-
-                  
-                    string JudgeCondition = "";
-                    string SortCondition = "StartTime desc";
-
-                    DataRow dr_Laseted = dt_CurrentStatus.NewRow();
-
-                    DataRow tmp = dt_temp.Select(JudgeCondition, SortCondition)[0];
-                    dr_Laseted[0] = tmp[0];
-                    dr_Laseted[1] = tmp[1];
-                    dr_Laseted[2] = tmp[2];
-                    dr_Laseted[3] = tmp[3];
-                    dr_Laseted[4] = tmp[4];
-                    dr_Laseted[5] = tmp[5];
-                    dr_Laseted[6] = tmp[6];
-                    dr_Laseted[7] = tmp[7];
-                    dr_Laseted[8] = tmp[8];
-                    dr_Laseted[9] = tmp[9];
-
-
-                    dt_CurrentStatus.Rows.Add(dr_Laseted);
-                    
-                }
-            }
-
-            return dt_CurrentStatus;
+            return dicStatus;
         }
-        
+
+
+
+
         
         public Dictionary<DateTime, StaticRes.Global.StatusType> getOEE(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sShift, string sDateNotIn, bool bExceptWeekend)
         {

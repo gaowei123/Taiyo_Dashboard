@@ -27,11 +27,17 @@
             <div class="row form-inline searchingBar ">
                 <div class="col-sm-3">
                     <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                    <input type="text" class="form-control" id="txtDateFrom" 
+                           CssClass="form-control formDateTimePicker"
+                           placeholder="Please choose date" 
+                           style="width:60%;" />
                 </div>
                 <div class="col-sm-3">
                     <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                    <input type="text" class="form-control" id="txtDateTo" 
+                           CssClass="form-control formDateTimePicker"                         
+                           placeholder="Please choose date" 
+                           style="width:60%;" />
                 </div>
                 <div class="col-sm-3">
                     <label for="ddlPIC" style="width:35%">PIC:</label>
@@ -46,7 +52,7 @@
 
     <div class="row">
         <div class="col-sm-12 panel panel-default" style="margin-top:10px;">
-            <div id="divChart" style="height:700px;"></div>
+            <div id="divChart"></div>
         </div>
     </div>
 </div>
@@ -80,8 +86,8 @@
         initialDate: new Date()
     });
 
-  
- 
+
+
     $(document).ready(function () {
         var today = dateFormat('yyyy-MM-dd', new Date());
         $('#txtDateFrom').val(today);
@@ -90,18 +96,15 @@
         generate();
     });
 
-
+    
 
     function generate() {
 
-        var datefrom = $("#txtDateFrom").val();
-        if (datefrom == '') {
+        if ($("#txtDateFrom").val() == '') {
             alert('Date From can not be empty!');
             return false;
         }
-
-        var dateto = $("#txtDateTo").val();
-        if (dateto == '') {
+        if ($("#txtDateTo").val() == '') {
             alert('Date To can not be empty!');
             return false;
         }
@@ -109,7 +112,7 @@
 
 
 
-      
+
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -117,7 +120,7 @@
             data: {
                 DateFrom: $("#txtDateFrom").val(),
                 DateTo: $("#txtDateTo").val(),
-                PIC: $('#ddlPIC').val()               
+                PIC: $('#ddlPIC').val()
             },
 
             beforeSend: function(){
@@ -150,7 +153,7 @@
 
 
                 option = {
-                  
+
                     title: {
                         text: ''
                     },

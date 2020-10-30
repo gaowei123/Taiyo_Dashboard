@@ -138,65 +138,7 @@ group by MONTH(a.day)
                 return ds.Tables[0];
             }
         }
-
-
-        public DataSet getProductSummaryByMachine(DateTime dDateFrom, DateTime dDateTo, string sSfhift)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select 
-                            'Machine' + b.machineID as MachineID,
-                            b.ok,
-                            b.ng,
-                            b.total,
-                            b.RejRate
-                            from
-                            (
-                                select 1 as MachineID union select 2 as MachineID union
-                                select 3 as MachineID union select 4 as MachineID union
-                                select 5 as MachineID union select 6 as MachineID union
-                                select 7 as MachineID union select 8 as MachineID
-                            ) a
-                            left join
-                            (
-                                select
-                                machineID,
-                                sum(isnull(acceptQty, 0)) as OK,
-                                sum(isnull(rejectQty, 0)) as NG,
-                                sum(isnull(acountReading, 0)) as Total,
-                                convert(decimal(18, 2), sum(isnull(rejectQty, 0)) / sum(isnull(acountReading, 0)) * 100) as RejRate
-                                from MouldingViTracking
-                                where datetime >= @dDateFrom and datetime < @dDateTo ");
-
-            if (sSfhift != "" && sSfhift.ToUpper() != "ALL")
-                strSql.Append(" and shift = @sShift ");
-            
-            strSql.Append(@" group by machineID
-                             ) b on a.MachineID = b.machineID  order by a.machineID ");
-            
-            SqlParameter[] paras =
-            {
-                new SqlParameter("dDateFrom",SqlDbType.DateTime2),
-                new SqlParameter("dDateTo",SqlDbType.DateTime2),
-                new SqlParameter("sShift",SqlDbType.VarChar)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo.AddDays(1);
-            if (sSfhift != "")
-                paras[2].Value = sSfhift;
-            else
-                paras[2] = null;
-
-        
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-
-
-        
-
-
+      
         public DataSet GetTestingList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -933,100 +875,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
 
-
-        // 2018 12 04 modified by wei lijia , add 2 parameter : date not in & except weekend  
-        public DataSet SummaryByMachine(DateTime dDateFrom, DateTime dDateTo, string sShift,string sDateNotIn, bool bExceptWeekend)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"Select 
-                            'Machine' + machineID as MachineID
-                            , SUM(acceptQty) as OK
-                            , SUM(rejectQty) as NG
-                            , SUM(acceptQty + rejectQty) as Output
-                            , CONVERT(varchar(50), convert(numeric(10, 2), SUM(rejectQty) / (SUM(acceptQty) + SUM(rejectQty)) * 100)) + '%' as RejRate 
-                            , CONVERT(varchar(50), convert(numeric(10, 2), SUM(acceptQty) / (SUM(acceptQty) + SUM(rejectQty)) * 100)) + '%' as Quality ");
-
-
-            strSql.Append(" ,isnull( ( ");
-
-            strSql.Append(@" select SUM( (aa.acceptQty + aa.rejectQty) / aa.cavityCount * bb.cycleTime ) from MouldingViTracking aa left join MouldingBom bb on aa.partNumberAll = bb.partNumberAll where ");
-
-            strSql.Append(" aa.dateTime >= @DateFrom ");
-            strSql.Append(" and aa.dateTime< @DateTo ");
-            strSql.Append(" and aa.machineID = a.machineID ");
-
-            if (sShift != "")
-            {
-                strSql.Append(" and aa.shift = @Shift ");
-            }
-         
-
-            strSql.Append(" ) ,0)as TotalTime ");
-
-
-
-            strSql.Append(" from MouldingViTracking a ");
-
-            strSql.Append(@"where acceptQty +rejectQty > 0 ");
-
-            strSql.Append(" and a.dateTime >= @DateFrom ");
-            strSql.Append(" and a.dateTime < @DateTo ");
-
-            if (sShift != "")
-            {
-                strSql.Append(" and a.Shift = @Shift ");
-            }
-
-            //2018 12 04
-            if (sDateNotIn != "")
-            {
-                strSql.Append(" and DATEPART(day, a.Day) not in (");
-
-                string[] DayArr = sDateNotIn.Split(',');
-                for (int i = 0; i < DayArr.Length; i++)
-                {
-                    strSql.Append(DayArr[i] + ",");
-                }
-
-                strSql.Remove(strSql.Length - 1, 1);
-
-                strSql.Append(" ) ");
-            }
-            //2018 12 04
-            if (bExceptWeekend)
-            {
-                strSql.Append(" and  datepart(weekday,a.Day)  not in ('7','1') ");
-            }
-
-            strSql.Append(@" group by a.machineID ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@DateFrom",SqlDbType.DateTime),
-                new SqlParameter("@DateTo",SqlDbType.DateTime),
-                new SqlParameter("@Shift",SqlDbType.VarChar)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo.AddDays(1);
-
-
-            if (sShift != "")
-            {
-                paras[2].Value = sShift;
-            }
-            else
-            {
-                paras[2] = null;
-            }
-
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }   
         
-        
-
         public SqlCommand UpdateSetupWasteMaterialCommond(Common.Class.Model.MouldingViHistory_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1360,292 +1209,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
         }
 
 
-        #region for output report 
-        internal DataSet getAttendance(DateTime dDay, string sShift)
-        {
-               StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" 
-                            select  count(distinct UserID)  as UserCount, b.USER_GROUP as UserGroup from 
-                            (SELECT  distinct userid as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                             union all 
-                             SELECT  distinct   material_mhcheck as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                               union all 
-                             SELECT  distinct   material_opcheck as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                               union all 
-                             SELECT  distinct   material_leaderCheck as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                               union all 
-                             SELECT  distinct    leaderCheck as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                               union all 
-                             SELECT  distinct    supervisorcheck as UserID
-                              FROM [dbo].[MouldingViTracking]
-                              where day = @Day and Shift = @Shift
-                              ) a 
-                              left join  [dbo].[User_DB] b on a.UserID = b.USER_ID 
-                              where a.UserID is not null and userid != ''
-                              group by b.USER_GROUP
-                              order by b.USER_GROUP   "); 
-
-            SqlParameter[] parameters = {
-                    new SqlParameter("@Day", SqlDbType.DateTime),
-                     new SqlParameter("@Shift", SqlDbType.VarChar,50 )
-            };
-
-            parameters[0].Value = dDay;
-            parameters[1].Value = sShift;
-
-            DBHelp.Reports.LogFile.DebugLog("AUTOCODE", "NameSpace:Common.DAL", "Class:MouldingViHistory_DAL", "Function:  internal DataSet getAttendance(DateTime dDay, string sShift)" + "TableName:LMMSWatchLog", " sShift =" + sShift + "; dDay = " + dDay.ToString() + ")");
-            Common.Model.LMMSWatchLog_Model model = new Common.Model.LMMSWatchLog_Model();
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters,DBHelp. Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-        /// <summary>
-        ///  Columns: Module -- MachineCount -- OK -- NG -- Output -- Target --ProdHrs
-        /// </summary>
-        /// <param name="dDay"></param>
-        /// <param name="sShift"></param>
-        /// <returns></returns>
-        internal DataSet getOutput(DateTime dDay, string sShift)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select x.[model] as Module , sum(modulecount) as MachineCount , sum (OK) as OK , sum(NG) as NG , sum(total) as OutPut , Sum(Target) as Target , 0 as ProdHrs
-                                from
-                                (SELECT  distinct [machineID]
-                                   ,convert(decimal(10,1),  1.0/( 
-                                   SELECT count( distinct model )
-                                  FROM [dbo].[MouldingViTracking]
-                                    where day = @Day
-                                  and shift = @Shift
-                                  and a.machineid = machineid 
-                                  )) as ModuleCount 
-                                      ,[model] 
-                                      ,max([targetQty]) as target  
-                                      ,max([acountReading]) as total
-                                      ,max([rejectQty]+[QCNGQTY]) as NG
-                                      ,min([acceptQty]) as OK  
-                                  FROM  [dbo].[MouldingViTracking] a
-                                  where day = @Day
-                                  and shift = @Shift
-                                  group by 
-                                  [machineID] 
-                                      ,[model] ) x
-	                                  group by x.[model] "); 
-
-            SqlParameter[] parameters = {
-                    new SqlParameter("@Day", SqlDbType.DateTime),
-                     new SqlParameter("@Shift", SqlDbType.VarChar,50 )
-            };
-
-            parameters[0].Value = dDay;
-            parameters[1].Value = sShift;
-
-            DBHelp.Reports.LogFile.DebugLog("AUTOCODE", "NameSpace:Common.DAL", "Class:MouldingViHistory_DAL", "Function:  internal DataSet getOutput(DateTime dDay, string sShift)" + "TableName:LMMSWatchLog", " sShift =" + sShift + "; dDay = " + dDay.ToString() + ")");
-            Common.Model.LMMSWatchLog_Model model = new Common.Model.LMMSWatchLog_Model();
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters,DBHelp. Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-
-        internal DataSet getDailyReject(DateTime dDay, string sShift)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            //new sql   add running time, 
-            strSql.Append(@"select 
-	x.machineid
-	,x.Day
-    ,x.shift
-	,isnull(y.Model, '') as Model
-	,isnull(y.PartNo, '') as PartNo
-
-
-	,isnull( McStatus.totalHours, 0) as MCRunHours          
-	,isnull( y.cavityCount, 1) as CavityCount
-	,isnull( CONVERT(decimal(18,0), ( y.TotalQTY / y.cavityCount)),0) as TotalShots
-	,isnull(y.TotalPassQTY,0) as TotalPassPCS
-	,isnull(y.TotalRejectQTY,0) as RejectQtyPCS
-	,CONVERT(varchar(50), convert(decimal(18,2), isnull( (y.TotalRejectQTY/y.TotalQTY *100),0))) + '%' as ProductionRejRate
-	,CONVERT(float, isnull(y.MCAdjustment,0)) as SetupRejectPCS
-	,CONVERT(varchar(50), convert(decimal(18,2), isnull( (isnull(y.MCAdjustment,0))/y.TotalQTY *100,0))) + '%' as SetupRejRate
-
-
-
-	,isnull(y.JigNo, '') as JigNo                                          
-	,isnull(y.Unit, 'Pcs') as Unit                                        
-	,isnull(y.TotalQTY, '0') as TotalQTY      
-	,isnull(isnull(y.TotalPassQTY, '0')-(isnull(y.MCAdjustment, '0') * y.cavityCount),0) as TotalPassQTY
-	,isnull(isnull(y.TotalRejectQTY, '0')+(isnull(y.MCAdjustment, '0') * y.cavityCount),0) as TotalRejectQTY                       
-	,isnull(y.TotalRejectQTY, 0) *  (isnull(( select distinct (unitcount) from mouldingBom where partNumber = y.PartNo) ,0))  as RejCost      
-	,convert(varchar, isnull(y.[Total Rej.%], '0')) + '%' as [Total RejRate] 
-
-
-
-	,isnull(z01.RejectQty, x.[White Dot]) as [White Dot]                   
-	,isnull(z02.RejectQty, x.[Scratches]) as [Scratches]                   
-	,isnull(z03.RejectQty, x.[Dented Mark]) as [Dented Mark]               
-	,isnull(z04.RejectQty, x.[Shinning Dot]) as [Shinning Dot]             
-	,isnull(z05.RejectQty, x.[Black Mark]) as [Black Mark]                 
-	,isnull(z06.RejectQty, x.[Sink Mark]) as [Sink Mark]                   
-	,isnull(z07.RejectQty, x.[Flow Mark]) as [Flow Mark]                   
-	,isnull(z08.RejectQty, x.[High Gate]) as [High Gate]                   
-	,isnull(z09.RejectQty, x.[Silver Steak]) as [Silver Steak]             
-	,isnull(z10.RejectQty, x.[Black Dot]) as [Black Dot]                   
-	,isnull(z11.RejectQty, x.[Oil Stain]) as [Oil Stain]                   
-	,isnull(z12.RejectQty, x.[Flow Line]) as [Flow Line]                   
-	,isnull(z13.RejectQty, x.[Over - Cut]) as [Over - Cut]
-	,isnull(z14.RejectQty, x.[Crack]) as [Crack]                           
-	,isnull(z15.RejectQty, x.[Short Mold]) as [Short Mold]                 
-	,isnull(z16.RejectQty, x.[Stain Mark]) as [Stain Mark]                 
-	,isnull(z17.RejectQty, x.[Weld Line]) as [Weld Line]                   
-	,isnull(z18.RejectQty, x.[Flashes]) as [Flashes]                       
-	,isnull(z19.RejectQty, x.[Foreign Materials]) as [Foreign Materials]   
-	,isnull(z20.RejectQty, x.[Drag]) as [Drag]                             
-	,isnull(z21.RejectQty, x.[Material Bleed]) as [Material Bleed]         
-	,isnull(z22.RejectQty, x.[Bent]) as [Bent]                             
-	,isnull(z23.RejectQty, x.[Defrom]) as [Defrom]                     
-	,isnull(z24.RejectQty, x.[Gas Mark]) as [Gas Mark]         
-	            
-	,isnull(y.[IPQC Buyoff], '0') as [IPQC Buyoff]                         
-	,convert(numeric(8,0) , isnull(y.MCAdjustment, '0')) as MCAdjustment                                 
-	,isnull(y.MCAdjustment, 0) *  (isnull(( select distinct (unitcount) from mouldingBom where partNumber = y.PartNo) ,0))  as MCAdjustmentCost    
-	  
-	,isnull(y.[MC Adjust Scrap Short01], 0.0) + isnull(y.[MC Adjust Scrap Short02], 0.0) as [MC Adjust Scrap Short]  
-	,( isnull(y.[MC Adjust Scrap Short01], 0.0) * (isnull((  select max(bomB1.Unit_Price) from mouldingBom bomA1 , Material_Inventory_Bom bomB1 where bomA1.partNumber = y.PartNo and bomA1.matPart01 = bomB1.Material_Part ) ,0.0))   + isnull(y.[MC Adjust Scrap Short02], 0.0) * (isnull((  select max(bomB2.Unit_Price) from mouldingBom bomA2 , Material_Inventory_Bom bomB2 where bomA2.partNumber = y.PartNo and bomA2.matPart02 = bomB2.Material_Part ) ,0.0))    ) as [MC Adjust Scrap Short Cost]  
-	,isnull(y.Operator, '') as Operator                                    
-	,isnull(y.[Inspd By], '') as [Inspd By]
-                        
-	--,isnull(y.Remarks, McStopReason.Reason) as Remarks
-	,case when  isnull( McStopReason.Reason,'') = 'Create By Ping App' then '' else isnull( McStopReason.Reason,'') end  as Remarks
-
-	from                                                                   
-	(                                                                                
-		select '1' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '2' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '3' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '4' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '5' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '6' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '7' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-		union all 
-		select '8' as machineid, @shift as shift, @day as day, 0 as [White Dot], 0 as [Scratches], 0 as [Dented Mark], 0 as [Shinning Dot], 0 as [Black Mark], 0 as [Sink Mark], 0 as [Flow Mark], 0 as [High Gate], 0 as [Silver Steak], 0 as [Black Dot], 0 as [Oil Stain], 0 as [Flow Line], 0 as [Over - Cut], 0 as [Crack], 0 as [Short Mold], 0 as [Stain Mark], 0 as [Weld Line], 0 as [Flashes], 0 as [Foreign Materials], 0 as [Drag], 0 as [Material Bleed], 0 as [Bent], 0 as [Defrom], 0 as [Gas Mark]   
-	) x                                                                                                               
-	
-	left join
-	(
-		SELECT 
-			[machineID]                            
-			,convert(varchar, [day], 23) as [Day]  
-			,[shift]                               
-			,[model] as Model 
-			,[partNumber]   as PartNo    
-			,[JigNo] as JigNo                      
-			,'Pcs' as Unit   
-			,cavityCount                           
-			,sum([acountReading]) as TotalQTY      
-			,sum([acceptQty]) as TotalPassQTY   
-
-			-- ipqc rej. WastageMaterial01 , WastageMaterial02 算作 reject的数量   
-			,sum(isnull(RejectQty,0) + isnull( QCNGQTY,0) + isnull(WastageMaterial01 *cavityCount ,0)+ isnull(WastageMaterial02 *cavityCount ,0)) as TotalRejectQTY
-
-                                                           	  
-			, convert(numeric(10, 2), sum(isnull( RejectQty,0) + isnull( QCNGQTY,0)) * 100 / sum([acountReading])) as 'Total Rej.%'
-			,sum(QCNGQTY) as 'IPQC Buyoff'	  
-			,sum(Setup) as MCAdjustment                                                                                 	  
-			,sum(WastageMaterial01) as 'MC Adjust Scrap Short01'                                                            	  
-			,sum(WastageMaterial02) as 'MC Adjust Scrap Short02'                                                            	  
-			,Max([UserID]) as Operator                                                                                  	  
-			,MAX([SupervisorCheck]) as 'Inspd By'                                                                                           	  
-			,Status as Remarks                                                                                                
-		FROM[MouldingViTracking]   
-		where[acountReading] is not null and[acountReading] > 0  
-		and  shift = @shift 
-		and day = @day            
-		group by[machineID],[Day],[shift],[model] ,[partNumber], [JigNo],[cavityCount] ,Status 
-	) y 
-	on x.machineid = y.machineid and x.shift = y.shift and x.day = y.Day
-
-	left join  
-	(
-		select 
-			MachineID
-			,MachineStatus
-			,SUM(DATEDIFF(second, starttime,case when endTime is null then getdate() else endtime end)) / 3600.00  as totalHours 
-		from MouldingMachineStatus 
-		where 1=1 and day = @day and Shif = @shift  and machinestatus = 'Running'
-		group by MachineStatus, MachineID
-
-	) McStatus
-	on McStatus.MachineID = y.machineID
-
-    left join 
-    (
-	    select day, shif, machineID,
-	    SUBSTRING(
-		    (SELECT  distinct ',' +  temp.Remark
-		    FROM  ( select MachineID, Remark from MouldingMachineStatus where  Remark is not null and Remark != '' and Day=@day and Shif=@shift ) temp  
-		    where temp.MachineID =  aaa.MachineID FOR xml path(''))     ,2,99) 
-	    as Reason
-	    from MouldingMachineStatus aaa
-	    where day=@day and shif=@shift and DATEDIFF(second,starttime, EndTime) > 3600
-	    group by day, shif, machineID
-    )McStopReason on McStopReason.MachineID = x.machineid
-
-	
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'White Dot'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z01 on z01.machineID = x.machineid  and z01.shift = x.shift and z01.Day = x.day  and z01.PartNo = y.PartNo 	
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Scratches'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z02 on z02.machineID = x.machineid  and z02.shift = x.shift and z02.Day = x.day  and z02.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Dented Mark'        group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z03 on z03.machineID = x.machineid  and z03.shift = x.shift and z03.Day = x.day  and z03.PartNo = y.PartNo 
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Shinning Dot'       group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z04 on z04.machineID = x.machineid  and z04.shift = x.shift and z04.Day = x.day  and z04.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Black Mark'         group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z05 on z05.machineID = x.machineid  and z05.shift = x.shift and z05.Day = x.day  and z05.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Sink Mark'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z06 on z06.machineID = x.machineid  and z06.shift = x.shift and z06.Day = x.day  and z06.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Flow Mark'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z07 on z07.machineID = x.machineid  and z07.shift = x.shift and z07.Day = x.day  and z07.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'High Gate'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z08 on z08.machineID = x.machineid  and z08.shift = x.shift and z08.Day = x.day  and z08.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Silver Steak'       group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z09 on z09.machineID = x.machineid  and z09.shift = x.shift and z09.Day = x.day  and z09.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Black Dot'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z10 on z10.machineID = x.machineid  and z10.shift = x.shift and z10.Day = x.day  and z10.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Oil Stain'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z11 on z11.machineID = x.machineid  and z11.shift = x.shift and z11.Day = x.day  and z11.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Flow Line'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z12 on z12.machineID = x.machineid  and z12.shift = x.shift and z12.Day = x.day  and z12.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Over-Cut'           group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z13 on z13.machineID = x.machineid  and z13.shift = x.shift and z13.Day = x.day  and z13.PartNo = y.PartNo  
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Crack'              group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z14 on z14.machineID = x.machineid  and z14.shift = x.shift and z14.Day = x.day  and z14.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Short Mold'         group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z15 on z15.machineID = x.machineid  and z15.shift = x.shift and z15.Day = x.day  and z15.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Stain Mark'         group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z16 on z16.machineID = x.machineid  and z16.shift = x.shift and z16.Day = x.day  and z16.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Weld Line'          group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z17 on z17.machineID = x.machineid  and z17.shift = x.shift and z17.Day = x.day  and z17.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Flashes'            group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z18 on z18.machineID = x.machineid  and z18.shift = x.shift and z18.Day = x.day  and z18.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Foreign Materials'  group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z19 on z19.machineID = x.machineid  and z19.shift = x.shift and z19.Day = x.day  and z19.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Drag'               group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z20 on z20.machineID = x.machineid  and z20.shift = x.shift and z20.Day = x.day  and z20.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Material Bleed'     group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z21 on z21.machineID = x.machineid  and z21.shift = x.shift and z21.Day = x.day  and z21.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Bent'               group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z22 on z22.machineID = x.machineid  and z22.shift = x.shift and z22.Day = x.day  and z22.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Defrom'             group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z23 on z23.machineID = x.machineid  and z23.shift = x.shift and z23.Day = x.day  and z23.PartNo = y.PartNo       
-	left join (SELECT[machineID] , convert(varchar, [day], 23) as [Day],[shift],[partNumber] as PartNo, defectCode, SUM(rejectQty) as RejectQty  from[MouldingViDefectTracking]   where  shift = @shift and day = @day  and defectCode = 'Gas Mark'           group by[machineID],[Day],[shift], [partNumber]  , defectCode ) z24 on z24.machineID = x.machineid  and z24.shift = x.shift and z24.Day = x.day  and z24.PartNo = y.PartNo       
-
-order by x.Day,x.shift,x.machineid");
-
-          
-
-            SqlParameter[] parameters = {
-                new SqlParameter( "@Day", SqlDbType.DateTime),
-                new SqlParameter("@Shift", SqlDbType.VarChar,50 )
-            };
-
-            parameters[0].Value = dDay;
-            parameters[1].Value = sShift;
-
-            DBHelp.Reports.LogFile.DebugLog("AUTOCODE", "NameSpace:Common.DAL", "Class:MouldingViHistory_DAL", "Function:  internal DataSet getOutput(DateTime dDay, string sShift)" + "TableName:LMMSWatchLog", " sShift =" + sShift + "; dDay = " + dDay.ToString() + ")");
-                
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-        #endregion
-
+      
 
 
 
@@ -1851,9 +1415,7 @@ and a.dateTime >@From and a.dateTime < @To ");
                 return ds.Tables[0];
             }
         }
-
-
-
+        
         internal DataTable GetMonthlyProductionReport(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sCustomer, string sType)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2169,398 +1731,9 @@ left join
                 return ds.Tables[0];
             }
         }
-
-
-
-
-        public DataTable GetOuput(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-sum(a.TotalOuput) as TotalOutput
-,sum(a.TotalShots) as TotalShots
-,sum(a.TotalRej) as TotalRej
-from 
-(
-	select 
-	1 as id
-	,isnull( acountReading,0) as TotalOuput
-	,isnull(acountReading,0)/isnull(cavityCount,1)  as TotalShots
-	,isnull(rejectQty,0) as TotalRej
-	from MouldingViTracking 
-	where datetime >= @dateFrom and datetime < @dateTo");
-            if (Shift != "")
-            {
-                strSql.Append(" and shift = @shift ");
-            }
-
-            if (DateNotIn != "")
-            {
-                strSql.Append(" and day(day) not in (");
-
-                string[] strArrDate = DateNotIn.Split(',');
-                foreach (string  date in strArrDate)
-                {
-                    if (Common.CommFunctions.isNumberic(date))
-                        strSql.Append(" '" + date + "', ");
-                }
-                strSql.Remove(strSql.Length, 1);
-
-                strSql.Append(" ) ");
-            }
-
-            if (ExceptWeekends)
-            {
-                strSql.Append("  DATEPART(WEEKDAY,datetime) not in (1,7) ");
-            }
-
-
-
-            strSql.Append(" ) a group by a.id ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@shift",SqlDbType.VarChar,16)
-            };
-
-
-            paras[0].Value = DateFrom;
-            paras[1].Value = DateTo;
-            if (Shift != "")
-            {
-                paras[2].Value = Shift;
-            }else
-            {
-                paras[2] = null;
-            }
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-
-        }
-
-
-
-
-
-
-
-
-        #region Moulding Monthly Top Reject Report
-        public DataTable GetTopRejParts(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(@"
-select
-
-a.partnumber as partNo
-,SUM(ISNULL(a.acountReading,0)) as output
-,SUM(ISNULL(a.rejectQty,0)) as rejQty
-,case when SUM(ISNULL(a.acountReading,0)) = 0 
-	then 0
-	else convert(decimal(18,2), round(SUM( ISNULL(a.rejectQty,0))/SUM(ISNULL( a.acountReading,0))*100,2))
-end  as rejRate
-
-from MouldingViTracking a
-
-where 1=1 
-and day >= @datefrom
-and day < @dateto ");
-
-            if (sMachineID != "")
-                strSql.Append(" and machineID = @machineID ");
-            
-            strSql.Append(@" 
-group by partNumber 
-
-order by 
-case when SUM(ISNULL(a.acountReading,0)) = 0 
-then 0 
-else SUM( ISNULL(a.rejectQty,0))/SUM(ISNULL( a.acountReading,0)) 
-end  desc ");
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@datefrom",SqlDbType.DateTime),
-                new SqlParameter("@dateto",SqlDbType.DateTime),
-                new SqlParameter("@machineID",SqlDbType.VarChar,16)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-        public DataTable GetTopRejParts_DefectQty(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
-        {
-
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(@"
-with defectDetail as (
-	select
-	partNumber as [partNo]
-	,SUM(rejectQty) as [totalRej]
-	,SUM(case when defectCode = 'White Dot' then rejectQty end ) as [White Dot]
-	,SUM(case when defectCode = 'Scratches' then rejectQty end ) as [Scratches]
-	,SUM(case when defectCode = 'Dented Mark' then rejectQty end ) as [Dented Mark]
-	,SUM(case when defectCode = 'Shinning Dot' then rejectQty end ) as [Shinning Dot]
-	,SUM(case when defectCode = 'Black Mark' then rejectQty end ) as [Black Mark]
-	,SUM(case when defectCode = 'Sink Mark' then rejectQty end ) as [Sink Mark]
-	,SUM(case when defectCode = 'Flow Mark' then rejectQty end ) as [Flow Mark]
-	,SUM(case when defectCode = 'High Gate' then rejectQty end ) as [High Gate]
-	,SUM(case when defectCode = 'Silver Steak' then rejectQty end ) as [Silver Steak]
-	,SUM(case when defectCode = 'Black Dot' then rejectQty end ) as [Black Dot]
-	,SUM(case when defectCode = 'Oil Stain' then rejectQty end ) as [Oil Stain]
-	,SUM(case when defectCode = 'Flow Line' then rejectQty end ) as [Flow Line]
-	,SUM(case when defectCode = 'Over-Cut' then rejectQty end ) as [Over-Cut]
-	,SUM(case when defectCode = 'Crack' then rejectQty end ) as [Crack]
-	,SUM(case when defectCode = 'Short Mold' then rejectQty end ) as [Short Mold]
-	,SUM(case when defectCode = 'Stain Mark' then rejectQty end ) as [Stain Mark]
-	,SUM(case when defectCode = 'Weld Line' then rejectQty end ) as [Weld Line]
-	,SUM(case when defectCode = 'Flashes' then rejectQty end ) as [Flashes]
-	,SUM(case when defectCode = 'Foreign Materials' then rejectQty end ) as [Foreign Materials]
-	,SUM(case when defectCode = 'Drag' then rejectQty end ) as [Drag]
-	,SUM(case when defectCode = 'Material Bleed' then rejectQty end ) as [Material Bleed]
-	,SUM(case when defectCode = 'Bent' then rejectQty end ) as [Bent]
-	,SUM(case when defectCode = 'Deform' then rejectQty end ) as [Deform]
-	,SUM(case when defectCode = 'Gas Mark' then rejectQty end ) as [Gas Mark]
-	from MouldingViDefectTracking
-	where 1=1 
-	and day >= @datefrom
-	and day < @dateto ");
-            
-
-            if (sMachineID != "")
-                strSql.Append(" and machineID = @machineID ");
-
-
-
-            strSql.Append(@"
-	group by partNumber 
-)
-select partNo, defectCode, rejQty, case when totalRej=0 then 0 else rejQty/totalRej*100 end as rejRate from (
-	select partNo, totalRej, 'White Dot' as defectCode, [White Dot] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Scratches' as defectCode, [Scratches] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Dented Mark' as defectCode, [Dented Mark] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Shinning Dot' as defectCode, [Shinning Dot] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Black Mark' as defectCode, [Black Mark] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Sink Mark' as defectCode, [Sink Mark] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Flow Mark' as defectCode, [Flow Mark] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'High Gate' as defectCode, [High Gate] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Silver Steak' as defectCode, [Silver Steak] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Black Dot' as defectCode, [Black Dot] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Oil Stain' as defectCode, [Oil Stain] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Flow Line' as defectCode, [Flow Line] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Over-Cut' as defectCode, [Over-Cut] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Crack' as defectCode, [Crack] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Short Mold' as defectCode, [Short Mold] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Stain Mark' as defectCode, [Stain Mark] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Weld Line' as defectCode, [Weld Line] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Flashes' as defectCode, [Flashes] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Foreign Materials' as defectCode, [Foreign Materials] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Drag' as defectCode, [Drag] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Material Bleed' as defectCode, [Material Bleed] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Bent' as defectCode, [Bent] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Deform' as defectCode, [Deform] as rejQty from defectDetail union all 
-	select partNo, totalRej, 'Gas Mark' as defectCode, [Gas Mark] as rejQty from defectDetail
-) a order by a.partNo asc , a.rejQty  desc ");
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@datefrom",SqlDbType.DateTime),
-                new SqlParameter("@dateto",SqlDbType.DateTime),
-                new SqlParameter("@machineID",SqlDbType.VarChar,16)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
         
 
-
-        public DataTable GetTopRejDefects(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
-        {
-            string searchMachine = sMachineID == "" ? "" : " and machineID = @MachineID";
-           
-
-            StringBuilder strSql = new StringBuilder();
-            strSql.AppendFormat(@"
-select 
-ISNULL(SUM( ISNULL([White Dot],0)),0) as [White Dot]
-,ISNULL(SUM( ISNULL([Scratches],0)),0) as [Scratches]
-,ISNULL(SUM( ISNULL([Dented Mark],0)),0) as [Dented Mark]
-,ISNULL(SUM( ISNULL([Shinning Dot],0)),0) as [Shinning Dot]
-,ISNULL(SUM( ISNULL([Black Mark],0)),0) as [Black Mark]
-,ISNULL(SUM( ISNULL([Sink Mark],0)),0) as [Sink Mark]
-,ISNULL(SUM( ISNULL([Flow Mark],0)),0) as [Flow Mark]
-,ISNULL(SUM( ISNULL([High Gate],0)),0) as [High Gate]
-,ISNULL(SUM( ISNULL([Silver Steak],0)),0) as [Silver Steak]
-,ISNULL(SUM( ISNULL([Black Dot],0)),0) as [Black Dot]
-,ISNULL(SUM( ISNULL([Oil Stain],0)),0) as [Oil Stain]
-,ISNULL(SUM( ISNULL([Flow Line],0)),0) as [Flow Line]
-,ISNULL(SUM( ISNULL([Over-Cut],0)),0) as [Over-Cut]
-,ISNULL(SUM( ISNULL([Crack],0)),0) as [Crack]
-,ISNULL(SUM( ISNULL([Short Mold],0)),0) as [Short Mold]
-,ISNULL(SUM( ISNULL([Stain Mark],0)),0) as [Stain Mark]
-,ISNULL(SUM( ISNULL([Weld Line],0)),0) as [Weld Line]
-,ISNULL(SUM( ISNULL([Flashes],0)),0) as [Flashes]
-,ISNULL(SUM( ISNULL([Foreign Materials],0)),0) as [Foreign Materials]
-,ISNULL(SUM( ISNULL([Drag],0)),0) as [Drag]
-,ISNULL(SUM( ISNULL([Material Bleed],0)),0) as [Material Bleed]
-,ISNULL(SUM( ISNULL([Bent],0)),0) as [Bent]
-,ISNULL(SUM( ISNULL([Deform],0)),0) as [Deform]
-,ISNULL(SUM( ISNULL([Gas Mark],0)),0) as [Gas Mark]
-
-from 
-(
-	select 
-
-	'1' as groupFlag
-
-	,SUM(case when defectCode = 'White Dot' then rejectQty end )			as [White Dot]
-	,SUM(case when defectCode = 'Scratches' then rejectQty end )			as [Scratches]
-	,SUM(case when defectCode = 'Dented Mark' then rejectQty end )			as [Dented Mark]
-	,SUM(case when defectCode = 'Shinning Dot' then rejectQty end )			as [Shinning Dot]
-	,SUM(case when defectCode = 'Black Mark' then rejectQty end )			as [Black Mark]
-	,SUM(case when defectCode = 'Sink Mark' then rejectQty end )			as [Sink Mark]
-	,SUM(case when defectCode = 'Flow Mark' then rejectQty end )			as [Flow Mark]
-	,SUM(case when defectCode = 'High Gate' then rejectQty end )			as [High Gate]
-	,SUM(case when defectCode = 'Silver Steak' then rejectQty end )			as [Silver Steak]
-	,SUM(case when defectCode = 'Black Dot' then rejectQty end )			as [Black Dot]
-	,SUM(case when defectCode = 'Oil Stain' then rejectQty end )			as [Oil Stain]
-	,SUM(case when defectCode = 'Flow Line' then rejectQty end )			as [Flow Line]
-	,SUM(case when defectCode = 'Over-Cut' then rejectQty end )				as [Over-Cut]
-	,SUM(case when defectCode = 'Crack' then rejectQty end )				as [Crack]
-	,SUM(case when defectCode = 'Short Mold' then rejectQty end )			as [Short Mold]
-	,SUM(case when defectCode = 'Stain Mark' then rejectQty end )			as [Stain Mark]
-	,SUM(case when defectCode = 'Weld Line' then rejectQty end )			as [Weld Line]
-	,SUM(case when defectCode = 'Flashes' then rejectQty end )				as [Flashes]
-	,SUM(case when defectCode = 'Foreign Materials' then rejectQty end )	as [Foreign Materials]
-	,SUM(case when defectCode = 'Drag' then rejectQty end )					as [Drag]
-	,SUM(case when defectCode = 'Material Bleed' then rejectQty end )		as [Material Bleed]
-	,SUM(case when defectCode = 'Bent' then rejectQty end )					as [Bent]
-	,SUM(case when defectCode = 'Deform' then rejectQty end )				as [Deform]
-	,SUM(case when defectCode = 'Gas Mark' then rejectQty end )				as [Gas Mark]
-
-	from mouldingvidefecttracking
-
-	where 1=1 
-	and day >= @datefrom
-	and day < @dateto
-    {0}
-
-	group by defectCode
-) a  group by groupFlag", searchMachine);
-
-         
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@datefrom",SqlDbType.DateTime),
-                new SqlParameter("@dateto",SqlDbType.DateTime),
-                new SqlParameter("@machineID",SqlDbType.VarChar,16)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-        public DataTable GetTopRejDefects_PartQty(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
-        {
-            string searchMachine = sMachineID == "" ? "" : " and machineID = @MachineID";
-            
-            StringBuilder strSql = new StringBuilder();
-            strSql.AppendFormat(@"
-select 
-partNumber as partNo
-,defectCode
-,sum(rejectQty) as rejqty
-
-from MouldingViDefectTracking 
-where 1=1 
-and day >= @datefrom
-and day < @dateto
-{0}
-group by partNumber, defectCode ", searchMachine);
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@datefrom",SqlDbType.DateTime),
-                new SqlParameter("@dateto",SqlDbType.DateTime),
-                new SqlParameter("@machineID",SqlDbType.VarChar,16)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-        #endregion
+        
 
 
 
@@ -2632,9 +1805,7 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
                 return ds.Tables[0];
             }
         }
-
-
-
+        
         public DataTable GetList(string sTrackingID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2661,8 +1832,7 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
               return   ds.Tables[0];
             }
         }
-
-
+        
         public SqlCommand MaintenanceCMD(Common.Class.Model.MouldingViHistory_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2886,29 +2056,6 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
       
         }
 
-
-        public int Delete(string sTrackingID)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(" Delete MouldingViTracking  where  trackingID = @trackingID");
-           
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@trackingID",SqlDbType.VarChar)
-            };
-
-
-            paras[0].Value = sTrackingID;
-
-
-
-            return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-
-
         public SqlCommand DeleteCommand(string sTrackingID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2931,6 +2078,316 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
         }
 
 
+
+
+        #region Moulding Monthly Top Reject Report
+        public DataTable GetTopRejParts(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        {
+            StringBuilder strSql = new StringBuilder();
+
+            strSql.Append(@"
+select
+
+a.partnumber as partNo
+,SUM(ISNULL(a.acountReading,0)) as output
+,SUM(ISNULL(a.rejectQty,0)) as rejQty
+,case when SUM(ISNULL(a.acountReading,0)) = 0 
+	then 0
+	else convert(decimal(18,2), round(SUM( ISNULL(a.rejectQty,0))/SUM(ISNULL( a.acountReading,0))*100,2))
+end  as rejRate
+
+from MouldingViTracking a
+
+where 1=1 
+and day >= @datefrom
+and day < @dateto ");
+
+            if (sMachineID != "")
+                strSql.Append(" and machineID = @machineID ");
+
+            strSql.Append(@" 
+group by partNumber 
+
+order by 
+case when SUM(ISNULL(a.acountReading,0)) = 0 
+then 0 
+else SUM( ISNULL(a.rejectQty,0))/SUM(ISNULL( a.acountReading,0)) 
+end  desc ");
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@datefrom",SqlDbType.DateTime),
+                new SqlParameter("@dateto",SqlDbType.DateTime),
+                new SqlParameter("@machineID",SqlDbType.VarChar,16)
+            };
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+        public DataTable GetTopRejParts_DefectQty(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+
+            strSql.Append(@"
+with defectDetail as (
+	select
+	partNumber as [partNo]
+	,SUM(rejectQty) as [totalRej]
+	,SUM(case when defectCode = 'White Dot' then rejectQty end ) as [White Dot]
+	,SUM(case when defectCode = 'Scratches' then rejectQty end ) as [Scratches]
+	,SUM(case when defectCode = 'Dented Mark' then rejectQty end ) as [Dented Mark]
+	,SUM(case when defectCode = 'Shinning Dot' then rejectQty end ) as [Shinning Dot]
+	,SUM(case when defectCode = 'Black Mark' then rejectQty end ) as [Black Mark]
+	,SUM(case when defectCode = 'Sink Mark' then rejectQty end ) as [Sink Mark]
+	,SUM(case when defectCode = 'Flow Mark' then rejectQty end ) as [Flow Mark]
+	,SUM(case when defectCode = 'High Gate' then rejectQty end ) as [High Gate]
+	,SUM(case when defectCode = 'Silver Steak' then rejectQty end ) as [Silver Steak]
+	,SUM(case when defectCode = 'Black Dot' then rejectQty end ) as [Black Dot]
+	,SUM(case when defectCode = 'Oil Stain' then rejectQty end ) as [Oil Stain]
+	,SUM(case when defectCode = 'Flow Line' then rejectQty end ) as [Flow Line]
+	,SUM(case when defectCode = 'Over-Cut' then rejectQty end ) as [Over-Cut]
+	,SUM(case when defectCode = 'Crack' then rejectQty end ) as [Crack]
+	,SUM(case when defectCode = 'Short Mold' then rejectQty end ) as [Short Mold]
+	,SUM(case when defectCode = 'Stain Mark' then rejectQty end ) as [Stain Mark]
+	,SUM(case when defectCode = 'Weld Line' then rejectQty end ) as [Weld Line]
+	,SUM(case when defectCode = 'Flashes' then rejectQty end ) as [Flashes]
+	,SUM(case when defectCode = 'Foreign Materials' then rejectQty end ) as [Foreign Materials]
+	,SUM(case when defectCode = 'Drag' then rejectQty end ) as [Drag]
+	,SUM(case when defectCode = 'Material Bleed' then rejectQty end ) as [Material Bleed]
+	,SUM(case when defectCode = 'Bent' then rejectQty end ) as [Bent]
+	,SUM(case when defectCode = 'Deform' then rejectQty end ) as [Deform]
+	,SUM(case when defectCode = 'Gas Mark' then rejectQty end ) as [Gas Mark]
+	from MouldingViDefectTracking
+	where 1=1 
+	and day >= @datefrom
+	and day < @dateto ");
+
+
+            if (sMachineID != "")
+                strSql.Append(" and machineID = @machineID ");
+
+
+
+            strSql.Append(@"
+	group by partNumber 
+)
+select partNo, defectCode, rejQty, case when totalRej=0 then 0 else rejQty/totalRej*100 end as rejRate from (
+	select partNo, totalRej, 'White Dot' as defectCode, [White Dot] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Scratches' as defectCode, [Scratches] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Dented Mark' as defectCode, [Dented Mark] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Shinning Dot' as defectCode, [Shinning Dot] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Black Mark' as defectCode, [Black Mark] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Sink Mark' as defectCode, [Sink Mark] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Flow Mark' as defectCode, [Flow Mark] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'High Gate' as defectCode, [High Gate] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Silver Steak' as defectCode, [Silver Steak] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Black Dot' as defectCode, [Black Dot] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Oil Stain' as defectCode, [Oil Stain] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Flow Line' as defectCode, [Flow Line] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Over-Cut' as defectCode, [Over-Cut] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Crack' as defectCode, [Crack] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Short Mold' as defectCode, [Short Mold] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Stain Mark' as defectCode, [Stain Mark] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Weld Line' as defectCode, [Weld Line] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Flashes' as defectCode, [Flashes] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Foreign Materials' as defectCode, [Foreign Materials] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Drag' as defectCode, [Drag] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Material Bleed' as defectCode, [Material Bleed] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Bent' as defectCode, [Bent] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Deform' as defectCode, [Deform] as rejQty from defectDetail union all 
+	select partNo, totalRej, 'Gas Mark' as defectCode, [Gas Mark] as rejQty from defectDetail
+) a order by a.partNo asc , a.rejQty  desc ");
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@datefrom",SqlDbType.DateTime),
+                new SqlParameter("@dateto",SqlDbType.DateTime),
+                new SqlParameter("@machineID",SqlDbType.VarChar,16)
+            };
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+
+
+        public DataTable GetTopRejDefects(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        {
+            string searchMachine = sMachineID == "" ? "" : " and machineID = @MachineID";
+
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendFormat(@"
+select 
+ISNULL(SUM( ISNULL([White Dot],0)),0) as [White Dot]
+,ISNULL(SUM( ISNULL([Scratches],0)),0) as [Scratches]
+,ISNULL(SUM( ISNULL([Dented Mark],0)),0) as [Dented Mark]
+,ISNULL(SUM( ISNULL([Shinning Dot],0)),0) as [Shinning Dot]
+,ISNULL(SUM( ISNULL([Black Mark],0)),0) as [Black Mark]
+,ISNULL(SUM( ISNULL([Sink Mark],0)),0) as [Sink Mark]
+,ISNULL(SUM( ISNULL([Flow Mark],0)),0) as [Flow Mark]
+,ISNULL(SUM( ISNULL([High Gate],0)),0) as [High Gate]
+,ISNULL(SUM( ISNULL([Silver Steak],0)),0) as [Silver Steak]
+,ISNULL(SUM( ISNULL([Black Dot],0)),0) as [Black Dot]
+,ISNULL(SUM( ISNULL([Oil Stain],0)),0) as [Oil Stain]
+,ISNULL(SUM( ISNULL([Flow Line],0)),0) as [Flow Line]
+,ISNULL(SUM( ISNULL([Over-Cut],0)),0) as [Over-Cut]
+,ISNULL(SUM( ISNULL([Crack],0)),0) as [Crack]
+,ISNULL(SUM( ISNULL([Short Mold],0)),0) as [Short Mold]
+,ISNULL(SUM( ISNULL([Stain Mark],0)),0) as [Stain Mark]
+,ISNULL(SUM( ISNULL([Weld Line],0)),0) as [Weld Line]
+,ISNULL(SUM( ISNULL([Flashes],0)),0) as [Flashes]
+,ISNULL(SUM( ISNULL([Foreign Materials],0)),0) as [Foreign Materials]
+,ISNULL(SUM( ISNULL([Drag],0)),0) as [Drag]
+,ISNULL(SUM( ISNULL([Material Bleed],0)),0) as [Material Bleed]
+,ISNULL(SUM( ISNULL([Bent],0)),0) as [Bent]
+,ISNULL(SUM( ISNULL([Deform],0)),0) as [Deform]
+,ISNULL(SUM( ISNULL([Gas Mark],0)),0) as [Gas Mark]
+
+from 
+(
+	select 
+
+	'1' as groupFlag
+
+	,SUM(case when defectCode = 'White Dot' then rejectQty end )			as [White Dot]
+	,SUM(case when defectCode = 'Scratches' then rejectQty end )			as [Scratches]
+	,SUM(case when defectCode = 'Dented Mark' then rejectQty end )			as [Dented Mark]
+	,SUM(case when defectCode = 'Shinning Dot' then rejectQty end )			as [Shinning Dot]
+	,SUM(case when defectCode = 'Black Mark' then rejectQty end )			as [Black Mark]
+	,SUM(case when defectCode = 'Sink Mark' then rejectQty end )			as [Sink Mark]
+	,SUM(case when defectCode = 'Flow Mark' then rejectQty end )			as [Flow Mark]
+	,SUM(case when defectCode = 'High Gate' then rejectQty end )			as [High Gate]
+	,SUM(case when defectCode = 'Silver Steak' then rejectQty end )			as [Silver Steak]
+	,SUM(case when defectCode = 'Black Dot' then rejectQty end )			as [Black Dot]
+	,SUM(case when defectCode = 'Oil Stain' then rejectQty end )			as [Oil Stain]
+	,SUM(case when defectCode = 'Flow Line' then rejectQty end )			as [Flow Line]
+	,SUM(case when defectCode = 'Over-Cut' then rejectQty end )				as [Over-Cut]
+	,SUM(case when defectCode = 'Crack' then rejectQty end )				as [Crack]
+	,SUM(case when defectCode = 'Short Mold' then rejectQty end )			as [Short Mold]
+	,SUM(case when defectCode = 'Stain Mark' then rejectQty end )			as [Stain Mark]
+	,SUM(case when defectCode = 'Weld Line' then rejectQty end )			as [Weld Line]
+	,SUM(case when defectCode = 'Flashes' then rejectQty end )				as [Flashes]
+	,SUM(case when defectCode = 'Foreign Materials' then rejectQty end )	as [Foreign Materials]
+	,SUM(case when defectCode = 'Drag' then rejectQty end )					as [Drag]
+	,SUM(case when defectCode = 'Material Bleed' then rejectQty end )		as [Material Bleed]
+	,SUM(case when defectCode = 'Bent' then rejectQty end )					as [Bent]
+	,SUM(case when defectCode = 'Deform' then rejectQty end )				as [Deform]
+	,SUM(case when defectCode = 'Gas Mark' then rejectQty end )				as [Gas Mark]
+
+	from mouldingvidefecttracking
+
+	where 1=1 
+	and day >= @datefrom
+	and day < @dateto
+    {0}
+
+	group by defectCode
+) a  group by groupFlag", searchMachine);
+
+
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@datefrom",SqlDbType.DateTime),
+                new SqlParameter("@dateto",SqlDbType.DateTime),
+                new SqlParameter("@machineID",SqlDbType.VarChar,16)
+            };
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+        public DataTable GetTopRejDefects_PartQty(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        {
+            string searchMachine = sMachineID == "" ? "" : " and machineID = @MachineID";
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendFormat(@"
+select 
+partNumber as partNo
+,defectCode
+,sum(rejectQty) as rejqty
+
+from MouldingViDefectTracking 
+where 1=1 
+and day >= @datefrom
+and day < @dateto
+{0}
+group by partNumber, defectCode ", searchMachine);
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@datefrom",SqlDbType.DateTime),
+                new SqlParameter("@dateto",SqlDbType.DateTime),
+                new SqlParameter("@machineID",SqlDbType.VarChar,16)
+            };
+
+            paras[0].Value = dDateFrom;
+            paras[1].Value = dDateTo;
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+        #endregion
 
     }
 }

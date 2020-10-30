@@ -250,6 +250,9 @@
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_BLL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_DAL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_Model.cs" />
+    <Compile Include="ExtendClass\PQCOperatorPerformanceChart\BLL.cs" />
+    <Compile Include="ExtendClass\PQCOperatorPerformanceChart\DAL.cs" />
+    <Compile Include="ExtendClass\PQCOperatorPerformanceChart\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchingCondition\BaseCondition.cs" />
     <Compile Include="SearchingCondition\LaserActivityCondition.cs" />

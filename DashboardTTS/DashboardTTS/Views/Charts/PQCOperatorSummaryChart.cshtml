@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "PQCOperatorPerformanceChart";
+    ViewBag.Title = "PQCOperatorSummaryChart";
 }
 
 @*下拉框组件*@
@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">PQC Operator Performance Chart</span>
+        <span class="titleText">PQC Operator Summary Chart</span>
     </div>
 
     <div class="row searchingBar">
@@ -80,8 +80,8 @@
         initialDate: new Date()
     });
 
-  
- 
+
+
     $(document).ready(function () {
         var today = dateFormat('yyyy-MM-dd', new Date());
         $('#txtDateFrom').val(today);
@@ -109,7 +109,7 @@
 
 
 
-      
+
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -117,7 +117,7 @@
             data: {
                 DateFrom: $("#txtDateFrom").val(),
                 DateTo: $("#txtDateTo").val(),
-                PIC: $('#ddlPIC').val()               
+                PIC: $('#ddlPIC').val()
             },
 
             beforeSend: function(){
@@ -150,7 +150,7 @@
 
 
                 option = {
-                  
+
                     title: {
                         text: ''
                     },
