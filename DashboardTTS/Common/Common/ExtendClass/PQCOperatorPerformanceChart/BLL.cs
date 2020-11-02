@@ -12,7 +12,8 @@ namespace Common.ExtendClass.PQCOperatorPerformanceChart
         public List<Model> GetOpList(SearchingCondition.BaseCondition condition)
         {
             List<Model> list = _dal.GetOpList(condition);
-
+            if (list ==null )
+                return null;
 
             return list.OrderBy(p => p.UserID).ToList();
         }

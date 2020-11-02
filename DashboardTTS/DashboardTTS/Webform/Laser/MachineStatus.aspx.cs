@@ -82,8 +82,8 @@ namespace DashboardTTS.Webform
                     uiModel.NGQty = productModel.totalFail.Value;
                     uiModel.RejRate = uiModel.LotQty == 0 ? "0.00%" : Math.Round(uiModel.NGQty / uiModel.LotQty * 100, 2).ToString() + "%";
 
-                    //img url      1~6: strRobortArmImgURL,    6,7,8: strTurnTableImgURL
-                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5, 6 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL;
+                    //img url      1~5: strRobortArmImgURL,    6,7,8: strTurnTableImgURL
+                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL;
 
                     //current status
                     uiModel.Status = dicCurStatus==null? StaticRes.Global.LaserStatus.Shutdown : dicCurStatus[i];

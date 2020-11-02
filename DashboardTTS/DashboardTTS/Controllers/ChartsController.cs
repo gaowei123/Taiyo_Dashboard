@@ -38,7 +38,52 @@ namespace DashboardTTS.Controllers
 
 
 
+
+
+
+
         MyChart.ChartFactory _chartFactory = new MyChart.ChartFactory();
+        
+        #region Home Page
+        public JsonResult GetHomeTrendData()
+        {
+            Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
+            condition.DateFrom = DateTime.Now.AddDays(-13).Date;
+            condition.DateTo = DateTime.Now.Date;
+
+            //本地测试
+            //condition.DateFrom = DateTime.Parse("2020-2-1");
+            //condition.DateTo = DateTime.Parse("2020-2-9");
+
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("HomeTrend");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+            return Json(chartData);
+        }
+
+        public JsonResult GetTotalPieChartData()
+        {
+            Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
+            condition.DateFrom = DateTime.Now.Date;
+            condition.DateTo = DateTime.Now.Date.AddDays(1);
+
+            //本地测试
+            //condition.DateFrom = DateTime.Parse("2020-2-4");
+            //condition.DateTo = DateTime.Parse("2020-2-5");
+
+
+            Common.ExtendClass.Home.Home_BLL bll = new Common.ExtendClass.Home.Home_BLL();
+            List<Common.ExtendClass.Home.Home_Model.DailyTrend> modelList = bll.GetDailyTrend(condition);
+
+
+            return Json(modelList);
+        }
+        #endregion
+
+
+
+
         public JsonResult GetLaserProductionData()
         {
             Common.SearchingCondition.LaserProductionCondition condition = new Common.SearchingCondition.LaserProductionCondition();
@@ -104,46 +149,34 @@ namespace DashboardTTS.Controllers
             return Json(chartData);
         }
 
-
-
-
-        #region Home Page
-        public JsonResult GetHomeTrendData()
+        public JsonResult GetPQCOperatorPerformanceData()
         {
             Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
-            condition.DateFrom = DateTime.Now.AddDays(-13).Date;
-            condition.DateTo = DateTime.Now.Date;
+            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
 
-            //本地测试
-            //condition.DateFrom = DateTime.Parse("2020-2-1");
-            //condition.DateTo = DateTime.Parse("2020-2-9");
-
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("HomeTrend");
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
             MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
 
-            return Json(chartData);
+        
+            return chartData == null ? Json(""): Json(chartData);
         }
 
-        public JsonResult GetTotalPieChartData()
+
+        public JsonResult GetPQCOperatorSummaryData()
         {
             Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
-            condition.DateFrom = DateTime.Now.Date;
-            condition.DateTo = DateTime.Now.Date.AddDays(1);
+            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
 
-            //本地测试
-            //condition.DateFrom = DateTime.Parse("2020-2-4");
-            //condition.DateTo = DateTime.Parse("2020-2-5");
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
 
 
-            Common.ExtendClass.Home.Home_BLL bll = new Common.ExtendClass.Home.Home_BLL();
-            List<Common.ExtendClass.Home.Home_Model.DailyTrend> modelList = bll.GetDailyTrend(condition);
-
-          
-            return Json(modelList);
+            return chartData == null ? Json("") : Json(chartData);
         }
-        #endregion
 
 
+      
     }
 }
