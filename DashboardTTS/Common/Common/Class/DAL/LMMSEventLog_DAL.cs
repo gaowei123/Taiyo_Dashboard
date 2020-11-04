@@ -9,295 +9,9 @@ namespace Common.DAL
 	/// <summary>
 	/// 数据访问类:LMMSEventLog_DAL
 	/// </summary>
-	public class LMMSEventLog_DAL
+	internal class LMMSEventLog_DAL
 	{
-		public LMMSEventLog_DAL()
-		{}
-		#region  Method
-
-		/// <summary>
-		/// 是否存在该记录
-		/// </summary>
-		public DataSet Exists()
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select count(1) from LMMSEventLog");
-			strSql.Append(" where ");
-			SqlParameter[] parameters = {
-};
-
-			return DBHelp.SqlDB.Query(strSql.ToString(),parameters);
-		}
-
-
-		/// <summary>
-		/// 增加一条数据
-		/// </summary>
-		public int Add(Common.Model.LMMSEventLog_Model model)
-		{
-            return 0;
-		}
-
-		/// <summary>
-		/// 增加一条数据
-		/// </summary>
-		public SqlCommand AddCommand(Common.Model.LMMSEventLog_Model model)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("insert into LMMSEventLog(");
-			strSql.Append("dateTime,machineID,currentOperation,ownerID,eventTrigger,startTime,stopTime,ipSetting)");
-			strSql.Append(" values (");
-			strSql.Append("@dateTime,@machineID,@currentOperation,@ownerID,@eventTrigger,@startTime,@stopTime,@ipSetting)");
-			strSql.Append(";select @@IDENTITY");
-			SqlParameter[] parameters = {
-					new SqlParameter("@dateTime", SqlDbType.DateTime),
-					new SqlParameter("@machineID", SqlDbType.VarChar,50),
-					new SqlParameter("@currentOperation", SqlDbType.VarChar,50),
-					new SqlParameter("@ownerID", SqlDbType.VarChar,50),
-					new SqlParameter("@eventTrigger", SqlDbType.VarChar,50),
-					new SqlParameter("@startTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@stopTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@ipSetting", SqlDbType.VarChar,50)};
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public SqlCommand AddCommand(Common.Model.LMMSEventLog_Model model)"  + "TableName:LMMSEventLog" , ";dateTime = "+ (model.dateTime == null ? "" : model.dateTime.ToString()) + ";machineID = "+ (model.machineID == null ? "" : model.machineID.ToString()) + ";currentOperation = "+ (model.currentOperation == null ? "" : model.currentOperation.ToString()) + ";ownerID = "+ (model.ownerID == null ? "" : model.ownerID.ToString()) + ";eventTrigger = "+ (model.eventTrigger == null ? "" : model.eventTrigger.ToString()) + ";startTime = "+ (model.startTime == null ? "" : model.startTime.ToString()) + ";stopTime = "+ (model.stopTime == null ? "" : model.stopTime.ToString()) + ";ipSetting = "+ (model.ipSetting == null ? "" : model.ipSetting.ToString()) + "");
-			parameters[0].Value = model.dateTime == null ? (object)DBNull.Value : model.dateTime ;
-			parameters[1].Value = model.machineID == null ? (object)DBNull.Value : model.machineID ;
-			parameters[2].Value = model.currentOperation == null ? (object)DBNull.Value : model.currentOperation ;
-			parameters[3].Value = model.ownerID == null ? (object)DBNull.Value : model.ownerID ;
-			parameters[4].Value = model.eventTrigger == null ? (object)DBNull.Value : model.eventTrigger ;
-			parameters[5].Value = model.startTime == null ? (object)DBNull.Value : model.startTime ;
-			parameters[6].Value = model.stopTime == null ? (object)DBNull.Value : model.stopTime ;
-			parameters[7].Value = model.ipSetting == null ? (object)DBNull.Value : model.ipSetting ;
-
-			 return  DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
-		}
-
-        /// <summary>
-        /// 更新一条数据
-        /// </summary>
-        public bool Update(Common.Model.LMMSEventLog_Model model)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("update LMMSEventLog set ");
-			strSql.Append("dateTime=@dateTime,");
-			strSql.Append("machineID=@machineID,");
-			strSql.Append("currentOperation=@currentOperation,");
-			strSql.Append("ownerID=@ownerID,");
-			strSql.Append("eventTrigger=@eventTrigger,");
-			strSql.Append("startTime=@startTime,");
-			strSql.Append("stopTime=@stopTime,");
-			strSql.Append("ipSetting=@ipSetting");
-			strSql.Append(" where id=@id");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.Int,4),
-					new SqlParameter("@dateTime", SqlDbType.DateTime),
-					new SqlParameter("@machineID", SqlDbType.VarChar,50),
-					new SqlParameter("@currentOperation", SqlDbType.VarChar,50),
-					new SqlParameter("@ownerID", SqlDbType.VarChar,50),
-					new SqlParameter("@eventTrigger", SqlDbType.VarChar,50),
-					new SqlParameter("@startTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@stopTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@ipSetting", SqlDbType.VarChar,50)};
-			parameters[0].Value = model.id == null ? (object)DBNull.Value : model.id ;
-			parameters[1].Value = model.dateTime == null ? (object)DBNull.Value : model.dateTime ;
-			parameters[2].Value = model.machineID == null ? (object)DBNull.Value : model.machineID ;
-			parameters[3].Value = model.currentOperation == null ? (object)DBNull.Value : model.currentOperation ;
-			parameters[4].Value = model.ownerID == null ? (object)DBNull.Value : model.ownerID ;
-			parameters[5].Value = model.eventTrigger == null ? (object)DBNull.Value : model.eventTrigger ;
-			parameters[6].Value = model.startTime == null ? (object)DBNull.Value : model.startTime ;
-			parameters[7].Value = model.stopTime == null ? (object)DBNull.Value : model.stopTime ;
-			parameters[8].Value = model.ipSetting == null ? (object)DBNull.Value : model.ipSetting ;
-
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public bool Update(Common.Model.LMMSEventLog_Model model)"  + "TableName:LMMSEventLog" , ";id = "+ (model.id == null ? "" : model.id.ToString() ) + ";dateTime = "+ (model.dateTime == null ? "" : model.dateTime.ToString() ) + ";machineID = "+ (model.machineID == null ? "" : model.machineID.ToString() ) + ";currentOperation = "+ (model.currentOperation == null ? "" : model.currentOperation.ToString() ) + ";ownerID = "+ (model.ownerID == null ? "" : model.ownerID.ToString() ) + ";eventTrigger = "+ (model.eventTrigger == null ? "" : model.eventTrigger.ToString() ) + ";startTime = "+ (model.startTime == null ? "" : model.startTime.ToString() ) + ";stopTime = "+ (model.stopTime == null ? "" : model.stopTime.ToString() ) + ";ipSetting = "+ (model.ipSetting == null ? "" : model.ipSetting.ToString() ) + "");
-			int rows=DBHelp.SqlDB.ExecuteSql(strSql.ToString(),parameters);
-			if (rows > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		/// <summary>
-		/// 更新一条数据
-		/// </summary>
-		public SqlCommand UpdateCommand(Common.Model.LMMSEventLog_Model model)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("update LMMSEventLog set ");
-			strSql.Append("dateTime=@dateTime,");
-			strSql.Append("machineID=@machineID,");
-			strSql.Append("currentOperation=@currentOperation,");
-			strSql.Append("ownerID=@ownerID,");
-			strSql.Append("eventTrigger=@eventTrigger,");
-			strSql.Append("startTime=@startTime,");
-			strSql.Append("stopTime=@stopTime,");
-			strSql.Append("ipSetting=@ipSetting");
-			strSql.Append(" where id=@id");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.Int,4),
-					new SqlParameter("@dateTime", SqlDbType.DateTime),
-					new SqlParameter("@machineID", SqlDbType.VarChar,50),
-					new SqlParameter("@currentOperation", SqlDbType.VarChar,50),
-					new SqlParameter("@ownerID", SqlDbType.VarChar,50),
-					new SqlParameter("@eventTrigger", SqlDbType.VarChar,50),
-					new SqlParameter("@startTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@stopTime", SqlDbType.SmallDateTime),
-					new SqlParameter("@ipSetting", SqlDbType.VarChar,50)};
-			parameters[0].Value = model.id == null ? (object)DBNull.Value : model.id ;
-			parameters[1].Value = model.dateTime == null ? (object)DBNull.Value : model.dateTime ;
-			parameters[2].Value = model.machineID == null ? (object)DBNull.Value : model.machineID ;
-			parameters[3].Value = model.currentOperation == null ? (object)DBNull.Value : model.currentOperation ;
-			parameters[4].Value = model.ownerID == null ? (object)DBNull.Value : model.ownerID ;
-			parameters[5].Value = model.eventTrigger == null ? (object)DBNull.Value : model.eventTrigger ;
-			parameters[6].Value = model.startTime == null ? (object)DBNull.Value : model.startTime ;
-			parameters[7].Value = model.stopTime == null ? (object)DBNull.Value : model.stopTime ;
-			parameters[8].Value = model.ipSetting == null ? (object)DBNull.Value : model.ipSetting ;
-
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public SqlCommand UpdateCommand(Common.Model.LMMSEventLog_Model model)"  + "TableName:LMMSEventLog" , ";id = "+ (model.id == null ? "" : model.id.ToString()) + ";dateTime = "+ (model.dateTime == null ? "" : model.dateTime.ToString()) + ";machineID = "+ (model.machineID == null ? "" : model.machineID.ToString()) + ";currentOperation = "+ (model.currentOperation == null ? "" : model.currentOperation.ToString()) + ";ownerID = "+ (model.ownerID == null ? "" : model.ownerID.ToString()) + ";eventTrigger = "+ (model.eventTrigger == null ? "" : model.eventTrigger.ToString()) + ";startTime = "+ (model.startTime == null ? "" : model.startTime.ToString()) + ";stopTime = "+ (model.stopTime == null ? "" : model.stopTime.ToString()) + ";ipSetting = "+ (model.ipSetting == null ? "" : model.ipSetting.ToString()) + "");
-			return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
-		}
-
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public bool Delete(int id)
-		{
-			
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from LMMSEventLog ");
-			strSql.Append(" where id=@id");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.Int,4)
-            };
-			parameters[0].Value = id;
-
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public bool Delete(int id)"  + "TableName:LMMSEventLog" , "");
-			int rows=DBHelp.SqlDB.ExecuteSql(strSql.ToString(),parameters);
-			if (rows > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public bool DeleteList(string idlist )
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from LMMSEventLog ");
-			strSql.Append(" where id in ("+idlist + ")  ");
-			int rows=DBHelp.SqlDB.ExecuteSql(strSql.ToString());
-			if (rows > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public SqlCommand DeleteCommand(int id)
-		{
-			
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from LMMSEventLog ");
-			strSql.Append(" where id=@id");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.Int,4)
-            };
-			parameters[0].Value = id;
-
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public SqlCommand DeleteCommand(int id)"  + "TableName:LMMSEventLog" , "");
-			return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
-		}
-		/// <summary>
-		/// 删除一条数据
-		/// </summary>
-		public SqlCommand DeleteAllCommand( )
-		{
-			
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("delete from LMMSEventLog ");
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public SqlCommand DeleteAllCommand( )"  + "TableName:LMMSEventLog" , "");
-			return DBHelp.SqlDB.generateCommand(strSql.ToString(), new SqlParameter[0]);
-		}
-
-
-		/// <summary>
-		/// 得到一个对象实体
-		/// </summary>
-		public Common.Model.LMMSEventLog_Model GetModel(int id)
-		{
-			
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select  top 1 id,dateTime,machineID,currentOperation,ownerID,eventTrigger,startTime,stopTime,ipSetting from LMMSEventLog ");
-			strSql.Append(" where id=@id");
-			SqlParameter[] parameters = {
-					new SqlParameter("@id", SqlDbType.Int,4)
-            };
-			parameters[0].Value = id;
-
-			 DBHelp.Reports.LogFile.DebugLog("AUTOCODE","NameSpace:Common.DAL" , "Class:LMMSEventLog_DAL" , "Function:		public Common.Model.LMMSEventLog_Model GetModel(int id)"  + "TableName:LMMSEventLog" , "");
-			Common.Model.LMMSEventLog_Model model=new Common.Model.LMMSEventLog_Model();
-			DataSet ds=DBHelp.SqlDB.Query(strSql.ToString(),parameters);
-			if(ds.Tables[0].Rows.Count>0)
-			{
-				if(ds.Tables[0].Rows[0]["id"].ToString()!="")
-				{
-					model.id=int.Parse(ds.Tables[0].Rows[0]["id"].ToString());
-				}
-				if(ds.Tables[0].Rows[0]["dateTime"].ToString()!="")
-				{
-					model.dateTime=DateTime.Parse(ds.Tables[0].Rows[0]["dateTime"].ToString());
-				}
-				model.machineID=ds.Tables[0].Rows[0]["machineID"].ToString();
-				model.currentOperation=ds.Tables[0].Rows[0]["currentOperation"].ToString();
-				model.ownerID=ds.Tables[0].Rows[0]["ownerID"].ToString();
-				model.eventTrigger=ds.Tables[0].Rows[0]["eventTrigger"].ToString();
-				if(ds.Tables[0].Rows[0]["startTime"].ToString()!="")
-				{
-					model.startTime=DateTime.Parse(ds.Tables[0].Rows[0]["startTime"].ToString());
-				}
-				if(ds.Tables[0].Rows[0]["stopTime"].ToString()!="")
-				{
-					model.stopTime=DateTime.Parse(ds.Tables[0].Rows[0]["stopTime"].ToString());
-				}
-				model.ipSetting=ds.Tables[0].Rows[0]["ipSetting"].ToString();
-				return model;
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-
-		
-        public DataSet GetTodayList()
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"SELECT  machineID, currentOperation, eventTrigger, startTime, stopTime FROM LMMSEventLog   
-                            WHERE currentOperation like '%OEE' and dateTime >= CONVERT(varchar, GETDATE(), 23) ");
-           
-            return DBHelp.SqlDB.Query(strSql.ToString());
-        }
-
-
-        #endregion  Method
-
-        #region MyRegion
-
-        internal DataSet getOEE(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo)
+        public DataSet getOEE(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo)
         {
             StringBuilder strSql = new StringBuilder();
 
@@ -342,9 +56,6 @@ namespace Common.DAL
 
             return ds;
         }
- 
-
-     
 
         public DataTable GetTimeByStatus(DateTime dDateFrom, DateTime dDateTo, string sMachineID, params string[] sStatus)
         {
@@ -392,32 +103,19 @@ namespace Common.DAL
         }
 
 
-        internal DataTable GetLastestTop50()
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-SELECT TOP 50 
-	[id]
-    ,[dateTime]
-    ,[machineID]
-    ,[currentOperation]
-    ,[ownerID]
-    ,case when eventTrigger = 'ADJUSTMENT' then 'BUYOFF' 
-    when eventTrigger = 'POWER ON' then 'RUN'
-    when eventTrigger = 'POWER OFF' then 'SHUTDOWN'
-    else eventTrigger end as eventTrigger
-    ,[startTime]
-    ,[stopTime]
-    ,[ipSetting]
-FROM [LMMSEventLog]
-where currentOperation in ('TECHNICIAN_OEE','SYSTEM_OEE')
-order by stoptime desc ,currentOperation desc");
 
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
 
-            return ds == null || ds.Tables.Count == 0 ? null : ds.Tables[0];
 
-        }
+
+
+
+
+
+
+
+
+
+
 
         public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus)
         {
@@ -472,12 +170,7 @@ and datetime >= @DateFrom and datetime <= @DateTo");
                 return ds.Tables[0];
             }
         }
-
-
-
-
-
-        #endregion
+        
     }
 }
 

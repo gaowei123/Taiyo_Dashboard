@@ -240,6 +240,9 @@
                             <%--<li><a runat="server" href="./PQC_Product/PackingPicChart">Packing PIC Chart</a></li>--%>
 
                             <li><a runat="server" href="./Charts/PQCOperatorPerformanceChart">PQC Operator Performance Chart</a></li>
+                            <li><a runat="server" href="./Charts/PQCOperatorSummaryChart">PQC Operator Summary Chart</a></li>
+
+                             <li><a runat="server" href="./Charts/PQCTopRejectChart">PQC Top Rejection Chart</a></li>
 
 
                             <li><a runat="server" href="./PQC_Product/PackingProductionTrendChart">Packing Production Trend Chart</a></li>

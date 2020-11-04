@@ -3719,6 +3719,7 @@
     <Content Include="Views\LASER_Product\DailyReport.cshtml" />
     <Content Include="Views\Charts\PQCOperatorPerformanceChart.cshtml" />
     <Content Include="Views\Charts\PQCOperatorSummaryChart.cshtml" />
+    <Content Include="Views\Charts\PQCTopRejectChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

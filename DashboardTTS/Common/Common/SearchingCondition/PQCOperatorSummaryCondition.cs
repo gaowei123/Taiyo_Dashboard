@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Common.SearchingCondition
 {
-   public  class PQCOperatorSummaryCondition:BaseCondition
+    public class PQCOperatorSummaryCondition : BaseCondition
     {
         public string PIC { get; set; }
+        public string GroupBy { get; set; }
     }
 }

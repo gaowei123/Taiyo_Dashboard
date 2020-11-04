@@ -9,6 +9,26 @@ namespace DashboardTTS.Controllers
     public class ChartsController : Controller
     {
         #region view
+        public ActionResult LaserMachineActivityChart()
+        {
+            return View();
+        }
+        public ActionResult PQCOperatorPerformanceChart()
+        {
+            return View();
+        }
+        public ActionResult PQCOperatorSummaryChart()
+        {
+            return View();
+        }
+        public ActionResult PQCTopRejectChart()
+        {
+            return View();
+        }
+
+
+
+
         public ActionResult LaserProductionChart()
         {
             return View();
@@ -22,18 +42,7 @@ namespace DashboardTTS.Controllers
             return View();
         }
       
-        public ActionResult LaserMachineActivityChart()
-        {
-            return View();
-        }
-        public ActionResult PQCOperatorPerformanceChart()
-        {
-            return View();
-        }
-        public ActionResult PQCOperatorSummaryChart()
-        {
-            return View();
-        }
+        
         #endregion
 
 
@@ -80,6 +89,100 @@ namespace DashboardTTS.Controllers
             return Json(modelList);
         }
         #endregion
+
+        public JsonResult GetLaserActivityData()
+        {
+            Common.SearchingCondition.LaserActivityCondition condition = new Common.SearchingCondition.LaserActivityCondition();
+            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
+            condition.Shift = Request.Form["Shift"];
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserMachineActivity");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+            return Json(chartData);
+        }
+
+        public JsonResult GetPQCOperatorPerformanceData()
+        {
+            Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
+            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+
+            return chartData == null ? Json("") : Json(chartData);
+        }
+
+        public JsonResult GetPQCOperatorSummaryData()
+        {
+            Common.SearchingCondition.PQCOperatorSummaryCondition condition = new Common.SearchingCondition.PQCOperatorSummaryCondition();
+            condition.GroupBy = Request.Form["GroupBy"];
+            if (condition.GroupBy == "Daily")
+            {
+                condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+                condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
+            }
+            else if (condition.GroupBy == "Monthly")
+            {
+                int year = int.Parse(Request.Form["Year"]);
+                condition.DateFrom = DateTime.Parse($"{year}-1-1");
+                condition.DateTo = condition.DateFrom.Value.AddYears(1);
+            }
+            else if (condition.GroupBy == "Yearly")
+            {
+                condition.DateFrom = DateTime.Parse("2017-1-1");
+                condition.DateTo = DateTime.Now.AddDays(1);
+            }
+            else
+            {
+                throw new NullReferenceException("No such type for group by!");
+            }
+            condition.PIC = Request.Form["PIC"];
+
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorSummary");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+
+            return chartData == null ? Json("") : Json(chartData);
+        }
+
+
+        #region Top Reject
+        public JsonResult GetTopPartNoRejData(DateTime dateFrom, DateTime dateTo, int topCount)
+        {
+            Common.SearchingCondition.PQCTopRejectCondition condition = new Common.SearchingCondition.PQCTopRejectCondition();
+            condition.DateFrom = dateFrom;
+            condition.DateTo = dateTo;
+            condition.TopCount = topCount;
+            
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCTopRejPartNo");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+            return chartData == null ? Json("") : Json(chartData);
+        }
+        
+        public JsonResult GetTopDefectRejData(DateTime dateFrom, DateTime dateTo, int topCount)
+        {
+            Common.SearchingCondition.PQCTopRejectCondition condition = new Common.SearchingCondition.PQCTopRejectCondition();
+            condition.DateFrom = dateFrom;
+            condition.DateTo = dateTo;
+            condition.TopCount = topCount;
+
+
+            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCTopRejDefect");
+            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+
+            return chartData == null ? Json("") : Json(chartData);
+        }
+
+        #endregion
+
+
 
 
 
@@ -136,46 +239,12 @@ namespace DashboardTTS.Controllers
             return Json(chartData);
         }
         
-        public JsonResult GetLaserActivityData()
-        {
-            Common.SearchingCondition.LaserActivityCondition condition = new Common.SearchingCondition.LaserActivityCondition();
-            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
-            condition.Shift = Request.Form["Shift"];
+      
 
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserMachineActivity");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
+      
 
-            return Json(chartData);
-        }
-
-        public JsonResult GetPQCOperatorPerformanceData()
-        {
-            Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
-            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
 
         
-            return chartData == null ? Json(""): Json(chartData);
-        }
-
-
-        public JsonResult GetPQCOperatorSummaryData()
-        {
-            Common.SearchingCondition.BaseCondition condition = new Common.SearchingCondition.BaseCondition();
-            condition.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            condition.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(condition);
-
-
-            return chartData == null ? Json("") : Json(chartData);
-        }
-
 
       
     }

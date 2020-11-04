@@ -48,6 +48,8 @@
     <Compile Include="ConcreteChartMethod\PQCOperatorPerformance.cs" />
     <Compile Include="ConcreteChartMethod\PQCOperatorSummary.cs" />
     <Compile Include="ConcreteChartMethod\PQCProduction.cs" />
+    <Compile Include="ConcreteChartMethod\PQCTopRejDefect.cs" />
+    <Compile Include="ConcreteChartMethod\PQCTopRejPartNo.cs" />
     <Compile Include="IChartMethod.cs" />
     <Compile Include="ChartFactory.cs" />
     <Compile Include="ChartModel.cs" />

@@ -30,7 +30,7 @@ namespace Common.ExtendClass.PQCOperatorSummaryChart
 	                                    SUM(TotalQty) as CheckQty,
 	                                    0 as PackQty
 	                                    from PQCQaViTracking 
-	                                    where 1=1 and day >= '2020-3-1' and day < '2020-3-30' {0}
+	                                    where 1=1 and day >= @dateFrom and day < @dateTo {0}
 	                                    group by DAY([Day]), MONTH([Day]), YEAR([Day])
 
 	                                    union all
@@ -42,9 +42,8 @@ namespace Common.ExtendClass.PQCOperatorSummaryChart
 	                                    0 as CheckQty,
 	                                    SUM(TotalQty) as PackQty	
 	                                    from PQCPackTracking 
-	                                    where 1=1 and day >= '2020-3-1' and day < '2020-3-30' {1}
+	                                    where 1=1 and day >= @dateFrom and day < @dateTo {1}
 	                                    group by DAY([Day]), MONTH([Day]), YEAR([Day])
-
                                     ) a 
                                     group by a.[Day], a.[Month], a.[Year] ", strConditionPIC, strConditionPIC);
 

@@ -13,10 +13,8 @@ namespace Common.BLL
     /// </summary>
     public class LMMSEventLog_BLL
     {
-        private readonly Common.DAL.LMMSEventLog_DAL dal = new Common.DAL.LMMSEventLog_DAL();
-        public LMMSEventLog_BLL()
-        { }
-        
+        private readonly Common.DAL.LMMSEventLog_DAL _dal = new Common.DAL.LMMSEventLog_DAL();
+
 
         bool IsRightShift(DateTime dt, string shift)
         {
@@ -117,24 +115,11 @@ namespace Common.BLL
             return Result;
         }
         
-        public DataTable GetTodayList()
-        {
-            DataSet ds = dal.GetTodayList();
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
 
         public Dictionary<DateTime, StaticRes.Global.StatusType> getOEE(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo, string sPartNo, string shift, string sDateNotIn, bool bExceptWeekend)
         {
             DataSet ds = new DataSet();
-            ds = dal.getOEE(dTimeFrom.AddDays(-1), dTimeTo, sMachineNo);
+            ds = _dal.getOEE(dTimeFrom.AddDays(-1), dTimeTo, sMachineNo);
             Dictionary<DateTime, StaticRes.Global.StatusType> dPoints = new Dictionary<DateTime, StaticRes.Global.StatusType>();
             if (ds == null || ds.Tables.Count == 0)
             {
@@ -356,7 +341,7 @@ namespace Common.BLL
 
 
             DataTable dt = new DataTable();
-            dt = dal.GetTimeByStatus(dDateFrom, dDateTo, sMachineID, sStatus);
+            dt = _dal.GetTimeByStatus(dDateFrom, dDateTo, sMachineID, sStatus);
             if (dt == null || dt.Rows.Count == 0)
             {
                 return 0;
@@ -386,7 +371,15 @@ namespace Common.BLL
 
 
 
-        #region 将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds整理 
+
+
+
+
+
+
+
+
+        #region 将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
 
         private List<string> GetMachineStatusList()
         {
@@ -407,7 +400,7 @@ namespace Common.BLL
         {
 
             //源数据   前延2天,后延1天, 防止漏查.
-            DataTable dtEvent = dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "", "");
+            DataTable dtEvent = _dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "", "");
             if (dtEvent == null || dtEvent.Rows.Count == 0)
                 return null;
 
@@ -900,6 +893,7 @@ namespace Common.BLL
 
 
 
+
         /// <summary>
         /// 获取当天的机器run时间占比
         /// used rate -->  (run + setup + buyoff + testing) / total(shutdown除外的总时间)
@@ -958,7 +952,13 @@ namespace Common.BLL
         {
             Dictionary<int, string> dicStatus = new Dictionary<int, string>();
 
-            DataTable dt = dal.GetLastestTop50();
+            DataTable dt = _dal.GetList(DateTime.Now.Date, DateTime.Now.Date.AddDays(1), string.Empty, string.Empty);
+            if (dt != null & dt.Rows.Count != 0)
+            {
+                dt = dt.Select("", " stoptime desc ,currentOperation desc ").CopyToDataTable();
+            }
+           
+
             for (int i = 1; i < 9; i++)
             {
                 string status = string.Empty;
