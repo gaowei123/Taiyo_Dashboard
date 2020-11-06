@@ -65,6 +65,14 @@
       <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
       <Name>StaticRes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Taiyo.Enum\Taiyo.Enum.csproj">
+      <Project>{7eef5249-5d72-4470-a952-94983fad5433}</Project>
+      <Name>Taiyo.Enum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Taiyo.SearchParam\Taiyo.SearchParam.csproj">
+      <Project>{d650fea2-5ad3-4599-81d0-97c084053b7b}</Project>
+      <Name>Taiyo.SearchParam</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

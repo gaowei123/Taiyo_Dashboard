@@ -8,22 +8,22 @@ namespace MyChart.ConcreteChartMethod
 {
     public class PQCProduction : IChartMethod
     {
-        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition condition)
+        public ChartModel GetChartData(Taiyo.SearchParam.BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetLegend(Common.SearchingCondition.BaseCondition condition)
+        public List<string> GetLegend(Taiyo.SearchParam.BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<Series> GetSeries(Common.SearchingCondition.BaseCondition condition)
+        public List<Series> GetSeries(Taiyo.SearchParam.BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition condition)
+        public List<string> GetXAxisData(Taiyo.SearchParam.BaseParam param)
         {
             throw new NotImplementedException();
         }

@@ -1,0 +1,363 @@
+﻿
+@{
+    ViewBag.Title = "PQCTopRejectChart";
+}
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*echart*@
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+
+
+<div class="container">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">PQC Top Rejection Chart</span>
+    </div>
+
+    <div class="row searchingBar">
+        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom"
+                           CssClass="form-control formDateTimePicker"
+                           data-date-format="yyyy-mm-dd"
+                           placeholder="Please choose date"
+                           style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo"
+                           CssClass="form-control formDateTimePicker"
+                           data-date-format="yyyy-mm-dd"
+                           placeholder="Please choose date"
+                           style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Top Count:</label>
+                    <select class="form-control" id="ddlTopCount" style="width:60%;">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="generateTopPartNoRej(); generateTopDefectRej();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="margin-top:10px;">
+            <div id="divChartTopPartNo"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 panel panel-default">
+            <div id="divChartTopDefect"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    var apiGetTopPartNoChartData = window.globalConfig.rootDirectory + '/Charts/GetTopPartNoRejData';
+    var apiGetTopDefectChartData = window.globalConfig.rootDirectory + '/Charts/GetTopDefectRejData';
+    var topPartNoChart = echarts.init(document.getElementById('divChartTopPartNo'));
+    var topDefectChart = echarts.init(document.getElementById('divChartTopDefect'));
+
+
+  
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+
+
+
+    $(document).ready(function () {
+        //默认选择前30天
+        var date = new Date();
+        date.setDate(date.getDate() - 30);
+
+
+        var dateFrom = dateFormat('yyyy-MM-dd', date);
+        var dateTo = dateFormat('yyyy-MM-dd', new Date());
+
+        $('#txtDateFrom').val(dateFrom);
+        $('#txtDateTo').val(dateTo);
+
+
+        generateTopPartNoRej();
+        generateTopDefectRej();
+    });
+
+
+
+
+
+
+    function generateTopPartNoRej() {
+
+        var searchData = {
+            DateFrom: $("#txtDateFrom").val(),
+            DateTo: $("#txtDateTo").val(),
+            TopCount: $("#ddlTopCount").val()
+        }
+    
+        var rotate = searchData.TopCount >= 10 ? 40 : 0;
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetTopPartNoChartData,
+            data:searchData,
+
+            beforeSend: function () {
+                topPartNoChart.showLoading();
+            },
+
+            success: function (data) {
+
+                if (data== null || data == undefined || data.length==0 ) {
+                    alert("No data found !");
+                    return false;
+                }
+
+
+
+                var series = [];
+                for (var i = 0; i < data.SeriesData.length; i++) {
+                    series.push({
+                        name: data.SeriesData[i].Name,
+                        type: data.SeriesData[i].Type,
+                        stack: data.SeriesData[i].Stack,
+                        data: data.SeriesData[i].Data,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: function (data) {
+                                if (data.data === 0) {
+                                    return '';
+                                } else {
+                                    return data.data;
+                                }
+                            }
+                        }
+                    });
+                }
+
+
+                option = {
+
+                    title: {
+                        text: 'Top Part No Rejection'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: data.LegendData
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: data.XAxisData,
+                            axisLabel:{
+                                interval:0,
+                                rotate: rotate
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: series
+                };
+
+                topPartNoChart.setOption(option, true);
+
+
+
+                topPartNoChart.clear();
+                topPartNoChart.setOption(option);
+            },
+
+            complete: function(){
+                topPartNoChart.hideLoading();
+                topPartNoChart.resize({ height: $(window).height() - 600 });
+            },
+
+
+            error: function (e) {
+                alert("Get chart data error !");
+                topPartNoChart.hideLoading();
+            }
+        });
+
+    }
+
+
+    function generateTopDefectRej() {
+
+        var searchData = {
+            DateFrom: $("#txtDateFrom").val(),
+            DateTo: $("#txtDateTo").val(),
+            TopCount: $("#ddlTopCount").val()
+        }
+
+
+        var rotate = searchData.TopCount >= 10 ? 40 : 0;
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetTopDefectChartData,
+            data: searchData,
+
+            beforeSend: function () {
+                topDefectChart.showLoading();
+            },
+
+            success: function (data) {
+
+                if (data == null || data == undefined || data.length == 0) {
+                    alert("No data found !");
+                    return false;
+                }
+
+
+
+                var series = [];
+                for (var i = 0; i < data.SeriesData.length; i++) {
+                    series.push({
+                        name: data.SeriesData[i].Name,
+                        type: data.SeriesData[i].Type,
+                        stack: data.SeriesData[i].Stack,
+                        data: data.SeriesData[i].Data,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: function (data) {
+                                if (data.data === 0) {
+                                    return '';
+                                } else {
+                                    return data.data;
+                                }
+                            }
+                        }
+                    });
+                }
+
+
+                option = {
+
+                    title: {
+                        text: 'Top Defect Rejection'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: data.LegendData
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: data.XAxisData,
+                            axisLabel: {
+                                interval: 0,
+                                rotate: rotate
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: series
+                };
+
+                topDefectChart.setOption(option, true);
+
+
+
+                topDefectChart.clear();
+                topDefectChart.setOption(option);
+            },
+
+            complete: function () {
+                topDefectChart.hideLoading();
+                topDefectChart.resize({ height: $(window).height() - 650 });
+            },
+
+
+            error: function (e) {
+                alert("Get chart data error !");
+                topDefectChart.hideLoading();
+            }
+        });
+
+    }
+
+
+
+
+    $(window).resize(function () {
+        chart.resize({ height: $(window).height() - 650 });
+    });
+
+
+
+   
+
+
+</script>

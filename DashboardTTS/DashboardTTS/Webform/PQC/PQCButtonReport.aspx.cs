@@ -320,7 +320,7 @@ namespace DashboardTTS.Webform.PQC
                     else if (summaryRowText == "OTHERS >" || summaryRowText == "TTS MOULD >" || summaryRowText == "VENDOR MOULD >" || summaryRowText == "PAINTING >"
                         || summaryRowText == "PAINTING SETUP >" || summaryRowText == "QA PAINT TEST >" || summaryRowText == "LASER >" || summaryRowText == "OVERALL >")
                     {
-                        for (int i = 3; i < 11; i++)
+                        for (int i = 3; i < 12; i++)
                         {
                             item.Cells[i].Font.Bold = true;
                             item.Cells[i].ForeColor = System.Drawing.Color.Black;

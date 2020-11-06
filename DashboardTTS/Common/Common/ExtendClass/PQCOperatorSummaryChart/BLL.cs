@@ -8,10 +8,10 @@ namespace Common.ExtendClass.PQCOperatorSummaryChart
     public class BLL
     {
         private readonly DAL _dal = new DAL();
-        public List<Model> GetDataList(SearchingCondition.PQCOperatorSummaryCondition cond)
+        public List<Model> GetDataList(Taiyo.SearchParam.PQCParam.PQCOperatorSummaryCondition param)
         {
 
-            return _dal.GetDailyList(cond);
+            return _dal.GetDailyList(param);
         }
 
         

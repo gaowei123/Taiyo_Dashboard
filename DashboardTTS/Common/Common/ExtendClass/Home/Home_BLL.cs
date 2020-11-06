@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using Taiyo.Enum.Organization;
+using Taiyo.SearchParam;
+
 
 namespace Common.ExtendClass.Home
 {
@@ -11,42 +14,45 @@ namespace Common.ExtendClass.Home
         Home_DAL _dal = new Home_DAL();
 
 
-        
-
-
-        public List<Home_Model.DailyTrend> GetMouldingDaily(SearchingCondition.BaseCondition cond)
-        {
-            DataTable dt = _dal.GetMouldingDaily(cond);
-            if (dt==null || dt.Rows.Count == 0)
-                return null;
-
-
+        /// <summary>
+        /// sql统一字段 month, day, output
+        /// </summary>
+        private List<Home_Model.DailyTrend> ConvertList(DataTable dt, Department dpt)
+        {           
             List<Home_Model.DailyTrend> modelList = new List<Home_Model.DailyTrend>();
 
             foreach (DataRow dr in dt.Rows)
             {
                 Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-
-                model.Department = "Moulding";
-                DateTime day = DateTime.Parse(dr["day"].ToString());
-                model.Day = Common.CommFunctions.GetMonthName(day.Month, false) + "." + day.Day.ToString();
+                model.Department = dpt.ToString();
+                model.Day = int.Parse(dr["day"].ToString());
+                model.Month = int.Parse(dr["month"].ToString());
                 model.Output = decimal.Parse(dr["output"].ToString());
-
                 modelList.Add(model);
             }
 
+            return modelList;
+        }
 
-            DateTime dTemp = cond.DateFrom.Value.Date;
-            while(dTemp < cond.DateTo.Value.Date)
+
+
+        /// <summary>
+        /// 周末, 节假日没数据, 查询不到对应的天
+        /// 循环from-to, 补齐全部天数, 缺失天output默认0;
+        /// </summary>
+        private List<Home_Model.DailyTrend> FillAllDate(List<Home_Model.DailyTrend> modelList, HomeParam param)
+        {
+            DateTime dTemp = param.DateFrom.Value.Date;
+            while (dTemp < param.DateTo.Value.Date)
             {
-                string day = Common.CommFunctions.GetMonthName(dTemp.Month, false) + "." + dTemp.Day;
-
-                var result = from a in modelList where a.Day == day select a;
+                var result = from a in modelList where a.Day == dTemp.Day && a.Month == dTemp.Month select a;
                 if (result == null || result.Count() == 0)
                 {
                     Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-                    model.Department = "Moulding";
-                    model.Day = day;
+                    model.Department = Department.Moulding.ToString();
+                    model.Day = dTemp.Day;
+                    model.Month = dTemp.Month;
+                    model.WeekName = dTemp.DayOfWeek.ToString();
                     model.Output = 0;
                     modelList.Add(model);
                 }
@@ -54,200 +60,106 @@ namespace Common.ExtendClass.Home
                 dTemp = dTemp.AddDays(1);
             }
 
-            return (from a in modelList orderby a.Day ascending select a).ToList();
+            return modelList.OrderBy(p => p.Month).OrderBy(p=>p.Day).ToList();
         }
 
 
-        public List<Home_Model.DailyTrend> GetLaserDaily(SearchingCondition.BaseCondition cond)
+
+
+        #region 各部门daily list
+        public List<Home_Model.DailyTrend> GetMouldingDaily(HomeParam param)
+        {
+            DataTable dt = _dal.GetMouldingDaily(param);
+            if (dt==null || dt.Rows.Count == 0)
+                return null;
+
+            var modelList = ConvertList(dt, Department.Moulding);
+            return FillAllDate(modelList, param);
+        }
+        public List<Home_Model.DailyTrend> GetPaintingDaily(HomeParam param)
+        {
+            DataTable dt = _dal.GetPaintingDaily(cond);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+            var modelList = ConvertList(dt, Department.Painting);
+            return FillAllDate(modelList, cond);
+        }
+        public List<Home_Model.DailyTrend> GetLaserDaily(HomeParam param)
         {
             DataTable dt = _dal.GetLaserDaily(cond);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
-
-            List<Home_Model.DailyTrend> modelList = new List<Home_Model.DailyTrend>();
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-
-                model.Department = "Laser";
-                DateTime day = DateTime.Parse(dr["day"].ToString());
-                model.Day = Common.CommFunctions.GetMonthName(day.Month, false) + "." + day.Day.ToString();
-                model.Output = decimal.Parse(dr["output"].ToString());
-
-                modelList.Add(model);
-            }
-
-
-            DateTime dTemp = cond.DateFrom.Value.Date;
-            while (dTemp < cond.DateTo.Value.Date)
-            {
-                string day = Common.CommFunctions.GetMonthName(dTemp.Month, false) + "." + dTemp.Day;
-
-                var result = from a in modelList where a.Day == day select a;
-                if (result == null || result.Count() == 0)
-                {
-                    Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-                    model.Department = "Laser";
-                    model.Day = day;
-                    model.Output = 0;
-                    modelList.Add(model);
-                }
-                dTemp = dTemp.AddDays(1);
-            }
-
-            return (from a in modelList orderby a.Day ascending select a).ToList();
+            var modelList = ConvertList(dt, Department.Laser);
+            return FillAllDate(modelList, cond);
         }
-
-
-        public List<Home_Model.DailyTrend> GetPQCOnlineDaily(SearchingCondition.BaseCondition cond)
+        public List<Home_Model.DailyTrend> GetPQCOnlineDaily(HomeParam param)
         {
             DataTable dt = _dal.GetPQCOnlineDaily(cond);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
-
-            List<Home_Model.DailyTrend> modelList = new List<Home_Model.DailyTrend>();
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-
-                model.Department = "Online";
-                DateTime day = DateTime.Parse(dr["day"].ToString());
-                model.Day = Common.CommFunctions.GetMonthName(day.Month, false) + "." + day.Day.ToString();
-                model.Output = decimal.Parse(dr["output"].ToString());
-
-                modelList.Add(model);
-            }
-
-
-            DateTime dTemp = cond.DateFrom.Value.Date;
-            while (dTemp < cond.DateTo.Value.Date)
-            {
-                string day = Common.CommFunctions.GetMonthName(dTemp.Month, false) + "." + dTemp.Day;
-
-                var result = from a in modelList where a.Day == day select a;
-                if (result == null || result.Count() == 0)
-                {
-                    Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-                    model.Department = "Online";
-                    model.Day = day;
-                    model.Output = 0;
-                    modelList.Add(model);
-                }
-
-                dTemp = dTemp.AddDays(1);
-            }
-
-            return (from a in modelList orderby a.Day ascending select a).ToList();
+            var modelList = ConvertList(dt, Department.Online);
+            return FillAllDate(modelList, cond);
         }
-
-
-        public List<Home_Model.DailyTrend> GetPQCWIPDaily(SearchingCondition.BaseCondition cond)
+        public List<Home_Model.DailyTrend> GetPQCWIPDaily(HomeParam param)
         {
             DataTable dt = _dal.GetPQCWIPDaily(cond);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
-
-            List<Home_Model.DailyTrend> modelList = new List<Home_Model.DailyTrend>();
-
-            foreach (DataRow dr in dt.Rows)
-            {
-                Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-
-                model.Department = "WIP";
-                DateTime day = DateTime.Parse(dr["day"].ToString());
-                model.Day = Common.CommFunctions.GetMonthName(day.Month, false) + "." + day.Day.ToString();
-                model.Output = decimal.Parse(dr["output"].ToString());
-
-                modelList.Add(model);
-            }
-
-
-            DateTime dTemp = cond.DateFrom.Value.Date;
-            while (dTemp < cond.DateTo.Value.Date)
-            {
-                string day = Common.CommFunctions.GetMonthName(dTemp.Month, false) + "." + dTemp.Day;
-
-                var result = from a in modelList where a.Day == day select a;
-                if (result == null || result.Count() == 0)
-                {
-                    Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-                    model.Department = "WIP";
-                    model.Day = day;
-                    model.Output = 0;
-                    modelList.Add(model);
-                }
-
-                dTemp = dTemp.AddDays(1);
-            }
-
-            return (from a in modelList orderby a.Day ascending select a).ToList();
+            var modelList = ConvertList(dt, Department.WIP);
+            return FillAllDate(modelList, cond);
         }
-
-
-        public List<Home_Model.DailyTrend> GetPQCPackingDaily(SearchingCondition.BaseCondition cond)
+        public List<Home_Model.DailyTrend> GetPQCPackingDaily(HomeParam param)
         {
             DataTable dt = _dal.GetPQCPackingDaily(cond);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
+            
+            var modelList = ConvertList(dt, Department.Packing);
+            return FillAllDate(modelList, cond);
+        }
+        #endregion
 
 
-            List<Home_Model.DailyTrend> modelList = new List<Home_Model.DailyTrend>();
 
-            foreach (DataRow dr in dt.Rows)
+        /// <summary>
+        /// 用于主页饼图数据
+        /// 获取各部门当天的output
+        /// </summary>
+        public List<Home_Model.DailyTrend> GetDailyTrend(HomeParam param)
+        {
+            List<Home_Model.DailyTrend> all = new List<Home_Model.DailyTrend>();            
+            all.AddRange(GetMouldingDaily(param));
+            all.AddRange(GetPaintingDaily(param));
+            all.AddRange(GetLaserDaily(param));
+            all.AddRange(GetPQCOnlineDaily(param));
+            all.AddRange(GetPQCWIPDaily(param));
+            all.AddRange(GetPQCPackingDaily(param));
+            
+
+            if (param.IsDisplayOffday)
             {
-                Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-
-                model.Department = "Packing";
-                DateTime day = DateTime.Parse(dr["day"].ToString());
-                model.Day = Common.CommFunctions.GetMonthName(day.Month, false) + "." + day.Day.ToString();
-                model.Output = decimal.Parse(dr["output"].ToString());
-
-                modelList.Add(model);
+                return all.OrderBy(p => p.Month).OrderBy(p => p.Day).ToList();
             }
-
-
-            DateTime dTemp = cond.DateFrom.Value.Date;
-            while (dTemp < cond.DateTo.Value.Date)
+            else
             {
-                string day = Common.CommFunctions.GetMonthName(dTemp.Month, false) + "." + dTemp.Day;
+                List<Home_Model.DailyTrend> allWithoutOffday = new List<Home_Model.DailyTrend>();
 
-                var result = from a in modelList where a.Day == day select a;
-                if (result == null || result.Count() == 0)
+                var dayList = from a in all group a by new { a.Month, a.Day } into b select new { b.Key.Month, b.Key.Day, Output = b.Sum(p => p.Output) };
+                foreach (var item in dayList)
                 {
-                    Home_Model.DailyTrend model = new Home_Model.DailyTrend();
-                    model.Department = "Packing";
-                    model.Day = day;
-                    model.Output = 0;
-                    modelList.Add(model);
+                    if (item.Output != 0)
+                    {
+                        var curDayList = (from a in all where a.Month == item.Month && a.Day == item.Day select a).ToList();
+                        allWithoutOffday.AddRange(curDayList);
+                    }
                 }
 
-                dTemp = dTemp.AddDays(1);
+                return allWithoutOffday.OrderBy(p => p.Month).OrderBy(p => p.Day).ToList();
             }
-
-            return (from a in modelList orderby a.Day ascending select a).ToList();
-        }
-
-
-        public List<Home_Model.DailyTrend> GetDailyTrend(SearchingCondition.BaseCondition cond)
-        {
-            List<Home_Model.DailyTrend> all = new List<Home_Model.DailyTrend>();
-
-
-            all.AddRange(GetMouldingDaily(cond));
-            all.AddRange(GetLaserDaily(cond));
-
-            all.AddRange(GetPQCOnlineDaily(cond));
-            all.AddRange(GetPQCWIPDaily(cond));
-            all.AddRange(GetPQCPackingDaily(cond));
-
-
-
-            return all;
         }
 
 

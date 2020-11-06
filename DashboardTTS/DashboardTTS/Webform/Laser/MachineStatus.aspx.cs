@@ -33,30 +33,34 @@ namespace DashboardTTS.Webform
                 for (int i = 1; i < 9; i++)
                 {
                     UserControl.WebUserControlMachineStatus.UIModel uiModel = new UserControl.WebUserControlMachineStatus.UIModel();
-
-                    //production info
-                    var productModel = (from a in watchDogList where a.machineID == i.ToString() select a).First();
                     uiModel.MachineID = "Machine " + i.ToString();
-                    uiModel.PartNo = productModel.partNumber;
-                    uiModel.LotNo = productModel.lotNo;
-                    uiModel.JobNo = productModel.jobNumber;
-                    uiModel.LotQty = productModel.totalQuantity.Value;
-                    uiModel.OKQty = productModel.totalPass.Value;
-                    uiModel.NGQty = productModel.totalFail.Value;
-                    uiModel.RejRate = uiModel.LotQty == 0 ? "0.00%" : Math.Round(uiModel.NGQty / uiModel.LotQty * 100, 2).ToString() + "%";
+                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL; //img url  1~5: strRobortArmImgURL  6,7,8: strTurnTableImgURL
 
-                    //img url      1~5: strRobortArmImgURL,    6,7,8: strTurnTableImgURL
-                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL;
+
 
                     //current status
-                    uiModel.Status = dicCurStatus==null? StaticRes.Global.LaserStatus.Shutdown : dicCurStatus[i];
+                    if (dicCurStatus == null || dicCurStatus[i] == StaticRes.Global.LaserStatus.Shutdown)
+                    {
+                        GetControl(i).SetShutdown(uiModel.MachineID, uiModel.ImgURL);
+                    }
+                    else
+                    {
+                        uiModel.Status = dicCurStatus[i];
+                        //production info
+                        var productModel = (from a in watchDogList where a.machineID == i.ToString() select a).First();
+                        uiModel.PartNo = productModel.partNumber;
+                        uiModel.LotNo = productModel.lotNo;
+                        uiModel.JobNo = productModel.jobNumber;
+                        uiModel.LotQty = productModel.totalQuantity.Value;
+                        uiModel.OKQty = productModel.totalPass.Value;
+                        uiModel.NGQty = productModel.totalFail.Value;
+                        uiModel.RejRate = uiModel.LotQty == 0 ? "0.00%" : Math.Round(uiModel.NGQty / uiModel.LotQty * 100, 2).ToString() + "%";
+                        //used rate
+                        double usedRate = dicCurDayUsedRate == null ? 0 : dicCurDayUsedRate[i];
+                        uiModel.UsedRate = usedRate.ToString("0.00") + "%";
 
-                    //used rate
-                    double usedRate = dicCurDayUsedRate == null ? 0: dicCurDayUsedRate[i];
-                    uiModel.UsedRate = usedRate.ToString("0.00") + "%";
-
-
-                    GetControl(i).SetUI(uiModel);
+                        GetControl(i).SetUI(uiModel);
+                    }
                 }
             }
             catch (Exception ee)

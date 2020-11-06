@@ -14,12 +14,12 @@ namespace StaticRes
         public static class LaserStatus
         {
             public const string Run = "RUN";
-            public const string Breakdown = "BREAKDOWN";
-            public const string Maintenance = "MAINTAINENCE";
             public const string Buyoff = "BUYOFF";
-            public const string NoSchedule = "NO SCHEDULE";
             public const string Setup = "SETUP";
             public const string Testing = "TESTING";
+            public const string NoSchedule = "NO SCHEDULE";
+            public const string Maintenance = "MAINTAINENCE";
+            public const string Breakdown = "BREAKDOWN";
             public const string Shutdown = "SHUTDOWN";
         }
 

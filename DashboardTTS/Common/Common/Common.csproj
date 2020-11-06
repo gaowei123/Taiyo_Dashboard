@@ -260,12 +260,6 @@
     <Compile Include="ExtendClass\PQCTopRejChart\DAL.cs" />
     <Compile Include="ExtendClass\PQCTopRejChart\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchingCondition\BaseCondition.cs" />
-    <Compile Include="SearchingCondition\LaserActivityCondition.cs" />
-    <Compile Include="SearchingCondition\LaserMachineCondition.cs" />
-    <Compile Include="SearchingCondition\LaserProductionCondition.cs" />
-    <Compile Include="SearchingCondition\PQCOperatorSummaryCondition.cs" />
-    <Compile Include="SearchingCondition\PQCTopRejectCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DB\DB\DBHelp.csproj">
@@ -275,6 +269,14 @@
     <ProjectReference Include="..\..\StaticRes\StaticRes.csproj">
       <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
       <Name>StaticRes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Taiyo.Enum\Taiyo.Enum.csproj">
+      <Project>{7eef5249-5d72-4470-a952-94983fad5433}</Project>
+      <Name>Taiyo.Enum</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Taiyo.SearchParam\Taiyo.SearchParam.csproj">
+      <Project>{d650fea2-5ad3-4599-81d0-97c084053b7b}</Project>
+      <Name>Taiyo.SearchParam</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -60,7 +60,7 @@
 
     <tr> 
         <td class="auto-style1 lbDescript status">
-            <asp:Label ID="lbStatus" runat="server"  Width="110px" BorderStyle="Solid" BorderWidth="1px"></asp:Label> 
+            <asp:Label ID="lbStatus" runat="server"  Width="120px" BorderStyle="Solid" BorderWidth="1px"></asp:Label> 
         </td>
         <td class="auto-style3 lbDescript">Lot No</td>          
         <td class="auto-style4">

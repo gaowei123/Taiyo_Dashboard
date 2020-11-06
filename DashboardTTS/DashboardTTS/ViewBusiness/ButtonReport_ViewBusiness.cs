@@ -65,6 +65,7 @@ namespace DashboardTTS.ViewBusiness
                     model.model = dr["model"].ToString();
                     model.partNumber = dr["partNumber"].ToString();
                     model.materialNo = dr["materialPartNo"].ToString();
+                    model.unitCost = dr["unitCost"].ToString() == ""? 0: double.Parse(dr["unitCost"].ToString());
                     model.lotQty = 0;
                     model.passQty = double.Parse(dr["passQty"].ToString());
                     model.rejectQty = double.Parse(dr["rejectQty"].ToString());
@@ -490,9 +491,6 @@ namespace DashboardTTS.ViewBusiness
             try
             {
 
-              
-
-
                 //先拉取满足条件的所有job id.
                 string strSqlJobIn = GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
                 if (string.IsNullOrEmpty(strSqlJobIn))
@@ -510,6 +508,8 @@ namespace DashboardTTS.ViewBusiness
                 List<ViewModel.PQCButtonReport_ViewModel.LaserInfo> laserInfoList = GetLaserInfoList(strSqlJobIn);
                 List<ViewModel.PQCButtonReport_ViewModel.PaintTempInfo> paintTempInfoList = GetPaintTempInfoList(strSqlJobIn);
                 List<ViewModel.PQCButtonReport_ViewModel.PaintDelivery> paintDeliveryList = GetPaintDeliveryList(strSqlJobIn);
+
+              
 
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
                 foreach (var pqcdetailModel in pqcDetailList)
@@ -560,6 +560,8 @@ namespace DashboardTTS.ViewBusiness
                     double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
                     double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
                     reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
+                    reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
+              
                     reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup) / paintDeliveryModel.mrpQty * 100, 2);
                     reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate); 
                     
@@ -715,16 +717,19 @@ namespace DashboardTTS.ViewBusiness
               
                     //TTS total Rej Qty & Reject Rate
                     reportModel.TTS_Mould_TotalRej = (from a in jobDefectList where a.defectDescription == "TTS" select a).Sum(p => p.rejectQty);
+                    reportModel.TTS_Mould_TotalRejCost = reportModel.TTS_Mould_TotalRej * pqcdetailModel.unitCost;
                     reportModel.TTS_Mould_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "TTS" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
              
                     //Vendor total rej qty & Reject Rate
                     reportModel.Vendor_Mould_TotalRej = (from a in jobDefectList where a.defectDescription == "Vendor" select a).Sum(p => p.rejectQty);
+                    reportModel.Vendor_Mould_TotalRejCost = reportModel.Vendor_Mould_TotalRej * pqcdetailModel.unitCost;
                     reportModel.Vendor_Mould_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Vendor" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
                  
 
 
                     //Paint total Rej Qty & Reject Rate
                     reportModel.Paint_TotalRej = (from a in jobDefectList where a.defectDescription == "Paint" select a).Sum(p => p.rejectQty);
+                    reportModel.Paint_TotalRejCost = reportModel.Paint_TotalRej * pqcdetailModel.unitCost;
                     reportModel.Paint_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Paint" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
                   
 
@@ -757,6 +762,7 @@ namespace DashboardTTS.ViewBusiness
 
                     //laser total rej & Rate
                     reportModel.Laser_TotalRej = (from a in jobDefectList where a.defectDescription == "Laser" select a).Sum(p => p.rejectQty);
+                    reportModel.Laser_TotalRejCost = reportModel.Laser_TotalRej * pqcdetailModel.unitCost;
                     reportModel.Laser_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Laser" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
                  
 
@@ -772,6 +778,7 @@ namespace DashboardTTS.ViewBusiness
 
                     //others total rej qty & rej rate
                     reportModel.Others_TotalRej = (from a in jobDefectList where a.defectDescription == "Others" select a).Sum(p => p.rejectQty);
+                    reportModel.Others_TotalRejCost = reportModel.Others_TotalRej * pqcdetailModel.unitCost;
                     reportModel.Others_TotalRejRate = Math.Round((from a in jobDefectList where a.defectDescription == "Others" select a).Sum(p => p.rejectQty) / paintDeliveryModel.mrpQty * 100, 2);
 
                     reportModel.InspBy = pqcdetailModel.OP;
@@ -781,7 +788,7 @@ namespace DashboardTTS.ViewBusiness
                 }
 
 
-              
+
 
 
 
@@ -795,9 +802,9 @@ namespace DashboardTTS.ViewBusiness
                                                lotQty = modelGroup.Sum(p => p.lotQty),
                                                pass = modelGroup.Sum(p => p.pass),
                                                rejQty = modelGroup.Sum(p => p.rejQty),
+                                               rejCost = modelGroup.Sum(p => p.rejCost),
                                                rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
-
-
+                                               
 
                                                ttsLotQty = modelGroup.Sum(p => p.ttsLotQty),
                                                vendorLotQty = modelGroup.Sum(p => p.vendorLotQty),
@@ -941,23 +948,30 @@ namespace DashboardTTS.ViewBusiness
 
 
                                                TTS_Mould_TotalRej = modelGroup.Sum(p => p.TTS_Mould_TotalRej),
+                                               TTS_Mould_TotalRejCost = modelGroup.Sum(p => p.TTS_Mould_TotalRejCost),
                                                TTS_Mould_TotalRejRate = modelGroup.Sum(p => p.ttsLotQty) == 0? 0: Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.ttsLotQty) * 100, 2),
 
                                                Vendor_Mould_TotalRej = modelGroup.Sum(p => p.Vendor_Mould_TotalRej),
+                                               Vendor_Mould_TotalRejCost = modelGroup.Sum(p => p.Vendor_Mould_TotalRejCost),
                                                Vendor_Mould_TotalRejRate = modelGroup.Sum(p => p.vendorLotQty) ==0?0: Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.vendorLotQty) * 100, 2),
 
                                                Paint_TotalRej = modelGroup.Sum(p => p.Paint_TotalRej),
+                                               Paint_TotalRejCost = modelGroup.Sum(p => p.Paint_TotalRejCost),
                                                Paint_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Paint_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                                Laser_TotalRej = modelGroup.Sum(p => p.Laser_TotalRej),
+                                               Laser_TotalRejCost = modelGroup.Sum(p => p.Laser_TotalRejCost),
                                                Laser_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Laser_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                                Others_TotalRej = modelGroup.Sum(p => p.Others_TotalRej),
+                                               Others_TotalRejCost = modelGroup.Sum(p => p.Others_TotalRejCost),
                                                Others_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Others_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                                Paint_SetupRej = modelGroup.Sum(p => p.Paint_SetupRej),
+                                               Paint_SetupRejCost = modelGroup.Sum(p => p.Paint_SetupRejCost),
                                                Paint_SetupRejRate = Math.Round(modelGroup.Sum(p => p.Paint_SetupRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
                                                Paint_QATestRej = modelGroup.Sum(p => p.Paint_QATestRej),
+                                               Paint_QATestRejCost = modelGroup.Sum(p => p.Paint_QATestRejCost),
                                                Paint_QATestRejRate = Math.Round(modelGroup.Sum(p => p.Paint_QATestRej) / modelGroup.Sum(p => p.lotQty) * 100, 2)
                                            };
                 #endregion
@@ -972,6 +986,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report othersLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     othersLaserSummaryModel.partNo = "OTHERS >";
                     othersLaserSummaryModel.rejQty = laserPartModel.Others_TotalRej;
+                    othersLaserSummaryModel.rejCost = laserPartModel.Others_TotalRejCost;
                     othersLaserSummaryModel.rejRate = laserPartModel.Others_TotalRejRate;
                     othersLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersLaserSummaryModel.rejQty, othersLaserSummaryModel.rejRate);
 
@@ -988,6 +1003,7 @@ namespace DashboardTTS.ViewBusiness
                     othersLaserSummaryModel.Other = laserPartModel.Other;
 
                     othersLaserSummaryModel.Others_TotalRej = laserPartModel.Others_TotalRej;
+                    othersLaserSummaryModel.Others_TotalRejCost = laserPartModel.Others_TotalRejCost;
                     othersLaserSummaryModel.Others_TotalRejRate = laserPartModel.Others_TotalRejRate;
 
 
@@ -999,6 +1015,7 @@ namespace DashboardTTS.ViewBusiness
                     ttsMouldingLaserSummaryModel.partNo = "TTS MOULD >";
                     ttsMouldingLaserSummaryModel.lotQty = laserPartModel.ttsLotQty;
                     ttsMouldingLaserSummaryModel.rejQty = laserPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingLaserSummaryModel.rejCost = laserPartModel.TTS_Mould_TotalRejCost;
                     ttsMouldingLaserSummaryModel.rejRate = laserPartModel.TTS_Mould_TotalRejRate;
                     ttsMouldingLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingLaserSummaryModel.rejQty, ttsMouldingLaserSummaryModel.rejRate);
 
@@ -1037,6 +1054,7 @@ namespace DashboardTTS.ViewBusiness
                     ttsMouldingLaserSummaryModel.TTS_Other = laserPartModel.TTS_Other;
 
                     ttsMouldingLaserSummaryModel.TTS_Mould_TotalRej = laserPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingLaserSummaryModel.TTS_Mould_TotalRejCost = laserPartModel.TTS_Mould_TotalRejCost;
                     ttsMouldingLaserSummaryModel.TTS_Mould_TotalRejRate = laserPartModel.TTS_Mould_TotalRejRate;
 
                     laserPartSummaryInfo.Add(ttsMouldingLaserSummaryModel);
@@ -1047,6 +1065,7 @@ namespace DashboardTTS.ViewBusiness
                     vendorMouldingLaserSummaryModel.partNo = "VENDOR MOULD >";
                     vendorMouldingLaserSummaryModel.lotQty = laserPartModel.vendorLotQty;
                     vendorMouldingLaserSummaryModel.rejQty = laserPartModel.Vendor_Mould_TotalRej;
+                    vendorMouldingLaserSummaryModel.rejCost = laserPartModel.Vendor_Mould_TotalRejCost;
                     vendorMouldingLaserSummaryModel.rejRate = laserPartModel.Vendor_Mould_TotalRejRate;
                     vendorMouldingLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingLaserSummaryModel.rejQty, vendorMouldingLaserSummaryModel.rejRate);
 
@@ -1085,6 +1104,7 @@ namespace DashboardTTS.ViewBusiness
                     vendorMouldingLaserSummaryModel.Vendor_Other = laserPartModel.Vendor_Other;
 
                     vendorMouldingLaserSummaryModel.Vendor_Mould_TotalRej = laserPartModel.Vendor_Mould_TotalRej;
+                    vendorMouldingLaserSummaryModel.Vendor_Mould_TotalRejCost = laserPartModel.Vendor_Mould_TotalRejCost;
                     vendorMouldingLaserSummaryModel.Vendor_Mould_TotalRejRate = laserPartModel.Vendor_Mould_TotalRejRate;
 
                     laserPartSummaryInfo.Add(vendorMouldingLaserSummaryModel);
@@ -1094,6 +1114,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintLaserSummaryModel.partNo = "PAINTING >";
                     paintLaserSummaryModel.rejQty = laserPartModel.Paint_TotalRej;
+                    paintLaserSummaryModel.rejCost = laserPartModel.Paint_TotalRejCost;
                     paintLaserSummaryModel.rejRate = laserPartModel.Paint_TotalRejRate;
                     paintLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintLaserSummaryModel.rejQty, paintLaserSummaryModel.rejRate);
 
@@ -1125,6 +1146,7 @@ namespace DashboardTTS.ViewBusiness
                     paintLaserSummaryModel.Paint_Shortage = laserPartModel.Paint_Shortage;
 
                     paintLaserSummaryModel.Paint_TotalRej = laserPartModel.Paint_TotalRej;
+                    paintLaserSummaryModel.Paint_TotalRejCost = laserPartModel.Paint_TotalRejCost;
                     paintLaserSummaryModel.Paint_TotalRejRate = laserPartModel.Paint_TotalRejRate;
 
                     laserPartSummaryInfo.Add(paintLaserSummaryModel);
@@ -1134,7 +1156,8 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintSetupLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintSetupLaserSummaryModel.partNo = "PAINTING SETUP >";
                     paintSetupLaserSummaryModel.rejQty = laserPartModel.Paint_SetupRej;
-                    paintSetupLaserSummaryModel.rejRate = laserPartModel.Paint_SetupRejRate;
+                    paintSetupLaserSummaryModel.rejCost = laserPartModel.Paint_SetupRejCost;
+                    paintSetupLaserSummaryModel.rejRate = laserPartModel.Paint_SetupRejRate;           
                     paintSetupLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupLaserSummaryModel.rejQty, paintSetupLaserSummaryModel.rejRate);
                     laserPartSummaryInfo.Add(paintSetupLaserSummaryModel);
 
@@ -1142,6 +1165,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintQALaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintQALaserSummaryModel.partNo = "QA PAINT TEST >";
                     paintQALaserSummaryModel.rejQty = laserPartModel.Paint_QATestRej;
+                    paintQALaserSummaryModel.rejCost = laserPartModel.Paint_QATestRejCost;
                     paintQALaserSummaryModel.rejRate = laserPartModel.Paint_QATestRejRate;
                     paintQALaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQALaserSummaryModel.rejQty, paintQALaserSummaryModel.rejRate);
                     laserPartSummaryInfo.Add(paintQALaserSummaryModel);
@@ -1150,6 +1174,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report laserLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     laserLaserSummaryModel.partNo = "LASER >";
                     laserLaserSummaryModel.rejQty = laserPartModel.Laser_TotalRej;
+                    laserLaserSummaryModel.rejCost = laserPartModel.Laser_TotalRejCost;
                     laserLaserSummaryModel.rejRate = laserPartModel.Laser_TotalRejRate;
                     laserLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserLaserSummaryModel.rejQty, laserLaserSummaryModel.rejRate);
 
@@ -1177,6 +1202,7 @@ namespace DashboardTTS.ViewBusiness
                     laserLaserSummaryModel.Laser_Setup = laserPartModel.Laser_Setup;
 
                     laserLaserSummaryModel.Laser_TotalRej = laserPartModel.Laser_TotalRej;
+                    laserLaserSummaryModel.Laser_TotalRejCost = laserPartModel.Laser_TotalRejCost;
                     laserLaserSummaryModel.Laser_TotalRejRate = laserPartModel.Laser_TotalRejRate;
 
                     laserPartSummaryInfo.Add(laserLaserSummaryModel);
@@ -1189,6 +1215,7 @@ namespace DashboardTTS.ViewBusiness
                     overallLaserSummaryModel.lotQty = laserPartModel.lotQty;
                     overallLaserSummaryModel.pass = laserPartModel.pass;
                     overallLaserSummaryModel.rejQty = laserPartModel.rejQty;
+                    overallLaserSummaryModel.rejCost = laserPartModel.rejCost;
                     overallLaserSummaryModel.rejRate = laserPartModel.rejRate;
                     overallLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallLaserSummaryModel.rejQty, overallLaserSummaryModel.rejRate);
 
@@ -1207,6 +1234,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report othersWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     othersWIPSummaryModel.partNo = "OTHERS >";
                     othersWIPSummaryModel.rejQty = wipPartModel.Others_TotalRej;
+                    othersWIPSummaryModel.rejCost = wipPartModel.Others_TotalRejCost;
                     othersWIPSummaryModel.rejRate = wipPartModel.Others_TotalRejRate;
                     othersWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersWIPSummaryModel.rejQty, othersWIPSummaryModel.rejRate);
 
@@ -1231,6 +1259,7 @@ namespace DashboardTTS.ViewBusiness
                     ttsMouldingWIPSummaryModel.partNo = "TTS MOULD >";
                     ttsMouldingWIPSummaryModel.lotQty = wipPartModel.ttsLotQty;
                     ttsMouldingWIPSummaryModel.rejQty = wipPartModel.TTS_Mould_TotalRej;
+                    ttsMouldingWIPSummaryModel.rejCost = wipPartModel.TTS_Mould_TotalRejCost;
                     ttsMouldingWIPSummaryModel.rejRate = wipPartModel.TTS_Mould_TotalRejRate;
                     ttsMouldingWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingWIPSummaryModel.rejQty, ttsMouldingWIPSummaryModel.rejRate);
 
@@ -1281,6 +1310,7 @@ namespace DashboardTTS.ViewBusiness
                     vendorMouldingWIPSummaryModel.partNo = "VENDOR MOULD >";
                     vendorMouldingWIPSummaryModel.lotQty = wipPartModel.vendorLotQty;
                     vendorMouldingWIPSummaryModel.rejQty = wipPartModel.Vendor_Mould_TotalRej;
+                    vendorMouldingWIPSummaryModel.rejCost = wipPartModel.Vendor_Mould_TotalRejCost;
                     vendorMouldingWIPSummaryModel.rejRate = wipPartModel.Vendor_Mould_TotalRejRate;
                     vendorMouldingWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingWIPSummaryModel.rejQty, vendorMouldingWIPSummaryModel.rejRate);
 
@@ -1329,6 +1359,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintWIPSummaryModel.partNo = "PAINTING >";
                     paintWIPSummaryModel.rejQty = wipPartModel.Paint_TotalRej;
+                    paintWIPSummaryModel.rejCost = wipPartModel.Paint_TotalRejCost;
                     paintWIPSummaryModel.rejRate = wipPartModel.Paint_TotalRejRate;
                     paintWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintWIPSummaryModel.rejQty, paintWIPSummaryModel.rejRate);
 
@@ -1370,6 +1401,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintSetupWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintSetupWIPSummaryModel.partNo = "PAINTING SETUP >";
                     paintSetupWIPSummaryModel.rejQty = wipPartModel.Paint_SetupRej;
+                    paintSetupWIPSummaryModel.rejCost = wipPartModel.Paint_SetupRejCost;
                     paintSetupWIPSummaryModel.rejRate = wipPartModel.Paint_SetupRejRate;
                     paintSetupWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupWIPSummaryModel.rejQty, paintSetupWIPSummaryModel.rejRate);
 
@@ -1379,6 +1411,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report paintQAWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     paintQAWIPSummaryModel.partNo = "QA PAINT TEST >";
                     paintQAWIPSummaryModel.rejQty = wipPartModel.Paint_QATestRej;
+                    paintQAWIPSummaryModel.rejCost = wipPartModel.Paint_QATestRejCost;
                     paintQAWIPSummaryModel.rejRate = wipPartModel.Paint_QATestRejRate;
                     paintQAWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAWIPSummaryModel.rejQty, paintQAWIPSummaryModel.rejRate);
 
@@ -1388,6 +1421,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.Report laserWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                     laserWIPSummaryModel.partNo = "LASER >";
                     laserWIPSummaryModel.rejQty = wipPartModel.Laser_TotalRej;
+                    laserWIPSummaryModel.rejCost = wipPartModel.Laser_TotalRejCost;
                     laserWIPSummaryModel.rejRate = wipPartModel.Laser_TotalRejRate;
                     laserWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserWIPSummaryModel.rejQty, laserWIPSummaryModel.rejRate);
 
@@ -1426,6 +1460,7 @@ namespace DashboardTTS.ViewBusiness
                     overallWIPSummaryModel.lotQty = wipPartModel.lotQty;
                     overallWIPSummaryModel.pass = wipPartModel.pass;
                     overallWIPSummaryModel.rejQty = wipPartModel.rejQty;
+                    overallWIPSummaryModel.rejCost = wipPartModel.rejCost;
                     overallWIPSummaryModel.rejRate = wipPartModel.rejRate;
                     overallWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallWIPSummaryModel.rejQty, overallWIPSummaryModel.rejRate);
 
@@ -1448,6 +1483,7 @@ namespace DashboardTTS.ViewBusiness
                 ViewModel.PQCButtonReport_ViewModel.Report othersOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 othersOverallSummaryModel.partNo = "OTHERS >";
                 othersOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
+                othersOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Others_TotalRejCost);
                 othersOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
                 othersOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersOverallSummaryModel.rejQty, othersOverallSummaryModel.rejRate);
 
@@ -1472,6 +1508,7 @@ namespace DashboardTTS.ViewBusiness
                 ttsMouldingOverallSummaryModel.partNo = ("TTS MOULD >");
                 ttsMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.ttsLotQty);
                 ttsMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej);
+                ttsMouldingOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRejCost);
                 ttsMouldingOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.ttsLotQty) * 100, 2);
                 ttsMouldingOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", ttsMouldingOverallSummaryModel.rejQty, ttsMouldingOverallSummaryModel.rejRate);
 
@@ -1522,6 +1559,7 @@ namespace DashboardTTS.ViewBusiness
                 vendorMouldingOverallSummaryModel.partNo = ("VENDOR MOULD >");
                 vendorMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.vendorLotQty);
                 vendorMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej);
+                vendorMouldingOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRejCost);
                 vendorMouldingOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej) / partsTypeSummaryList.Sum(p => p.vendorLotQty) * 100, 2);
                 vendorMouldingOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", vendorMouldingOverallSummaryModel.rejQty, vendorMouldingOverallSummaryModel.rejRate);
 
@@ -1570,7 +1608,8 @@ namespace DashboardTTS.ViewBusiness
                 ViewModel.PQCButtonReport_ViewModel.Report paintOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintOverallSummaryModel.partNo = ("PAINTING >");
                 paintOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_TotalRej);
-                paintOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                paintOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_TotalRejCost);
+                paintOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);        
                 paintOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintOverallSummaryModel.rejQty, paintOverallSummaryModel.rejRate);
 
 
@@ -1611,6 +1650,7 @@ namespace DashboardTTS.ViewBusiness
                 ViewModel.PQCButtonReport_ViewModel.Report paintSetupOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintSetupOverallSummaryModel.partNo = "PAINTING SETUP >";
                 paintSetupOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_SetupRej);
+                paintSetupOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_SetupRejCost);
                 paintSetupOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_SetupRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
                 paintSetupOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupOverallSummaryModel.rejQty, paintSetupOverallSummaryModel.rejRate);
 
@@ -1620,6 +1660,7 @@ namespace DashboardTTS.ViewBusiness
                 ViewModel.PQCButtonReport_ViewModel.Report paintQAOveralSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 paintQAOveralSummaryModel.partNo = "QA PAINT TEST >";
                 paintQAOveralSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_QATestRej);
+                paintQAOveralSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_QATestRejCost);
                 paintQAOveralSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_QATestRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
                 paintQAOveralSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAOveralSummaryModel.rejQty, paintQAOveralSummaryModel.rejRate);
 
@@ -1629,6 +1670,7 @@ namespace DashboardTTS.ViewBusiness
                 ViewModel.PQCButtonReport_ViewModel.Report laserOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
                 laserOverallSummaryModel.partNo = ("LASER >");
                 laserOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Laser_TotalRej);
+                laserOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Laser_TotalRejCost);
                 laserOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Laser_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
                 laserOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserOverallSummaryModel.rejQty, laserPartModel.Laser_TotalRejRate);//summary汇总信息中 laser rej  按照 laser rej/laser part总数 计算. 
 
@@ -1667,6 +1709,7 @@ namespace DashboardTTS.ViewBusiness
                 overallOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.lotQty);
                 overallOverallSummaryModel.pass = partsTypeSummaryList.Sum(p => p.pass);
                 overallOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.rejQty);
+                overallOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.rejCost);
                 overallOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.rejQty) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
                 overallOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", overallOverallSummaryModel.rejQty, overallOverallSummaryModel.rejRate);
 
@@ -1695,6 +1738,7 @@ namespace DashboardTTS.ViewBusiness
                                            lotQty = modelGroup.Sum(p => p.lotQty),
                                            pass = modelGroup.Sum(p => p.pass),
                                            rejQty = modelGroup.Sum(p => p.rejQty),
+                                           rejCost = modelGroup.Sum(p => p.rejCost),
                                            rejRate = Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                            rejRateDisplay = string.Format("{0}({1}%)", modelGroup.Sum(p => p.rejQty), Math.Round(modelGroup.Sum(p => p.rejQty) / modelGroup.Sum(p => p.lotQty) * 100, 2)),
@@ -1834,24 +1878,33 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+                                           
+
                                            TTS_Mould_TotalRej = modelGroup.Sum(p => p.TTS_Mould_TotalRej),
-                                           TTS_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                           TTS_Mould_TotalRejCost = modelGroup.Sum(p => p.TTS_Mould_TotalRejCost ),
+                                           TTS_Mould_TotalRejRate = modelGroup.Sum(p => p.ttsLotQty) == 0 ? 0 : Math.Round(modelGroup.Sum(p => p.TTS_Mould_TotalRej) / modelGroup.Sum(p => p.ttsLotQty) * 100, 2),
 
                                            Vendor_Mould_TotalRej = modelGroup.Sum(p => p.Vendor_Mould_TotalRej),
-                                           Vendor_Mould_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
+                                           Vendor_Mould_TotalRejCost = modelGroup.Sum(p => p.Vendor_Mould_TotalRejCost ),
+                                           Vendor_Mould_TotalRejRate = modelGroup.Sum(p => p.vendorLotQty) == 0 ? 0 : Math.Round(modelGroup.Sum(p => p.Vendor_Mould_TotalRej) / modelGroup.Sum(p => p.vendorLotQty) * 100, 2),
 
                                            Paint_TotalRej = modelGroup.Sum(p => p.Paint_TotalRej),
+                                           Paint_TotalRejCost = modelGroup.Sum(p => p.Paint_TotalRejCost ),
                                            Paint_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Paint_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                            Laser_TotalRej = modelGroup.Sum(p => p.Laser_TotalRej),
+                                           Laser_TotalRejCost = modelGroup.Sum(p => p.Laser_TotalRejCost),
                                            Laser_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Laser_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                            Others_TotalRej = modelGroup.Sum(p => p.Others_TotalRej),
+                                           Others_TotalRejCost = modelGroup.Sum(p => p.Others_TotalRejCost ),
                                            Others_TotalRejRate = Math.Round(modelGroup.Sum(p => p.Others_TotalRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
 
                                            Paint_SetupRej = modelGroup.Sum(p => p.Paint_SetupRej),
+                                           Paint_SetupRejCost = modelGroup.Sum(p => p.Paint_SetupRejCost),
                                            Paint_SetupRejRate = Math.Round(modelGroup.Sum(p => p.Paint_SetupRej) / modelGroup.Sum(p => p.lotQty) * 100, 2),
                                            Paint_QATestRej = modelGroup.Sum(p => p.Paint_QATestRej),
+                                           Paint_QATestRejCost = modelGroup.Sum(p => p.Paint_QATestRejCost ),
                                            Paint_QATestRejRate = Math.Round(modelGroup.Sum(p => p.Paint_QATestRej) / modelGroup.Sum(p => p.lotQty) * 100, 2)
                                        };
 
@@ -1873,6 +1926,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.pass = modelSummary.pass;
                     reportModel.rejQty = modelSummary.rejQty;
                     reportModel.rejRate = modelSummary.rejRate;
+                    reportModel.rejCost = modelSummary.rejCost;
                     reportModel.rejRateDisplay = modelSummary.rejRateDisplay;
 
                     //tts

@@ -10,7 +10,7 @@ namespace Common.ExtendClass.PQCTopRejChart
     internal class DAL
     {
 
-        public List<Model.TopPartNo> GetTopPartNoRej(SearchingCondition.PQCTopRejectCondition condition)
+        public List<Model.TopPartNo> GetTopPartNoRej(Taiyo.SearchParam.PQCParam.PQCTopRejectCondition param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendFormat(@"select
@@ -19,7 +19,7 @@ namespace Common.ExtendClass.PQCTopRejChart
                                     ,sum(rejectQty) as rejQty
                                     from PQCQaViTracking 
                                     where 1=1 and day >=@dateFrom and day < @dateTo
-                                    group by partNumber order by rejQty desc", condition.TopCount);
+                                    group by partNumber order by rejQty desc", param.TopCount);
 
 
             SqlParameter[] parameters =
@@ -27,8 +27,8 @@ namespace Common.ExtendClass.PQCTopRejChart
                 new SqlParameter("@dateFrom",SqlDbType.DateTime2),
                 new SqlParameter("@dateTo",SqlDbType.DateTime2)
             };
-            parameters[0].Value = condition.DateFrom;
-            parameters[1].Value = condition.DateTo;
+            parameters[0].Value = param.DateFrom;
+            parameters[1].Value = param.DateTo;
 
             
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
@@ -54,7 +54,7 @@ namespace Common.ExtendClass.PQCTopRejChart
         }
         
 
-        public List<Model.TopDefect> GetTopDefectRej(SearchingCondition.PQCTopRejectCondition condition)
+        public List<Model.TopDefect> GetTopDefectRej(Taiyo.SearchParam.PQCParam.PQCTopRejectCondition param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendFormat(@"select
@@ -63,7 +63,7 @@ namespace Common.ExtendClass.PQCTopRejChart
                                     ,sum(rejectQty) as rejQty
                                     from PQCQaViDefectTracking 
                                     where 1=1 and day >=@dateFrom and day < @dateTo
-                                    group by defectDescription, defectCode order by  rejQty desc", condition.TopCount);
+                                    group by defectDescription, defectCode order by  rejQty desc", param.TopCount);
 
 
             SqlParameter[] parameters =
@@ -71,8 +71,8 @@ namespace Common.ExtendClass.PQCTopRejChart
                 new SqlParameter("@dateFrom",SqlDbType.DateTime2),
                 new SqlParameter("@dateTo",SqlDbType.DateTime2)
             };
-            parameters[0].Value = condition.DateFrom;
-            parameters[1].Value = condition.DateTo;
+            parameters[0].Value = param.DateFrom;
+            parameters[1].Value = param.DateTo;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);

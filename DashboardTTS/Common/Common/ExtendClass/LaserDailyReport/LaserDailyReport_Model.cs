@@ -27,6 +27,7 @@ namespace Common.ExtendClass.LaserDailyReport
         public class DetailStatus
         {
             public string MachineID { get; set; }
+            public string Shift { get; set; }
             public string StartTime { get; set; }
             public string StopTime { get; set; }
             public string TakeTime { get; set; }

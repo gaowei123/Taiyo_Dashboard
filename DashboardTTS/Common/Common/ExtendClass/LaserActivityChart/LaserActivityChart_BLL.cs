@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Taiyo.SearchParam;
 
 namespace Common.ExtendClass.LaserActivityChart
 {    
@@ -11,9 +12,9 @@ namespace Common.ExtendClass.LaserActivityChart
 
 
 
-        public List<LaserActivityChart_Model> GetDataList(Common.SearchingCondition.LaserActivityCondition condition)
+        public List<LaserActivityChart_Model> GetDataList(Taiyo.SearchParam.LaserParam.LaserActivityCondition param)
         {
-            List<Common.Model.LMMSEventLog_Model.Detail> baseList = _eventBLL.GetStatusModelList(condition.DateFrom.Value, condition.DateTo.Value, "", "", condition.Shift, false);
+            List<Common.Model.LMMSEventLog_Model.Detail> baseList = _eventBLL.GetStatusModelList(param.DateFrom.Value, param.DateTo.Value, "", "", param.Shift, false);
             if (baseList == null)
                 return null;
 

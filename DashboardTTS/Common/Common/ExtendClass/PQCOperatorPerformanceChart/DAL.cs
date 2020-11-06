@@ -9,7 +9,7 @@ namespace Common.ExtendClass.PQCOperatorPerformanceChart
 {
     internal class DAL
     {
-        public List<Model> GetOpList(SearchingCondition.BaseCondition condition)
+        public List<Model> GetOpList(Taiyo.SearchParam.BaseParam param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -45,8 +45,8 @@ namespace Common.ExtendClass.PQCOperatorPerformanceChart
                 new SqlParameter("@dateFrom",SqlDbType.DateTime2),
                 new SqlParameter("@dateTo",SqlDbType.DateTime2),
             };
-            parameters[0].Value = condition.DateFrom;
-            parameters[1].Value = condition.DateTo;
+            parameters[0].Value = param.DateFrom;
+            parameters[1].Value = param.DateTo;
          
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)

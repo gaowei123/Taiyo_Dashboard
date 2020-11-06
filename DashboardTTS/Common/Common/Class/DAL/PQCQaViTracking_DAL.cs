@@ -432,6 +432,7 @@ a.jobID
 ,a.model
 ,a.partNumber
 ,b.materialPartNo
+,c.unitCost
 ,Sum(b.passQty) as passQty
 ,sum(b.rejectQty) as rejectQty
 ,c.remark_1 as supplier
@@ -448,7 +449,7 @@ left join PQCBom c on a.partNumber = c.partnumber
 where 1=1 ");
 
             strSql.Append(" and a.jobId in " + strWhere);
-            strSql.Append(" group by a.jobId, a.model, a.partNumber , b.materialPartNo, c.remark_1, a.processes, c.processes ");
+            strSql.Append(" group by a.jobId, a.model, a.partNumber , b.materialPartNo, c.remark_1, a.processes, c.processes, c.unitCost ");
             
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_PQC_Server);

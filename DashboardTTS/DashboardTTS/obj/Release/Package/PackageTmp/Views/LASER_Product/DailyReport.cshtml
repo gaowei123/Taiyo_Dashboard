@@ -56,7 +56,9 @@
             </div>
         </div>
     </div>
-    <div class="row"> 
+   
+
+    <div class="row">
         <div class="col-sm-12 panel panel-default" style="padding-bottom:10px;">
             <h4>Machine Status List</h4>
             <table data-toggle="table" id="tbStatus" style="width:500px;"></table>
@@ -65,7 +67,7 @@
 
     <div class="row">
         <div class="col-sm-12 panel panel-default" style="padding-bottom:10px;">
-            <h4>Production Output List</h4>
+            <h4>Production Output Report</h4>
             <table data-toggle="table" id="tbOutput"></table>
         </div>
     </div>
@@ -157,6 +159,12 @@
                         return index + 1;
                     }
                 }
+            },
+            {
+                field: 'Shift',
+                title: 'Shift',
+                align: 'center',
+                valign: 'middle'
             },
             {
                 field: 'StartTime',

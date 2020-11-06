@@ -50,9 +50,6 @@
                             <label><asp:label runat="server" ID="lbBezelPanelName"/></label>
                             <asp:DropDownList runat="server" ID="ddlNumber" CssClass="form-control">
                                 <asp:ListItem Value="">All</asp:ListItem>
-                                <asp:ListItem Value="257">257</asp:ListItem>
-                                <asp:ListItem Value="830">830</asp:ListItem>
-                                <asp:ListItem Value="831">831</asp:ListItem>
                             </asp:DropDownList>
                         </div>
                         <%--<div class="form-group searchingBarCol" style="margin:5px 10px 5px 5px;">

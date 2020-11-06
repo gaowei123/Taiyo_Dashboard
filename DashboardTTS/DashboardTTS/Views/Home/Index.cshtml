@@ -206,8 +206,11 @@
     var pieChart = echarts.init(document.getElementById('divDayPieChart'));
 
 
+    $(function () {
 
-    $(document).ready(function () {
+
+        return false;
+
 
         generateTrendChart();
 
@@ -231,9 +234,11 @@
         setInterval("generateLaserStatus()", 30000);
         setInterval("generatePQCStatus()", 30000);
 
-        //1min 刷新
-        setInterval("generateLabelTime()", 60000);
-    });
+        //10s 刷新
+        setInterval("generateLabelTime()", 10000);
+    })
+
+
 
 
 
@@ -244,6 +249,7 @@
         var strDate = dateFormat('dd/MM/yyyy HH:mm', new Date());
         $('#lbTime').text(strDate);
     }
+
 
     function generateTrendChart() {
         $.ajax({
@@ -514,6 +520,7 @@
     }
 
     function generatePQCStatus() {
+
         $.ajax({
             type: "POST",
             dataType: "json",

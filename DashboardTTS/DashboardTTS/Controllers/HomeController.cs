@@ -22,8 +22,8 @@ namespace DashboardTTS.Controllers
 
         public ActionResult GetMouldStatus()
         {
-            Common.Class.BLL.MouldingMachineStatus_BLL MachineStatus = new Common.Class.BLL.MouldingMachineStatus_BLL();
-            Dictionary<int,string> dicStatus = MachineStatus.GetCurrentStatus();
+            Common.Class.BLL.MouldingMachineStatus_BLL MachineStatusBLL = new Common.Class.BLL.MouldingMachineStatus_BLL();
+            Dictionary<int,string> dicStatus = MachineStatusBLL.GetCurrentStatus();
             
             return Content(JsonConvert.SerializeObject(dicStatus));
         }

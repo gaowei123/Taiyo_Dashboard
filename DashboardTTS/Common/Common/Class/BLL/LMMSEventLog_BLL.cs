@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Model;
+using System.Globalization;
 
 namespace Common.BLL
 {
@@ -440,10 +441,10 @@ namespace Common.BLL
                     continue;
 
 
+             
 
 
 
-                
 
 
                 //4种情况
@@ -452,10 +453,10 @@ namespace Common.BLL
                 //3. 跨8:00 和 20:00 二个时间段
                 //4. 跨三个时间段 (目前只发现,机器停一天, pingApp产生的).
 
-                DateTime dDate = startTime.Date;
+                DateTime dDate = startTime.AddHours(-8).Date;
                 if (startTime >= dDate.AddHours(8) && stopTime >= dDate.AddHours(8) && startTime < dDate.AddHours(20) && stopTime < dDate.AddHours(20))
                 {
-                    #region startTime, stopTime在8-20之间
+                    #region startTime, stopTime在8-20 白班时间内
                     model = new LMMSEventLog_Model.Detail();
                     model.year = dDate.Year;
                     model.month = dDate.Month;
@@ -472,7 +473,7 @@ namespace Common.BLL
                 }
                 else if (startTime >= dDate.AddHours(20) && stopTime >= dDate.AddHours(20) && startTime < dDate.AddHours(32) && stopTime < dDate.AddHours(32))
                 {
-                    #region starttime, stoptime 在20 - 隔天8点 之间
+                    #region starttime, stoptime在20 - 8点 夜班时间内                    
                     model = new LMMSEventLog_Model.Detail();
                     model.year = dDate.Year;
                     model.month = dDate.Month;
@@ -488,26 +489,57 @@ namespace Common.BLL
                     #endregion
                 }
                 //最大范围在上.
-                else if ((startTime < dDate.AddHours(8) && stopTime > dDate.AddHours(8))  //跨 8:00 这个点
+                else if ((startTime < dDate.AddDays(1).AddHours(8) && stopTime > dDate.AddDays(1).AddHours(8))  //跨 8:00 这个点
                             &&
-                           (startTime < dDate.AddHours(20) && stopTime > dDate.AddHours(20)))//跨20:00 这个点
+                           (startTime < dDate.AddDays(1).AddHours(20) && stopTime > dDate.AddDays(1).AddHours(20)))//跨20:00 这个点
                 {
                     #region 周日0:00 - 隔天0;00  跨3个时间段,  0;00-8:00,  8:00-20:00,   20:00-隔天0:00
 
                     //第一部分 startTime - 8:00,  属于前一天night
                     model = new LMMSEventLog_Model.Detail();
-                    model.year = dDate.AddDays(-1).Year;
-                    model.month = dDate.AddDays(-1).Month;
-                    model.day = dDate.AddDays(-1);
+                    model.year = dDate.Year;
+                    model.month = dDate.Month;
+                    model.day = dDate;
                     model.shift = StaticRes.Global.Shift.Night;
                     model.machineID = machineID;
                     model.status = status;
                     model.startTime = startTime;
-                    model.stopTime = dDate.AddHours(8).AddSeconds(-1);
+                    model.stopTime = dDate.AddDays(1).AddHours(8);
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
                     //第二部分 8:00 - 20:00,   属于当天day
+                    model = new LMMSEventLog_Model.Detail();
+                    model.year = dDate.AddDays(1).Year;
+                    model.month = dDate.AddDays(1).Month;
+                    model.day = dDate.AddDays(1);
+                    model.shift = StaticRes.Global.Shift.Day;
+                    model.machineID = machineID;
+                    model.status = status;
+                    model.startTime = dDate.AddDays(1).AddHours(8);
+                    model.stopTime = dDate.AddDays(1).AddHours(20);
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
+                    allStatusModels.Add(model);
+
+                    //第三部分 20:00 - stoptime,  属于当天night
+                    model = new LMMSEventLog_Model.Detail();
+                    model.year = dDate.AddDays(1).Year;
+                    model.month = dDate.AddDays(1).Month;
+                    model.day = dDate.AddDays(1);
+                    model.shift = StaticRes.Global.Shift.Night;
+                    model.machineID = machineID;
+                    model.status = status;
+                    model.startTime = dDate.AddDays(1).AddHours(20);
+                    model.stopTime = stopTime;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
+                    allStatusModels.Add(model);
+                    #endregion
+                }
+                else if (startTime<dDate.AddHours(20) && stopTime > dDate.AddDays(1).AddHours(8))
+                {
+                    #region 跨20:00,  8:00 2个时间段
+
+                    //前一部分 属于当天白班
                     model = new LMMSEventLog_Model.Detail();
                     model.year = dDate.Year;
                     model.month = dDate.Month;
@@ -515,12 +547,13 @@ namespace Common.BLL
                     model.shift = StaticRes.Global.Shift.Day;
                     model.machineID = machineID;
                     model.status = status;
-                    model.startTime = dDate.AddHours(8);
-                    model.stopTime = dDate.AddHours(20).AddSeconds(-1);
+                    model.startTime = startTime;
+                    model.stopTime = dDate.AddHours(20);
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
-                    //disanbufen 20:00 - stoptime,  属于当天night
+
+                    //中间部分 属于当天晚班
                     model = new LMMSEventLog_Model.Detail();
                     model.year = dDate.Year;
                     model.month = dDate.Month;
@@ -529,15 +562,30 @@ namespace Common.BLL
                     model.machineID = machineID;
                     model.status = status;
                     model.startTime = dDate.AddHours(20);
+                    model.stopTime = dDate.AddDays(1).AddHours(8);
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
+                    allStatusModels.Add(model);
+
+                    //后一部分 属于下一天白班
+                    model = new LMMSEventLog_Model.Detail();
+                    model.year = dDate.AddDays(1).Year;
+                    model.month = dDate.AddDays(1).Month;
+                    model.day = dDate.AddDays(1);
+                    model.shift = StaticRes.Global.Shift.Day;
+                    model.machineID = machineID;
+                    model.status = status;
+                    model.startTime = dDate.AddDays(1).AddHours(8);
                     model.stopTime = stopTime;
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
-                    #endregion
+
+
+                    #endregion 
                 }
                 //小范围在下
                 else if (startTime < dDate.AddHours(8) && stopTime > dDate.AddHours(8))
                 {
-                    #region starttime, stoptime 跨 8:00am 这个点
+                    #region starttime, stoptime 跨当天8:00am 这个点
 
                     //拆分2条记录
 
@@ -550,7 +598,7 @@ namespace Common.BLL
                     model.machineID = machineID;
                     model.status = status;
                     model.startTime = startTime;
-                    model.stopTime = dDate.AddHours(8).AddSeconds(-1);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
+                    model.stopTime = dDate.AddHours(8);
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
 
@@ -563,12 +611,48 @@ namespace Common.BLL
                     model.shift = StaticRes.Global.Shift.Day;
                     model.machineID = machineID;
                     model.status = status;
-                    model.startTime = dDate.AddHours(8);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
+                    model.startTime = dDate.AddHours(8);
                     model.stopTime = stopTime;
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
                     #endregion
                 }
+
+                else if (startTime < dDate.AddDays(1).AddHours(8) && stopTime > dDate.AddDays(1).AddHours(8))
+                {
+                    #region starttime, stoptime 跨下一天8:00am 这个点
+
+                    //拆分2条记录
+
+                    //前半部分 属于当天晚班
+                    model = new LMMSEventLog_Model.Detail();
+                    model.year = dDate.Year;
+                    model.month = dDate.Month;
+                    model.day = dDate;
+                    model.shift = StaticRes.Global.Shift.Night;
+                    model.machineID = machineID;
+                    model.status = status;
+                    model.startTime = startTime;
+                    model.stopTime = dDate.AddDays(1).AddHours(8);
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
+                    allStatusModels.Add(model);
+
+
+                    //后半部分, 属于下一天白班
+                    model = new LMMSEventLog_Model.Detail();
+                    model.year = dDate.AddDays(1).Year;
+                    model.month = dDate.AddDays(1).Month;
+                    model.day = dDate.AddDays(1);
+                    model.shift = StaticRes.Global.Shift.Day;
+                    model.machineID = machineID;
+                    model.status = status;
+                    model.startTime = dDate.AddDays(1).AddHours(8);
+                    model.stopTime = stopTime;
+                    model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
+                    allStatusModels.Add(model);
+                    #endregion
+                }
+
                 else if (startTime < dDate.AddHours(20) && stopTime > dDate.AddHours(20))
                 {
                     #region starttime, stoptime 跨 20:00这个dian
@@ -584,9 +668,12 @@ namespace Common.BLL
                     model.machineID = machineID;
                     model.status = status;
                     model.startTime = startTime;
-                    model.stopTime = dDate.AddHours(20).AddSeconds(-1);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
+                    model.stopTime = dDate.AddHours(20); 
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
+
+
+
 
 
                     //后半部分, 属于当天晚班
@@ -597,7 +684,7 @@ namespace Common.BLL
                     model.shift = StaticRes.Global.Shift.Night;
                     model.machineID = machineID;
                     model.status = status;
-                    model.startTime = dDate.AddHours(20);//统一包头, 不包尾.  8:00, 20:00这2个时刻分别属于day, night. 
+                    model.startTime = dDate.AddHours(20);
                     model.stopTime = stopTime;
                     model.totalSeconds = (model.stopTime.Value - model.startTime.Value).TotalSeconds;
                     allStatusModels.Add(model);
@@ -882,6 +969,7 @@ namespace Common.BLL
                           && arrMachine.Contains(a.machineID)
                           && arrStatus.Contains(a.status)
                           && arrWeekDay.Contains((int)a.day.DayOfWeek)
+                          orderby a.day ascending, a.startTime ascending
                           select a).ToList();
 
 

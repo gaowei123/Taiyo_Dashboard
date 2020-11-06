@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.SearchingCondition;
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
@@ -13,11 +13,11 @@ namespace MyChart.ConcreteChartMethod
         Common.ExtendClass.PQCOperatorSummaryChart.BLL _bll = new Common.ExtendClass.PQCOperatorSummaryChart.BLL();
 
 
-        public ChartModel GetChartData(BaseCondition condition)
+        public ChartModel GetChartData(BaseParam param)
         {
-            var xAxis = GetXAxisData(condition);
-            var legend = GetLegend(condition);
-            var series = GetSeries(condition);
+            var xAxis = GetXAxisData(param);
+            var legend = GetLegend(param);
+            var series = GetSeries(param);
 
             if (series == null)
                 return null;
@@ -30,7 +30,7 @@ namespace MyChart.ConcreteChartMethod
             };
         }
 
-        public List<string> GetLegend(BaseCondition condition)
+        public List<string> GetLegend(BaseParam param)
         {
             return new List<string>()
             {
@@ -39,10 +39,9 @@ namespace MyChart.ConcreteChartMethod
             };
         }
 
-        public List<Series> GetSeries(BaseCondition condition)
+        public List<Series> GetSeries(BaseParam param)
         {
-            var cond = (PQCOperatorSummaryCondition)condition;
-
+            var opSummaryParam = (Taiyo.SearchParam.PQCParam.PQCOperatorSummaryCondition)param;
 
 
             Series checkingSeries = new Series();
@@ -60,7 +59,7 @@ namespace MyChart.ConcreteChartMethod
             if (dataList == null)
                 return null;
 
-            if (cond.GroupBy == "Daily")
+            if (opSummaryParam.GroupBy == "Daily")
             {
                 var result = from a in dataList
                              group a by new { a.Day, a.Month } into b
@@ -77,7 +76,7 @@ namespace MyChart.ConcreteChartMethod
                     packingSeries.Data.Add(item.PackQty);
                 }
             }
-            else if (cond.GroupBy == "Monthly")
+            else if (opSummaryParam.GroupBy == "Monthly")
             {
                 var result = from a in dataList
                              group a by a.Month into b
@@ -94,7 +93,7 @@ namespace MyChart.ConcreteChartMethod
                     packingSeries.Data.Add(item.PackQty);
                 }
             }
-            else if (cond.GroupBy == "Yearly")
+            else if (opSummaryParam.GroupBy == "Yearly")
             {
                 var result = from a in dataList
                              group a by a.Year into b
@@ -123,16 +122,16 @@ namespace MyChart.ConcreteChartMethod
             };                       
         }
 
-        public List<string> GetXAxisData(BaseCondition condition)
+        public List<string> GetXAxisData(BaseParam param)
         {
-            var cond = (PQCOperatorSummaryCondition)condition;
-            List<Common.ExtendClass.PQCOperatorSummaryChart.Model> dataList = _bll.GetDataList(cond);
+            var opSummaryParam = (Taiyo.SearchParam.PQCParam.PQCOperatorSummaryCondition)param;
+            List<Common.ExtendClass.PQCOperatorSummaryChart.Model> dataList = _bll.GetDataList(opSummaryParam);
             if (dataList == null)
                 return null;
 
             List<string> xAxisList = new List<string>();
 
-            if (cond.GroupBy == "Daily")
+            if (opSummaryParam.GroupBy == "Daily")
             {
                 var result = from a in dataList
                              group a by new { a.Day, a.Month } into b
@@ -146,7 +145,7 @@ namespace MyChart.ConcreteChartMethod
                     xAxisList.Add(item.Day);
                 }                  
             }
-            else if (cond.GroupBy == "Monthly")
+            else if (opSummaryParam.GroupBy == "Monthly")
             {
                 var result = from a in dataList
                              group a by a.Month into b
@@ -160,7 +159,7 @@ namespace MyChart.ConcreteChartMethod
                     xAxisList.Add(item.Month);
                 }
             }
-            else if (cond.GroupBy == "Yearly")
+            else if (opSummaryParam.GroupBy == "Yearly")
             {
                 var result = from a in dataList
                              group a by a.Year into b

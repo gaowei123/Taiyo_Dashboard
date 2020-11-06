@@ -47,6 +47,24 @@ namespace DashboardTTS.UserControl
             this.lbRejRate.Text = model.RejRate;
             this.lbUsedRate.Text = model.UsedRate;
         }
+
+        public void SetShutdown(string machineID, string imgRUL)
+        {
+            this.lbMachineID.Text = machineID;
+            this.lbPartNo.Text = "";
+            this.lbStatus.Text = StaticRes.Global.LaserStatus.Shutdown;
+            this.lbStatus.BackColor = GetStatusColor(StaticRes.Global.LaserStatus.Shutdown);
+            this.lbLotNo.Text = "";
+
+
+            this.imgLogo.ImageUrl = imgRUL;
+            this.lbJobNo.Text = "";
+            this.lbLotQty.Text = "0";
+            this.lbOKQty.Text = "0";
+            this.lbNGQty.Text = "0";
+            this.lbRejRate.Text = "0.00%";
+            this.lbUsedRate.Text = "0.00%";
+        }
         
         private System.Drawing.Color GetStatusColor(string status)
         {

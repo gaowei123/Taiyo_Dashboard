@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticRes", "StaticRes\Stat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyChart", "MyChart\MyChart.csproj", "{C3722565-1D97-4472-AE3C-A4D255A5788D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Tool", "StatusConverter\Taiyo.Tool.csproj", "{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Enum", "Taiyo.Enum\Taiyo.Enum.csproj", "{7EEF5249-5D72-4470-A952-94983FAD5433}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model Layer", "Model Layer", "{53FFD7BF-B356-4218-9EC2-5C65D3087836}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.SearchParam", "Taiyo.SearchParam\Taiyo.SearchParam.csproj", "{D650FEA2-5AD3-4599-81D0-97C084053B7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +47,24 @@ Global
 		{C3722565-1D97-4472-AE3C-A4D255A5788D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3722565-1D97-4472-AE3C-A4D255A5788D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3722565-1D97-4472-AE3C-A4D255A5788D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EEF5249-5D72-4470-A952-94983FAD5433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EEF5249-5D72-4470-A952-94983FAD5433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EEF5249-5D72-4470-A952-94983FAD5433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EEF5249-5D72-4470-A952-94983FAD5433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D650FEA2-5AD3-4599-81D0-97C084053B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D650FEA2-5AD3-4599-81D0-97C084053B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D650FEA2-5AD3-4599-81D0-97C084053B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D650FEA2-5AD3-4599-81D0-97C084053B7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7EEF5249-5D72-4470-A952-94983FAD5433} = {53FFD7BF-B356-4218-9EC2-5C65D3087836}
+		{D650FEA2-5AD3-4599-81D0-97C084053B7B} = {53FFD7BF-B356-4218-9EC2-5C65D3087836}
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.SearchingCondition;
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
@@ -12,9 +12,9 @@ namespace MyChart.ConcreteChartMethod
         private readonly Common.ExtendClass.PQCTopRejChart.BLL _bll = new Common.ExtendClass.PQCTopRejChart.BLL();
 
 
-        public ChartModel GetChartData(BaseCondition condition)
+        public ChartModel GetChartData(BaseParam param)
         {
-            var dataList = _bll.GetDefectList((Common.SearchingCondition.PQCTopRejectCondition)condition);
+            var dataList = _bll.GetDefectList((Taiyo.SearchParam.PQCParam.PQCTopRejectCondition)param);
             if (dataList == null)
                 return null;
 
@@ -44,17 +44,17 @@ namespace MyChart.ConcreteChartMethod
             };
         }
 
-        public List<string> GetLegend(BaseCondition condition)
+        public List<string> GetLegend(BaseParam param)
         {
             return new List<string>() { "RejQty" };
         }
 
-        public List<Series> GetSeries(BaseCondition condition)
+        public List<Series> GetSeries(BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetXAxisData(BaseCondition condition)
+        public List<string> GetXAxisData(BaseParam param)
         {
             throw new NotImplementedException();
         }

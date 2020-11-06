@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
@@ -10,26 +11,26 @@ namespace MyChart.ConcreteChartMethod
     {
         private Common.ExtendClass.LaserProductionChart.LaserProduction_BLL _bll = new Common.ExtendClass.LaserProductionChart.LaserProduction_BLL();
 
-        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition bCondition)
+        public ChartModel GetChartData(BaseParam param)
         {
             MyChart.ChartModel model = new ChartModel();
-            model.SeriesData = GetSeries(bCondition);
-            model.XAxisData = GetXAxisData(bCondition);
-            model.LegendData = GetLegend(bCondition);
+            model.SeriesData = GetSeries(param);
+            model.XAxisData = GetXAxisData(param);
+            model.LegendData = GetLegend(param);
 
 
             return model;
         }
 
-        public List<string> GetLegend(Common.SearchingCondition.BaseCondition bCondition)
+        public List<string> GetLegend(BaseParam param)
         {
             return new List<string> { "OK","NG" };
         }
 
-        public List<Series> GetSeries(Common.SearchingCondition.BaseCondition bCondition)
+        public List<Series> GetSeries(BaseParam param)
         {
-            Common.SearchingCondition.LaserProductionCondition condition = (Common.SearchingCondition.LaserProductionCondition)bCondition;
-            var productionList = _bll.GetProductionList(condition);
+            Taiyo.SearchParam.LaserParam.LaserProductionCondition productionParam = (Taiyo.SearchParam.LaserParam.LaserProductionCondition)param;
+            var productionList = _bll.GetProductionList(productionParam);
             if (productionList == null)
                 return null;
 
@@ -44,7 +45,7 @@ namespace MyChart.ConcreteChartMethod
             seriesRej.Stack = "Output";
             seriesRej.Type = "bar";
 
-            if (condition.ChartType == "Machine")
+            if (productionParam.ChartType == "Machine")
             {
                 var groupList = from a in productionList
                                   orderby a.MachineID ascending
@@ -61,7 +62,7 @@ namespace MyChart.ConcreteChartMethod
                     seriesRej.Data.Add((decimal)item.RejQty);
                 }
             }
-            else if (condition.ChartType == "Model")
+            else if (productionParam.ChartType == "Model")
             {
                 var groupList = from a in productionList
                                 group a by a.Model into b
@@ -82,7 +83,7 @@ namespace MyChart.ConcreteChartMethod
                     seriesRej.Data.Add((decimal)item.RejQty);
                 }
             }
-            else if (condition.ChartType == "PartNo")
+            else if (productionParam.ChartType == "PartNo")
             {
                 var groupList = from a in productionList
                                   group a by a.PartNo into b
@@ -105,22 +106,22 @@ namespace MyChart.ConcreteChartMethod
             }
             else
             {
-                throw new NullReferenceException("No define type:" + condition.ChartType);
+                throw new NullReferenceException("No define type:" + productionParam.ChartType);
             }
 
             return new List<Series> { seriesPass , seriesRej};
         }
 
-        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition bCondition)
+        public List<string> GetXAxisData(BaseParam param)
         {
-            Common.SearchingCondition.LaserProductionCondition condition = (Common.SearchingCondition.LaserProductionCondition)bCondition;
-            if (condition.ChartType == "Machine")
+            Taiyo.SearchParam.LaserParam.LaserProductionCondition productionParam = (Taiyo.SearchParam.LaserParam.LaserProductionCondition)param;
+            if (productionParam.ChartType == "Machine")
             {
                 return new List<string> { "Machine1", "Machine2", "Machine3", "Machine4", "Machine5", "Machine6", "Machine7", "Machine8" };
             }
-            else if (condition.ChartType == "Model")
+            else if (productionParam.ChartType == "Model")
             {
-                var productionList = _bll.GetProductionList(condition);
+                var productionList = _bll.GetProductionList(productionParam);
                 if (productionList == null)
                     return null;
 
@@ -145,9 +146,9 @@ namespace MyChart.ConcreteChartMethod
 
                 return xAxisList;
             }
-            else if (condition.ChartType == "PartNo")
+            else if (productionParam.ChartType == "PartNo")
             {
-                var productionList = _bll.GetProductionList(condition);
+                var productionList = _bll.GetProductionList(productionParam);
                 if (productionList == null)
                     return null;
 
@@ -174,7 +175,7 @@ namespace MyChart.ConcreteChartMethod
             }
             else
             {
-                throw new NullReferenceException("No define type:" + condition.ChartType);
+                throw new NullReferenceException("No define type:" + productionParam.ChartType);
             }
         }
     }

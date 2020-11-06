@@ -127,6 +127,7 @@
                     <asp:BoundColumn DataField="rejRate" HeaderText="Rej%" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="rejRateDisplay" HeaderText="Rej(%)"></asp:BoundColumn>
                     <asp:BoundColumn DataField="supplier" HeaderText="Supplier" Visible="false"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="rejCost" HeaderText="Rej Amount"></asp:BoundColumn>
 
 
                     <%--12--%>

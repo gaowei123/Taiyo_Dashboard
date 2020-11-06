@@ -10,7 +10,9 @@ namespace Common.ExtendClass.Home
         public class DailyTrend
         {
             public string Department { get; set; }
-            public string Day { get; set; }
+            public int Month { get; set; }
+            public int Day { get; set; }
+            public string WeekName { get; set; }
             public decimal Output { get; set; }
         }
 

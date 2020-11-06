@@ -9,7 +9,7 @@ namespace Common.ExtendClass.LaserProductionChart
 {
     internal class LaserProduction_DAL
     {
-        public List<LaserProduction_Model> GetProduction(SearchingCondition.LaserProductionCondition condition)
+        public List<LaserProduction_Model> GetProduction(Taiyo.SearchParam.LaserParam.LaserProductionCondition param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -45,8 +45,8 @@ where 1=1 ");
                 //new SqlParameter("@partNo",SqlDbType.VarChar),
                 //new SqlParameter("@model",SqlDbType.VarChar)
             };
-            parameters[0].Value = condition.DateFrom;
-            parameters[1].Value = condition.DateTo;
+            parameters[0].Value = param.DateFrom;
+            parameters[1].Value = param.DateTo;
             //if (!string.IsNullOrEmpty(sShift)) parameters[2].Value = sShift; else parameters[2] = null;
             //if (!string.IsNullOrEmpty(sPartNo)) parameters[3].Value = sPartNo; else parameters[3] = null;
             //if (!string.IsNullOrEmpty(sModel)) parameters[4].Value = sModel; else parameters[4] = null;

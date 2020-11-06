@@ -38,7 +38,7 @@ namespace Common.Class.BLL
                         dicStatus.Add(i, arrDrTemp[0]["MachineStatus"].ToString());
                     }
                 }
-            }           
+            }
 
             return dicStatus;
         }

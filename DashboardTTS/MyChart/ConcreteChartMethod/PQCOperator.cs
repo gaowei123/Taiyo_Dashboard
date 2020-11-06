@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
     public class PQCOperator : IChartMethod
     {
-        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition condition)
+        public ChartModel GetChartData(BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetLegend(Common.SearchingCondition.BaseCondition condition)
+        public List<string> GetLegend(BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<Series> GetSeries(Common.SearchingCondition.BaseCondition condition)
+        public List<Series> GetSeries(BaseParam param)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition condition)
+        public List<string> GetXAxisData(BaseParam param)
         {
             throw new NotImplementedException();
         }

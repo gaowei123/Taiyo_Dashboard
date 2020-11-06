@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.SearchingCondition;
+using Taiyo.SearchParam;
+using Taiyo.SearchParam.LaserParam;
+
 
 namespace MyChart.ConcreteChartMethod
 {
@@ -11,17 +13,17 @@ namespace MyChart.ConcreteChartMethod
     {
         private Common.ExtendClass.LaserActivityChart.LaserActivityChart_BLL _bll = new Common.ExtendClass.LaserActivityChart.LaserActivityChart_BLL();
 
-        public ChartModel GetChartData(BaseCondition condition)
+        public ChartModel GetChartData(BaseParam param)
         {
             return new ChartModel()
             {
-                LegendData = GetLegend(condition),
-                SeriesData = GetSeries(condition),
-                XAxisData = GetXAxisData(condition)
+                LegendData = GetLegend(param),
+                SeriesData = GetSeries(param),
+                XAxisData = GetXAxisData(param)
             };
         }
 
-        public List<string> GetLegend(BaseCondition condition)
+        public List<string> GetLegend(BaseParam param)
         {
             return new List<string>()
             {
@@ -39,9 +41,10 @@ namespace MyChart.ConcreteChartMethod
 
     
 
-        public List<Series> GetSeries(BaseCondition condition)
+        public List<Series> GetSeries(BaseParam param)
         {
-            var dataList = _bll.GetDataList((LaserActivityCondition)condition);
+            var activityParam = (Taiyo.SearchParam.LaserParam.LaserActivityCondition)param;
+            var dataList = _bll.GetDataList(activityParam);
             if (dataList == null)
                 return null;
 
@@ -150,7 +153,7 @@ namespace MyChart.ConcreteChartMethod
         }
 
 
-        public List<string> GetXAxisData(BaseCondition condition)
+        public List<string> GetXAxisData(BaseParam param)
         {
             return new List<string>()
             {

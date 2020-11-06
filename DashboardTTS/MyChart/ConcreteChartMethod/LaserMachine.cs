@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
     public class LaserMachine : IChartMethod
     {
-
-    
-
-        public ChartModel GetChartData(Common.SearchingCondition.BaseCondition bCondition)
+        public ChartModel GetChartData(BaseParam para)
         {
-            
-
-
             ChartModel chart = new ChartModel();
             //chart.LegendData = GetLegend(condition);
             //chart.XAxisData = GetXAxisData(condition);
@@ -24,14 +18,11 @@ namespace MyChart.ConcreteChartMethod
 
             return chart;
         }
-
-
-        public List<string> GetLegend(Common.SearchingCondition.BaseCondition bCondition)
+        public List<string> GetLegend(BaseParam para)
         {
             return new List<string>() { "Run", "Shutdown", "Idle", "Breakdown" };
         }
-
-        public List<MyChart.Series> GetSeries(Common.SearchingCondition.BaseCondition bCondition)
+        public List<Series> GetSeries(BaseParam para)
         {
             List<MyChart.Series> listSeries = new List<MyChart.Series>();
 
@@ -69,8 +60,7 @@ namespace MyChart.ConcreteChartMethod
 
             return listSeries;
         }
-
-        public List<string> GetXAxisData(Common.SearchingCondition.BaseCondition bCondition)
+        public List<string> GetXAxisData(BaseParam para)
         {
             return new List<string>() { "Machine1", "Machine2", "Machine3", "Machine4", "Machine5", "Machine6", "Machine7", "Machine8" };
         }

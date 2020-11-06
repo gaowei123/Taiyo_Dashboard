@@ -10,9 +10,9 @@ namespace Common.ExtendClass.PQCOperatorSummaryChart
     internal class DAL
     {
 
-        public List<Model> GetDailyList(SearchingCondition.PQCOperatorSummaryCondition condition)
+        public List<Model> GetDailyList(Taiyo.SearchParam.PQCParam.PQCOperatorSummaryCondition param)
         {
-            string strConditionPIC = string.IsNullOrEmpty(condition.PIC) ? "" : " and userID = @userID";
+            string strConditionPIC = string.IsNullOrEmpty(param.PIC) ? "" : " and userID = @userID";
             
             StringBuilder strSql = new StringBuilder();
             strSql.AppendFormat(@"select 
@@ -54,9 +54,9 @@ namespace Common.ExtendClass.PQCOperatorSummaryChart
                 new SqlParameter("@dateTo",SqlDbType.DateTime2),
                 new SqlParameter("@userID",SqlDbType.VarChar)
             };
-            parameters[0].Value = condition.DateFrom;
-            parameters[1].Value = condition.DateTo;
-            if (string.IsNullOrEmpty(condition.PIC)) parameters[2] = null; else parameters[2].Value = condition.PIC;
+            parameters[0].Value = param.DateFrom;
+            parameters[1].Value = param.DateTo;
+            if (string.IsNullOrEmpty(param.PIC)) parameters[2] = null; else parameters[2].Value = param.PIC;
 
 
 

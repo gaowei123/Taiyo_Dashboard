@@ -120,8 +120,9 @@ namespace Common.ExtendClass.LaserDailyReport
 
                 LaserDailyReport_Model.DetailStatus model = new LaserDailyReport_Model.DetailStatus();
                 model.MachineID = item.machineID;
-                model.StartTime = item.startTime == null? "": item.startTime.Value.ToString("HH:MM");
-                model.StopTime = item.stopTime == null ? "" :item.stopTime.Value.ToString("HH:MM");
+                model.Shift = item.shift;
+                model.StartTime = item.startTime == null? "": item.startTime.Value.ToString("HH:mm");
+                model.StopTime = item.stopTime == null ? "" :item.stopTime.Value.ToString("HH:mm");
                 model.TakeTime = Common.CommFunctions.ConvertDateTimeShort((item.totalSeconds / 3600).ToString());
                 model.Status = item.status;
 

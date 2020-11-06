@@ -19,7 +19,8 @@ namespace DashboardTTS.ViewModel
             public string materialNo { get; set; }
             public double lotQty { get; set; }
             public double pass { get; set; }
-            public double rejQty { get; set; }
+            public double rejQty { get; set; }         
+            public double rejCost { get; set; }
             public double rejRate { get; set; }
             public string rejRateDisplay { get; set; }
             public string supplier { get; set; }
@@ -168,18 +169,23 @@ namespace DashboardTTS.ViewModel
 
 
             public double TTS_Mould_TotalRej { get; set; }
+            public double TTS_Mould_TotalRejCost { get; set; }
             public double TTS_Mould_TotalRejRate { get; set; }
             public double Vendor_Mould_TotalRej { get; set; }
+            public double Vendor_Mould_TotalRejCost { get; set; }
             public double Vendor_Mould_TotalRejRate { get; set; }
             public DateTime? MFGDate { get; set; }
 
 
 
             public double Paint_TotalRej { get; set; }
+            public double Paint_TotalRejCost { get; set; }
             public double Paint_TotalRejRate { get; set; }
             public double Paint_SetupRej { get; set; }
+            public double Paint_SetupRejCost { get; set; }
             public double Paint_SetupRejRate { get; set; }
             public double Paint_QATestRej { get; set; }
+            public double Paint_QATestRejCost { get; set; }
             public double Paint_QATestRejRate { get; set; }
 
             public string paintCoat1st { get; set; }
@@ -196,6 +202,7 @@ namespace DashboardTTS.ViewModel
 
 
             public double Laser_TotalRej { get; set; }
+            public double Laser_TotalRejCost { get; set; }
             public double Laser_TotalRejRate { get; set; }
 
             public string laserMachine { get; set; }
@@ -206,6 +213,7 @@ namespace DashboardTTS.ViewModel
 
 
             public double Others_TotalRej { get; set; }
+            public double Others_TotalRejCost { get; set; }
             public double Others_TotalRejRate { get; set; }
 
             public string InspBy { get; set; }
@@ -230,6 +238,7 @@ namespace DashboardTTS.ViewModel
             public string process = "";
             public string partsType = "";
             public string mouldType = "";
+            public double unitCost = 0;
 
 
             public string OP = "";

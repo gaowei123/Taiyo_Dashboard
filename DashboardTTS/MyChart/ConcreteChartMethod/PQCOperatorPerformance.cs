@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.SearchingCondition;
+using Taiyo.SearchParam;
 
 namespace MyChart.ConcreteChartMethod
 {
@@ -15,11 +15,11 @@ namespace MyChart.ConcreteChartMethod
 
 
 
-        public ChartModel GetChartData(BaseCondition condition)
+        public ChartModel GetChartData(BaseParam param)
         {
-            var lengenList = GetLegend(condition);
-            var xAxisList = GetXAxisData(condition);
-            var seriesList = GetSeries(condition);
+            var lengenList = GetLegend(param);
+            var xAxisList = GetXAxisData(param);
+            var seriesList = GetSeries(param);
 
             if (seriesList == null)
                 return null;
@@ -33,7 +33,7 @@ namespace MyChart.ConcreteChartMethod
             return model;
         }
 
-        public List<string> GetLegend(BaseCondition condition)
+        public List<string> GetLegend(BaseParam param)
         {
             return new List<string>()
             {
@@ -42,9 +42,9 @@ namespace MyChart.ConcreteChartMethod
             };
         }
 
-        public List<Series> GetSeries(BaseCondition condition)
+        public List<Series> GetSeries(BaseParam param)
         {
-            List<Common.ExtendClass.PQCOperatorPerformanceChart.Model> dataList = _bll.GetOpList(condition);
+            List<Common.ExtendClass.PQCOperatorPerformanceChart.Model> dataList = _bll.GetOpList(param);
             if (dataList == null)
                 return null;
 
@@ -73,9 +73,9 @@ namespace MyChart.ConcreteChartMethod
                };
         }
 
-        public List<string> GetXAxisData(BaseCondition condition)
+        public List<string> GetXAxisData(BaseParam param)
         {
-            List<Common.ExtendClass.PQCOperatorPerformanceChart.Model> dataList = _bll.GetOpList(condition);
+            List<Common.ExtendClass.PQCOperatorPerformanceChart.Model> dataList = _bll.GetOpList(param);
             if (dataList == null )
                 return null;
 

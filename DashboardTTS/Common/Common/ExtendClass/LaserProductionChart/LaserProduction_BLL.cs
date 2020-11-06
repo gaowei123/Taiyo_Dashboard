@@ -9,9 +9,9 @@ namespace Common.ExtendClass.LaserProductionChart
     {
         private LaserProduction_DAL _dal = new LaserProduction_DAL();
 
-        public  List<LaserProduction_Model> GetProductionList(SearchingCondition.LaserProductionCondition condition)
+        public  List<LaserProduction_Model> GetProductionList(Taiyo.SearchParam.LaserParam.LaserProductionCondition param)
         {
-            return _dal.GetProduction(condition);
+            return _dal.GetProduction(param);
         }
 
         
