@@ -1966,13 +1966,13 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>11/06/2020 09:25:30</publishTime>
+      <publishTime>11/09/2020 15:21:16</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>11/06/2020 09:25:34</publishTime>
+      <publishTime>11/09/2020 15:21:21</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>11/06/2020 09:25:29</publishTime>
+      <publishTime>11/09/2020 15:21:15</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2080,7 +2080,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>11/06/2020 09:25:30</publishTime>
+      <publishTime>11/09/2020 15:21:17</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2125,7 +2125,10 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>11/06/2020 09:25:29</publishTime>
+      <publishTime>11/09/2020 15:21:15</publishTime>
+    </File>
+    <File Include="bin/StatusConverter.dll">
+      <publishTime>11/09/2020 15:21:15</publishTime>
     </File>
     <File Include="bin/stdole.dll">
       <publishTime>06/20/2016 14:45:20</publishTime>
@@ -2150,6 +2153,12 @@
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
+    </File>
+    <File Include="bin/Taiyo.Enum.dll">
+      <publishTime>11/09/2020 15:21:15</publishTime>
+    </File>
+    <File Include="bin/Taiyo.SearchParam.dll">
+      <publishTime>11/09/2020 15:21:15</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2248,7 +2257,7 @@
       <publishTime>01/17/2020 14:15:38</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/HomePage.css">
-      <publishTime>10/21/2020 16:52:52</publishTime>
+      <publishTime>11/09/2020 14:57:12</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/MasterPage.css">
       <publishTime>09/11/2020 11:03:22</publishTime>
@@ -5300,6 +5309,276 @@
     </File>
     <File Include="plugins/bootstrap-select-1.13.0/tests/bootstrap4.html">
       <publishTime>06/15/2020 19:58:42</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/.babelrc">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/.eslintrc.json">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/.gitignore">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/.nvmrc">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/.travis.yml">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/bower.json">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/CHANGELOG.md">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/CNAME">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/composer.json">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/CONTRIBUTING.md">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap2/bootstrap-switch.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap2/bootstrap-switch.min.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap4/bootstrap-switch.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/css/bootstrap4/bootstrap-switch.min.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/js/bootstrap-switch.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/dist/js/bootstrap-switch.min.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/404.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/css/highlight.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/css/main.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/documentation-2.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/events.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/examples.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/index.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/js/highlight.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/js/main.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/methods.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/docs/options.html">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/karma.conf.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/LICENSE">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/package.json">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/README.md">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/harp.json">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/404.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/CNAME">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/css/highlight.css">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/css/main.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/documentation-2.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/events.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/examples.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/index.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/js/highlight.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/js/main.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/methods.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/options.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/docs/public/_layout.jade">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/js/bootstrap-switch.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/js/bootstrap-switch.test.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap2/bootstrap-switch.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap2/build.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap2/mixins.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap2/variables.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/bootstrap-switch.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/build.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/alerts.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/background-variant.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/border-radius.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/buttons.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/center-block.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/clearfix.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/forms.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/gradients.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/grid-framework.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/grid.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/hide-text.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/image.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/labels.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/list-group.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/nav-divider.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/nav-vertical-align.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/opacity.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/pagination.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/panels.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/progress-bar.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/reset-filter.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/reset-text.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/resize.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/responsive-visibility.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/size.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/tab-focus.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/table-row.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/text-emphasis.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/text-overflow.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/mixins/vendor-prefixes.less">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/less/bootstrap3/variables.less">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/sass/bootstrap4/bootstrap-switch.scss">
+      <publishTime>11/09/2020 14:22:21</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/src/setup-test.js">
+      <publishTime>11/09/2020 14:22:20</publishTime>
+    </File>
+    <File Include="plugins/bootstrap-switch-master/yarn.lock">
+      <publishTime>11/09/2020 14:22:20</publishTime>
     </File>
     <File Include="plugins/bootstrap-table-1.15.3/.browserslistrc">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11002,13 +11281,13 @@
       <publishTime>01/15/2020 14:05:31</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>10/23/2020 15:19:00</publishTime>
+      <publishTime>11/09/2020 15:10:38</publishTime>
     </File>
     <File Include="Views/Home/Index1.cshtml">
       <publishTime>10/21/2020 17:02:37</publishTime>
     </File>
     <File Include="Views/LASER_MachineSetting/Index.cshtml">
-      <publishTime>09/24/2020 16:06:02</publishTime>
+      <publishTime>11/09/2020 14:33:37</publishTime>
     </File>
     <File Include="Views/LASER_Product/DailyReport.cshtml">
       <publishTime>11/05/2020 14:19:17</publishTime>
@@ -11692,7 +11971,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport.aspx">
-      <publishTime>11/05/2020 15:50:23</publishTime>
+      <publishTime>11/06/2020 09:44:42</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport_New.aspx">
       <publishTime>12/25/2019 15:10:53</publishTime>

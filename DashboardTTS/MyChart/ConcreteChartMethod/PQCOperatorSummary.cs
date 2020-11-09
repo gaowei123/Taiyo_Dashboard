@@ -55,7 +55,7 @@ namespace MyChart.ConcreteChartMethod
             packingSeries.Stack = "output";
 
 
-            List<Common.ExtendClass.PQCOperatorSummaryChart.Model> dataList = _bll.GetDataList(cond);
+            List<Common.ExtendClass.PQCOperatorSummaryChart.Model> dataList = _bll.GetDataList(opSummaryParam);
             if (dataList == null)
                 return null;
 

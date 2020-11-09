@@ -1,1 +1,7 @@
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\obj\Debug\Taiyo.Tool.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Debug\StatusConverter.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Debug\StatusConverter.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Debug\Taiyo.Enum.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Debug\Taiyo.Enum.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\obj\Debug\StatusConverter.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\obj\Debug\StatusConverter.pdb

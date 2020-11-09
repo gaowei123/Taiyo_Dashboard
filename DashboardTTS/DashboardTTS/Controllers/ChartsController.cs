@@ -58,13 +58,10 @@ namespace DashboardTTS.Controllers
         public JsonResult GetHomeTrendData(bool isDisplayOffday)
         {
             HomeParam param = new HomeParam();
-            param.DateFrom = DateTime.Now.AddDays(-13).Date;
+            param.DateFrom = DateTime.Now.AddDays(-12).Date;
             param.DateTo = DateTime.Now.Date;
             param.IsDisplayOffday = isDisplayOffday;
 
-            //本地测试
-            param.DateFrom = DateTime.Parse("2020-2-1");
-            param.DateTo = DateTime.Parse("2020-2-13");
 
 
             MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("HomeTrend");
@@ -73,23 +70,41 @@ namespace DashboardTTS.Controllers
             return Json(chartData);
         }
 
-        public JsonResult GetTotalPieChartData(bool isDisplayOffday)
+        public JsonResult GetTotalPieChartData()
         {
             HomeParam param = new HomeParam();
-            param.DateFrom = DateTime.Now.AddDays(-13).Date;
-            param.DateTo = DateTime.Now.Date;
-            param.IsDisplayOffday = isDisplayOffday;
+            param.DateFrom = DateTime.Now.Date;
+            param.DateTo = DateTime.Now.Date.AddDays(1);
+            param.IsDisplayOffday = true;
 
-
-            //本地测试
-            param.DateFrom = DateTime.Parse("2020-2-4");
-            param.DateTo = DateTime.Parse("2020-2-5");
-
+            
             
 
             //饼图数据结构和曲线/柱状图有区别, 直接传list过去. 再前端处理.
             Common.ExtendClass.Home.Home_BLL bll = new Common.ExtendClass.Home.Home_BLL();
             List<Common.ExtendClass.Home.Home_Model.DailyTrend> modelList = bll.GetDailyTrend(param);
+
+
+            //遍历每个部门
+            foreach (Taiyo.Enum.Organization.Department item in Enum.GetValues(typeof(Taiyo.Enum.Organization.Department)))
+            {
+                //排除不需要的部门, 
+                if (item == Taiyo.Enum.Organization.Department.PQC ||
+                    item == Taiyo.Enum.Organization.Department.Assembly)
+                    continue;
+
+
+                var temp = from a in modelList where a.Department == item.ToString() select a; 
+                if (temp == null || temp.Count() == 0)
+                {
+                    //饼图只需要 department, output.  其余字段不需要赋值.
+                    modelList.Add(new Common.ExtendClass.Home.Home_Model.DailyTrend()
+                    {
+                        Department = item.ToString(),
+                        Output = 0
+                    });
+                }
+            }
 
 
             return Json(modelList);

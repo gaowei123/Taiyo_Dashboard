@@ -53,7 +53,7 @@ namespace Common.ExtendClass.Home
                             DAY(datetime) as [day],
                             convert(float,SUM(inQuantity)) as output 
                             from PaintingDeliveryHis 
-                            where 1=1 and datetime > @DateFrom
+                            where 1=1 and datetime >= @DateFrom
                             and datetime < @DateTo
                             group by  MONTH(dateTime),  DAY(datetime)
                             order by MONTH(dateTime) asc, DAY(datetime) asc");

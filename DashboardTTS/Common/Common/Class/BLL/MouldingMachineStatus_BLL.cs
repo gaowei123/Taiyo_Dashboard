@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Collections;
+using Taiyo.Enum.Production;
+using Taiyo.Tool;
+using Taiyo.Tool.Extension;
 
 
 namespace Common.Class.BLL
@@ -21,7 +24,7 @@ namespace Common.Class.BLL
             {
                 for (int i = 1; i < 10; i++)
                 {
-                    dicStatus.Add(i, StaticRes.Global.MouldingStatus.ShutDown);
+                    dicStatus.Add(i, MouldingStatus.Shutdown.GetDescription());
                 }               
             }
             else
@@ -31,11 +34,12 @@ namespace Common.Class.BLL
                     DataRow[] arrDrTemp = dt.Select(" MachineID = '" + i.ToString() + "'");
                     if (arrDrTemp == null || arrDrTemp.Count() == 0)
                     {
-                        dicStatus.Add(i, StaticRes.Global.MouldingStatus.ShutDown);
+                        dicStatus.Add(i, MouldingStatus.Shutdown.GetDescription());
                     }
                     else
                     {
-                        dicStatus.Add(i, arrDrTemp[0]["MachineStatus"].ToString());
+                        var status = StatusConventor.ConventMoulding(arrDrTemp[0]["MachineStatus"].ToString());
+                        dicStatus.Add(i, status.GetDescription());
                     }
                 }
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Taiyo.Enum.Production;
 using Taiyo.Enum.Organization;
 
-namespace StatusConventor
+namespace Taiyo.Tool
 {
 
     /// <summary>
@@ -28,35 +28,33 @@ namespace StatusConventor
 
             switch (status.ToUpper())
             {
-                case "1":
+                case "RUNNING":
                     return MouldingStatus.Running;
-                case "1":
+                case "MATERIAL TESTING":
                     return MouldingStatus.MaterialTesting;
-                case "1":
+                case "MOULD TESTING":
                     return MouldingStatus.MouldTesting;
-                case "1":
+                case "ADJUSTMENT":
                     return MouldingStatus.Adjustment;
-                case "1":
+                case "NO_SCHEDULE":
                     return MouldingStatus.NoSchedule;
-                case "1":
+                case "CHANGE MODEL":
                     return MouldingStatus.ChangeModel;
-                case "1":
+                case "NO OPERATOR":
                     return MouldingStatus.NoOperator;
-                case "1":
+                case "LOGIN OUT":
                     return MouldingStatus.LoginOut;
-                case "1":
+                case "NO MATERIAL":
                     return MouldingStatus.NoMaterial;
-                case "1":
+                case "LOGIN LATE":
                     return MouldingStatus.LoginLate;
-                case "1":
-                    return MouldingStatus.NoSchedule;
-                case "1":
+                case "BREAK TIME":
                     return MouldingStatus.BreakTime;
-                case "1":
+                case "MACHINEBREAK":
                     return MouldingStatus.MachineBreak;
-                case "1":
+                case "DAMAGEMOULD":
                     return MouldingStatus.DamageMould;
-                case "1":
+                case "SHUTDOWN":
                     return MouldingStatus.Shutdown;               
                 default:
                     throw new ArgumentNullException("Status can not empty or null !");
@@ -71,21 +69,24 @@ namespace StatusConventor
 
             switch (status.ToUpper())
             {
-                case "1":
+                case "RUN":
+                case "POWER ON":
                     return LaserStatus.Running;
-                case "1":
+                case "ADJUSTMENT":        
+                case "BUYOFF":
                     return LaserStatus.Buyoff;
-                case "1":
+                case "SETUP":
                     return LaserStatus.Setup;
-                case "1":
+                case "TESTING":
                     return LaserStatus.Testing;
-                case "1":
+                case "NO SCHEDULE":
                     return LaserStatus.NoSchedule;
-                case "1":
+                case "MAINTAINENCE":
                     return LaserStatus.Maintenance;
-                case "1":
+                case "BREAKDOWN":
                     return LaserStatus.Breakdown;
-                case "1":
+                case "POWER OFF":
+                case "SHUTDOWN":
                     return LaserStatus.Shutdown;
                 default:
                     throw new ArgumentNullException("Status can not empty or null !");
@@ -100,13 +101,13 @@ namespace StatusConventor
 
             switch (status.ToUpper())
             {
-                case "1":
+                case "CHECKING":
                     return PQCStatus.Checking;
-                case "1":
+                case "PACKING":
                     return PQCStatus.Packing;
-                case "1":
+                case "NO SCHEDULE":
                     return PQCStatus.NoSchedule;               
-                case "1":
+                case "SHUTDOWN":
                     return PQCStatus.Shutdown;
               
                 default:

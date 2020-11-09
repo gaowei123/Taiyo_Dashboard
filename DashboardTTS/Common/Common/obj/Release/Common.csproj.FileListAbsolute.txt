@@ -7,3 +7,9 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Release\Common.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\obj\Release\Common.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\StatusConverter.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\StatusConverter.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.pdb

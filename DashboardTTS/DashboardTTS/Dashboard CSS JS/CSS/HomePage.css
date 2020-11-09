@@ -1,5 +1,7 @@
 ﻿
-    .topTitleRow{
+
+
+.topTitleRow{
         background-color: #003366;
         color:white;
         font-family:Arial;
@@ -22,15 +24,16 @@
         border-radius:6px;
         border-width:1px;
         border-color:#ddd;
+        padding-bottom:4px;
     }
     .areaL{
-         margin:20px 10px 0px 0px;
+         margin:16px 8px 0px 0px;
     }
     .areaR{
-        margin:20px 0px 0px 10px;  
+        margin:16px 0px 0px 8px;  
     }
     .areaM{
-        margin:20px 10px 0px 10px;  
+        margin:16px 8px 0px 8px;  
     }
     .areaChart{
         height:330px;
@@ -38,7 +41,7 @@
 
 
     .divController{
-        width:100px; 
+        width:110px; 
         height:70px;
         border-radius:6px;
         border-width:1px;
@@ -76,4 +79,15 @@
         font-size:13px;
         font-weight:bold;
         line-height:25px;
+    }
+
+
+
+    .dayOffSwitch{
+        position:absolute;
+        left:58%;
+        top:130px;
+
+        width:212px;
+        height:35px;
     }

@@ -5,15 +5,11 @@
 <script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 <link href="~/Dashboard CSS JS/CSS/HomePage.css" rel="stylesheet" />
 
+<script src="~/plugins/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
+<link href="~/plugins/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" />
 
-<style>
-    .container-fluid{
-        max-width:1500px;
-    }
-</style>
 
-<div class="container-fluid">
-
+<div class="container-fluid" style="max-width:1500px;">
     <div class="row topTitleRow">
         <div class="col-md-9">
             <img class="titleImg" src="~/Resources/Images/headericon.gif" />
@@ -23,7 +19,6 @@
             <label id="lbTime" style="color:white; width:100%; text-align:right;"></label>
         </div>
     </div>
-
 
     <div class="row">
         <div class="col-sm-9" style="margin:0px;padding:0px;">
@@ -41,9 +36,10 @@
                 <h4 class="statusTitle">Moulding</h4>
 
                 <div class="row">
-                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divMouldingContain">
+                    <div class="col-sm-12" id="divMouldingContain"
+                         style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;">
                         <div class="divController run" id="ctrl">
-                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Material Testing</span>
                         </div>
                         <div class="divController idle">
                             <span class="statusFont">MC.2</span><br /><span class="statusFont">No Schedule</span>
@@ -79,7 +75,8 @@
                 <h4 class="statusTitle">Laser</h4>
 
                 <div class="row">
-                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divLaserContain">
+                    <div class="col-sm-12" id="divLaserContain"
+                         style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:flex-start; padding-left:17px;" >
                         <div class="divController run">
                             <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
                         </div>
@@ -113,9 +110,10 @@
                 <h4 class="statusTitle">PQC</h4>
 
                 <div class="row" style="margin:auto;">
-                    <div class="col-sm-12" style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:center;" id="divPQCContain">
+                    <div class="col-sm-12" id="divPQCContain"
+                         style="display:flex; flex-direction:row;flex-wrap:wrap; justify-content:flex-start;" >
                         <div class="divController run">
-                            <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
+                            <span class="statusFont">Packing1(Sta.1)</span><br /><span class="statusFont">Run</span>
                         </div>
                         <div class="divController run">
                             <span class="statusFont">MC.1</span><br /><span class="statusFont">Run</span>
@@ -194,6 +192,12 @@
 
 </div>
 
+
+<div class="dayOffSwitch">
+    <label>Display Dayoff</label>
+    <input name="status" type="checkbox" data-size="small">
+</div>
+
 <script>
     var apiGetTrendChartData = window.globalConfig.rootDirectory + '/Charts/GetHomeTrendData';
     var apiGetPieChartData = window.globalConfig.rootDirectory + '/Charts/GetTotalPieChartData';
@@ -208,39 +212,22 @@
 
     $(function () {
 
-
-        return false;
-
-
-        generateTrendChart();
-
+        generateLabelTime();
+        setInterval("generateLabelTime()", 10000);//时间标签 10s 刷新
+        
+      
+        generateTrendChart(false);
         generatePieChart();
+        setInterval("generatePieChart()", 300000);//饼图 5min 刷新
+   
 
         generateMouldStatus();
-
         generateLaserStatus();
-
         generatePQCStatus();
-
-        generateLabelTime();
-
-
-        //5min 刷新
-        setInterval("generateTrendChart()", 300000);
-        setInterval("generatePieChart()", 300000);
-
-        //30s 刷新
-        setInterval("generateMouldStatus()", 30000);
-        setInterval("generateLaserStatus()", 30000);
-        setInterval("generatePQCStatus()", 30000);
-
-        //10s 刷新
-        setInterval("generateLabelTime()", 10000);
+        setInterval("generateMouldStatus()", 30000);//30s 刷新
+        setInterval("generateLaserStatus()", 30000);//30s 刷新
+        setInterval("generatePQCStatus()", 30000);  //30s 刷新
     })
-
-
-
-
 
 
 
@@ -251,12 +238,14 @@
     }
 
 
-    function generateTrendChart() {
+    function generateTrendChart(displayFlag) {
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetTrendChartData,
-            data: {},
+            data: {
+                isDisplayOffday: displayFlag
+            },
 
             beforeSend: function () {
                 trendChart.showLoading();
@@ -303,7 +292,10 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: data.XAxisData
+                            data: data.XAxisData,
+                            axisLabel: {
+                                interval: 0
+                            }
                         }
                     ],
                     yAxis: [
@@ -361,7 +353,7 @@
 
                 var option = {
                     title: {
-                        text: 'Today Output: ' + totalOutput,
+                        text: 'Real Output: ' + totalOutput,
                         //subtext: '纯属虚构',
                         left: 'left'
                     },
@@ -375,7 +367,7 @@
                         right: 0,
                         top: 20,
                         bottom: 20,
-                        data: ['Moulding', 'Laser', 'Online', 'WIP', 'Packing']
+                        data: ['Moulding','Painting', 'Laser', 'Online', 'WIP', 'Packing']
                     },
                     series: [
                         {
@@ -432,15 +424,17 @@
 
                 for (var i = 1; i < 10; i++) {
 
-                    var strMc = 'Mc.' + i;
-                    var strStatus = data[i].toUpperCase();
+                    var strMc = 'Machine ' + i;
+                    var strStatus = data[i];
 
                     var classStatus = '';
-                    if (strStatus == 'RUNNING' || strStatus == 'ADJUSTMENT' || strStatus == 'CHANGE MODEL' || strStatus == 'MOULD TESTING' || strStatus=='MATERIAL TESTING') {
+                    if (strStatus == 'Running' || strStatus == 'Adjustment' ||
+                        strStatus == 'Change Model' || strStatus == 'Mould Testing' || strStatus == 'Material Testing') {
                         classStatus = 'run';
-                    } else if (strStatus == 'NO_SCHEDULE' || strStatus == "NO OPERATOR" || strStatus == "NO MATERIAL" || strStatus == "LOGIN LATE" || strStatus == 'BREAK TIME') {
+                    } else if (strStatus == 'No Schedule' || strStatus == "No Operator" || strStatus == "No Material"
+                        || strStatus == "Login Late" || strStatus == 'Break Time') {
                         classStatus = 'idle';
-                    } else if (strStatus == 'DAMAGEMOULD') {
+                    } else if (strStatus == 'Damage Mould') {
                         classStatus = 'breakdown';
                     } else {
                         classStatus = 'shutdown';
@@ -487,15 +481,15 @@
 
                 for (var i = 1; i < 9; i++) {
 
-                    var strMc = 'Mc.' + i;
+                    var strMc = 'Machine ' + i;
                     var strStatus = data[i];
 
                     var classStatus = '';
-                    if (strStatus == 'RUN' || strStatus == 'TESTING' || strStatus == 'SETUP' || strStatus == 'BUYOFF') {
+                    if (strStatus == 'Running' || strStatus == 'Testing' || strStatus == 'Setup' || strStatus == 'Buyoff') {
                         classStatus = 'run';
-                    } else if (strStatus == 'NO SCHEDULE' || strStatus == "MAINTAINENCE") {
+                    } else if (strStatus == 'No Schedule' || strStatus == "Maintenance") {
                         classStatus = 'idle';
-                    } else if (strStatus == 'BREAKDOWN') {
+                    } else if (strStatus == 'Breakdown') {
                         classStatus = 'breakdown';
                     } else {
                         classStatus = 'shutdown';
@@ -540,13 +534,13 @@
                 $("#divPQCContain").empty();
                 for (var i = 0; i < data.length; i++) {
 
-                    var strMc = 'Sta.' + (i + 1);
+                    var strMc = data[i].Station;
                     var strStatus = data[i].Status;
 
                     var classStatus = '';
-                    if (strStatus == 'CHECKING' || strStatus == 'PACKING') {
+                    if (strStatus == 'Checking' || strStatus == 'Packing') {
                         classStatus = 'run';
-                    } else if (strStatus == 'NO SCHEDULE') {
+                    } else if (strStatus == 'No Schedule') {
                         classStatus = 'idle';
                     } else {
                         classStatus = 'shutdown';
@@ -570,6 +564,26 @@
         });
     }
 
+
+
+
+    $('[name="status"]').bootstrapSwitch({
+        onText: "ON",
+        offText: "OFF",
+        onColor: "success",
+        offColor: "danger",
+        size: "mini",
+        animate:false,
+        onSwitchChange: function (event, state) {
+            if (state == true) {
+                generateTrendChart(true);              
+                alert('Displaying day off data!');
+            } else {
+                generateTrendChart(false);               
+                alert('Hiding day off data!');
+            }
+        }
+    });
 
 
 

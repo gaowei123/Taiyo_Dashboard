@@ -5,7 +5,9 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Model;
-using System.Globalization;
+using Taiyo.Enum.Production;
+using Taiyo.Tool;
+using Taiyo.Tool.Extension;
 
 namespace Common.BLL
 {
@@ -1049,15 +1051,16 @@ namespace Common.BLL
 
             for (int i = 1; i < 9; i++)
             {
-                string status = string.Empty;
+                Taiyo.Enum.Production.LaserStatus status;
 
                 DataRow[] drArrTemp = dt.Select("machineID = " + i.ToString() + "", "");
-                if (drArrTemp == null || drArrTemp.Length== 0)
-                    status = StaticRes.Global.LaserStatus.Shutdown;
+                if (drArrTemp == null || drArrTemp.Length == 0)
+                    status = LaserStatus.Shutdown;
                 else
-                    status = drArrTemp[0]["eventTrigger"].ToString();
+                    status = Taiyo.Tool.StatusConventor.ConventLaser(drArrTemp[0]["eventTrigger"].ToString());
 
-                dicStatus.Add(i, status);
+
+                dicStatus.Add(i, status.GetDescription());
             }
 
             return dicStatus;

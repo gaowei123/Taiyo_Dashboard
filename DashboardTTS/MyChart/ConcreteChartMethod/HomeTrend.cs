@@ -26,7 +26,7 @@ namespace MyChart.ConcreteChartMethod
             var dayList = from a in chartDataList group a by new { a.Month,a.WeekName, a.Day } into b orderby b.Key.Month ascending, b.Key.Day ascending select new { b.Key.Month, b.Key.WeekName, b.Key.Day };
             foreach (var item in dayList)
             {
-                string value = string.Format("{0}/{1}</br>{2}",
+                string value = string.Format("{0}/{1}\n{2}",
                     item.Day,
                     Common.CommFunctions.GetMonthName(item.Month, false),
                     item.WeekName);

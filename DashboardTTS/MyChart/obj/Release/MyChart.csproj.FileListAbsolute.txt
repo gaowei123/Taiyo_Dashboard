@@ -9,3 +9,9 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Commo
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\StaticRes.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\DBHelp.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Release\MyChart.csprojResolveAssemblyReference.cache
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Taiyo.Enum.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Taiyo.SearchParam.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\StatusConverter.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Taiyo.Enum.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\Taiyo.SearchParam.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Release\StatusConverter.pdb
