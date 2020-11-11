@@ -5,6 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Drawing;
+using Taiyo.Enum.Production;
+using Taiyo.Tool.Extension;
+
+
+
 namespace DashboardTTS.UserControl
 {
     public partial class WebUserControlMachineStatus : System.Web.UI.UserControl
@@ -12,7 +17,7 @@ namespace DashboardTTS.UserControl
         public class UIModel
         {
             public string MachineID { get; set; }
-            public string Status { get; set; }
+            public LaserStatus Status { get; set; }
             public System.Drawing.Color StatusColor { get; set; }
             public string ImgURL { get; set; }
             public string PartNo { get; set; }
@@ -34,7 +39,7 @@ namespace DashboardTTS.UserControl
         {
             this.lbMachineID.Text = model.MachineID;
             this.lbPartNo.Text = model.PartNo;
-            this.lbStatus.Text = model.Status;
+            this.lbStatus.Text = model.Status.GetDescription();
             this.lbStatus.BackColor = GetStatusColor(model.Status);
             this.lbLotNo.Text = model.LotNo;
 
@@ -48,16 +53,17 @@ namespace DashboardTTS.UserControl
             this.lbUsedRate.Text = model.UsedRate;
         }
 
-        public void SetShutdown(string machineID, string imgRUL)
+        public void SetShutdown(string machineID, string imgURL)
         {
             this.lbMachineID.Text = machineID;
-            this.lbPartNo.Text = "";
-            this.lbStatus.Text = StaticRes.Global.LaserStatus.Shutdown;
-            this.lbStatus.BackColor = GetStatusColor(StaticRes.Global.LaserStatus.Shutdown);
+          
+            this.lbStatus.Text = LaserStatus.Shutdown.GetDescription();
+            this.lbStatus.BackColor = GetStatusColor(LaserStatus.Shutdown);
+            this.imgLogo.ImageUrl = imgURL;
+            
+
             this.lbLotNo.Text = "";
-
-
-            this.imgLogo.ImageUrl = imgRUL;
+            this.lbPartNo.Text = "";
             this.lbJobNo.Text = "";
             this.lbLotQty.Text = "0";
             this.lbOKQty.Text = "0";
@@ -66,35 +72,39 @@ namespace DashboardTTS.UserControl
             this.lbUsedRate.Text = "0.00%";
         }
         
-        private System.Drawing.Color GetStatusColor(string status)
+        private System.Drawing.Color GetStatusColor(LaserStatus status)
         {
             System.Drawing.Color statusColor = new System.Drawing.Color();
             switch (status)
             {
-                case StaticRes.Global.LaserStatus.Run:
-                case StaticRes.Global.LaserStatus.Setup:
-                case StaticRes.Global.LaserStatus.Testing:
-                case StaticRes.Global.LaserStatus.Buyoff:
+                case LaserStatus.Running:
                     statusColor = StaticRes.MainStatusColor.Run;
                     break;
-
-                case StaticRes.Global.LaserStatus.NoSchedule:
+                case LaserStatus.Buyoff:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case LaserStatus.Setup:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case LaserStatus.Testing:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case LaserStatus.NoSchedule:
                     statusColor = StaticRes.MainStatusColor.NoSchedule;
                     break;
-
-                case StaticRes.Global.LaserStatus.Maintenance:
-                case StaticRes.Global.LaserStatus.Breakdown:
+                case LaserStatus.Maintenance:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case LaserStatus.Breakdown:
                     statusColor = StaticRes.MainStatusColor.Breakdown;
                     break;
-
-                case StaticRes.Global.LaserStatus.Shutdown:
+                case LaserStatus.Shutdown:
                     statusColor = StaticRes.MainStatusColor.Shutdown;
                     break;
-                    
                 default:
-                    throw new NullReferenceException("no such status" + status);                   
+                    break;
             }
-
+          
             return statusColor;
         }
     }

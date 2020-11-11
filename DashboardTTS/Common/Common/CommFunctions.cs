@@ -143,11 +143,8 @@ namespace Common
 
             double dTotalSeconds = double.Parse(sHour) * 3600 + double.Parse(sMin) * 60 + double.Parse(sSec);
 
-
-            double dHours = Math.Round(dTotalSeconds / 3600, 2);
-
-
-            return dHours;
+            
+            return dTotalSeconds;
         }
 
 

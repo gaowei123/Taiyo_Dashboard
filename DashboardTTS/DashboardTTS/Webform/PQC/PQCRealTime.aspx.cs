@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using Taiyo.Enum.Production;
+using Taiyo.Tool;
 
 namespace DashboardTTS.Webform.PQC
 {
@@ -30,7 +32,7 @@ namespace DashboardTTS.Webform.PQC
                 DataRow[] drArrTemp = dtTracking.Select(" machineID = '" + i + "'", " datetime desc");
                 if (drArrTemp == null || drArrTemp.Length == 0)
                 {
-                    model.Status = StaticRes.Global.PQCStatus.Shutdown;
+                    model.Status = PQCStatus.Shutdown;
                     model.LotNo = "";
                     model.JobNo = "";
                     model.PartNo = "";
@@ -46,7 +48,7 @@ namespace DashboardTTS.Webform.PQC
 
                     if (dr["stopTime"].ToString() == "")
                     {
-                        model.Status = dr["status"].ToString();
+                        model.Status = StatusConventor.ConventnPQC(dr["status"].ToString());
                         var paint = (from a in paintList
                                      where a.paintProcess == "Paint#1" && a.jobNumber == dr["jobId"].ToString()
                                      select a).FirstOrDefault();
@@ -63,7 +65,7 @@ namespace DashboardTTS.Webform.PQC
                     }
                     else
                     {
-                        model.Status = StaticRes.Global.PQCStatus.NoSchedule;
+                        model.Status = PQCStatus.NoSchedule;
                         model.LotNo = "";
                         model.JobNo = "";
                         model.PartNo = "";
@@ -73,9 +75,6 @@ namespace DashboardTTS.Webform.PQC
                         model.RejRate = 0;
                         model.Operator = "";
                     }
-
-
-                    
                 }
 
                 GetControl(i).SetUI(model);

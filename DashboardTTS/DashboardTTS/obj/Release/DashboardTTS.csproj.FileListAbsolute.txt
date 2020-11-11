@@ -108,9 +108,9 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Release\
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\obj\Release\DashboardTTS.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\MyChart.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\MyChart.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\StatusConverter.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Enum.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.SearchParam.dll
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\StatusConverter.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Enum.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.SearchParam.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Tool.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Tool.pdb

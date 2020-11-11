@@ -5,6 +5,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using Taiyo.Tool;
+using Taiyo.Tool.Extension;
+using Taiyo.Enum.Production;
+
 namespace DashboardTTS.Webform
 {
     public partial class MachineStatus : System.Web.UI.Page
@@ -26,7 +30,7 @@ namespace DashboardTTS.Webform
                     return;
                 }
                 Dictionary<int, double> dicCurDayUsedRate = _statusBLL.GetCurrentDayUsedRate();
-                Dictionary<int, string> dicCurStatus = _statusBLL.GetCurrentStatus();
+                Dictionary<int, LaserStatus> dicCurStatus = _statusBLL.GetCurrentStatus();
 
 
                 //遍历8台机器, 赋值
@@ -39,7 +43,7 @@ namespace DashboardTTS.Webform
 
 
                     //current status
-                    if (dicCurStatus == null || dicCurStatus[i] == StaticRes.Global.LaserStatus.Shutdown)
+                    if ( dicCurStatus[i] == LaserStatus.Shutdown)
                     {
                         GetControl(i).SetShutdown(uiModel.MachineID, uiModel.ImgURL);
                     }

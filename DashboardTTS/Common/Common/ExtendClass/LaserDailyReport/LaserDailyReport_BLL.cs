@@ -13,96 +13,96 @@ namespace Common.ExtendClass.LaserDailyReport
 
 
 
-        public List<LaserDailyReport_Model.Main> GetMainList(DateTime dDay)
-        {
-            List<LaserDailyReport_Model.DetailOutput> detailOutputList = _dal.GetList(dDay);
-            List<Common.Model.LMMSEventLog_Model.Detail> statusList = _eventBLL.GetStatusModelList(dDay, dDay.AddDays(1), "", "", "", false);
+        //public List<LaserDailyReport_Model.Main> GetMainList(DateTime dDay)
+        //{
+        //    List<LaserDailyReport_Model.DetailOutput> detailOutputList = _dal.GetList(dDay);
+        //    List<Common.Model.LMMSEventLog_Model.Detail> statusList = _eventBLL.GetStatusModelList(dDay, dDay.AddDays(1), "", "", "", false);
 
-            if (detailOutputList == null || statusList == null)
-                return null;
-
-
-            var outputGrouped = from a in detailOutputList
-                                orderby a.MachineID ascending
-                                group a by a.MachineID into b
-                                select new
-                                {
-                                    MachineID = b.Key,
-                                    PassQty = b.Sum(p => p.PassQty),
-                                    RejQty = b.Sum(p => p.RejQty),
-                                    Setup = b.Sum(p => p.Setup),
-                                    Buyoff = b.Sum(p => p.Buyoff),
-                                    Output = b.Sum(p => p.Output)
-                                };
-
-            var runStatusGrouped = from a in statusList
-                                   where a.status == StaticRes.Global.LaserStatus.Run
-                                   || a.status == StaticRes.Global.LaserStatus.Setup
-                                   || a.status == StaticRes.Global.LaserStatus.Buyoff
-                                   || a.status == StaticRes.Global.LaserStatus.Testing
-                                   group a by a.machineID into b
-                                   select new
-                                   {
-                                       MachineID = b.Key,
-                                       TotalSeconds = b.Sum(p => p.totalSeconds)
-                                   };
-            var idleStatusGrouped = from a in statusList
-                                   where a.status == StaticRes.Global.LaserStatus.NoSchedule
-                                   || a.status == StaticRes.Global.LaserStatus.Maintenance
-                                   group a by a.machineID into b
-                                   select new
-                                   {
-                                       MachineID = b.Key,
-                                       TotalSeconds = b.Sum(p => p.totalSeconds)
-                                   };
-            var breakdownStatusGrouped = from a in statusList
-                                   where a.status == StaticRes.Global.LaserStatus.Breakdown
-                                   group a by a.machineID into b
-                                   select new
-                                   {
-                                       MachineID = b.Key,
-                                       TotalSeconds = b.Sum(p => p.totalSeconds)
-                                   };
-            var shutdownStatusGrouped = from a in statusList
-                                   where a.status == StaticRes.Global.LaserStatus.Shutdown
-                                   group a by a.machineID into b
-                                   select new
-                                   {
-                                       MachineID = b.Key,
-                                       TotalSeconds = b.Sum(p => p.totalSeconds)
-                                   };
+        //    if (detailOutputList == null || statusList == null)
+        //        return null;
 
 
-            List<LaserDailyReport_Model.Main> mainList = new List<LaserDailyReport_Model.Main>();
-            for (int i = 1; i < 9; i++)
-            {
-                var output = (from a in outputGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
-                var run = (from a in runStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
-                var idle = (from a in idleStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
-                var breakdown = (from a in breakdownStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
-                var shutdown = (from a in shutdownStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
+        //    var outputGrouped = from a in detailOutputList
+        //                        orderby a.MachineID ascending
+        //                        group a by a.MachineID into b
+        //                        select new
+        //                        {
+        //                            MachineID = b.Key,
+        //                            PassQty = b.Sum(p => p.PassQty),
+        //                            RejQty = b.Sum(p => p.RejQty),
+        //                            Setup = b.Sum(p => p.Setup),
+        //                            Buyoff = b.Sum(p => p.Buyoff),
+        //                            Output = b.Sum(p => p.Output)
+        //                        };
+
+        //    var runStatusGrouped = from a in statusList
+        //                           where a.status == StaticRes.Global.LaserStatus.Run
+        //                           || a.status == StaticRes.Global.LaserStatus.Setup
+        //                           || a.status == StaticRes.Global.LaserStatus.Buyoff
+        //                           || a.status == StaticRes.Global.LaserStatus.Testing
+        //                           group a by a.machineID into b
+        //                           select new
+        //                           {
+        //                               MachineID = b.Key,
+        //                               TotalSeconds = b.Sum(p => p.totalSeconds)
+        //                           };
+        //    var idleStatusGrouped = from a in statusList
+        //                           where a.status == StaticRes.Global.LaserStatus.NoSchedule
+        //                           || a.status == StaticRes.Global.LaserStatus.Maintenance
+        //                           group a by a.machineID into b
+        //                           select new
+        //                           {
+        //                               MachineID = b.Key,
+        //                               TotalSeconds = b.Sum(p => p.totalSeconds)
+        //                           };
+        //    var breakdownStatusGrouped = from a in statusList
+        //                           where a.status == StaticRes.Global.LaserStatus.Breakdown
+        //                           group a by a.machineID into b
+        //                           select new
+        //                           {
+        //                               MachineID = b.Key,
+        //                               TotalSeconds = b.Sum(p => p.totalSeconds)
+        //                           };
+        //    var shutdownStatusGrouped = from a in statusList
+        //                           where a.status == StaticRes.Global.LaserStatus.Shutdown
+        //                           group a by a.machineID into b
+        //                           select new
+        //                           {
+        //                               MachineID = b.Key,
+        //                               TotalSeconds = b.Sum(p => p.totalSeconds)
+        //                           };
+
+
+        //    List<LaserDailyReport_Model.Main> mainList = new List<LaserDailyReport_Model.Main>();
+        //    for (int i = 1; i < 9; i++)
+        //    {
+        //        var output = (from a in outputGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
+        //        var run = (from a in runStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
+        //        var idle = (from a in idleStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
+        //        var breakdown = (from a in breakdownStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
+        //        var shutdown = (from a in shutdownStatusGrouped where a.MachineID == i.ToString() select a).FirstOrDefault();
 
 
 
 
-                LaserDailyReport_Model.Main model = new LaserDailyReport_Model.Main();
-                model.MachineID = i.ToString();
-                model.Run = Common.CommFunctions.ConvertDateTimeShort((run.TotalSeconds / 3600).ToString());
-                model.Idle = Common.CommFunctions.ConvertDateTimeShort((idle.TotalSeconds / 3600).ToString());
-                model.Breakdown = Common.CommFunctions.ConvertDateTimeShort((breakdown.TotalSeconds / 3600).ToString());
-                model.Shutdown = Common.CommFunctions.ConvertDateTimeShort((shutdown.TotalSeconds / 3600).ToString());
+        //        LaserDailyReport_Model.Main model = new LaserDailyReport_Model.Main();
+        //        model.MachineID = i.ToString();
+        //        model.Run = Common.CommFunctions.ConvertDateTimeShort((run.TotalSeconds / 3600).ToString());
+        //        model.Idle = Common.CommFunctions.ConvertDateTimeShort((idle.TotalSeconds / 3600).ToString());
+        //        model.Breakdown = Common.CommFunctions.ConvertDateTimeShort((breakdown.TotalSeconds / 3600).ToString());
+        //        model.Shutdown = Common.CommFunctions.ConvertDateTimeShort((shutdown.TotalSeconds / 3600).ToString());
 
-                model.PassQty = output.PassQty;
-                model.RejQty = output.RejQty;
-                model.Setup = output.Setup;
-                model.Buyoff = output.Buyoff;
-                model.Output = output.Output;
+        //        model.PassQty = output.PassQty;
+        //        model.RejQty = output.RejQty;
+        //        model.Setup = output.Setup;
+        //        model.Buyoff = output.Buyoff;
+        //        model.Output = output.Output;
 
-                mainList.Add(model);
-            }
+        //        mainList.Add(model);
+        //    }
 
-            return mainList;
-        }
+        //    return mainList;
+        //}
 
 
         public List<LaserDailyReport_Model.DetailStatus> GetDetailStatusList(DateTime dDay,string sShift, string sMachineID)
@@ -132,8 +132,12 @@ namespace Common.ExtendClass.LaserDailyReport
 
 
             LaserDailyReport_Model.DetailStatus total = new LaserDailyReport_Model.DetailStatus();
-            double totalHours = detailStatusList.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.TakeTime));
-            total.TakeTime = Common.CommFunctions.ConvertDateTimeShort(totalHours.ToString());
+
+
+
+           
+            double seconds = detailStatusList.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.TakeTime));
+            total.TakeTime = Common.CommFunctions.ConvertDateTimeShort((seconds/3600).ToString());
 
             detailStatusList.Add(total);
 
@@ -159,7 +163,7 @@ namespace Common.ExtendClass.LaserDailyReport
 
             LaserDailyReport_Model.DetailOutput total = new LaserDailyReport_Model.DetailOutput();
             double totalSeconds = result.Sum(p => Common.CommFunctions.ConvertDateTimeToDouble(p.TakeTime));
-            total.TakeTime = Common.CommFunctions.ConvertDateTimeShort(totalSeconds.ToString());
+            total.TakeTime = Common.CommFunctions.ConvertDateTimeShort((totalSeconds/3600).ToString());
             total.PassQty = result.Sum(p => p.PassQty);
             total.RejQty = result.Sum(p => p.RejQty);
             total.Setup = result.Sum(p => p.Setup);

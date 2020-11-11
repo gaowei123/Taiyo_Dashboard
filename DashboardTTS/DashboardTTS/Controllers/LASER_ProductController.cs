@@ -70,14 +70,14 @@ namespace DashboardTTS.Controllers
 
         #region Laesr Daily Report
         //暂时不用
-        public JsonResult GetDailyMain()
-        {
-            DateTime dDay = DateTime.Parse(Request.Form["Day"]);
+        //public JsonResult GetDailyMain()
+        //{
+        //    DateTime dDay = DateTime.Parse(Request.Form["Day"]);
 
 
-            Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL bll = new Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL();
-            return Json(bll.GetMainList(dDay));
-        }
+        //    Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL bll = new Common.ExtendClass.LaserDailyReport.LaserDailyReport_BLL();
+        //    return Json(bll.GetMainList(dDay));
+        //}
 
 
         public JsonResult GetDailyDetailOutput()

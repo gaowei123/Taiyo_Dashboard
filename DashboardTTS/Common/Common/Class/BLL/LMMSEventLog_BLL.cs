@@ -403,7 +403,7 @@ namespace Common.BLL
         {
 
             //源数据   前延2天,后延1天, 防止漏查.
-            DataTable dtEvent = _dal.GetList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "", "");
+            DataTable dtEvent = _dal.GetListForModelList(dDateFrom.AddDays(-2), dDateTo.AddDays(1), "", "");
             if (dtEvent == null || dtEvent.Rows.Count == 0)
                 return null;
 
@@ -1038,11 +1038,11 @@ namespace Common.BLL
         /// <returns>
         /// 返回 McID-Status 的键值对
         /// </returns>
-        public Dictionary<int, string> GetCurrentStatus()
+        public Dictionary<int, LaserStatus> GetCurrentStatus()
         {
-            Dictionary<int, string> dicStatus = new Dictionary<int, string>();
+            Dictionary<int, LaserStatus> dicStatus = new Dictionary<int, LaserStatus>();
 
-            DataTable dt = _dal.GetList(DateTime.Now.Date, DateTime.Now.Date.AddDays(1), string.Empty, string.Empty);
+            DataTable dt = _dal.GetCurrentStatusList(string.Empty);
             if (dt != null & dt.Rows.Count != 0)
             {
                 dt = dt.Select("", " stoptime desc ,currentOperation desc ").CopyToDataTable();
@@ -1051,16 +1051,16 @@ namespace Common.BLL
 
             for (int i = 1; i < 9; i++)
             {
-                Taiyo.Enum.Production.LaserStatus status;
+                LaserStatus status;
 
                 DataRow[] drArrTemp = dt.Select("machineID = " + i.ToString() + "", "");
                 if (drArrTemp == null || drArrTemp.Length == 0)
                     status = LaserStatus.Shutdown;
                 else
-                    status = Taiyo.Tool.StatusConventor.ConventLaser(drArrTemp[0]["eventTrigger"].ToString());
+                    status = StatusConventor.ConventLaser(drArrTemp[0]["eventTrigger"].ToString());
 
 
-                dicStatus.Add(i, status.GetDescription());
+                dicStatus.Add(i, status);
             }
 
             return dicStatus;

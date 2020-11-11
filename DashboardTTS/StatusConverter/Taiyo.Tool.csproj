@@ -7,8 +7,8 @@
     <ProjectGuid>{9EE7AB40-6B50-47A4-9F3A-3B3F3520CADB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StatusConverter</RootNamespace>
-    <AssemblyName>StatusConverter</AssemblyName>
+    <RootNamespace>Taiyo.Tool</RootNamespace>
+    <AssemblyName>Taiyo.Tool</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DateTimeConventor.cs" />
+    <Compile Include="Extension\DateTimeHelper.cs" />
     <Compile Include="Extension\EnumHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusConventor.cs" />

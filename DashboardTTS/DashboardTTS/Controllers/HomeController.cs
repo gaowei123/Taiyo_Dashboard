@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Taiyo.Enum.Production;
 using Taiyo.Tool;
 using Taiyo.Tool.Extension;
+using System.Text;
 
 namespace DashboardTTS.Controllers
 {
@@ -26,22 +27,44 @@ namespace DashboardTTS.Controllers
         public ActionResult GetMouldStatus()
         {
             Common.Class.BLL.MouldingMachineStatus_BLL MachineStatusBLL = new Common.Class.BLL.MouldingMachineStatus_BLL();
-            Dictionary<int,string> dicStatus = MachineStatusBLL.GetCurrentStatus();
-            
-            return Content(JsonConvert.SerializeObject(dicStatus));
+            Dictionary<int,MouldingStatus> dicCurStatus = MachineStatusBLL.GetCurrentStatus();
+
+
+            //前台显示全部按照 enum中的description来显示
+            Dictionary<int, string> dicTemp = new Dictionary<int, string>();
+            foreach (var item in dicCurStatus)
+            {
+                dicTemp.Add(item.Key, item.Value.GetDescription());
+            }
+
+            return Content(JsonConvert.SerializeObject(dicTemp));
         }
 
         public ActionResult GetLaserStatus()
         {
             Common.BLL.LMMSEventLog_BLL bll = new Common.BLL.LMMSEventLog_BLL();
-            Dictionary<int, string> dicCurStatus = bll.GetCurrentStatus();
-            
-            
-            string result = JsonConvert.SerializeObject(dicCurStatus);
+            Dictionary<int, LaserStatus> dicCurStatus = bll.GetCurrentStatus();
+
+
+            //前台显示全部按照 enum中的description来显示
+            Dictionary<int, string> dicTemp = new Dictionary<int, string>();
+            foreach (var item in dicCurStatus)
+            {
+                dicTemp.Add(item.Key, item.Value.GetDescription());
+            }
+
+            string result = JsonConvert.SerializeObject(dicTemp);
 
        
 
             return Content(result);
+        }
+
+
+        private class HomePQCModel
+        {
+            public string Station { get; set; }
+            public string Status { get; set; }
         }
 
         public JsonResult GetPQCStatus()
@@ -53,26 +76,28 @@ namespace DashboardTTS.Controllers
             var onlineList = new List<UserControl.WebUserControlPQCStatus.UIModel>();
             var wipList = new List<UserControl.WebUserControlPQCStatus.UIModel>();
             var packingList = new List<UserControl.WebUserControlPQCStatus.UIModel>();
-            
+
 
             #region  online 1-8
             for (int i = 1; i < 9; i++)
             {
-                string status = "";
-                if (dtTracking == null )
-                    status = PQCStatus.Shutdown.ToString();
+                UserControl.WebUserControlPQCStatus.UIModel model = new UserControl.WebUserControlPQCStatus.UIModel();
+                model.Station = $"Online{i}(Sta{i})";
+
+
+                if (dtTracking == null)
+                    model.Status = PQCStatus.Shutdown;
                 else
                 {
                     DataRow[] drArrTemp = dtTracking.Select(" machineID = '" + i + "'", " datetime desc");
                     if (drArrTemp == null || drArrTemp.Length == 0)
-                        status = PQCStatus.Shutdown.ToString();
+                        model.Status = PQCStatus.Shutdown;
                     else
-                        status = drArrTemp[0]["stopTime"].ToString() == "" ? PQCStatus.Checking.GetDescription() : PQCStatus.NoSchedule.GetDescription();
+                        model.Status = drArrTemp[0]["stopTime"].ToString() == "" ? PQCStatus.Checking : PQCStatus.NoSchedule;
                 }
 
-                UserControl.WebUserControlPQCStatus.UIModel model = new UserControl.WebUserControlPQCStatus.UIModel();
-                model.Station = $"Online{i}(Sta{i})";
-                model.Status = status;
+
+
                 onlineList.Add(model);
             }
             #endregion
@@ -83,32 +108,32 @@ namespace DashboardTTS.Controllers
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP1(Sta16)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP2(Sta17)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP3(Sta14)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP4(Sta15)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP5(Sta11)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP6(Sta13)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
             }
             else
@@ -116,32 +141,32 @@ namespace DashboardTTS.Controllers
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP1(Sta16)",
-                    Status = GetPQCStatusFromDt(dtTracking,16).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 16)
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP2(Sta17)",
-                    Status = GetPQCStatusFromDt(dtTracking, 17).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 17)
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP3(Sta14)",
-                    Status = GetPQCStatusFromDt(dtTracking, 114).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 114)
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP4(Sta15)",
-                    Status = GetPQCStatusFromDt(dtTracking, 15).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 15)
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP5(Sta11)",
-                    Status = GetPQCStatusFromDt(dtTracking, 11).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 11)
                 });
                 wipList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"WIP6(Sta13)",
-                    Status = GetPQCStatusFromDt(dtTracking, 13).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 13)
                 });
             }
             #endregion
@@ -152,32 +177,32 @@ namespace DashboardTTS.Controllers
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing1(Sta25)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing2(Sta23)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing3(Sta22)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing4(Sta21)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing5(Sta24)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing6(Sta12)",
-                    Status = PQCStatus.Shutdown.GetDescription()
+                    Status = PQCStatus.Shutdown
                 });
             }
             else
@@ -185,37 +210,37 @@ namespace DashboardTTS.Controllers
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing1(Sta25)",
-                    Status = GetPQCStatusFromDt(dtTracking, 25).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 25)
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing2(Sta23)",
-                    Status = GetPQCStatusFromDt(dtTracking, 23).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 23)
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing3(Sta22)",
-                    Status = GetPQCStatusFromDt(dtTracking, 22).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 22)
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing4(Sta21)",
-                    Status = GetPQCStatusFromDt(dtTracking, 21).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 21)
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing5(Sta24)",
-                    Status = GetPQCStatusFromDt(dtTracking, 24).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 24)
                 });
                 packingList.Add(new UserControl.WebUserControlPQCStatus.UIModel()
                 {
                     Station = $"Packing6(Sta12)",
-                    Status = GetPQCStatusFromDt(dtTracking, 12).GetDescription()
+                    Status = GetPQCStatusFromDt(dtTracking, 12)
                 });
             }
             #endregion
 
-            
+
             //按照特定的顺序排列.
             var resultList = new List<UserControl.WebUserControlPQCStatus.UIModel>()
             {
@@ -247,11 +272,20 @@ namespace DashboardTTS.Controllers
                 onlineList[6],
                 onlineList[7]
             };
-          
 
 
+            List<HomePQCModel> list = new List<HomePQCModel>();
+            foreach (var item in resultList)
+            {
+                list.Add(new HomePQCModel()
+                {
+                    Station = item.Station,
+                    Status = item.Status.GetDescription()
+                });
+            }
 
-            return Json(resultList);
+       
+            return Json(list);
         }
 
 

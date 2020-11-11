@@ -70,7 +70,7 @@
           
     <tr>    
         <td class="auto-style1" rowspan="6" > 
-            <asp:Image ID="imgLogo"  runat="server"  Width="150" Height ="150" />
+            <asp:Image ID="imgLogo"  runat="server"  Width="146" Height ="146" />
         </td>
         <td class="auto-style3 lbDescript">Job No</td>
         <td class="auto-style4">

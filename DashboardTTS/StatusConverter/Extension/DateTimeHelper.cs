@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Taiyo.Tool
+namespace Taiyo.Tool.Extension
 {
-    public static class DateTimeConventor
+    public static class DateTimeHelper
     {
-        public static string GetWeekName(DateTime datetime, bool isFullName)
+        public static string GetWeekName(this DateTime datetime, bool isFullName)
         {
             string result = "";
             switch (datetime.DayOfWeek)
@@ -43,7 +42,7 @@ namespace Taiyo.Tool
         }
 
 
-        public static string GetMonthName(DateTime datetime, bool isFullName)
+        public static string GetMonthName(this DateTime datetime, bool isFullName)
         {
             string result = "";
 
@@ -90,7 +89,6 @@ namespace Taiyo.Tool
 
             return result;
         }
-
 
 
 

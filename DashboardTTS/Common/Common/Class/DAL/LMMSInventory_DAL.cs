@@ -260,23 +260,24 @@ namespace Common.Class.DAL
             {
                 strSql.Append(" and a.partNumber = @partNumber ");
             }
+
             
             if (status != "ALL")
             {
-                if (status == StaticRes.Global.clsConstValue.JobStatus.pending)
+                if (status == "Pending")
                 {
                     strSql.Append("  and  isnull(c.totalFail,0) + isnull( c.totalPass ,0) = 0  ");
                 }
-                else if (status == StaticRes.Global.clsConstValue.JobStatus.inprocess)
+                else if (status == "Inprocess")
                 {
                     strSql.Append(" and   isnull(c.totalFail,0) + isnull( c.totalPass ,0) >0  ");
                     strSql.Append(" and ( isnull(c.totalFail,0) + isnull(c.totalPass,0) ) <  (a.quantity  -  isnull( a.setupQTY,0) - isnull( a.pqcQuantity,0) - isnull(a.buyOffQty,0))  * b.materialCount ");
                 }
-                else if (status == StaticRes.Global.clsConstValue.JobStatus.complete)
+                else if (status == "Complete")
                 {
                     strSql.Append(" and    ( isnull(c.totalFail,0) + isnull(c.totalPass,0) ) >= (a.quantity  -  isnull( a.setupQTY,0) - isnull( a.pqcQuantity,0) - isnull(a.buyOffQty,0))  * b.materialCount ");
                 }
-                else if (status == StaticRes.Global.clsConstValue.JobStatus.noComplete)
+                else if (status == "NoComplete")
                 {
                     strSql.Append(" and isnull( c.totalPass,0) + isnull(c.totalFail,0) < (a.quantity  -  isnull( a.setupQTY,0) - isnull( a.pqcQuantity,0) - isnull(a.buyOffQty,0))  * b.materialCount ");
                 }

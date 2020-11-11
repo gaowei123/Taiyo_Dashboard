@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using Taiyo.SearchParam;
 using Taiyo.Enum.Organization;
+using Taiyo.Tool.Extension;
 
 namespace Common.ExtendClass.Home
 {
@@ -29,8 +30,7 @@ namespace Common.ExtendClass.Home
                 model.Output = decimal.Parse(dr["output"].ToString());
 
                 DateTime dTemp = DateTime.Parse($"{DateTime.Now.Date.Year}-{model.Month}-{model.Day}");
-                model.WeekName = Taiyo.Tool.DateTimeConventor.GetWeekName(dTemp, false);
-
+                model.WeekName = dTemp.GetWeekName(false);
                 modelList.Add(model);
             }
 
@@ -55,7 +55,7 @@ namespace Common.ExtendClass.Home
                     model.Department = dpt.ToString();
                     model.Day = dTemp.Day;
                     model.Month = dTemp.Month;
-                    model.WeekName = Taiyo.Tool.DateTimeConventor.GetWeekName(dTemp, false);
+                    model.WeekName = dTemp.GetWeekName(false);
                     model.Output = 0;
                     modelList.Add(model);
                 }

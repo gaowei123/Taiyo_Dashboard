@@ -24,40 +24,6 @@ namespace StaticRes
         }
 
 
-        public static class MouldingStatus
-        {
-            public const string Run = "Running";
-            public const string Material_Testing = "Material Testing";
-            public const string Mould_Testing = "Mould Testing";
-            public const string Adjustment = "Adjustment";
-            public const string Change_Model = "Change Model";
-
-            public const string No_Operator = "No Operator";
-            public const string Login_Out = "Login Out";
-            public const string No_Material = "No Material";
-            public const string Login_Late = "Login Late";
-            public const string No_Schedule = "No_Schedule";
-            public const string Break_Time = "Break Time";
-            
-            public const string MachineBreak = "MachineBreak";
-            public const string DamageMould = "DamageMould";
-
-            public const string ShutDown = "ShutDown";
-        }
-
-
-        public static class PQCStatus
-        {
-            public const string Checking = "CHECKING";
-            public const string Packing = "PACKING";
-            public const string NoSchedule = "NO SCHEDULE";
-            public const string Shutdown = "SHUTDOWN";
-        }
-
-
-
-
-
 
         public static class ErrorLevel
         {
@@ -163,37 +129,6 @@ namespace StaticRes
                 public static string Testing = "TESTING";
                 public static string Setup = "SETUP";
                 public static string Buyoff = "BUYOFF";
-            }
-
-
-            //base on the type recorded from Client
-            public static class ConstMouldingStatus  
-            {
-                public const string No_Operator = "No Operator";
-                public const string Material_Testing = "Material Testing";
-                public const string MachineBreak = "MachineBreak";
-                public const string Login_Out = "Login Out";
-                public const string No_Material = "No Material";
-                public const string Mould_Testing = "Mould Testing";
-                public const string Login_Late = "Login Late";
-                public const string Adjustment = "Adjustment";
-                public const string No_Schedule = "No_Schedule";
-                public const string Break_Time = "Break Time";
-                public const string Running = "Running";
-                public const string Change_Model = "Change Model";
-                public const string DamageMould = "DamageMould";
-                public const string ShutDown = "ShutDown";
-            }
-
-
-
-            public static class JobStatus
-            {
-                public static string pending = "Pending";
-                public static string inprocess = "Inprocess";
-                public static string complete = "Complete";
-                public static string noComplete = "NoComplete";
-               // public static string remove = "Remove";
             }
             
         }

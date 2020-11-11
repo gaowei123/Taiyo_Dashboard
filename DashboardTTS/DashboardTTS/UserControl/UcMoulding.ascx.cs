@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Taiyo.Tool.Extension;
+using Taiyo.Enum.Production;
 
 namespace DashboardTTS.UserControl
 {
@@ -13,7 +15,7 @@ namespace DashboardTTS.UserControl
         public class UIModel
         {
             public string MachineID { get; set; }
-            public string Status { get; set; }
+            public MouldingStatus Status { get; set; }
             public System.Drawing.Color StatusColor { get; set; }
             public string ImgURL { get; set; }
             public string PartNo { get; set; }
@@ -29,7 +31,7 @@ namespace DashboardTTS.UserControl
         public void SetUI(UIModel model)
         {
             this.lbMachineID.Text = model.MachineID;
-            this.lbStatus.Text = model.Status;
+            this.lbStatus.Text = model.Status.GetDescription();
             this.lbStatus.BackColor = GetStatusColor(model.Status);
             this.imgLogo.ImageUrl = model.ImgURL;
 
@@ -45,49 +47,85 @@ namespace DashboardTTS.UserControl
         }
 
 
-        private System.Drawing.Color GetStatusColor(string status)
+
+        public void SetShutdown(string machineID, string imgURL)
+        {
+            this.lbMachineID.Text = machineID;
+            this.lbStatus.Text = MouldingStatus.Shutdown.GetDescription();
+            this.lbStatus.BackColor = GetStatusColor(MouldingStatus.Shutdown);
+            this.imgLogo.ImageUrl = imgURL;            
+
+            this.lbPartNo.Text = "";
+            this.lbModel.Text = "";
+            this.lbJigNo.Text = "";
+            this.lbTotalQty.Text = "0";
+            this.lbOKQty.Text = "0";
+            this.lbNGQty.Text = "0";
+            this.lbRejRate.Text = "0.00%";
+            this.lbUsedRate.Text = "0.00%";
+        }
+
+
+        private System.Drawing.Color GetStatusColor(MouldingStatus status)
         {
             System.Drawing.Color statusColor = new System.Drawing.Color();
+
+
+
             switch (status)
             {
-                case StaticRes.Global.MouldingStatus.Run:
-                case StaticRes.Global.MouldingStatus.Material_Testing:
-                case StaticRes.Global.MouldingStatus.Mould_Testing:
-                case StaticRes.Global.MouldingStatus.Adjustment:
-                case StaticRes.Global.MouldingStatus.Change_Model:
+                case MouldingStatus.Running:
                     statusColor = StaticRes.MainStatusColor.Run;
                     break;
-
-                case StaticRes.Global.MouldingStatus.No_Operator:
-                case StaticRes.Global.MouldingStatus.Login_Out:
-                case StaticRes.Global.MouldingStatus.No_Material:
-                case StaticRes.Global.MouldingStatus.Login_Late:
-                case StaticRes.Global.MouldingStatus.No_Schedule:
-                case StaticRes.Global.MouldingStatus.Break_Time:
+                case MouldingStatus.MaterialTesting:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case MouldingStatus.MouldTesting:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case MouldingStatus.Adjustment:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case MouldingStatus.ChangeModel:
+                    statusColor = StaticRes.MainStatusColor.Run;
+                    break;
+                case MouldingStatus.NoOperator:
                     statusColor = StaticRes.MainStatusColor.NoSchedule;
                     break;
-
-                case StaticRes.Global.MouldingStatus.MachineBreak:
-                case StaticRes.Global.MouldingStatus.DamageMould:
+                case MouldingStatus.LoginOut:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case MouldingStatus.NoMaterial:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case MouldingStatus.LoginLate:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case MouldingStatus.NoSchedule:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case MouldingStatus.BreakTime:
+                    statusColor = StaticRes.MainStatusColor.NoSchedule;
+                    break;
+                case MouldingStatus.MachineBreak:
                     statusColor = StaticRes.MainStatusColor.Breakdown;
                     break;
-
-                case StaticRes.Global.LaserStatus.Shutdown:
+                case MouldingStatus.DamageMould:
+                    statusColor = StaticRes.MainStatusColor.Breakdown;
+                    break;
+                case MouldingStatus.Shutdown:
                     statusColor = StaticRes.MainStatusColor.Shutdown;
                     break;
-
                 default:
                     throw new NullReferenceException("no such status" + status);
+                    break;
             }
 
             return statusColor;
         }
 
 
+     
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

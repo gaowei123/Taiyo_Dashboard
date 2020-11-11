@@ -8,15 +8,10 @@ using Taiyo.Enum.Organization;
 
 namespace Taiyo.Tool
 {
-
     /// <summary>
-    /// 原本状态显示是根据数据库中的机器状态
-    /// 都是由client记录都没统一很乱. 
-    /// 
+    /// 原本状态的显示都是按照数client保存到数据库中的数据, 没统一很乱. 
     /// 现在通过StatusConventor统一转换成Taiyo.Enum.Production下的对应Enum
     /// </summary>
-
-        
 
     public static class StatusConventor
     {       
@@ -114,5 +109,8 @@ namespace Taiyo.Tool
                     throw new ArgumentNullException("Status can not empty or null !");
             }
         }
+
+
+
     }
 }

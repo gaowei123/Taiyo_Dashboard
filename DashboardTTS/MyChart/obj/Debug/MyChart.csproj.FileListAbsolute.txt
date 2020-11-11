@@ -13,5 +13,5 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.S
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\StatusConverter.dll
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\StatusConverter.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.pdb

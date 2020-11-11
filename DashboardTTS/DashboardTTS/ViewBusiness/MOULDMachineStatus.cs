@@ -124,15 +124,7 @@ namespace DashboardTTS.ViewBusiness
             return statusList;
         }
 
-
-       
-
-
-
-   
-
-
-
+        
 
 
 
@@ -292,6 +284,8 @@ namespace DashboardTTS.ViewBusiness
 
             return summaryList;
         }
+
+
 
     }
 }

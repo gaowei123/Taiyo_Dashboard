@@ -674,13 +674,6 @@
     <Compile Include="Webform\Moulding\MouldingProductionReport.aspx.designer.cs">
       <DependentUpon>MouldingProductionReport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\Moulding\MouldingProductivityChart.aspx.cs">
-      <DependentUpon>MouldingProductivityChart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Moulding\MouldingProductivityChart.aspx.designer.cs">
-      <DependentUpon>MouldingProductivityChart.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\Moulding\ProductionReport.aspx.cs">
       <DependentUpon>ProductionReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3722,7 +3715,6 @@
     <Content Include="Webform\Moulding\MouldingPartsMoving.aspx" />
     <Content Include="Webform\Moulding\MouldingPartsMovingDetail.aspx" />
     <Content Include="Webform\Moulding\MouldingProductionReport.aspx" />
-    <Content Include="Webform\Moulding\MouldingProductivityChart.aspx" />
     <Content Include="Webform\Moulding\ProductionReport.aspx" />
     <Content Include="Webform\Moulding\QAProductionReport.aspx" />
     <Content Include="Webform\Moulding\RejDetail.aspx" />

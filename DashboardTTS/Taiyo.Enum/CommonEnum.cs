@@ -7,9 +7,13 @@ using System.ComponentModel;
 
 namespace Taiyo.Enum
 {
-    public enum CommonEnum
+    public class CommonEnum
     {
-
+        public enum Shift
+        {
+            Day=0,
+            Night=1
+        }
 
     }
 }

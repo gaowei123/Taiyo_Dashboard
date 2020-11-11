@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Taiyo.Enum.Production;
+using Taiyo.Tool.Extension;
 
 namespace DashboardTTS.UserControl
 {
@@ -11,7 +13,7 @@ namespace DashboardTTS.UserControl
     {
         public class UIModel {
             public string Station { get; set; }
-            public string Status { get; set; }
+            public  PQCStatus Status { get; set; }
             public string LotNo { get; set; }
             public string JobNo { get; set; }
             public string PartNo { get; set; }
@@ -26,7 +28,7 @@ namespace DashboardTTS.UserControl
         public void SetUI(UIModel model)
         {
             this.lbStation.Text = model.Station;
-            this.lbStatus.Text = model.Status;
+            this.lbStatus.Text = model.Status.GetDescription();
             this.lbLotNo.Text = model.LotNo;
             this.lbJobNo.Text = model.JobNo;
             this.lbPartNo.Text = model.PartNo;
@@ -39,25 +41,29 @@ namespace DashboardTTS.UserControl
             this.lbStatus.BackColor = GetStatusColor(model.Status);
         }
         
-        private System.Drawing.Color GetStatusColor(string status)
+        private System.Drawing.Color GetStatusColor(PQCStatus status)
         {
             System.Drawing.Color statusColor = new System.Drawing.Color();
+
             switch (status)
             {
-                case StaticRes.Global.PQCStatus.Checking:
-                case StaticRes.Global.PQCStatus.Packing:              
+                case PQCStatus.Checking:
                     statusColor = StaticRes.PQCStautsColor.Run;
                     break;
-                case StaticRes.Global.PQCStatus.NoSchedule:
+                case PQCStatus.Packing:
+                    statusColor = StaticRes.PQCStautsColor.Run;
+                    break;
+                case PQCStatus.NoSchedule:
                     statusColor = StaticRes.PQCStautsColor.NoSchedule;
                     break;
-                case StaticRes.Global.PQCStatus.Shutdown:
+                case PQCStatus.Shutdown:
                     statusColor = StaticRes.PQCStautsColor.Shutdown;
                     break;
-
                 default:
                     throw new NullReferenceException("no such status " + status);
+                    break;
             }
+
 
             return statusColor;
         }

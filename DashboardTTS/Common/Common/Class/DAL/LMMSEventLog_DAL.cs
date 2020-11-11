@@ -105,19 +105,10 @@ namespace Common.DAL
 
 
 
+        
 
 
-
-
-
-
-
-
-
-
-
-
-        public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus)
+        public DataTable GetListForModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -170,6 +161,59 @@ and datetime >= @DateFrom and datetime <= @DateTo");
                 return ds.Tables[0];
             }
         }
+
+
+        public DataTable GetCurrentStatusList(string sMachineID)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select id
+,machineID
+,currentOperation
+,case when eventTrigger = 'ADJUSTMENT' then 'BUYOFF' 
+when eventTrigger = 'POWER ON' then 'RUN'
+when eventTrigger = 'POWER OFF' then 'SHUTDOWN'
+else eventTrigger end as eventTrigger
+,startTime
+,stopTime
+from LMMSEventLog 
+where (currentOperation = 'TECHNICIAN_OEE' or currentOperation = 'SYSTEM_OEE')
+and datetime >= @DateFrom and datetime <= @DateTo");
+
+            if (sMachineID != "")
+            {
+                strSql.Append(" and machineID = @machineID ");
+            }
+
+          
+
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@DateFrom", SqlDbType.DateTime),
+                new SqlParameter("@DateTo", SqlDbType.DateTime),
+                new SqlParameter("@machineID", SqlDbType.VarChar,8)
+            };
+
+            paras[0].Value = DateTime.Now.Date;
+            paras[1].Value = DateTime.Now.Date.AddDays(1);
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+
         
     }
 }
