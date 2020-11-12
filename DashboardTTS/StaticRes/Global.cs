@@ -215,7 +215,6 @@ namespace StaticRes
                 public const string Assembly = "Assembly";
                 public const string FG = "FG";
             }
-
         }
 
 

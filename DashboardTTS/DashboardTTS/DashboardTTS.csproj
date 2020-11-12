@@ -856,7 +856,6 @@
     <Content Include="Dashboard CSS JS\JS\GlobalConfig.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_DailyReport.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_MonthlyHighestReject.js" />
-    <Content Include="MaterialPartImg\testpart1\adsf.png" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.css" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.js" />
     <Content Include="Dashboard CSS JS\CSS\MasterPage.css" />
@@ -3805,6 +3804,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="MaterialPartImg\" />
     <Folder Include="TempImages\" />
     <Folder Include="Views\Common\" />
   </ItemGroup>
