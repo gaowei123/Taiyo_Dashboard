@@ -60,8 +60,8 @@ namespace DashboardTTS.Webform.Painting
                 return;
             }
 
-          
-            DBHelp.Reports.LogFile.Log("InventoryRecord_Debug", string.Format( "Job No: {0}",jobNo));
+           DBHelp.Reports.LogFile.Log("InventoryRecord_Debug", string.Format( "Job No: {0}",jobNo));
+           
 
             string paintProcess = "";
 
@@ -75,6 +75,8 @@ namespace DashboardTTS.Webform.Painting
             }
             else
             {
+
+               
                 //有paint1, 并且process中有painting#2的, 记录为paint2
                 //有paint2, 并且process中有painting#3的, 记录为paint3
 
