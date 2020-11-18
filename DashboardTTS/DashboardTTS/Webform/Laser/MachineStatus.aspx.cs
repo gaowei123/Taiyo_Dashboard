@@ -19,6 +19,9 @@ namespace DashboardTTS.Webform
         private const string strTurnTableImgURL = "~/Resources/Images/LaserMachine_TurnTable.png";
 
        
+        
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -29,7 +32,7 @@ namespace DashboardTTS.Webform
                     Common.CommFunctions.ShowMessage(this.Page, "No data found from watchdog");
                     return;
                 }
-                Dictionary<int, double> dicCurDayUsedRate = _statusBLL.GetCurrentDayUsedRate();
+                List<Common.BLL.LMMSEventLog_BLL.UsedRate> usedRateList = _statusBLL.GetCurrentDayUsedRate();
                 Dictionary<int, LaserStatus> dicCurStatus = _statusBLL.GetCurrentStatus();
 
 
@@ -59,9 +62,12 @@ namespace DashboardTTS.Webform
                         uiModel.OKQty = productModel.totalPass.Value;
                         uiModel.NGQty = productModel.totalFail.Value;
                         uiModel.RejRate = uiModel.LotQty == 0 ? "0.00%" : Math.Round(uiModel.NGQty / uiModel.LotQty * 100, 2).ToString() + "%";
+
+
                         //used rate
-                        double usedRate = dicCurDayUsedRate == null ? 0 : dicCurDayUsedRate[i];
-                        uiModel.UsedRate = usedRate.ToString("0.00") + "%";
+                        var usedRateModel = (from a in usedRateList where a.MachineID == i select a).FirstOrDefault();
+                        uiModel.UsedRate = usedRateModel == null ? "0.00%" : usedRateModel.Value.ToString("0.00") + "%";
+                        uiModel.UsedRateDescription = usedRateModel == null ? "" : usedRateModel.Description;
 
                         GetControl(i).SetUI(uiModel);
                     }

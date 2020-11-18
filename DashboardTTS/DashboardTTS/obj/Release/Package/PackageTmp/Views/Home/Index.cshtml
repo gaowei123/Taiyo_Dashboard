@@ -12,20 +12,24 @@
 <div class="container-fluid" style="max-width:1500px;">
 
     <div class="row topTitleRow">
-        <div class="col-md-9">
+        <div class="col-sm-9">
             <img class="titleImg" src="~/Resources/Images/headericon.gif" />
             <span>Production Home Page</span>
         </div>
-        <div class="col-md-3">
+        <div class="col-sm-3">
             <label id="lbTime" style="color:white; width:100%; text-align:right;"></label>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-9 no" style="margin:0px;padding:0px;">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" style="margin:0px;padding:0px; position:relative;">
+            <div class="dayOffSwitch">
+                <label>Null</label>
+                <input name="status" type="checkbox">
+            </div>
             <div id="divOutputTrendChart" class="area areaL areaChart"></div>
         </div>
-        <div class="col-sm-3" style="margin:0px;padding:0px;">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="margin:0px;padding:0px;">
             <div id="divDayPieChart" class="area areaR areaChart"></div>
         </div>
     </div>
@@ -80,10 +84,7 @@
 
 </div>
 
-<div class="dayOffSwitch">
-    <label>Null</label>
-    <input name="status" type="checkbox">
-</div>
+
 
 
 

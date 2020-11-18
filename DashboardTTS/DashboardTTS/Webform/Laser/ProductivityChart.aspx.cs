@@ -22,7 +22,7 @@ namespace DashboardTTS.Webform
                 if (!IsPostBack)
                 {
                     setYearDDL();
-                    setMachineIDDDL();
+                    //setMachineIDDDL();
 
 
 
@@ -49,10 +49,10 @@ namespace DashboardTTS.Webform
             {
                 string sReportType = this.ddlReportType.SelectedValue;
                 string sYear = this.ddlYear.SelectedValue;
-                string sMachineID = this.ddlMachineNo.SelectedValue;
-                string sPartNo = this.txtPartNo.Text.Trim();
+                string sMachineID = "";
+                string sPartNo = "";
                 string sShift = this.ddlShift.SelectedValue;
-                string sModel = this.txtModel.Text.Trim();
+                string sModel = "";
                 DateTime dDateFrom = DateTime.Parse(this.txtDateFrom.Text).AddHours(8);
                 DateTime dDateTo = DateTime.Parse(this.txtDateTo.Text).AddDays(1).AddHours(8);
 
@@ -308,16 +308,16 @@ namespace DashboardTTS.Webform
             this.ddlYear.SelectedIndex = this.ddlYear.Items.Count - 1;
         }
 
-        void setMachineIDDDL()
-        {
-            this.ddlMachineNo.Items.Clear();
-            this.ddlMachineNo.Items.Add(new ListItem("ALL", ""));
+        //void setMachineIDDDL()
+        //{
+        //    this.ddlMachineNo.Items.Clear();
+        //    this.ddlMachineNo.Items.Add(new ListItem("ALL", ""));
             
-            for (int i =1; i < 9; i++)
-            {
-                this.ddlMachineNo.Items.Add(new ListItem("No."+i.ToString(), i.ToString()));
-            }
-        }
+        //    for (int i =1; i < 9; i++)
+        //    {
+        //        this.ddlMachineNo.Items.Add(new ListItem("No."+i.ToString(), i.ToString()));
+        //    }
+        //}
 
         void showWarning(string message)
         {

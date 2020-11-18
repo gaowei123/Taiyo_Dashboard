@@ -3,6 +3,9 @@
     ViewBag.Title = "UserManagement";
 }
 
+@using Taiyo.Enum.Organization
+@using Taiyo.Tool.Extension;
+
 @*下拉框组件*@
 <script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
 <link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
@@ -22,34 +25,28 @@
                     <label style="width:35%">Department:</label>
                     <select id="ddlDepartment" class="form-control" data-ng-style="btn-info" style="width:60%;">
                         <option value="">All</option>
-                        <option value="Moulding">Moulding</option>
-                        <option value="Painting">Painting</option>
-                        <option value="Laser">Laser</option>
-                        <option value="PQC">PQC</option>
-                        <option value="Assembly">Assembly</option>
-                        <option value="Office">Office</option>
-
-                        @*<option value="Moulding">Moulding</option>
-                        <option value="Moulding">Moulding</option>
-                        <option value="Moulding">Moulding</option>
-                        <option value="Moulding">Moulding</option>*@
+                        @foreach (Department item in Enum.GetValues(typeof(Department)))
+                        {
+                            if (item == Department.Online || item == Department.WIP || item == Department.Packing)
+                            {
+                                continue;
+                            }
+                            <option value="@item.GetDescription()">@item.GetDescription()</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label style="width:35%">User Group:</label>
                     <select id="ddlUserGroup" class="form-control" data-ng-style="btn-info" style="width:60%;">
                         <option value="">All</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Supervisor">Supervisor</option>
-                        <option value="Engineer">Engineer</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Leader">Leader</option>
-                        <option value="Technician">Technician</option>
-                        <option value="MH">MH</option>
-                        <option value="TemporaryStaff">TemporaryStaff</option>
-                        <option value="IPQC">IPQC</option>
-                        <option value="Checker">Checker</option>
-                        <option value="Operator">Operator</option>
+                        @foreach (UserGroup item in Enum.GetValues(typeof(UserGroup)))
+                        {
+                            if (item == UserGroup.Admin)
+                            {
+                                continue;
+                            }
+                            <option value="@Taiyo.Tool.Extension.EnumHelper.GetDescription(@item)">@Taiyo.Tool.Extension.EnumHelper.GetDescription(@item)</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -132,17 +129,10 @@
                         <div class="col-sm-8">                          
                             <select id="ddlFormUserGroup" class="form-control" placeholder="Please choose user group">
                                 <option value=""></option>
-                                <option value="Admin">Admin</option>
-                                <option value="Supervisor">Supervisor</option>
-                                <option value="Engineer">Engineer</option>
-                                <option value="Manager">Manager</option>
-                                <option value="Leader">Leader</option>
-                                <option value="Technician">Technician</option>
-                                <option value="MH">MH</option>
-                                <option value="TemporaryStaff">TemporaryStaff</option>
-                                <option value="IPQC">IPQC</option>
-                                <option value="Checker">Checker</option>
-                                <option value="Operator">Operator</option>
+                                @foreach (UserGroup item in Enum.GetValues(typeof(UserGroup)))
+                                {
+                                    <option value="@item.GetDescription()">@item.GetDescription()</option>
+                                }                             
                             </select>
                         </div>
                     </div>
@@ -164,12 +154,14 @@
                         <div class="col-sm-8">
                             <select id="ddlFormDepartment" class="form-control" placeholder="Please choose shift">
                                 <option value=""></option>
-                                <option value="Moulding">Moulding</option>
-                                <option value="Painting">Painting</option>
-                                <option value="Laser">Laser</option>
-                                <option value="PQC">PQC</option>
-                                <option value="Assembly">Assembly</option>
-                                <option value="Office">Office</option>
+                                @foreach (Department item in Enum.GetValues(typeof(Department)))
+                                {
+                                    if (item == Department.Online || item == Department.WIP || item == Department.Packing)
+                                    {
+                                        continue;
+                                    }
+                                    <option value="@item.GetDescription()">@item.GetDescription()</option>
+                                }                               
                             </select>
                         </div>
                     </div>
@@ -248,7 +240,7 @@
         search();
     });
 
-    function search() {
+    function search() {        
         //重新加载必须将原本table清空
         $('#tableUserList').bootstrapTable('destroy');
         $('#tableUserList').bootstrapTable({ // 对应table标签的id
@@ -373,7 +365,8 @@
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
-                    var strHtml = "<button class=\"btn btn-danger btn-sm\" onclick=\"initDelForm('" + row.EMPLOYEE_ID + "')\"> <i class=\"fa fa-trash-o fa-lg\"></i> </button>";
+                    var strHtml = "<button class=\"btn btn-warning btn-sm\" onclick=\"initUpdateForm('" + row.EMPLOYEE_ID + "')\"> <i class=\"fa fa-edit fa-lg\"></i></button>";
+                    strHtml += "&nbsp;<button class=\"btn btn-danger btn-sm\" onclick=\"initDelForm('" + row.EMPLOYEE_ID + "')\"> <i class=\"fa fa-trash-o fa-lg\"></i> </button>";
                     return strHtml;
                 }
             }
@@ -415,16 +408,15 @@
 
         $('#txtFormEmployeeID').val(row.EMPLOYEE_ID);
         $("#txtFormEmployeeID").attr("disabled", "disabled");
-
         $('#txtFormDepartmentID').val(row.USER_ID);
         $('#txtFormUsername').val(row.USER_NAME);
         $('#txtFormPassword').val(row.PASSWORD);
         $('#txtFormPasswordConfirm').val(row.PASSWORD);
         $('#ddlFormUserGroup').val(row.USER_GROUP);
+        $('#ddlFormUserGroup').val(row.USER_GROUP);
         $('#ddlFormShift').val(row.SHIFT);
         $('#ddlFormDepartment').val(row.DEPARTMENT);
           
-
         $('#modalUpdateForm').modal('show');
     }
     function initDelForm(employeeID) {

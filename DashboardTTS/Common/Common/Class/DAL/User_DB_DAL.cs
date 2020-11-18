@@ -102,9 +102,9 @@ where 1=1 ");
 
         public int Add(Common.Class.Model.User_DB_Model model, SqlConnection cn)
         {
+         
 
-
-            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "in func add!");
+            DBHelp.Reports.LogFile.Log("UserManagement", "in func add!");
 
 
 
@@ -118,7 +118,7 @@ where 1=1 ");
 
 
 
-            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "str sql:" + strSql.ToString());
+            DBHelp.Reports.LogFile.Log("UserManagement", "str sql:" + strSql.ToString());
 
 
 
@@ -158,7 +158,7 @@ where 1=1 ");
                 ,model.USER_ID, model.USER_NAME, model.PASSWORD, model.USER_GROUP, model.UPDATED_BY, model.DEPARTMENT, model.SHIFT);
 
 
-            DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", aa);
+            DBHelp.Reports.LogFile.Log("UserManagement", aa);
 
 
            int  result = 0;
@@ -169,7 +169,7 @@ where 1=1 ");
             }
             catch (Exception ee)
             {
-                DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", " add exception: " + ee.ToString());
+                DBHelp.Reports.LogFile.Log("UserManagement", " add exception: " + ee.ToString());
             }
 
             return result;

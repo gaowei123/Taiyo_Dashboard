@@ -50,28 +50,12 @@
                             <asp:ListItem Value="Night">Night</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-sm-3">
-                        <label style="width:35%">Machine No:</label>
-                        <asp:DropDownList runat="server" ID="ddlMachineNo" CssClass="form-control" Width="60%"></asp:DropDownList>
-                    </div>
-                    <div class="col-sm-3">
-                        <label style="width:35%">Model:</label>
-                        <asp:TextBox runat="server" ID="txtModel" CssClass="form-control" Width="60%" AutoCompleteType="Disabled"></asp:TextBox>
-                    </div>
-                    <div class="col-sm-3">
-                        <label style="width:35%">Part No:</label>
-                        <asp:TextBox runat="server" ID="txtPartNo" CssClass="form-control" Width="60%" AutoCompleteType="Disabled"></asp:TextBox>
-                    </div>
-                </div>
-
-                <div class="row form-inline searchingBar ">
-                    <div class="col-sm-3"></div>
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3" align="right" style="padding-right:2%">
                         <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="btnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
                     </div>
-                </div>
+                </div>              
             </div>
         </div>
 

@@ -96,7 +96,6 @@ namespace StaticRes
             public const string LEADER = "Leader";
             public const string OPERATOR = "Operator";
             public const string MH = "MH";
-         
             public const string IPQC = "IPQC";
             public const string TECHNICIAN = "Technician";
             public const string CHECKER = "Checker";

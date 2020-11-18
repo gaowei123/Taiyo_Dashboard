@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.SearchParam", "Taiyo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.JobSchedule", "Taiyo.JobSchedule\Taiyo.JobSchedule.csproj", "{93DEB090-D3C7-46B3-A006-FD8BB46316F2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APP", "APP", "{9CCC2C3B-585B-43B2-A2CD-A331CEBE5DA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.App.JobApp", "Taiyo.App.JobApp\Taiyo.App.JobApp.csproj", "{56212B44-80EF-4C46-AF20-9E5357679AEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,10 @@ Global
 		{93DEB090-D3C7-46B3-A006-FD8BB46316F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93DEB090-D3C7-46B3-A006-FD8BB46316F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93DEB090-D3C7-46B3-A006-FD8BB46316F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56212B44-80EF-4C46-AF20-9E5357679AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56212B44-80EF-4C46-AF20-9E5357679AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56212B44-80EF-4C46-AF20-9E5357679AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56212B44-80EF-4C46-AF20-9E5357679AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +80,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7EEF5249-5D72-4470-A952-94983FAD5433} = {53FFD7BF-B356-4218-9EC2-5C65D3087836}
 		{D650FEA2-5AD3-4599-81D0-97C084053B7B} = {53FFD7BF-B356-4218-9EC2-5C65D3087836}
+		{56212B44-80EF-4C46-AF20-9E5357679AEB} = {9CCC2C3B-585B-43B2-A2CD-A331CEBE5DA6}
 	EndGlobalSection
 EndGlobal

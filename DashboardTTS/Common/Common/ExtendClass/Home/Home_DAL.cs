@@ -81,7 +81,7 @@ namespace Common.ExtendClass.Home
             strSql.Append(@"select 
                             month(day) as month,
                             day(day) as day,
-                            sum(totalquantity) as output 
+                            sum(totalPass + totalFail) as output 
                             from LMMSWatchDog_Shift 
                             where 1=1 
                             and day >= @DateFrom
@@ -112,7 +112,7 @@ namespace Common.ExtendClass.Home
             strSql.Append(@"select 
                             month(day) as month,
                             day(day) as day,
-                            sum(TotalQty) as output 
+                            sum(acceptQty + RejectQty) as output 
                             from PQCQaViTracking a 
                             left join PQCBom b on a.partNumber = b.partNumber 
                             where 1=1
@@ -147,7 +147,7 @@ namespace Common.ExtendClass.Home
             strSql.Append(@"select 
                             month(day) as month,
                             day(day) as day,
-                            sum(TotalQty) as output
+                            sum(acceptQty + RejectQty) as output
                             from PQCQaViTracking a
                             left
                             join PQCBom b on a.partNumber = b.partNumber
@@ -185,7 +185,7 @@ namespace Common.ExtendClass.Home
             strSql.Append(@"select 
                             month(day) as month,
                             day(day) as day,
-                            sum(TotalQty) as output
+                            sum(acceptQty + RejectQty) as output
                             from PQCPackTracking 
                             where 1=1
                             and day >= @DateFrom

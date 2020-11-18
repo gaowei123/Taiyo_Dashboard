@@ -45,7 +45,6 @@
     }
 </style>
 
-
 <table  class="tableBorder">
     <tr>
         <td class="auto-style1 lbDescript title"> 
@@ -102,14 +101,15 @@
     <tr>
         <td class="auto-style3 lbDescript">REJ Rate</td>
         <td class="auto-style4" >
-            <asp:Label ID="lbRejRate" runat="server" ToolTip="REJ Rate = NG/MRP Total"></asp:Label>
+            <asp:Label ID="lbRejRate" runat="server"></asp:Label>
         </td>
     </tr>   
 
     <tr>
         <td class="auto-style3 lbDescript">Used Rate</td>
         <td class="auto-style4"  >
-            <asp:Label ID="lbUsedRate" runat="server" ToolTip="Used Rate = Run Time/Total Time(Except Shutdown)"></asp:Label> 
+            <asp:Label ID="lbUsedRate" runat="server"></asp:Label>
         </td>
     </tr>
+
 </table>

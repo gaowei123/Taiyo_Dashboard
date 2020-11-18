@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CommonEnum.cs" />
     <Compile Include="Organization\Department.cs" />
+    <Compile Include="Organization\UserGroup.cs" />
     <Compile Include="Production\LaserStatus.cs" />
     <Compile Include="Production\MouldingStatus.cs" />
     <Compile Include="Production\PQCStatus.cs" />

@@ -10,7 +10,7 @@ namespace DashboardTTS.Controllers
     public class AttendanceController : Controller
     {
         private readonly ViewBusiness.Attendance_ViewBusiness vbllAttendance = new ViewBusiness.Attendance_ViewBusiness();
-        private readonly Common.Class.BLL.User_DB_BLL userBLL = new Common.Class.BLL.User_DB_BLL();
+        private readonly Common.Class.BLL.User_DB_BLL _userBLL = new Common.Class.BLL.User_DB_BLL();
         private readonly Common.BLL.LMMSUserAttendanceTracking_BLL attendanceBLL = new Common.BLL.LMMSUserAttendanceTracking_BLL();
 
 
@@ -44,6 +44,77 @@ namespace DashboardTTS.Controllers
 
 
 
+
+
+
+
+
+
+        #region User Management
+        public JsonResult GetUserList(string Department, string EmployeeID, string UserGroup)
+        {
+            var modelList = _userBLL.GetModelList(Department, EmployeeID, UserGroup, "");
+
+            var result = from a in modelList
+                         where a.USER_GROUP != Taiyo.Enum.Organization.UserGroup.Admin.ToString()
+                         orderby a.EMPLOYEE_ID ascending
+                         select a;
+            
+            return Json(result);
+        }
+
+        public JsonResult AddUser()
+        {
+            string employeeID = Request.Form["EmployeeID"];
+            if (_userBLL.Exist(employeeID))
+            {
+                return Json($"EmployeeID {employeeID} is already exist!");       
+            }
+            else
+            {
+                var model = new Common.Class.Model.User_DB_Model();
+                model.EMPLOYEE_ID = Request.Form["EmployeeID"];
+                model.USER_ID = Request.Form["DepartmentID"];
+                model.USER_NAME = Request.Form["Username"];
+                model.PASSWORD = Request.Form["Password"];
+                model.USER_GROUP = Request.Form["UserGroup"];
+                model.UPDATED_TIME = DateTime.Now;
+                model.UPDATED_BY = Request.Form["UpdatedBy"];
+                model.DEPARTMENT = Request.Form["Department"];
+                model.SHIFT = Request.Form["Shift"];
+                model.FINGER_TEMPLATE = "";
+                model.FINGER_TEMPLATE_1 = "";
+                model.DEPARTMENT_ID = "";
+                
+                return Json(_userBLL.Add(model));
+            }
+        }
+
+        public JsonResult UpdateUser()
+        {
+            var model = new Common.Class.Model.User_DB_Model();
+            model.EMPLOYEE_ID = Request.Form["EmployeeID"];
+            model.USER_ID = Request.Form["DepartmentID"];
+            model.USER_NAME = Request.Form["Username"];
+            model.PASSWORD = Request.Form["Password"];
+            model.USER_GROUP = Request.Form["UserGroup"];
+            model.UPDATED_TIME = DateTime.Now;
+            model.UPDATED_BY = Request.Form["UpdatedBy"];
+            model.DEPARTMENT = Request.Form["Department"];
+            model.SHIFT = Request.Form["Shift"];
+            model.FINGER_TEMPLATE = "";
+            model.FINGER_TEMPLATE_1 = "";
+            model.DEPARTMENT_ID = "";
+
+            return Json(_userBLL.Update(model));
+        }
+
+        public JsonResult DeleteUser(string EmployeeID)
+        {       
+            return Json(_userBLL.Delete(EmployeeID));
+        }
+
+        #endregion
 
 
         #region Attendenance Daily Report
@@ -91,99 +162,7 @@ namespace DashboardTTS.Controllers
         #endregion
 
         
-        #region User Management
-        public ActionResult GetUserList()
-        {
-            string department = Request.Form["Department"] == null ? "" : Request.Form["Department"];
-            string employeeID = Request.Form["EmployeeID"]== null ? "" : Request.Form["EmployeeID"];
-            string userGroup = Request.Form["UserGroup"] == null ? "" : Request.Form["UserGroup"];
-
-
-
-            Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();
-
-            List<Common.Class.Model.User_DB_Model> modelList = bll.GetModelList(department, employeeID,userGroup,"");
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            if (modelList == null)
-            {
-                return Content(js.Serialize(""));
-            }
-            else
-            {
-                return Content(js.Serialize(modelList));
-            }
-        }
-        
-        public ActionResult AddUser()
-        {
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            string employeeID = Request.Form["EmployeeID"];
-
-            bool isAdded = userBLL.Exist(employeeID);
-
-            if (isAdded)
-            {
-                return Content(js.Serialize( "EmployeeID " + employeeID + " is already exist."));
-            }
-            else
-            {
-                Common.Class.Model.User_DB_Model model = new Common.Class.Model.User_DB_Model();
-                model.EMPLOYEE_ID = Request.Form["EmployeeID"];
-                model.USER_ID = Request.Form["DepartmentID"];
-                model.USER_NAME = Request.Form["Username"];
-                model.PASSWORD = Request.Form["Password"];
-                model.USER_GROUP = Request.Form["UserGroup"];
-                model.UPDATED_TIME = DateTime.Now;
-                model.UPDATED_BY = Request.Form["UpdatedBy"];
-                model.DEPARTMENT = Request.Form["Department"];
-                model.SHIFT = Request.Form["Shift"];
-                model.FINGER_TEMPLATE = "";
-                model.FINGER_TEMPLATE_1 = "";
-                model.DEPARTMENT_ID = "";
-
-
-                bool result = userBLL.Add(model);
-                return Content(js.Serialize(result));
-            }
-        }
-        
-        public ActionResult UpdateUser()
-        {
-            Common.Class.Model.User_DB_Model model = new Common.Class.Model.User_DB_Model();
-            model.EMPLOYEE_ID = Request.Form["EmployeeID"];
-            model.USER_ID = Request.Form["DepartmentID"];
-            model.USER_NAME = Request.Form["Username"];
-            model.PASSWORD = Request.Form["Password"];
-            model.USER_GROUP = Request.Form["UserGroup"];
-            model.UPDATED_TIME = DateTime.Now;
-            model.UPDATED_BY = Request.Form["UpdatedBy"];
-            model.DEPARTMENT = Request.Form["Department"];
-            model.SHIFT = Request.Form["Shift"];
-            model.FINGER_TEMPLATE = "";
-            model.FINGER_TEMPLATE_1 = "";
-            model.DEPARTMENT_ID = "";
-
-
-            bool result = userBLL.Update(model);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            return Content(js.Serialize(result));
-        }
-        
-        public ActionResult DeleteUser()
-        {
-            string employeeID = Request.Form["EmployeeID"];
-            bool result = userBLL.Delete(employeeID);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            return Content(js.Serialize(result));
-        }
-
-        #endregion
+      
 
 
         #region submit attendance

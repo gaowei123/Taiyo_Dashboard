@@ -1966,10 +1966,10 @@
       <publishTime>11/13/2020 18:44:06</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>11/13/2020 13:54:49</publishTime>
+      <publishTime>11/18/2020 16:01:35</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>11/13/2020 18:45:01</publishTime>
+      <publishTime>11/18/2020 16:01:40</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
       <publishTime>11/13/2020 13:54:47</publishTime>
@@ -2086,7 +2086,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>11/13/2020 13:54:49</publishTime>
+      <publishTime>11/18/2020 16:01:35</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2134,7 +2134,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>11/13/2020 13:54:47</publishTime>
+      <publishTime>11/18/2020 16:01:34</publishTime>
     </File>
     <File Include="bin/StatusConverter.dll">
       <publishTime>11/10/2020 17:09:44</publishTime>
@@ -2179,16 +2179,16 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Taiyo.Enum.dll">
-      <publishTime>11/13/2020 13:54:47</publishTime>
+      <publishTime>11/18/2020 16:01:34</publishTime>
     </File>
     <File Include="bin/Taiyo.JobSchedule.dll">
-      <publishTime>11/13/2020 16:38:34</publishTime>
+      <publishTime>11/18/2020 12:48:52</publishTime>
     </File>
     <File Include="bin/Taiyo.SearchParam.dll">
       <publishTime>11/13/2020 13:54:47</publishTime>
     </File>
     <File Include="bin/Taiyo.Tool.dll">
-      <publishTime>11/13/2020 13:54:48</publishTime>
+      <publishTime>11/18/2020 16:01:34</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2287,7 +2287,7 @@
       <publishTime>01/17/2020 14:15:38</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/HomePage.css">
-      <publishTime>11/11/2020 15:15:42</publishTime>
+      <publishTime>11/18/2020 14:36:43</publishTime>
     </File>
     <File Include="Dashboard CSS JS/CSS/MasterPage.css">
       <publishTime>09/11/2020 11:03:22</publishTime>
@@ -2845,7 +2845,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="plugins/bootstrap-3.3.7/dist/css/bootstrap.css">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>11/18/2020 11:45:16</publishTime>
     </File>
     <File Include="plugins/bootstrap-3.3.7/dist/css/bootstrap.css.map">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2872,7 +2872,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="plugins/bootstrap-3.3.7/dist/js/bootstrap.js">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>11/18/2020 12:12:51</publishTime>
     </File>
     <File Include="plugins/bootstrap-3.3.7/dist/js/bootstrap.min.js">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11194,7 +11194,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="test.html">
-      <publishTime>10/12/2020 15:54:26</publishTime>
+      <publishTime>11/18/2020 12:40:51</publishTime>
     </File>
     <File Include="testBootstrapTable.html">
       <publishTime>01/20/2020 15:57:43</publishTime>
@@ -11206,7 +11206,7 @@
       <publishTime>10/29/2020 13:53:05</publishTime>
     </File>
     <File Include="UserControl/WebUserControlMachineStatus.ascx">
-      <publishTime>11/10/2020 10:44:06</publishTime>
+      <publishTime>11/18/2020 15:27:21</publishTime>
     </File>
     <File Include="UserControl/WebUserControlMachineStatusMINI.ascx">
       <publishTime>02/02/2020 20:38:41</publishTime>
@@ -11266,7 +11266,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Attendance/UserManagement.cshtml">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>11/18/2020 13:54:41</publishTime>
     </File>
     <File Include="Views/Bom/PQCBomMenu.cshtml">
       <publishTime>09/25/2020 10:18:23</publishTime>
@@ -11311,7 +11311,7 @@
       <publishTime>01/15/2020 14:05:31</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>11/11/2020 14:07:10</publishTime>
+      <publishTime>11/18/2020 14:37:13</publishTime>
     </File>
     <File Include="Views/Home/Index1.cshtml">
       <publishTime>10/21/2020 17:02:37</publishTime>
@@ -11428,7 +11428,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>11/10/2020 10:59:34</publishTime>
+      <publishTime>11/18/2020 10:31:07</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11827,7 +11827,7 @@
       <publishTime>10/13/2020 13:48:31</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityChart.aspx">
-      <publishTime>10/13/2020 13:44:25</publishTime>
+      <publishTime>11/18/2020 15:57:07</publishTime>
     </File>
     <File Include="Webform/Laser/ProductivityDetail.aspx">
       <publishTime>10/13/2020 13:42:38</publishTime>
@@ -12088,7 +12088,7 @@
       <publishTime>01/15/2020 17:07:53</publishTime>
     </File>
     <File Include="Webform/TTSHomePage.aspx">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>11/16/2020 13:28:43</publishTime>
     </File>
     <File Include="Webform/UserDetail.aspx">
       <publishTime>01/15/2020 16:02:51</publishTime>

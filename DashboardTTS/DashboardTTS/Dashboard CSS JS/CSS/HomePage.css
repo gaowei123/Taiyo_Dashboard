@@ -87,11 +87,14 @@
 
     .dayOffSwitch{
         position:absolute;
-        left:63.2%;
-        top:132px;
+        right:8px;
+        top:18px;
 
-        width:110px;
+        width:90px;
         height:23px;
+
+        z-index:999;
+
         
       
         font-size:14px;

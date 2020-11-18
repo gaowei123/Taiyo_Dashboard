@@ -984,6 +984,15 @@ namespace Common.BLL
 
 
 
+
+
+        public class UsedRate
+        {
+            public int MachineID { get; set; }
+            public string Description { get; set; }
+            public double Value { get; set; }
+        }
+
         /// <summary>
         /// 获取当天的机器run时间占比
         /// used rate -->  (run + setup + buyoff + testing) / total(shutdown除外的总时间)
@@ -991,23 +1000,48 @@ namespace Common.BLL
         /// <returns>
         /// 返回 机器ID-比率 的键值对
         /// </returns>
-        public Dictionary<int, double> GetCurrentDayUsedRate()
+        public List<UsedRate> GetCurrentDayUsedRate()
         {
             List<Common.Model.LMMSEventLog_Model.Detail> statusList = GetStatusModelList(DateTime.Now.Date, DateTime.Now.Date.AddDays(1), "", "", "", false);
             if (statusList == null)
                 return null;
 
-            var runTimeList = from a in statusList
-                              where a.status == StaticRes.Global.LaserStatus.Run
-                              || a.status == StaticRes.Global.LaserStatus.Setup
-                              || a.status == StaticRes.Global.LaserStatus.Buyoff
-                              || a.status == StaticRes.Global.LaserStatus.Testing
-                              group a by a.machineID into b
-                              select new
-                              {
-                                  MachineID = b.Key,
-                                  TotalSeconds = b.Sum(p => p.totalSeconds)
-                              };
+
+            var runList = from a in statusList
+                          where a.status == StaticRes.Global.LaserStatus.Run
+                          group a by a.machineID into b
+                          select new
+                          {
+                              MachineID = b.Key,
+                              TotalSeconds = b.Sum(p => p.totalSeconds)
+                          };
+            var setupList = from a in statusList
+                          where a.status == StaticRes.Global.LaserStatus.Setup
+                          group a by a.machineID into b
+                          select new
+                          {
+                              MachineID = b.Key,
+                              TotalSeconds = b.Sum(p => p.totalSeconds)
+                          };
+            var buyoffList = from a in statusList
+                          where a.status == StaticRes.Global.LaserStatus.Buyoff
+                          group a by a.machineID into b
+                          select new
+                          {
+                              MachineID = b.Key,
+                              TotalSeconds = b.Sum(p => p.totalSeconds)
+                          };
+            var testingList = from a in statusList
+                          where a.status == StaticRes.Global.LaserStatus.Testing
+                          group a by a.machineID into b
+                          select new
+                          {
+                              MachineID = b.Key,
+                              TotalSeconds = b.Sum(p => p.totalSeconds)
+                          };
+
+
+
 
             var totalTimeList = from a in statusList
                                 where a.status != StaticRes.Global.LaserStatus.Shutdown
@@ -1018,18 +1052,38 @@ namespace Common.BLL
                                     TotalSeconds = b.Sum(p => p.totalSeconds)
                                 };
 
-            Dictionary<int, double> dicUsedRate = new Dictionary<int, double>();
+         
+            List<UsedRate> resultList = new List<UsedRate>();
             for (int i = 1; i < 9; i++)
             {
-                double runSeconds = (from a in runTimeList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+                double runSeconds = (from a in runList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+                double setupSeconds = (from a in setupList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+                double buyoffSeconds = (from a in buyoffList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+                double testingSeconds = (from a in testingList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+         
                 double totalSeconds = (from a in totalTimeList where a.MachineID == i.ToString() select a.TotalSeconds).FirstOrDefault();
+                
 
-                dicUsedRate.Add(i, Math.Round(runSeconds / totalSeconds * 100, 2));
+
+                resultList.Add(new UsedRate()
+                {
+                    MachineID = i,
+                    Value = Math.Round((runSeconds + setupSeconds + buyoffSeconds + testingSeconds) / totalSeconds * 100, 2),
+                    Description = string.Format("({0} + {1} + {2} + {3}) / {4} * 100", Math.Round(runSeconds/3600,2)
+                                                                                     , Math.Round(setupSeconds / 3600, 2)
+                                                                                     , Math.Round(buyoffSeconds / 3600, 2)
+                                                                                     , Math.Round(testingSeconds / 3600, 2)
+                                                                                     , Math.Round(totalSeconds / 3600, 2))
+                });
             }
 
-            return dicUsedRate;
+            return resultList;
         }
-        
+
+
+
+
+      
 
 
         /// <summary>

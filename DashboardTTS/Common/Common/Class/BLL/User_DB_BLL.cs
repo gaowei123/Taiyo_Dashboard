@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Collections;
+using Taiyo.Enum.Organization;
+using Taiyo.Tool.Extension;
 
 namespace Common.Class.BLL
 {
@@ -25,7 +27,7 @@ namespace Common.Class.BLL
             foreach (DataRow dr in dt.Rows)
             {
                 Common.Class.Model.User_DB_Model model = new Model.User_DB_Model();
-                
+
                 model.USER_GROUP = dr["USER_GROUP"].ToString();
                 model.USER_ID = dr["USER_ID"].ToString();
                 model.USER_NAME = dr["USER_NAME"].ToString();
@@ -51,27 +53,29 @@ namespace Common.Class.BLL
             int result = dal.Add(model);
 
 
-            //moulding, pqc client 会使用各自database的user_db表登入
-            if (model.DEPARTMENT == StaticRes.Global.Department.Moulding)
+
+            //如果Department是Moulding,PQC需要再添加到Moulding DB, PQC DB中,
+            //Moulding/PQC Client会使用各自database的user_db表登入
+            if (model.DEPARTMENT == Department.Moulding.GetDescription())
             {
-
-                DBHelp.Reports.LogFile.Log("User_DB_BLL_Bebug", "start add moulding or pqc!");
-
-
+                DBHelp.Reports.LogFile.Log("UserManagement", "start add moulding or pqc!");
                 int temp = dal.Add(model, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
                 if (temp < 1)
                 {
-                    DBHelp.Reports.LogFile.Log("User_DB_BLL", "Add user for moulding db fail!");
+                    DBHelp.Reports.LogFile.Log("UserManagement", "Add user for moulding db fail!");
                 }
             }
-            else if (model.DEPARTMENT == StaticRes.Global.Department.PQC)
+            else if (model.DEPARTMENT == Department.PQC.GetDescription())
             {
                 int temp = dal.Add(model, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
                 if (temp < 1)
                 {
-                    DBHelp.Reports.LogFile.Log("User_DB_BLL", "Add user for pqc db fail!");
+                    DBHelp.Reports.LogFile.Log("UserManagement", "Add user for pqc db fail!");
                 }
             }
+
+
+        
                 
 
             if (result > 0)

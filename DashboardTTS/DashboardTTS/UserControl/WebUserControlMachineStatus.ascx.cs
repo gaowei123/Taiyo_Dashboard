@@ -28,6 +28,8 @@ namespace DashboardTTS.UserControl
             public decimal NGQty { get; set; }
             public string RejRate { get; set; }
             public string UsedRate { get; set; }
+
+            public string UsedRateDescription { get; set; }
         }
         
         public WebUserControlMachineStatus()
@@ -51,6 +53,7 @@ namespace DashboardTTS.UserControl
             this.lbNGQty.Text = model.NGQty.ToString();
             this.lbRejRate.Text = model.RejRate;
             this.lbUsedRate.Text = model.UsedRate;
+            this.lbUsedRate.ToolTip = model.UsedRateDescription;
         }
 
         public void SetShutdown(string machineID, string imgURL)
@@ -70,6 +73,7 @@ namespace DashboardTTS.UserControl
             this.lbNGQty.Text = "0";
             this.lbRejRate.Text = "0.00%";
             this.lbUsedRate.Text = "0.00%";
+            this.lbUsedRate.ToolTip = "";
         }
         
         private System.Drawing.Color GetStatusColor(LaserStatus status)
