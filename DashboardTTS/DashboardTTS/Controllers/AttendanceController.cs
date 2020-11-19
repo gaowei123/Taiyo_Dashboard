@@ -16,10 +16,7 @@ namespace DashboardTTS.Controllers
 
 
         #region view
-        public ActionResult Index()
-        {
-            return View();
-        }
+       
         public ActionResult UserManagement()
         {
             return View();

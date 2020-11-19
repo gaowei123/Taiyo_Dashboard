@@ -74,35 +74,52 @@
 
 
 
-
-
-
 </head>
 
 <body>
     <form runat="server">
         <nav class="navbar navbar-inverse navbar-fixed-top " role="navigation" >
-            <%--当网页宽度缩小到768后 显示在右上角的菜单按钮, 宽度大于768则不会显示, 768为bootstrap的设定值--%>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#target-menu">
-                    <span class="sr-only">qieh</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
 
-                <%--taiyo logo图案--%>
-                <img id="imglogo" src="./Resources/Images/logo-ir4-tts-lmms.png" runat="server" style="width:390px;height:50px;" />
+        <div class="container-fluid">
+
+           
+            <div class="navbar-header">
+                <div class="row">
+                  <div class="col-xs-10" style="margin:0px;padding:0px;">
+                         <a href="#" style="margin-right:0px;padding-right:0px;" >
+                            <img runat="server" id="imglogo" class="img-responsive" src="./Resources/Images/logo-ir4-tts-lmms.png" 
+                            style="width:380px;height:50px;"/>
+                        </a>
+                    </div>
+                    <div class="col-xs-2">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#target-menu">
+                            <span class="sr-only">qieh</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         
             <%--多级菜单栏--%>
             <div class="collapse navbar-collapse" id="target-menu">
-                <ul class="nav navbar-nav">
-               
-                    <li><a runat="server" href="./Home/Index"><font size="4">HOME</font></a></li>
+                <ul class="nav navbar-nav">               
 
+                    <li class="dropdown menu-top">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Production</font><span class="caret"></span></a>
+                        <ul class="dropdown-menu menu-top">
+                            <li><a runat="server" href="./Webform/TTSHomePage.aspx">Home Page</a></li> 
+                            <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
+                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
+                            <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
+                            <li><a runat="server" href="./OverallReport/OutputSummaryChart">Overall Output Chart</a></li>
+                            <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>
+                        </ul>
+                    </li>
+                    
 
-                    <li class="dropdown">
+                    <li class="dropdown menu-top">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Moulding</font><span class="caret"></span></a>
                     <ul class="dropdown-menu menu-top">
                         <li class="dropdown-submenu">
@@ -251,19 +268,7 @@
 
 
                
-                    <li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Overall</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/TTSHomePage.aspx">Home Page</a></li> 
-                            <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
-                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
-                            <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
-                            <li><a runat="server" href="./OverallReport/OutputSummaryChart">Overall Output Chart</a></li>
-                            <%--<li><a runat="server" href="./Webform/Reports/AllMachineUtilizationRate.aspx">All Machine Utilization</a></li>--%>
-                            <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>
-
-                        </ul>
-                    </li>
+                    
 
 
 
@@ -294,13 +299,12 @@
 
                 </ul>
             </div>
+                         </div>
         </nav>
 
     
 
-       <asp:ContentPlaceHolder ID="MainContent" runat="server"  > 
-
-       </asp:ContentPlaceHolder>
+       <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
 
 
     </form>
@@ -308,37 +312,20 @@
 
 
     <script type="text/javascript">
-        //调整 body 的padding top 适应窗口缩放.
-        $(document).ready(function () {
-            setBodyMarginTop($(document.body).outerWidth(true));
-        })
-        $(window).resize(function () {
-            setBodyMarginTop($(document.body).outerWidth(true));
+        //将所有input框的 autocomplete off.
+        $(function () {
+            $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
         });
-
-
-        /*解决 navbar-fixed-top 遮挡下方div*/
-        function setBodyMarginTop(currentBrowserWidth) {
-            if (currentBrowserWidth > 1120) {
-                //正常宽度
-                $("body").css("paddingTop", 56);
-            } else if (currentBrowserWidth < 754) {
-                //754宽度内 logo图片过长， 导致按钮换行
-                $("body").css("paddingTop", 56);
-                $("#imglogo").width(300);
+        $(window).resize(function () {
+            let width = $(window).width();
+            if (width < 1100 && width > 768) {
+                $('#imglogo').hide();
+            } else if (width <= 768) {
+                $('#imglogo').show();
+            } else {
+                $('#imglogo').show();
             }
-            else {
-                //1120-754宽度内 菜单栏自动换行 导致navbar变宽
-                $("body").css("paddingTop", 106);
-            }
-        }
-
-
-        $(function(){  
-            $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off'); 
-        }); 
-
+        })
     </script>
-
 </body>
 </html>

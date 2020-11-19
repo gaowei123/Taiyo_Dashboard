@@ -1,9 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PQCRejectDetail.aspx.cs" MasterPageFile="~/Site.Master" Inherits="DashboardTTS.Webform.PQC.PQCRejectDetail" %>
 <%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" >
-    <link href="../css/Dashboard.css" rel="stylesheet" />
-   
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" >   
     <div style="width: 100%; height: 257px; align-items:center;margin:auto">
 
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">

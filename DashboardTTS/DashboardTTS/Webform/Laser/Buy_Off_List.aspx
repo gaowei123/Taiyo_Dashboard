@@ -2,14 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <style >
-        .container-fluid{
-            max-width: 1400px;
-        }
-    </style>
-
-
-    <div class="container-fluid">
+    <div class="container-fluid" style="max-width: 1400px;">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
             <span class="titleText">Laser Buy-Off List</span>

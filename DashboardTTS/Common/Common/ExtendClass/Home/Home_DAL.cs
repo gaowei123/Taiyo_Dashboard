@@ -47,16 +47,20 @@ namespace Common.ExtendClass.Home
         public DataTable GetPaintingDaily(Taiyo.SearchParam.HomeParam param)
         {
             StringBuilder strSql = new StringBuilder();
-
             strSql.Append(@"select 
-                            MONTH(dateTime) as [month],
-                            DAY(datetime) as [day],
-                            convert(float,SUM(inQuantity)) as output 
-                            from PaintingDeliveryHis 
-                            where 1=1 and datetime >= @DateFrom
-                            and datetime < @DateTo
-                            group by  MONTH(dateTime),  DAY(datetime)
-                            order by MONTH(dateTime) asc, DAY(datetime) asc");
+                            MONTH(updatedTime) as [month],
+                            DAY(updatedTime) as [day],
+                            SUM(inQuantity * case when isnull(b.materialCount, '') = '' then 1 else b.materialCount end) as output
+                            FROM PaintingDeliveryHis a
+                            left join ( 
+	                            select partNumber, count(1) as materialCount 
+	                            from  LMMS_TAIYO.dbo.lmmsbomDetail 
+	                            group by partNumber 
+                            ) b on a.partNumber  = b.partNumber
+
+                            where 1 = 1   and updatedTime >= @DateFrom  and updatedTime <= @DateTo
+                            group by  MONTH(updatedTime),  DAY(updatedTime)
+                            order by MONTH(updatedTime) asc, DAY(updatedTime) asc ");
 
             SqlParameter[] paras =
             {

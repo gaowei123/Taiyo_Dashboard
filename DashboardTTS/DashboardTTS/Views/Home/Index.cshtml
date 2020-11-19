@@ -214,6 +214,7 @@
     }
 
     function generatePieChart() {
+
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -254,10 +255,10 @@
                     },
                     legend: {
                         type: 'scroll',
-                        orient: 'vertical',
-                        right: 0,
-                        top: 20,
-                        bottom: 20,
+                        orient: 'horizontal',
+                        left: 0,
+                        //top: 20,
+                        bottom: 0,
                         data: ['Moulding','Painting', 'Laser', 'Online', 'WIP', 'Packing']
                     },
                     series: [
@@ -265,7 +266,7 @@
                             name: 'Output',
                             type: 'pie',
                             radius: '60%',
-                            center: ['40%', '60%'],
+                            center: ['50%', '50%'],
                             data: seriesData,
                             emphasis: {
                                 itemStyle: {

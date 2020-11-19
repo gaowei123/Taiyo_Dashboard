@@ -43,6 +43,7 @@ namespace DashboardTTS.ViewBusiness
         /// laser btn: 有laser process, 并且当前process为check1.  并且不包括num设定的小分类.
         /// wip btn: wip part 和有laser process并且当前process不是check1的job, 并且不包括num设定的小分类.
         /// num小分类: 取最后一道check process的数量,  并且按照bom中设置的num 动态汇总.
+        /// 
         /// packing: 分online, wip显示.
         ///     online: 同laser btn逻辑
         ///     wip: 同wip btn逻辑
@@ -250,7 +251,7 @@ namespace DashboardTTS.ViewBusiness
         /// 生成pqc summary report对应packing的3条信息
         /// online: process只有laser,check#1
         /// offline: process没有laser, 或者有laser并且有check#2,3的.
-        /// </summary>     
+        /// </summary>
         private List<ViewModel.PQCSummaryReport_ViewModel.Report> AddPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, List<ViewModel.PQCSummaryReport_ViewModel.Report> reportList)
         {
 

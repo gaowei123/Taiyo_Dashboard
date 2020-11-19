@@ -2,13 +2,7 @@
 
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-    <link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-    <link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
 
-    <script src="../js/Dashboard.js"> </script>
-
-    
-     
     <div style="width: 60%;align-items:center;margin:auto">
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">
             <tr style ="width: 100%">

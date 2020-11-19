@@ -2,15 +2,8 @@
 
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent"  >
-  
-    <style >
-        .container-fluid{
-            max-width: 1500px;
-        }
-    </style>
-
-
-    <div class="container-fluid">
+ 
+    <div class="container-fluid" style="max-width: 1500px;">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
             <span class="titleText">Laser Job Order Detail Report</span>

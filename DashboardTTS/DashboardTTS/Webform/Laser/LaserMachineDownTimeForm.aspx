@@ -2,10 +2,6 @@
 <%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-    <link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-    <link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-
-    <script src="../js/Dashboard.js"> </script>
 
     <script type="text/javascript">
         function uploadFile(filePath) {

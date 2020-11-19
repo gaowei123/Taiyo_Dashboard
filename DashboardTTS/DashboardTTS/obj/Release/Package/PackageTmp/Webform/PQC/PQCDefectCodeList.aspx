@@ -1,11 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeBehind="PQCDefectCodeList.aspx.cs" Inherits="DashboardTTS.Webform.PQC.PQCDefectCodeList" %>
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-  
-    <link href="../css/Dashboard.css" rel="stylesheet" />
-    <script src="../js/Dashboard.js"></script>
-   
-
     
     <div style =" width: 50%;margin:auto;">
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">

@@ -110,22 +110,6 @@ namespace Common.Class.BLL
         
 
 
-        public DataTable GetDayOutput( DateTime dDay)
-        {
-            DataSet ds = new DataSet();
-
-            ds = dal.GetDayOutput(dDay);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
 
         public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sJobNo, string sPartNo,string sSendingTo,string sLotno)
         {

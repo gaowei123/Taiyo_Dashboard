@@ -3,9 +3,7 @@
 
 
  <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-     
-<link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-<link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
+ 
 
 
     <div style="position: relative; width: 80%; height: auto; margin: auto">

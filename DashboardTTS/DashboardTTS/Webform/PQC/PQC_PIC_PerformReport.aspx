@@ -2,15 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <style>
-        .container-fluid{
-            max-width:1500px;
-        }
-    </style>
-
-
-
-    <div class="container">
+    <div class="container" style=" max-width:1500px;">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
             <span class="titleText">PIC Performance Report</span>

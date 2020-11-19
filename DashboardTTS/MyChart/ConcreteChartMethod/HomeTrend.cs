@@ -10,10 +10,7 @@ namespace MyChart.ConcreteChartMethod
 {
     public class HomeTrend : IChartMethod
     {
-
-
         Common.ExtendClass.Home.Home_BLL _bll = new Common.ExtendClass.Home.Home_BLL();
-
 
         public ChartModel GetChartData(BaseParam param)
         {

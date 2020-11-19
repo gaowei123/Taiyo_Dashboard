@@ -59,12 +59,11 @@ namespace DashboardTTS.Webform.Painting
                 string SendingTo = this.ddlSendingTo.SelectedValue;
                 string LotNo = this.txtLotNo.Text.Trim();
 
-                //from 8am To 8am
-                DateTime dTimeFrom = DateTime.Parse(this.txtDateFrom.Text).Date.AddHours(8);
-                DateTime dTimeTo = DateTime.Parse(this.txtDateTo.Text).Date.AddHours(8).AddDays(1);
+              
+                DateTime dTimeFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
+                DateTime dTimeTo = DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
 
                 Common.Class.BLL.PaintingDeliveryHis_BLL bll = new Common.Class.BLL.PaintingDeliveryHis_BLL();
-
                 DataTable dt = bll.GetList(dTimeFrom, dTimeTo, JobNumber, PartNumber, SendingTo, LotNo);
 
                 if (dt == null || dt.Rows.Count == 0)

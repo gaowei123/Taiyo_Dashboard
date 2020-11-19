@@ -15,14 +15,15 @@
 </style>
 
 <div class="container-fluid">
+
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">User Attendance</span>
     </div>
 
-
+    
     <div class="row">
-        <div class="col-md-12 panel panel-default searchingPanel">
+        <div class="col-xs-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
                 <div class="col-md-2" style="padding-top:4px;" >
                     <label style="font-size:16px;">Department:</label>
@@ -34,10 +35,10 @@
                     <label id="lbAttRate" style="font-size:16px;">90%</label>
                 </div>
 
-                <div class="col-md-4"></div>
-                <div class="col-md-2">
+               
+                <div class="col-md-6">
                     <label>Date:</label>
-                    <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" onchange="refresh();" />
+                    <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:120px;" onchange="refresh();" />
                 </div>
                 <div class="col-md-2" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-primary" value="Submit" style="width:100px;" onclick="checkValidation();"/>
@@ -45,6 +46,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div class="row">
         <div class="col-md-12">           
@@ -161,11 +164,8 @@
 
 
         $('#tableAttendance').bootstrapTable('destroy');
-
-        $('#tableAttendance').bootstrapTable({ // 对应table标签的id
-
-
-            //call后台数据
+        $('#tableAttendance').bootstrapTable({
+                     
             method: 'post',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

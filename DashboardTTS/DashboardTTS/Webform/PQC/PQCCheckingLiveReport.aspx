@@ -2,14 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server" >
 
-
-    <style >
-        .container-fluid{
-            max-width: 1600px;
-        }
-    </style>
-
-    <div class="container-fluid">
+    <div class="container-fluid" style="max-width: 1600px;">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
             <span class="titleText">Checking Live Report</span>    <asp:Label runat="server" ID="lbTrackingID" Visible="false"></asp:Label>

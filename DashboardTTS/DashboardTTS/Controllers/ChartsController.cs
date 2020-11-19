@@ -90,7 +90,7 @@ namespace DashboardTTS.Controllers
             foreach (Taiyo.Enum.Organization.Department item in Enum.GetValues(typeof(Taiyo.Enum.Organization.Department)))
             {
                 //排除不需要的部门, 
-                if (item == Department.PQC || item == Department.Assembly || item == Department.TSS||
+                if (item == Department.PQC || item == Department.Assembly || item == Department.TSS|| item ==Department.Office||
                     item == Department.HR_Finance || item == Department.Operations || item == Department.QA_QC_FA ||
                     item == Department.Sales_Project || item ==Department.Store)
                     continue;

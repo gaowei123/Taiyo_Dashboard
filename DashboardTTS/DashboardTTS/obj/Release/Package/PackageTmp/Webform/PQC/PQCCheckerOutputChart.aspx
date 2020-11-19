@@ -2,14 +2,9 @@
 
 <%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
  <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-     
-<link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-<link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-
 
     <div style="position: relative; width: 80%; height: auto; margin: auto">
-										
-  
+			
     <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">
 
         <tr style ="width: 100%">
