@@ -20,14 +20,19 @@ namespace Taiyo.JobSchedule
 
         public async void StartJob()
         {
-            DBHelp.Reports.LogFile.Log("JobSchedule", "In Func");
+
+            Taiyo.Tool.LogHelper.JobScheduleLog("In Func  StartJob");
+
+            
 
 
             //创建一个调度器
             factory = new StdSchedulerFactory();
             scheduler = await factory.GetScheduler();
 
-            DBHelp.Reports.LogFile.Log("JobSchedule", "Create Scheduler");
+
+            Taiyo.Tool.LogHelper.JobScheduleLog("Create Scheduler");
+            
 
 
            
@@ -36,15 +41,15 @@ namespace Taiyo.JobSchedule
 
             //创建一个任务
             IJobDetail job = JobBuilder.Create<Jobs.DemoJob>().Build();
-
-            DBHelp.Reports.LogFile.Log("JobSchedule", "Create Job");
+            
+            Taiyo.Tool.LogHelper.JobScheduleLog("Create Job");
 
 
 
             //创建一个触发器
-            ITrigger trigger = TriggerBuilder.Create().WithCronSchedule("0/10 * * * * ?").Build();
+            ITrigger trigger = TriggerBuilder.Create().WithCronSchedule("*/5 * * * * ?").Build();
 
-            DBHelp.Reports.LogFile.Log("JobSchedule", "Create trigger");
+            Taiyo.Tool.LogHelper.JobScheduleLog("Create trigger");
 
 
 
@@ -52,7 +57,7 @@ namespace Taiyo.JobSchedule
             //将任务与触发器添加到调度器中
             await scheduler.ScheduleJob(job, trigger);
 
-            DBHelp.Reports.LogFile.Log("JobSchedule", "Add job trigger in schedule");
+            Taiyo.Tool.LogHelper.JobScheduleLog("Add job trigger in schedule");
 
 
 
@@ -60,8 +65,7 @@ namespace Taiyo.JobSchedule
 
             //开始作业
             await scheduler.Start();
-
-            DBHelp.Reports.LogFile.Log("JobSchedule", "schedule start");
+            Taiyo.Tool.LogHelper.JobScheduleLog("schedule start");
         }
 
 

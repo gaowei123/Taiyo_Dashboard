@@ -24,6 +24,10 @@ namespace Taiyo.App.JobApp
         public MainWindow()
         {
             InitializeComponent();
+
+
+            Taiyo.Tool.LogHelper.JobScheduleLog("Application start");
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

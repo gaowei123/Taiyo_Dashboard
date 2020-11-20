@@ -1,0 +1,11 @@
+20201120 16:48:44 下午 -- Application start
+20201120 16:48:48 下午 -- In Func  StartJob
+20201120 16:48:48 下午 -- Create Scheduler
+20201120 16:48:48 下午 -- Create Job
+20201120 16:48:48 下午 -- Create trigger
+20201120 16:48:48 下午 -- Add job trigger in schedule
+20201120 16:48:48 下午 -- schedule start
+20201120 16:48:53 下午 -- doing job
+20201120 16:48:55 下午 -- doing job
+20201120 16:49:00 下午 -- doing job
+20201120 16:49:05 下午 -- doing job

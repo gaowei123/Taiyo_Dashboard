@@ -20,3 +20,7 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\bin\Deb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Tool.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Enum.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Tool.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Enum.pdb

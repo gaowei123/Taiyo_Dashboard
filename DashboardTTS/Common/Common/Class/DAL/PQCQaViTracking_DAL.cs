@@ -648,6 +648,7 @@ and a.day < @dDateTo ");
 
             //online
             if (sType == "Online") strSql.Append(" and c.processes like '%Laser%' and a.processes = 'Check#1' ");
+
             //wip
             else if (sType == "WIP") strSql.Append(@" and (c.processes not like '%Laser%' 
                                                            or ( c.processes like '%Laser%' and a.processes = 'Check#2' )

@@ -3,6 +3,10 @@
     ViewBag.Title = "Attendance";
 }
 
+@using Taiyo.Enum.Attendance;
+@using Taiyo.Tool.Extension;
+
+
 @*时间框组件*@
 <script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
@@ -25,9 +29,9 @@
     <div class="row">
         <div class="col-xs-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
-                <div class="col-md-2" style="padding-top:4px;" >
+                <div class="col-md-3" style="padding-top:4px;" >
                     <label style="font-size:16px;">Department:</label>
-                    <label id="lbDepartment" style="font-size:16px; color:red;"></label>
+                    <label id="lbDepartment" style="font-size:16px; "></label>
                 </div>
 
                 <div class="col-md-2" style="padding-top:4px;">
@@ -36,7 +40,7 @@
                 </div>
 
                
-                <div class="col-md-6">
+                <div class="col-md-2 col-md-offset-3">
                     <label>Date:</label>
                     <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:120px;" onchange="refresh();" />
                 </div>
@@ -263,6 +267,26 @@
                 align: 'center',
                 valign: 'middle',
                 width: 320,
+
+
+
+                //<option value=""></option>\
+                //<option value="Annual Leave">Annual Leave</option>\
+                //<option value="MC">MC</option>\
+                //<option value="UPL/UPMC">UPL/UPMC</option>\
+                //<option value="Maternity">Maternity</option>\
+                //<option value="Paternity">Paternity</option>\
+                //<option value="Marriage">Marriage</option>\
+                //<option value="WFH">WFH</option>\
+                //<option value="Hospitalization">Hospitalization</option>\
+                //<option value="Compassionate">Compassionate</option>\
+                //<option value="Child Care Leave">Child Care Leave</option>\
+                //<option value="Absent">Absent</option>\
+                //<option value="Business Trip">Business Trip</option>\
+                //<option value="Reservist">Reservist</option>\
+                //<option value="Pending">Pending</option>\
+
+
                 formatter: function (value, row, index) {
                     return '<div style="width:100%;height:100%; display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;">\
                                 <select id="ddl_leaveReason_' + index + '" class="form-control" style="width:150px;" onchange="resetAttendance(' + index + ');">\
@@ -291,59 +315,59 @@
                 valign: 'middle',
                 width: 300,
                 formatter: function (value, row, index) {
-                    return '<input type="text" id="txt_Remarks_'+index+'" class="form-control" style="width:100%;"/>';
-                }
+                                return '<input type="text" id="txt_Remarks_'+index+'" class="form-control" style="width:100%;"/>';
+                            }
             }
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-            
-
-                var totalUser = data.length;
-                var attendanceUser = 0;
-
-                for (var i = 0; i < data.length; i++) {
-
-                    //赋值shift
-                    var tempShift = data[i].Shift;
-                    $('input[name=\'rd_shift_' + i + '\'][value=\'' + tempShift + '\']').attr('checked', true);
 
 
-                    //赋值attendance & take leave
-                    var tempAtt = data[i].Attendance;
-                    if (tempAtt == '') {
-                        $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', true);
-                    }
-                    else if (tempAtt != 'Attendance') {
-                        $('#ddl_leaveReason_' + i).val(tempAtt);
-                        $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', false);
-                    } else {
-                        $('input[name=\'rd_attendance_' + i+ '\'][value=\'Attendance\']').attr('checked', true);
+                            var totalUser = data.length;
+                            var attendanceUser = 0;
 
-                        attendanceUser++;
-                    }
+                            for (var i = 0; i < data.length; i++) {
+
+                                //赋值shift
+                                var tempShift = data[i].Shift;
+                                $('input[name=\'rd_shift_' + i + '\'][value=\'' + tempShift + '\']').attr('checked', true);
 
 
-                    //赋值leave time
-                    var tempOnLeave = data[i].OnLeave;
-                    if (tempOnLeave != 'NA') {
-                        $('input[name=\'rd_leave_' + i + '\'][value=\'' + tempOnLeave + '\']').attr('checked', true);
-                    }
+                                //赋值attendance & take leave
+                                var tempAtt = data[i].Attendance;
+                                if (tempAtt == '') {
+                                    $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', true);
+                                }
+                                else if (tempAtt != 'Attendance') {
+                                    $('#ddl_leaveReason_' + i).val(tempAtt);
+                                    $('input[name=\'rd_attendance_' + i + '\'][value=\'Attendance\']').attr('checked', false);
+                                } else {
+                                    $('input[name=\'rd_attendance_' + i+ '\'][value=\'Attendance\']').attr('checked', true);
+
+                                    attendanceUser++;
+                                }
 
 
-                    var tempRemarks = data[i].Remarks;
-                    $('#txt_Remarks_' + i).val(tempRemarks);
-                }
+                                //赋值leave time
+                                var tempOnLeave = data[i].OnLeave;
+                                if (tempOnLeave != 'NA') {
+                                    $('input[name=\'rd_leave_' + i + '\'][value=\'' + tempOnLeave + '\']').attr('checked', true);
+                                }
 
 
-                //显示出勤率
-                var attendanceRate = attendanceUser / totalUser * 100;
-                $('#lbAttRate').text(attendanceRate.toFixed(2) + '%');
+                                var tempRemarks = data[i].Remarks;
+                                $('#txt_Remarks_' + i).val(tempRemarks);
+                            }
 
-            },
+
+                            //显示出勤率
+                            var attendanceRate = totalUser ==0 ? 0 : attendanceUser / totalUser * 100;
+                            $('#lbAttRate').text(attendanceRate.toFixed(2) + '%');
+
+                        },
             onLoadError: function () {  //加载失败时执行
-                console.log("加载数据失败");
-            }
+                            console.log("加载数据失败");
+                        }
 
         });
     }

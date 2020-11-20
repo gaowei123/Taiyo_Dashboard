@@ -14,9 +14,12 @@ namespace DashboardTTS.Controllers
         private readonly Common.BLL.LMMSUserAttendanceTracking_BLL attendanceBLL = new Common.BLL.LMMSUserAttendanceTracking_BLL();
 
 
+        private readonly  JavaScriptSerializer _jsSerializer = new JavaScriptSerializer();
+
+
 
         #region view
-       
+
         public ActionResult UserManagement()
         {
             return View();
@@ -184,6 +187,9 @@ namespace DashboardTTS.Controllers
 
             return Content(js.Serialize(orderList));
         }
+
+
+
         
         public ActionResult IsSubmit()
         {
@@ -198,24 +204,21 @@ namespace DashboardTTS.Controllers
             return Content(js.Serialize(result));
         }
         
-        public ActionResult SubmitAttendance()
+
+
+        public JsonResult SubmitAttendance()
         {
             string strAttendanceList = Request.Form["AttendanceList"];
             DateTime day = DateTime.Parse(Request.Form["Day"]);
-
             string department = Request.Form["Department"];
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            List<Common.Model.LMMSUserAttendanceTracking_Model> modelList = js.Deserialize<List<Common.Model.LMMSUserAttendanceTracking_Model>>(strAttendanceList);
+            
+            List<Common.Model.LMMSUserAttendanceTracking_Model> modelList = _jsSerializer.Deserialize<List<Common.Model.LMMSUserAttendanceTracking_Model>>(strAttendanceList);
             if (modelList == null)
-                return Content(js.Serialize("false"));
+                return Json("false");
 
-
-
+            
             bool result = attendanceBLL.SubmitAttendance(day, department, modelList);
-
-            return Content(js.Serialize(result));
+            return Json(result);
         }
 
         #endregion

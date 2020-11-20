@@ -83,6 +83,10 @@
       <Project>{c6ac93b9-faa8-4488-b2e7-56f278d67a24}</Project>
       <Name>DBHelp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StatusConverter\Taiyo.Tool.csproj">
+      <Project>{9ee7ab40-6b50-47a4-9f3a-3b3f3520cadb}</Project>
+      <Name>Taiyo.Tool</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

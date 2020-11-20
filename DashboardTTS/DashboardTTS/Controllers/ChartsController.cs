@@ -91,7 +91,7 @@ namespace DashboardTTS.Controllers
             {
                 //排除不需要的部门, 
                 if (item == Department.PQC || item == Department.Assembly || item == Department.TSS|| item ==Department.Office||
-                    item == Department.HR_Finance || item == Department.Operations || item == Department.QA_QC_FA ||
+                    item == Department.HR_Finance || item == Department.Planning_Purchasing || item == Department.QA_QC_FA ||
                     item == Department.Sales_Project || item ==Department.Store)
                     continue;
 
