@@ -20,19 +20,23 @@ namespace Taiyo.App.JobApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        Taiyo.JobSchedule.DemoSchedule schedule = new JobSchedule.DemoSchedule();
+        Taiyo.JobSchedule.InventorySchedule schedule = new JobSchedule.InventorySchedule();
         public MainWindow()
         {
             InitializeComponent();
 
 
-            Taiyo.Tool.LogHelper.JobScheduleLog("Application start");
+            Taiyo.Tool.LogHelper.Log("Application start");
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+    
+
+        private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             schedule.StartJob();
         }
+
+       
     }
 }

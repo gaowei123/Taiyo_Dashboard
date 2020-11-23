@@ -13,219 +13,183 @@ namespace DashboardTTS.Webform.PQC {
     public partial class PQCRealTime {
         
         /// <summary>
-        /// ucPQC1 控件。
+        /// ucOnline1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC1;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline1;
         
         /// <summary>
-        /// ucPQC2 控件。
+        /// ucOnline2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC2;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline2;
         
         /// <summary>
-        /// ucPQC3 控件。
+        /// ucWIP1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC3;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP1;
         
         /// <summary>
-        /// ucPQC4 控件。
+        /// ucWIP2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC4;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP2;
         
         /// <summary>
-        /// ucPQC5 控件。
+        /// ucPacking1 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC5;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking1;
         
         /// <summary>
-        /// ucPQC6 控件。
+        /// ucPacking2 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC6;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking2;
         
         /// <summary>
-        /// ucPQC7 控件。
+        /// ucOnline3 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC7;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline3;
         
         /// <summary>
-        /// ucPQC8 控件。
+        /// ucOnline4 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC8;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline4;
         
         /// <summary>
-        /// ucPQC9 控件。
+        /// ucWIP3 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC9;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP3;
         
         /// <summary>
-        /// ucPQC10 控件。
+        /// ucWIP4 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC10;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP4;
         
         /// <summary>
-        /// ucPQC11 控件。
+        /// ucPacking3 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC11;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking3;
         
         /// <summary>
-        /// ucPQC12 控件。
+        /// ucPacking4 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC12;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking4;
         
         /// <summary>
-        /// ucPQC13 控件。
+        /// ucOnline5 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC13;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline5;
         
         /// <summary>
-        /// ucPQC14 控件。
+        /// ucOnline6 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC14;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline6;
         
         /// <summary>
-        /// ucPQC15 控件。
+        /// ucWIP5 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC15;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP5;
         
         /// <summary>
-        /// ucPQC16 控件。
+        /// ucWIP6 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC16;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucWIP6;
         
         /// <summary>
-        /// ucPQC17 控件。
+        /// ucPacking5 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC17;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking5;
         
         /// <summary>
-        /// ucPQC18 控件。
+        /// ucPacking6 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC18;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPacking6;
         
         /// <summary>
-        /// ucPQC19 控件。
+        /// ucOnline7 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC19;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline7;
         
         /// <summary>
-        /// ucPQC20 控件。
+        /// ucOnline8 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC20;
-        
-        /// <summary>
-        /// ucPQC21 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC21;
-        
-        /// <summary>
-        /// ucPQC22 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC22;
-        
-        /// <summary>
-        /// ucPQC23 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC23;
-        
-        /// <summary>
-        /// ucPQC24 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucPQC24;
+        protected global::DashboardTTS.UserControl.WebUserControlPQCStatus ucOnline8;
     }
 }

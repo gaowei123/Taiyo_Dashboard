@@ -215,6 +215,11 @@ namespace DashboardTTS.Controllers
 
 
 
+
+
+
+
+
         public JsonResult GetLaserProductionData()
         {
             var param = new Taiyo.SearchParam.LaserParam.LaserProductionCondition();

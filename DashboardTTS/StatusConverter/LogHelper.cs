@@ -8,9 +8,16 @@ namespace Taiyo.Tool
 {
     public static class LogHelper
     {
-        public static void JobScheduleLog(string msg)
+       
+
+        public static void Log(string msg)
         {
-            var file = $"./{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
+            string path = "./Log";
+            if (!Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+
+
+            var file = $"{path}/{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
 
 
             StreamWriter tw = File.AppendText(file);

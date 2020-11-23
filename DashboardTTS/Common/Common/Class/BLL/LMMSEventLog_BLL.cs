@@ -891,8 +891,8 @@ namespace Common.BLL
                     {
                         model.totalSeconds = 12 * 3600 - machineDayList.Sum(p => p.totalSeconds);
                     }
-
-                 
+                    model.totalSeconds = model.totalSeconds < 0 ? 0 : model.totalSeconds;//出去负数的情况
+                    
                     modelList.Add(model);
                     
 
@@ -919,7 +919,8 @@ namespace Common.BLL
                     {
                         model.totalSeconds = 12 * 3600 - machineNightList.Sum(p => p.totalSeconds);
                     }
-                 
+                    model.totalSeconds = model.totalSeconds < 0 ? 0 : model.totalSeconds;//出去负数的情况
+
                     modelList.Add(model);
                 }
 

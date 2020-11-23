@@ -1878,11 +1878,11 @@ from
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
-	machineID,'CHECKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,stopTime,datetime 
+	machineID,'CHECKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,starttime, stopTime,datetime 
 from PQCQaViTracking where day = @day
 union all 
 select
-	machineID,'PACKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,stopTime,datetime 
+	machineID,'PACKING' as status,jobId,partNumber,acceptQty,rejectQty,userID,starttime, stopTime,datetime 
 from pqcpacktracking where day =@day ");
 
 

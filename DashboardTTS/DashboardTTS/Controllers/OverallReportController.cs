@@ -26,6 +26,15 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+
+        public ActionResult ProductivityReport()
+        {
+            return View();
+        }
+
+
+
         #endregion
 
         

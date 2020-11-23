@@ -12,7 +12,7 @@ namespace Taiyo.JobSchedule
     {
 
         //调度器
-       public static IScheduler scheduler;
+        public static IScheduler scheduler;
 
         //调度器工厂
         ISchedulerFactory factory;
@@ -20,44 +20,28 @@ namespace Taiyo.JobSchedule
 
         public async void StartJob()
         {
-
-            Taiyo.Tool.LogHelper.JobScheduleLog("In Func  StartJob");
-
-            
-
-
             //创建一个调度器
             factory = new StdSchedulerFactory();
             scheduler = await factory.GetScheduler();
 
-
-            Taiyo.Tool.LogHelper.JobScheduleLog("Create Scheduler");
             
-
-
-           
-
-
 
             //创建一个任务
             IJobDetail job = JobBuilder.Create<Jobs.DemoJob>().Build();
             
-            Taiyo.Tool.LogHelper.JobScheduleLog("Create Job");
 
 
 
             //创建一个触发器
             ITrigger trigger = TriggerBuilder.Create().WithCronSchedule("*/5 * * * * ?").Build();
 
-            Taiyo.Tool.LogHelper.JobScheduleLog("Create trigger");
 
 
 
 
             //将任务与触发器添加到调度器中
             await scheduler.ScheduleJob(job, trigger);
-
-            Taiyo.Tool.LogHelper.JobScheduleLog("Add job trigger in schedule");
+            
 
 
 
@@ -65,7 +49,6 @@ namespace Taiyo.JobSchedule
 
             //开始作业
             await scheduler.Start();
-            Taiyo.Tool.LogHelper.JobScheduleLog("schedule start");
         }
 
 
@@ -75,7 +58,7 @@ namespace Taiyo.JobSchedule
             if (scheduler != null)
             {
                 scheduler.Shutdown(true);
-                DBHelp.Reports.LogFile.Log("JobSchedule", "Close Job");
+                Taiyo.Tool.LogHelper.Log("Close Job");
             }
         }
 

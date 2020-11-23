@@ -101,7 +101,7 @@ namespace Taiyo.Tool
                 case "PACKING":
                     return PQCStatus.Packing;
                 case "NO SCHEDULE":
-                    return PQCStatus.NoSchedule;               
+                    return PQCStatus.NoSchedule;
                 case "SHUTDOWN":
                     return PQCStatus.Shutdown;
               

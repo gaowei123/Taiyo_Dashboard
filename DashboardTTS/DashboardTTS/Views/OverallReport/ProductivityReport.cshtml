@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewBag.Title = "ProductivityReport";
+}
+
+
+
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+
+<div class="container">
+
+    <div class="row titleRow">
+        <div class="col-lg-10 col-md-9 col-xs-8">
+            <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span class="titleText">Productivity Report</span>
+        </div>
+        <div class="col-lg-2 col-md-3 col-xs-4">
+            <input type="text"  id="txtDate"  
+                   class="form-control text-center" 
+                   data-date-format="yyyy-mm-dd" 
+                   placeholder="Please choose date" 
+                   style="margin-top:-4px;"/>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="margin-top:20px;">
+            <div class="row text-center">
+                <h3><strong>Moulding Department</strong></h3>
+            </div>
+            <div class="row">
+                <table id="tbMouldingDay" data-toggle="table"></table>
+            </div>
+            <div class="row">
+                <table id="tbMouldingNight" data-toggle="table"></table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default">
+            <div class="row text-center">
+                <h3><strong>Laser Department</strong></h3>
+            </div>
+
+            <div class="row">
+                <table id="tbLaserDay" data-toggle="table"></table>
+            </div>
+
+            <div class="row">
+                <table id="tbLaserNight" data-toggle="table"></table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default">
+            <div class="row text-center">
+                <h3><strong>PQC Department</strong></h3>
+            </div>
+
+            <div class="row">
+                <table id="tbPQCDay" data-toggle="table"></table>
+            </div>
+
+            <div class="row">
+                <table id="tbPQCNight" data-toggle="table"></table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+
+    let apiGetMouldDay = window.globalConfig.rootDirectory + '/OverallReport/func1';
+    let apiGetMouldNight = window.globalConfig.rootDirectory + '/OverallReport/func1';
+    let apiGetLaserDay = window.globalConfig.rootDirectory + '/OverallReport/func1';
+    let apiGetLaserNight = window.globalConfig.rootDirectory + '/OverallReport/func1';
+    let apiGetPQCDay = window.globalConfig.rootDirectory + '/OverallReport/func1';
+    let apiGetPQCNight = window.globalConfig.rootDirectory + '/OverallReport/func1';
+
+
+
+
+    //初始化时间框
+    $('#txtDate').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        
+        initialDate: new Date()
+    });
+
+
+    $(document).ready(function () {
+        var lastDay = getLastReportDay();
+        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+        $('#txtDate').val(strLastDay);
+      
+        search();
+    });
+
+
+
+
+
+    function search() {
+
+     
+
+
+        //重新加载必须将原本table清空
+        $('#tbMouldingDay').bootstrapTable('destroy');
+        $('#tbMouldingDay').bootstrapTable({ // 对应table标签的id
+
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetMouldDay,
+
+            queryParams: function (params) { 
+                return{
+                    Date: $("#txtDate").val(),
+                    Shift:'Day'
+                }
+            },
+
+
+          
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+            visibleSearch: true,
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                return {
+                    //防止数据自动换行
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+
+            columns: [{
+                field: 'Type',
+                title: 'Day Shift',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'UserCount',
+                title: 'Man Power',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'Attendance',
+                title: 'Attendance',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'aaa',
+                title: 'Target Prod HRs',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ng',
+                title: 'NG Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ng',
+                title: 'NG Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ng',
+                title: 'NG Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ng',
+                title: 'NG Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+
+            ],
+
+
+            onLoadSuccess: function (data) {
+                
+                $('#tbMouldingDay').bootstrapTable('mergeCells', { index: 0, field: '类别名称', colspan: 0, rowspan: 1 });
+
+            },
+            onLoadError: function () {
+                console.log("加载数据失败");
+            }
+
+        });
+
+
+
+
+
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tbMouldingDay').bootstrapTable('resetView');
+
+    });
+
+
+
+
+
+</script>

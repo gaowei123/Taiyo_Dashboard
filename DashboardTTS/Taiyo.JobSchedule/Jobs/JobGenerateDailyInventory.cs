@@ -13,16 +13,7 @@ namespace Taiyo.JobSchedule.Jobs
         {
             await Task.Run(() =>
             {
-                DBHelp.Reports.LogFile.Log("JobGenerateDailyInventory", "********************Start Job********************");
-
-
-
-                DBHelp.Reports.LogFile.Log("JobGenerateDailyInventory", "do job....");
-
-
-
-
-                DBHelp.Reports.LogFile.Log("JobGenerateDailyInventory", "********************End Job********************");
+                Taiyo.Tool.LogHelper.Log("doing job....");
             });
         }
     }

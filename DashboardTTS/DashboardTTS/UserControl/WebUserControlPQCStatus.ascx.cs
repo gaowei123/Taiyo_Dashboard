@@ -40,7 +40,27 @@ namespace DashboardTTS.UserControl
             
             this.lbStatus.BackColor = GetStatusColor(model.Status);
         }
-        
+
+
+        public void SetEmpty(string sStation, PQCStatus status)
+        {
+            this.lbStation.Text = sStation;
+            this.lbStatus.Text = status.GetDescription();
+            this.lbLotNo.Text = "";
+            this.lbJobNo.Text = "";
+            this.lbPartNo.Text = "";
+            this.lbLotQty.Text = "0";
+            this.lbOK.Text = "0";
+            this.lbNG.Text = "0";
+            this.lbRejRate.Text = "0.00%";
+            this.lbOP.Text = "";
+
+            this.lbStatus.BackColor = GetStatusColor(status);
+        }
+
+      
+
+
         private System.Drawing.Color GetStatusColor(PQCStatus status)
         {
             System.Drawing.Color statusColor = new System.Drawing.Color();
@@ -67,5 +87,9 @@ namespace DashboardTTS.UserControl
 
             return statusColor;
         }
+
+
+
+
     }
 }

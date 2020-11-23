@@ -13,7 +13,7 @@ namespace Taiyo.JobSchedule.Jobs
         {
             await Task.Run(() =>
             {
-                Taiyo.Tool.LogHelper.JobScheduleLog("doing job");
+                Taiyo.Tool.LogHelper.Log("doing job");
             });
         }
     }
