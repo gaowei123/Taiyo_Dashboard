@@ -1,11 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "AllSectionInventoryReport";
+    ViewBag.Title = "Production Inventory";
 }
-
-
-
-
 
 <div class="container-fluid">
 
@@ -19,19 +15,22 @@
         <div class="col-md-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
                 <div class="col-md-3">
-                    <label for="ddlModel" style="width:35%;">Model:</label>
-                    <select id="ddlModel" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                    <label for="ddlPartNo" style="width:35%;">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
                 </div>
 
                 <div class="col-md-3">
-                    <label style="width:35%">Ship To:</label>
-                    <select id="ddlShipTo" class="form-control selectpicker" data-ng-style="btn-info">
+                    <label style="width:35%">Inventory:</label>
+                    <select id="ddlShipTo" class="form-control" data-ng-style="btn-info" style="width:60%;"> 
                         <option value="">All</option>
                         <option value="FG">FG</option>
                         <option value="Assembly">Assembly</option>
                     </select>
                 </div>
-                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    <label for="txtDate" style="width:35%;">Date:</label>
+                    <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
                 <div class="col-md-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
@@ -40,14 +39,8 @@
         </div>
     </div>
 
-
-
- 
-
-
-
     <div class="row">
-        <div class="col-lg-12" style="padding:0px;">
+        <div class="col-lg-12" style="padding:0px;margin-top:-10px;">
             <table id="tableInventory" data-toggle="table"></table>
         </div>
     </div>
@@ -66,29 +59,37 @@
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
 <script type="text/javascript">
 
     var apiGetAllSectionIventoryReport = window.globalConfig.rootDirectory + '/OverallReport/GetAllSectionInventoryReport';
 
 
+    $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
     
+    $('#txtDate').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
 
-
-    
     $(document).ready(function () {
 
-        setModelDDL($('#ddlModel'), 'PQC');
-        
+        setPartNoDDL($('#ddlPartNo'), 'PQC');
+
         search();
     });
 
 
-
-
-
     function search() {
-
-
         //重新加载必须将原本table清空
         $('#tableInventory').bootstrapTable('destroy');
 
@@ -106,7 +107,7 @@
       
             queryParams: function (params) { 
                 return {
-                    Model: $("#ddlModel").val(),
+                    PartNo: $("#ddlPartNo").val(),
                     ShipTo: $("#ddlShipTo").val()
                 }
             },
@@ -125,9 +126,10 @@
             //pageSize: 10, // 页面数据条数
             //pageNumber: 1, // 首页页码
 
+            showFooter: true,   //显示合计栏
 
-            height : $(window).height() - 210,
 
+            height: $(window).height() - 190,
 
 
             rowStyle: function (row, index) {
@@ -135,7 +137,6 @@
                     //防止数据自动换行
                     css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
                 }
-
             },
 
             columns: [
@@ -143,7 +144,10 @@
                 field: 'model',
                 title: 'Model',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {                  
+                    return "Total";
+                }
             },
             {
                 field: 'partNo',
@@ -153,110 +157,218 @@
             },
             {
                 field: 'materialName',
-                title: 'Material Name',
+                title: 'Material</br>Name',
                 align: 'center',
                 valign: 'middle'
             },
-            
-            {
-                field: 'lineRej',
-                title: 'Line Rej',
+            { 
+                field: 'assembly',
+                title: 'Assembly',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].assembly != null) {
+                            count += Number(value[i].assembly);
+                        }
+                    }
+                    return count;
+                }
             },
             {
-                field: 'afterAssembly',
-                title: 'After Assembly',
+                field: 'fg',
+                title: 'FG',
                 align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'beforeAssembly',
-                title: 'Before Assembly',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'afterFG',
-                title: 'After FG',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'beforeFG',
-                title: 'Before FG',
-                align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                width: 80,
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].fg != null) {
+                            count += Number(value[i].fg);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'afterPack',
-                title: 'After Packing',
+                title: 'After</br>Packing',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].afterPack != null) {
+                            count += Number(value[i].afterPack);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'beforePack',
-                title: 'Before Packing',
+                title: 'Before</br>Packing',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].beforePack != null) {
+                            count += Number(value[i].beforePack);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'afterWIP',
-                title: 'After WIP',
+                title: 'After</br>WIP',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].afterWIP != null) {
+                            count += Number(value[i].afterWIP);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'beforeWIP',
-                title: 'Before WIP',
+                title: 'Before</br>WIP',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].beforeWIP != null) {
+                            count += Number(value[i].beforeWIP);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'afterLaser',
-                title: 'After Laser',
+                title: 'After</br>Laser',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].afterLaser != null) {
+                            count += Number(value[i].afterLaser);
+                        }
+                    }
+                    return count;
+                }
             },
             {
                 field: 'beforeLaser',
-                title: 'Before Laser',
+                title: 'Before</br>Laser',
                 align: 'center',
-                valign: 'middle'
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].beforeLaser != null) {
+                            count += Number(value[i].beforeLaser);
+                        }
+                    }
+                    return count;
+                }
             },
-           {
-               field: 'tcPaint',
-               title: 'T/C Paint',
-               align: 'center',
-               valign: 'middle'
-           }, {
-               field: 'mcPaint',
-               title: 'M/C Paint',
-               align: 'center',
-               valign: 'middle'
-           }, {
-               field: 'ucPaint',
-               title: 'U/C Paint',
-               align: 'center',
-               valign: 'middle'
-           }, {
-               field: 'rawPartMoulding',
-               title: 'Moulding Raw Part',
-               align: 'center',
-               valign: 'middle'
-           }
-            ],
+            {
+                field: 'tcPaint',
+                title: 'T/C</br>Paint',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].tcPaint != null) {
+                            count += Number(value[i].tcPaint);
+                        }
+                    }
+                    return count;
+                }
+            },
+            {
+                field: 'mcPaint',
+                title: 'M/C</br>Paint',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].mcPaint != null) {
+                            count += Number(value[i].mcPaint);
+                        }
+                    }
+                    return count;
+                }
+            },
+            {
+                field: 'print',
+                title: 'Print</br>Supplier',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].print != null) {
+                            count += Number(value[i].print);
+                        }
+                    }
+                    return count;
+                }
+            },
+            {
+                field: 'ucPaint',
+                title: 'U/C</br>Paint',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].ucPaint != null) {
+                            count += Number(value[i].ucPaint);
+                        }
+                    }
+                    return count;
+                }
+            },
+            {
+                field: 'rawPart',
+                title: 'Paint</br>Raw Part',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (value) {
+                    var count = 0;
+                    for (var i in value) {
+                        if (value[i].rawPartMoulding != null) {
+                            count += Number(value[i].rawPartMoulding);
+                        }
+                    }
+                    return count;
+                }
+            }],
 
-            onLoadSuccess: function (data) {  //加载成功时执行
-               
+
+            onLoadSuccess: function (data) {
+                if (data ==undefined || data ==null||data.length==0) {
+                    $('#tableInventory').bootstrapTable('resetView');
+                }
             },
 
-            onLoadError: function () {  //加载失败时执行
+            onLoadError: function () {
                 console.log("加载数据失败");
             }
-
         });
-
     }
 
 

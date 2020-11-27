@@ -671,6 +671,41 @@ group by a.PartNumber , a.materialName , a.processes ");
         }
 
 
-	}
+        public DataTable GetFgAndAssembly()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+a.PartNumber,
+a.materialName,
+case when shipTo = 'FG' then 
+sum(  convert(int,a.materialQty/b.outerBoxQty) * b.outerBoxQty  ) 
+end as FG,
+case when shipTo = 'Assembly' then 
+sum(  convert(int,a.materialQty/b.outerBoxQty) * b.outerBoxQty  ) 
+end as Assembly
+from PQCQaViBinning a
+left join PQCBomDetail b 
+on a.PartNumber = b.partNumber and a.materialPartNo = b.materialPartNo
+where a.processes = 'PACKING'
+and a.day = @date 
+group by a.PartNumber, a.materialName, a.ShipTo");
+
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@date", SqlDbType.DateTime)
+            };
+            parameters[0].Value = DateTime.Now.AddHours(-8).Date;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
+
+
+    }
 }
 

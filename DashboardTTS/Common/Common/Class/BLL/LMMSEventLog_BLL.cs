@@ -432,13 +432,18 @@ namespace Common.BLL
 
 
 
+                //buyoff, setup, testing等状态超过12小时的全部跳过.
+                if ( (new string[] { "BUYOFF", "NO SCHEDULE", "SETUP" , "TESTING" }).Contains(status) 
+                    &&  (stopTime - startTime ).TotalHours >= 12  )
+                    continue;
+
+
 
 
 
                 //不考虑startTime, stopTime超过1天的数据, 属于异常数据, 
                 //早期client的一个bug导致的.  好像是scan状态后重启Client导致生成2条相同状态的eventlog,
                 //但再次scan停止时, 只有一条记录会被更新, 而另一条的stoptime会一直被pingapp不停更新stoptime.
-
                 if ((stopTime - startTime).TotalDays > 1)
                     continue;
 

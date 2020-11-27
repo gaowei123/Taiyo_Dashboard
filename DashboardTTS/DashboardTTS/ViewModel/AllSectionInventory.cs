@@ -25,12 +25,12 @@ namespace DashboardTTS.ViewModel
          
             public string processes { get; set; }
             public string shipTo { get; set; }
+            public int outerBoxQty { get; set; }
         }
 
 
         public class laserOutputInfo
         {
-           
             public string partNo { get; set; }
             public string materialNo { get; set; }
             public double okQty { get; set; }
@@ -63,6 +63,14 @@ namespace DashboardTTS.ViewModel
         }
         
 
+        public class fgAndAssembly
+        {
+            public string partNo { get; set; }
+            public string materialName { get; set; }
+            public double fg { get; set; }
+            public double assembly { get; set; }
+        }
+
         public class pqcBinInfo
         {
             public string partNo { get; set; }
@@ -70,8 +78,7 @@ namespace DashboardTTS.ViewModel
             public string materialName { get; set; }
             public double qty { get; set; }
         }
-
-
+        
 
         public class report
         {
@@ -82,9 +89,10 @@ namespace DashboardTTS.ViewModel
 
 
 
-            public double? rawPartMoulding { get; set; }
+            public double? rawPart { get; set; }
             public double? ucPaint { get; set; }
             public double? mcPaint { get; set; }
+            public double? print { get; set; }
             public double? tcPaint { get; set; }
 
 
@@ -96,14 +104,9 @@ namespace DashboardTTS.ViewModel
             public double? afterPack { get; set; }
 
 
-            public double? beforeFG { get; set; }
-            public double? beforeAssembly { get; set; }
-
-            public double? afterFG { get; set; }
-            public double? afterAssembly { get; set; }
-
-
-            public double? lineRej { get; set; }
+            public double? fg { get; set; }
+            public double? assembly { get; set; }
+            
 
 
         }

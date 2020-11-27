@@ -4,24 +4,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>PQC Buyoff Record</title>
    
 
     <link href="../../plugins/bootstrap-datetimepicker-master/sample in bootstrap v3/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
     <link href="../../plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/sample in bootstrap v3/jquery/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/sample in bootstrap v3/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-
-
-
 
 
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
@@ -58,15 +52,6 @@
         }
 
     </style>
-
-
-    <script>
-        function LoseFuces(obj) {
-            if (obj.value.length == 13) {
-                obj.blur();//主动移除焦点, 触发asp textbox  textchanged事件
-            }
-        } 
-    </script>
 
 </head>
 <body>
@@ -318,7 +303,6 @@
                 </div>
             </div>
 
-                    
         </div>
     </form>
 

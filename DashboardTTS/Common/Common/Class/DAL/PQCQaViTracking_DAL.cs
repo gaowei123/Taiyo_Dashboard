@@ -2237,7 +2237,7 @@ left join pqcbom c on a.partnumber = c.partnumber
 
 
 where 1=1 
-and a.day >= '2020-6-1'
+and a.day >= @startTime
 
 --如果不是最后一道check工序 , 或者 nextviflag false的,  (做了但没做完的)都算作是after wip
 and 
@@ -2253,7 +2253,7 @@ group by a.partNumber, b.materialName ");
 
 
             SqlParameter[] parameters = {
-                new SqlParameter("@startTime", SqlDbType.DateTime)
+                new SqlParameter("startTime", SqlDbType.DateTime)
             };
             parameters[0].Value = dStartTime;
 

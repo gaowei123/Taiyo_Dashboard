@@ -2,7 +2,7 @@
 <%@ Register src="../../UserControl/WebUserControlPQCStatus.ascx" tagname="WebUserControlPQCStatus" tagprefix="uc1" %>
  
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <%--<meta http-equiv="Refresh" content="30" />--%>
+    <meta http-equiv="Refresh" content="30" />
     <style>
         .divUC {
             width: auto;

@@ -103,7 +103,7 @@
             </div>
         
             <%--多级菜单栏--%>
-            <div class="collapse navbar-collapse" id="target-menu">
+            <div class="collapse navbar-collapse" id="target-m enu">
                 <ul class="nav navbar-nav">               
 
                     <li class="dropdown menu-top">
@@ -114,7 +114,7 @@
                             <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
                             <li><a runat="server" href="./OverallReport/OutputSummaryChart">Overall Output Chart</a></li>
-                            <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">All Section Inventory Report</a></li>
+                            <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">Production Inventory</a></li>
                         </ul>
                     </li>
                     

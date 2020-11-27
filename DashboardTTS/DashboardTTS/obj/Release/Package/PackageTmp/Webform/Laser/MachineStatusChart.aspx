@@ -46,7 +46,7 @@
                         <label style="width:35%">Type:</label>
                         <asp:DropDownList runat="server" ID="ddlType" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="UTILIZATION">Utilization</asp:ListItem>
-                            <asp:ListItem Value="RUNNING">Operating</asp:ListItem>
+                            <asp:ListItem Value="RUN">Operating</asp:ListItem>
                             <asp:ListItem Value="BUYOFF">Buyoff</asp:ListItem>
                             <asp:ListItem Value="SETUP">Setup</asp:ListItem>
                             <asp:ListItem Value="NO SCHEDULE">No Schedule</asp:ListItem>

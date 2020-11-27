@@ -167,6 +167,14 @@ namespace Common.Class.BLL
         }
 
 
+        /// <summary>
+        /// 获取当天的fg/assembly的数量.  
+        /// 直接通过packing qty / outerboxqty能被整除的数量,即为fg/assembly的数量.
+        /// </summary>
+        public DataTable GetFgAndAssembly()
+        {
+            return dal.GetFgAndAssembly();
+        }
 
 
 

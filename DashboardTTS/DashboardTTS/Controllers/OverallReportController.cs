@@ -11,12 +11,7 @@ namespace DashboardTTS.Controllers
     {
         private readonly ViewBusiness.OverallReport_ViewBusiness vBLL = new ViewBusiness.OverallReport_ViewBusiness();
 
-        #region  view 
-        public ActionResult Index()
-        {
-            return View();
-        }
-        
+        #region  view     
         public ActionResult AllSectionInventoryReport()
         {
             return View();
@@ -26,32 +21,20 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
-
+        
         public ActionResult ProductivityReport()
         {
             return View();
         }
-
-
-
+        
         #endregion
 
         
 
 
-        public ActionResult GetAllSectionInventoryReport()
+        public ActionResult GetAllSectionInventoryReport(string PartNo, string ShipTo)
         {
-            //全部从6-1号开始计算.
-
-            string model = Request.Form["Model"];
-            string shipTo = Request.Form["ShipTo"];
-
-            DateTime startTime = DateTime.Parse("2020-6-1");
-
-
-
-            string result = vBLL.GetAllSectionList(startTime, model, shipTo);
+            string result = vBLL.GetAllSectionResult(new DateTime(2020, 11, 25), PartNo, ShipTo);
             return Content(result);
         }
 

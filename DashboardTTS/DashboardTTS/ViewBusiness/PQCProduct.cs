@@ -1710,7 +1710,7 @@ namespace DashboardTTS.ViewBusiness
                                           bomFlag = grouped.Max(p => p.bomFlag)
 
                                       };
-
+                 
                 return _js.Serialize(groupByPartList);
             }
             catch (Exception ee)

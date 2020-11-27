@@ -113,6 +113,7 @@
     <Compile Include="Class\BLL\PQCQaViDetailTracking_BLL.cs" />
     <Compile Include="Class\BLL\PQCQaViHistory_BLL.cs" />
     <Compile Include="Class\BLL\PQCQaViTracking_BLL.cs" />
+    <Compile Include="Class\BLL\ProductionInventoryHistory.cs" />
     <Compile Include="Class\BLL\TempProductivityData_BLL.cs" />
     <Compile Include="Class\BLL\User_DB_BLL.cs" />
     <Compile Include="Class\DAL\AssyUserDB.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Class\DAL\PQCQaViHistory_DAL.cs" />
     <Compile Include="Class\DAL\PQCQaViTracking_DAL.cs" />
     <Compile Include="Class\DAL\PQCUserDB.cs" />
+    <Compile Include="Class\DAL\ProductionInventoryHistory.cs" />
     <Compile Include="Class\DAL\TempProductivityData_DAL.cs" />
     <Compile Include="Class\DAL\User_DB_DAL.cs" />
     <Compile Include="Class\Model\LMMSBomDetail_Model.cs" />
@@ -230,9 +232,13 @@
     <Compile Include="Class\Model\PQCQaViDetailTracking_Model.cs" />
     <Compile Include="Class\Model\PQCQaViHistory_Model.cs" />
     <Compile Include="Class\Model\PQCQaViTracking.cs" />
+    <Compile Include="Class\Model\ProductionInventoryHistory.cs" />
     <Compile Include="Class\Model\TempProductivityData_Model.cs" />
     <Compile Include="Class\Model\User_DB_Model.cs" />
     <Compile Include="CommFunctions.cs" />
+    <Compile Include="ExtendClass\AllProductionInventory\Inventory_BLL.cs" />
+    <Compile Include="ExtendClass\AllProductionInventory\Inventory_DAL.cs" />
+    <Compile Include="ExtendClass\AllProductionInventory\Inventory_Model.cs" />
     <Compile Include="ExtendClass\Home\Home_BLL.cs" />
     <Compile Include="ExtendClass\Home\Home_DAL.cs" />
     <Compile Include="ExtendClass\Home\Home_Model.cs" />
