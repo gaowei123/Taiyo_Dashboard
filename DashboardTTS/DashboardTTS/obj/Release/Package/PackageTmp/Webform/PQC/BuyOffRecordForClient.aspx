@@ -38,10 +38,10 @@
         }
 
         .tdBig{
-            padding: 10px 10px 10px 10px; 
+            padding: 0px 10px 0px 10px; 
             border: 1px solid #CCCCCC; 
             font-family: 'Arial Unicode MS'; 
-            height: 50px;
+            height: 38px;
         }
 
         .tdSmall{
@@ -111,6 +111,20 @@
                             <td class="tdSmall"></td>
                         </tr>
 
+                        <tr> 
+                            <td class="tdSmall">Annealing Date:</td>
+                            <td class="tdSmall">
+                               <asp:TextBox runat="server" ID="txtAnnealingDate" AutoCompleteType="Disabled" CssClass="form-control formDateTimePicker" Height="23px" type="text" value=""  data-date-format="yyyy-mm-dd"   Width="100%" ></asp:TextBox>
+                            </td>
+                            <td class="tdSmall" colspan="2">
+                                &nbsp;<asp:TextBox runat="server" ID="txtAnnealingTime" AutoCompleteType="Disabled" Height="23px" Width="100%"></asp:TextBox>
+                            </td>                           
+                            <td class="tdSmall"></td>
+                            <td class="tdSmall"></td>
+                        </tr>
+
+
+
 
                         <tr> 
                             <td class="tdBig" colspan="2" align="center">
@@ -122,7 +136,7 @@
                             <td class="tdBig" colspan="2" align="center">
                                 <h4><b>TOP COAT</b></h4>
                             </td>
-                        </tr>  
+                        </tr>
                 
 
                         <tr> 

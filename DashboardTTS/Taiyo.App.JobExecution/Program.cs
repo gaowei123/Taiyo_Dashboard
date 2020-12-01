@@ -33,8 +33,8 @@ namespace Taiyo.App.JobExecution
                 Common.Class.BLL.ProductionInventoryHistory inventoryBLL = new Common.Class.BLL.ProductionInventoryHistory();
 
 
-                //检查今天的数据是否保存过了.
-                var totalList = inventoryBLL.GetDayList(DateTime.Now.Date);
+                //检查数据是否保存过了.
+                var totalList = inventoryBLL.GetDayList(DateTime.Now.Date.AddDays(-1));
                 if (totalList != null && totalList.Count > 0)
                 {
                     DBHelp.Reports.LogFile.Log("Taiyo.App.JobExecution", "Today list already exist!");
@@ -45,17 +45,19 @@ namespace Taiyo.App.JobExecution
 
                 //按照dashbaord原本的逻辑生成当前的list.
                 DashboardTTS.ViewBusiness.OverallReport_ViewBusiness overallBLL = new DashboardTTS.ViewBusiness.OverallReport_ViewBusiness();
-                List<DashboardTTS.ViewModel.AllSectionInventory.report> list = overallBLL.GetAllSectionList(_startTime, "", "");
+                var  list = overallBLL.GetAllSectionResult(_startTime, "", "", DateTime.Now.AddHours(-8).Date);
                 if (list != null)
                 {
                     DBHelp.Reports.LogFile.Log("Taiyo.App.JobExecution", "Gerenate today list success, list.count = " + list.Count);
 
 
                     List<SqlCommand> cmdList = new List<SqlCommand>();
+                    //遍历list中每一个保存到表中.
                     foreach (var item in list)
                     {
-                        //遍历list中每一个保存到表中.
-                        cmdList.Add(inventoryBLL.AddCommand(ConvertModel(item)));
+                        //当天3点执行, 算作前一天的库存信息.
+                        item.Day = DateTime.Now.Date.AddDays(-1);
+                        cmdList.Add(inventoryBLL.AddCommand(item));
                     }
 
                     bool result = DBHelp.SqlDB.SetData_Rollback(cmdList);
@@ -72,39 +74,6 @@ namespace Taiyo.App.JobExecution
                 DBHelp.Reports.LogFile.Log("Taiyo.App.JobExecution", "Catch exception: " + ee.ToString());
             }
         }
-
-
-
-
-        /// <summary>
-        /// 将原本report的model, 和数据库的model, 做一个适配转换.
-        /// </summary>
-        private static Common.Class.Model.ProductionInventoryHistory ConvertModel(DashboardTTS.ViewModel.AllSectionInventory.report model)
-        {
-            Common.Class.Model.ProductionInventoryHistory dbModel = new Common.Class.Model.ProductionInventoryHistory();
-            dbModel.Day = DateTime.Now.Date;
-
-
-            dbModel.PartNumber = model.partNo;
-            dbModel.Model = model.model;
-            dbModel.MaterialName = model.materialName;
-            dbModel.Assembly = model.assembly ==null? 0: (int)model.assembly.Value;
-            dbModel.FG = model.fg ==null ? 0: (int)model.fg.Value;
-            dbModel.AfterPacking = model.afterPack == null ? 0 : (int)model.afterPack.Value;
-            dbModel.BeforePacking = model.beforePack == null ? 0 : (int)model.beforePack.Value;
-            dbModel.AfterWIP = model.afterWIP == null ? 0 : (int)model.afterWIP.Value;
-            dbModel.BeforeWIP = model.beforeWIP == null ? 0 : (int)model.beforeWIP.Value;
-            dbModel.AfterLaser = model.afterLaser == null ? 0 : (int)model.afterLaser.Value;
-            dbModel.BeforeLaser = model.beforeLaser == null ? 0 : (int)model.beforeLaser.Value;
-            dbModel.TCPaint = model.tcPaint == null ? 0 : (int)model.tcPaint.Value;
-            dbModel.MCPaint = model.mcPaint == null ? 0 : (int)model.mcPaint.Value;
-            dbModel.PrintSupplier = model.print == null ? 0 : (int)model.print.Value;
-            dbModel.UCPaint = model.ucPaint == null ? 0 : (int)model.ucPaint.Value;
-            dbModel.PaintRawPart = model.rawPart == null ? 0 : (int)model.rawPart.Value;
-
-
-            return dbModel;
-        }
-
+        
     }
 }

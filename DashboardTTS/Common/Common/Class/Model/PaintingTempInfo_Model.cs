@@ -73,6 +73,10 @@ namespace Common.Class.Model
         private double _humidityRear;
 
 
+        private DateTime? _annealingDate;
+        private string _annealingTime;
+
+
 
         public double temperateFront
         {
@@ -389,6 +393,32 @@ namespace Common.Class.Model
         {
             set { _paintingDate_3rd = value; }
             get { return _paintingDate_3rd; }
+        }
+
+        public DateTime? AnnealingDate
+        {
+            get
+            {
+                return _annealingDate;
+            }
+
+            set
+            {
+                _annealingDate = value;
+            }
+        }
+
+        public string AnnealingTime
+        {
+            get
+            {
+                return _annealingTime;
+            }
+
+            set
+            {
+                _annealingTime = value;
+            }
         }
 
 

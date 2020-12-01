@@ -32,10 +32,33 @@ namespace DashboardTTS.Controllers
         
 
 
-        public ActionResult GetAllSectionInventoryReport(string PartNo, string ShipTo)
+        public JsonResult GetAllSectionInventoryReport(string PartNo, string ShipTo, DateTime SearchDay)
         {
-            string result = vBLL.GetAllSectionResult(new DateTime(2020, 11, 25), PartNo, ShipTo);
-            return Content(result);
+
+            var list = vBLL.GetAllSectionResult(new DateTime(2020, 12, 1), PartNo, ShipTo, SearchDay);
+
+
+            var result = new List<Common.Class.Model.ProductionInventoryHistory>();
+
+
+            if (PartNo == "" && ShipTo == "")
+            {
+                result = list;              
+            }
+            else if (PartNo != "" && ShipTo == "")
+            {
+                result = (from a in list where a.PartNumber == PartNo select a).ToList();             
+            }
+            else if (PartNo == "" && ShipTo != "")
+            {
+                result = (from a in list where a.ShipTo == ShipTo select a).ToList();
+            }
+            else
+            {
+                result = (from a in list where a.ShipTo == ShipTo && a.Model == PartNo select a).ToList();
+            }
+
+            return Json(result);
         }
 
 

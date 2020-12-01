@@ -29,495 +29,238 @@ namespace DashboardTTS.ViewBusiness
 
 
         #region all section inventory report 
-        public string GetAllSectionResult(DateTime dStartTime, string sPartNo, string sShipTo)
+        public List<Common.Class.Model.ProductionInventoryHistory> GetAllSectionResult(DateTime dStartTime, string sPartNo, string sShipTo, DateTime dSearchingDay)
         {
             try
             {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                List<Common.Class.Model.ProductionInventoryHistory> reportList = new List<Common.Class.Model.ProductionInventoryHistory>();
 
 
-                //pqc bom info.
-                List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
-                if (bomList == null) return "";
+                //先从ProductionInventoryHistory表中查找 是否有自动生成的
+                Common.Class.BLL.ProductionInventoryHistory bll = new Common.Class.BLL.ProductionInventoryHistory();
+                reportList = bll.GetDayList(dSearchingDay);
 
-
-
-                //主表信息,   model, part no, material name
-                List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
-                if (mainList == null) return null;
-
-
-
-                //before laser  
-                //详细到material no一条的记录. 需要join pqcbom在 group by material name
-                List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
-
-
-                //after laser 
-                //详细到material no一条的记录, 需要join pqcbom在 group by material name, 并排除 jobStatus 是done的. 
-                List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
-
-
-                //before wip,  详细到material name, 直接join
-                List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
-
-
-                //after wip, 详细到material name, 直接join
-                List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
-
-
-
-                //pqc bin, 详细到material name, 通过process 区分出 check complete qty (before pack),   没pack完的(after pack)
-                List<ViewModel.AllSectionInventory.pqcBinInfo> pqcBinInfo = GetPackInventory(dStartTime);
-                var beforePacking = from a in pqcBinInfo where a.processes == "CHECK#1" || a.processes == "CHECK#2" select a;
-                var afterPacking = from a in pqcBinInfo where a.processes == "PACKING" select a;
-
-
-                //FG, Assembly list, 通过material qty/outerboxqty, 获取能被整除的数量作为fg,assembly的数量.
-                var fgAssemblyList = GetFgAssembly();
-
-
-
-
-                //join 
-                List<ViewModel.AllSectionInventory.report> reportList = new List<ViewModel.AllSectionInventory.report>();
-                foreach (var material in mainList)
+                if (reportList == null || reportList.Count == 0)
                 {
+                    #region 找不到当天的记录则实时生成
+                    //pqc bom info.
+                    List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+                    if (bomList == null) return null;
 
 
-                    //获取该part的 bom detail list.   (material no一条)
-                    var tempBomList = (from a in bomList where a.partNo == material.partNo && a.materialName == material.materialName select a).ToList();
-                    if (tempBomList == null || tempBomList.Count == 0)
+
+                    //主表信息,   model, part no, material name
+                    List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
+                    if (mainList == null) return null;
+
+
+
+                    //before laser  
+                    //详细到material no一条的记录. 需要join pqcbom在 group by material name
+                    List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
+
+
+                    //after laser 
+                    //详细到material no一条的记录, 需要join pqcbom在 group by material name, 并排除 jobStatus 是done的. 
+                    List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
+
+
+                    //before wip,  详细到material name, 直接join
+                    List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
+
+
+                    //after wip, 详细到material name, 直接join
+                    List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
+
+
+
+                    //pqc bin, 详细到material name, 通过process 区分出 check complete qty (before pack),   没pack完的(after pack)
+                    List<ViewModel.AllSectionInventory.pqcBinInfo> pqcBinInfo = GetPackInventory(dStartTime);
+                    var beforePacking = from a in pqcBinInfo where a.processes == "CHECK#1" || a.processes == "CHECK#2" select a;
+                    var afterPacking = from a in pqcBinInfo where a.processes == "PACKING" select a;
+
+
+                    //FG, Assembly list, 通过material qty/outerboxqty, 获取能被整除的数量作为fg,assembly的数量.
+                    var fgAssemblyList = GetFgAssembly();
+
+
+                    reportList = new List<Common.Class.Model.ProductionInventoryHistory>();
+
+                    foreach (var material in mainList)
                     {
-                        DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllSectionList, can not find pqc bom, part no:[" + material.partNo + "], material name :[" + material.materialName + "]");
-                        continue;
-                    }
+
+
+                        //获取该part的 bom detail list.   (material no一条)
+                        var tempBomList = (from a in bomList where a.partNo == material.partNo && a.materialName == material.materialName select a).ToList();
+                        if (tempBomList == null || tempBomList.Count == 0)
+                        {
+                            DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllSectionList, can not find pqc bom, part no:[" + material.partNo + "], material name :[" + material.materialName + "]");
+                            continue;
+                        }
 
 
 
 
 
-                    #region before laser
-                    //laser join pqcbom,  在按照pqcbom的materialname group by.
-                    var tempLaserDetailList = from a in laserInventory
+                        #region before laser
+                        //laser join pqcbom,  在按照pqcbom的materialname group by.
+                        var tempLaserDetailList = from a in laserInventory
+                                                  where a.partNo == material.partNo
+                                                  join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
+                                                  select new
+                                                  {
+                                                      a,
+                                                      b
+                                                  };
+
+                        //group by material name
+                        var beforeLaserModel = (from a in tempLaserDetailList
+                                                where a.b.materialName == material.materialName
+                                                group a by a.b.materialName into summary
+                                                select new
+                                                {
+                                                    summary.Key,
+                                                    qty = summary.Max(p => p.a.qty)
+                                                }).FirstOrDefault();
+                        #endregion
+
+
+
+
+
+
+
+                        #region after laser
+                        //laser join pqcbom, 在按照pqcbom的materialname group by.
+                        var tempLaserOutputDetialList = from a in laserOutputList
+                                                        where a.partNo == material.partNo
+                                                        join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
+                                                        select new
+                                                        {
+                                                            a,
+                                                            b
+                                                        };
+
+
+                        //group by material name
+                        var afterLaserModel = (from a in tempLaserOutputDetialList
+                                               where a.b.materialName == material.materialName
+                                               group a by a.b.materialName into summary
+                                               select new
+                                               {
+                                                   summary.Key,
+                                                   qty = summary.Max(p => p.a.okQty + p.a.ngQty)
+                                               }).FirstOrDefault();
+                        #endregion
+
+
+
+
+
+
+                        //before wip
+                        var beforeWIPModel = (from a in wipInventoryList
                                               where a.partNo == material.partNo
-                                              join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
-                                              select new
-                                              {
-                                                  a,
-                                                  b
-                                              };
-
-                    //group by material name
-                    var beforeLaserModel = (from a in tempLaserDetailList
-                                            where a.b.materialName == material.materialName
-                                            group a by a.b.materialName into summary
-                                            select new
-                                            {
-                                                summary.Key,
-                                                qty = summary.Max(p => p.a.qty)
-                                            }).FirstOrDefault();
-                    #endregion
-
-
-
-
-
-
-
-                    #region after laser
-                    //laser join pqcbom, 在按照pqcbom的materialname group by.
-                    var tempLaserOutputDetialList = from a in laserOutputList
-                                                    where a.partNo == material.partNo
-                                                    join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
-                                                    select new
-                                                    {
-                                                        a,
-                                                        b
-                                                    };
-
-
-                    //group by material name
-                    var afterLaserModel = (from a in tempLaserOutputDetialList
-                                           where a.b.materialName == material.materialName
-                                           group a by a.b.materialName into summary
-                                           select new
-                                           {
-                                               summary.Key,
-                                               qty = summary.Max(p => p.a.okQty + p.a.ngQty)
-                                           }).FirstOrDefault();
-                    #endregion
-
-
-
-
-
-
-                    //before wip
-                    var beforeWIPModel = (from a in wipInventoryList
-                                          where a.partNo == material.partNo
-                                           && a.materialName == material.materialName
-                                          select a).FirstOrDefault();
-
-
-
-
-                    //after wip
-                    var afterWIPModel = (from a in wipOutputList
-                                         where a.partNo == material.partNo
-                                         && a.materialName == material.materialName
-                                         select a).FirstOrDefault();
-
-
-
-
-                    //beforepacking
-                    var beforePackingModel = (from a in beforePacking
-                                              where a.partNo == material.partNo
-                                              && a.materialName == material.materialName
+                                               && a.materialName == material.materialName
                                               select a).FirstOrDefault();
 
 
 
 
-                    //afterpacking
-                    var afterPackingModel = (from a in afterPacking
+                        //after wip
+                        var afterWIPModel = (from a in wipOutputList
                                              where a.partNo == material.partNo
                                              && a.materialName == material.materialName
-                                             join b in tempBomList on new { a.partNo, a.materialName } equals new { b.partNo, b.materialName }
-                                             select new {
-                                                 a.materialName,
-                                                 qty = a.qty % b.outerBoxQty
-                                             }).FirstOrDefault();
-
-
-
-                    
-                    var fgAssemblyModel = (from a in fgAssemblyList
-                                           where a.partNo == material.partNo
-                                           && a.materialName == material.materialName
-                                           select a).FirstOrDefault();
+                                             select a).FirstOrDefault();
 
 
 
 
-
-                    ViewModel.AllSectionInventory.report reportModel = new ViewModel.AllSectionInventory.report();
-                    reportModel.model = material.model;
-                    reportModel.partNo = material.partNo;
-                    reportModel.materialName = material.materialName;
-                    reportModel.shipTo = material.shipTo;
-
-                    reportModel.rawPart = null;
-                    reportModel.ucPaint = null;
-                    reportModel.mcPaint = null;
-                    reportModel.print = null;
-                    reportModel.tcPaint = null;
-
-                    if (beforeLaserModel != null) reportModel.beforeLaser = beforeLaserModel.qty;
-                    if (afterLaserModel != null) reportModel.afterLaser = afterLaserModel.qty;
-                    if (beforeWIPModel != null) reportModel.beforeWIP = beforeWIPModel.inventoryQty;
-                    if (afterWIPModel != null) reportModel.afterWIP = afterWIPModel.passQty + afterWIPModel.rejectQty;
-                    if (beforePackingModel != null) reportModel.beforePack = beforePackingModel.qty;
-                    if (afterPackingModel != null) reportModel.afterPack = afterPackingModel.qty;
+                        //beforepacking
+                        var beforePackingModel = (from a in beforePacking
+                                                  where a.partNo == material.partNo
+                                                  && a.materialName == material.materialName
+                                                  select a).FirstOrDefault();
 
 
-                     if (fgAssemblyModel != null)
-                    {
-                        reportModel.fg = fgAssemblyModel.fg;
-                        reportModel.assembly = fgAssemblyModel.assembly;
+
+
+                        //afterpacking
+                        var afterPackingModel = (from a in afterPacking
+                                                 where a.partNo == material.partNo
+                                                 && a.materialName == material.materialName
+                                                 join b in tempBomList on new { a.partNo, a.materialName } equals new { b.partNo, b.materialName }
+                                                 select new
+                                                 {
+                                                     a.materialName,
+                                                     qty = a.qty % b.outerBoxQty
+                                                 }).FirstOrDefault();
+
+
+
+
+                        var fgAssemblyModel = (from a in fgAssemblyList
+                                               where a.partNo == material.partNo
+                                               && a.materialName == material.materialName
+                                               select a).FirstOrDefault();
+
+
+
+
+
+
+                        Common.Class.Model.ProductionInventoryHistory reportModel = new Common.Class.Model.ProductionInventoryHistory();
+                        reportModel.Model = material.model;
+                        reportModel.PartNumber = material.partNo;
+                        reportModel.MaterialName = material.materialName;
+                        reportModel.ShipTo = material.shipTo;
+                        reportModel.PaintRawPart = null;
+                        reportModel.UCPaint = null;
+                        reportModel.MCPaint = null;
+                        reportModel.PrintSupplier = null;
+                        reportModel.TCPaint = null;
+
+                        if (beforeLaserModel != null) reportModel.BeforeLaser = (int)beforeLaserModel.qty;
+                        if (afterLaserModel != null) reportModel.AfterLaser = (int)afterLaserModel.qty;
+                        if (beforeWIPModel != null) reportModel.BeforeWIP = (int)beforeWIPModel.inventoryQty;
+                        if (afterWIPModel != null) reportModel.AfterWIP = (int)afterWIPModel.passQty + (int)afterWIPModel.rejectQty;
+                        if (beforePackingModel != null) reportModel.BeforePacking = (int)beforePackingModel.qty;
+                        if (afterPackingModel != null) reportModel.AfterPacking = (int)afterPackingModel.qty;
+
+
+                        if (fgAssemblyModel != null)
+                        {
+                            reportModel.FG = (int)fgAssemblyModel.fg;
+                            reportModel.Assembly = (int)fgAssemblyModel.assembly;
+                        }
+
+                        
+
+
+                        reportList.Add(reportModel);
                     }
-
-  
-
-
-
-                    reportList.Add(reportModel);
+                    #endregion
                 }
+                
 
 
-                JavaScriptSerializer js = new JavaScriptSerializer();
 
                 var orderbyList = from a in reportList
-                                  where a.afterLaser != null
-                                  || a.beforeLaser != null
-                                  || a.afterWIP != null
-                                  || a.beforeWIP != null
-                                  || a.afterPack != null
-                                  || a.beforePack != null
-                                  orderby a.model ascending
+                                  where a.AfterLaser != null
+                                  || a.BeforePacking != null
+                                  || a.AfterWIP != null
+                                  || a.BeforeWIP != null
+                                  || a.AfterPacking != null
+                                  || a.BeforePacking != null
+                                  || a.FG != null
+                                  || a.Assembly != null
+                                  orderby a.Model ascending
                                   select a;
 
 
-                if (sPartNo == "" && sShipTo == "")
-                {
-                    return js.Serialize(orderbyList);
-                }
-                else if (sPartNo != "" && sShipTo == "")
-                {
-                    var result = from a in orderbyList where a.partNo == sPartNo select a;
-                    return js.Serialize(result);
-                }
-                else if (sPartNo == "" && sShipTo != "")
-                {
-                    var result = from a in orderbyList where a.shipTo == sShipTo select a;
-                    return js.Serialize(result);
-                }
-                else
-                {
-                    var result = from a in orderbyList where a.shipTo == sShipTo && a.model == sPartNo select a;
-                    return js.Serialize(result);
-                }
 
-            }
-            catch (Exception ee)
-            {
-                DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, Catch Exception: " + ee.ToString());
-                return "";
-            }
-        }
-
-
-
-        public List<ViewModel.AllSectionInventory.report> GetAllSectionList(DateTime dStartTime, string sPartNo, string sShipTo)
-        {
-            try
-            {
-
-
-                //pqc bom info.
-                List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
-                if (bomList == null) return null;
-
-
-
-                //主表信息,   model, part no, material name
-                List<ViewModel.AllSectionInventory.mainMaterialList> mainList = GetMainMaterialList(dStartTime);
-                if (mainList == null) return null;
-
-
-
-                //before laser  
-                //详细到material no一条的记录. 需要join pqcbom在 group by material name
-                List<ViewModel.AllSectionInventory.laserInventoryInfo> laserInventory = GetLaserInventory(dStartTime);
-
-
-                //after laser 
-                //详细到material no一条的记录, 需要join pqcbom在 group by material name, 并排除 jobStatus 是done的. 
-                List<ViewModel.AllSectionInventory.laserOutputInfo> laserOutputList = GetLaserOutput(dStartTime);
-
-
-                //before wip,  详细到material name, 直接join
-                List<ViewModel.AllSectionInventory.wipInventoryInfo> wipInventoryList = GetWIPInventory(dStartTime);
-
-
-                //after wip, 详细到material name, 直接join
-                List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
-
-
-
-                //pqc bin, 详细到material name, 通过process 区分出 check complete qty (before pack),   没pack完的(after pack)
-                List<ViewModel.AllSectionInventory.pqcBinInfo> pqcBinInfo = GetPackInventory(dStartTime);
-                var beforePacking = from a in pqcBinInfo where a.processes == "CHECK#1" || a.processes == "CHECK#2" select a;
-                var afterPacking = from a in pqcBinInfo where a.processes == "PACKING" select a;
-
-
-                //FG, Assembly list, 通过material qty/outerboxqty, 获取能被整除的数量作为fg,assembly的数量.
-                var fgAssemblyList = GetFgAssembly();
-
-
-
-
-                //join 
-                List<ViewModel.AllSectionInventory.report> reportList = new List<ViewModel.AllSectionInventory.report>();
-                foreach (var material in mainList)
-                {
-
-
-                    //获取该part的 bom detail list.   (material no一条)
-                    var tempBomList = (from a in bomList where a.partNo == material.partNo && a.materialName == material.materialName select a).ToList();
-                    if (tempBomList == null || tempBomList.Count == 0)
-                    {
-                        DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllSectionList, can not find pqc bom, part no:[" + material.partNo + "], material name :[" + material.materialName + "]");
-                        continue;
-                    }
-
-
-
-
-
-                    #region before laser
-                    //laser join pqcbom,  在按照pqcbom的materialname group by.
-                    var tempLaserDetailList = from a in laserInventory
-                                              where a.partNo == material.partNo
-                                              join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
-                                              select new
-                                              {
-                                                  a,
-                                                  b
-                                              };
-
-                    //group by material name
-                    var beforeLaserModel = (from a in tempLaserDetailList
-                                            where a.b.materialName == material.materialName
-                                            group a by a.b.materialName into summary
-                                            select new
-                                            {
-                                                summary.Key,
-                                                qty = summary.Max(p => p.a.qty)
-                                            }).FirstOrDefault();
-                    #endregion
-
-
-
-
-
-
-
-                    #region after laser
-                    //laser join pqcbom, 在按照pqcbom的materialname group by.
-                    var tempLaserOutputDetialList = from a in laserOutputList
-                                                    where a.partNo == material.partNo
-                                                    join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
-                                                    select new
-                                                    {
-                                                        a,
-                                                        b
-                                                    };
-
-
-                    //group by material name
-                    var afterLaserModel = (from a in tempLaserOutputDetialList
-                                           where a.b.materialName == material.materialName
-                                           group a by a.b.materialName into summary
-                                           select new
-                                           {
-                                               summary.Key,
-                                               qty = summary.Max(p => p.a.okQty + p.a.ngQty)
-                                           }).FirstOrDefault();
-                    #endregion
-
-
-
-
-
-
-                    //before wip
-                    var beforeWIPModel = (from a in wipInventoryList
-                                          where a.partNo == material.partNo
-                                           && a.materialName == material.materialName
-                                          select a).FirstOrDefault();
-
-
-
-
-                    //after wip
-                    var afterWIPModel = (from a in wipOutputList
-                                         where a.partNo == material.partNo
-                                         && a.materialName == material.materialName
-                                         select a).FirstOrDefault();
-
-
-
-
-                    //beforepacking
-                    var beforePackingModel = (from a in beforePacking
-                                              where a.partNo == material.partNo
-                                              && a.materialName == material.materialName
-                                              select a).FirstOrDefault();
-
-
-
-
-                    //afterpacking
-                    var afterPackingModel = (from a in afterPacking
-                                             where a.partNo == material.partNo
-                                             && a.materialName == material.materialName
-                                             join b in tempBomList on new { a.partNo, a.materialName } equals new { b.partNo, b.materialName }
-                                             select new
-                                             {
-                                                 a.materialName,
-                                                 qty = a.qty % b.outerBoxQty
-                                             }).FirstOrDefault();
-
-
-
-
-                    var fgAssemblyModel = (from a in fgAssemblyList
-                                           where a.partNo == material.partNo
-                                           && a.materialName == material.materialName
-                                           select a).FirstOrDefault();
-
-
-
-
-
-                    ViewModel.AllSectionInventory.report reportModel = new ViewModel.AllSectionInventory.report();
-                    reportModel.model = material.model;
-                    reportModel.partNo = material.partNo;
-                    reportModel.materialName = material.materialName;
-                    reportModel.shipTo = material.shipTo;
-
-                    reportModel.rawPart = null;
-                    reportModel.ucPaint = null;
-                    reportModel.mcPaint = null;
-                    reportModel.print = null;
-                    reportModel.tcPaint = null;
-
-                    if (beforeLaserModel != null) reportModel.beforeLaser = beforeLaserModel.qty;
-                    if (afterLaserModel != null) reportModel.afterLaser = afterLaserModel.qty;
-                    if (beforeWIPModel != null) reportModel.beforeWIP = beforeWIPModel.inventoryQty;
-                    if (afterWIPModel != null) reportModel.afterWIP = afterWIPModel.passQty + afterWIPModel.rejectQty;
-                    if (beforePackingModel != null) reportModel.beforePack = beforePackingModel.qty;
-                    if (afterPackingModel != null) reportModel.afterPack = afterPackingModel.qty;
-
-
-                    if (fgAssemblyModel != null)
-                    {
-                        reportModel.fg = fgAssemblyModel.fg;
-                        reportModel.assembly = fgAssemblyModel.assembly;
-                    }
-
-
-
-
-
-                    reportList.Add(reportModel);
-                }
-
-
-                JavaScriptSerializer js = new JavaScriptSerializer();
-
-                var orderbyList = from a in reportList
-                                  where a.afterLaser != null
-                                  || a.beforeLaser != null
-                                  || a.afterWIP != null
-                                  || a.beforeWIP != null
-                                  || a.afterPack != null
-                                  || a.beforePack != null
-                                  orderby a.model ascending
-                                  select a;
-
-
-                if (sPartNo == "" && sShipTo == "")
-                {
-                    return orderbyList.ToList();
-                }
-                else if (sPartNo != "" && sShipTo == "")
-                {
-                    var result = from a in orderbyList where a.partNo == sPartNo select a;
-                    return result.ToList();
-                }
-                else if (sPartNo == "" && sShipTo != "")
-                {
-                    var result = from a in orderbyList where a.shipTo == sShipTo select a;
-                    return result.ToList();
-                }
-                else
-                {
-                    var result = from a in orderbyList where a.shipTo == sShipTo && a.model == sPartNo select a;
-                    return result.ToList();
-                }
-
+                return orderbyList.ToList();
             }
             catch (Exception ee)
             {

@@ -85,6 +85,9 @@
 
         setPartNoDDL($('#ddlPartNo'), 'PQC');
 
+        let date = new Date();
+        $('#txtDate').val(dateFormat('yyyy-MM-dd', date))
+
         search();
     });
 
@@ -107,6 +110,7 @@
       
             queryParams: function (params) { 
                 return {
+                    SearchDay: $("#txtDate").val(),
                     PartNo: $("#ddlPartNo").val(),
                     ShipTo: $("#ddlShipTo").val()
                 }
@@ -141,7 +145,7 @@
 
             columns: [
             {
-                field: 'model',
+                field: 'Model',
                 title: 'Model',
                 align: 'center',
                 valign: 'middle',
@@ -150,34 +154,34 @@
                 }
             },
             {
-                field: 'partNo',
+                field: 'PartNumber',
                 title: 'Part No',
                 align: 'center',
                 valign: 'middle'
             },
             {
-                field: 'materialName',
+                field: 'MaterialName',
                 title: 'Material</br>Name',
                 align: 'center',
                 valign: 'middle'
             },
             { 
-                field: 'assembly',
+                field: 'Assembly',
                 title: 'Assembly',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].assembly != null) {
-                            count += Number(value[i].assembly);
+                        if (value[i].Assembly != null) {
+                            count += Number(value[i].Assembly);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'fg',
+                field: 'FG',
                 title: 'FG',
                 align: 'center',
                 valign: 'middle',
@@ -185,173 +189,173 @@
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].fg != null) {
-                            count += Number(value[i].fg);
+                        if (value[i].FG != null) {
+                            count += Number(value[i].FG);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'afterPack',
+                field: 'AfterPacking',
                 title: 'After</br>Packing',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].afterPack != null) {
-                            count += Number(value[i].afterPack);
+                        if (value[i].AfterPacking != null) {
+                            count += Number(value[i].AfterPacking);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'beforePack',
+                field: 'BeforePacking',
                 title: 'Before</br>Packing',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].beforePack != null) {
-                            count += Number(value[i].beforePack);
+                        if (value[i].BeforePacking != null) {
+                            count += Number(value[i].BeforePacking);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'afterWIP',
+                field: 'AfterWIP',
                 title: 'After</br>WIP',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].afterWIP != null) {
-                            count += Number(value[i].afterWIP);
+                        if (value[i].AfterWIP != null) {
+                            count += Number(value[i].AfterWIP);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'beforeWIP',
+                field: 'BeforeWIP',
                 title: 'Before</br>WIP',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].beforeWIP != null) {
-                            count += Number(value[i].beforeWIP);
+                        if (value[i].BeforeWIP != null) {
+                            count += Number(value[i].BeforeWIP);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'afterLaser',
+                field: 'AfterLaser',
                 title: 'After</br>Laser',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].afterLaser != null) {
-                            count += Number(value[i].afterLaser);
+                        if (value[i].AfterLaser != null) {
+                            count += Number(value[i].AfterLaser);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'beforeLaser',
+                field: 'BeforeLaser',
                 title: 'Before</br>Laser',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].beforeLaser != null) {
-                            count += Number(value[i].beforeLaser);
+                        if (value[i].BeforeLaser != null) {
+                            count += Number(value[i].BeforeLaser);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'tcPaint',
+                field: 'TCPaint',
                 title: 'T/C</br>Paint',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].tcPaint != null) {
-                            count += Number(value[i].tcPaint);
+                        if (value[i].TCPaint != null) {
+                            count += Number(value[i].TCPaint);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'mcPaint',
+                field: 'MCPaint',
                 title: 'M/C</br>Paint',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].mcPaint != null) {
-                            count += Number(value[i].mcPaint);
+                        if (value[i].MCPaint != null) {
+                            count += Number(value[i].MCPaint);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'print',
+                field: 'PrintSupplier',
                 title: 'Print</br>Supplier',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].print != null) {
-                            count += Number(value[i].print);
+                        if (value[i].PrintSupplier != null) {
+                            count += Number(value[i].PrintSupplier);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'ucPaint',
+                field: 'UCPaint',
                 title: 'U/C</br>Paint',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].ucPaint != null) {
-                            count += Number(value[i].ucPaint);
+                        if (value[i].UCPaint != null) {
+                            count += Number(value[i].UCPaint);
                         }
                     }
                     return count;
                 }
             },
             {
-                field: 'rawPart',
+                field: 'PaintRawPart',
                 title: 'Paint</br>Raw Part',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (value) {
                     var count = 0;
                     for (var i in value) {
-                        if (value[i].rawPartMoulding != null) {
-                            count += Number(value[i].rawPartMoulding);
+                        if (value[i].PaintRawPart != null) {
+                            count += Number(value[i].PaintRawPart);
                         }
                     }
                     return count;

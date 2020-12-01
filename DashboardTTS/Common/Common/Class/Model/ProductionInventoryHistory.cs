@@ -13,6 +13,7 @@ namespace Common.Class.Model
 		private int? _id;
 		private DateTime? _day;
 		private string _partnumber;
+        private string _shipto;
 		private string _model;
 		private string _materialname;
 		private int? _assembly;
@@ -172,8 +173,21 @@ namespace Common.Class.Model
 			set{ _paintrawpart=value;}
 			get{return _paintrawpart;}
 		}
-		#endregion Model
 
-	}
+        public string ShipTo
+        {
+            get
+            {
+                return _shipto;
+            }
+
+            set
+            {
+                _shipto = value;
+            }
+        }
+        #endregion Model
+
+    }
 }
 

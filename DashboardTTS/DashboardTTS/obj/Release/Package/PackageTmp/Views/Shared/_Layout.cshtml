@@ -272,10 +272,23 @@
 
 
     <script type="text/javascript">
-        //将所有input框的 autocomplete off.
+        
         $(function () {
+
+            //将所有input框的 autocomplete off.
             $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
+
+            //一加载就执行, 防止第一次加载的时候, 出现菜单栏换行的情况. 
+            let width = $(window).width();
+            if (width < 1100 && width > 768) {
+                $('#imglogo').hide();
+            } else if (width <= 768) {
+                $('#imglogo').show();
+            } else {
+                $('#imglogo').show();
+            }
         });
+
         $(window).resize(function () {
             let width = $(window).width();
             if (width < 1100 && width > 768) {

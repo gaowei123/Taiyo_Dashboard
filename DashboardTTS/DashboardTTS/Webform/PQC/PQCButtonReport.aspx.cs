@@ -17,20 +17,17 @@ namespace DashboardTTS.Webform.PQC
                 try
                 {
                     this.lblUserHeader.Text = "PQC Button Report";                 
-
-
+                    
                     //周日, 周一显示 上周五的. 默认显示前一天的.
                     DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
                     this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");
 
 
                     BtnGenerate_Click(new object(), new EventArgs());
-
                 }
                 catch (Exception ex)
                 {
-                    DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "Page_Load error : " + ex.ToString());
-                   
+                    DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "Page_Load error : " + ex.ToString());                   
                 }
             }
         }
@@ -58,10 +55,8 @@ namespace DashboardTTS.Webform.PQC
 
                 DashboardTTS.ViewBusiness.ButtonReport_ViewBusiness vBLL = new ViewBusiness.ButtonReport_ViewBusiness();
                 DataTable dtReport = vBLL.GetResultDt(DateFrom, DateTo, sDescription, partNumber, JobNo, model, supplier, color, coating, reportType, out modelForDisplay);
-
                 
                 Display(dtReport, modelForDisplay);
-
             }
             catch (Exception ex)
             {

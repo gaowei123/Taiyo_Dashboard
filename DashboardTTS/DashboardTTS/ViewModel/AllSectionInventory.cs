@@ -78,39 +78,7 @@ namespace DashboardTTS.ViewModel
             public string materialName { get; set; }
             public double qty { get; set; }
         }
-        
-
-        public class report
-        {
-            public string model { get; set; }
-            public string partNo { get; set; }         
-            public string materialName { get; set; }
-            public string shipTo { get; set; }
-
-
-
-            public double? rawPart { get; set; }
-            public double? ucPaint { get; set; }
-            public double? mcPaint { get; set; }
-            public double? print { get; set; }
-            public double? tcPaint { get; set; }
-
-
-            public double? beforeLaser { get; set; }
-            public double? afterLaser { get; set; }
-            public double? beforeWIP { get; set; }
-            public double? afterWIP { get; set; }
-            public double? beforePack { get; set; }
-            public double? afterPack { get; set; }
-
-
-            public double? fg { get; set; }
-            public double? assembly { get; set; }
-            
-
-
-        }
-
+       
 
     }
 }

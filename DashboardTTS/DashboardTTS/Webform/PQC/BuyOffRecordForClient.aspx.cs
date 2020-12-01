@@ -145,7 +145,6 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-
                 #endregion
 
 
@@ -248,6 +247,7 @@ namespace DashboardTTS.Webform.PQC
 
 
 
+
                     Common.Class.Model.PaintingTempInfo_Model model = new Common.Class.Model.PaintingTempInfo_Model();
 
                     model.jobNumber = txtJobNumber.Text;
@@ -262,6 +262,19 @@ namespace DashboardTTS.Webform.PQC
                     model.laserOperator = laserOperator;
                     model.laserMachine = laserMachine;
                     model.laserDate = laserDate;
+
+
+
+                    //2020-12-1, 新增字段保存 annealingDate & annealingTime
+                    if (this.txtAnnealingDate.Text != string.Empty)
+                    {
+                        model.AnnealingDate = DateTime.Parse(this.txtAnnealingDate.Text);
+                    }
+                    model.AnnealingTime = this.txtAnnealingTime.Text;
+
+
+
+
 
 
 

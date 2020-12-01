@@ -90,9 +90,9 @@ namespace Common.Class.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into PaintingTempInfo(");
-            strSql.Append("jobNumber,lotNo,partNumber,materialName,lotQty,setupRejQty,qaTestQty,coat_1st,pMachine_1st,coat_2nd,pMachine_2nd,coat_3rd,pMachine_3rd,paintingDate,UCDate,TCDate,laserMachine,laserOperator,laserDate,MFGDate,createdTime,updatedTime,recordBy,paintingDate_1st,paintingDate_2nd,paintingDate_3rd,thickness_1st,thickness_2nd,thickness_3rd,paintLot_1st,paintLot_2nd,paintLot_3rd,thinnersLot_1st,thinnersLot_2nd,thinnersLot_3rd,paintingPIC_1st,paintingPIC_2nd,paintingPIC_3rd,paintingRunningTime_1st,paintingRunningTime_2nd,paintingRunningTime_3rd,paintingOvenTime_1st,paintingOvenTime_2nd,paintingOvenTime_3rd,CheckProcess,temperatureFront,temperatureRear,humidityFront,humidityRear )");
+            strSql.Append("jobNumber,lotNo,partNumber,materialName,lotQty,setupRejQty,qaTestQty,coat_1st,pMachine_1st,coat_2nd,pMachine_2nd,coat_3rd,pMachine_3rd,paintingDate,UCDate,TCDate,laserMachine,laserOperator,laserDate,MFGDate,createdTime,updatedTime,recordBy,paintingDate_1st,paintingDate_2nd,paintingDate_3rd,thickness_1st,thickness_2nd,thickness_3rd,paintLot_1st,paintLot_2nd,paintLot_3rd,thinnersLot_1st,thinnersLot_2nd,thinnersLot_3rd,paintingPIC_1st,paintingPIC_2nd,paintingPIC_3rd,paintingRunningTime_1st,paintingRunningTime_2nd,paintingRunningTime_3rd,paintingOvenTime_1st,paintingOvenTime_2nd,paintingOvenTime_3rd,CheckProcess,temperatureFront,temperatureRear,humidityFront,humidityRear,annealingDate,annealingTime )");
             strSql.Append(" values (");
-            strSql.Append("@jobNumber,@lotNo,@partNumber,@materialName,@lotQty,@setupRejQty,@qaTestQty,@coat_1st,@pMachine_1st,@coat_2nd,@pMachine_2nd,@coat_3rd,@pMachine_3rd,@paintingDate,@UCDate,@TCDate,@laserMachine,@laserOperator,@laserDate,@MFGDate,@createdTime,@updatedTime,@recordBy,@paintingDate_1st,@paintingDate_2nd,@paintingDate_3rd,@thickness_1st,@thickness_2nd,@thickness_3rd,@paintLot_1st,@paintLot_2nd,@paintLot_3rd,@thinnersLot_1st,@thinnersLot_2nd,@thinnersLot_3rd,@paintingPIC_1st,@paintingPIC_2nd,@paintingPIC_3rd,@paintingRunningTime_1st,@paintingRunningTime_2nd,@paintingRunningTime_3rd,@paintingOvenTime_1st,@paintingOvenTime_2nd,@paintingOvenTime_3rd, @CheckProcess,@temperatureFront,@temperatureRear,@humidityFront,@humidityRear )");
+            strSql.Append("@jobNumber,@lotNo,@partNumber,@materialName,@lotQty,@setupRejQty,@qaTestQty,@coat_1st,@pMachine_1st,@coat_2nd,@pMachine_2nd,@coat_3rd,@pMachine_3rd,@paintingDate,@UCDate,@TCDate,@laserMachine,@laserOperator,@laserDate,@MFGDate,@createdTime,@updatedTime,@recordBy,@paintingDate_1st,@paintingDate_2nd,@paintingDate_3rd,@thickness_1st,@thickness_2nd,@thickness_3rd,@paintLot_1st,@paintLot_2nd,@paintLot_3rd,@thinnersLot_1st,@thinnersLot_2nd,@thinnersLot_3rd,@paintingPIC_1st,@paintingPIC_2nd,@paintingPIC_3rd,@paintingRunningTime_1st,@paintingRunningTime_2nd,@paintingRunningTime_3rd,@paintingOvenTime_1st,@paintingOvenTime_2nd,@paintingOvenTime_3rd, @CheckProcess,@temperatureFront,@temperatureRear,@humidityFront,@humidityRear,@annealingDate,@annealingTime)");
             SqlParameter[] parameters = {
                     new SqlParameter("@jobNumber", SqlDbType.VarChar,50),
                     new SqlParameter("@lotNo", SqlDbType.VarChar,50),
@@ -146,7 +146,9 @@ namespace Common.Class.DAL
                     new SqlParameter("@temperatureFront", SqlDbType.Decimal),
                     new SqlParameter("@temperatureRear", SqlDbType.Decimal),
                     new SqlParameter("@humidityFront", SqlDbType.Decimal),
-                    new SqlParameter("@humidityRear",SqlDbType.Decimal)
+                    new SqlParameter("@humidityRear",SqlDbType.Decimal),
+                    new SqlParameter("@annealingDate",SqlDbType.DateTime2),
+                    new SqlParameter("@annealingTime",SqlDbType.VarChar,100)
 
             };
 
@@ -206,6 +208,9 @@ namespace Common.Class.DAL
             parameters[46].Value = model.temperateRear == null ? (object)DBNull.Value : model.temperateRear;
             parameters[47].Value = model.humidityFront == null ? (object)DBNull.Value : model.humidityFront;
             parameters[48].Value = model.humidityRear == null ? (object)DBNull.Value : model.humidityRear;
+
+            parameters[49].Value = model.AnnealingDate == null ? (object)DBNull.Value : model.AnnealingDate;
+            parameters[50].Value = model.AnnealingTime == null ? (object)DBNull.Value : model.AnnealingTime;
 
 
 

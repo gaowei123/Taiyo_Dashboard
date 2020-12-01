@@ -79,9 +79,9 @@ namespace Common.Class.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into ProductionInventoryHistory(");
-            strSql.Append("Day,PartNumber,Model,MaterialName,Assembly,FG,AfterPacking,BeforePacking,AfterWIP,BeforeWIP,AfterLaser,BeforeLaser,TCPaint,MCPaint,PrintSupplier,UCPaint,PaintRawPart)");
+            strSql.Append("Day,PartNumber,Model,MaterialName,Assembly,FG,AfterPacking,BeforePacking,AfterWIP,BeforeWIP,AfterLaser,BeforeLaser,TCPaint,MCPaint,PrintSupplier,UCPaint,PaintRawPart,ShipTo)");
             strSql.Append(" values (");
-            strSql.Append("@Day,@PartNumber,@Model,@MaterialName,@Assembly,@FG,@AfterPacking,@BeforePacking,@AfterWIP,@BeforeWIP,@AfterLaser,@BeforeLaser,@TCPaint,@MCPaint,@PrintSupplier,@UCPaint,@PaintRawPart)");
+            strSql.Append("@Day,@PartNumber,@Model,@MaterialName,@Assembly,@FG,@AfterPacking,@BeforePacking,@AfterWIP,@BeforeWIP,@AfterLaser,@BeforeLaser,@TCPaint,@MCPaint,@PrintSupplier,@UCPaint,@PaintRawPart,@ShipTo)");
             SqlParameter[] parameters = {
                     
                     new SqlParameter("@Day", SqlDbType.DateTime),
@@ -100,26 +100,28 @@ namespace Common.Class.DAL
                     new SqlParameter("@MCPaint", SqlDbType.Int,4),
                     new SqlParameter("@PrintSupplier", SqlDbType.Int,4),
                     new SqlParameter("@UCPaint", SqlDbType.Int,4),
-                    new SqlParameter("@PaintRawPart", SqlDbType.Int,4)};
+                    new SqlParameter("@PaintRawPart", SqlDbType.Int,4),
+                    new SqlParameter("@ShipTo", SqlDbType.VarChar,100)};
       
             parameters[0]. Value = model.Day;
             parameters[1]. Value = model.PartNumber;
             parameters[2]. Value = model.Model;
             parameters[3]. Value = model.MaterialName;
-            parameters[4]. Value = model.Assembly;
-            parameters[5]. Value = model.FG;
-            parameters[6]. Value = model.AfterPacking;
-            parameters[7]. Value = model.BeforePacking;
-            parameters[8]. Value = model.AfterWIP;
-            parameters[9]. Value = model.BeforeWIP;
-            parameters[10].Value = model.AfterLaser;
-            parameters[11].Value = model.BeforeLaser;
-            parameters[12].Value = model.TCPaint;
-            parameters[13].Value = model.MCPaint;
-            parameters[14].Value = model.PrintSupplier;
-            parameters[15].Value = model.UCPaint;
-            parameters[16].Value = model.PaintRawPart;
-                     
+            parameters[4].Value = model.Assembly == null ? 0 : model.Assembly;
+            parameters[5]. Value = model.FG == null ? 0 : model.FG;
+            parameters[6]. Value = model.AfterPacking == null ? 0 : model.AfterPacking;
+            parameters[7]. Value = model.BeforePacking == null ? 0 : model.BeforePacking;
+            parameters[8]. Value = model.AfterWIP == null ? 0 : model.AfterWIP;
+            parameters[9]. Value = model.BeforeWIP == null ? 0 : model.BeforeWIP;
+            parameters[10].Value = model.AfterLaser == null ? 0 : model.AfterLaser;
+            parameters[11].Value = model.BeforeLaser == null ? 0 : model.BeforeLaser;
+            parameters[12].Value = model.TCPaint == null ? 0 : model.TCPaint;
+            parameters[13].Value = model.MCPaint == null ? 0 : model.MCPaint;
+            parameters[14].Value = model.PrintSupplier == null ? 0 : model.PrintSupplier;
+            parameters[15].Value = model.UCPaint == null ? 0 : model.UCPaint;
+            parameters[16].Value = model.PaintRawPart == null ? 0 : model.PaintRawPart;
+            parameters[17].Value = model.ShipTo;
+
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
 
