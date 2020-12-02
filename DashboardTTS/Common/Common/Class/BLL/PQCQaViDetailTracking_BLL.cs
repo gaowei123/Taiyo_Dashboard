@@ -217,6 +217,12 @@ namespace Common.Class.BLL
         }
 
 
+        public DataTable GetPaintTcInventory(DateTime dStartTime)
+        {
+            return dal.GetPaintTcInventory(dStartTime);
+        }
+
+
         #endregion  Method
 
     }

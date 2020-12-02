@@ -12,14 +12,14 @@
 
 
     <div class="row">
-        <div class="col-md-12 panel panel-default searchingPanel">
+        <div class="col-sm-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <label for="ddlPartNo" style="width:35%;">Part No:</label>
                     <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <label style="width:35%">Inventory:</label>
                     <select id="ddlShipTo" class="form-control" data-ng-style="btn-info" style="width:60%;"> 
                         <option value="">All</option>
@@ -27,11 +27,11 @@
                         <option value="Assembly">Assembly</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <label for="txtDate" style="width:35%;">Date:</label>
                     <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
                 </div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
             </div>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-12" style="padding:0px;margin-top:-10px;">
+        <div class="col-sm-12" style="padding:0px;margin-top:-10px;">
             <table id="tableInventory" data-toggle="table"></table>
         </div>
     </div>

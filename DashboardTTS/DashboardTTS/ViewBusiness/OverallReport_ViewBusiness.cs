@@ -41,7 +41,12 @@ namespace DashboardTTS.ViewBusiness
                 Common.Class.BLL.ProductionInventoryHistory bll = new Common.Class.BLL.ProductionInventoryHistory();
                 reportList = bll.GetDayList(dSearchingDay);
 
-                if (reportList == null || reportList.Count == 0)
+                if ( dSearchingDay < new DateTime(2020,12,1))
+                {
+                    //不提供2020-12-1号之间的数据查询. 
+                    return null;
+                }
+                else if (reportList == null || reportList.Count == 0)
                 {
                     #region 找不到当天的记录则实时生成
                     //pqc bom info.
@@ -73,8 +78,7 @@ namespace DashboardTTS.ViewBusiness
                     //after wip, 详细到material name, 直接join
                     List<ViewModel.AllSectionInventory.wipOutputInfo> wipOutputList = GetWIPOutput(dStartTime);
 
-
-
+                    
                     //pqc bin, 详细到material name, 通过process 区分出 check complete qty (before pack),   没pack完的(after pack)
                     List<ViewModel.AllSectionInventory.pqcBinInfo> pqcBinInfo = GetPackInventory(dStartTime);
                     var beforePacking = from a in pqcBinInfo where a.processes == "CHECK#1" || a.processes == "CHECK#2" select a;
@@ -83,6 +87,10 @@ namespace DashboardTTS.ViewBusiness
 
                     //FG, Assembly list, 通过material qty/outerboxqty, 获取能被整除的数量作为fg,assembly的数量.
                     var fgAssemblyList = GetFgAssembly();
+
+
+                    //check#1完成要被送去做第二次paint的数量. 
+                    Dictionary<string, double> dicPaintTC = GetPaintTC(dStartTime);
 
 
                     reportList = new List<Common.Class.Model.ProductionInventoryHistory>();
@@ -234,7 +242,11 @@ namespace DashboardTTS.ViewBusiness
                             reportModel.FG = (int)fgAssemblyModel.fg;
                             reportModel.Assembly = (int)fgAssemblyModel.assembly;
                         }
-
+                        if (dicPaintTC.ContainsKey(material.materialName))
+                        {
+                            reportModel.TCPaint = (int)dicPaintTC[material.materialName];
+                        }
+                        
                         
 
 
@@ -513,7 +525,7 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-
+        //FG, Assembly list, 通过material qty/outerboxqty, 获取能被整除的数量作为fg,assembly的数量.
         private List<ViewModel.AllSectionInventory.fgAndAssembly> GetFgAssembly()
         {
             DataTable dt = pqcBinBLL.GetFgAndAssembly();
@@ -539,8 +551,53 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-         
-        
+        //check#1完成要被送去做第二次paint的数量. 
+        //判断逻辑: 当前是check#1工序, 并且还要check#2, 并且painting delivery中还没有paint#2的记录
+        private Dictionary<string, double> GetPaintTC(DateTime dStartTime)
+        {
+            DataTable dtPaintDelivery = paintDeliveryBLL.GetList(dStartTime, DateTime.Now.AddDays(1), "");
+            if (dtPaintDelivery == null || dtPaintDelivery.Rows.Count == 0)
+                return null;
+
+
+            //查出所有做了check#1但没做下一道check的数据.
+            DataTable dtPaintTc = detialTrackingBLL.GetPaintTcInventory(dStartTime);
+            if (dtPaintTc == null || dtPaintTc.Rows.Count == 0)
+                return null;
+
+
+
+            Dictionary<string, double> dicMaterialTc = new Dictionary<string, double>();
+
+            foreach (DataRow dr in dtPaintTc.Rows)
+            {
+                string jobID = dr["jobId"].ToString();
+                string materialName = dr["materialName"].ToString();
+                double output = double.Parse(dr["passQty"].ToString()) + double.Parse(dr["rejQty"].ToString());
+
+                //如果有paint#2的数据说明已经离开painting. 
+                DataRow[] drArrTemp = dtPaintDelivery.Select("jobNumber = '" + jobID + "' and paintProcess = 'Paint#2' ");
+                if (drArrTemp != null && drArrTemp.Length != 0)
+                {
+                    continue;
+                }
+
+                if (dicMaterialTc.ContainsKey(materialName))
+                {
+                    double value = dicMaterialTc[materialName] + output;
+                    dicMaterialTc[materialName] = value;
+                }
+                else
+                {
+                    dicMaterialTc.Add(materialName, output);
+                }                
+            }
+
+
+            return dicMaterialTc;
+        }
+
+
         #endregion
 
 

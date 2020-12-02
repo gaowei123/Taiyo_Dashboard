@@ -34,10 +34,7 @@ namespace DashboardTTS.Controllers
 
         public JsonResult GetAllSectionInventoryReport(string PartNo, string ShipTo, DateTime SearchDay)
         {
-
             var list = vBLL.GetAllSectionResult(new DateTime(2020, 12, 1), PartNo, ShipTo, SearchDay);
-
-
             var result = new List<Common.Class.Model.ProductionInventoryHistory>();
 
 

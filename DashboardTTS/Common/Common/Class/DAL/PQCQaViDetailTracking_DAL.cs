@@ -365,7 +365,7 @@ namespace Common.DAL
 
 
 
-          public SqlCommand DeleteJobCommand(string  sJobNo)
+        public SqlCommand DeleteJobCommand(string  sJobNo)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@" delete from PQCQaViDetailTracking where jobId  =@jobID");
@@ -378,6 +378,47 @@ namespace Common.DAL
 
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+        internal DataTable GetPaintTcInventory(DateTime dStartTime)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"select 
+a.jobId,
+b.materialName,
+SUM(b.passQty) as passQty,
+SUM(b.rejectQty) as rejQty
+from PQCQaViTracking a
+left
+join PQCQaViDetailTracking b on a.trackingID = b.trackingID
+left
+join (
+    select
+    partNumber,
+    processes,
+	case when CHARINDEX('Check#3', processes, 0) > 0 then 'CHECK#3'
+         when CHARINDEX('Check#2', processes, 0) > 0 then 'CHECK#2'
+	     else 'CHECK#1'
+    end as lastCheckProcess
+    from PQCBom
+) c on a.partNumber = c.partNumber
+where 1 = 1
+and a.processes = 'check#1' and c.lastCheckProcess != 'Check#1'  
+and a.day >= @startTime 
+group by a.jobId, b.materialName ");
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@startTime",SqlDbType.DateTime)
+            };
+            parameters[0].Value = dStartTime;
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+
+            return ds.Tables[0];
         }
 
 
