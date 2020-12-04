@@ -401,22 +401,27 @@ group by a.ID");
         public DataTable GetInventoryInfoForAllInventoryReport(DateTime dStartTime)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-
-a.partnumber
-,b.materialPartNo
-,sum(a.quantity) as inventoryQty
-
-from lmmsinventory a
-left join LMMSBomDetail b on a.partnumber = b.partnumber 
-left join LMMSWatchLog c on a.jobnumber = c.jobNumber
-left join (select partNumber, count(1) as materialCount from lmmsbomdetail group by partnumber ) d on a.partnumber = d.partnumber 
-
-where 1=1 and a.datetime >= '2020-3-1'
-and c.totalPass + totalFail +  isnull(a.pqcQuantity,0) * d.materialCount +  isnull(a.setUpQTY,0) * d.materialCount +  isnull(a.buyOffQty,0) * d.materialCount  < c.totalQuantity 
-
-group by a.partNumber, b.materialPartNo ");
+            strSql.Append(@"select 
+                            a.jobNumber,
+                            a.partNumber,
+                            a.quantity,
+                            a.datetime
+                            from lmmsinventory a
+                            left join (
+	                            select  jobNumber, partNumber,
+	                            SUM(totalpass + totalFail + isnull(setupQty, 0) + isnull(buyoffQty,0) + isnull(shortage,0)) as output
+	                            from lmmswatchdog_shift
+	                            group by partNumber, jobNumber
+                            ) b  on a.jobNumber = b.jobNumber
+                            left join (
+	                            select 
+	                            partNumber,
+	                            count(1) as materialCount
+	                            from LMMSBomDetail
+	                            group by partNumber
+                            ) c  on  a.partNumber = c.partNumber
+                            where a.datetime > @startTime
+                            and a.quantity * c.materialCount - isnull(b.output,0)  > 0 ");
 
             
             SqlParameter[] parameters = {

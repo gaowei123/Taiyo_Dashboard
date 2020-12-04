@@ -40,64 +40,7 @@ namespace Common.ExtendClass.LaserInventory
                 row["ID"] = id.ToString();
                 id++;
 
-                #region  set status  not use
-                //double undo = 0;
-                //double total = 0;
-                //string statusGen = "";
-
-                //try
-                //{
-                //    undo = double.Parse(row["undoCount"].ToString());
-                //}
-                //catch
-                //{
-                //    statusGen = StaticRes.Global.clsConstValue.JobStatus.pending;
-                //}
-
-                //try
-                //{
-                //    total = double.Parse(row["totalQuantity"].ToString());
-
-                //    //string aaa = row["totalQuantity"].ToString();
-                //}
-                //catch 
-                //{
-                //    statusGen = StaticRes.Global.clsConstValue.JobStatus.pending;
-                //}
-
-                //try
-                //{
-                //    if (row["estProcessTime"].ToString() == "")
-                //    {
-                //        row["estProcessTime"] = "0h";
-                //    }
-                //    else
-                //    {
-                //        row["estProcessTime"] = row["estProcessTime"] + "h";
-                //    }
-
-                //}
-                //catch(Exception ee)
-                //{}
-
-
-                //if (statusGen == "" && undo >= total)
-                //{
-                //    row["status"] = StaticRes.Global.clsConstValue.JobStatus.pending;
-                //}
-                //else if (statusGen == "" && (undo > 0 && undo < total))
-                //{
-                //    row["status"] = StaticRes.Global.clsConstValue.JobStatus.inprocess;
-                //}
-                //else if (statusGen == "" && undo <= 0)
-                //{
-                //    row["status"] = StaticRes.Global.clsConstValue.JobStatus.complete;
-                //}
-                //else
-                //{
-                //    row["status"] = statusGen;
-                //}
-                #endregion
+     
 
                 #region  AllSetCount++ /  PCSCount++ / EstTimeCount++ / AllJobCount++
                 try
@@ -169,13 +112,10 @@ namespace Common.ExtendClass.LaserInventory
             dr["Customer"] = "Total :";
             dr["SetCount"] = AllSetCount < 0 ? 0 : AllSetCount;
             dr["Pcs"] = PCSCount < 0 ? 0 : PCSCount;
-            //dr["estProcessTime"] = EstTimeCount < 0 ? 0 : EstTimeCount;
             dr["JobCount"] = AllJobCount < 0 ? 0 : AllJobCount;
             dr["estProcessTime"] = Common.CommFunctions.ConvertDateTimeShort(Math.Round(EstTimeCount < 0 ? 0 : EstTimeCount, 2).ToString() + 'H');
             dr["MRPSet_PCS"] = AllSetCount.ToString() + "(" + PCSCount + ")";
-
-
-
+            
             dr["BeforeLaser"] = BeforeSETCount.ToString() + "(" + BeforePCSCount.ToString() + ")";
             dr["AfterLaser"] = AfterSETCount.ToString() + "(" + AfterPCSCount.ToString() + ")";
 

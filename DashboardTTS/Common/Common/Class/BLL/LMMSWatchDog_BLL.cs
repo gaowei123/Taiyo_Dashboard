@@ -18,5 +18,11 @@ namespace Common.Class.BLL
             return dt == null || dt.Rows.Count == 0 ? false : true;
         }
 
+
+        public DataTable GetMaterialList(DateTime? dStartTime)
+        {
+            return  _dal.GetMaterialList(dStartTime);
+        }
+
     }
 }

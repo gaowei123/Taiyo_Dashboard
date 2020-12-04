@@ -22,7 +22,7 @@ namespace DashboardTTS.ViewBusiness
         private readonly Common.Class.BLL.PQCInventory_BLL pqcInventoryBLL = new Common.Class.BLL.PQCInventory_BLL();
         private readonly Common.Class.BLL.LMMSInventoty_BLL laserInventoryBLL = new Common.Class.BLL.LMMSInventoty_BLL();
         private readonly Common.Class.BLL.PaintingTempInfo paintTempBLL = new Common.Class.BLL.PaintingTempInfo();
-
+        private readonly Common.Class.BLL.LMMSWatchDog_BLL watchdogBLL = new Common.Class.BLL.LMMSWatchDog_BLL();
 
 
 
@@ -113,23 +113,14 @@ namespace DashboardTTS.ViewBusiness
 
                         #region before laser
                         //laser join pqcbom,  在按照pqcbom的materialname group by.
-                        var tempLaserDetailList = from a in laserInventory
-                                                  where a.partNo == material.partNo
-                                                  join b in tempBomList on new { a.partNo, a.materialNo } equals new { b.partNo, b.materialNo }
-                                                  select new
-                                                  {
-                                                      a,
-                                                      b
-                                                  };
 
-                        //group by material name
-                        var beforeLaserModel = (from a in tempLaserDetailList
-                                                where a.b.materialName == material.materialName
-                                                group a by a.b.materialName into summary
+                        var beforeLaserModel = (from a in laserInventory
+                                                where a.partNo == material.partNo && a.materialName == material.materialName
+                                                group a by a.materialName into b
                                                 select new
                                                 {
-                                                    summary.Key,
-                                                    qty = summary.Max(p => p.a.qty)
+                                                    b.Key,
+                                                    qty = b.Sum(p => p.qty)
                                                 }).FirstOrDefault();
                         #endregion
 
@@ -427,21 +418,83 @@ namespace DashboardTTS.ViewBusiness
         //按amterial no汇总的信息
         private List<ViewModel.AllSectionInventory.laserInventoryInfo> GetLaserInventory(DateTime dStartTime)
         {
-            DataTable dt = laserInventoryBLL.GetInventoryInfoForAllInventoryReport(dStartTime);
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
+            //jobNumber,partNumber,quantity
+            DataTable dtInventory = laserInventoryBLL.GetInventoryInfoForAllInventoryReport(dStartTime);
             
+            //jobnumber,partnumber,materialname,ok,ng
+            DataTable dtMaterialList = watchdogBLL.GetMaterialList(dStartTime);
+            
+            List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+
+
+
+
+
+            //保存最终的laserInventory结果.
             List<ViewModel.AllSectionInventory.laserInventoryInfo> modelList = new List<ViewModel.AllSectionInventory.laserInventoryInfo>();
-            foreach (DataRow dr in dt.Rows)
+
+
+            foreach (DataRow dr in dtInventory.Rows)
             {
-                ViewModel.AllSectionInventory.laserInventoryInfo model = new ViewModel.AllSectionInventory.laserInventoryInfo();
+
              
-                model.partNo = dr["partNumber"].ToString();
-                model.materialNo = dr["materialPartNo"].ToString();
-                model.qty = double.Parse(dr["inventoryQty"].ToString());
+
+                string partNo = dr["partNumber"].ToString();
+                string jobNo = dr["jobNumber"].ToString();
+                int mrpQty = int.Parse(dr["quantity"].ToString());
+
+            
+
+                var bomMaterials = bomList.Where(p => p.partNo == partNo).ToList();
+                if (bomMaterials == null)
+                {
+                    DBHelp.Reports.LogFile.Log("AllSectionInventory", $"PartNo{partNo} is not exist.");
+                    continue;
+                }
+
+
                 
-                modelList.Add(model);
+              
+                //遍历各个materialNo
+                foreach (var item in bomMaterials)
+                {
+                    DataRow drMaterial;
+                    DataRow[] drArrTemp = dtMaterialList.Select($" jobNumber = '{jobNo}' and MaterialNo = '{item.materialNo}' ");
+                    if (drArrTemp ==null || drArrTemp.Count() == 0)
+                    {
+                        drMaterial = null;
+                    }
+                    else
+                    {
+                        drMaterial = drArrTemp[0];
+                    }
+
+                 
+
+
+                    int materialOutput = 0;
+                    if (drMaterial == null)
+                    {
+                        materialOutput = 0;
+                    }
+                    else
+                    {
+                        materialOutput = int.Parse(drMaterial["ok"].ToString()) + int.Parse(drMaterial["ng"].ToString());
+                    }
+
+
+
+
+                    ViewModel.AllSectionInventory.laserInventoryInfo model = new ViewModel.AllSectionInventory.laserInventoryInfo();
+                    model.materialNo = item.materialNo;
+                    model.materialName = item.materialName;
+                    model.partNo = item.partNo;
+                    model.qty = mrpQty - materialOutput < 0 ? 0 : mrpQty - materialOutput;
+                    modelList.Add(model);
+                }
             }
+
+
 
 
             return modelList;

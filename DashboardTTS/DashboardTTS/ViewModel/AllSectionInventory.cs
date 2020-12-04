@@ -42,6 +42,7 @@ namespace DashboardTTS.ViewModel
         {
             public string partNo { get; set; }
             public string materialNo { get; set; }
+            public string materialName { get; set; }
             public double qty { get; set; }
         }
 
