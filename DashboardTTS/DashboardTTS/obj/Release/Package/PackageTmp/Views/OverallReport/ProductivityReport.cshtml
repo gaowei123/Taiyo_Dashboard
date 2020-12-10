@@ -3,14 +3,16 @@
     ViewBag.Title = "ProductivityReport";
 }
 
-
-
-
 @*时间框组件*@
 <script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-
+<style>
+    .bg{
+        background-color:#FBF2EF;
+        padding-bottom:10px;
+    }
+</style>
 
 <div class="container">
 
@@ -24,7 +26,7 @@
                    class="form-control text-center" 
                    data-date-format="yyyy-mm-dd" 
                    placeholder="Please choose date" 
-                   style="margin-top:-4px;"/>
+                   style="margin-top:-4px; width:100px; float:right;"/>
         </div>
     </div>
 
@@ -32,7 +34,7 @@
 
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default" style="margin-top:20px;">
+        <div class="col-sm-12 panel panel-default bg" style="margin-top:20px;">
             <div class="row text-center">
                 <h3><strong>Moulding Department</strong></h3>
             </div>
@@ -40,14 +42,14 @@
                 <table id="tbMouldingDay" data-toggle="table"></table>
             </div>
             <div class="row">
-                <table id="tbMouldingNight" data-toggle="table"></table>
+                @*<table id="tbMouldingNight" data-toggle="table"></table>*@
             </div>
         </div>
     </div>
 
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default">
+        <div class="col-sm-12 panel panel-default bg" >
             <div class="row text-center">
                 <h3><strong>Laser Department</strong></h3>
             </div>
@@ -64,7 +66,7 @@
 
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default">
+        <div class="col-sm-12 panel panel-default bg" >
             <div class="row text-center">
                 <h3><strong>PQC Department</strong></h3>
             </div>
@@ -116,10 +118,10 @@
 
 
     $(document).ready(function () {
-        var lastDay = getLastReportDay();
-        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+        let lastDay = getLastReportDay();
+        let strLastDay = dateFormat('yyyy-MM-dd', lastDay);
         $('#txtDate').val(strLastDay);
-      
+
         search();
     });
 
@@ -128,9 +130,6 @@
 
 
     function search() {
-
-     
-
 
         //重新加载必须将原本table清空
         $('#tbMouldingDay').bootstrapTable('destroy');
@@ -248,9 +247,5 @@
         $('#tbMouldingDay').bootstrapTable('resetView');
 
     });
-
-
-
-
 
 </script>

@@ -1,0 +1,334 @@
+﻿
+@{
+    ViewBag.Title = "Attendance Day Summary";
+}
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row titleRow">
+        <div class="col">
+            <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span class="titleText">Attendance Day Summary Report</span>
+        </div>
+    </div>
+
+    <div class="row panel panel-default"  style="margin-top:10px;padding:10px;">
+        <div class="col-xs-4 col-xs-offset-8 col-sm-3 col-sm-offset-9 form-inline">
+            <label style="width:20%;">Date:</label>
+            <input type="text" class="form-control" id="txtDate"
+                   data-date-format="yyyy-mm-dd"
+                   placeholder="Please choose date"
+                   style="width:60%;"
+                   onchange="search();">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" 
+             style="padding:0px;">
+            <table id="tbReport" data-toggle="table"></table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 panel panel-default">
+            <div id="divChart"></div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var apiGetTableData = window.globalConfig.rootDirectory + '/Attendance/GetDailySummaryReport';
+    var apiGetChartData = window.globalConfig.rootDirectory + '/Attendance/GetDailySummaryReport';
+
+    var chart = echarts.init(document.getElementById('divChart'));
+
+    //初始化时间框
+    $('#txtDate').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    $(document).ready(function () {
+        var strLastDay = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDate').val(strLastDay);
+
+        search();
+    });
+
+
+
+    function search() {
+        let date = $("#txtDate").val();
+     
+
+        $('#tbReport').bootstrapTable('destroy');
+        $('#tbReport').bootstrapTable({
+
+            //call后台数据
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetTableData,
+            queryParams: function (params) {
+                return { Date: date }
+            },
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+
+            columns: [
+            {
+                field: 'Department',
+                title: 'Department',
+                align: 'center',
+                valign: 'middle',
+            },
+            {
+                field: 'TotalUser',
+                title: 'Nos Of<br/>Staff',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'DayShiftUserCount',
+                title: 'Day<br/>Shift',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'NightShiftUserCount',
+                title: 'Night<br/>Shift',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'AnnualLeave',
+                title: 'Annual<br/>Leave',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'OthersLeave',
+                title: 'Others<br/>Approved<br/>Leave',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'MC',
+                title: 'MC',
+                align: 'center',
+                valign: 'middle'              
+            },
+            {
+                field: 'BussinessTrip_WFH',
+                title: 'Business<br/>Trip/WFH',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'UPL_UPMC',
+                title: 'UPL/<br/>UPMC',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'Absent',
+                title: 'Absent',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'TotalPresent',
+                title: 'Total<br/>Present',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'ExcludedAL',
+                title: 'Excluded<br/>AL(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'IncludedAL',
+                title: 'Included<br/>AL(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'Target',
+                title: 'Target (%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'LeaveDetail',
+                title: 'Indicated<br/>Emplyee name &<br/>reason of leave',
+                align: 'left',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == null || value==='') {
+                        return '';
+                    } else {
+                        return value.replace(',', '<br/>');
+                    }
+                }
+            }
+            ],
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+              
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.log("加载数据失败");
+            }
+
+        });
+
+
+        
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetChartData,
+            data: { Date: date },
+
+            beforeSend: function () {
+                chart.showLoading();
+            },
+
+            success: function (data) {
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('There is no record found, Please try again!');
+                    return false;
+                }
+
+
+
+
+                
+                let excludedALData = [];
+
+           
+                for (var i = 0; i < data.length; i++) {
+                    
+                    let ExcludedAL = data[i].ExcludedAL;
+                    
+                    excludedALData.push(data[i].ex)
+                }
+
+
+                var attendOption = {
+                    title: {
+                        text: 'Machine Utilization Chart'
+                    },
+                    
+
+                    xAxis: {
+                        type: 'category',
+                        name: 'Machine Type',
+                        data: axisXLabelData,//X轴数据 数组
+                        axisLabel: {
+                            interval: 0,
+                            rotate: 0   //X轴 倾斜角度
+                        },
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'Percentage',
+                            min: 0,
+                            max: 100,
+                            interval: 20,
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
+                        }
+
+                    ],
+
+                    series: [
+                        {
+                            name: 'Excluded AL(%)',
+                            type: 'bar',
+                            data: excludedALData,
+                            label: {
+                                show: true,
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    return params.value + '%';
+                                }
+                            },
+                        },
+                        {
+                            name: 'Target(%)',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            data: [98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50]
+                        }
+                    ]
+                };
+
+               
+
+
+
+                chart.clear();
+                chart.setOption(option, true);
+            },
+
+            complete: function () {
+                chart.hideLoading();
+                chart.resize({ height: 400 });
+            },
+
+            error: function () {
+                alert("Get chart data error !");
+                pieChart.hideLoading();
+            }
+        });
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tbReport').bootstrapTable('resetView');
+        chart.resize({ height: 400 });
+    });
+
+
+
+</script>
+
+

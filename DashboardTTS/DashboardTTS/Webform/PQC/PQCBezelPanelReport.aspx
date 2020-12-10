@@ -120,10 +120,6 @@
 
             $("#dgBezelPanel").FrozenTable(4, 0, 1);
         });
-
-
-      
-       
     </script>
 
 </body>

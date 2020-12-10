@@ -4,13 +4,7 @@
 }
 
 
-<style>
-    .container-fluid{
-        max-width:1400px;
-    }
-</style>
-
-<div class="container-fluid">
+<div class="container-fluid" style="max-width:1400px;">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Laser Inventory Report</span>
@@ -24,17 +18,13 @@
 </div>
 
 
-
-
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
 <script type="text/javascript">
-
     var apiGetData = window.globalConfig.rootDirectory + '/LASER_Product/GetInventoryList';
 
     $(document).ready(function () {
-
         $('#tbReport').bootstrapTable('destroy');
         $('#tbReport').bootstrapTable({
 

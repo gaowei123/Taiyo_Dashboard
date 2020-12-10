@@ -239,6 +239,11 @@
     <Compile Include="ExtendClass\AllProductionInventory\Inventory_BLL.cs" />
     <Compile Include="ExtendClass\AllProductionInventory\Inventory_DAL.cs" />
     <Compile Include="ExtendClass\AllProductionInventory\Inventory_Model.cs" />
+    <Compile Include="ExtendClass\Attendance\Base_BLL.cs" />
+    <Compile Include="ExtendClass\Attendance\Base_DAL.cs" />
+    <Compile Include="ExtendClass\Attendance\Base_Model.cs" />
+    <Compile Include="ExtendClass\Attendance\DailySummary_BLL.cs" />
+    <Compile Include="ExtendClass\Attendance\DailySummary_Model.cs" />
     <Compile Include="ExtendClass\Home\Home_BLL.cs" />
     <Compile Include="ExtendClass\Home\Home_DAL.cs" />
     <Compile Include="ExtendClass\Home\Home_Model.cs" />

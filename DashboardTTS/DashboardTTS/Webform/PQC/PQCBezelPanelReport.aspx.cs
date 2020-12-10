@@ -56,9 +56,7 @@ namespace DashboardTTS.Webform.PQC
                 DateTime? dMFGDate = null;
                 DateTime? dPaintDate = null;
 
-                try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }             
-                //try { dPaintDate = DateTime.Parse(txtPaintDate.Text); } catch { dPaintDate = null; }
-                //try { dMFGDate = DateTime.Parse(txtMFGDate.Text); } catch { dMFGDate = null; }
+                try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }
 
 
                 if (dDateFrom == null)
@@ -74,7 +72,7 @@ namespace DashboardTTS.Webform.PQC
                 string sDescription = Request.QueryString["Description"].ToString();
                 string sNumber = this.ddlNumber.SelectedValue;
 
-                string sPIC = "";// this.txtPIC.Text.Trim();
+                string sPIC = "";
 
 
 
@@ -113,8 +111,8 @@ namespace DashboardTTS.Webform.PQC
                 dtOutput.Columns.Add("Lot No");
                 dtOutput.Columns.Add("Job No");
                 dtOutput.Columns.Add("Lot Qty");
-                //dtOutput.Columns.Add("Total Checked Qty");
                 dtOutput.Columns.Add("MFG Date");
+                dtOutput.Columns.Add("Annealing Date");//2020/12/8, new column
                 dtOutput.Columns.Add("Painting Under Coat Date");
                 dtOutput.Columns.Add("Painting Under Coat M/C No");
                 dtOutput.Columns.Add("Painting Under Coat M/C running time");
@@ -224,10 +222,12 @@ namespace DashboardTTS.Webform.PQC
                     drOutput["Lot No"] = dr["LotNo"].ToString();
 
                     //带a连接标签的jobno, 做跳转连接
-      
                     drOutput["Job No"] = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", sJobNumber, sJobNumber);
 
                     drOutput["MFG Date"] = dr["MFG Date"].ToString();
+
+                    //2020/12/8, new column
+                    drOutput["Annealing Date"] = dr["Annealing Date"].ToString().Replace(",", "<br/>");
                     drOutput["Painting Under Coat Date"] = dr["Painting Under Coat Date"].ToString();
                     drOutput["Painting Under Coat M/C No"] = dr["Painting Under Coat M/C No"].ToString();
                     drOutput["Painting Under Coat M/C running time"] = dr["Painting Under Coat M/C running time"].ToString();

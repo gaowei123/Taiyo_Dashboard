@@ -3,51 +3,18 @@
     ViewBag.Title = "PackingInventory";
 }
 
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 
-
-<style>
-    .container-fluid {
-        max-width: 1400px;
-    }
-</style>
-
-
-<div class="container-fluid">
-
+<div class="container-fluid" style="max-width: 1400px;">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Packing Inventory</span>
     </div>
 
-
     <div class="row">
-        <div class="col-md-12 panel panel-default searchingPanel">
-            <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Part No:</label>
-                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
-                </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-3"></div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
-                    <input type="button" class="btn btn-success" value="Generate" onclick="Search();" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <div class="col-lg-12" style="padding:0px;">
+        <div class="col-sm-12" style="padding:0px; margin-top:10px;">
             <table id="tablePackingInventory" data-toggle="table"></table>
         </div>
     </div>
-
-
 </div>
 
 
@@ -60,15 +27,7 @@
 
     var apiGetPackInventory = window.globalConfig.rootDirectory + '/PQC_Product/GetPackingInventoryList';
 
-
-
-
-
-    //设置part no, machine id 下拉框
     $(document).ready(function () {
-        $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
-        setPartNoDDL($('#ddlPartNo'), 'PQC','');
-
         Search();
     });
 
@@ -84,39 +43,27 @@
 
         $('#tablePackingInventory').bootstrapTable({ // 对应table标签的id
 
-
             //call后台数据
             method: 'post',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url: apiGetPackInventory,
 
-            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-
-            //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) {
-                return {
-                    DateFrom: '2020-11-26',
-                    PartNo: $("#ddlPartNo").val()
-                }
+                return { DateFrom: '2020-11-26'}
             },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
 
 
             //表头样式 undefined, thead-light, thead-dark,
             theadClasses: 'thead-title',
 
             //表格样式
-            classes: 'table table-bordered table-hover table-striped',
-
-
-            striped: false,  //表格显示条纹，默认为false
+            classes: 'table table-bordered table-hover',
+            cache: false,
+            search: true,
+            striped: true,  //表格显示条纹，默认为false
             pagination: false, // 在表格底部显示分页组件，默认false
-            //pageList: [10, 20], // 设置页面可以显示的数据条数
-            //pageSize: 10, // 页面数据条数
-            //pageNumber: 1, // 首页页码
-
+            pageNumber: 1, // 首页页码
 
             rowStyle: function (row, index) {
                 return {

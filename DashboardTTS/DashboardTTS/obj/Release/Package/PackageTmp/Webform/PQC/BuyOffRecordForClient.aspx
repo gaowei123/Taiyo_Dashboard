@@ -23,12 +23,10 @@
 
 
     <style>
-
         .tr{
             width:100%;
         }
-
-         .tableMain{
+            .tableMain{
             width: 100%; 
             border-collapse: separate; 
             border-spacing: 10px; 
@@ -36,22 +34,20 @@
             line-height: 10px; 
             vertical-align: 10%;
         }
-
         .tdBig{
             padding: 0px 10px 0px 10px; 
             border: 1px solid #CCCCCC; 
             font-family: 'Arial Unicode MS'; 
             height: 38px;
         }
-
         .tdSmall{
             padding: 3px 3px 3px 3px; 
             border: 1px solid #CCCCCC; 
             font-family: 'Arial Unicode MS';
             height: 30px; 
         }
-
     </style>
+
 
 </head>
 <body>

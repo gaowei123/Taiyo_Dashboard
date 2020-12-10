@@ -360,11 +360,8 @@ namespace DashboardTTS.Controllers
 
         #region WIP Inventory Report 
         public ActionResult GetWIPInventory()
-        {
-            string partNo = Request.Form["PartNo"] == null ? "" : Request.Form["PartNo"].ToString();
-            //string model = Request.Form["Model"] == null ? "" : Request.Form["Model"].ToString();
-            
-            string result = vBLL.GetWIPInventory(partNo);
+        {            
+            string result = vBLL.GetWIPInventory();
             
             return Content(result);
         }

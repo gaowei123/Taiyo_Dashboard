@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Taiyo.SearchParam;
 
 namespace DashboardTTS.Controllers
 {
@@ -14,12 +15,14 @@ namespace DashboardTTS.Controllers
         private readonly Common.BLL.LMMSUserAttendanceTracking_BLL attendanceBLL = new Common.BLL.LMMSUserAttendanceTracking_BLL();
 
 
+        private readonly Common.ExtendClass.Attendance.DailySummary_BLL dailySummaryBLL = new Common.ExtendClass.Attendance.DailySummary_BLL();
+
         private readonly  JavaScriptSerializer _jsSerializer = new JavaScriptSerializer();
 
 
 
-        #region view
 
+        #region view
         public ActionResult UserManagement()
         {
             return View();
@@ -37,6 +40,10 @@ namespace DashboardTTS.Controllers
             return View();
         }
 
+        public ActionResult DailySummaryReport()
+        {
+            return View();
+        }
         #endregion
 
 
@@ -115,55 +122,7 @@ namespace DashboardTTS.Controllers
         }
 
         #endregion
-
-
-        #region Attendenance Daily Report
-        public ActionResult GetOverall()
-        {
-            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
-
-
-            List<ViewModel.Attendance_ViewModel.Overall> overallList = vbllAttendance.GetOverall(dDay);
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = js.Serialize(overallList);
-
-
-
-            return  Content(jsonResult);
-        }
         
-        public ActionResult  GetDetail()
-        {
-            string jsonResult = "";
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-
-            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
-        
-
-            List<ViewModel.Attendance_ViewModel.Detail> detailList = vbllAttendance.GetDetail(dDay);
-
-            if (detailList == null || detailList.Count == 0)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                
-                jsonResult = js.Serialize(detailList);
-            }
-            
-
-            return Content(jsonResult);
-        }
-
-        #endregion
-
-        
-      
-
 
         #region submit attendance
         public ActionResult GetAttendanceList()
@@ -187,9 +146,6 @@ namespace DashboardTTS.Controllers
 
             return Content(js.Serialize(orderList));
         }
-
-
-
         
         public ActionResult IsSubmit()
         {
@@ -204,8 +160,6 @@ namespace DashboardTTS.Controllers
             return Content(js.Serialize(result));
         }
         
-
-
         public JsonResult SubmitAttendance()
         {
             string strAttendanceList = Request.Form["AttendanceList"];
@@ -220,9 +174,62 @@ namespace DashboardTTS.Controllers
             bool result = attendanceBLL.SubmitAttendance(day, department, modelList);
             return Json(result);
         }
-
+        
         #endregion
 
+
+        public JsonResult GetDailySummaryReport(DateTime Date)
+        {
+            BaseParam para = new BaseParam() { DateFrom = Date, DateTo = Date.AddDays(1) };
+            var result = dailySummaryBLL.GetDailySummaryList(para);
+
+            return Json(result);
+        }
+
+
+        #region Attendenance Daily Report
+        public ActionResult GetOverall()
+        {
+            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
+
+
+            List<ViewModel.Attendance_ViewModel.Overall> overallList = vbllAttendance.GetOverall(dDay);
+
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string jsonResult = js.Serialize(overallList);
+
+
+
+            return Content(jsonResult);
+        }
+
+        public ActionResult GetDetail()
+        {
+            string jsonResult = "";
+            JavaScriptSerializer js = new JavaScriptSerializer();
+
+
+            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
+
+
+            List<ViewModel.Attendance_ViewModel.Detail> detailList = vbllAttendance.GetDetail(dDay);
+
+            if (detailList == null || detailList.Count == 0)
+            {
+                jsonResult = js.Serialize("");
+            }
+            else
+            {
+
+                jsonResult = js.Serialize(detailList);
+            }
+
+
+            return Content(jsonResult);
+        }
+
+        #endregion
 
         //attendance chart
         public ActionResult GetChartData()

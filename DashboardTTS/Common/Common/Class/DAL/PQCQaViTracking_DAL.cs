@@ -1049,6 +1049,8 @@ with allJobsForReports as (
     ,[temperatureRear]
     ,[humidityFront]
     ,[humidityRear]
+    ,[annealingDate]
+    ,[annealingTime]
 
     from  OPENDATASOURCE( 'SQLOLEDB', {0} ).Taiyo_Painting.dbo.paintingtempinfo
 )", StaticRes.Global.SqlConnection.SqlconnPainting);
@@ -1075,6 +1077,7 @@ b.partNumber
 --Painting Info
 ,d.Lotno
 ,f.MFGDate as [MFG Date]
+,convert(varchar, d.annealingDate, 103) + ',' + d.annealingTime as [Annealing Date]
 ,d.[Painting Under Coat Date]
 ,d.pMachine_1st as [Painting Under Coat M/C No]
 ,d.paintingRunningTime_1st as [Painting Under Coat M/C running time]

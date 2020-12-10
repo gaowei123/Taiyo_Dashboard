@@ -77,8 +77,8 @@ namespace DashboardTTS.ViewBusiness
             modelForLaser.othersRej = laserGroupList.Sum(p => p.othersRej);
 
             modelForLaser.totalRejRate = string.Format("{0}({1}%)", modelForLaser.totalRej, Math.Round(modelForLaser.totalRej / modelForLaser.totalOutput * 100, 2));
-            modelForLaser.ttsMouldRejRate = string.Format("{0}({1}%)", modelForLaser.vendorsModelRej, Math.Round(modelForLaser.vendorsModelRej / modelForLaser.totalOutput * 100, 2));
-            modelForLaser.vendorsModelRejRate = string.Format("{0}({1}%)", modelForLaser.ttsMouldRej, Math.Round(modelForLaser.ttsMouldRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.ttsMouldRejRate = string.Format("{0}({1}%)", modelForLaser.ttsMouldRej , Math.Round(modelForLaser.ttsMouldRej / modelForLaser.totalOutput * 100, 2));
+            modelForLaser.vendorsModelRejRate = string.Format("{0}({1}%)", modelForLaser.vendorsModelRej, Math.Round(modelForLaser.vendorsModelRej  / modelForLaser.totalOutput * 100, 2));
             modelForLaser.paintRejRate = string.Format("{0}({1}%)", modelForLaser.paintRej, Math.Round(modelForLaser.paintRej / modelForLaser.totalOutput * 100, 2));
             modelForLaser.laserRejRate = string.Format("{0}({1}%)", modelForLaser.laserRej, Math.Round(modelForLaser.laserRej / modelForLaser.totalOutput * 100, 2));
             modelForLaser.othersRejRate = string.Format("{0}({1}%)", modelForLaser.othersRej, Math.Round(modelForLaser.othersRej / modelForLaser.totalOutput * 100, 2));
@@ -106,8 +106,8 @@ namespace DashboardTTS.ViewBusiness
             modelForWIP.othersRej = wipGroupList.Sum(p => p.othersRej);
 
             modelForWIP.totalRejRate = string.Format("{0}({1}%)", modelForWIP.totalRej, Math.Round(modelForWIP.totalRej / modelForWIP.totalOutput * 100, 2));
-            modelForWIP.ttsMouldRejRate = string.Format("{0}({1}%)", modelForWIP.vendorsModelRej, Math.Round(modelForWIP.vendorsModelRej / modelForWIP.totalOutput * 100, 2));
-            modelForWIP.vendorsModelRejRate = string.Format("{0}({1}%)", modelForWIP.ttsMouldRej, Math.Round(modelForWIP.ttsMouldRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.ttsMouldRejRate = string.Format("{0}({1}%)", modelForWIP.ttsMouldRej, Math.Round(modelForWIP.ttsMouldRej / modelForWIP.totalOutput * 100, 2));
+            modelForWIP.vendorsModelRejRate = string.Format("{0}({1}%)", modelForWIP.vendorsModelRej , Math.Round(modelForWIP.vendorsModelRej  / modelForWIP.totalOutput * 100, 2));
             modelForWIP.paintRejRate = string.Format("{0}({1}%)", modelForWIP.paintRej, Math.Round(modelForWIP.paintRej / modelForWIP.totalOutput * 100, 2));
             modelForWIP.laserRejRate = string.Format("{0}({1}%)", modelForWIP.laserRej, Math.Round(modelForWIP.laserRej / modelForWIP.totalOutput * 100, 2));
             modelForWIP.othersRejRate = string.Format("{0}({1}%)", modelForWIP.othersRej, Math.Round(modelForWIP.othersRej / modelForWIP.totalOutput * 100, 2));
@@ -163,8 +163,8 @@ namespace DashboardTTS.ViewBusiness
                 modelForNum.othersRej = numModel.laserRej;
                          
                 modelForNum.totalRejRate = string.Format("{0}({1}%)", modelForNum.totalRej, Math.Round(modelForNum.totalRej / modelForNum.totalOutput * 100, 2));
-                modelForNum.ttsMouldRejRate = string.Format("{0}({1}%)", modelForNum.vendorsModelRej, Math.Round(modelForNum.vendorsModelRej / modelForNum.totalOutput * 100, 2));
-                modelForNum.vendorsModelRejRate = string.Format("{0}({1}%)", modelForNum.ttsMouldRej, Math.Round(modelForNum.ttsMouldRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.ttsMouldRejRate = string.Format("{0}({1}%)", modelForNum.ttsMouldRej, Math.Round(modelForNum.ttsMouldRej / modelForNum.totalOutput * 100, 2));
+                modelForNum.vendorsModelRejRate = string.Format("{0}({1}%)", modelForNum.vendorsModelRej , Math.Round(modelForNum.vendorsModelRej  / modelForNum.totalOutput * 100, 2));
                 modelForNum.paintRejRate = string.Format("{0}({1}%)", modelForNum.paintRej, Math.Round(modelForNum.paintRej / modelForNum.totalOutput * 100, 2));
                 modelForNum.laserRejRate = string.Format("{0}({1}%)", modelForNum.laserRej, Math.Round(modelForNum.laserRej / modelForNum.totalOutput * 100, 2));
                 modelForNum.othersRejRate = string.Format("{0}({1}%)", modelForNum.othersRej, Math.Round(modelForNum.othersRej / modelForNum.totalOutput * 100, 2));
@@ -860,49 +860,49 @@ namespace DashboardTTS.ViewBusiness
 
 
         #region wip inventory report & job order detail
-        public string GetWIPInventory(string sPartNo)
+        public string GetWIPInventory()
         {
 
             DateTime dateFrom = DateTime.Parse("2020-6-1");
             DateTime dateTo = DateTime.Now.AddDays(1);
 
-            List<ViewModel.PQCWIPInventory_ViewModel> modelList = GetWIPList(dateFrom, dateTo, sPartNo, "","");
+            List<ViewModel.PQCWIPInventory_ViewModel> modelList = GetWIPList(dateFrom, dateTo, "", "","");
 
 
 
             //group by partnumber
             var summaryList = from a in modelList
-                                 where a.jobStatus == "Pending" || a.jobStatus == "Inprocess"
-                                 group a by a.partNo into summary
-                                 select new
-                                 {
-                                     customer = summary.Max(p => p.customer),
-                                     model = summary.Max(p => p.model),
-                                     partNo = summary.Key,
+                              where a.jobStatus == "Pending" || a.jobStatus == "Inprocess"
+                              group a by a.partNo into summary
+                              select new
+                              {
+                                  customer = summary.Max(p => p.customer),
+                                  model = summary.Max(p => p.model),
+                                  partNo = summary.Key,
 
-                                     jobNo = (summary.Sum(p => p.jobCount) == 1 ? summary.Max(p => p.jobNo) : "JOT###"),
-
-
-
-                                     mrpQtyPCS = summary.Sum(p => p.mrpQtyPCS),
-                                     mrpQtySET = summary.Sum(p => p.mrpQtySET),
-                                     sMrpQty = summary.Sum(p => p.mrpQtySET) + "(" + summary.Sum(p => p.mrpQtyPCS) + ")",
-
-
-                                     beforeQtyPCS = summary.Sum(p => p.beforeQtyPCS),
-                                     beforeQtySET = summary.Sum(p => p.beforeQtySET),
-                                     sBeforeQty = summary.Sum(p => p.beforeQtySET) + "(" + summary.Sum(p => p.beforeQtyPCS) + ")",
-
-
-                                     afterQtyPCS = summary.Sum(p => p.afterQtyPCS),
-                                     afterQtySET = summary.Sum(p => p.afterQtySET),
-                                     sAfterQty = summary.Sum(p => p.afterQtySET) + "(" + summary.Sum(p => p.afterQtyPCS) + ")",
+                                  jobNo = (summary.Sum(p => p.jobCount) == 1 ? summary.Max(p => p.jobNo) : "JOT###"),
 
 
 
-                                     jobCount = summary.Sum(p => p.jobCount),
+                                  mrpQtyPCS = summary.Sum(p => p.mrpQtyPCS),
+                                  mrpQtySET = summary.Sum(p => p.mrpQtySET),
+                                  sMrpQty = summary.Sum(p => p.mrpQtySET) + "(" + summary.Sum(p => p.mrpQtyPCS) + ")",
 
-                                     mfgDate = (summary.Sum(p => p.jobCount) == 1 ? summary.Max(p => p.mfgDate) : null),
+
+                                  beforeQtyPCS = summary.Sum(p => p.beforeQtyPCS),
+                                  beforeQtySET = summary.Sum(p => p.beforeQtySET),
+                                  sBeforeQty = summary.Sum(p => p.beforeQtySET) + "(" + summary.Sum(p => p.beforeQtyPCS) + ")",
+
+
+                                  afterQtyPCS = summary.Sum(p => p.afterQtyPCS),
+                                  afterQtySET = summary.Sum(p => p.afterQtySET),
+                                  sAfterQty = summary.Sum(p => p.afterQtySET) + "(" + summary.Sum(p => p.afterQtyPCS) + ")",
+
+
+
+                                  jobCount = summary.Sum(p => p.jobCount),
+
+                                  mfgDate = (summary.Sum(p => p.jobCount) == 1 ? summary.Max(p => p.mfgDate.Value.ToString("dd/MM/yyyy")) : ""),
                                      
 
                                      bomFlag = summary.Max(p => p.bomFlag)
