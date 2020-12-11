@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Attendance Day Summary";
+    ViewBag.Title = "Daily Attendance Summary Report";
 }
 
 @*时间框组件*@
@@ -11,7 +11,7 @@
     <div class="row titleRow">
         <div class="col">
             <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-            <span class="titleText">Attendance Day Summary Report</span>
+            <span class="titleText">Daily Attendance Summary Report</span>
         </div>
     </div>
 
@@ -27,14 +27,86 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default" 
-             style="padding:0px;">
-            <table id="tbReport" data-toggle="table"></table>
+        <div class="col-sm-12">
+            <table id="tbReport" data-toggle="table" class="table table-bordered table-striped">
+                <thead class="thead-title">
+                    <tr style="text-align:center;">
+                        <th>Department</th>
+                        <th>Day<br/>Shift</th>
+                        <th>Night<br />Shift</th>
+                        <th>Annual<br />Leave</th>
+                        <th>Other<br />Approved<br />Leave</th>
+                        <th>Unpaid<br />Leave</th>
+                        <th>MC /<br />UPMC</th>
+                        <th>Absent</th>
+                        <th>Business<br />Trip /<br />WFH</th>
+                        <th>Pending</th>
+                        <th>Total<br />Present</th>
+                        <th>Exclude<br />AL(%)</th>
+                        <th>Include<br />AL(%)</th>
+                        <th>Target<br/>Attend(%)</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Moulding</td>
+                        <td>10</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>10</td>
+                        <td>100%</td>
+                        <td>90.91%</td>
+                        <td>98.5%</td>
+                        <td>Lee(Annual leave)</td>
+                    </tr>
+                    <tr>
+                        <td>Laser</td>
+                        <td>10</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>10</td>
+                        <td>100%</td>
+                        <td>90.91%</td>
+                        <td>98.5%</td>
+                        <td>Lee(Annual leave)</td>
+                    </tr>
+                    <tr>
+                        <td>PQC</td>
+                        <td>10</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>10</td>
+                        <td>100%</td>
+                        <td>90.91%</td>
+                        <td>98.5%</td>
+                        <td>Lee(Annual leave)</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-12 panel panel-default">
+        <div class="col-md-12">
             <div id="divChart"></div>
         </div>
     </div>
@@ -75,6 +147,7 @@
 
 
     function search() {
+
         let date = $("#txtDate").val();
      
 
@@ -233,75 +306,81 @@
 
 
 
-                
+
                 let excludedALData = [];
 
-           
                 for (var i = 0; i < data.length; i++) {
-                    
                     let ExcludedAL = data[i].ExcludedAL;
-                    
                     excludedALData.push(data[i].ex)
                 }
 
 
-                var attendOption = {
-                    title: {
-                        text: 'Machine Utilization Chart'
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: '{a0} - {c0}%<br/>\
+                                    {a1} - {c1}%<br/>\
+                                    {a2} - {c2}%'
                     },
-                    
-
-                    xAxis: {
-                        type: 'category',
-                        name: 'Machine Type',
-                        data: axisXLabelData,//X轴数据 数组
-                        axisLabel: {
-                            interval: 0,
-                            rotate: 0   //X轴 倾斜角度
-                        },
-                        axisPointer: {
-                            type: 'shadow'
+                    legend: {
+                        data: ['Include AL(%)', 'Exclude AL(%)', 'Target'],
+                        top: 10,
+                        right: 200
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['Moulding', 'Laser', 'PQC'],
+                            axisPointer: {
+                                type: 'shadow'
+                            }
                         }
-                    },
-
+                    ],
                     yAxis: [
                         {
                             type: 'value',
-                            name: 'Percentage',
+                            name: 'Attendance%',
                             min: 0,
                             max: 100,
-                            interval: 20,
+                            interval: 10,
                             axisLabel: {
-                                formatter: '{value} %'
+                                formatter: '{value}%'
                             }
                         }
-
                     ],
-
                     series: [
                         {
-                            name: 'Excluded AL(%)',
+                            name: 'Include AL(%)',
                             type: 'bar',
-                            data: excludedALData,
+                            data: [90.91, 90.91, 90.91],
                             label: {
                                 show: true,
                                 position: 'insideTop',
                                 formatter: function (params) {
-                                    return params.value + '%';
+                                    return params.data + '%';
                                 }
                             },
                         },
                         {
-                            name: 'Target(%)',
+                            name: 'Exclude AL(%)',
+                            type: 'bar',
+                            data: [100, 100, 100],
+                            label: {
+                                show: true,
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    return params.data + '%';
+                                }
+                            },
+                        },
+
+                        {
+                            name: 'Target',
                             type: 'line',
-                            yAxisIndex: 1,
-                            data: [98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50, 98.50]
+                            data: [98.5, 98.5, 98.5]
                         }
                     ]
                 };
-
-               
-
 
 
                 chart.clear();
