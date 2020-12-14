@@ -44,6 +44,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -244,6 +245,7 @@
     <Compile Include="ExtendClass\Attendance\Base_Model.cs" />
     <Compile Include="ExtendClass\Attendance\DailySummary_BLL.cs" />
     <Compile Include="ExtendClass\Attendance\DailySummary_Model.cs" />
+    <Compile Include="ExtendClass\Attendance\MonthlySummary_BLL.cs" />
     <Compile Include="ExtendClass\Home\Home_BLL.cs" />
     <Compile Include="ExtendClass\Home\Home_DAL.cs" />
     <Compile Include="ExtendClass\Home\Home_Model.cs" />

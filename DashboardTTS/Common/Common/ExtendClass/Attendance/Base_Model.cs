@@ -28,8 +28,8 @@ namespace Common.ExtendClass.Attendance
         public decimal NightShift { get; set; }
         public decimal TotalPresent { get; set; }
         public decimal AnnualLeavel { get; set; }
-        public decimal MC { get; set; }
-        public decimal UPL_UPMC { get; set; }
+        public decimal MC_UPMC { get; set; }
+        public decimal Unpaid { get; set; }
         public decimal Maternity { get; set; }
         public decimal Paternity { get; set; }
         public decimal Marriage { get; set; }
@@ -42,7 +42,7 @@ namespace Common.ExtendClass.Attendance
         public decimal Reservist { get; set; }
         public decimal Pending { get; set; }
 
-        public string LeaveReason { get; set; }      
+        public string LeaveReason { get; set; }
 
     }
 }

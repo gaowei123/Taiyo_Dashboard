@@ -20,30 +20,6 @@ namespace Common.ExtendClass.Attendance
         }
 
 
-        //public List<Base_Model> GetBaseList(BaseParam param)
-        //{
-        //    DataTable dt = _dal.GetList(param);
-        //    if (dt == null || dt.Rows.Count == 0)
-        //        return null;
-
-        //    List<Base_Model> list = new List<Base_Model>();
-
-        //    foreach (DataRow dr in dt.Rows)
-        //    {
-        //        Base_Model model = new Base_Model();
-        //        model.Day = DateTime.Parse(dr["day"].ToString());
-        //        model.Shift = (CommonEnum.Shift)Enum.Parse(typeof(CommonEnum.Shift), dr["shift"].ToString());
-        //        model.Department = (Department)Enum.Parse(typeof(Department), dr["Department"].ToString().Replace("/","_"));
-        //        model.EmployeeID = dr["EmployeeID"].ToString();
-        //        model.Username = dr["UserName"].ToString();
-        //        model.Attendance = dr["Attendance"].ToString();
-        //        model.OnLeave = dr["OnLeave"].ToString();
-
-        //        list.Add(model);
-        //    }
-
-        //    return list;
-        //}
 
 
         public List<Attendance_Model> GetDepartmentAttendanceList(BaseParam param)
@@ -67,8 +43,8 @@ namespace Common.ExtendClass.Attendance
                 
 
                 model.AnnualLeavel = decimal.Parse(dr["Annual Leave"].ToString());
-                model.MC = decimal.Parse(dr["MC"].ToString());
-                model.UPL_UPMC = decimal.Parse(dr["UPL/UPMC"].ToString());
+                model.MC_UPMC = decimal.Parse(dr["MC/UP MC"].ToString());
+                model.Unpaid = decimal.Parse(dr["Unpaid Leave"].ToString());
                 model.Maternity = decimal.Parse(dr["Maternity"].ToString());
                 model.Paternity = decimal.Parse(dr["Paternity"].ToString());
                 model.Marriage = decimal.Parse(dr["Marriage"].ToString());
@@ -81,7 +57,7 @@ namespace Common.ExtendClass.Attendance
                 model.Reservist = decimal.Parse(dr["Reservist"].ToString());
                 model.Pending = decimal.Parse(dr["Pending"].ToString());
 
-                model.LeaveReason = dr["LeaveReason"].ToString();
+                model.LeaveReason = dr["LeaveReason"].ToString().Replace(",", "<br/>");
 
 
 

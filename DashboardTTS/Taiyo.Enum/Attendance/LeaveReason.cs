@@ -11,10 +11,9 @@ namespace Taiyo.Enum.Attendance
         [Description("Annual Leave")]
         AnnualLeave,
 
-        [Description("MC")]
+        [Description("MC/UPMC")]
         MedicalCare,
-
-        [Description("UPL/UPMC")]
+        
         Unpaid,
 
         Maternity,//产假

@@ -1,0 +1,416 @@
+﻿
+@{
+    ViewBag.Title = "Daily Attendance Summary Report";
+}
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+<div class="container-fluid" style="max-width:1400px;">
+    <div class="row titleRow">
+        <div class="col-md-10 col-xs-9">
+            <img id="titleImg" class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span class="titleText">Daily Attendance Summary Report</span>
+        </div>
+        <div class="col-md-2 col-xs-3" style="padding-right:0px;">
+            <input type="text" class="form-control" id="txtDate"
+                   data-date-format="yyyy-mm-dd"
+                   placeholder="Please choose date"
+                   style="margin-top:-4px; margin-right:0px; font-weight"
+                   onchange="search();">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="padding:10px;">
+            <table id="tbReport" data-toggle="table"> </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="padding:0px">
+            <div id="divChart"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var apiGetTableData = window.globalConfig.rootDirectory + '/Attendance/GetDailySummaryReport';
+    var apiGetChartData = window.globalConfig.rootDirectory + '/Attendance/GetDailySummaryReport';
+    var chart = echarts.init(document.getElementById('divChart'));
+
+
+    //初始化时间框
+    $('#txtDate').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    $(document).ready(function () {
+        var strLastDay = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDate').val(strLastDay);
+
+        search();
+    });
+
+
+    function search() {
+
+        var tbReportInfo = {
+            url: apiGetTableData,
+            queryParams: {
+                Date: $("#txtDate").val()
+            },
+            theadClasses: 'thead-title',
+            tableClass: 'table table-bordered table-hover table-striped',
+            columns: [
+            {
+                field: 'Department',title: 'Department',align: 'center',valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else {return {};}
+                }
+            },
+            {
+                field: 'DayShiftUserCount', title: 'Day<br/>Shift', align: 'center', valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'NightShiftUserCount', title: 'Night<br/>Shift', align: 'center', valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'AnnualLeave',
+                title: 'Annual<br/>Leave',
+                align: 'center', valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'OthersLeave',
+                title: 'Others<br/>Approved<br/>Leave',
+                align: 'center', valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'UnpaidLeave',
+                title: 'Unpaid<br />Leave',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'MC_UPMC',
+                title: 'MC /<br />UPMC',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'Absent',
+                title: 'Absent',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'BussinessTrip_WFH',
+                title: 'Business<br/>Trip /<br/>WFH',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'Pending',
+                title: 'Pending',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'TotalPresent',
+                title: 'Total<br/>Present',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'ExcludedAL',
+                title: 'Excluded<br/>AL(%)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'IncludedAL',
+                title: 'Included<br/>AL(%)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'Target',
+                title: 'Target<br/>Attend(%)',
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            },
+            {
+                field: 'Remarks',
+                title: 'Remarks',
+                align: 'left',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == null || value === '') {
+                        return '';
+                    } else {
+                        return value.replace(',', '<br/>');
+                    }
+                },
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            }]
+        }
+        
+        $('#tbReport').bootstrapTable('destroy');
+        $('#tbReport').bootstrapTable({           
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: tbReportInfo.url,
+            queryParams: function (params) { return tbReportInfo.queryParams; },
+
+            theadClasses: tbReportInfo.theadClasses,//表头样式 undefined, thead-light, thead-dark,  
+            classes: tbReportInfo.tableClass,//表格样式
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+            showFooter: false,   //显示合计栏
+
+            columns: tbReportInfo.columns,
+
+            onLoadSuccess: function (data) {
+              
+            },
+            onLoadError: function () {
+                alert("列表数据加载异常");
+            }
+        });
+
+      
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetChartData,
+            data: { Date: $("#txtDate").val() },
+
+            beforeSend: function () {
+                chart.showLoading();
+            },
+
+            success: function (data) {
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('No record found, Please try again!');
+                    return false;
+                }
+
+
+                let excludedALData = [];
+                let includedALData = [];
+                let axisXData = [];
+                for (var i = 0; i < data.length; i++) {
+                    let excludedAL = parseFloat(data[i].ExcludedAL.trim('%'));
+                    let includedAL = parseFloat(data[i].IncludedAL.trim('%'));
+
+                    excludedALData.push(excludedAL);
+                    includedALData.push(includedAL);
+                    axisXData.push(data[i].Department);
+                }
+
+
+                var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: '{b0}<br/><br/>\
+                                    {a0} - {c0}%<br/>\
+                                    {a1} - {c1}%<br/>\
+                                    {a2} - {c2}%'
+                    },
+                    legend: {
+                        data: ['Include AL(%)', 'Exclude AL(%)', 'Target'],
+                        top: 10                       
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: axisXData,
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                            axisLabel: {
+                                interval: 0
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'Attendance%',
+                            min: 0,
+                            max: 100,
+                            interval: 10,
+                            axisLabel: {
+                                formatter: '{value}%'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Include AL(%)',
+                            type: 'bar',
+                            data: includedALData,
+                            label: {
+                                show: true,
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    if (params.data === 0) {
+                                        return '';
+                                    } else {
+                                        return params.data + '%';
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            name: 'Exclude AL(%)',
+                            type: 'bar',
+                            data: excludedALData,
+                            label: {
+                                show: true,
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    if (params.data === 0) {
+                                        return '';
+                                    } else {
+                                        return params.data + '%';
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            name: 'Target',
+                            type: 'line',
+                            data: [98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, ]
+                        }
+                    ]
+                };
+
+
+                chart.clear();
+                chart.setOption(option, true);
+            },
+
+            complete: function () {
+                chart.hideLoading();
+                chart.resize({ height: 400 });
+            },
+
+            error: function () {
+                alert("Get chart data error !");
+                chart.hideLoading();
+            }
+        });
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tbReport').bootstrapTable('resetView');
+        chart.resize({ height: 400 });
+
+       var width = $(window).width();
+
+       if (width < 550) {
+           $('#titleImg').hide();
+       } else {
+           $('#titleImg').show();
+       }
+       
+    });
+
+
+
+</script>
+
+

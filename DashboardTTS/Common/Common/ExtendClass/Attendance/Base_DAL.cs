@@ -10,36 +10,7 @@ namespace Common.ExtendClass.Attendance
 {
     internal class Base_DAL
     {
-        //internal DataTable GetList(BaseParam param)
-        //{
-        //    if (param.DateFrom == null || param.DateTo == null)
-        //        throw new ArgumentNullException("Date From, Date To can not be null!");
-        //    StringBuilder strSql = new StringBuilder();
-        //    strSql.Append(@"select 
-        //                    day,
-        //                    shift,
-        //                    Department,
-        //                    EmployeeID,
-        //                    UserName,
-        //                    Attendance,
-        //                    OnLeave
-        //                    from LMMSUserAttendanceTracking
-        //                    where day >= @dateFrom and day < @dateTo");
-        //    SqlParameter[] paras =
-        //    {
-        //        new SqlParameter("@dateFrom",SqlDbType.DateTime),
-        //        new SqlParameter("@dateTo",SqlDbType.DateTime)
-        //    };
-
-        //    paras[0].Value = param.DateFrom.Value.Date;
-        //    paras[1].Value = param.DateTo.Value.Date;
-
-        //    DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
-        //    if (ds == null || ds.Tables.Count == 0)
-        //        return null;
-        //    else
-        //        return ds.Tables[0];
-        //}
+    
 
         internal DataTable GetDepartmentAttendanceList(BaseParam param)
         {
@@ -54,8 +25,8 @@ SUM(case when Shift = 'Day' then 1 else 0 end) as DayShift,
 SUM(case when Shift = 'Night' then 1 else 0 end) as NightShift,
 SUM(case when Attendance = 'Attendance' then 1 else 0 end ) as TotalPresent,
 SUM(case when Attendance = 'Annual Leave' then 1 else 0 end ) as [Annual Leave],
-SUM(case when Attendance = 'MC' then 1 else 0 end ) as [MC],
-SUM(case when Attendance = 'UPL/UPMC' then 1 else 0 end ) as [UPL/UPMC],
+SUM(case when Attendance = 'MC/UP MC' then 1 else 0 end ) as [MC/UP MC],
+SUM(case when Attendance = 'Unpaid Leave' then 1 else 0 end ) as [Unpaid Leave],
 SUM(case when Attendance = 'Maternity' then 1 else 0 end ) as [Maternity],
 SUM(case when Attendance = 'Paternity' then 1 else 0 end ) as [Paternity],
 SUM(case when Attendance = 'Marriage' then 1 else 0 end ) as [Marriage],
@@ -69,7 +40,7 @@ SUM(case when Attendance = 'Reservist' then 1 else 0 end ) as [Reservist],
 SUM(case when Attendance = 'Pending' then 1 else 0 end ) as [Pending],
 
 (select 
-	case when attendance != 'attendance' then UserName+'  ---  '+Attendance end + ','
+	case when attendance != 'attendance' then UserName+'   ( '+Attendance end + ' ),'
 	from LMMSUserAttendanceTracking 
 	where day =a.Day and Department = a.Department
 	for xml path('') 
@@ -102,7 +73,9 @@ group by Department, day ");
         internal DataTable GetDepartmentUserCount()
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select DEPARTMENT, count(1) as UserCount from User_DB group by DEPARTMENT");
+            strSql.Append(@"select DEPARTMENT, count(1) as UserCount from User_DB
+                            where USER_GROUP != 'Admin' and USER_GROUP != 'IPQC'
+                            group by DEPARTMENT");
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
             if (ds == null || ds.Tables.Count == 0)

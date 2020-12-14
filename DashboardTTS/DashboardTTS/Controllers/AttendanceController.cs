@@ -182,8 +182,8 @@ namespace DashboardTTS.Controllers
         {
             BaseParam para = new BaseParam() { DateFrom = Date, DateTo = Date.AddDays(1) };
             var result = dailySummaryBLL.GetDailySummaryList(para);
-
-            return Json(result);
+            
+            return result == null ? Json("") : Json(result);
         }
 
 

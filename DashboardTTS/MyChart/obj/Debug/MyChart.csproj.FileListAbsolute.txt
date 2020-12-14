@@ -15,3 +15,4 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.dll
