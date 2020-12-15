@@ -3839,6 +3839,7 @@
     <Content Include="Views\Charts\PQCTopRejectChart.cshtml" />
     <Content Include="Views\OverallReport\ProductivityReport.cshtml" />
     <Content Include="Views\Attendance\DailySummaryReport.cshtml" />
+    <Content Include="Views\Attendance\MonthlySummaryReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

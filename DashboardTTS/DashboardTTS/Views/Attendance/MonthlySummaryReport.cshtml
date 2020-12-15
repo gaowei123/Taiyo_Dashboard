@@ -1,0 +1,456 @@
+﻿
+@{
+    ViewBag.Title = "Monthly Attendance Summary Report";
+}
+
+<div class="container-fluid" style="max-width:1400px;">
+    <div class="row titleRow">
+        <div class="col">
+            <img id="titleImg" class="titleImg" src="~/Resources/Images/headericon.gif" />
+            <span class="titleText">Monthly Attendance Summary Report</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label style="width:35%">Year:</label>
+                    <select id="ddlYear" class="form-control" data-ng-style="btn-info" style="width:60%;">                        
+                        @for (int i = 2019; i <= DateTime.Now.Year; i++)
+                        {
+                            if (i == DateTime.Now.Year)
+                            {
+                                <option value="@i.ToString()" selected="selected">@i.ToString()</option>
+                            }
+                            else
+                            {
+                                <option value="@i.ToString()">@i.ToString()</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Month:</label>
+                    <select id="ddlMonth" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            if (i == DateTime.Now.Month)
+                            {
+                                <option value="@i.ToString()" selected="selected">@i.ToString()</option>
+                            }
+                            else
+                            {
+                                <option value="@i.ToString()">@i.ToString()</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Type:</label>
+                    <select id="ddlType" class="form-control" data-ng-style="btn-info" style="width:60%;">                        
+                        <option value="true">Excluded AL</option>
+                        <option value="false">Included AL</option>
+                    </select>
+                </div>
+                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="padding:10px;">
+            <table id="tbReport" data-toggle="table"> </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="padding:0px">
+            <div id="divChart"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var apiGetData = window.globalConfig.rootDirectory + '/Attendance/GetMonthlySummaryReport';    
+    var chart = echarts.init(document.getElementById('divChart'));
+
+
+
+    $(document).ready(function () { search(); });
+
+
+    function search() {
+
+        var searchParams = {
+            Year : $('#ddlYear').val(),
+            Month: $('#ddlMonth').val(),
+            IsExcludedAL: $('#ddlType').val()
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: apiGetData,
+            data: searchParams,
+
+            beforeSend: function () {
+                chart.showLoading();
+            },
+
+            success: function (data) {
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('No record found, Please try again!');
+                    return false;
+                }
+
+
+                initTable(data);
+                return false;
+                initeChart(data);
+            },
+
+            complete: function () {
+                chart.hideLoading();
+                chart.resize({ height: 400 });
+            },
+
+            error: function () {
+                alert("数据加载异常 !");
+                chart.hideLoading();
+            }
+        });
+        
+    }
+
+
+
+
+
+    function initTable(data) {
+
+
+
+        //columns
+        let dateStart = new Date($('#ddlYear').val() + '-' + $('#ddlMonth').val() + '-1');
+        let dateEnd = new Date(dateStart.setMonth(dateStart.getMonth() + 1));
+        dateStart = new Date($('#ddlYear').val() + '-' + $('#ddlMonth').val() + '-1');
+        let dateTemp = dateStart;
+
+
+        let columns = [];
+        columns.push({
+            field: 'Department',
+            title: 'Department',
+            align: 'center',
+            valign: 'middle',
+            cellStyle: function (value, row, index) {
+                if (row.Department === 'Total') {
+                    return { css: { 'font-weight': 'bold' } };
+                } else { return {}; }
+            }
+        });
+
+
+        while (dateTemp < dateEnd) {
+
+            let strArr = dateTemp.toDateString().split(' ');//--> ["Fri", "Jan", "01", "2021"]
+            if (strArr[0] === 'Sat' || strArr[0] === 'Sun') {
+                dateTemp = new Date(dateTemp.setDate(dateTemp.getDate() + 1));
+                continue;
+            }
+            
+            let monthName = strArr[1];
+            let day = dateTemp.getDate();
+
+            columns.push({
+                field: day + '-' + monthName,
+                title: day + '-' + monthName,
+                align: 'center',
+                valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
+                }
+            });
+
+            dateTemp = new Date(dateTemp.setDate(dateTemp.getDate() + 1));
+        }
+        //columns
+
+
+
+        //datas
+        let datas = [];
+
+        let mouldingList = data.filter(item=> item.Department === 'Moulding');
+        var objMould= { Department: 'Moulding' };
+        for (var i = 0; i < mouldingList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objMould[mouldingList[i].Day] = mouldingList[i].ExcludedAL;
+            }else{
+                objMould[mouldingList[i].Day] = mouldingList[i].IncludedAL;
+            }
+        }
+
+        let paintingList = data.filter(item=> item.Department === 'Painting');
+        var objPaint= { Department: 'Painting' };
+        for (var i = 0; i < paintingList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objPaint[paintingList[i].Day] = paintingList[i].ExcludedAL;
+            }else{
+                objPaint[paintingList[i].Day] = paintingList[i].IncludedAL;
+            }
+        }
+
+        let laserList = data.filter(item=> item.Department === 'Laser');
+        var objLaser= { Department: 'Laser' };
+        for (var i = 0; i < laserList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objLaser[laserList[i].Day] = laserList[i].ExcludedAL;
+            }else{
+                objLaser[laserList[i].Day] = laserList[i].IncludedAL;
+            }
+        }
+
+        let pqcList = data.filter(item=> item.Department === 'PQC');
+        var objPQC= { Department: 'PQC' };
+        for (var i = 0; i < pqcList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objPQC[pqcList[i].Day] = pqcList[i].ExcludedAL;
+            }else{
+                objPQC[pqcList[i].Day] = pqcList[i].IncludedAL;
+            }
+        }
+
+        let assemblyList = data.filter(item=> item.Department === 'Assembly');
+        var objAssy= { Department: 'Assembly' };
+        for (var i = 0; i < assemblyList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objAssy[assemblyList[i].Day] = assemblyList[i].ExcludedAL;
+            }else{
+                objAssy[assemblyList[i].Day] = assemblyList[i].IncludedAL;
+            }
+        }
+
+        let officeList = data.filter(item=> item.Department === 'Office');
+        var objOffice= { Department: 'Prod Office' };
+        for (var i = 0; i < officeList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objOffice[officeList[i].Day] = officeList[i].ExcludedAL;
+            }else{
+                objOffice[officeList[i].Day] = officeList[i].IncludedAL;
+            }
+        }
+
+        let ttsList = data.filter(item=> item.Department === 'TSS');
+        var objTTS = { Department: 'TSS' };
+        for (var i = 0; i < ttsList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objTTS[ttsList[i].Day] = ttsList[i].ExcludedAL;
+            }else{
+                objTTS[ttsList[i].Day] = ttsList[i].IncludedAL;
+            }
+        }
+
+        let hrList = data.filter(item=> item.Department === 'HR/Finance');
+        var objHR = { Department: 'HR/Finance' };
+        for (var i = 0; i < hrList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objHR[hrList[i].Day] = hrList[i].ExcludedAL;
+            }else{
+                objHR[hrList[i].Day] = hrList[i].IncludedAL;
+            }
+        }
+
+        let planList = data.filter(item=> item.Department === 'Planning/Purchasing');
+        var objPlan = { Department: 'Planning/Purchasing' };
+        for (var i = 0; i < planList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objPlan[planList[i].Day] = planList[i].ExcludedAL;
+            }else{
+                objPlan[planList[i].Day] = planList[i].IncludedAL;
+            }
+        }
+
+        let saleList = data.filter(item=> item.Department === 'Sales/Project');
+        var objSale = { Department: 'Sales/Project' };
+        for (var i = 0; i < saleList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objSale[saleList[i].Day] = saleList[i].ExcludedAL;
+            }else{
+                objSale[saleList[i].Day] = saleList[i].IncludedAL;
+            }
+        }
+
+        let qaList = data.filter(item=> item.Department === 'QA/QC/FA');
+        var objQA = { Department: 'QA/QC/FA' };
+        for (var i = 0; i < qaList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objQA[qaList[i].Day] = qaList[i].ExcludedAL;
+            }else{
+                objQA[qaList[i].Day] = qaList[i].IncludedAL;
+            }
+        }
+
+        let storeList = data.filter(item=> item.Department === 'Store');
+        var objStore = { Department: 'Store' };
+        for (var i = 0; i < storeList.length; i++) {
+            if ($('#ddlType').val() == 'true') {
+                objStore[storeList[i].Day] = storeList[i].ExcludedAL;
+            }else{
+                objStore[storeList[i].Day] = storeList[i].IncludedAL;
+            }
+        }
+
+        datas.push(objMould);
+        datas.push(objPaint);
+        datas.push(objLaser);
+        datas.push(objAssy);
+        datas.push(objOffice);
+        datas.push(objTTS);
+        datas.push(objHR);
+        datas.push(objPlan);
+        datas.push(objSale);
+        datas.push(objStore);
+
+        
+
+        $('#tbReport').bootstrapTable('destroy');
+        $('#tbReport').bootstrapTable({            
+            theadClasses: 'thead-title',//表头样式 undefined, thead-light, thead-dark,
+            classes: 'table table-bordered table-hover table-striped',//表格样式
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+            showFooter: false,   //显示合计栏
+
+            columns: columns,
+            data: datas,
+
+            onLoadSuccess: function (data) { },
+            onLoadError: function () {
+                alert("列表数据加载异常");
+            }
+        });
+    }
+
+
+
+
+
+    function initeChart(data) {
+
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                formatter: '{b0}<br/><br/>\
+                                    {a0} - {c0}%<br/>\
+                                    {a1} - {c1}%<br/>\
+                                    {a2} - {c2}%'
+            },
+            legend: {
+                data: ['Include AL(%)', 'Exclude AL(%)', 'Target'],
+                top: 10
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: axisXData,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        interval: 0
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Attendance%',
+                    min: 0,
+                    max: 100,
+                    interval: 10,
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'Include AL(%)',
+                    type: 'bar',
+                    data: includedALData,
+                    label: {
+                        show: true,
+                        position: 'insideTop',
+                        formatter: function (params) {
+                            if (params.data === 0) {
+                                return '';
+                            } else {
+                                return params.data + '%';
+                            }
+                        }
+                    },
+                },
+                {
+                    name: 'Exclude AL(%)',
+                    type: 'bar',
+                    data: excludedALData,
+                    label: {
+                        show: true,
+                        position: 'insideTop',
+                        formatter: function (params) {
+                            if (params.data === 0) {
+                                return '';
+                            } else {
+                                return params.data + '%';
+                            }
+                        }
+                    },
+                },
+                {
+                    name: 'Target',
+                    type: 'line',
+                    data: [98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5, 98.5]
+                }
+            ]
+        };
+                
+        chart.clear();
+        chart.setOption(option, true);
+    }
+
+
+    $(window).resize(function () {
+        $('#tbReport').bootstrapTable('resetView');
+        chart.resize({ height: 400 });
+
+       var width = $(window).width();
+
+       if (width < 550) {
+           $('#titleImg').hide();
+       } else {
+           $('#titleImg').show();
+       }
+    });
+
+
+
+</script>
+
+

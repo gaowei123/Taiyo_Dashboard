@@ -16,6 +16,8 @@ namespace DashboardTTS.Controllers
 
 
         private readonly Common.ExtendClass.Attendance.DailySummary_BLL dailySummaryBLL = new Common.ExtendClass.Attendance.DailySummary_BLL();
+        private readonly Common.ExtendClass.Attendance.MonthlySummary_BLL monthlySummaryBLL = new Common.ExtendClass.Attendance.MonthlySummary_BLL();
+
 
         private readonly  JavaScriptSerializer _jsSerializer = new JavaScriptSerializer();
 
@@ -41,6 +43,11 @@ namespace DashboardTTS.Controllers
         }
 
         public ActionResult DailySummaryReport()
+        {
+            return View();
+        }
+
+        public ActionResult MonthlySummaryReport()
         {
             return View();
         }
@@ -178,6 +185,14 @@ namespace DashboardTTS.Controllers
         #endregion
 
 
+
+
+        /// <summary>
+        /// New Daily Attendance Summary Report
+        /// bootstrap table & echart 都访问同一个api
+        /// </summary>
+        /// <param name="Date">要查看的日期</param>
+        /// <returns></returns>
         public JsonResult GetDailySummaryReport(DateTime Date)
         {
             BaseParam para = new BaseParam() { DateFrom = Date, DateTo = Date.AddDays(1) };
@@ -185,6 +200,33 @@ namespace DashboardTTS.Controllers
             
             return result == null ? Json("") : Json(result);
         }
+
+
+        /// <summary>
+        /// New Monthly Attendance Summary Report
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="isExcludedAL">
+        /// 切换ExcludedAL, IncludedAL 的flag
+        /// Included AL % = ( Nos of staff -mc -upL/upMC -absent -AL -OAL)/Nos of staff
+        /// Excluded AL % =( Nos of staff -mc -upL/upMC -absent)/ Nos of staff
+        /// </param>
+        /// <returns></returns>
+        public ActionResult GetMonthlySummaryReport(int Year, int Month, bool IsExcludedAL)
+        {
+            Taiyo.SearchParam.AttendanceParam.MonthlyParams param = new Taiyo.SearchParam.AttendanceParam.MonthlyParams();
+            param.DateFrom = new DateTime(Year, Month, 1);
+            param.DateTo = param.DateFrom.Value.AddMonths(1);
+            param.isExcludedAL = IsExcludedAL;
+
+
+
+            string strResult = monthlySummaryBLL.GetMonthlyListJsonString(param);
+
+            return Content(strResult);
+        }
+
 
 
         #region Attendenance Daily Report
