@@ -100,8 +100,7 @@ namespace Common.ExtendClass.Attendance
                                   Department = groupList.Key.Department.GetDescription(),
                                   Day =  $"{groupList.Key.Day.Value.Day}-{groupList.Key.Day.Value.GetMonthName(false)}",
 
-
-
+                                  
                                   //Excluded AL % =( Nos of staff -mc -upL/upMC -absent)/ Nos of staff
                                   ExcludedAL = groupList.Sum(p => p.a.TotalPresent) == 0 ? "0.00%" : 
                                   Math.Round(
@@ -110,18 +109,42 @@ namespace Common.ExtendClass.Attendance
                                   ).ToString("0.00") + "%",
 
 
-
                                   //Included AL % = ( Nos of staff -mc -upL/upMC -absent -AL -OAL)/Nos of staff
                                   IncludedAL = groupList.Sum(p => p.a.TotalPresent) == 0 ? "0.00%" :  
                                   Math.Round(
                                       (groupList.Sum(p => p.b.Value) - groupList.Sum(p => p.a.MC_UPMC + p.a.Unpaid + p.a.Absent  + p.a.AnnualLeavel  + p.a.Maternity + p.a.Paternity + p.a.Marriage + p.a.Hospitalization + p.a.Compassionate + p.a.ChildCareLeave)) / groupList.Sum(p => p.b.Value) * 100
                                       , 2
                                   ).ToString("0.00") + "%",
-
                               };
-                     
 
-            return JsonConvert.SerializeObject(groupByList);
+            var summary = from a in joinList
+                          group a by a.a.Day into groupList
+                          select new
+                          {
+                              Department = "Total",
+                              Day = $"{groupList.Key.Value.Day}-{groupList.Key.Value.GetMonthName(false)}",
+
+
+                              //Excluded AL % =( Nos of staff -mc -upL/upMC -absent)/ Nos of staff
+                              ExcludedAL = groupList.Sum(p => p.a.TotalPresent) == 0 ? "0.00%" :
+                              Math.Round(
+                                  (groupList.Sum(p => p.b.Value) - groupList.Sum(p => p.a.MC_UPMC + p.a.Unpaid + p.a.Absent)) / groupList.Sum(p => p.b.Value) * 100
+                                  , 2
+                              ).ToString("0.00") + "%",
+
+
+                              //Included AL % = ( Nos of staff -mc -upL/upMC -absent -AL -OAL)/Nos of staff
+                              IncludedAL = groupList.Sum(p => p.a.TotalPresent) == 0 ? "0.00%" :
+                              Math.Round(
+                                  (groupList.Sum(p => p.b.Value) - groupList.Sum(p => p.a.MC_UPMC + p.a.Unpaid + p.a.Absent + p.a.AnnualLeavel + p.a.Maternity + p.a.Paternity + p.a.Marriage + p.a.Hospitalization + p.a.Compassionate + p.a.ChildCareLeave)) / groupList.Sum(p => p.b.Value) * 100
+                                  , 2
+                              ).ToString("0.00") + "%",
+                          };
+
+            var resultList = groupByList.Union(summary);
+
+
+            return JsonConvert.SerializeObject(resultList);
         }
 
 
