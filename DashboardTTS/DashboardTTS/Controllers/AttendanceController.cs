@@ -132,48 +132,38 @@ namespace DashboardTTS.Controllers
         
 
         #region submit attendance
-        public ActionResult GetAttendanceList()
+        public JsonResult GetAttendanceList(string Department, DateTime Date)
         {
-            string department = Request.Form["Department"];
-            DateTime day = DateTime.Parse(Request.Form["Date"]);
-
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-
-            List<Common.Model.LMMSUserAttendanceTracking_Model> attendanceList = vbllAttendance.GetAttendanceList(day, department);
+            List<Common.Model.LMMSUserAttendanceTracking_Model> attendanceList = vbllAttendance.GetAttendanceList(Date, Department);
 
             //保留原本的排列顺序
-            var orderList = from a in attendanceList
-                            orderby a.Shift ascending, a.UserID ascending
-                            select a;
-
-
-
-            return Content(js.Serialize(orderList));
+            var orderList = attendanceList.OrderBy(p => p.Shift).OrderBy(p => p.UserID);
+            return Json(orderList);
         }
         
-        public ActionResult IsSubmit()
+        /// <summary>
+        /// 判断这一天, 这个部门有没有提交过.
+        /// 没提交过的,页面显示一句警告信息.
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult IsSubmit(string Department, DateTime Date)
         {
-            string department = Request.Form["Department"];
-            DateTime day = DateTime.Parse(Request.Form["Date"]);
-
-
-            bool result = attendanceBLL.IsSubmited(day, department);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            return Content(js.Serialize(result));
+            bool result = attendanceBLL.IsSubmited(Date, Department);          
+            return Json(result);
         }
         
+
+        /// <summary>
+        /// 保存Attendance信息
+        /// </summary>
+        /// <returns></returns>
         public JsonResult SubmitAttendance()
         {
-            string strAttendanceList = Request.Form["AttendanceList"];
+            string strJsonObj = Request.Form["AttendanceList"];
             DateTime day = DateTime.Parse(Request.Form["Day"]);
             string department = Request.Form["Department"];
             
-            List<Common.Model.LMMSUserAttendanceTracking_Model> modelList = _jsSerializer.Deserialize<List<Common.Model.LMMSUserAttendanceTracking_Model>>(strAttendanceList);
+            List<Common.Model.LMMSUserAttendanceTracking_Model> modelList = _jsSerializer.Deserialize<List<Common.Model.LMMSUserAttendanceTracking_Model>>(strJsonObj);
             if (modelList == null)
                 return Json("false");
 

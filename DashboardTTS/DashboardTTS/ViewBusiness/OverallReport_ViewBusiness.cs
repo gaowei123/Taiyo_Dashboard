@@ -7,9 +7,6 @@ using System.Web.Script.Serialization;
 
 namespace DashboardTTS.ViewBusiness
 {
-
-    
-
     public class OverallReport_ViewBusiness
     {
 

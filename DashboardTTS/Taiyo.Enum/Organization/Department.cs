@@ -22,7 +22,7 @@ namespace Taiyo.Enum.Organization
 
         Assembly = 7,
 
-        [Description("Pord Office")]
+        [Description("Prod Office")]
         Office = 8,
 
         TSS = 9,

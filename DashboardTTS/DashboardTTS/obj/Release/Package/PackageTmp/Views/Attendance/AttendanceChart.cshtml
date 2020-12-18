@@ -223,8 +223,15 @@
                             data: attDaysDataArray,
                             label: {
                                 show: true,
-                                position: 'insideTop'
-                            },
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    if (params.data === 0) {
+                                        return '';
+                                    } else {
+                                        return params.data;
+                                    }
+                                }
+                            }                            
                         },
                         {
                             name: 'Leave Days',
@@ -233,16 +240,17 @@
                             data: leaveDaysDataArray,
                             label: {
                                 show: true,
-                                position: 'insideTop'
+                                position: 'insideTop',
+                                formatter: function (params) {
+                                    if (params.data === 0) {
+                                        return '';
+                                    } else {
+                                        return params.data;
+                                    }
+                                }
                             },
                         }
                       
-                        //{
-                        //    name: 'Attendance Rate',
-                        //    type: 'line',
-                        //    yAxisIndex: 1,
-                        //    data: rateDataArray
-                        //}
                     ]
                 };
 

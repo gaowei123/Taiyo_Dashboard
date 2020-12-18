@@ -85,9 +85,8 @@ namespace Common.ExtendClass.Attendance
                     model.Target = "98.50%";
                     model.Remarks = dptModel.LeaveReason;
 
-                    allExcludedAL += model.TotalPresent - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent;
-                    allIncludedAL += model.TotalPresent - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent - dptModel.AnnualLeavel - dptModel.Paternity - dptModel.Marriage - dptModel.Hospitalization - dptModel.Compassionate - dptModel.ChildCareLeave;
-                    allTotalPresent += model.TotalUser;
+                    allExcludedAL +=  dptModel.MC_UPMC + dptModel.Unpaid + dptModel.Absent;
+                    allIncludedAL +=  dptModel.MC_UPMC + dptModel.Unpaid + dptModel.Absent + dptModel.AnnualLeavel + dptModel.Paternity + dptModel.Marriage + dptModel.Hospitalization + dptModel.Compassionate + dptModel.ChildCareLeave;
                 }
                 else
                 {
@@ -131,8 +130,8 @@ namespace Common.ExtendClass.Attendance
             modelSummary.Pending = resultList.Sum(p => p.Pending);
             modelSummary.TotalPresent = resultList.Sum(p => p.TotalPresent);
             
-            modelSummary.ExcludedAL = Math.Round(allExcludedAL / allTotalPresent * 100, 2).ToString("0.00") + "%";
-            modelSummary.IncludedAL = Math.Round(allIncludedAL / allTotalPresent * 100, 2).ToString("0.00") + "%";
+            modelSummary.ExcludedAL = Math.Round((dicDeparmentUserCount.Sum(p => p.Value) -allExcludedAL) / dicDeparmentUserCount.Sum(p => p.Value) * 100, 2).ToString() + "%";
+            modelSummary.IncludedAL = Math.Round((dicDeparmentUserCount.Sum(p => p.Value) - allIncludedAL) / dicDeparmentUserCount.Sum(p=>p.Value) * 100, 2).ToString() + "%";
 
             modelSummary.Target = "";
             modelSummary.Remarks = "";

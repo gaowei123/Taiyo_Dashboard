@@ -60,7 +60,6 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bi
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\MyChart.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\EntityFramework.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\System.Web.Razor.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\System.Web.WebPages.Razor.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\System.Web.WebPages.xml

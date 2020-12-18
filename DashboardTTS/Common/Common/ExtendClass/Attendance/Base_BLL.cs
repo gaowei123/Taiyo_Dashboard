@@ -34,7 +34,7 @@ namespace Common.ExtendClass.Attendance
             {
                 Attendance_Model model = new Attendance_Model();
 
-                model.Department = (Department)Enum.Parse(typeof(Department), dr["Department"].ToString().Replace("/", "_"));
+                model.Department = Taiyo.Tool.StatusConventor.GetEnumByDescription<Department>(dr["Department"].ToString());
                 model.Day = DateTime.Parse(dr["day"].ToString());
 
                 model.DayShift = decimal.Parse(dr["DayShift"].ToString());
@@ -79,7 +79,13 @@ namespace Common.ExtendClass.Attendance
                 Dictionary<Department, decimal> dicUser = new Dictionary<Department, decimal>();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    Department department =(Department) Enum.Parse(typeof(Department), dr["DEPARTMENT"].ToString().Replace("/","_")) ;
+
+                    var adsf = dr["DEPARTMENT"].ToString();
+
+
+
+                    // Department department =(Department) Enum.Parse(typeof(Department), dr["DEPARTMENT"].ToString().Replace("/","_")) ;
+                    Department department = Taiyo.Tool.StatusConventor.GetEnumByDescription<Department>(dr["DEPARTMENT"].ToString());
                     decimal userCount = decimal.Parse(dr["UserCount"].ToString());
 
                     dicUser.Add(department, userCount);

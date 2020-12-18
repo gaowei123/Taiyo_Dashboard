@@ -46,14 +46,12 @@ namespace DashboardTTS.Webform.PQC
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
                 string sDescription = "BUTTON";//除了panel, bezel的part都显示.
-
-
-
+                
 
                 ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();
 
 
-                DashboardTTS.ViewBusiness.ButtonReport_ViewBusiness vBLL = new ViewBusiness.ButtonReport_ViewBusiness();
+                ViewBusiness.ButtonReport_ViewBusiness vBLL = new ViewBusiness.ButtonReport_ViewBusiness();
                 DataTable dtReport = vBLL.GetResultDt(DateFrom, DateTo, sDescription, partNumber, JobNo, model, supplier, color, coating, reportType, out modelForDisplay);
                 
                 Display(dtReport, modelForDisplay);

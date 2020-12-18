@@ -13,3 +13,4 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.dll

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Taiyo.Enum.Production;
 using Taiyo.Enum.Organization;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Taiyo.Tool
 {
@@ -109,6 +111,35 @@ namespace Taiyo.Tool
                     throw new ArgumentNullException("Status can not empty or null !");
             }
         }
+        
+
+
+        /// <summary>
+        /// 根据Description获取枚举
+        /// </summary>
+        /// <typeparam name="T">枚举类型</typeparam>
+        /// <param name="description">枚举描述</param>
+        /// <returns>枚举</returns>
+        public static T GetEnumByDescription<T>(string description)
+        {
+            System.Reflection.FieldInfo[] fields = typeof(T).GetFields();
+            foreach (System.Reflection.FieldInfo field in fields)
+            {
+                object[] objs = field.GetCustomAttributes(typeof(DescriptionAttribute), false); //获取描述属性
+                if (objs.Length > 0 && (objs[0] as DescriptionAttribute).Description == description)
+                {
+                    return (T)field.GetValue(null);
+                }
+                else
+                {
+                    if (field.Name == description)
+                        return (T)field.GetValue(null);
+                }
+            }
+
+            throw new ArgumentException(string.Format("{0} 未能找到对应的枚举.", description), "Description");
+        }
+
 
 
 

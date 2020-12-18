@@ -2,3 +2,4 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Enum\bin\Release\Ta
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Enum\bin\Release\Taiyo.Enum.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Enum\obj\Release\Taiyo.Enum.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Enum\obj\Release\Taiyo.Enum.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Enum\obj\Release\Taiyo.Enum.csprojResolveAssemblyReference.cache
