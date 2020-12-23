@@ -23,5 +23,11 @@ namespace Common.ExtendClass.Attendance
         public string IncludedAL { get; set; }
         public string Target { get; set; }
         public string Remarks { get; set; }
+        /// <summary>
+        /// 用于判断attendance是否提交了. 
+        /// 超过当天8:15 AM还没提交则false;
+        /// else true;
+        /// </summary>
+        public bool IsSubmit { get; set; }
     }
 }

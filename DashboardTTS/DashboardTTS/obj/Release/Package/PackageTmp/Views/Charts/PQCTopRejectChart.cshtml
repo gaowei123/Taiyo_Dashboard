@@ -54,12 +54,12 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default" style="margin-top:10px;">
+        <div class="col-md-12 panel panel-default" style="margin-top:10px;">
             <div id="divChartTopPartNo"></div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 panel panel-default">
+        <div class="col-md-12 panel panel-default">
             <div id="divChartTopDefect"></div>
         </div>
     </div>
@@ -222,7 +222,7 @@
 
             complete: function(){
                 topPartNoChart.hideLoading();
-                topPartNoChart.resize({ height: $(window).height() - 600 });
+                topPartNoChart.resize({ height: 300 });
             },
 
 
@@ -336,7 +336,7 @@
 
             complete: function () {
                 topDefectChart.hideLoading();
-                topDefectChart.resize({ height: $(window).height() - 650 });
+                topDefectChart.resize({ height: 300 });
             },
 
 
@@ -352,7 +352,8 @@
 
 
     $(window).resize(function () {
-        chart.resize({ height: $(window).height() - 650 });
+        topPartNoChart.resize({ height: 300 });
+        topDefectChart.resize({ height: 300 });
     });
 
 

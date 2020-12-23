@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
 
 namespace Common.Class.BLL
 {
@@ -1052,6 +1053,8 @@ namespace Common.Class.BLL
         public bool UpdateQASetupForWipPart(string sTrackingID, int iQa, int iSetup)
         {
 
+            DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"In func UpdateQASetupForWipPart,  trackingID:{sTrackingID},  qaQty:{iQa},  setupQty:{iSetup}");
+
             Common.DAL.PQCQaViDetailTracking_DAL viDetailTracking = new Common.DAL.PQCQaViDetailTracking_DAL();
             Common.Class.BLL.PQCQaViDetailTracking_BLL detailBLL = new PQCQaViDetailTracking_BLL();
 
@@ -1061,26 +1064,32 @@ namespace Common.Class.BLL
             List<Common.Class.Model.PQCQaViDetailTracking_Model> detailList = detailBLL.GetModelList(sTrackingID, "", null, null);
             foreach (var detailModel in detailList)
             {
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"source detailModel: {JsonConvert.SerializeObject(detailModel)}");
+
                 detailModel.totalQty = detailModel.totalQty - iQa - iSetup;
                 detailModel.passQty = detailModel.passQty - iQa - iSetup;
 
                 detailModel.remarks = "Updated by buyoff record";
                 detailModel.lastUpdatedTime = DateTime.Now;
                 detailModel.updatedTime = DateTime.Now;
+
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"updated detailModel: {JsonConvert.SerializeObject(detailModel)}");
             }
 
 
             //处理 vi tracking
             Common.Class.Model.PQCQaViTracking viModel = GetModelByTrackingID(sTrackingID);
+            DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"source viModel: {JsonConvert.SerializeObject(viModel)}");
+
             viModel.TotalQty = (int.Parse(viModel.TotalQty) - (iQa + iSetup) * detailList.Count()).ToString();
             viModel.acceptQty = (int.Parse(viModel.acceptQty) - (iQa + iSetup) * detailList.Count()).ToString();
 
             viModel.remarks = "Updated by buyoff record";
             viModel.lastUpdatedTime = DateTime.Now;
             viModel.updatedTime = DateTime.Now;
+            DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"updated viModel: {JsonConvert.SerializeObject(viModel)}");
 
 
-            
 
             List<SqlCommand> cmdList = new List<SqlCommand>();
 
@@ -1114,10 +1123,15 @@ namespace Common.Class.BLL
             List<Common.Class.Model.PQCQaViBinning> viBinList = binBLL.GetModelList(null, null, viModel.jobId, viModel.processes);
             foreach (var binModel in viBinList)
             {
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"source binModel: {JsonConvert.SerializeObject(binModel)}");
+
                 binModel.materialQty = binModel.materialQty - iQa - iSetup;
                 binModel.updatedTime = DateTime.Now;
                 binModel.remarks = "Updated by buyoff record";
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"updated binModel: {JsonConvert.SerializeObject(binModel)}");
+
                 cmdList.Add(binBLL.UpdateCommand(binModel));
+
 
 
 

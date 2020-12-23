@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Taiyo.SearchParam.AttendanceParam;
 using Taiyo.Enum.Organization;
 using Newtonsoft.Json;
 using Taiyo.Enum.Organization;
@@ -19,7 +18,7 @@ namespace Common.ExtendClass.Attendance
         }
 
 
-        public string GetMonthlyListJsonString(Taiyo.SearchParam.AttendanceParam.MonthlyParams param)
+        public string GetMonthlyListJsonString(Taiyo.SearchParam.BaseParam param)
         {
             JsonSerializer jsonSerializer = new JsonSerializer();
 

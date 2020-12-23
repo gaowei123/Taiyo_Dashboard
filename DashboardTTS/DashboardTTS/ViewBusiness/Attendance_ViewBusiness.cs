@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using Taiyo.Enum.Organization;
+using Taiyo.Tool.Extension;
 
 namespace DashboardTTS.ViewBusiness
 {
@@ -322,9 +324,16 @@ namespace DashboardTTS.ViewBusiness
             List<Common.Class.Model.User_DB_Model> userList = userBLL.GetModelList(sDepartment, "", "", "");
             //去掉一个admin
             var attendanceUser = from a in userList
-                                 where a.USER_GROUP != StaticRes.Global.UserGroup.ADMIN 
+                                 where a.USER_GROUP != StaticRes.Global.UserGroup.ADMIN
+                                 select a;
+            //只有当是moulding部门时, 才不显示ipqc.
+            if (sDepartment == Department.Moulding.GetDescription())
+            {
+                attendanceUser = from a in userList
+                                 where a.USER_GROUP != StaticRes.Global.UserGroup.ADMIN
                                  && a.USER_GROUP != StaticRes.Global.UserGroup.IPQC
                                  select a;
+            }
 
             List<Common.Model.LMMSUserAttendanceTracking_Model> currentAttendanceList = attendanceBLL.GetModelList(dDay, dDay.AddDays(1), sDepartment);
 

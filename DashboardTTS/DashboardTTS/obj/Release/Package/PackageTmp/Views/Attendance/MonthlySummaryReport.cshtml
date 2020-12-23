@@ -17,7 +17,7 @@
             <div class="row form-inline searchingBar ">
                 <div class="col-sm-3">
                     <label style="width:35%">Year:</label>
-                    <select id="ddlYear" class="form-control" data-ng-style="btn-info" style="width:60%;">                        
+                    <select id="ddlYear" class="form-control" data-ng-style="btn-info" style="width:60%;">
                         @for (int i = 2019; i <= DateTime.Now.Year; i++)
                         {
                             if (i == DateTime.Now.Year)
@@ -47,13 +47,7 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-3">
-                    <label style="width:35%">Type:</label>
-                    <select id="ddlType" class="form-control" data-ng-style="btn-info" style="width:60%;">                        
-                        <option value="true">Excluded AL</option>
-                        <option value="false">Included AL</option>
-                    </select>
-                </div>
+                <div class="col-sm-3"></div>
                 <div class="col-sm-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
@@ -62,18 +56,37 @@
         </div>
     </div>
 
+    
     <div class="row">
-        <div class="col-sm-12 panel panel-default" style="padding:10px;">
-            <table id="tbReport" data-toggle="table"> </table>
+        <div class="col-sm-12 panel panel-default" style="padding-top:10px;">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#ExcludedAL" aria-controls="home" role="tab" data-toggle="tab">Excluded AL</a>
+                </li>
+                <li role="presentation">
+                    <a href="#IncludedAL" aria-controls="wip" role="tab" data-toggle="tab">Included AL</a>
+                </li>                
+            </ul>
+
+
+
+            <!-- Tab panes -->
+            <div class="tab-content" style="margin-top:10px;">
+                <div role="tabpanel" class="tab-pane fade in active" id="ExcludedAL">                   
+                    <table id="tbReportEx" data-toggle="table"> </table>
+                    <hr />
+                    <div id="divChartEx"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="IncludedAL">
+                    <table id="tbReportIn" data-toggle="table"> </table>
+                    <hr />
+                    <div id="divChartIn"></div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-sm-12 panel panel-default" style="padding:0px">
-            <div id="divChart"></div>
-        </div>
-    </div>
-
 </div>
 
 
@@ -85,7 +98,8 @@
 <script type="text/javascript">
 
     var apiGetData = window.globalConfig.rootDirectory + '/Attendance/GetMonthlySummaryReport';    
-    var chart = echarts.init(document.getElementById('divChart'));
+    var chartEx = echarts.init(document.getElementById('divChartEx'));
+    var chartIn = echarts.init(document.getElementById('divChartIn'));
 
 
 
@@ -96,8 +110,7 @@
 
         var searchParams = {
             Year : $('#ddlYear').val(),
-            Month: $('#ddlMonth').val(),
-            IsExcludedAL: $('#ddlType').val()
+            Month: $('#ddlMonth').val()
         }
 
         $.ajax({
@@ -107,7 +120,8 @@
             data: searchParams,
 
             beforeSend: function () {
-                chart.showLoading();
+                chartEx.showLoading();
+                chartIn.showLoading();
             },
 
             success: function (data) {
@@ -119,29 +133,29 @@
 
                 initTable(data);
 
-                initeChart(data);
+                initChart(data);
             },
 
             complete: function () {
-                chart.hideLoading();
-                chart.resize({ height: 400 });
+                chartEx.hideLoading();
+                chartIn.hideLoading();
+                chartEx.resize({ height: 400 });
+                chartIn.resize({ height: 400 });
             },
 
             error: function () {
                 alert("数据加载异常 !");
-                chart.hideLoading();
+                chartEx.hideLoading();
+                chartIn.hideLoading();
             }
         });
         
     }
 
 
-
-
-
     function initTable(data) {
 
-        //columns
+        //根据选择的月份, 遍历每一天生成表头
         let dateStart = new Date($('#ddlYear').val() + '-' + $('#ddlMonth').val() + '-1');
         let dateEnd = new Date(dateStart.setMonth(dateStart.getMonth() + 1));
         dateStart = new Date($('#ddlYear').val() + '-' + $('#ddlMonth').val() + '-1');
@@ -187,218 +201,51 @@
 
             dateTemp = new Date(dateTemp.setDate(dateTemp.getDate() + 1));
         }
-        //columns
+        //根据选择的月份, 遍历每一天生成表头
 
 
 
 
-      
+        //整理原始的data数据 对应表头, 生成对象数组
 
-        //整理原始的data数据 来对应table column的对象数组
-        let datas = [];
-
-        let mouldingList = data.filter(item=> item.Department === 'Moulding');
-        var objMould= { Department: 'Moulding' };
-        for (var i = 0; i < mouldingList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objMould[mouldingList[i].Day] = day > today && month === currentMonth ? '' : mouldingList[i].ExcludedAL;
-            }else{
-                objMould[mouldingList[i].Day] = day > today && month === currentMonth ? '' : mouldingList[i].IncludedAL;
-            }
-        }
-
-        let paintingList = data.filter(item=> item.Department === 'Painting');
-        var objPaint= { Department: 'Painting' };
-        for (var i = 0; i < paintingList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objPaint[paintingList[i].Day] = day > today && month === currentMonth ? '' : paintingList[i].ExcludedAL;
-            }else{
-                objPaint[paintingList[i].Day] = day > today && month === currentMonth ? '' : paintingList[i].IncludedAL;
-            }
-        }
-
-        let laserList = data.filter(item=> item.Department === 'Laser');
-        var objLaser= { Department: 'Laser' };
-        for (var i = 0; i < laserList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objLaser[laserList[i].Day] =day > today && month === currentMonth ? '' : laserList[i].ExcludedAL;
-            }else{
-                objLaser[laserList[i].Day] = day > today && month === currentMonth ? '' : laserList[i].IncludedAL;
-            }
-        }
-
-        let pqcList = data.filter(item=> item.Department === 'PQC');
-        var objPQC= { Department: 'PQC' };
-        for (var i = 0; i < pqcList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objPQC[pqcList[i].Day] =day > today && month === currentMonth ? '' : pqcList[i].ExcludedAL;
-            }else{
-                objPQC[pqcList[i].Day] = day > today && month === currentMonth ? '' : pqcList[i].IncludedAL;
-            }
-        }
-
-        let assemblyList = data.filter(item=> item.Department === 'Assembly');
-        var objAssy= { Department: 'Assembly' };
-        for (var i = 0; i < assemblyList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objAssy[assemblyList[i].Day] =day > today && month === currentMonth ? '' :  assemblyList[i].ExcludedAL;
-            }else{
-                objAssy[assemblyList[i].Day] = day > today && month === currentMonth ? '' : assemblyList[i].IncludedAL;
-            }
-        }
-
-        let officeList = data.filter(item=> item.Department === 'Pord Office');
-        var objOffice= { Department: 'Prod Office' };
-        for (var i = 0; i < officeList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objOffice[officeList[i].Day] = day > today && month === currentMonth ? '' :  officeList[i].ExcludedAL ;
-            }else{
-                objOffice[officeList[i].Day] = day > today && month === currentMonth ? '' : officeList[i].IncludedAL;
-            }
-        }
-
-        let ttsList = data.filter(item=> item.Department === 'TSS');
-        var objTTS = { Department: 'TSS' };
-        for (var i = 0; i < ttsList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objTTS[ttsList[i].Day] =day > today && month === currentMonth ? '' :  ttsList[i].ExcludedAL;
-            }else{
-                objTTS[ttsList[i].Day] = day > today && month === currentMonth ? '' : ttsList[i].IncludedAL;
-            }
-        }
-
-        let hrList = data.filter(item=> item.Department === 'HR/Finance');
-        var objHR = { Department: 'HR/Finance' };
-        for (var i = 0; i < hrList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objHR[hrList[i].Day] =day > today && month === currentMonth ? '' :   hrList[i].ExcludedAL;
-            }else{
-                objHR[hrList[i].Day] = day > today && month === currentMonth ? '' : hrList[i].IncludedAL;
-            }
-        }
-
-        let planList = data.filter(item=> item.Department === 'Planning/Purchasing');
-        var objPlan = { Department: 'Planning/Purchasing' };
-        for (var i = 0; i < planList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objPlan[planList[i].Day] = day > today && month === currentMonth ? '' :  planList[i].ExcludedAL;
-            }else{
-                objPlan[planList[i].Day] = day > today && month === currentMonth ? '' : planList[i].IncludedAL;
-            }
-        }
-
-        let saleList = data.filter(item=> item.Department === 'Sales/Project');
-        var objSale = { Department: 'Sales/Project' };
-        for (var i = 0; i < saleList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objSale[saleList[i].Day] =day > today && month === currentMonth ? '' :  saleList[i].ExcludedAL;
-            }else{
-                objSale[saleList[i].Day] = day > today && month === currentMonth ? '' : saleList[i].IncludedAL;
-            }
-        }
-
-        let qaList = data.filter(item=> item.Department === 'QA/QC/FA');
-        var objQA = { Department: 'QA/QC/FA' };
-        for (var i = 0; i < qaList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objQA[qaList[i].Day] =day > today && month === currentMonth ? '' :  qaList[i].ExcludedAL;
-            }else{
-                objQA[qaList[i].Day] = day > today && month === currentMonth ? '' : qaList[i].IncludedAL;
-            }
-        }
-
-        let storeList = data.filter(item=> item.Department === 'Store');
-        var objStore = { Department: 'Store' };
-        for (var i = 0; i < storeList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objStore[storeList[i].Day] = day > today && month === currentMonth ? '' : storeList[i].ExcludedAL;
-            }else{
-                objStore[storeList[i].Day] = day > today && month === currentMonth ? '' : storeList[i].IncludedAL;
-            }
-        }
-
-        let summayList = data.filter(item=> item.Department === 'Total');
-        var objSummary = { Department: 'Total' };
-        for (var i = 0; i < summayList.length; i++) {
-            let day = parseInt(mouldingList[i].Day.split('-')[0]);
-            let month = mouldingList[i].Day.split('-')[1]
-            let today = parseInt(new Date().toString().split(' ')[2]);
-            let currentMonth = new Date().toString().split(' ')[1];
-            if ($('#ddlType').val() == 'true') {
-                objSummary[summayList[i].Day] = day > today && month === currentMonth ? '' :  summayList[i].ExcludedAL;
-            }else{
-                objSummary[summayList[i].Day] = day > today && month === currentMonth ? '' : summayList[i].IncludedAL;
-            }
-        }
-
-        datas.push(objMould);
-        datas.push(objPaint);
-        datas.push(objLaser);
-        datas.push(objPQC);
-        datas.push(objAssy);
-        datas.push(objOffice);
-        datas.push(objTTS);
-        datas.push(objHR);
-        datas.push(objPlan);
-        datas.push(objSale);
-        datas.push(objStore);
-        datas.push(objSummary);
-        //整理原始的data数据 来对应table column的对象数组
+        //给table赋值的数组对象.
+        let excludedDatas = [];
+        let includedDatas = [];
 
 
+        //遍历每个department
+        const departments = ['Moulding', 'Painting', 'Laser', 'PQC', 'Assembly', 'Prod Office', 'TSS', 'HR/Finance', 'Planning/Purchasing', 'Sales/Project', 'QA/QC/FA', 'Store', 'Total'];
+        departments.forEach(function (dpt) {
+
+            //获取每个department的所有天的列表
+            let departmentList = data.filter(item=>item.Department === dpt);
+
+            const objExcluded = { Department: dpt };
+            const objIncluded = { Department: dpt };
+
+
+            //遍历列表,将所有天数添加到一个对象中.
+            departmentList.forEach(function (item2) {
+                let day = parseInt(item2.Day.split('-')[0]);
+                let month = item2.Day.split('-')[1]
+                let today = parseInt(new Date().toString().split(' ')[2]);
+                let currentMonth = new Date().toString().split(' ')[1];
+
+
+                //查询的月份中, 有大于当天的数据, 空值显示.
+                objExcluded[item2.Day] = day > today && month === currentMonth ? '' : item2.ExcludedAL;
+                objIncluded[item2.Day] = day > today && month === currentMonth ? '' : item2.IncludedAL;
+            })
+
+            //将单个department 所有天数的生成的对象添加到结果数组中.
+            excludedDatas.push(objExcluded);
+            includedDatas.push(objIncluded);
+        });
 
         
 
-        $('#tbReport').bootstrapTable('destroy');
-        $('#tbReport').bootstrapTable({            
+        $('#tbReportEx').bootstrapTable('destroy');
+        $('#tbReportEx').bootstrapTable({
             theadClasses: 'thead-title',//表头样式 undefined, thead-light, thead-dark,
             classes: 'table table-bordered table-hover table-striped',//表格样式
             striped: false,  //表格显示条纹，默认为false
@@ -407,7 +254,26 @@
             showFooter: false,   //显示合计栏
 
             columns: columns,
-            data: datas,
+            data: excludedDatas,
+
+            onLoadSuccess: function (data) { },
+            onLoadError: function () {
+                alert("列表数据加载异常");
+            }
+        });
+
+
+        $('#tbReportIn').bootstrapTable('destroy');
+        $('#tbReportIn').bootstrapTable({
+            theadClasses: 'thead-title',//表头样式 undefined, thead-light, thead-dark,
+            classes: 'table table-bordered table-hover table-striped',//表格样式
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+            showFooter: false,   //显示合计栏
+
+            columns: columns,
+            data: includedDatas,
 
             onLoadSuccess: function (data) { },
             onLoadError: function () {
@@ -417,53 +283,69 @@
 
     }
     
-    function initeChart(data) {
+    function initChart(data) {
 
-        let arrSeries = [];
+        let arrSeriesEx = [];
+        let arrSeriesIn = [];
         let arrAxisXLable = [];
 
-        const departments = ['Moulding', 'Painting', 'Laser', 'PQC', 'Assembly', 'Pord Office', 'TSS', 'HR/Finance', 'Planning/Purchasing', 'Sales/Project', 'QA/QC/FA', 'Store', 'Total'];
+
+        //遍历每个Department, 每个Department生成chart对应的series push到 arrSeries
+        const departments = ['Moulding', 'Painting', 'Laser', 'PQC', 'Assembly', 'Prod Office', 'TSS', 'HR/Finance', 'Planning/Purchasing', 'Sales/Project', 'QA/QC/FA', 'Store', 'Total'];
         departments.forEach(function (item) {
 
-            //根据server端data配置每个department的data数组
-            let arrData = [];
-            data.filter(obj=> obj.Department === item)
-                .forEach(function (objDpt) {
-                    if ($('#ddlType').val() == 'true') {
-                        arrData.push(objDpt.ExcludedAL.replace('%',''));
-                    } else {
-                        arrData.push(objDpt.IncludedAL.replace('%',''));
-                    }
+            
+        let arrDataEx = [];
+        let arrDataIn = [];
 
-                    //配置axisX label 数组
-                    if (item ==='Moulding' ) {
-                        arrAxisXLable.push(objDpt.Day);
-                    }
-                });
+            
+        data.filter(obj=> obj.Department === item)
+            .forEach(function (objDpt) {
 
-            //根据department配置每个series
-            var objSeries = {
-                name: item,
-                type: 'line',
-                data: arrData,
-                label: {
-                    show: true,
-                    position: 'insideTop',
-                    formatter: function (params) {
-                        return params.data === '0.00' ? '' : params.data + '%';
-                    }
+                //将单个department下, 每一天的数据push到 arrData中.
+                arrDataEx.push(objDpt.ExcludedAL.replace('%', ''));
+                arrDataIn.push(objDpt.IncludedAL.replace('%', ''));
+
+                //配置axisX label 数组, 配置一次就可以了.
+                if (item ==='Moulding' ) {
+                    arrAxisXLable.push(objDpt.Day);
                 }
-            };
-            arrSeries.push(objSeries);
+            });
+
+        //根据department配置每个series
+        var objSeriesEx = {
+            name: item,
+            type: 'line',
+            data: arrDataEx,
+            label: {
+                show: true,
+                position: 'insideTop',
+                formatter: function (params) {
+                    return params.data === '0.00' ? '' : params.data + '%';
+                }
+            }
+        };
+        //根据department配置每个series
+        var objSeriesIn = {
+            name: item,
+            type: 'line',
+            data: arrDataIn,
+            label: {
+                show: true,
+                position: 'insideTop',
+                formatter: function (params) {
+                    return params.data === '0.00' ? '' : params.data + '%';
+                }
+            }
+        };
+
+        arrSeriesEx.push(objSeriesEx);
+        arrSeriesIn.push(objSeriesIn);
         });
      
-        let option = {
+        let optionEx = {
             tooltip: {
-                trigger: 'axis',
-                //formatter: '{b0}<br/><br/>\
-                //                    {a0} - {c0}%<br/>\
-                //                    {a1} - {c1}%<br/>\
-                //                    {a2} - {c2}%'
+                trigger: 'axis'
             },
             legend: {
                 type: 'scroll',
@@ -494,25 +376,69 @@
                     }
                 }
             ],
-            series: arrSeries
+            series: arrSeriesEx
         };
 
-
+        let optionIn = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                type: 'scroll',
+                data: departments,
+                top: 10
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: arrAxisXLable,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        interval: 0
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Attendance%',
+                    min: 0,
+                    max: 100,
+                    interval: 10,
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }
+            ],
+            series: arrSeriesIn
+        };
      
          
-        chart.clear();
-        chart.setOption(option, true);
-        chart.resize({ height: 400 });
+        chartEx.clear();
+        chartIn.clear();
+
+        chartEx.setOption(optionEx, true);
+        chartIn.setOption(optionIn, true);        
     }
 
 
+
+    //解决tab切换不显示问题 在加载窗口后重新渲染。
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        chartEx.resize({ height: 400 });
+        chartIn.resize({ height: 400 });
+    });
+
+
     $(window).resize(function () {
-        $('#tbReport').bootstrapTable('resetView');
-        chart.resize({ height: 400 });
+        $('#tbReportEx').bootstrapTable('resetView');
+        $('#tbReportIn').bootstrapTable('resetView');
+        chartEx.resize({ height: 400 });
+        chartIn.resize({ height: 400 });
 
-       var width = $(window).width();
-
-       if (width < 550) {
+       if ($(window).width() < 550) {
            $('#titleImg').hide();
        } else {
            $('#titleImg').show();

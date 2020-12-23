@@ -203,12 +203,11 @@ namespace DashboardTTS.Controllers
         /// Excluded AL % =( Nos of staff -mc -upL/upMC -absent)/ Nos of staff
         /// </param>
         /// <returns></returns>
-        public ActionResult GetMonthlySummaryReport(int Year, int Month, bool IsExcludedAL)
+        public ActionResult GetMonthlySummaryReport(int Year, int Month)
         {
-            Taiyo.SearchParam.AttendanceParam.MonthlyParams param = new Taiyo.SearchParam.AttendanceParam.MonthlyParams();
+            Taiyo.SearchParam.BaseParam param = new Taiyo.SearchParam.BaseParam();
             param.DateFrom = new DateTime(Year, Month, 1);
             param.DateTo = param.DateFrom.Value.AddMonths(1);
-            param.isExcludedAL = IsExcludedAL;
 
 
 

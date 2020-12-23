@@ -47,13 +47,7 @@
                         }
                     </select>
                 </div>
-                <div class="col-sm-3">
-                    <label style="width:35%">Type:</label>
-                    <select id="ddlType" class="form-control" data-ng-style="btn-info" style="width:60%;">                        
-                        <option value="true">Excluded AL</option>
-                        <option value="false">Included AL</option>
-                    </select>
-                </div>
+                <div class="col-sm-3"></div>
                 <div class="col-sm-3" align="right" style="padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
@@ -62,12 +56,7 @@
         </div>
     </div>
 
-
-
-
-
-
-
+    
     <div class="row">
         <div class="col-sm-12 panel panel-default" style="padding-top:10px;">
 
@@ -144,13 +133,13 @@
 
                 initTable(data);
 
-                initeChart(data);
+                initChart(data);
             },
 
             complete: function () {
                 chartEx.hideLoading();
-                chartEx.resize({ height: 400 });
                 chartIn.hideLoading();
+                chartEx.resize({ height: 400 });
                 chartIn.resize({ height: 400 });
             },
 
@@ -162,9 +151,6 @@
         });
         
     }
-
-
-
 
 
     function initTable(data) {
@@ -309,37 +295,52 @@
         departments.forEach(function (item) {
 
             
-            let arrDataEx = [];
-            let arrDataIn = [];
+        let arrDataEx = [];
+        let arrDataIn = [];
 
             
-            data.filter(obj=> obj.Department === item)
-                .forEach(function (objDpt) {
+        data.filter(obj=> obj.Department === item)
+            .forEach(function (objDpt) {
 
-                    //将单个department下, 每一天的数据push到 arrData中.
-                    arrDataEx.push(objDpt.ExcludedAL.replace('%', ''));
-                    arrDataIn.push(objDpt.IncludedAL.replace('%', ''));                    
+                //将单个department下, 每一天的数据push到 arrData中.
+                arrDataEx.push(objDpt.ExcludedAL.replace('%', ''));
+                arrDataIn.push(objDpt.IncludedAL.replace('%', ''));
 
-                    //配置axisX label 数组, 配置一次就可以了.
-                    if (item ==='Moulding' ) {
-                        arrAxisXLable.push(objDpt.Day);
-                    }
-                });
-
-            //根据department配置每个series
-            var objSeries = {
-                name: item,
-                type: 'line',
-                data: arrData,
-                label: {
-                    show: true,
-                    position: 'insideTop',
-                    formatter: function (params) {
-                        return params.data === '0.00' ? '' : params.data + '%';
-                    }
+                //配置axisX label 数组, 配置一次就可以了.
+                if (item ==='Moulding' ) {
+                    arrAxisXLable.push(objDpt.Day);
                 }
-            };
-            arrSeries.push(objSeries);
+            });
+
+        //根据department配置每个series
+        var objSeriesEx = {
+            name: item,
+            type: 'line',
+            data: arrDataEx,
+            label: {
+                show: true,
+                position: 'insideTop',
+                formatter: function (params) {
+                    return params.data === '0.00' ? '' : params.data + '%';
+                }
+            }
+        };
+        //根据department配置每个series
+        var objSeriesIn = {
+            name: item,
+            type: 'line',
+            data: arrDataIn,
+            label: {
+                show: true,
+                position: 'insideTop',
+                formatter: function (params) {
+                    return params.data === '0.00' ? '' : params.data + '%';
+                }
+            }
+        };
+
+        arrSeriesEx.push(objSeriesEx);
+        arrSeriesIn.push(objSeriesIn);
         });
      
         let optionEx = {
@@ -375,7 +376,7 @@
                     }
                 }
             ],
-            series: arrSeries
+            series: arrSeriesEx
         };
 
         let optionIn = {
@@ -411,29 +412,33 @@
                     }
                 }
             ],
-            series: arrSeries
+            series: arrSeriesIn
         };
-
-
      
          
         chartEx.clear();
-        chartEx.setOption(optionEx, true);
-        chartEx.resize({ height: 400 });
-
         chartIn.clear();
-        chartIn.setOption(optionIn, true);
-        chartIn.resize({ height: 400 });
+
+        chartEx.setOption(optionEx, true);
+        chartIn.setOption(optionIn, true);        
     }
+
+
+
+    //解决tab切换不显示问题 在加载窗口后重新渲染。
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        chartEx.resize({ height: 400 });
+        chartIn.resize({ height: 400 });
+    });
 
 
     $(window).resize(function () {
         $('#tbReportEx').bootstrapTable('resetView');
+        $('#tbReportIn').bootstrapTable('resetView');
         chartEx.resize({ height: 400 });
+        chartIn.resize({ height: 400 });
 
-       var width = $(window).width();
-
-       if (width < 550) {
+       if ($(window).width() < 550) {
            $('#titleImg').hide();
        } else {
            $('#titleImg').show();

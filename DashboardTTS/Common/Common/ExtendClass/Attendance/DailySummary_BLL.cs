@@ -31,7 +31,6 @@ namespace Common.ExtendClass.Attendance
             //用于计算summary row中的 excludedAL,includedAL.
             decimal allExcludedAL = 0;
             decimal allIncludedAL = 0;
-            decimal allTotalPresent = 0;
 
 
             List<DailySummary_Model> resultList = new List<DailySummary_Model>();
@@ -51,6 +50,7 @@ namespace Common.ExtendClass.Attendance
                 var dptModel = departmentAttendanceList.Where(p => p.Department == item).FirstOrDefault();
                 if (dptModel != null)
                 {
+                    model.IsSubmit = true;
                     model.DayShiftUserCount = dptModel.DayShift;
                     model.NightShiftUserCount = dptModel.NightShift;
                 
@@ -78,7 +78,7 @@ namespace Common.ExtendClass.Attendance
 
                     //Included AL % = ( Nos of staff -mc -upL/upMC -absent -AL -OAL)/Nos of staff
                     model.IncludedAL = Math.Round(
-                        (model.TotalUser - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent
+                        (model.TotalUser - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent - dptModel.Maternity
                         - dptModel.AnnualLeavel - dptModel.Paternity - dptModel.Marriage - dptModel.Hospitalization
                         - dptModel.Compassionate - dptModel.ChildCareLeave) / model.TotalUser * 100, 2).ToString("0.00") + "%";
                     
@@ -86,10 +86,21 @@ namespace Common.ExtendClass.Attendance
                     model.Remarks = dptModel.LeaveReason;
 
                     allExcludedAL +=  dptModel.MC_UPMC + dptModel.Unpaid + dptModel.Absent;
-                    allIncludedAL +=  dptModel.MC_UPMC + dptModel.Unpaid + dptModel.Absent + dptModel.AnnualLeavel + dptModel.Paternity + dptModel.Marriage + dptModel.Hospitalization + dptModel.Compassionate + dptModel.ChildCareLeave;
+                    allIncludedAL +=  dptModel.MC_UPMC + dptModel.Unpaid + dptModel.Absent + dptModel.AnnualLeavel + dptModel.Paternity + dptModel.Marriage + dptModel.Maternity + dptModel.Hospitalization + dptModel.Compassionate + dptModel.ChildCareLeave;
                 }
                 else
                 {
+                    //超过当天8:15还没有submit attendance记录的赋值为false.
+                    //前端页面, 通过判断为false的, 设置红色高亮背景.
+                    if (DateTime.Now > DateTime.Now.AddHours(-8).Date.AddHours(8).AddMinutes(15))
+                    {
+                        model.IsSubmit = false;
+                    }
+                    else
+                    {
+                        model.IsSubmit = true;
+                    }
+                   
                     model.DayShiftUserCount = 0;
                     model.NightShiftUserCount = 0;
                     model.TotalPresent = 0;
@@ -118,6 +129,7 @@ namespace Common.ExtendClass.Attendance
             #region summary row
             DailySummary_Model modelSummary = new DailySummary_Model();
             modelSummary.Department = "Total";
+            modelSummary.IsSubmit = true;
             modelSummary.TotalUser = resultList.Sum(p => p.TotalUser);
             modelSummary.DayShiftUserCount = resultList.Sum(p => p.DayShiftUserCount);
             modelSummary.NightShiftUserCount = resultList.Sum(p => p.NightShiftUserCount);

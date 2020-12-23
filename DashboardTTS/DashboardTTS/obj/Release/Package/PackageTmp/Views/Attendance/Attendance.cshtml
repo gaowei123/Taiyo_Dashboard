@@ -12,13 +12,7 @@
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 
-<style>
-    .container-fluid{
-        max-width:1500px;
-    }
-</style>
-
-<div class="container-fluid">
+<div class="container-fluid" style="max-width:1300px;">
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
@@ -157,7 +151,7 @@
             },
             success: function (data) {
                 if (data == false) {
-                    $('#lbResult').text('No Attendance Data of ' + $('#txtDate').val() + ', Please ask Supervisor submit first!');
+                    $('#lbResult').text('No attendance data of ' + $('#txtDate').val() + ',  Please ask supervisor submit first!');
                 } else {
                     $('#lbResult').text('');
                 }

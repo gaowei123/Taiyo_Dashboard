@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttendanceParam\MonthlyParams.cs" />
     <Compile Include="BaseParam.cs" />
     <Compile Include="HomeParam.cs" />
     <Compile Include="LaserParam\LaserActivityCondition.cs" />
@@ -51,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AttendanceParam\" />
     <Folder Include="MouldingParam\" />
     <Folder Include="PaintingParam\" />
   </ItemGroup>

@@ -229,12 +229,18 @@
 
                             <li class="divider"></li>
 
+
+
+                            @*  !!!
+                                URL传递的Department参数必须和Enum中设定的Description保持一致.
+                                不然submit界面会查询不到数据
+                            *@
                             <li><a href="~/Attendance/Attendance?Department=Moulding">Moulding</a></li>
                             <li><a href="~/Attendance/Attendance?Department=Painting">Painting</a></li>
                             <li><a href="~/Attendance/Attendance?Department=Laser">Laser</a></li>
                             <li><a href="~/Attendance/Attendance?Department=PQC">PQC</a></li>
                             <li><a href="~/Attendance/Attendance?Department=Assembly">Assembly</a></li>
-                            <li><a href="~/Attendance/Attendance?Department=Office">Prod Office</a></li>
+                            <li><a href="~/Attendance/Attendance?Department=Prod Office">Prod Office</a></li>
 
                             
                             @*新增部门*@
@@ -283,7 +289,7 @@
 
             //一加载就执行, 防止第一次加载的时候, 出现菜单栏换行的情况. 
             let width = $(window).width();
-            if (width < 1100 && width > 768) {
+            if (width < 1120 && width > 768) {
                 $('#imglogo').hide();
             } else if (width <= 768) {
                 $('#imglogo').show();
@@ -294,7 +300,7 @@
 
         $(window).resize(function () {
             let width = $(window).width();
-            if (width < 1100 && width > 768) {
+            if (width < 1120 && width > 768) {
                 $('#imglogo').hide();
             } else if (width <= 768) {
                 $('#imglogo').show();

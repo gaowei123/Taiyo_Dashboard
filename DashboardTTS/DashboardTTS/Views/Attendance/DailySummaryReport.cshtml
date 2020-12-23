@@ -17,7 +17,7 @@
             <input type="text" class="form-control" id="txtDate"
                    data-date-format="yyyy-mm-dd"
                    placeholder="Please choose date"
-                   style="margin-top:-4px; margin-right:0px; font-weight"
+                   style="margin-top:-4px; margin-right:0px;"
                    onchange="search();">
         </div>
     </div>
@@ -78,6 +78,19 @@
             },
             theadClasses: 'thead-title',
             tableClass: 'table table-bordered table-hover table-striped',
+            rowStyle: function (row, index) {
+                var style = {};
+                if (row.IsSubmit) {
+                    style = {};
+                } else {
+                    style = {
+                        css: { "background-color": "	pink" }
+                    }
+                }
+                return style;
+            },
+
+
             columns: [
             {
                 field: 'Department',title: 'Department',align: 'center',valign: 'middle',
@@ -189,7 +202,7 @@
                     } else { return {}; }
                 }
             },
-            {
+           {
                 field: 'ExcludedAL',
                 title: 'Excluded<br/>AL(%)',
                 align: 'center',
@@ -256,6 +269,7 @@
             pagination: false, // 在表格底部显示分页组件，默认false
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
             showFooter: false,   //显示合计栏
+            rowStyle: tbReportInfo.rowStyle, //行样式
 
             columns: tbReportInfo.columns,
 
@@ -282,6 +296,8 @@
             success: function (data) {
                 if (data == null || data == undefined || data.length == 0) {
                     alert('No record found, Please try again!');
+                    chart.clear();
+                    chart.setOption({}, true);
                     return false;
                 }
 
@@ -300,6 +316,10 @@
 
 
                 var option = {
+                    color: ['#006400', '#4169E1', '#FF0000'],
+                    grid: {
+                      bottom:'100'
+                    },
                     tooltip: {
                         trigger: 'axis',
                         formatter: '{b0}<br/><br/>\
@@ -308,8 +328,8 @@
                                     {a2} - {c2}%'
                     },
                     legend: {
-                        data: ['Include AL(%)', 'Exclude AL(%)', 'Target'],
-                        top: 10                       
+                        data: ['Exclude AL(%)',  'Include AL(%)', 'Target'],
+                        top: 10
                     },
                     xAxis: [
                         {
@@ -319,7 +339,9 @@
                                 type: 'shadow'
                             },
                             axisLabel: {
-                                interval: 0
+                                interval: 0,
+                                rotate: 40,
+                                height: 100
                             }
                         }
                     ],
@@ -337,12 +359,12 @@
                     ],
                     series: [
                         {
-                            name: 'Include AL(%)',
+                            name: 'Exclude AL(%)',
                             type: 'bar',
-                            data: includedALData,
+                            data: excludedALData,
                             label: {
                                 show: true,
-                                position: 'insideTop',
+                                position: 'inside',
                                 formatter: function (params) {
                                     if (params.data === 0) {
                                         return '';
@@ -353,12 +375,12 @@
                             },
                         },
                         {
-                            name: 'Exclude AL(%)',
+                            name: 'Include AL(%)',
                             type: 'bar',
-                            data: excludedALData,
+                            data: includedALData,
                             label: {
                                 show: true,
-                                position: 'insideTop',
+                                position: 'inside',
                                 formatter: function (params) {
                                     if (params.data === 0) {
                                         return '';

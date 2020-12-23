@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 
 namespace DashboardTTS.Webform.PQC
 {
@@ -412,6 +413,7 @@ namespace DashboardTTS.Webform.PQC
                 {
                     strUrl = "../PQC/BuyOffRecordForClient.aspx?Result=FALSE";
                 }
+
                 Response.Redirect(strUrl, false);
 
             }
@@ -606,6 +608,8 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", "In func UpdatePaintQaSetup");
+
                 string jobNo = this.txtJobNumber.Text.Trim();
                 string checkProcess = this.lbCheckProcess.Text.Trim();
 
@@ -613,17 +617,22 @@ namespace DashboardTTS.Webform.PQC
                 string currentShift = DateTime.Now >= currentDay.AddHours(8) && DateTime.Now < currentDay.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
 
 
-            
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"jobno:{jobNo},  checkProcess:{checkProcess},  day:{currentDay},  shift:{currentShift}");
+
+
 
                 //根据job, process获取所有记录.
                 Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
                 List<Common.Class.Model.PQCQaViTracking> modelList = bll.GetModelList(null, null, jobNo, checkProcess);
                 if (modelList == null || modelList.Count == 0)
                 {
-                    DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find record!");
+                    DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", "UpdatePaintQaSetup,  not find record!");
                     return;
                 }
-            
+
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"get vi tracking list count:{modelList.Count()}");
+
+
 
 
                 var currentTracking = (from a in modelList
@@ -631,14 +640,21 @@ namespace DashboardTTS.Webform.PQC
                                        select a).FirstOrDefault();
                 if (currentTracking == null)
                 {
-                    DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup,  not find current tracking!");
+                    DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", "UpdatePaintQaSetup,  not find current tracking!");
                     return;
                 }
-            
+                DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", $"get current tracking :{JsonConvert.SerializeObject(currentTracking)}");
+
+
+
+
+
                 int totalQty = int.Parse(string.IsNullOrEmpty(currentTracking.TotalQty) ? "0" : currentTracking.TotalQty);
                 if (totalQty != 0 && modelList.Count == 1)
                 {
-                   bool result =  bll.UpdateQASetupForWipPart(currentTracking.trackingID, qaQty, setupQty);
+                   
+
+                    bool result =  bll.UpdateQASetupForWipPart(currentTracking.trackingID, qaQty, setupQty);
                 }
 
             }
