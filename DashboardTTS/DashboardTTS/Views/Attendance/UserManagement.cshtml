@@ -91,25 +91,30 @@
                 <form class="form-horizontal" role="form" id="updatingForm">
 
                     <div class="form-group">
-                        <label for="txtFormEmployeeID" class="col-sm-4 control-label">Employee ID:</label>
+                        <label for="txtFormUsername" class="col-sm-4 control-label">User Name:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtFormEmployeeID" placeholder="Please input employee ID">
+                            <input type="text" class="form-control" id="txtFormUsername" placeholder="Please input user name"
+                                   style="text-transform:uppercase;">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="txtFormDepartmentID" class="col-sm-4 control-label">Department ID:</label>
+                        <label for="txtFormDepartmentID" class="col-sm-4 control-label">User ID:</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="txtFormDepartmentID" placeholder="Please input department ID">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="txtFormUsername" class="col-sm-4 control-label">User Name:</label>
+                        <label for="txtFormEmployeeID" class="col-sm-4 control-label">Employee ID:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtFormUsername" placeholder="Please input user name">
+                            <input type="text" class="form-control" id="txtFormEmployeeID" placeholder="Please input employee ID">
                         </div>
                     </div>
+
+                    
+
+                    
 
                     <div class="form-group">
                         <label for="txtFormPassword" class="col-sm-4 control-label">Password:</label>
@@ -132,7 +137,7 @@
                                 @foreach (UserGroup item in Enum.GetValues(typeof(UserGroup)))
                                 {
                                     <option value="@item.GetDescription()">@item.GetDescription()</option>
-                                }                             
+                                }
                             </select>
                         </div>
                     </div>
@@ -161,7 +166,7 @@
                                         continue;
                                     }
                                     <option value="@item.GetDescription()">@item.GetDescription()</option>
-                                }                               
+                                }
                             </select>
                         </div>
                     </div>
@@ -256,7 +261,6 @@
 
             //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
                 return {
                     Department: $('#ddlDepartment').val(),
                     UserGroup: $("#ddlUserGroup").val(),
@@ -315,6 +319,12 @@
                 valign: 'middle'
             },
             {
+                field: 'USER_NAME',
+                title: 'Employee Name',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
                 field: 'EMPLOYEE_ID',
                 title: 'Employee ID',
                 align: 'center',
@@ -322,19 +332,13 @@
             },
             {
                 field: 'USER_ID',
-                title: 'Department ID',
+                title: 'User ID',
                 align: 'center',
                 valign: 'middle'
             },
             {
                 field: 'USER_GROUP',
                 title: 'User Group',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'USER_NAME',
-                title: 'User Name',
                 align: 'center',
                 valign: 'middle'
             },
@@ -446,16 +450,23 @@
         }
 
       
-        var password = $('#txtFormPassword').val();
-        var passwordConfirm = $('#txtFormPasswordConfirm').val();
-        if (password == '') {
-            alert('Password can not be empty');
-            return false;
+        if ($('#ddlFormDepartment').val() == 'Moulding' ||
+            $('#ddlFormDepartment').val() == 'Painting' ||
+            $('#ddlFormDepartment').val() == 'Laser' ||
+            $('#ddlFormDepartment').val() == 'PQC')
+        {
+            var password = $('#txtFormPassword').val();
+            var passwordConfirm = $('#txtFormPasswordConfirm').val();
+            if (password == '') {
+                alert('Password can not be empty');
+                return false;
+            }
+            if (password != passwordConfirm) {
+                alert('Password not match');
+                return false;
+            }
         }
-        if (password != passwordConfirm) {
-            alert('Password not match');
-            return false;
-        }
+      
 
 
         if ($('#ddlFormUserGroup').val() == '') {

@@ -50,7 +50,7 @@ namespace Common.ExtendClass.Attendance
                 var dptModel = departmentAttendanceList.Where(p => p.Department == item).FirstOrDefault();
                 if (dptModel != null)
                 {
-                    model.IsSubmit = true;
+                    model.BackgroundColor = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.White);
                     model.DayShiftUserCount = dptModel.DayShift;
                     model.NightShiftUserCount = dptModel.NightShift;
                 
@@ -74,10 +74,11 @@ namespace Common.ExtendClass.Attendance
                     model.TotalPresent = dptModel.TotalPresent;
 
                     //Excluded AL % =( Nos of staff -mc -upL/upMC -absent)/ Nos of staff
-                    model.ExcludedAL = Math.Round((model.TotalUser - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent) / model.TotalUser * 100, 2).ToString("0.00") + "%";
+                    model.ExcludedAL = model.TotalUser == 0 ? "0.00%" :
+                        Math.Round((model.TotalUser - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent) / model.TotalUser * 100, 2).ToString("0.00") + "%";
 
                     //Included AL % = ( Nos of staff -mc -upL/upMC -absent -AL -OAL)/Nos of staff
-                    model.IncludedAL = Math.Round(
+                    model.IncludedAL = model.TotalUser == 0 ? "0.00%" : Math.Round(
                         (model.TotalUser - dptModel.MC_UPMC - dptModel.Unpaid - dptModel.Absent - dptModel.Maternity
                         - dptModel.AnnualLeavel - dptModel.Paternity - dptModel.Marriage - dptModel.Hospitalization
                         - dptModel.Compassionate - dptModel.ChildCareLeave) / model.TotalUser * 100, 2).ToString("0.00") + "%";
@@ -90,15 +91,19 @@ namespace Common.ExtendClass.Attendance
                 }
                 else
                 {
-                    //超过当天8:15还没有submit attendance记录的赋值为false.
-                    //前端页面, 通过判断为false的, 设置红色高亮背景.
-                    if (DateTime.Now > DateTime.Now.AddHours(-8).Date.AddHours(8).AddMinutes(15))
+                    //超过当天8:15还没有提交, 背景显示为黄色.
+                    //超过当天8:30还没有提交, 背景显示为红色.                   
+                    if (DateTime.Now > DateTime.Now.AddHours(-8).Date.AddHours(8).AddMinutes(30))
                     {
-                        model.IsSubmit = false;
+                        model.BackgroundColor = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.Pink);
+                    }
+                    else if (DateTime.Now > DateTime.Now.AddHours(-8).Date.AddHours(8).AddMinutes(15))
+                    {
+                        model.BackgroundColor = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.Yellow);
                     }
                     else
                     {
-                        model.IsSubmit = true;
+                        model.BackgroundColor = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.White);
                     }
                    
                     model.DayShiftUserCount = 0;
@@ -117,10 +122,6 @@ namespace Common.ExtendClass.Attendance
                 }
 
 
-                
-
-
-
                 resultList.Add(model);
                 #endregion
             }
@@ -129,12 +130,13 @@ namespace Common.ExtendClass.Attendance
             #region summary row
             DailySummary_Model modelSummary = new DailySummary_Model();
             modelSummary.Department = "Total";
-            modelSummary.IsSubmit = true;
+            modelSummary.BackgroundColor = System.Drawing.ColorTranslator.ToHtml( System.Drawing.Color.White);
             modelSummary.TotalUser = resultList.Sum(p => p.TotalUser);
             modelSummary.DayShiftUserCount = resultList.Sum(p => p.DayShiftUserCount);
             modelSummary.NightShiftUserCount = resultList.Sum(p => p.NightShiftUserCount);
             
             modelSummary.AnnualLeave = resultList.Sum(p => p.AnnualLeave);
+            modelSummary.OthersLeave = resultList.Sum(p => p.OthersLeave);
             modelSummary.UnpaidLeave = resultList.Sum(p => p.UnpaidLeave);
             modelSummary.MC_UPMC = resultList.Sum(p => p.MC_UPMC);
             modelSummary.Absent = resultList.Sum(p => p.Absent);

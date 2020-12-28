@@ -79,15 +79,9 @@
             theadClasses: 'thead-title',
             tableClass: 'table table-bordered table-hover table-striped',
             rowStyle: function (row, index) {
-                var style = {};
-                if (row.IsSubmit) {
-                    style = {};
-                } else {
-                    style = {
-                        css: { "background-color": "	pink" }
-                    }
+                return {
+                    css: { "background-color": `${row.BackgroundColor}` }
                 }
-                return style;
             },
 
 
@@ -98,6 +92,14 @@
                     if (row.Department === 'Total') {
                         return { css: { 'font-weight': 'bold' } };
                     } else {return {};}
+                }
+            },
+            {
+                field: 'TotalUser', title: 'No Of<br/>Staff', align: 'center', valign: 'middle',
+                cellStyle: function (value, row, index) {
+                    if (row.Department === 'Total') {
+                        return { css: { 'font-weight': 'bold' } };
+                    } else { return {}; }
                 }
             },
             {
@@ -365,6 +367,8 @@
                             label: {
                                 show: true,
                                 position: 'inside',
+                                rotate: 90,
+                                fontSize: 14,
                                 formatter: function (params) {
                                     if (params.data === 0) {
                                         return '';
@@ -381,6 +385,8 @@
                             label: {
                                 show: true,
                                 position: 'inside',
+                                rotate: 90,
+                                fontSize: 14,
                                 formatter: function (params) {
                                     if (params.data === 0) {
                                         return '';

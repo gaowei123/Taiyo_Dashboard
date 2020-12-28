@@ -22,6 +22,7 @@ namespace Taiyo.Enum.Organization
 
 
         Checker,
-        Operator
+        Operator,
+        Indirect
     }
 }

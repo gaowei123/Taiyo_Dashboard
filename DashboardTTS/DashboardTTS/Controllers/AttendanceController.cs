@@ -33,6 +33,8 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+        [Obsolete]
         public ActionResult AttendanceReport()
         {
             return View();
@@ -218,7 +220,8 @@ namespace DashboardTTS.Controllers
 
 
 
-        #region Attendenance Daily Report
+        #region Attendenance Daily Report  -- 已弃用
+        [Obsolete]
         public ActionResult GetOverall()
         {
             DateTime dDay = DateTime.Parse(Request.Form["Date"]);
@@ -234,7 +237,7 @@ namespace DashboardTTS.Controllers
 
             return Content(jsonResult);
         }
-
+        [Obsolete]
         public ActionResult GetDetail()
         {
             string jsonResult = "";
@@ -259,7 +262,6 @@ namespace DashboardTTS.Controllers
 
             return Content(jsonResult);
         }
-
         #endregion
 
         //attendance chart

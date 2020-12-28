@@ -24,10 +24,9 @@ namespace Common.ExtendClass.Attendance
         public string Target { get; set; }
         public string Remarks { get; set; }
         /// <summary>
-        /// 用于判断attendance是否提交了. 
-        /// 超过当天8:15 AM还没提交则false;
-        /// else true;
+        /// 当天8:15还没提交, 显示黄色.
+        /// 当天8:30还没提交, 显示红色
         /// </summary>
-        public bool IsSubmit { get; set; }
+        public string  BackgroundColor { get; set; }
     }
 }

@@ -306,8 +306,6 @@
 
                             <li><a runat="server" href="./Attendance/DailySummaryReport">Daily Attendance Summary Report</a></li>
                             <li><a runat="server" href="./Attendance/MonthlySummaryReport">Monthly Attendance Summary Report</a></li>
-
-                            <li><a runat="server" href="./Attendance/AttendanceReport">Daily Attendance Report</a></li> 
                             <li><a runat="server" href="./Attendance/AttendanceChart">User Attendance Chart</a></li>
 
                         </ul>
