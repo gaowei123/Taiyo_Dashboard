@@ -76,7 +76,7 @@ namespace DashboardTTS.Controllers
 
 
         //summary report
-        public ActionResult GetSummaryData()
+        public JsonResult GetSummaryData()
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"].ToString());
@@ -84,25 +84,11 @@ namespace DashboardTTS.Controllers
             string shift = Request.Form["Shift"] == null ? "" : Request.Form["Shift"].ToString();
             string partNo = Request.Form["PartNo"] == null ? "" : Request.Form["PartNo"].ToString();
 
-
            
-            string jsonResult = "";
-
             List<ViewModel.PQCSummaryReport_ViewModel.Report> models = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
             models = vBLL.GetSummaryList(dateFrom, dateTo, shift, partNo);
-
-            if (models != null && models.Count != 0)
-            {
-                jsonResult = _js.Serialize(models);
-            }
-            else
-            {
-                jsonResult = _js.Serialize("");
-            }
-
-
-
-            return Content(jsonResult);
+            
+            return models == null ? Json("") : Json(models);
         }
 
 

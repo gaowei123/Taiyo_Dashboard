@@ -3840,6 +3840,7 @@
     <Content Include="Views\OverallReport\ProductivityReport.cshtml" />
     <Content Include="Views\Attendance\DailySummaryReport.cshtml" />
     <Content Include="Views\Attendance\MonthlySummaryReport.cshtml" />
+    <Content Include="Views\Buyoff\TouchPCBuyoffWithoutCurrent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -705,7 +705,7 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetDefectDetail(string sJobID, string sTrackingID, string sDefectDescription)
+        public DataTable GetDefectDetail(string sJobID, string sTrackingID, string sDefectDescription, string CheckProcess, bool IsExcludeTracking)
         {
             DataTable dt = new DataTable();
 
@@ -714,92 +714,98 @@ namespace Common.Class.BLL
 
             if (sDefectDescription == "Mould")
             {
-                dt = dal.GetMouldDefect(sJobID, sTrackingID);
+                dt = dal.GetMouldDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
             }
             else if (sDefectDescription == "Paint")
             {
                 DBHelp.Reports.LogFile.Log("TouchPCBuyoff", "GetDefectDetail,  in paint branch");
 
-                dt = dal.GetPaintDefect(sJobID, sTrackingID);
-                
-                #region 处理shortage, qa
-                Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
-                DataTable dtInventory = inventoryBLL.GetList(sJobID);
-
-                Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
-                DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
-
-                foreach (DataRow dr in dt.Rows)
+                dt = dal.GetPaintDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
+                //check#2 不经过laser, 不去累加laser的维护的 shortage
+                if (CheckProcess == "CHECK#1")
                 {
-                    double shortage = 0;
-                    //double qa = 0;
+                    #region 处理shortage, qa
+                    Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
+                    DataTable dtInventory = inventoryBLL.GetList(sJobID);
 
-                    if (dtInventory != null && dtInventory.Rows.Count != 0)
-                        shortage += double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
+                    Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
+                    DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
 
-                    if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        shortage += double.Parse(dtPaintTemp.Rows[0]["setupRejQty"].ToString());
-                        //qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
+                        double shortage = 0;
+                        //double qa = 0;
+
+                        if (dtInventory != null && dtInventory.Rows.Count != 0)
+                            shortage += double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
+
+                        if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
+                        {
+                            shortage += double.Parse(dtPaintTemp.Rows[0]["setupRejQty"].ToString());
+                            //qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
+                        }
+
+
+                        dr["Shortage"] = shortage;
+                        //dr["QA"] = qa;
+                        dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage);
                     }
-
-
-                    dr["Shortage"] = shortage;
-                    //dr["QA"] = qa;
-                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage );
+                    #endregion
                 }
-                #endregion
             }
             else if (sDefectDescription == "Laser")
             {
-                dt = dal.GetLaserDefect(sJobID, sTrackingID);
+                dt = dal.GetLaserDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
                 
-                #region  处理 laser ng, setup, buyoff
-                Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
-                DataTable dtInventory = inventoryBLL.GetList(sJobID);
-
-                Common.BLL.LMMSWatchLog_BLL watchLogBLL = new Common.BLL.LMMSWatchLog_BLL();
-                DataTable dtWatchLog = watchLogBLL.GetJobMaterialList(sJobID);
-
-
-                foreach (DataRow dr in dt.Rows)
+                //check#2 不经过laser, 不去累加laser的vision ng
+                if (CheckProcess == "CHECK#1")
                 {
-                    string materialNo = dr["materialpartNo"].ToString();
+                    #region  处理 laser ng, setup, buyoff
+                    Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
+                    DataTable dtInventory = inventoryBLL.GetList(sJobID);
 
-                    double laserMaterialNG = 0;
-                    double buyoff = 0;
-                    double setup = 0;
+                    Common.BLL.LMMSWatchLog_BLL watchLogBLL = new Common.BLL.LMMSWatchLog_BLL();
+                    DataTable dtWatchLog = watchLogBLL.GetJobMaterialList(sJobID);
 
-                    //watchlog 中获取laser material ng的数量
-                    if (dtWatchLog != null && dtWatchLog.Rows.Count != 0)
+
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        DataRow[] drArrTemp = dtWatchLog.Select("materialNo = '" + materialNo + "'");
+                        string materialNo = dr["materialpartNo"].ToString();
 
-                        if (drArrTemp.Length > 0)
+                        double laserMaterialNG = 0;
+                        double buyoff = 0;
+                        double setup = 0;
+
+                        //watchlog 中获取laser material ng的数量
+                        if (dtWatchLog != null && dtWatchLog.Rows.Count != 0)
                         {
-                            laserMaterialNG = double.Parse(drArrTemp[0]["ngQty"].ToString());
-                            dr["Graphic Shift check by M/C"] = laserMaterialNG;
+                            DataRow[] drArrTemp = dtWatchLog.Select("materialNo = '" + materialNo + "'");
+
+                            if (drArrTemp.Length > 0)
+                            {
+                                laserMaterialNG = double.Parse(drArrTemp[0]["ngQty"].ToString());
+                                dr["Graphic Shift check by M/C"] = laserMaterialNG;
+                            }
                         }
+
+
+                        //laser inventory 中获取 setup, buyoff数量.
+                        if (dtInventory != null && dtInventory.Rows.Count != 0)
+                        {
+                            buyoff = double.Parse(dtInventory.Rows[0]["buyOffQty"].ToString());
+                            setup = double.Parse(dtInventory.Rows[0]["setUpQTY"].ToString());
+                            dr["Buyoff"] = buyoff;
+                            dr["Setup"] = setup;
+                        }
+
+                        dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + buyoff + setup + laserMaterialNG);
                     }
-
-
-                    //laser inventory 中获取 setup, buyoff数量.
-                    if (dtInventory != null  && dtInventory.Rows.Count != 0)
-                    {
-                        buyoff = double.Parse(dtInventory.Rows[0]["buyOffQty"].ToString());
-                        setup = double.Parse(dtInventory.Rows[0]["setUpQTY"].ToString());
-                        dr["Buyoff"] = buyoff;
-                        dr["Setup"] = setup;
-                    }
-
-                    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + buyoff + setup + laserMaterialNG);
+                    #endregion
                 }
-                #endregion
-
             }
             else if (sDefectDescription == "Others")
             {
-                dt = dal.GetOthersDefect(sJobID, sTrackingID);
+                dt = dal.GetOthersDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
 
                 #region 处理 qa
                 Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();

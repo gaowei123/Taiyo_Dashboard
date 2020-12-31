@@ -334,13 +334,13 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-        public List<ViewModel.BuyoffReport_ViewModel.MouldDefect> GetMaterialMouldDefectList(string sJobNo, string sTrackingID)
+        public List<ViewModel.BuyoffReport_ViewModel.MouldDefect> GetMaterialMouldDefectList(string sJobNo, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
             List<ViewModel.BuyoffReport_ViewModel.MouldDefect> mouldDefectList = new List<ViewModel.BuyoffReport_ViewModel.MouldDefect>();
 
 
 
-            DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Mould");
+            DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Mould", CheckProcess, IsExcludeTracking);
             if (dt == null ||dt.Rows.Count == 0)
             {
                 return null;
@@ -396,7 +396,7 @@ namespace DashboardTTS.ViewBusiness
             return mouldDefectList;
         }
         
-        public List<ViewModel.BuyoffReport_ViewModel.PaintDefect> GetMaterialPaintDefectList(string sJobNo, string sTrackingID)
+        public List<ViewModel.BuyoffReport_ViewModel.PaintDefect> GetMaterialPaintDefectList(string sJobNo, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
             List<ViewModel.BuyoffReport_ViewModel.PaintDefect> paintDefectList = new List<ViewModel.BuyoffReport_ViewModel.PaintDefect>();
 
@@ -404,7 +404,7 @@ namespace DashboardTTS.ViewBusiness
             try
             {
                 
-                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Paint");
+                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Paint", CheckProcess, IsExcludeTracking);
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     return null;
@@ -462,17 +462,15 @@ namespace DashboardTTS.ViewBusiness
             }
             return paintDefectList;
         }
-
-
-
-        public List<ViewModel.BuyoffReport_ViewModel.LaserDefect> GetMaterialLaserDefectList(string sJobNo, string sTrackingID)
+        
+        public List<ViewModel.BuyoffReport_ViewModel.LaserDefect> GetMaterialLaserDefectList(string sJobNo, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
 
             List<ViewModel.BuyoffReport_ViewModel.LaserDefect> laserDefectList = new List<ViewModel.BuyoffReport_ViewModel.LaserDefect>();
             try
             {
 
-                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Laser");
+                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Laser", CheckProcess, IsExcludeTracking);
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     return null;
@@ -525,10 +523,8 @@ namespace DashboardTTS.ViewBusiness
 
             return laserDefectList;
         }
-
-
-
-        public List<ViewModel.BuyoffReport_ViewModel.OthersDefect> GetMaterialOthersDefectList(string sJobNo, string sTrackingID)
+        
+        public List<ViewModel.BuyoffReport_ViewModel.OthersDefect> GetMaterialOthersDefectList(string sJobNo, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
             List<ViewModel.BuyoffReport_ViewModel.OthersDefect> othersDefectList = new List<ViewModel.BuyoffReport_ViewModel.OthersDefect>();
 
@@ -537,7 +533,7 @@ namespace DashboardTTS.ViewBusiness
             {
 
            
-                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Others");
+                DataTable dt = defectTracking.GetDefectDetail(sJobNo, sTrackingID, "Others", CheckProcess, IsExcludeTracking);
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     return null;

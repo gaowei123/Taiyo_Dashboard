@@ -59,13 +59,16 @@
                      
                     <td style ="  width: 25%; border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; height: 50px; vertical-align:middle" >
                         <asp:DropDownList ID="ddlPartNo"  runat="server" Width="100%" Height="23px"  >
-                                <asp:ListItem Value="">ALL</asp:ListItem>
-                                <asp:ListItem Value="6910-6894 T2">6910-6894 T2</asp:ListItem>
-                                <asp:ListItem Value="6910-6453">6910-6453</asp:ListItem>
-                                <asp:ListItem Value="6910-6355">6910-6355</asp:ListItem>
-                                <asp:ListItem Value="6910-6356">6910-6356</asp:ListItem>
-                                <asp:ListItem Value="6910-6357">6910-6357</asp:ListItem>
-                                <asp:ListItem Value="6910-6454 T2">6910-6454 T2</asp:ListItem>
+                            <asp:ListItem Value="">ALL</asp:ListItem>
+                            <asp:ListItem Value="6910-6894 T2">6910-6894 T2</asp:ListItem>    
+                            <asp:ListItem Value="6910-6894 T3">6910-6894 T3</asp:ListItem>                       
+                            <asp:ListItem Value="6910-6453">6910-6453</asp:ListItem>
+                            <asp:ListItem Value="6910-6355">6910-6355</asp:ListItem>
+                            <asp:ListItem Value="6910-6356">6910-6356</asp:ListItem>
+                            <asp:ListItem Value="6910-6357">6910-6357</asp:ListItem>
+                            <asp:ListItem Value="6910-6454 T2">6910-6454 T2</asp:ListItem>
+                            <asp:ListItem Value="75P59-0050">75P59-0050</asp:ListItem>
+                            <asp:ListItem Value="75P59-0060">75P59-0060</asp:ListItem>
                         </asp:DropDownList>
                     </td>
 

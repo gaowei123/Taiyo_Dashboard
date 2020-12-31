@@ -296,13 +296,6 @@
 
 
 
-
-    
-
-
-
-
-
     <script type="text/javascript">
 
     var apiGetLaserModel = window.globalConfig.rootDirectory + '/Buyoff/GetLaserBuyoffRecord';
@@ -323,12 +316,11 @@
     }
 
 
-
     $(document).ready(function () {
 
         var jobID = getUrlParam('JobID');
         var trackingID = getUrlParam('TrackingID');
-
+        var process = getUrlParam('CheckProcess');
 
        
      
@@ -337,7 +329,7 @@
 
         setLaserParameters(jobID);
 
-        setDefectTable(jobID, trackingID);
+        setDefectTable(jobID, trackingID, process);
 
     });
 
@@ -468,7 +460,6 @@
                     $('#lbPower').text('');
                     $('#lbRepeat').text('');
                 } else {
-
                     $('#lbRate').text(data.rate);
                     $('#lbFrequency').text(data.frequency);
                     $('#lbPower').text(data.power);
@@ -483,7 +474,15 @@
 
 
 
-    function setDefectTable(jobID, trackingID) {
+    function setDefectTable(jobID, trackingID, process) {
+
+        var params = {
+            JobID: jobID,
+            TrackingID: trackingID,
+            IsExcludeTracking: false,
+            CheckProcess: process
+        }
+
         //重新加载必须将原本table清空
         $('#tableMouldingDefect').bootstrapTable('destroy');
         $('#tablePaintingDefect').bootstrapTable('destroy');
@@ -504,18 +503,7 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    JobID: jobID, 
-                    TrackingID: trackingID
-                }
-            },
+            queryParams: params,
             //sortName: 'id', // 要排序的字段
             //sortOrder: 'desc', // 排序规则
 
@@ -540,7 +528,6 @@
                     //防止数据自动换行
                     css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap", "background-color": "#FFFFF3" }
                 }
-
             },
 
             columns: [
@@ -891,18 +878,7 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    JobID: jobID,
-                    TrackingID: trackingID
-                }
-            },
+            queryParams: params,
             //sortName: 'id', // 要排序的字段
             //sortOrder: 'desc', // 排序规则
 
@@ -1218,18 +1194,7 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    JobID: jobID,
-                    TrackingID: trackingID
-                }
-            },
+            queryParams: params,
             //sortName: 'id', // 要排序的字段
             //sortOrder: 'desc', // 排序规则
 
@@ -1505,18 +1470,7 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    JobID: jobID,
-                    TrackingID: trackingID
-                }
-            },
+            queryParams: params,
             //sortName: 'id', // 要排序的字段
             //sortOrder: 'desc', // 排序规则
 
@@ -1671,6 +1625,7 @@
             }
 
         });
+
     }
 
 
@@ -1691,7 +1646,4 @@
     </script>
 
 </body>
-
-
-
 </html>

@@ -122,7 +122,7 @@ namespace DashboardTTS.ViewBusiness
             #region  按num汇总
             var numGroupList = from a in viDetailList
                                where a.number != "" && a.lastCheckProcess == a.currentProcess//取最后一道check process
-                               group a by new { a.number, a.description, a.lastCheckProcess} into groupList
+                               group a by new { a.number, a.description, a.lastCheckProcess } into groupList
                                select new
                                {
                                    groupList.Key.number,
@@ -160,7 +160,7 @@ namespace DashboardTTS.ViewBusiness
                 modelForNum.vendorsModelRej = numModel.vendorRej;
                 modelForNum.paintRej = numModel.paintRej;
                 modelForNum.laserRej = numModel.laserRej;
-                modelForNum.othersRej = numModel.laserRej;
+                modelForNum.othersRej = numModel.othersRej;
                          
                 modelForNum.totalRejRate = string.Format("{0}({1}%)", modelForNum.totalRej, Math.Round(modelForNum.totalRej / modelForNum.totalOutput * 100, 2));
                 modelForNum.ttsMouldRejRate = string.Format("{0}({1}%)", modelForNum.ttsMouldRej, Math.Round(modelForNum.ttsMouldRej / modelForNum.totalOutput * 100, 2));
@@ -206,8 +206,7 @@ namespace DashboardTTS.ViewBusiness
             return AddPackList(dDateFrom, dDateTo, sShift, sPartNo, reportList);
         }
 
-
-      
+        
         private List<ViewModel.PQCSummaryReport_ViewModel.ViDetail> GetViDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
         {
             Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
@@ -254,7 +253,6 @@ namespace DashboardTTS.ViewBusiness
         /// </summary>
         private List<ViewModel.PQCSummaryReport_ViewModel.Report> AddPackList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, List<ViewModel.PQCSummaryReport_ViewModel.Report> reportList)
         {
-
             ViewModel.PQCSummaryReport_ViewModel.Report packOnlineModel = new ViewModel.PQCSummaryReport_ViewModel.Report();
             packOnlineModel.pqcDept = "Packing Online";       
             packOnlineModel.ttsMouldRejRate = "-";

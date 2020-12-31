@@ -25,22 +25,21 @@ namespace Taiyo.Enum.Organization
         [Description("Prod Office")]
         Office = 8,
 
-        TSS = 9,
-
         [Description("HR/Finance")]
-        HR_Finance = 10,
+        HR_Finance = 9,
 
         [Description("Planning/Purchasing")]
-        Planning_Purchasing = 11,
+        Planning_Purchasing = 10,
 
     
         [Description("Sales/Project")]
-        Sales_Project = 12,
+        Sales_Project = 11,
 
         [Description("QA/QC/FA")]
-        QA_QC_FA = 13,
+        QA_QC_FA = 12,
 
-        Store = 14
+        Store = 13,
 
+        TSS = 14
     }
 }

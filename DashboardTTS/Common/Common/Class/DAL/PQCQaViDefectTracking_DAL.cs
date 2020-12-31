@@ -1277,7 +1277,7 @@ trackingID
 ,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
 
 from PQCQaViDefectTracking
-where day >= @DateFrom  and day < @DateTo   ");
+where day >= @DateFrom  and day < @DateTo ");
 
             if (sShift != "")
             {
@@ -1313,10 +1313,10 @@ where day >= @DateFrom  and day < @DateTo   ");
 
 
         #region defect detail list
-        public DataTable GetMouldDefect(string sJobId,string sTrackingID)
+        public DataTable GetMouldDefect(string sJobId,string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
-
             StringBuilder strSql = new StringBuilder();
+
             strSql.Append(@"
 select 
     jobid
@@ -1359,18 +1359,34 @@ from PQCQaViDefectTracking
 where 1=1  ");
 
             if (sJobId != "") strSql.Append(" and jobId = @jobId ");
-            if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+
+           
+           
+            if (IsExcludeTracking)
+            {
+                //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
+                strSql.Append(" and trackingID != @trackingID ");
+                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+            }
+            else
+            {
+                //如果不排除tracking的, 看没有没传trackingID, 传了只查该tracking, 没有就全查出来.
+                if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+            }
+            
 
             strSql.Append(" group by jobid, materialPartNo ");
 
 
             SqlParameter[] parameters = {
                 new SqlParameter("@jobId", SqlDbType.VarChar),
-                new SqlParameter("@trackingID", SqlDbType.VarChar)
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@processes",SqlDbType.VarChar)
             };
 
             if (sJobId != "") parameters[0].Value = sJobId; else parameters[0] = null;
             if (sTrackingID != "") parameters[1].Value = sTrackingID; else parameters[1] = null;
+            if (CheckProcess != "") parameters[2].Value = CheckProcess; else parameters[2] = null;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
@@ -1379,8 +1395,8 @@ where 1=1  ");
             else
                 return ds.Tables[0];
         }
-        
-        public DataTable GetPaintDefect(string sJobId, string sTrackingID)
+
+        public DataTable GetPaintDefect(string sJobId, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -1419,21 +1435,34 @@ from PQCQaViDefectTracking
 where 1=1  ");
 
             if (sJobId != "") strSql.Append(" and jobId = @jobId ");
-            if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+
+            if (IsExcludeTracking)
+            {
+                //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
+                strSql.Append(" and trackingID != @trackingID ");
+                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+            }
+            else
+            {
+                //如果不排除tracking的, 看没有没传trackingID, 传了只查该tracking, 没有就全查出来.
+                if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+            }
+
 
             strSql.Append(" group by jobid, materialPartNo ");
 
 
             SqlParameter[] parameters = {
                 new SqlParameter("@jobId", SqlDbType.VarChar),
-                new SqlParameter("@trackingID", SqlDbType.VarChar)
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@processes",SqlDbType.VarChar)
             };
 
             if (sJobId != "") parameters[0].Value = sJobId; else parameters[0] = null;
             if (sTrackingID != "") parameters[1].Value = sTrackingID; else parameters[1] = null;
+            if (CheckProcess != "") parameters[2].Value = CheckProcess; else parameters[2] = null;
 
 
-            
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0)
@@ -1442,7 +1471,7 @@ where 1=1  ");
                 return ds.Tables[0];
         }
         
-        public DataTable GetLaserDefect(string sJobId, string sTrackingID)
+        public DataTable GetLaserDefect(string sJobId, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -1476,18 +1505,32 @@ from PQCQaViDefectTracking
 where 1=1  ");
 
             if (sJobId != "") strSql.Append(" and jobId = @jobId ");
-            if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+
+            if (IsExcludeTracking)
+            {
+                //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
+                strSql.Append(" and trackingID != @trackingID ");
+                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+            }
+            else
+            {
+                //如果不排除tracking的, 看没有没传trackingID, 传了只查该tracking, 没有就全查出来.
+                if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+            }
+
 
             strSql.Append(" group by jobid, materialPartNo ");
 
 
             SqlParameter[] parameters = {
                 new SqlParameter("@jobId", SqlDbType.VarChar),
-                new SqlParameter("@trackingID", SqlDbType.VarChar)
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@processes",SqlDbType.VarChar)
             };
 
             if (sJobId != "") parameters[0].Value = sJobId; else parameters[0] = null;
             if (sTrackingID != "") parameters[1].Value = sTrackingID; else parameters[1] = null;
+            if (CheckProcess != "") parameters[2].Value = CheckProcess; else parameters[2] = null;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
@@ -1497,7 +1540,7 @@ where 1=1  ");
                 return ds.Tables[0];
         }
         
-        public DataTable GetOthersDefect(string sJobId, string sTrackingID)
+        public DataTable GetOthersDefect(string sJobId, string sTrackingID, string CheckProcess, bool IsExcludeTracking)
         {
 
             StringBuilder strSql = new StringBuilder();
@@ -1520,18 +1563,33 @@ from PQCQaViDefectTracking
 where 1=1  ");
 
             if (sJobId != "") strSql.Append(" and jobId = @jobId ");
-            if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+
+
+            if (IsExcludeTracking)
+            {
+                //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
+                strSql.Append(" and trackingID != @trackingID ");
+                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+            }
+            else
+            {
+                //如果不排除tracking的, 看没有没传trackingID, 传了只查该tracking, 没有就全查出来.
+                if (sTrackingID != "") strSql.Append(" and trackingID = @trackingID");
+            }
+
 
             strSql.Append(" group by jobid, materialPartNo ");
 
 
             SqlParameter[] parameters = {
                 new SqlParameter("@jobId", SqlDbType.VarChar),
-                new SqlParameter("@trackingID", SqlDbType.VarChar)
+                new SqlParameter("@trackingID", SqlDbType.VarChar),
+                new SqlParameter("@processes",SqlDbType.VarChar)
             };
 
             if (sJobId != "") parameters[0].Value = sJobId; else parameters[0] = null;
             if (sTrackingID != "") parameters[1].Value = sTrackingID; else parameters[1] = null;
+            if (CheckProcess != "") parameters[2].Value = CheckProcess; else parameters[2] = null;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);

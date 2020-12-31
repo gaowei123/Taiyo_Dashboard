@@ -17,7 +17,6 @@
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="../../plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 
-
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
 
 
@@ -51,7 +50,6 @@
 
 </head>
 <body>
-     
     <form id="form1" runat="server">
         <div class="container">
             <div class="row titleRow"  style="margin-top:10px;">

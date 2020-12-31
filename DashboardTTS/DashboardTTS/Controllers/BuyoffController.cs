@@ -9,7 +9,6 @@ namespace DashboardTTS.Controllers
 {
     public class BuyoffController : Controller
     {
-
         private readonly ViewBusiness.Buyoff_ViewBusiness vbBuyoff = new ViewBusiness.Buyoff_ViewBusiness();
 
         #region view
@@ -27,12 +26,16 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+
+        public ActionResult TouchPCBuyoffWithoutCurrent()
+        {
+            return View();
+        }
         
         public ActionResult PQCBuyoffList()
         {
             return View();
         }
-
         #endregion
 
 
@@ -132,117 +135,25 @@ namespace DashboardTTS.Controllers
 
 
 
-        public ActionResult GetMouldDefect()
+        public JsonResult GetMouldDefect(string JobID, string TrackingID, string CheckProcess, bool IsExcludeTracking)
         {
-            string jobID = Request.Form["JobID"];
-            string trackingID = Request.Form["TrackingID"];
-
-
-            List<ViewModel.BuyoffReport_ViewModel.MouldDefect> mouldDefectList = vbBuyoff.GetMaterialMouldDefectList(jobID, trackingID);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = "";
-
-            if (mouldDefectList == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(mouldDefectList);
-            }
-
-
-
-            return Content(jsonResult);
+            List<ViewModel.BuyoffReport_ViewModel.MouldDefect> mouldDefectList = vbBuyoff.GetMaterialMouldDefectList(JobID, TrackingID, CheckProcess,IsExcludeTracking);
+            return mouldDefectList == null ? Json(""): Json(mouldDefectList);
         }
-        
-        public ActionResult GetPaintDefect()
+        public JsonResult GetPaintDefect(string JobID, string TrackingID, string CheckProcess, bool IsExcludeTracking)
         {
-            string jobID = Request.Form["JobID"];
-            string trackingID = Request.Form["TrackingID"];
-
-
-
-            DBHelp.Reports.LogFile.Log("TouchPCBuyoff", string.Format("GetPaintDefect, receive para JobID:{0},trackingID:{1}", jobID, trackingID));
-
-            List<ViewModel.BuyoffReport_ViewModel.PaintDefect> paintDefectList = vbBuyoff.GetMaterialPaintDefectList(jobID, trackingID);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = "";
-
-            if (paintDefectList == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(paintDefectList);
-            }
-            
-
-
-
-            return Content(jsonResult);
+            List<ViewModel.BuyoffReport_ViewModel.PaintDefect> paintDefectList = vbBuyoff.GetMaterialPaintDefectList(JobID, TrackingID, CheckProcess, IsExcludeTracking);
+            return paintDefectList == null ? Json("") : Json(paintDefectList);
         }
-        
-        public ActionResult GetLaserDefect()
+        public ActionResult GetLaserDefect(string JobID, string TrackingID, string CheckProcess, bool IsExcludeTracking)
         {
-            string jobID = Request.Form["JobID"];
-            string trackingID = Request.Form["TrackingID"];
-
-
-            List<ViewModel.BuyoffReport_ViewModel.LaserDefect> laserDefectList = vbBuyoff.GetMaterialLaserDefectList(jobID, trackingID);
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = "";
-
-            if (laserDefectList == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(laserDefectList);
-            }
-
-
-
-            return Content(jsonResult);
+            List<ViewModel.BuyoffReport_ViewModel.LaserDefect> laserDefectList = vbBuyoff.GetMaterialLaserDefectList(JobID, TrackingID, CheckProcess, IsExcludeTracking);
+            return laserDefectList == null ? Json("") : Json(laserDefectList);
         }
-
-
-
-        public ActionResult GetOthersDefect()
+        public ActionResult GetOthersDefect(string JobID, string TrackingID, string CheckProcess, bool IsExcludeTracking)
         {
-
-
-
-            string jobID = Request.Form["JobID"];
-            string trackingID = Request.Form["TrackingID"];
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = "";
-
-
-
-
-            List<ViewModel.BuyoffReport_ViewModel.OthersDefect> othersDefectList = vbBuyoff.GetMaterialOthersDefectList(jobID, trackingID);
-
-          
-
-            if (othersDefectList == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(othersDefectList);
-            }
-
-
-
-            return Content(jsonResult);
+            List<ViewModel.BuyoffReport_ViewModel.OthersDefect> othersDefectList = vbBuyoff.GetMaterialOthersDefectList(JobID, TrackingID, CheckProcess, IsExcludeTracking);
+            return othersDefectList == null ? Json("") : Json(othersDefectList);
         }
 
 

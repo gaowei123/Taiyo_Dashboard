@@ -1966,10 +1966,10 @@
       <publishTime>11/13/2020 18:44:06</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>12/28/2020 10:41:07</publishTime>
+      <publishTime>12/31/2020 15:38:54</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>12/28/2020 10:41:13</publishTime>
+      <publishTime>12/31/2020 15:38:59</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
       <publishTime>12/28/2020 10:41:06</publishTime>
@@ -2086,7 +2086,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>12/28/2020 10:41:08</publishTime>
+      <publishTime>12/31/2020 15:38:54</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2179,16 +2179,16 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Taiyo.Enum.dll">
-      <publishTime>12/28/2020 10:41:06</publishTime>
+      <publishTime>12/31/2020 15:38:52</publishTime>
     </File>
     <File Include="bin/Taiyo.JobSchedule.dll">
-      <publishTime>12/28/2020 10:41:07</publishTime>
+      <publishTime>12/31/2020 15:38:53</publishTime>
     </File>
     <File Include="bin/Taiyo.SearchParam.dll">
       <publishTime>12/28/2020 10:41:06</publishTime>
     </File>
     <File Include="bin/Taiyo.Tool.dll">
-      <publishTime>12/28/2020 10:41:06</publishTime>
+      <publishTime>12/31/2020 15:38:53</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11188,7 +11188,7 @@
       <publishTime>11/13/2020 13:53:46</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>12/24/2020 14:02:09</publishTime>
+      <publishTime>12/31/2020 14:13:22</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11266,7 +11266,7 @@
       <publishTime>12/09/2020 11:16:20</publishTime>
     </File>
     <File Include="Views/Attendance/DailySummaryReport.cshtml">
-      <publishTime>12/28/2020 09:45:26</publishTime>
+      <publishTime>12/29/2020 14:00:08</publishTime>
     </File>
     <File Include="Views/Attendance/MonthlySummaryReport.cshtml">
       <publishTime>12/22/2020 14:22:57</publishTime>
@@ -11278,13 +11278,16 @@
       <publishTime>09/25/2020 10:18:23</publishTime>
     </File>
     <File Include="Views/Buyoff/OverallBuyoff.cshtml">
-      <publishTime>09/29/2020 10:44:30</publishTime>
+      <publishTime>12/30/2020 16:51:55</publishTime>
     </File>
     <File Include="Views/Buyoff/PQCBuyoffList.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Buyoff/TouchPCBuyoff.cshtml">
-      <publishTime>08/14/2020 14:30:36</publishTime>
+      <publishTime>12/30/2020 17:08:53</publishTime>
+    </File>
+    <File Include="Views/Buyoff/TouchPCBuyoffWithoutCurrent.cshtml">
+      <publishTime>12/31/2020 11:24:29</publishTime>
     </File>
     <File Include="Views/Charts/LaserMachineActivityChart.cshtml">
       <publishTime>10/29/2020 16:42:50</publishTime>
@@ -11437,7 +11440,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/24/2020 14:01:57</publishTime>
+      <publishTime>12/31/2020 14:13:09</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11470,7 +11473,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/13/2020 18:45:02</publishTime>
+      <publishTime>12/31/2020 11:24:51</publishTime>
     </File>
     <File Include="Webform/Assy/AssyUserAttendance.aspx">
       <publishTime>01/19/2020 15:52:12</publishTime>
@@ -11950,7 +11953,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/Moulding/MouldingProductionReport.aspx">
-      <publishTime>06/15/2020 19:58:42</publishTime>
+      <publishTime>12/31/2020 11:51:58</publishTime>
     </File>
     <File Include="Webform/Moulding/MouldingProductivityChart.aspx">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11998,7 +12001,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/PQC/BuyOffRecordForClient.aspx">
-      <publishTime>12/08/2020 13:46:04</publishTime>
+      <publishTime>12/29/2020 13:42:17</publishTime>
     </File>
     <File Include="Webform/PQC/PQCBezelPanelReport.aspx">
       <publishTime>12/08/2020 14:52:04</publishTime>
