@@ -43,7 +43,7 @@ SUM(case when Attendance = 'Reservist' and OnLeave = 'Day' then 1 when Attendanc
 SUM(case when Attendance = 'Pending' and OnLeave = 'Day' then 1 when Attendance = 'Pending' and OnLeave in ('AM','PM')  then 0.5  else 0 end  ) as [Pending],
 
 (select 
-	case when attendance != 'attendance' then UserName+'   ( '+Attendance end + ' ),'
+	case when attendance != 'attendance' then  UserName + '  ('+Attendance+ (case when OnLeave in ('AM','PM') then '-'+OnLeave else '' end)+'),' end
 	from LMMSUserAttendanceTracking 
 	where day =a.Day and Department = a.Department
 	for xml path('') 

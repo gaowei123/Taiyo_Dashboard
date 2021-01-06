@@ -269,6 +269,7 @@
     <Compile Include="Controllers\MOULDProductController.cs" />
     <Compile Include="Controllers\OverallReportController.cs" />
     <Compile Include="Controllers\BomController.cs" />
+    <Compile Include="Controllers\Painting_ProductController.cs" />
     <Compile Include="Controllers\PQC_ProductController.cs" />
     <Compile Include="UserControl\UcMoulding.ascx.cs">
       <DependentUpon>UcMoulding.ascx</DependentUpon>
@@ -3841,6 +3842,7 @@
     <Content Include="Views\Attendance\DailySummaryReport.cshtml" />
     <Content Include="Views\Attendance\MonthlySummaryReport.cshtml" />
     <Content Include="Views\Buyoff\TouchPCBuyoffWithoutCurrent.cshtml" />
+    <Content Include="Views\Painting_Product\DeliveryRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

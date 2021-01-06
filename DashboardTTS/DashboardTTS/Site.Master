@@ -183,7 +183,11 @@
                         <ul class="dropdown-menu menu-top">
                             <li><a runat="server" href="./Webform/Painting/InventoryRecord.aspx">Daily Delivery</a></li>
                             <li><a runat="server" href="./Webform/Painting/PaintingDeliveryOperatingHis.aspx">Delivery His</a></li>
-                            <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx">Painting Job Order</a></li>
+                            <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx" aria-disabled="false">Painting Job Order</a></li>
+
+
+                            <li><a runat="server" href="./Painting_Product/DeliveryRecord">Delivery Record</a></li>
+
                         </ul>
                     </li>
 

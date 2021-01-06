@@ -45,6 +45,7 @@
     <Compile Include="HomeParam.cs" />
     <Compile Include="LaserParam\LaserActivityCondition.cs" />
     <Compile Include="LaserParam\LaserProductionCondition.cs" />
+    <Compile Include="PaintingParam\DeliveryRecordParams.cs" />
     <Compile Include="PQCParam\PQCOperatorSummaryCondition.cs" />
     <Compile Include="PQCParam\PQCTopRejectCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,7 +53,6 @@
   <ItemGroup>
     <Folder Include="AttendanceParam\" />
     <Folder Include="MouldingParam\" />
-    <Folder Include="PaintingParam\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

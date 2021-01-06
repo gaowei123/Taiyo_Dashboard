@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Taiyo.SearchParam;
 using Taiyo.Enum.Organization;
+using Newtonsoft.Json;
 
 namespace DashboardTTS.Controllers
 {
@@ -62,7 +63,6 @@ namespace DashboardTTS.Controllers
             param.DateFrom = DateTime.Now.AddDays(-12).Date;
             param.DateTo = DateTime.Now.Date;
             param.IsDisplayOffday = isDisplayOffday;
-
 
 
             MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("HomeTrend");
@@ -271,13 +271,6 @@ namespace DashboardTTS.Controllers
             return Json(chartData);
         }
         
-      
-
-      
-
-
-        
-
       
     }
 }

@@ -1,0 +1,267 @@
+﻿
+@{
+    ViewBag.Title = "DeliveryRecord";
+}
+
+<div class="container-fluid" style="max-width:1300px;">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Delivery Record</span>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label for="txtDateFrom" style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label for="txtDateTo" style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label for="ddlPartNo" style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="ddlSendingTo" style="width:35%">Sending To:</label>
+                    <select id="ddlSendingTo" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Laser">Laser</option>
+                        <option value="PQC">PQC</option>
+                        <option value="Print">Print</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label for="txtJobID" style="width:35%">Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job id" style="width:60%;" />
+                </div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="initTable();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" style="padding:0px; margin-top:-10px;">
+            <table id="tb" data-toggle="table"></table>
+        </div>
+    </div>
+</div>
+
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*bootstrap table*@
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var apiGetData = window.globalConfig.rootDirectory + '/Painting_Product/GetRecordList';
+
+
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+
+
+    $(document).ready(function () {
+
+        setPartNoDDL($('#ddlPartNo'), 'PQC', '');
+
+        let today = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateFrom').val(today);
+        $('#txtDateTo').val(today);
+
+        initTable();
+    });
+
+
+    function initTable() {
+
+
+        let aaa = $("#ddlPartNo").val();
+
+        let tableInfo = {
+            url: apiGetData,
+            params: {
+                DateFrom: $("#txtDateFrom").val(),
+                DateTo: $("#txtDateTo").val(),
+                PartNo: $("#ddlPartNo").val(),
+                SendingTo: $("#ddlSendingTo").val(),
+                JobNo: $('#txtJobNo').val()
+            },
+            column: [
+                {
+                    title: 'ID',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },{
+                    field: 'PartNo',
+                    title: 'Part No',
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: function (value) {
+                        return 'Total';
+                    }
+                },{
+                    field: 'JobNo',
+                    title: 'Job No',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'LotNo',
+                    title: 'Lot No',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'MRPQty',
+                    title: 'MRP Qty(PCS)',
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: function (rows) {
+                        let totalMRPPCS = 0;
+                        let totalMRPSET = 0;
+                        for (var i = 0; i < rows.length; i++) {
+                            let strmrp = rows[i].MRPQty;
+                            let strmrpArr = strmrp.replace(')', '').split('(');
+                            totalMRPSET += Number(strmrpArr[0]);
+                            totalMRPPCS += Number(strmrpArr[1]);
+                        }
+                        return `${totalMRPSET}(${totalMRPPCS})`
+                    }
+                },{
+                    field: 'Rej',
+                    title: 'Rej',
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: function (rows) {
+                        let rej = 0;
+                        for (var i = 0; i < rows.length ; i++) {
+                            rej += Number(rows[i].Rej);
+                        }
+                        return rej;
+                    }
+                },{
+                    field: 'Process',
+                    title: 'Process',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'SendingTo',
+                    title: 'Sending To',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'Description',
+                    title: 'Description',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'MFGDate',
+                    title: 'MFG Date',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'ScanDate',
+                    title: 'Scan Date',
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    valign: 'middle'
+                }
+            ]
+        }
+
+
+        //重新加载必须将原本table清空
+        $('#tb').bootstrapTable('destroy');
+        $('#tb').bootstrapTable({
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            queryParams: tableInfo.params,
+            url: tableInfo.url,
+
+            theadClasses: 'thead-title',//表头样式 undefined, thead-light, thead-dark,
+            classes: 'table table-bordered table-hover table-striped',//表格样式
+            showFooter: true,   //显示合计栏
+            visibleSearch: true,//是否显示查询框
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+            //sidePagination: 'server', // 设置为服务器端分页
+            //cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+          
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: tableInfo.column,
+
+            onLoadSuccess: function (data) {
+                if (data == null ||data == undefined ||data.length==0) {
+                    $('#tb').bootstrapTable('resetView');
+                } else {
+                    resize();
+                }
+            },
+
+            onLoadError: function () {
+                console.log("Get data error");
+            }
+        });
+    }
+
+    $(window).resize(function () {
+        resize();
+    });
+
+    function resize() {
+        let height = $(window).height();
+        $('#tb').bootstrapTable('resetView', { height: height-230 });
+    }
+
+</script>

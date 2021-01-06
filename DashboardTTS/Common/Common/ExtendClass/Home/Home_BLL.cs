@@ -15,7 +15,7 @@ namespace Common.ExtendClass.Home
 
 
         /// <summary>
-        /// sql统一字段 month, day, output
+        /// sql统一字段 year, month, day, output
         /// </summary>
         private List<Home_Model.DailyTrend> ConvertList(DataTable dt, Department dpt)
         {           
@@ -27,10 +27,10 @@ namespace Common.ExtendClass.Home
                 model.Department = dpt.ToString();
                 model.Day = int.Parse(dr["day"].ToString());
                 model.Month = int.Parse(dr["month"].ToString());
+                model.Year = int.Parse(dr["year"].ToString());
                 model.Output = decimal.Parse(dr["output"].ToString());
-
-                DateTime dTemp = DateTime.Parse($"{DateTime.Now.Date.Year}-{model.Month}-{model.Day}");
-                model.WeekName = dTemp.GetWeekName(false);
+                
+                model.WeekName = (new DateTime(model.Year, model.Month, model.Day)).GetWeekName(false);
                 modelList.Add(model);
             }
 
@@ -48,13 +48,16 @@ namespace Common.ExtendClass.Home
             DateTime dTemp = param.DateFrom.Value.Date;
             while (dTemp < param.DateTo.Value.Date)
             {
-                var result = from a in modelList where a.Day == dTemp.Day && a.Month == dTemp.Month select a;
+                var result = from a in modelList
+                             where a.Year == dTemp.Year && a.Day == dTemp.Day && a.Month == dTemp.Month
+                             select a;
                 if (result == null || result.Count() == 0)
                 {
                     Home_Model.DailyTrend model = new Home_Model.DailyTrend();
                     model.Department = dpt.ToString();
                     model.Day = dTemp.Day;
                     model.Month = dTemp.Month;
+                    model.Year = dTemp.Year;
                     model.WeekName = dTemp.GetWeekName(false);
                     model.Output = 0;
                     modelList.Add(model);
@@ -63,7 +66,7 @@ namespace Common.ExtendClass.Home
                 dTemp = dTemp.AddDays(1);
             }
 
-            return modelList.OrderBy(p => p.Month).OrderBy(p=>p.Day).ToList();
+            return modelList.OrderBy(p => p.Year).OrderBy(p => p.Month).OrderBy(p=>p.Day).ToList();
         }
 
 

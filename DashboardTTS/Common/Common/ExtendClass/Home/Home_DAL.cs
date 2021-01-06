@@ -15,6 +15,7 @@ namespace Common.ExtendClass.Home
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
+                            year(day) as year,
                             month(day) as month,
                             day(day) as day,
                             sum(acountReading) as output 
@@ -22,8 +23,8 @@ namespace Common.ExtendClass.Home
                             where 1=1 
                             and day >= @DateFrom
                             and day < @DateTo
-                            group by month(day), day(day)  
-                            order by month(day) asc, day(day) asc");
+                            group by year(day), month(day), day(day)  
+                            order by year(day) asc, month(day) asc, day(day) asc");
 
 
 
@@ -48,6 +49,7 @@ namespace Common.ExtendClass.Home
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
+                            YEAR(updatedTime) as [year],
                             MONTH(updatedTime) as [month],
                             DAY(updatedTime) as [day],
                             SUM(inQuantity * case when isnull(b.materialCount, '') = '' then 1 else b.materialCount end) as output
@@ -59,8 +61,8 @@ namespace Common.ExtendClass.Home
                             ) b on a.partNumber  = b.partNumber
 
                             where 1 = 1   and updatedTime >= @DateFrom  and updatedTime <= @DateTo
-                            group by  MONTH(updatedTime),  DAY(updatedTime)
-                            order by MONTH(updatedTime) asc, DAY(updatedTime) asc ");
+                            group by YEAR(updatedTime), MONTH(updatedTime),  DAY(updatedTime)
+                            order by YEAR(updatedTime) asc, MONTH(updatedTime) asc, DAY(updatedTime) asc ");
 
             SqlParameter[] paras =
             {
@@ -83,6 +85,7 @@ namespace Common.ExtendClass.Home
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
+                            year(day) as year,
                             month(day) as month,
                             day(day) as day,
                             sum(totalPass + totalFail) as output 
@@ -90,8 +93,8 @@ namespace Common.ExtendClass.Home
                             where 1=1 
                             and day >= @DateFrom
                             and day < @DateTo
-                            group by month(day), day(day)  
-                            order by month(day) asc, day(day) asc");            
+                            group by year(day), month(day), day(day)  
+                            order by year(day) asc, month(day) asc, day(day) asc");            
           
             SqlParameter[] paras =
             {
@@ -114,6 +117,7 @@ namespace Common.ExtendClass.Home
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
+                            year(day) as year,
                             month(day) as month,
                             day(day) as day,
                             sum(acceptQty + RejectQty) as output 
@@ -123,8 +127,8 @@ namespace Common.ExtendClass.Home
                             and CHARINDEX('Laser',b.processes,0) > 0 and a.processes = 'CHECK#1'
                             and day >= @DateFrom 
                             and day < @DateTo
-                            group by month(a.day), day(a.day)  
-                            order by month(a.day) asc , day(a.day)  asc");
+                            group by year(day), month(a.day), day(a.day)  
+                            order by year(day) asc, month(a.day) asc , day(a.day)  asc");
 
        
 
@@ -149,6 +153,7 @@ namespace Common.ExtendClass.Home
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
+                            year(day) as year,
                             month(day) as month,
                             day(day) as day,
                             sum(acceptQty + RejectQty) as output
@@ -159,8 +164,8 @@ namespace Common.ExtendClass.Home
                             and(CHARINDEX('Laser', b.processes, 0) = 0 or(CHARINDEX('Laser', b.processes, 0) > 0 and  a.processes != 'CHECK#1'))
                             and day >= @DateFrom
                             and day < @DateTo
-                            group by month(a.day), day(a.day)
-                            order by month(a.day) asc, day(a.day)  asc");
+                            group by year(day), month(a.day), day(a.day)
+                            order by year(day) asc, month(a.day) asc, day(a.day)  asc");
             
 
             SqlParameter[] paras =
@@ -187,6 +192,7 @@ namespace Common.ExtendClass.Home
             StringBuilder strSql = new StringBuilder();
 
             strSql.Append(@"select 
+                            year(day) as year,
                             month(day) as month,
                             day(day) as day,
                             sum(acceptQty + RejectQty) as output
@@ -194,8 +200,8 @@ namespace Common.ExtendClass.Home
                             where 1=1
                             and day >= @DateFrom
                             and day < @DateTo
-                            group by month(day), day(day)
-                            order by month(day) asc, day(day)  asc");
+                            group by year(day), month(day), day(day)
+                            order by year(day) asc, month(day) asc, day(day)  asc");
          
 
             SqlParameter[] paras =

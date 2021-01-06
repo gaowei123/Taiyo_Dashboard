@@ -24,6 +24,6 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\bin\Debug\
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Channels.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Tasks.Extensions.xml
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.csprojResolveAssemblyReference.cache

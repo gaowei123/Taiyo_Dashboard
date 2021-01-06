@@ -16,11 +16,13 @@ namespace MyChart.ConcreteChartMethod
         {
             var homeParam = (HomeParam)param;
             var chartDataList = _bll.GetDailyTrend(homeParam);
-
+            
 
             #region generate xAxis 
             List<string> xAxisLabelList = new List<string>();
-            var dayList = from a in chartDataList group a by new { a.Month,a.WeekName, a.Day } into b orderby b.Key.Month ascending, b.Key.Day ascending select new { b.Key.Month, b.Key.WeekName, b.Key.Day };
+            var dayList = from a in chartDataList group a by new { a.Year, a.Month,a.WeekName, a.Day } into b
+                          orderby b.Key.Year ascending, b.Key.Month ascending, b.Key.Day ascending
+                          select new { b.Key.Month, b.Key.WeekName, b.Key.Day };
             foreach (var item in dayList)
             {
                 string value = string.Format("{0}/{1}\n{2}",
@@ -38,32 +40,38 @@ namespace MyChart.ConcreteChartMethod
             Series moulding = new Series();
             moulding.Name = Department.Moulding.ToString();
             moulding.Type = "line";
-            moulding.Data = (from a in chartDataList where a.Department == Department.Moulding.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            moulding.Data = (from a in chartDataList where a.Department == Department.Moulding.ToString()
+                             orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
             
             Series painting = new Series();
             painting.Name = Department.Painting.ToString();
             painting.Type = "line";
-            painting.Data = (from a in chartDataList where a.Department == Department.Painting.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            painting.Data = (from a in chartDataList where a.Department == Department.Painting.ToString()
+                             orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
             
             Series laser = new Series();
             laser.Name = Department.Laser.ToString();
             laser.Type = "line";
-            laser.Data = (from a in chartDataList where a.Department == Department.Laser.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            laser.Data = (from a in chartDataList where a.Department == Department.Laser.ToString()
+                          orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
         
             Series online = new Series();
             online.Name = Department.Online.ToString();
             online.Type = "line";
-            online.Data = (from a in chartDataList where a.Department == Department.Online.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            online.Data = (from a in chartDataList where a.Department == Department.Online.ToString()
+                           orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
             
             Series wip = new Series();
             wip.Name = Department.WIP.ToString();
             wip.Type = "line";
-            wip.Data = (from a in chartDataList where a.Department == Department.WIP.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            wip.Data = (from a in chartDataList where a.Department == Department.WIP.ToString()
+                        orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
          
             Series packing = new Series();
             packing.Name = Department.Packing.ToString();
             packing.Type = "line";
-            packing.Data = (from a in chartDataList where a.Department == Department.Packing.ToString() orderby a.Month ascending, a.Day ascending select a.Output).ToList();
+            packing.Data = (from a in chartDataList where a.Department == Department.Packing.ToString()
+                            orderby a.Year ascending, a.Month ascending, a.Day ascending select a.Output).ToList();
 
             List<Series> seriesList = new List<Series>() { moulding, painting, laser, online, wip, packing };
             #endregion
