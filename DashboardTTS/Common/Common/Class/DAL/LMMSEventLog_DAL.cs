@@ -11,6 +11,14 @@ namespace Common.DAL
 	/// </summary>
 	internal class LMMSEventLog_DAL
 	{
+        /// <summary>
+        /// 遗留的旧逻辑,
+        /// 给MachineOEETimeBar(laser time bar)用的.
+        /// </summary>
+        /// <param name="dTimeFrom"></param>
+        /// <param name="dTimeTo"></param>
+        /// <param name="sMachineNo"></param>
+        /// <returns></returns>
         public DataSet getOEE(DateTime dTimeFrom, DateTime dTimeTo, string sMachineNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -105,9 +113,19 @@ namespace Common.DAL
 
 
 
-        
 
 
+        /// <summary>
+        /// 从数据库获取基础字段 id, machineID, currentOperation, eventTrigger, startTime, stopTime
+        /// eventTrigger中
+        ///     为了兼容旧数据ADJUSTMENT视为BUYOFF. 
+        ///     为了统一描述POWER ON视为RUN,  POWER OFF视为SHUTDOWN
+        /// </summary>
+        /// <param name="dDateFrom"></param>
+        /// <param name="dDateTo"></param>
+        /// <param name="sMachineID"></param>
+        /// <param name="sStatus"></param>
+        /// <returns>返回一个datatable</returns>
         public DataTable GetListForModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus)
         {
             StringBuilder strSql = new StringBuilder();

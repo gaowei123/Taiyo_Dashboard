@@ -26,4 +26,3 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.RedisCache\bin\Debu
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.RedisCache\bin\Debug\System.Threading.Tasks.Extensions.xml
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.pdb
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.csprojResolveAssemblyReference.cache

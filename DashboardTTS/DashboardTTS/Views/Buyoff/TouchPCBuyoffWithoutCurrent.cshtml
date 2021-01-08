@@ -3,7 +3,6 @@
     Layout = null;
 }
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,11 +27,8 @@
     <script src="~/Dashboard CSS JS/JS/GlobalConfig.js"></script>
     <title>TouchPC - Buyoff Report</title>
 
-
 </head>
 <body>
-
-
 
     <div class="container" style="margin-top:10px;">
 
@@ -293,8 +289,6 @@
 
 
     </div>
-
-
 
 
 <script type="text/javascript">
@@ -857,7 +851,7 @@
             }
 
         });
-
+        
         $('#tablePaintingDefect').bootstrapTable({ // 对应table标签的id
 
 
@@ -1452,7 +1446,6 @@
 
         $('#tableOthersDefect').bootstrapTable({ // 对应table标签的id
 
-
             //call后台数据
             method: 'post',
             dataType: 'json',
@@ -1570,7 +1563,6 @@
 
 
                 var pqcScratch = 0;
-                var blackDot = 0;
                 var overSpray = 0;
                 var bubble = 0;
                 var oilStain = 0;
@@ -1585,7 +1577,6 @@
                 for (var i = 0; i < data.length; i++) {
 
                     pqcScratch += data[i].pqcScratch;
-                    blackDot += data[i].blackDot;
                     overSpray += data[i].overSpray;
                     bubble += data[i].overSpray;
                     oilStain += data[i].oilStain;
@@ -1600,7 +1591,6 @@
 
 
                 if (pqcScratch == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'pqcScratch');
-                if (blackDot == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'blackDot');
                 if (overSpray == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'overSpray');
                 if (bubble == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'bubble');
                 if (oilStain == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'oilStain');

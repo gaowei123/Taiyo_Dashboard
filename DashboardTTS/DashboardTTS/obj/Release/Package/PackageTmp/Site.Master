@@ -109,7 +109,7 @@
                     <li class="dropdown menu-top">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Production</font><span class="caret"></span></a>
                         <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/TTSHomePage.aspx">Home Page</a></li> 
+                            <li><a runat="server" href="./Webform/TTSHomePage.aspx">Production Overview</a></li> 
                             <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
                             <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
@@ -181,9 +181,14 @@
                     <li class="dropdown menu-top">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Painting</font><span class="caret"></span></a>
                         <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/Painting/InventoryRecord.aspx">Daily Delivery</a></li>
-                            <li><a runat="server" href="./Webform/Painting/PaintingDeliveryOperatingHis.aspx">Delivery His</a></li>
-                            <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx">Painting Job Order</a></li>
+                            <li><a runat="server" href="./Webform/Painting/InventoryRecord.aspx">Job Transfer</a></li>
+                            <li><a runat="server" href="./Painting_Product/DeliveryRecord">Delivery Record</a></li>
+
+                            <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx" onclick="return false;" style="color: #888;">Painting Job Order</a></li>
+
+
+                            
+
                         </ul>
                     </li>
 

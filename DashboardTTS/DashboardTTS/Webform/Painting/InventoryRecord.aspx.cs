@@ -22,7 +22,7 @@ namespace DashboardTTS.Webform.Painting
                 {
                     DBHelp.Reports.LogFile.Log("InventoryRecord_Debug", "In Page");
 
-                    this.lblUserHeader.Text = "Painting Delivery Record";
+                    this.lblUserHeader.Text = "Painting Job Transfer";
 
                     //隐藏 手动填写的lotno, in quantity, partno
                     HidePrint();

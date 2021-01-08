@@ -14,7 +14,7 @@ namespace Common.ExtendClass.PaintingRecord
         public List<Model> GetList(DeliveryRecordParam param)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select  
+            strSql.Append($@"select  
 jobNumber as JobNo
 ,a.partNumber as PartNo
 ,sendingTo as SendingTo
@@ -31,9 +31,9 @@ convert(varchar(50), convert(decimal(18, 0), inQuantity * case when isnull(b.mat
 FROM PaintingDeliveryHis a
 left join (
 	select partNumber, count(1) as materialCount 
-	from LMMS_Taiyo.dbo.lmmsbomDetail 
-	group by partNumber
-) b on a.partNumber  = b.partNumber
+	from  opendatasource('SQLOLEDB',{StaticRes.Global.SqlConnection.SqlconnPQC}).TAIYO_PQC.dbo.pqcbomdetail
+    group by partNumber
+) b on a.partNumber collate Chinese_PRC_CI_AS  = b.partNumber collate Chinese_PRC_CI_AS
 where 1 = 1   
 and updatedTime >= @DateFrom
 and updatedTime <= @DateTo ");
