@@ -137,6 +137,7 @@ namespace DashboardTTS.Controllers
 
         public JsonResult GetMouldDefect(string JobID, string TrackingID, string CheckProcess, bool IsExcludeTracking)
         {
+            DBHelp.Reports.LogFile.Log("BuyoffController_Debug", $"JobID:{JobID},TrackingID:{TrackingID},CheckProcess:{CheckProcess},IsExcludeTracking:{IsExcludeTracking}");
             List<ViewModel.BuyoffReport_ViewModel.MouldDefect> mouldDefectList = vbBuyoff.GetMaterialMouldDefectList(JobID, TrackingID, CheckProcess,IsExcludeTracking);
             return mouldDefectList == null ? Json(""): Json(mouldDefectList);
         }

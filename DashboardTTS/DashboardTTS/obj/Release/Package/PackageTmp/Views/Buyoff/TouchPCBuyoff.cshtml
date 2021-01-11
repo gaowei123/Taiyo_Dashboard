@@ -30,8 +30,6 @@
 </head>
 <body>
 
-
-
     <div class="container" style="margin-top:10px;">
         
         @*LASER 1st PIECE BUY-OFF RECORD*@
@@ -293,13 +291,10 @@
     </div>
 
 
-
-
-    <script type="text/javascript">
+<script type="text/javascript">
 
     var apiGetLaserModel = window.globalConfig.rootDirectory + '/Buyoff/GetLaserBuyoffRecord';
     var apiGetLaserParameterModel = window.globalConfig.rootDirectory + '/Buyoff/GetLaserParameter';
-
 
     var apiGetMouldingDefect = window.globalConfig.rootDirectory + '/Buyoff/GetMouldDefect';
     var apiGetPaintingDefect = window.globalConfig.rootDirectory + '/Buyoff/GetPaintDefect';
@@ -1577,7 +1572,6 @@
              
 
                 var pqcScratch = 0;
-                var blackDot = 0;
                 var overSpray = 0;
                 var bubble = 0;
                 var oilStain = 0;
@@ -1592,7 +1586,6 @@
                 for (var i = 0; i < data.length; i++) {
 
                     pqcScratch += data[i].pqcScratch;
-                    blackDot += data[i].blackDot;
                     overSpray += data[i].overSpray;
                     bubble += data[i].overSpray;
                     oilStain += data[i].oilStain;
@@ -1607,7 +1600,6 @@
 
 
                 if (pqcScratch == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'pqcScratch');
-                if (blackDot == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'blackDot');
                 if (overSpray == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'overSpray');
                 if (bubble == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'bubble');
                 if (oilStain == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'oilStain');

@@ -1366,7 +1366,7 @@ where 1=1  ");
             {
                 //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
                 strSql.Append(" and trackingID != @trackingID ");
-                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+                if (CheckProcess != "") strSql.Append(" and processes = @processes ");
             }
             else
             {
@@ -1440,7 +1440,7 @@ where 1=1  ");
             {
                 //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
                 strSql.Append(" and trackingID != @trackingID ");
-                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+                if (CheckProcess != "") strSql.Append(" and processes = @processes ");
             }
             else
             {
@@ -1510,7 +1510,7 @@ where 1=1  ");
             {
                 //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
                 strSql.Append(" and trackingID != @trackingID ");
-                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+                if (CheckProcess != "") strSql.Append(" and processes = @processes ");
             }
             else
             {
@@ -1569,7 +1569,7 @@ where 1=1  ");
             {
                 //说明是TouchPCBuyoffWithoutCurrent界面进入的, 不包含当前tracking, 查询当前process下除了该tracking的所有记录
                 strSql.Append(" and trackingID != @trackingID ");
-                if (CheckProcess != "") strSql.Append(" and processes != @processes ");
+                if (CheckProcess != "") strSql.Append(" and processes = @processes ");
             }
             else
             {

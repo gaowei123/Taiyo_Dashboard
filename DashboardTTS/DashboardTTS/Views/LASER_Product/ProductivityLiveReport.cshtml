@@ -1,0 +1,297 @@
+﻿
+@{
+    ViewBag.Title = "ProductivityLiveReport";
+}
+
+<div class="container-fluid" style="max-width:1500px;">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Laser Productivity Live Report</span>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label style="width:35%">Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Shift:</label>
+                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Model:</label>
+                    <select id="ddlModel" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
+                </div>
+            </div>
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label style="width:35%">Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Machine No:</label>
+                    <select id="ddlMachineID" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                        <option value="">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label style="width:35%">Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control"  placeholder="Please input job no" style="width:60%;" />
+                </div>
+                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" style="padding:0px; margin-top:-10px;">
+            <table id="tb" data-toggle="table"></table>
+        </div>
+    </div>
+</div>
+
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*table组件*@
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+
+<script type="text/javascript">
+
+    var apiGetData = window.globalConfig.rootDirectory + '/LASER_Product/GetLiveReport';
+
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+    $('#ddlModel').selectpicker({ width: 'calc(60%)' });
+
+    //设置part no, machine id 下拉框
+    $(document).ready(function () {
+        setPartNoDDL($('#ddlPartNo'), 'Laser', '');
+        setModelDDL($('#ddlModel'), 'Laser');
+
+        var lastDay = getLastReportDay();
+        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
+
+        $('#txtDateFrom').val(strLastDay);
+        $('#txtDateTo').val(strLastDay);
+
+        search();
+    });
+
+
+
+
+
+    function search() {
+
+        let tableInfo = {
+            url: apiGetData,
+            params: {
+                DateFrom: $("#txtDateFrom").val(),
+                DateTo: $("#txtDateTo").val(),
+                Shift: $("#ddlShift").val(),
+                Model: $("#ddlModel").val(),
+                PartNo: $("#ddlPartNo").val(),
+                MachineID: $("#ddlMachineID").val(),
+                JobNo: $('#txtJobNo').val()
+            },
+            column: [
+                {
+                    field: 'Date',
+                    title: 'Shift',
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter: function (value) {
+                        return 'Total';
+                    }
+
+
+                    //footerFormatter: function (rows) {
+                    //    if (rows.length == 0) {
+                    //        return '';
+                    //    }
+                    //    let totalMRPPCS = 0;
+                    //    let totalMRPSET = 0;
+                    //    for (var i = 0; i < rows.length; i++) {
+                    //        let strmrp = rows[i].MRPQty;
+                    //        let strmrpArr = strmrp.replace(')', '').split('(');
+                    //        totalMRPSET += Number(strmrpArr[0]);
+                    //        totalMRPPCS += Number(strmrpArr[1]);
+                    //    }
+                    //    return `${totalMRPSET}(${totalMRPPCS})`
+                    //}
+
+                },{
+                    field: 'MachineID',
+                    title: 'Machine ID',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'Model',
+                    title: 'Model',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'JobNo',
+                    title: 'Job No',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'PartNo',
+                    title: 'Part No',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'StartTime',
+                    title: 'Start Time',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'EndTime',
+                    title: 'End Time',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'TakeTime',
+                    title: 'Take Time',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'OkQty',
+                    title: 'Ok Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'NgQty',
+                    title: 'Ng Qty',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'Output',
+                    title: 'Output',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'Rej',
+                    title: 'Rej',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'Setup',
+                    title: 'Setup',
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    field: 'MRPQty',
+                    title: 'MRPQty',
+                    align: 'center',
+                    valign: 'middle'
+                }                 
+            ]
+        }
+
+
+        //重新加载必须将原本table清空
+        $('#tb').bootstrapTable('destroy');
+        $('#tb').bootstrapTable({
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            queryParams: tableInfo.params,
+            url: tableInfo.url,
+
+            theadClasses: 'thead-title',//表头样式 undefined, thead-light, thead-dark,
+            classes: 'table table-bordered table-hover table-striped',//表格样式
+            showFooter: true,   //显示合计栏
+            visibleSearch: true,//是否显示查询框
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+            //sidePagination: 'server', // 设置为服务器端分页
+            //cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: tableInfo.column,
+
+            onLoadSuccess: function (data) {
+                //if (data == null || data == undefined || data.length == 0) {
+                //    $('#tb').bootstrapTable('resetView');
+                //} else {
+                //    resize();
+                //}
+            },
+
+            onLoadError: function () {
+                console.log("Get data error");
+            }
+        });
+
+    }
+
+
+    $(window).resize(function () {
+        $('#tb').bootstrapTable('resetView');
+    });
+
+
+
+
+
+</script>

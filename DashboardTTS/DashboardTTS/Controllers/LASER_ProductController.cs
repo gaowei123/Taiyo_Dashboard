@@ -27,12 +27,16 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+        public ActionResult ProductivityLiveReport()
+        {
+            return View();
+        }
         #endregion
 
 
 
 
-        
+
 
 
         #region laser summary report
@@ -104,6 +108,25 @@ namespace DashboardTTS.Controllers
 
         #endregion
 
+
+
+        public JsonResult GetLiveReport(DateTime DateFrom, DateTime DateTo, string Shift, string Model, string PartNo, string MachineID, string JobNo)
+        {
+            Taiyo.SearchParam.LaserParam.LaserLiveParam param = new Taiyo.SearchParam.LaserParam.LaserLiveParam();
+            param.DateFrom = DateFrom;
+            param.DateTo = DateTo.AddDays(1);
+            param.Shift = Shift;
+            param.Model = Model;
+            param.PartNo = PartNo;
+            param.MachineID = MachineID;
+            param.JobNo = JobNo;
+
+            Common.ExtendClass.LaserLiveReport.LaserLive_BLL bll = new Common.ExtendClass.LaserLiveReport.LaserLive_BLL();
+            var list = bll.GetList(param);
+            
+
+            return list == null ? Json("") : Json(list);
+        }
 
 
     }
