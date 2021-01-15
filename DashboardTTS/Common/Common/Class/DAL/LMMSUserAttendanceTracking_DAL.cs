@@ -486,20 +486,24 @@ namespace Common.DAL
             strSql.Append(@" 
 select 
 EmployeeID
-,UserName
-,sum(case when Attendance = 'Attendance' or Attendance = 'Business Trip' then 1 
-		  when attendance <>'Attendance' and (OnLeave ='AM' or OnLeave = 'PM')  then 0.5 
+,b.USER_NAME
+,sum(case when Attendance = 'Attendance' then 1 
+		  when Attendance in( 'Business Trip','WFH') and OnLeave = 'Day' then 1
+		  when Attendance in( 'Business Trip','WFH') and (OnLeave ='AM' or OnLeave = 'PM') then 0.5
+          when attendance not in ( 'Business Trip','WFH') and (OnLeave ='AM' or OnLeave = 'PM') then 0.5
 		  else 0 end) as attendanceDays
-,sum(case when OnLeave = 'Day' then 1
-      when onleave = 'AM' or OnLeave='PM' then 0.5
-	  else 0 end ) as leaveDays
-from LMMSUserAttendanceTracking  where 1=1 and day >= @dateFrom and day < @dateTo ");
+,sum(case when Attendance not in ('Business Trip','WFH','Attendance') and OnLeave = 'Day' then 1
+		  when Attendance not in ('Business Trip','WFH','Attendance') and (OnLeave ='AM' or OnLeave = 'PM') then 0.5
+		  else 0 end ) as leaveDays
+from LMMSUserAttendanceTracking  a 
+left join User_DB b on a.EmployeeID = b.EMPLOYEE_ID
+where 1=1 and day >= @dateFrom and day < @dateTo ");
             
-            if (!string.IsNullOrEmpty(sDepartment)) strSql.Append(" and department = @Department ");
+            if (!string.IsNullOrEmpty(sDepartment)) strSql.AppendLine(" and a.department = @Department ");
 
 
 
-            strSql.Append(" group by EmployeeID,UserName  ");
+            strSql.AppendLine(" group by EmployeeID, b.USER_NAME");
 
 
             SqlParameter[] parameters = {
@@ -518,7 +522,7 @@ from LMMSUserAttendanceTracking  where 1=1 and day >= @dateFrom and day < @dateT
             if (ds == null|| ds.Tables.Count == 0)
                 return null;
             else
-                return ds.Tables[0];           
+                return ds.Tables[0];
         }
 
 

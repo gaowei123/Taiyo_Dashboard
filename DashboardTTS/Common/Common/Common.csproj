@@ -260,9 +260,9 @@
     <Compile Include="ExtendClass\LaserLiveReport\LaserLive_BLL.cs" />
     <Compile Include="ExtendClass\LaserLiveReport\LaserLive_DAL.cs" />
     <Compile Include="ExtendClass\LaserLiveReport\LaserLive_Model.cs" />
-    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_BLL.cs" />
-    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_DAL.cs" />
-    <Compile Include="ExtendClass\LaserProductionChart\LaserProduction_Model.cs" />
+    <Compile Include="ExtendClass\LaserProductChart\ProductChart_BLL.cs" />
+    <Compile Include="ExtendClass\LaserProductChart\ProductChart_DAL.cs" />
+    <Compile Include="ExtendClass\LaserProductChart\ProductChart_Model.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_BLL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_DAL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_Model.cs" />

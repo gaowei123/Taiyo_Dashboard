@@ -17,7 +17,10 @@ namespace Common.ExtendClass.PaintingRecord
 
         public List<Model> GetList(DeliveryRecordParam param)
         {
-            return _dal.GetList(param);
+            var result = _dal.GetList(param);
+
+            //order by a.partNumber asc, a.updatedTime desc
+            return result.OrderBy(model => model.PartNo).OrderByDescending(model => model.S_ScanDate).ToList();
         }
     }
 }

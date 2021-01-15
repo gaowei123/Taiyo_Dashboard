@@ -3,18 +3,16 @@
     ViewBag.Title = "DailyReport";
 }
 
-
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-@*bootstrap table*@
-<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
-<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+<style>
+    .laserID{
+        position:absolute;
+        right:2%;
+        top:4px;
+    }
+    .laserID label{
+        display:inline-block;
+    }
+</style>
 
 <div class="container">
     <div class="row titleRow">
@@ -59,22 +57,37 @@
    
 
     <div class="row">
-        <div class="col-sm-12 panel panel-default" style="padding-bottom:10px;">
-            <h4>Machine Status List</h4>
-            <table data-toggle="table" id="tbStatus" style="width:500px;"></table>
-        </div>
-    </div>
+        <div class="col-sm-12 panel panel-default" style="padding-bottom:10px;position:relative;margin-top:-10px;">           
+            <div class="laserID">
+                <label for="ddlLaserID">Laser ID &nbsp; </label>
+                <select id="ddlLaserID" class="form-control selectpicker"></select>
+            </div>
 
-    <div class="row">
-        <div class="col-sm-12 panel panel-default" style="padding-bottom:10px;">
-            <h4>Production Output Report</h4>
-            <table data-toggle="table" id="tbOutput"></table>
+            <div style="width:100%;">
+                <h4>Machine Status List</h4>
+                <table data-toggle="table" id="tbStatus" style="width:500px;"></table>
+            </div>
+            <div style="width:100%; border-top:2px solid #f4f4f4;margin-top:10px;">
+                <h4>Production Output Report</h4>
+                <table data-toggle="table" id="tbOutput"></table>
+            </div>
         </div>
     </div>
 </div>
 
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*bootstrap table*@
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
 <script type="text/javascript">
 
@@ -94,7 +107,7 @@
     });
 
 
-
+    $('#ddlLaserID').selectpicker({ width: '100px' });
 
     //设置part no, machine id 下拉框
     $(document).ready(function () {
@@ -102,6 +115,9 @@
         var lastDay = getLastReportDay();
         var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
         $('#txtDate').val(strLastDay);
+
+
+        getLaserIDList($('#ddlLaserID'));
 
         generate();
     });
@@ -335,6 +351,8 @@
 
     }
 
+
+   
 
     $(window).resize(function () {
         $('#tbStatus').bootstrapTable('resetView');

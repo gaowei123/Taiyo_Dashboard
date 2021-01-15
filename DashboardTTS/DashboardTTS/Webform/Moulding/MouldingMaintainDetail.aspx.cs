@@ -204,20 +204,26 @@ namespace DashboardTTS.Webform
         {
             ddl.Items.Clear();
             ddl.Items.Add(new ListItem("",""));
-
-
+            
             Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();
             List<Common.Class.Model.User_DB_Model> modelList = bll.GetModelList(StaticRes.Global.Department.Moulding, "", "","");
             var technicianList = (from a in modelList
                                   where a.USER_GROUP == StaticRes.Global.UserGroup.TECHNICIAN
                                   select a).ToList();
-
-
+                        
+            if (technicianList ==null || technicianList.Count() == 0)
+            {
+                //由于moulding原本TECHNICIAN的人员辞职了,
+                //所以找不到technician的人员下, 定死S0107显示.
+                technicianList = (from a in modelList
+                                  where a.EMPLOYEE_ID == "S0107"
+                                  select a).ToList();
+            }
+            
             foreach (Common.Class.Model.User_DB_Model model in technicianList)
             {
                 ddl.Items.Add(new ListItem(model.USER_NAME,model.USER_NAME));
             }
-         
         }
 
 

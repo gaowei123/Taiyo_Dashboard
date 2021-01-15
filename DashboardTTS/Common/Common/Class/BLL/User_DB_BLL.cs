@@ -184,6 +184,9 @@ namespace Common.Class.BLL
 
             return userIDList;
         }
+
+
+        
         
         public DataTable GetManPower()
         {

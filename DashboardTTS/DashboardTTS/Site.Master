@@ -86,7 +86,7 @@
             <div class="navbar-header">
                 <div class="row">
                   <div class="col-xs-10" style="margin:0px;padding:0px;">
-                         <a href="#" style="margin-right:0px;padding-right:0px;" >
+                         <a href="./Webform/TTSHomePage.aspx" style="margin-right:0px;padding-right:0px;" >
                             <img runat="server" id="imglogo" class="img-responsive" src="./Resources/Images/logo-ir4-tts-lmms.png" 
                             style="width:380px;height:50px;"/>
                         </a>
@@ -178,98 +178,91 @@
                     </ul>
                 </li>
 
-                    <li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Painting</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/Painting/InventoryRecord.aspx">Job Transfer</a></li>
-                            <li><a runat="server" href="./Painting_Product/DeliveryRecord">Delivery Record</a></li>
+                <li class="dropdown menu-top">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Painting</font><span class="caret"></span></a>
+                    <ul class="dropdown-menu menu-top">
+                        <li><a runat="server" href="./Webform/Painting/InventoryRecord.aspx">Job Transfer</a></li>
+                        <li><a runat="server" href="./Painting_Product/DeliveryRecord">Delivery Record</a></li>
+                        <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx" onclick="return false;" style="color: #888;">Painting Job Order</a></li>
+                    </ul>
+                </li>
 
-                            <li><a runat="server" href="./Webform/Painting/PaintingJobOrder.aspx" onclick="return false;" style="color: #888;">Painting Job Order</a></li>
+                <li class="dropdown menu-top">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Laser</font><span class="caret"></span></a>
+                    <ul class="dropdown-menu menu-top">
+                        <li><a runat="server" href="./Webform/Laser/MachineStatus.aspx">Machine Real Time</a></li>
+                        <li><a runat="server" href="./LASER_Product/SummaryReport">Laser Summary Report</a></li>
 
+                        <li><a runat="server" href="./LASER_Product/DailyReport">Laser Daily Report</a></li>
 
-                            
+                        <li><a runat="server" href="./Charts/LaserProductionChart">Productivity Chart</a></li>
+                        <li><a runat="server" href="./Webform/Laser/ProductivityDetail.aspx">Productivity Detail Report</a></li>
+                        <li><a runat="server" href="./Webform/Laser/ProductivityNGDetail.aspx">Material Detail Report</a></li>
+                           
+                        <li><a runat="server" href="./Webform/Laser/MachineCapability.aspx">Machine Capacity</a></li>  
+                        <li><a runat="server" href="./Webform/MachineOEETimeBar.aspx">Operation Status</a></li>
+                        <li><a runat="server" href="./Webform/Laser/BOMList.aspx">Bom List</a></li>
 
-                        </ul>
-                    </li>
+                        <li><a runat="server" href="./LASER_Product/InventoryReport">Inventory Report</a></li>
+                        <li><a runat="server" href="./Webform/Laser/InventoryDetail.aspx">Job Order Detail</a></li>
+                        <li><a runat="server" href="./Webform/Laser/Buy_Off_List.aspx">Buy Off List</a></li>
+                        <li><a runat="server" href="./Webform/Laser/LaserEquipmentCheckList.aspx">Equipment Check List</a></li>
+                        <li><a runat="server" href="./Webform/Laser/LaserMachineDownTimeList.aspx">Machine Maintenance Record</a></li>
+                        <li><a runat="server" href="./Webform/Laser/LaserSparePartsInventory.aspx">Spare Parts Record</a></li>  
+                        <li><a runat="server" href="./Webform/Laser/LaserSparePartsUsageHis.aspx">Spare Parts History</a></li>  
+                        <li><a runat="server" href="./Webform/Laser/LaserSettingList.aspx">Machine Parameters</a></li> 
+                        <li><a runat="server" href="./LASER_MachineSetting/Index">Product Parameter Chart</a></li>
 
-                    <li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Laser</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/Laser/MachineStatus.aspx">Machine Real Time</a></li>
-                            <li><a runat="server" href="./LASER_Product/SummaryReport">Laser Summary Report</a></li>
+                        <li><a runat="server" href="./Charts/LaserMachineActivityChart">Machine Activity Chart</a></li>
+                    </ul>
+                </li>
 
-                            <li><a runat="server" href="./LASER_Product/DailyReport">Laser Daily Report</a></li>
-
-                            <li><a runat="server" href="./Webform/Laser/ProductivityChart.aspx">Productivity Chart</a></li>
-                            <li><a runat="server" href="./Webform/Laser/ProductivityDetail.aspx">Productivity Detail Report</a></li>
-                            <li><a runat="server" href="./Webform/Laser/ProductivityNGDetail.aspx">Material Detail Report</a></li>
-                            <li><a runat="server" href="./Webform/Laser/MachineStatusChart.aspx">Machine Chart</a></li>
-                            <li><a runat="server" href="./Webform/Laser/MachineCapability.aspx">Machine Capacity</a></li>  
-                            <li><a runat="server" href="./Webform/MachineOEETimeBar.aspx">Operation Status</a></li>
-                            <li><a runat="server" href="./Webform/Laser/BOMList.aspx">Bom List</a></li>
-                            <%--<li><a runat="server" href="./Webform/Laser/InventoryReport.aspx">Laser Inventory</a></li>--%>
-
-                            <li><a runat="server" href="./LASER_Product/InventoryReport">Inventory Report</a></li>
-                            <li><a runat="server" href="./Webform/Laser/InventoryDetail.aspx">Job Order Detail</a></li>
-                            <li><a runat="server" href="./Webform/Laser/Buy_Off_List.aspx">Buy Off List</a></li>
-                            <li><a runat="server" href="./Webform/Laser/LaserEquipmentCheckList.aspx">Equipment Check List</a></li>
-                            <li><a runat="server" href="./Webform/Laser/LaserMachineDownTimeList.aspx">Machine Maintenance Record</a></li>
-                            <li><a runat="server" href="./Webform/Laser/LaserSparePartsInventory.aspx">Spare Parts Record</a></li>  
-                            <li><a runat="server" href="./Webform/Laser/LaserSparePartsUsageHis.aspx">Spare Parts History</a></li>  
-                            <li><a runat="server" href="./Webform/Laser/LaserSettingList.aspx">Machine Parameters</a></li> 
-                            <li><a runat="server" href="./LASER_MachineSetting/Index">Product Parameter Chart</a></li>
-
-                            <li><a runat="server" href="./Charts/LaserMachineActivityChart">Machine Activity Chart</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">PQC</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
-                            <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx">PQC Station Real Time</a></li>
+                <li class="dropdown menu-top">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">PQC</font><span class="caret"></span></a>
+                    <ul class="dropdown-menu menu-top">
+                        <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx">PQC Station Real Time</a></li>
 
                            
 
-                            <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>           
-                            <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
-                            <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output Report</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>           
+                        <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
+                        <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
+                        <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output Report</a></li>
 
-                            <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">PQC Analysis Report - Button</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">PQC Analysis Report - Bezel</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">PQC Analysis Report - Panel</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">PQC Analysis Report - Button</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">PQC Analysis Report - Bezel</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">PQC Analysis Report - Panel</a></li>
 
-                            <li><a runat="server" href="./PQC_Product/WIPInventory">WIP Inventory</a></li>
-                            <li><a runat="server" href="./PQC_Product/JobOrderDetail">Job Order Detail</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCRejectDetail.aspx">PQC Reject Detail Report</a></li>
+                        <li><a runat="server" href="./PQC_Product/WIPInventory">WIP Inventory</a></li>
+                        <li><a runat="server" href="./PQC_Product/JobOrderDetail">Job Order Detail</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCRejectDetail.aspx">PQC Reject Detail Report</a></li>
 
-                            <li class="divider"></li>
+                        <li class="divider"></li>
                             
 
-                            <li><a runat="server" href="./PQC_Product/PackingInventory">Packing Inventory</a></li>
-                            <li><a runat="server" href="./PQC_Product/PackingJobOrder">Packing Job Order Detail</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li> 
-                            <%--<li><a runat="server" href="./PQC_Product/PackingPicChart">Packing PIC Chart</a></li>--%>
+                        <li><a runat="server" href="./PQC_Product/PackingInventory">Packing Inventory</a></li>
+                        <li><a runat="server" href="./PQC_Product/PackingJobOrder">Packing Job Order Detail</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCPackingLiveReport.aspx">Packing Live Report</a></li> 
 
-                            <li><a runat="server" href="./Charts/PQCOperatorPerformanceChart">PQC Operator Performance Chart</a></li>
-                            <li><a runat="server" href="./Charts/PQCOperatorSummaryChart">PQC Operator Summary Chart</a></li>
+                        <li><a runat="server" href="./Charts/PQCOperatorPerformanceChart">PQC Operator Performance Chart</a></li>
+                        <li><a runat="server" href="./Charts/PQCOperatorSummaryChart">PQC Operator Summary Chart</a></li>
 
-                             <li><a runat="server" href="./Charts/PQCTopRejectChart">PQC Top Rejection Chart</a></li>
+                        <li><a runat="server" href="./Charts/PQCTopRejectChart">PQC Top Rejection Chart</a></li>
 
 
-                            <li><a runat="server" href="./PQC_Product/PackingProductionTrendChart">Packing Production Trend Chart</a></li>
+                        <li><a runat="server" href="./PQC_Product/PackingProductionTrendChart">Packing Production Trend Chart</a></li>
 
                            
-                            <li class="divider"></li>
+                        <li class="divider"></li>
 
-                            <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>                            
-                            <li><a runat="server" href="./Webform/PQC/PQCProductionChart.aspx">PQC Chart</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCCheckerOutputChart.aspx">Checker Output Chart</a></li>
-                            <li><a runat="server" href="./Webform/PQC/PQCBomList.aspx">Bom List</a></li>
-                            <li><a runat="server" href="./Buyoff/PQCBuyoffList">PQC Buyoff Record History</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQC_PIC_PerformReport.aspx">PIC Report</a></li>                            
+                        <li><a runat="server" href="./Webform/PQC/PQCProductionChart.aspx">PQC Chart</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCCheckerOutputChart.aspx">Checker Output Chart</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCBomList.aspx">Bom List</a></li>
+                        <li><a runat="server" href="./Buyoff/PQCBuyoffList">PQC Buyoff Record History</a></li>
 
-                        </ul>
-                    </li>
+                    </ul>
+                </li>
 
 
                
@@ -277,55 +270,48 @@
 
 
 
-                    <li class="dropdown menu-top">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Attendance</font><span class="caret"></span></a>
-                        <ul class="dropdown-menu menu-top">
+                <li class="dropdown menu-top">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Attendance</font><span class="caret"></span></a>
+                    <ul class="dropdown-menu menu-top">
+                        <li><a runat="server" href="./Attendance/UserManagement">User Management</a></li>
+                        <li class="divider"></li>
 
-                            <li><a runat="server" href="./Attendance/UserManagement">User Management</a></li>
-
-                            <li class="divider"></li>
-
-
-                            <%-- !!!
-                                 URL传递的Department参数必须和Enum中设定的Description保持一致. 
-                                 不然submit界面会查询不到数据
-                            --%>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Moulding">Moulding</a></li> 
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Painting">Painting</a></li> 
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Laser">Laser</a></li> 
-                            <li><a runat="server" href="./Attendance/Attendance?Department=PQC">PQC</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Assembly">Assembly</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Prod Office">Prod Office</a></li>
-
-
-                            <%--新增部门--%>                            
-                            <li><a runat="server" href="./Attendance/Attendance?Department=HR/Finance">HR/Finance</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Planning/Purchasing">Planning/Purchasing</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Sales/Project">Sales/Project</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=QA/QC/FA">QA/QC/FA</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=Store">Store</a></li>
-                            <li><a runat="server" href="./Attendance/Attendance?Department=TSS">TSS</a></li>
+                        <%-- 
+                            !!!
+                            URL传递的Department参数必须和Enum中设定的Description保持一致. 
+                            不然submit界面会查询不到数据
+                        --%>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Moulding">Moulding</a></li> 
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Painting">Painting</a></li> 
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Laser">Laser</a></li> 
+                        <li><a runat="server" href="./Attendance/Attendance?Department=PQC">PQC</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Assembly">Assembly</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Prod Office">Prod Office</a></li>
+                        <%--新增部门--%>                            
+                        <li><a runat="server" href="./Attendance/Attendance?Department=HR/Finance">HR/Finance</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Planning/Purchasing">Planning/Purchasing</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Sales/Project">Sales/Project</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=QA/QC/FA">QA/QC/FA</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=Store">Store</a></li>
+                        <li><a runat="server" href="./Attendance/Attendance?Department=TSS">TSS</a></li>
                                  
-
-                            <li class="divider"></li>
-
-                            <li><a runat="server" href="./Attendance/DailySummaryReport">Daily Attendance Summary Report</a></li>
-                            <li><a runat="server" href="./Attendance/MonthlySummaryReport">Monthly Attendance Summary Report</a></li>
-                            <li><a runat="server" href="./Attendance/AttendanceChart">User Attendance Chart</a></li>
-
-                        </ul>
-                    </li>
+                        <li class="divider"></li>
+                        <li><a runat="server" href="./Attendance/DailySummaryReport">Daily Attendance Summary Report</a></li>
+                        <li><a runat="server" href="./Attendance/MonthlySummaryReport">Monthly Attendance Summary Report</a></li>
+                        <li><a runat="server" href="./Attendance/AttendanceChart">User Attendance Chart</a></li>
+                    </ul>
+                </li>
 
 
 
                 </ul>
             </div>
         </div>
-        </nav>
+    </nav>
 
     
 
-       <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
 
 
     </form>
@@ -337,23 +323,16 @@
         $(function () {
             //将所有input框的 autocomplete off.
             $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
-
             //一加载就执行, 防止第一次加载的时候, 出现菜单栏换行的情况. 
-            let width = $(window).width();
-            if (width < 1120 && width > 768) {
-                $('#imglogo').hide();
-            } else if (width <= 768) {
-                $('#imglogo').show();
-            } else {
-                $('#imglogo').show();
-            }
+            resizeNavbar();
         });
-
-
-
-
 
         $(window).resize(function () {
+            resizeNavbar();
+        });
+
+
+        function resizeNavbar() {
             let width = $(window).width();
             if (width < 1120 && width > 768) {
                 $('#imglogo').hide();
@@ -362,9 +341,7 @@
             } else {
                 $('#imglogo').show();
             }
-        });
-
-
+        }
 
     </script>
 </body>

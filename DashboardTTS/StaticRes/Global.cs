@@ -45,9 +45,6 @@ namespace StaticRes
         }
         
     
-
-        
-       
         //OEE 
         public enum StatusType
         {
@@ -106,13 +103,6 @@ namespace StaticRes
 
         public static class clsConstValue
         {
-            public static class ConstCategory
-            {
-                public static string Sysem = "SYSTEM_OEE";
-                public static string Technician = "TECHNICIAN_OEE";
-                public static string StandBy = "STANDBY";
-            }
-
             public static class ConstStatus
             {
                 public static string PowerOn = "POWER ON";
@@ -129,7 +119,6 @@ namespace StaticRes
                 public static string Setup = "SETUP";
                 public static string Buyoff = "BUYOFF";
             }
-            
         }
 
         public static class ProductType
@@ -174,27 +163,7 @@ namespace StaticRes
             public static string Machine = "Machine";
             public static string Main = "Main";
         }
-
-
-
-        public static class UserAttendance
-        {
-            public static class LeaveReason
-            {
-                public static string annualLeave = "Annual Leave";
-                public static string mcLeave = "MC";
-                public static string unPaid = "UnPaid";
-                public static string maternity = "Maternity";
-                public static string marriage = "Marriage";
-                public static string compassionate = "Compassionate";
-                public static string childCare = "ChildCare";
-                public static string absent = "Absent";
-                public static string businessTrip = "Business Trip";
-                public static string pending = "Pending";
-                public static string reserviced = "Reserviced";
-            }
-        }
-
+        
         public static class PQC
         {
             public static class Process

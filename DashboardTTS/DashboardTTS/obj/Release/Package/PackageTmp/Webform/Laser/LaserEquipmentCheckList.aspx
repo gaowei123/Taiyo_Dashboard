@@ -6,7 +6,7 @@
     <div class="container-fluid" style="max-width: 1700px;">
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-            <span class="titleText">Laser Equipment Preventive Maintenance & Check List</span>
+            <span class="titleText">Equipment Check List</span>
         </div>
 
 

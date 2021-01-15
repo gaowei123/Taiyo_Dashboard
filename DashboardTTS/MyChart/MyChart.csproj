@@ -65,6 +65,10 @@
       <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
       <Name>StaticRes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StatusConverter\Taiyo.Tool.csproj">
+      <Project>{9ee7ab40-6b50-47a4-9f3a-3b3f3520cadb}</Project>
+      <Name>Taiyo.Tool</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Taiyo.Enum\Taiyo.Enum.csproj">
       <Project>{7eef5249-5d72-4470-a952-94983fad5433}</Project>
       <Name>Taiyo.Enum</Name>

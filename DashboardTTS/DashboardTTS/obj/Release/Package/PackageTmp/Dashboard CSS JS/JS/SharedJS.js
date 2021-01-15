@@ -6,6 +6,8 @@ var apiGetLastReportDay = window.globalConfig.rootDirectory + '/Common/GetLastRe
 var apiGetMouldingDefectList = window.globalConfig.rootDirectory + '/Common/GetMouldingDefectList';
 var apiGetUserIDList = window.globalConfig.rootDirectory + '/Common/GetUserIDList';
 
+var apiGetLaserIDList = window.globalConfig.rootDirectory + '/Common/GetLaserIDList';
+
 
 
 //设置机器列表下拉框
@@ -358,3 +360,23 @@ function getUrlParam(name) {
 }
 
 
+function getLaserIDList(selectControl) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: apiGetLaserIDList,
+
+        success: function (data) {
+            selectControl.empty();//清空
+            selectControl.append($("<option value=''></option>"));//添加一行空行
+            for (var i = 0; i < data.length; i++) {
+                selectControl.append($("<option value='" + data[i].USER_ID + "'>" + data[i].USER_ID + "</option>"));
+            }
+            selectControl.selectpicker("refresh");
+        },
+        error: function () {
+            alert("Setting laser id drop down list error !");
+        }
+    });
+
+}

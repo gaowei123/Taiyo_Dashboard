@@ -28,14 +28,16 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-
-
-
-
         public ActionResult LaserProductionChart()
         {
             return View();
         }
+
+    
+
+
+
+
         public ActionResult LaserMachineChart()
         {
             return View();
@@ -208,33 +210,51 @@ namespace DashboardTTS.Controllers
 
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
         public JsonResult GetLaserProductionData()
         {
-            var param = new Taiyo.SearchParam.LaserParam.LaserProductionCondition();
-            param.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            param.DateTo = DateTime.Parse(Request.Form["DateTo"]);
-            param.DateTo = param.DateTo.Value.AddDays(1);
-            param.ChartType = Request.Form["ChartType"];
+            string type = Request.Form["Type"];
 
-            
+            var param = new Taiyo.SearchParam.LaserParam.LaserProductChartParam();
+            param.Type = type;
+           
+            if (type == "Daily")
+            {
+                param.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+                param.DateTo = DateTime.Parse(Request.Form["DateTo"]);
+                param.DateTo = param.DateTo.Value.AddDays(1);
+            }
+            else if (type == "Monthly")
+            {
+                param.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
+                param.DateTo = DateTime.Parse(Request.Form["DateTo"]);
+            }
+            else if (type == "Yearly")
+            {
+                param.DateFrom = new DateTime(2018, 1, 1);
+                param.DateTo = DateTime.Now.AddDays(1);
+            }
+
+            param.PartNo = Request.Form["PartNo"];
+
+
             MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("LaserProduction");
             MyChart.ChartModel chartData = chartProvidor.GetChartData(param);
 
             return Json(chartData);
         }
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
         public JsonResult GetLaserMachineData()
         {
             var param = new Taiyo.SearchParam.BaseParam();

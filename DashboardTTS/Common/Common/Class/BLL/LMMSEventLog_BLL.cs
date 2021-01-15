@@ -141,7 +141,7 @@ namespace Common.BLL
                             continue;
                         }
 
-                        if (dr["currentOperation"].ToString().Trim() == StaticRes.Global.clsConstValue.ConstCategory.Technician)
+                        if (dr["currentOperation"].ToString().Trim() == "TECHNICIAN_OEE")
                         {
                             DateTime tmp = DateTime.Parse(dr["startTime"].ToString());
                             //2018 04 03 marked by wei lijia , some stop time will be the first minutes of next day. it will cause error
@@ -268,7 +268,7 @@ namespace Common.BLL
                 {
                     try
                     {
-                        if (dr["currentOperation"].ToString().Trim() == StaticRes.Global.clsConstValue.ConstCategory.Sysem)
+                        if (dr["currentOperation"].ToString().Trim() == "SYSTEM_OEE")
                         {
                             DateTime tmp = DateTime.Parse(dr["startTime"].ToString());
                             //2018 04 03 marked by wei lijia , some stop time will be the first minutes of next day. it will cause error
@@ -380,10 +380,10 @@ namespace Common.BLL
 
 
 
-
-
-        #region 将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
-
+        //以下为新逻辑, 由于旧逻辑遍历到每一秒, 极大影响了生成yearly的数据的速度.
+        //新逻辑 将原数据按照 8:00,  20:00的时间点来切分重组.
+        //将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
+        #region 只有GetStatusModelList方法对外public使用
         private List<string> GetMachineStatusList()
         {
             return new List<string>()
@@ -984,13 +984,8 @@ namespace Common.BLL
 
             return result;
         }
-
         #endregion
-
-
-
-
-
+        
 
         public class UsedRate
         {
@@ -998,7 +993,6 @@ namespace Common.BLL
             public string Description { get; set; }
             public double Value { get; set; }
         }
-
         /// <summary>
         /// 获取当天的机器run时间占比
         /// used rate -->  (run + setup + buyoff + testing) / total(shutdown除外的总时间)
@@ -1086,12 +1080,7 @@ namespace Common.BLL
             return resultList;
         }
 
-
-
-
-      
-
-
+       
         /// <summary>
         /// 获取机器当前最新的状态
         /// </summary>
@@ -1125,8 +1114,6 @@ namespace Common.BLL
 
             return dicStatus;
         }
-
         
-
     }
 }

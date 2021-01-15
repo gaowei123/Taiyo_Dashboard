@@ -220,55 +220,10 @@ namespace DashboardTTS.Controllers
 
 
 
-        #region Attendenance Daily Report  -- 已弃用
-        [Obsolete]
-        public ActionResult GetOverall()
-        {
-            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
-
-
-            List<ViewModel.Attendance_ViewModel.Overall> overallList = vbllAttendance.GetOverall(dDay);
-
-
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string jsonResult = js.Serialize(overallList);
-
-
-
-            return Content(jsonResult);
-        }
-        [Obsolete]
-        public ActionResult GetDetail()
-        {
-            string jsonResult = "";
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-
-            DateTime dDay = DateTime.Parse(Request.Form["Date"]);
-
-
-            List<ViewModel.Attendance_ViewModel.Detail> detailList = vbllAttendance.GetDetail(dDay);
-
-            if (detailList == null || detailList.Count == 0)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-
-                jsonResult = js.Serialize(detailList);
-            }
-
-
-            return Content(jsonResult);
-        }
-        #endregion
-
+     
         //attendance chart
-        public ActionResult GetChartData()
+        public JsonResult GetChartData()
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
             dateTo = dateTo.AddDays(1);
@@ -277,15 +232,7 @@ namespace DashboardTTS.Controllers
 
             List<ViewModel.Attendance_ViewModel.Chart> modelList = vbllAttendance.GetChartData(dateFrom, dateTo, department);
 
-
-            
-
-            if (modelList == null || modelList.Count == 0)
-                return Content(js.Serialize(""));
-            else
-                return Content(js.Serialize(modelList));            
+            return modelList == null ? Json("") : Json(modelList);
         }
-
-
     }
 }

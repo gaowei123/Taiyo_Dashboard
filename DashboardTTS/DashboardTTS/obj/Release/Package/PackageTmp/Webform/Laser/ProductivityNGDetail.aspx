@@ -5,7 +5,7 @@
     <div class="container-fluid" style="max-width: 1500px;" >
         <div class="row titleRow">
             <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-            <span class="titleText">Laser Productivity Material Detail</span>
+            <span class="titleText">Material Detail Report</span>
         </div>
 
         <div class="row">

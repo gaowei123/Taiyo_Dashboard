@@ -3,149 +3,154 @@
     ViewBag.Title = "LaserProductionChart";
 }
 
+<style>
+    #ddlType,#ddlYear,#txtDateFrom,#txtDateTo{
+        width:60%;
+    }
+    label{
+        width:35%;
+    }
+</style>
+
+<div class="container-fluid" style="max-width:1500px;">
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Laser Productivity Chart</span>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar">
+                <div class="col-sm-3">
+                    <label>Type:</label>
+                    <select id="ddlType" class="form-control">
+                        <option value="Daily">Daily</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-sm-3" id="condition1">
+                    <label>Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                </div>
+                <div class="col-sm-3" id="condition2">
+                    <label>Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                </div>
+                <div class="col-sm-3" id="condition3">
+                    <label>Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true"></select>
+                </div>
+            </div>
+            <div class="row form-inline searchingBar">
+                <div class="col-sm-3"></div>                
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" onclick="initChart();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 panel panel-default" style="padding:0px;">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+
+
+
 @*下拉框组件*@
 <script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
 <link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
 
 @*时间框组件*@
 <script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-
-<div class="container">
-
-    <div class="row titleRow">
-        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">Laser Production Chart</span>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
-
-            <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
-                </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
-                </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Shift:</label>
-                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
-                        <option value="">All</option>
-                        <option value="Day">Day</option>
-                        <option value="Night">Night</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Part No:</label>
-                    <select id="ddlPartNo" class="form-control" data-live-search="true" data-ng-style="btn-info" style="width:60%;"></select>
-                </div>
-            </div>
-
-
-            <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Chart Type:</label>
-                    <select id="ddlChartType" class="form-control" data-ng-style="btn-info" style="width:60%;">
-                        <option value="Machine">Machine</option>
-                        <option value="PartNo">Part No</option>
-                        <option value="Model">Model</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-
-                </div>
-                <div class="col-md-3">
-
-                </div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
-                    <input type="button" class="btn btn-success" value="Generate" onclick="generateChartOption();" />
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <div class="col-md-12 panel panel-default" style="padding:0px; margin-top:10px;">
-            <div id="divChart"></div>
-        </div>
-    </div>
-
-</div>
-
-
-
-
+@*echarts*@
 <script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 
+
 <script type="text/javascript">
-
-    //初始化时间框
-    $('#txtDateFrom').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        initialDate: new Date()
-    });
-    $('#txtDateTo').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        initialDate: new Date()
-    });
-
 
     var apiGetChartData = window.globalConfig.rootDirectory + '/Charts/GetLaserProductionData';
 
     //初始化 echart
-    var chart = echarts.init(document.getElementById('divChart'));
-
-    var option;
+    var chart = echarts.init(document.getElementById('chart'));
     
-
     $(document).ready(function () {
-
-        //设置默认查询时间
-        var lastDay = getLastReportDay();
-        var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
-        $('#txtDateFrom').val(strLastDay);
-        $('#txtDateTo').val(strLastDay);
-
-
-        generateChartOption();
+        setPartNoDDL($('#ddlPartNo'), 'Laser', '');
+        $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+        
+        initDate();
+        initChart();
     });
 
 
-    function generateChartOption() {
+    function initDate() {
+        //初始化时间框
+        $('#txtDateFrom').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            initialDate: new Date()
+        });
+        $('#txtDateTo').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            initialDate: new Date()
+        });
 
-        //ajax 请求后台数据
+        var today = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateTo').val(today);
+
+        //date from 默认前推一个月.
+        var date = new Date();
+        date.setMonth(date.getMonth() - 1);
+        let strDate = dateFormat('yyyy-MM-dd', date);
+        $('#txtDateFrom').val(strDate);
+    }
+
+    function initChart() {
+
+        let DateFrom = '';
+        let DateTo = '';
+
+        let type = $('#ddlType').val();
+        if (type == 'Daily') {
+            DateFrom = $('#txtDateFrom').val();
+            DateTo = $('#txtDateTo').val();
+        } else if (type == 'Monthly') {
+            let year = $('#ddlYear').val();
+            DateFrom = new Date(year + '-1-1');
+            DateTo = new Date(parseInt(year) + 1 + '-1-1');
+            DateFrom = dateFormat('yyyy-MM-dd', DateFrom);
+            DateTo = dateFormat('yyyy-MM-dd', DateTo);
+        }
+        
+
+     
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetChartData,
             data: {
-                DateFrom: $('#txtDateFrom').val(),
-                DateTo: $('#txtDateTo').val(),
-                Shift: $('#ddlShift').val(),
-                PartNo: $('#txtPartNo').val(),
-                ChartType: $('#ddlChartType').val(),
+                Type:$('#ddlType').val(),
+                PartNo: $('#ddlPartNo').val(),
+                DateFrom: DateFrom,
+                DateTo: DateTo
             },
 
             beforeSend: function () {
@@ -154,44 +159,23 @@
 
             success: function (data) {
 
-                console.log(data);
-
-
-
-                var series = [];
-
-                for (var i = 0; i < data.SeriesData.length; i++) {
-                    series.push({
-                        name: data.SeriesData[i].Name,
-                        type: data.SeriesData[i].Type,
-                        stack: data.SeriesData[i].Stack,
-                        data: data.SeriesData[i].Data,
-                        label: {
-                            show: true,
-                            position: 'inside'
-                        },
-                    });
+                if (data == null || data == undefined || data.length == 0) {
+                    alert('No record found!');
+                    return false;
                 }
-
-
+             
+                                
                 option = {
-                    title: {
-                        text: 'Laser Production Chart'
-                    },
+                    color: ['#009900', '#FF0000'],
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     legend: {
-                        data: data.LegendData
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
+                        data: data.LegendData,
+                        top:10
                     },
                     xAxis: [
                         {
@@ -201,37 +185,137 @@
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name: 'OK',
+                            position: 'left',
+                        },
+                        {
+                            type: 'value',
+                            name: 'NG',
+                            position: 'right',
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#FF0000'
+                                }
+                            },
+                            //max:100
                         }
                     ],
-                    series: series          
+                    series:[{
+                        name: data.SeriesData[0].Name,
+                        type: data.SeriesData[0].Type,
+                        //stack: data.SeriesData[0].Stack,
+                        yAxisIndex: 0,
+                        label: {
+                            show: true,
+                            position: 'top'
+                        },
+                        data: data.SeriesData[0].Data
+                    },{
+                        name: data.SeriesData[1].Name,
+                        type: data.SeriesData[1].Type,
+                        //stack: data.SeriesData[1].Stack,
+                        yAxisIndex: 1,
+                        label: {
+                            show: true,
+                           
+                        },
+                        data: data.SeriesData[1].Data
+                    }]
                 };
-
                 chart.setOption(option, true);
             },
 
             complete: function () {
-                chart.hideLoading();
-                chartResize(chart);
+                chart.hideLoading();              
+                resizeChart();
             },
 
             error: function () {
-                alert('Catch error, get chart data fail!');
+                alert('Get chart data fail!');
+                chart.setOption({}, true);
                 chart.hideLoading();
             }
         });
-
-
     }
 
+    $(window).resize(function () {
+        resizeChart();
+    });
 
-
-
-    $(window).resize(function () {chartResize(chart);});
-    function chartResize(chart) {
+    function resizeChart() {
         var bHeight = $(window).height() - 280;
         chart.resize({ height: bHeight });
     }
 
+    $('#ddlType').change(function () {
+        if ($('#ddlType').val() === 'Daily') {
+            $('#condition1').empty();
+            $('#condition2').empty();
+            $('#condition3').empty();
+            $('#condition1').html('<label>Date From:</label>\
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>');
+            $('#condition2').html('<label>Date To:</label>\
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>');
+            $('#condition3').html('<label>Part No:</label>\
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true"></select>');
+            setPartNoDDL($('#ddlPartNo'), 'Laser', '');
+            $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+
+            $('#txtDateFrom').datetimepicker({
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                initialDate: new Date()
+            });
+            $('#txtDateTo').datetimepicker({
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                initialDate: new Date()
+            });
+
+            initDate();
+
+        } else if ($('#ddlType').val() === 'Monthly') {
+            $('#condition1').empty();
+            $('#condition2').empty();
+            $('#condition3').empty();
+            $('#condition1').html('<label>Year:</label>\
+                    <select id="ddlYear" class="form-control"></select>');
+            $("#ddlYear").empty();
+            for (var i = 2018; i <= (new Date()).getFullYear() ; i++) {
+                if (i === (new Date()).getFullYear()) {
+                    var options = "<option value='" + i + "' selected='true'>" + i + "</option>";
+                } else {
+                    var options = "<option value='" + i + "'>" + i + "</option>";
+                }
+
+                $("#ddlYear").append(options);
+            }
+            $('#condition2').html('<label>Part No:</label>\
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true"></select>');
+            setPartNoDDL($('#ddlPartNo'), 'Laser', '');
+            $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+        } else {
+            $('#condition1').empty();
+            $('#condition2').empty();
+            $('#condition3').empty();
+
+            $('#condition1').html('<label>Part No:</label>\
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true"></select>');
+            setPartNoDDL($('#ddlPartNo'), 'Laser', '');
+            $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+        }
+    })
+    
 
 </script>

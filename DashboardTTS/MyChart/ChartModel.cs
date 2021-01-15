@@ -8,6 +8,12 @@ namespace MyChart
 {
     public class ChartModel
     {
+        public ChartModel()
+        {
+            LegendData = new List<string>();
+            XAxisData = new List<string>();
+        }
+
         public List<string> LegendData;
 
         public List<string> XAxisData;

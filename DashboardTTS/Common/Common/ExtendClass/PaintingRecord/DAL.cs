@@ -83,7 +83,7 @@ and updatedTime <= @DateTo ");
                 model.Process = dr["Process"].ToString();
                 model.LotNo = dr["LotNo"].ToString();
                 model.Description = dr["Description"].ToString();
-                model.MFGDate = DateTime.Parse(dr["MFGDate"].ToString()).ToString("dd/MM/yyyy");
+                model.MFGDate = dr["MFGDate"].ToString() != "" ? DateTime.Parse(dr["MFGDate"].ToString()).ToString("dd/MM/yyyy") : "";
                 model.ScanDate = DateTime.Parse(dr["ScanDate"].ToString()).ToString("dd/MM/yyyy HH:mm:ss");
                 model.Status = dr["Status"].ToString();
                 

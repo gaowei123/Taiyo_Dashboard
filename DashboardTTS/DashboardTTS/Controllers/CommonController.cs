@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Data;
-
+using Taiyo.Tool.Extension;
 namespace DashboardTTS.Controllers
 {
     public class CommonController : Controller
@@ -175,6 +175,20 @@ namespace DashboardTTS.Controllers
         }
 
 
-        
+
+        public JsonResult GetLaserIDList()
+        {
+            Common.Class.BLL.User_DB_BLL bll = new Common.Class.BLL.User_DB_BLL();
+            var laserIDList = bll.GetModelList(Taiyo.Enum.Organization.Department.Laser.GetDescription(),"","","");
+
+            var result = from a in laserIDList
+                         where a.USER_GROUP != "Admin"
+                         orderby a.USER_ID
+                         select a;
+
+            return Json(result);
+        }
+
+
     }
 }

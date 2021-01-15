@@ -480,13 +480,6 @@
     <Compile Include="Webform\Laser\MachineStatus.aspx.designer.cs">
       <DependentUpon>MachineStatus.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\Laser\MachineStatusChart.aspx.cs">
-      <DependentUpon>MachineStatusChart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Laser\MachineStatusChart.aspx.designer.cs">
-      <DependentUpon>MachineStatusChart.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\Laser\ProductivityChart.aspx.cs">
       <DependentUpon>ProductivityChart.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -745,13 +738,6 @@
     </Compile>
     <Compile Include="Webform\Painting\InventoryRecord.aspx.designer.cs">
       <DependentUpon>InventoryRecord.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Painting\PaintingDeliveryOperatingHis.aspx.cs">
-      <DependentUpon>PaintingDeliveryOperatingHis.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Painting\PaintingDeliveryOperatingHis.aspx.designer.cs">
-      <DependentUpon>PaintingDeliveryOperatingHis.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Painting\PaintingJobOrder.aspx.cs">
       <DependentUpon>PaintingJobOrder.aspx</DependentUpon>
@@ -3719,7 +3705,6 @@
     <Content Include="Webform\Laser\Login.aspx" />
     <Content Include="Webform\Laser\MachineCapability.aspx" />
     <Content Include="Webform\Laser\MachineStatus.aspx" />
-    <Content Include="Webform\Laser\MachineStatusChart.aspx" />
     <Content Include="Webform\Laser\ProductivityChart.aspx" />
     <Content Include="Webform\Laser\ProductivityDetail.aspx" />
     <Content Include="Webform\Laser\ProductivityNGDetail.aspx" />
@@ -3756,7 +3741,6 @@
     <Content Include="Webform\Moulding\RejDetail.aspx" />
     <Content Include="Webform\Moulding\UpdateProduction.aspx" />
     <Content Include="Webform\Painting\InventoryRecord.aspx" />
-    <Content Include="Webform\Painting\PaintingDeliveryOperatingHis.aspx" />
     <Content Include="Webform\Painting\PaintingJobOrder.aspx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
