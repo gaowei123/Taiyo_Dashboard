@@ -47,6 +47,7 @@
     <Compile Include="Organization\UserGroup.cs" />
     <Compile Include="Production\LaserStatus.cs" />
     <Compile Include="Production\MouldingStatus.cs" />
+    <Compile Include="Production\PQCReportType.cs" />
     <Compile Include="Production\PQCStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

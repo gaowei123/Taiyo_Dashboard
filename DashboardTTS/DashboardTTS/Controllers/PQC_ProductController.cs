@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Taiyo.SearchParam.PQCParam;
 
 namespace DashboardTTS.Controllers
 {
@@ -75,21 +76,35 @@ namespace DashboardTTS.Controllers
 
 
 
-        //summary report
-        public JsonResult GetSummaryData()
+        #region summary report
+        public JsonResult GetSummaryCheckingList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo)
         {
-            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
-            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"].ToString());
-            dateTo = dateTo.AddDays(1);
-            string shift = Request.Form["Shift"] == null ? "" : Request.Form["Shift"].ToString();
-            string partNo = Request.Form["PartNo"] == null ? "" : Request.Form["PartNo"].ToString();
+            PQCSummaryParam param = new PQCSummaryParam();
+            param.DateFrom = DateFrom;
+            param.DateTo = DateTo.AddDays(1);
+            param.Shift = Shift;
+            param.PartNo = PartNo;
 
-           
-            List<ViewModel.PQCSummaryReport_ViewModel.Report> models = new List<ViewModel.PQCSummaryReport_ViewModel.Report>();
-            models = vBLL.GetSummaryList(dateFrom, dateTo, shift, partNo);
-            
-            return models == null ? Json("") : Json(models);
+            Common.ExtendClass.PQCSummaryReport.Summary_BLL bll = new Common.ExtendClass.PQCSummaryReport.Summary_BLL();
+            var result = bll.GetCheckingList(param);
+
+            return result == null ? Json("") : Json(result);
+
         }
+        public JsonResult GetSummaryPackingList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo)
+        {
+            PQCSummaryParam param = new PQCSummaryParam();
+            param.DateFrom = DateFrom;
+            param.DateTo = DateTo.AddDays(1);
+            param.Shift = Shift;
+            param.PartNo = PartNo;
+
+            Common.ExtendClass.PQCSummaryReport.Summary_BLL bll = new Common.ExtendClass.PQCSummaryReport.Summary_BLL();
+            var result = bll.GetPackingList(param);
+
+            return result == null ? Json("") : Json(result);
+        }
+        #endregion
 
 
 

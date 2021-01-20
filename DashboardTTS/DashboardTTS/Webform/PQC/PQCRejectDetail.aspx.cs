@@ -16,10 +16,6 @@ namespace DashboardTTS.Webform.PQC
             {
                 if (!IsPostBack)
                 {
-
-                    this.lblUserHeader.Text = "PQC Rejection Detail Report";
-
-
                     //request parameters
                     string RejType = Request.QueryString["Type"] == null ? "" : Request.QueryString["Type"].ToString();
                     DateTime? dDateFrom = null;
@@ -36,7 +32,7 @@ namespace DashboardTTS.Webform.PQC
 
 
                     //init
-                    SetMachineTypeDDL();
+                
                     setRejType(RejType);
                     setRejCode("");
 
@@ -129,35 +125,6 @@ namespace DashboardTTS.Webform.PQC
 
 
         //============== func ==============//
-
-        private void SetMachineTypeDDL()
-        {
-
-            this.ddlMachineType.Items.Clear();
-
-            ListItem Li = new ListItem();
-            Li.Text = "All";
-            Li.Value = "";
-            this.ddlMachineType.Items.Add(Li);
-
-
-            for (int i = 1; i < 29; i++)
-            {
-                if (i == 9 || i == 10 || i == 18 || i == 19 || i == 20)
-                {
-                    continue;
-                }
-
-                Li = new ListItem();
-                Li.Text = "Station" + i.ToString();
-                Li.Value = i.ToString();
-                this.ddlMachineType.Items.Add(Li);
-            }
-
-        }
-
-
-
         private void setRejType(string sType)
         {
 

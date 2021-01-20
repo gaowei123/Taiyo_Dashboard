@@ -351,6 +351,14 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
+
+
+
+
+
+
+
         #region daily pqc  report 
         public List<ViewModel.PQCDailyReport_ViewModel> GetCheckingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sType)
         {

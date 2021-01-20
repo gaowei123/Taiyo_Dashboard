@@ -3,24 +3,7 @@
     ViewBag.Title = "OperatorDailyOutput";
 }
 
-
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-<style>
-    .container-fluid{
-        max-width:1600px;
-    }
-</style>
-
-
-<div class="container-fluid">
+<div class="container-fluid" style="max-width:1600px;">
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
@@ -68,8 +51,15 @@
 </div>
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
+@*bootstrap table 组件*@
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
@@ -294,7 +284,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 210 });
+                $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 220 });
             },
 
             onLoadError: function () {  //加载失败时执行
@@ -307,7 +297,7 @@
 
 
     $(window).resize(function () {
-        $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 210 });
+        $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 220 });
     });
 
 

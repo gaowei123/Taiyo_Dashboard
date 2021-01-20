@@ -9,7 +9,7 @@
             <tr style ="width: 100%">
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; font-family: 'Arial Unicode MS'; height: 50px; background-color: #003366; font-weight: bold;" colspan="5"> 
                     <img src="../../Resources/Images/headericon.gif" alt="" style="width: 15px; height: 15px" />
-                    <Asp:label ID="lblUserHeader"   runat="server" Font-Names="Arial Unicode MS"  Text="" Font-Size="12" ForeColor="White"></Asp:label>
+                    <Asp:label ID="lblUserHeader"   runat="server" Font-Names="Arial Unicode MS"  Text="PQC Rejection Detail Report" Font-Size="12" ForeColor="White"></Asp:label>
                 </td>
             </tr>
 
@@ -18,7 +18,31 @@
                     <asp:Label runat="server" Text="Station :" Width="100px"></asp:Label>  
                 </td>
                 <td style ="border: 1px solid #CCCCCC; padding: 10px 35px 10px 10px; width: 25%; height: 50px;">
-                    <asp:DropDownList ID="ddlMachineType"  runat="server" Width="100%" Height="23px"  />
+                    <asp:DropDownList runat="server"  ID="ddlMachineType" Width="100%"  Height="23px">
+                            <asp:ListItem Value="">All</asp:ListItem>
+                            <asp:ListItem Value="1">Online1(Sta1)</asp:ListItem>
+                            <asp:ListItem Value="2">Online2(Sta2)</asp:ListItem>
+                            <asp:ListItem Value="3">Online3(Sta3)</asp:ListItem>
+                            <asp:ListItem Value="4">Online4(Sta4)</asp:ListItem>
+                            <asp:ListItem Value="5">Online5(Sta5)</asp:ListItem>
+                            <asp:ListItem Value="6">Online6(Sta6)</asp:ListItem>
+                            <asp:ListItem Value="7">Online7(Sta7)</asp:ListItem>
+                            <asp:ListItem Value="8">Online8(Sta8)</asp:ListItem>
+
+                            <asp:ListItem Value="16">WIP1(Sta16)</asp:ListItem>
+                            <asp:ListItem Value="17">WIP2(Sta17)</asp:ListItem>
+                            <asp:ListItem Value="14">WIP3(Sta14)</asp:ListItem>
+                            <asp:ListItem Value="15">WIP4(Sta15)</asp:ListItem>
+                            <asp:ListItem Value="11">WIP5(Sta11)</asp:ListItem>
+                            <asp:ListItem Value="13">WIP6(Sta13)</asp:ListItem>
+
+                            <asp:ListItem Value="25">Packing1(Sta25)</asp:ListItem>
+                            <asp:ListItem Value="23">Packing2(Sta23)</asp:ListItem>
+                            <asp:ListItem Value="22">Packing3(Sta22)</asp:ListItem>
+                            <asp:ListItem Value="21">Packing4(Sta21)</asp:ListItem>
+                            <asp:ListItem Value="24">Packing5(Sta24)</asp:ListItem>
+                            <asp:ListItem Value="12">Packing6(Sta12)</asp:ListItem>
+                        </asp:DropDownList>
                 </td>
 
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%; font-family: 'Arial Unicode MS'; height: 50px;"> 

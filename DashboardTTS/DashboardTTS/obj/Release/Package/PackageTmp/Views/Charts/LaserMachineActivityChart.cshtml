@@ -3,23 +3,11 @@
     ViewBag.Title = "LaserMachineActivityChart";
 }
 
-@*下拉框组件*@
-@*<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />*@
-
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-
 <div class="container">
-
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Machine Activity Analysis Chart</span>
     </div>
-
 
     <div class="row">
         <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
@@ -47,8 +35,6 @@
         </div>
     </div>
 
-
-
     <div class="row">
         <div class="col-md-12 panel panel-default" style="padding:0px; margin-top:10px;">
             <div id="divChart"></div>
@@ -58,7 +44,9 @@
 </div>
 
 
-
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 <script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 
@@ -222,7 +210,7 @@
                         {
                             type: 'value',
                             name: 'Hour',
-                            max:24
+                           
                         }
                     ],
                     series: series

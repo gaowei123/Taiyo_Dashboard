@@ -9,43 +9,6 @@ namespace Common.Class.DAL
 {
     public class PaintingDeliveryHis_DAL
     {
-        public SqlCommand AddCMD(Common.Class.Model.PaintingDeliveryHis_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("insert into PaintingDeliveryHis(");
-            strSql.Append("jobNumber,partNumber,sendingTo,inQuantity,lotNo,boxQty,remark,dateTime,updatedTime,signID");
-            strSql.Append(") values (");
-            strSql.Append("@jobNumber,@partNumber,@sendingTo,@inQuantity,@lotNo,@boxQty,@remark,@dateTime,@updatedTime,@signID");
-            strSql.Append(") ");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@jobNumber", SqlDbType.VarChar,32) ,
-                new SqlParameter("@partNumber", SqlDbType.VarChar,32) ,
-                new SqlParameter("@sendingTo", SqlDbType.VarChar,32) ,
-                new SqlParameter("@inQuantity", SqlDbType.Decimal,9) ,
-                new SqlParameter("@lotNo", SqlDbType.VarChar,32) ,
-                new SqlParameter("@boxQty", SqlDbType.Decimal,9) ,
-                new SqlParameter("@remark", SqlDbType.VarChar,100) ,
-                new SqlParameter("@dateTime", SqlDbType.DateTime2,8) ,
-                new SqlParameter("@updatedTime", SqlDbType.DateTime2,8),
-                new SqlParameter("@signID", SqlDbType.VarChar,32)
-
-            };
-
-            parameters[0].Value = model.jobNumber == null ? (object)DBNull.Value : model.jobNumber;
-            parameters[1].Value = model.partNumber == null ? (object)DBNull.Value : model.partNumber;
-            parameters[2].Value = model.sendingTo == null ? (object)DBNull.Value : model.sendingTo;
-            parameters[3].Value = model.inQuantity == 0 ? (object)DBNull.Value : model.inQuantity;
-            parameters[4].Value = model.lotNo == null ? (object)DBNull.Value : model.lotNo;
-            parameters[5].Value = model.boxQty == null ? (object)DBNull.Value : model.boxQty;
-            parameters[6].Value = model.remark == null ? (object)DBNull.Value : model.remark;
-            parameters[7].Value = model.dateTime == null ? (object)DBNull.Value : model.dateTime;
-            parameters[8].Value = model.updatedTime == null ? (object)DBNull.Value : model.updatedTime;
-            parameters[9].Value = model.SignID == null ? (object)DBNull.Value : model.SignID;
-            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
-        }
-
-
 
         public int Add(Common.Class.Model.PaintingDeliveryHis_Model model)
         {
@@ -87,48 +50,7 @@ namespace Common.Class.DAL
             return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
 
-        public int Update(Common.Class.Model.PaintingDeliveryHis_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update PaintingDeliveryHis set ");
-
-            strSql.Append(" jobNumber = @jobNumber , ");
-            strSql.Append(" partNumber = @partNumber , ");
-            strSql.Append(" sendingTo = @sendingTo , ");
-            strSql.Append(" inQuantity = @inQuantity , ");
-            strSql.Append(" lotNo = @lotNo , ");
-            strSql.Append(" boxQty = @boxQty , ");
-            strSql.Append(" remark = @remark , ");
-            strSql.Append(" dateTime = @dateTime , ");
-            strSql.Append(" updatedTime = @updatedTime  ");
-            strSql.Append(" where  ");
-
-            SqlParameter[] parameters = {
-                        new SqlParameter("@jobNumber", SqlDbType.VarChar,32) ,
-                        new SqlParameter("@partNumber", SqlDbType.VarChar,32) ,
-                        new SqlParameter("@sendingTo", SqlDbType.VarChar,32) ,
-                        new SqlParameter("@inQuantity", SqlDbType.Decimal,9) ,
-                        new SqlParameter("@lotNo", SqlDbType.VarChar,32) ,
-                        new SqlParameter("@boxQty", SqlDbType.Decimal,9) ,
-                        new SqlParameter("@remark", SqlDbType.VarChar,100) ,
-                        new SqlParameter("@dateTime", SqlDbType.DateTime2,8) ,
-                        new SqlParameter("@updatedTime", SqlDbType.DateTime2,8)
-            };
-
-            parameters[0].Value = model.jobNumber;
-            parameters[1].Value = model.partNumber;
-            parameters[2].Value = model.sendingTo;
-            parameters[3].Value = model.inQuantity;
-            parameters[4].Value = model.lotNo;
-            parameters[5].Value = model.boxQty;
-            parameters[6].Value = model.remark;
-            parameters[7].Value = model.dateTime;
-            parameters[8].Value = model.updatedTime;
-
-            return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
-        }
-
-
+     
         public int UpdatePaintRej(string jobNumber, int rejQty, string process)
         {
             StringBuilder strSql = new StringBuilder();
@@ -189,30 +111,7 @@ namespace Common.Class.DAL
         
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
-
-
-
-        public bool Delete()
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from PaintingDeliveryHis ");
-            strSql.Append(" where ");
-            SqlParameter[] parameters = {
-            };
-
-
-            int rows =  DBHelp.SqlDB.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
+        
 
         public DataSet GetList(DateTime dDateFrom, DateTime dDateTo, string sJobNo, string sPaintProcess)
         {
@@ -358,106 +257,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
-
-
         
-
-
-        public DataSet GetDayOutput(DateTime dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select 
-                            sum(aa.MRP_SET) as TotalSET,
-                            sum(aa.MRP_PCS) as TotalPCS
-                                from
-                            (
-                                select
-                                1 as ID,
-                                CONVERT(decimal(18, 0), inQuantity) as MRP_SET,
-                                convert(decimal(18, 0), inQuantity * isnull(b.materialCount, 1)) as MRP_PCS
-                                from PaintingDeliveryHis a
-                                left join (select partnumber, count(1) as materialCount from LMMS_TAIYO.dbo.LMMSBomDetail group by partNumber) b on a.partNumber = b.partnumber
-                                where updatedTime >= @DateFrom and updatedTime < @DateTo
-                            ) aa  group by ID ");
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@DateFrom",SqlDbType.DateTime),
-                new SqlParameter("@DateTo",SqlDbType.DateTime)
-            };
-
-            paras[0].Value = dDay.Date.AddHours(8);
-            paras[1].Value = dDay.Date.AddDays(1).AddHours(8);
-         
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
-        }
-
-
-        public DataTable GetOuput(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-sum(a.TotalOuput) as TotalOutput
-,sum(a.TotalRej) as TotalRej
-from 
-(
-	select 
-	1 as id
-	,convert(decimal(18,0), isnull( inQuantity,0)) as TotalOuput
-	,isnull(paintRejQty,0) as TotalRej
-	from PaintingDeliveryHis 
-	where updatedTime >= @dateFrom and updatedTime < @dateTo");
-          
-
-            if (DateNotIn != "")
-            {
-                strSql.Append(" and day(updatedTime) not in (");
-
-                string[] strArrDate = DateNotIn.Split(',');
-                foreach (string date in strArrDate)
-                {
-                    if (Common.CommFunctions.isNumberic(date))
-                        strSql.Append(" '" + date + "', ");
-                }
-                strSql.Remove(strSql.Length, 1);
-
-                strSql.Append(" ) ");
-            }
-
-            if (ExceptWeekends)
-            {
-                strSql.Append("  DATEPART(WEEKDAY,updatedTime) not in (1,7) ");
-            }
-
-
-
-            strSql.Append(" ) a group by a.id ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime)
-            };
-
-
-            paras[0].Value = DateFrom;
-            paras[1].Value = DateTo;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-
-        }
-
-
-
 
         public DataSet GetPaintDeliveryForButtonReport_NEW(string strWhere)
         {

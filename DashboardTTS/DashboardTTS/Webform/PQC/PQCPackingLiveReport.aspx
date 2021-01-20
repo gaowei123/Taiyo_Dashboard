@@ -43,28 +43,28 @@
                         <label style="width:35%">Station:</label>
                         <asp:DropDownList runat="server" ID="ddlStation" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="">All</asp:ListItem>
-                            <asp:ListItem Value="1">Station 1</asp:ListItem>
-                            <asp:ListItem Value="2">Station 2</asp:ListItem>
-                            <asp:ListItem Value="3">Station 3</asp:ListItem>
-                            <asp:ListItem Value="4">Station 4</asp:ListItem>
-                            <asp:ListItem Value="5">Station 5</asp:ListItem>
-                            <asp:ListItem Value="6">Station 6</asp:ListItem>
-                            <asp:ListItem Value="7">Station 7</asp:ListItem>
-                            <asp:ListItem Value="8">Station 8</asp:ListItem>
+                            <asp:ListItem Value="1">Online1(Sta1)</asp:ListItem>
+                            <asp:ListItem Value="2">Online2(Sta2)</asp:ListItem>
+                            <asp:ListItem Value="3">Online3(Sta3)</asp:ListItem>
+                            <asp:ListItem Value="4">Online4(Sta4)</asp:ListItem>
+                            <asp:ListItem Value="5">Online5(Sta5)</asp:ListItem>
+                            <asp:ListItem Value="6">Online6(Sta6)</asp:ListItem>
+                            <asp:ListItem Value="7">Online7(Sta7)</asp:ListItem>
+                            <asp:ListItem Value="8">Online8(Sta8)</asp:ListItem>
 
-                            <asp:ListItem Value="11">Station 11</asp:ListItem>
-                            <asp:ListItem Value="12">Station 12</asp:ListItem>
-                            <asp:ListItem Value="13">Station 13</asp:ListItem>
-                            <asp:ListItem Value="14">Station 14</asp:ListItem>
-                            <asp:ListItem Value="15">Station 15</asp:ListItem>
-                            <asp:ListItem Value="16">Station 16</asp:ListItem>
-                            <asp:ListItem Value="17">Station 17</asp:ListItem>
+                            <asp:ListItem Value="16">WIP1(Sta16)</asp:ListItem>
+                            <asp:ListItem Value="17">WIP2(Sta17)</asp:ListItem>
+                            <asp:ListItem Value="14">WIP3(Sta14)</asp:ListItem>
+                            <asp:ListItem Value="15">WIP4(Sta15)</asp:ListItem>
+                            <asp:ListItem Value="11">WIP5(Sta11)</asp:ListItem>
+                            <asp:ListItem Value="13">WIP6(Sta13)</asp:ListItem>
 
-                            <asp:ListItem Value="21">Station 21</asp:ListItem>
-                            <asp:ListItem Value="22">Station 22</asp:ListItem>
-                            <asp:ListItem Value="23">Station 23</asp:ListItem>
-                            <asp:ListItem Value="24">Station 24</asp:ListItem>
-                            <asp:ListItem Value="25">Station 25</asp:ListItem>
+                            <asp:ListItem Value="25">Packing1(Sta25)</asp:ListItem>
+                            <asp:ListItem Value="23">Packing2(Sta23)</asp:ListItem>
+                            <asp:ListItem Value="22">Packing3(Sta22)</asp:ListItem>
+                            <asp:ListItem Value="21">Packing4(Sta21)</asp:ListItem>
+                            <asp:ListItem Value="24">Packing5(Sta24)</asp:ListItem>
+                            <asp:ListItem Value="12">Packing6(Sta12)</asp:ListItem>
                         </asp:DropDownList>
                     </div>
                     <div class="col-md-3">

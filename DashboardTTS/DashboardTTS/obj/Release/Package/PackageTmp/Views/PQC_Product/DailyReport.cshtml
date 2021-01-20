@@ -3,14 +3,7 @@
     ViewBag.Title = "DailyReport";
 }
 
-
-
 <style>
-    .container-fluid {
-        max-width: 1850px;
-    }
-
-
     /*解决tab导致 第2,3...div tab content内的table 样式异常*/
     .tab-content > .tab-pane,
     .pill-content > .pill-pane {
@@ -24,22 +17,10 @@
         height: auto;       /* let the content decide it  */
     }
 
+
 </style>
 
-
-
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-
-
-<div class="container-fluid">
+<div class="container-fluid" style="max-width: 1850px;">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Daily PQC Report</span>
@@ -75,28 +56,32 @@
                     <label style="width:35%">Station:</label>
                     <select id="ddlStation" class="form-control" data-ng-style="btn-info" style="width:60%;">
                         <option value="">All</option>
-                        <option value="1">Station 1</option>
-                        <option value="2">Station 2</option>
-                        <option value="3">Station 3</option>
-                        <option value="4">Station 4</option>
-                        <option value="5">Station 5</option>
-                        <option value="6">Station 6</option>
-                        <option value="7">Station 7</option>
-                        <option value="8">Station 8</option>
-
-                        <option value="11">Station 11</option>
-                        <option value="12">Station 12</option>
-                        <option value="13">Station 13</option>
-                        <option value="14">Station 14</option>
-                        <option value="15">Station 15</option>
-                        <option value="16">Station 16</option>
-                        <option value="17">Station 17</option>
-
-                        <option value="21">Station 21</option>
-                        <option value="22">Station 22</option>
-                        <option value="23">Station 23</option>
-                        <option value="24">Station 24</option>
-                        <option value="25">Station 25</option>
+                        <optgroup label="Online">
+                            <option value="1">Online1(Sta1)</option>
+                            <option value="2">Online2(Sta2)</option>
+                            <option value="3">Online3(Sta3)</option>
+                            <option value="4">Online4(Sta4)</option>
+                            <option value="5">Online5(Sta5)</option>
+                            <option value="6">Online6(Sta6)</option>
+                            <option value="7">Online7(Sta7)</option>
+                            <option value="8">Online8(Sta8)</option>
+                        </optgroup>
+                        <optgroup label="WIP">
+                            <option value="16">WIP1(Sta16)</option>
+                            <option value="17">WIP2(Sta17)</option>
+                            <option value="14">WIP3(Sta14)</option>
+                            <option value="15">WIP4(Sta15)</option>
+                            <option value="11">WIP5(Sta11)</option>
+                            <option value="13">WIP6(Sta13)</option>
+                        </optgroup>
+                        <optgroup label="Packing">
+                            <option value="25">Packing1(Sta25)</option>
+                            <option value="23">Packing2(Sta23)</option>
+                            <option value="22">Packing3(Sta22)</option>
+                            <option value="21">Packing4(Sta21)</option>
+                            <option value="24">Packing5(Sta24)</option>
+                            <option value="12">Packing6(Sta12)</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -111,10 +96,8 @@
                     <input type="button" class="btn btn-success" value="Generate" onclick="Search();" />
                 </div>
             </div>
-
         </div>
     </div>
-
 
 
     <div class="row">
@@ -152,7 +135,15 @@
 
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*bootstrap table插件*@
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
@@ -265,7 +256,7 @@
             //pageNumber: 1, // 首页页码
 
 
-            height: 650,
+            //height: 650,
 
 
 
@@ -413,9 +404,8 @@
             }
             ],
 
-            onLoadSuccess: function (data) {  //加载成功时执行
-                //console.log(data);
-
+            onLoadSuccess: function (data) {  //加载成功时执行              
+                $('#tableOnline').bootstrapTable('resetView', { height: $(window).height() - 320 });
             },
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
@@ -474,7 +464,7 @@
 
 
 
-            height: 650,
+            //height: 650,
 
             rowStyle: function (row, index) {
                 //console.log(row);
@@ -621,9 +611,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                //console.log(data);
-
-
+                $('#tableWIP').bootstrapTable('resetView', { height: $(window).height() - 320 });
             },
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
@@ -680,7 +668,7 @@
             //pageNumber: 1, // 首页页码
 
            
-            height: 650,
+            //height: 650,
 
 
 
@@ -805,9 +793,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                //console.log(data);
-
-
+                $('#tablePacking').bootstrapTable('resetView', { height: $(window).height() - 320 });
             },
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
@@ -822,9 +808,9 @@
 
 
     $(window).resize(function () {
-        $('#tableOnline').bootstrapTable('resetView');
-        $('#tableWIP').bootstrapTable('resetView');
-        $('#tablePacking').bootstrapTable('resetView');
+        $('#tableOnline').bootstrapTable('resetView', { height: $(window).height() - 320 });
+        $('#tableWIP').bootstrapTable('resetView', { height: $(window).height() - 320 });
+        $('#tablePacking').bootstrapTable('resetView', { height: $(window).height() - 320 });
     });
    
 

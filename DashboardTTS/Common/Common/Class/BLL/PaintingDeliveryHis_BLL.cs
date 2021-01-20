@@ -14,11 +14,7 @@ namespace Common.Class.BLL
 
 
         #region  Method
-     
-        public SqlCommand AddCMD(Common.Class.Model.PaintingDeliveryHis_Model model)
-        {
-            return dal.AddCMD(model);
-        }
+   
 
 
         public bool Add(Common.Class.Model.PaintingDeliveryHis_Model model)
@@ -34,22 +30,6 @@ namespace Common.Class.BLL
             }
         }
 
-        /// <summary>
-        /// 更新一条数据
-        /// </summary>
-        public bool Update(Common.Class.Model.PaintingDeliveryHis_Model model)
-        {
-            int result = dal.Update(model);
-
-            if (result <= 0)
-            {
-                return false;
-            }else
-            {
-                return true;
-            }
-         
-        }
 
         public bool UpdatePaintRej(string jobNumber, int rejQty, string process)
         {
@@ -81,13 +61,7 @@ namespace Common.Class.BLL
 
         }
 
-        /// <summary>
-        /// 删除一条数据
-        /// </summary>
-        public bool Delete()
-        {
-            return dal.Delete();
-        }
+    
         
         #endregion
 
@@ -161,13 +135,7 @@ namespace Common.Class.BLL
         }
 
         
-
-
-
-
         
-
-
         public bool ExistJobno(string sJobno)
         {
             bool Result = false;
@@ -185,23 +153,7 @@ namespace Common.Class.BLL
             return Result;
         }
 
-
-        public DataTable GetOuputForAllMachineChart(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            DataTable dt = dal.GetOuput(DateFrom, DateTo, Shift, DateNotIn, ExceptWeekends);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            else
-            {
-                return dt;
-            }
-        }
-
-
-
+        
         public DataTable GetPaintDeliveryForButtonReport_NEW(string strWhere)
         {
             DataSet ds = dal.GetPaintDeliveryForButtonReport_NEW(strWhere);
@@ -256,10 +208,7 @@ namespace Common.Class.BLL
 
             return ConvertModel(dt.Rows[0]);
         }
-
-
-
-
+        
 
         public Common.Class.Model.PaintingDeliveryHis_Model ConvertModel(DataRow dr)
         {
@@ -306,11 +255,7 @@ namespace Common.Class.BLL
             return model;
         }
 
-
-
-
-     
-
+        
 
 
     }

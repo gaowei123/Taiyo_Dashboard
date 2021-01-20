@@ -275,6 +275,9 @@
     <Compile Include="ExtendClass\PQCOperatorSummaryChart\BLL.cs" />
     <Compile Include="ExtendClass\PQCOperatorSummaryChart\DAL.cs" />
     <Compile Include="ExtendClass\PQCOperatorSummaryChart\Model.cs" />
+    <Compile Include="ExtendClass\PQCSummaryReport\Summary_BLL.cs" />
+    <Compile Include="ExtendClass\PQCSummaryReport\Summary_DAL.cs" />
+    <Compile Include="ExtendClass\PQCSummaryReport\Summary_Model.cs" />
     <Compile Include="ExtendClass\PQCTopRejChart\BLL.cs" />
     <Compile Include="ExtendClass\PQCTopRejChart\DAL.cs" />
     <Compile Include="ExtendClass\PQCTopRejChart\Model.cs" />
