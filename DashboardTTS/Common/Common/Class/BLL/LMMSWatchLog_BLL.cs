@@ -532,24 +532,7 @@ namespace Common.BLL
             return dt;
         }
 
-
-
-
-        public DataTable GetDayOutput(DateTime dDay)
-        {
-            DataSet ds = new DataSet();
-            ds = dal.GetDayOutput(dDay);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
         
-
 
         public bool IsJobFinished(string sJobNumber)
         {

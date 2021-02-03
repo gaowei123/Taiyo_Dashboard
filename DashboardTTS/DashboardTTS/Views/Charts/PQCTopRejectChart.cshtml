@@ -3,14 +3,25 @@
     ViewBag.Title = "PQCTopRejectChart";
 }
 
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-@*echart*@
-<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
-
-
+<style>
+    label{
+        width:35%;
+    }
+    #txtDateFrom,#txtDateTo,#ddlTopCount{
+        width:60%;
+    }
+    #divChartTopPartNo{
+        padding-top:10px;
+    }
+    #divChartTopDefect{
+        border-top:1px solid #ccc;
+        margin-top:10px;
+        padding-top:10px;
+    }
+    .t10{
+        padding-top:10px;
+    }
+</style>
 
 <div class="container">
     <div class="row titleRow">
@@ -19,27 +30,23 @@
     </div>
 
     <div class="row searchingBar">
-        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+        <div class="col-sm-12 panel panel-default searchingPanel t10">
             <div class="row form-inline searchingBar ">
                 <div class="col-sm-3">
-                    <label style="width:35%">Date From:</label>
+                    <label>Date From:</label>
                     <input type="text" class="form-control" id="txtDateFrom"
-                           CssClass="form-control formDateTimePicker"
                            data-date-format="yyyy-mm-dd"
-                           placeholder="Please choose date"
-                           style="width:60%;" />
+                           placeholder="Please choose date"/>
                 </div>
                 <div class="col-sm-3">
-                    <label style="width:35%">Date To:</label>
+                    <label>Date To:</label>
                     <input type="text" class="form-control" id="txtDateTo"
-                           CssClass="form-control formDateTimePicker"
                            data-date-format="yyyy-mm-dd"
-                           placeholder="Please choose date"
-                           style="width:60%;" />
+                           placeholder="Please choose date"/>
                 </div>
                 <div class="col-sm-3">
-                    <label style="width:35%">Top:</label>
-                    <select class="form-control" id="ddlTopCount" style="width:60%;">
+                    <label>Top:</label>
+                    <select class="form-control" id="ddlTopCount">
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -52,29 +59,29 @@
             </div>
         </div>
     </div>
-
     <div class="row">
-        <div class="col-md-12 panel panel-default" style="margin-top:-10px;padding-top:4px;">
+        <div class="col-md-12 panel panel-default">
             <div id="divChartTopPartNo"></div>
-            
-            <div id="divChartTopDefect" style="border-top:1px solid #ccc;margin-top:10px;padding-top:10px;"></div>
+            <div id="divChartTopDefect"></div>
         </div>
     </div>
-   
 </div>
 
 
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*echart*@
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 
 <script type="text/javascript">
-
     var apiGetTopPartNoChartData = window.globalConfig.rootDirectory + '/Charts/GetTopPartNoRejData';
     var apiGetTopDefectChartData = window.globalConfig.rootDirectory + '/Charts/GetTopDefectRejData';
     var topPartNoChart = echarts.init(document.getElementById('divChartTopPartNo'));
     var topDefectChart = echarts.init(document.getElementById('divChartTopDefect'));
 
-
-  
     $('#txtDateFrom').datetimepicker({
         weekStart: 1,
         todayBtn: 1,
@@ -95,19 +102,16 @@
         forceParse: 0,
         initialDate: new Date()
     });
-
-
-
+    var chartHeight = 400;
+    var chartColor = ['#B22222', 'OrangeRed'];
+    
 
     $(document).ready(function () {
         //默认选择前30天
-        var date = new Date();
+        let date = new Date();
         date.setDate(date.getDate() - 30);
-
-
-        var dateFrom = dateFormat('yyyy-MM-dd', date);
-        var dateTo = dateFormat('yyyy-MM-dd', new Date());
-
+        let dateFrom = dateFormat('yyyy-MM-dd', date);
+        let dateTo = dateFormat('yyyy-MM-dd', new Date());
         $('#txtDateFrom').val(dateFrom);
         $('#txtDateTo').val(dateTo);
 
@@ -118,73 +122,96 @@
 
 
 
-
-
-
     function generateTopPartNoRej() {
-
-        var searchData = {
+        let searchData = {
             DateFrom: $("#txtDateFrom").val(),
             DateTo: $("#txtDateTo").val(),
             TopCount: $("#ddlTopCount").val()
-        }
-    
-        var rotate = searchData.TopCount >= 10 ? 40 : 0;
-
+        };
+        let rotate = $("#ddlTopCount").val() >= 10 ? 40 : 0;
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetTopPartNoChartData,
             data:searchData,
-
             beforeSend: function () {
                 topPartNoChart.showLoading();
             },
 
             success: function (data) {
-
-                if (data== null || data == undefined || data.length==0 ) {
-                    alert("No data found !");
+                if (data == '' || data.length == 0 ) {
+                    alert("No data found for top part no chart!");
                     return false;
                 }
 
+                let arrRejQty = [];
+                let arrRejRate = [];
+                let arrCategoryData = [];
+                for (var i = 0; i < data.length; i++) {
+                    arrCategoryData.push(data[i].PartNo);
+                    arrRejQty.push(data[i].RejQty);
 
-
-                var series = [];
-                for (var i = 0; i < data.SeriesData.length; i++) {
-                    series.push({
-                        name: data.SeriesData[i].Name,
-                        type: data.SeriesData[i].Type,
-                        stack: data.SeriesData[i].Stack,
-                        data: data.SeriesData[i].Data,
-                        label: {
-                            show: true,
-                            position: 'top',
-                            formatter: function (data) {
-                                if (data.data === 0) {
-                                    return '';
-                                } else {
-                                    return data.data;
-                                }
-                            }
-                        }
-                    });
+                    let rejRate = (data[i].RejQty / data[i].TotalQty * 100);
+                    arrRejRate.push(rejRate.toFixed(2))
                 }
 
 
-                option = {
 
+                let seriesRejQty = {
+                    name: 'Rej Qty',
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    data: arrRejQty,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
+                        }
+                    }
+                };
+                let seriesRejRate = {
+                    name: 'Rej %',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: arrRejRate,
+                    label: {
+                        show: true,
+                        formatter: function (value) {
+                            return value.value + "%";
+                        }
+                    }
+                };
+
+                option = {
+                    color: chartColor,
                     title: {
-                        text: 'Top Part No Rejection'
+                        text: 'Reject Qty & (%)'
                     },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
                             type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        formatter: function (params) {
+                            let html = params[0].name + "<br>";
+                            for (let i = 0; i < params.length; i++) {
+                                html += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[i].color + ';"></span>'
+                                if (params[i].seriesName == 'Rej %') {
+                                    html += params[i].seriesName + ":" + params[i].value + "%<br>";
+                                } else {
+                                    html += params[i].seriesName + ":" + params[i].value + "<br>";
+                                }                                
+                            }
+                            return html;
                         }
                     },
                     legend: {
-                        data: data.LegendData,
+                        data: ["Rej Qty", "Rej %"],
                         top: 20
                     },
                     grid: {
@@ -196,7 +223,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: data.XAxisData,
+                            data: arrCategoryData,
                             axisLabel:{
                                 interval:0,
                                 rotate: rotate
@@ -205,101 +232,129 @@
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name: 'Rej Qty',
+                        },
+                        {
+                            type: 'value',
+                            name: 'Rej %',
+                            min: 0,
+                            nameTextStyle:{
+                                color: 'red',
+                            },
+                            axisLabel: {
+                                formatter: '{value}%',
+                                color: 'red',
+                            }
                         }
                     ],
-                    series: series
+                    series: [seriesRejQty, seriesRejRate]
                 };
 
-                topPartNoChart.setOption(option, true);
-
-
-
                 topPartNoChart.clear();
-                topPartNoChart.setOption(option);
+                topPartNoChart.setOption(option, true);
             },
 
             complete: function(){
                 topPartNoChart.hideLoading();
-                topPartNoChart.resize({ height: $(window).height() - 500 });
+                topPartNoChart.resize({ height: chartHeight });
             },
-
-
             error: function (e) {
                 alert("Get chart data error !");
                 topPartNoChart.hideLoading();
             }
         });
-
     }
 
-
     function generateTopDefectRej() {
-
-        var searchData = {
+        let searchData = {
             DateFrom: $("#txtDateFrom").val(),
             DateTo: $("#txtDateTo").val(),
             TopCount: $("#ddlTopCount").val()
-        }
-
-
-        var rotate = searchData.TopCount >= 10 ? 40 : 0;
-
-
+        };
+        let rotate = $("#ddlTopCount").val() >= 10 ? 40 : 0;
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetTopDefectChartData,
             data: searchData,
-
             beforeSend: function () {
                 topDefectChart.showLoading();
             },
 
             success: function (data) {
-
-                if (data == null || data == undefined || data.length == 0) {
-                    alert("No data found !");
+                if (data == '' || data.length == 0) {
+                    alert("No data found for top defect chart");
                     return false;
                 }
 
 
+                let arrRejQty = [];
+                let arrRejRate = [];
+                let arrCategoryData = [];
+                for (var i = 0; i < data.length; i++) {
+                    arrCategoryData.push(data[i].DefectCode);
+                    arrRejQty.push(data[i].RejQty);
 
-                var series = [];
-                for (var i = 0; i < data.SeriesData.length; i++) {
-                    series.push({
-                        name: data.SeriesData[i].Name,
-                        type: data.SeriesData[i].Type,
-                        stack: data.SeriesData[i].Stack,
-                        data: data.SeriesData[i].Data,
-                        label: {
-                            show: true,
-                            position: 'top',
-                            formatter: function (data) {
-                                if (data.data === 0) {
-                                    return '';
-                                } else {
-                                    return data.data;
-                                }
-                            }
-                        }
-                    });
+                    let rejRate = (data[i].RejQty / data[i].TotalQty * 100);
+                    arrRejRate.push(rejRate.toFixed(2))
                 }
 
+                let seriesRejQty = {
+                    name: 'Rej Qty',
+                    type: 'bar',
+                    yAxisIndex: 0,
+                    data: arrRejQty,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
+                        }
+                    }
+                };
+                let seriesRejRate = {
+                    name: 'Rej %',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: arrRejRate,
+                    label: {
+                        show: true,
+                        formatter: function (value) {
+                            return value.value + "%";
+                        }
+                    }
+                };
 
                 option = {
-
+                    color: chartColor,
                     title: {
-                        text: 'Top Defect Rejection'
+                        text: 'Defect Qty & (%)'
                     },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
                             type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        formatter: function (params) {
+                            let html = params[0].name + "<br>";
+                            for (let i = 0; i < params.length; i++) {
+                                html += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[i].color + ';"></span>'
+                                if (params[i].seriesName == 'Rej %') {
+                                    html += params[i].seriesName + ":" + params[i].value + "%<br>";
+                                } else {
+                                    html += params[i].seriesName + ":" + params[i].value + "<br>";
+                                }
+                            }
+                            return html;
                         }
                     },
                     legend: {
-                        data: data.LegendData,
+                        data: ["Rej Qty", "Rej %"],
                         top: 20
                     },
                     grid: {
@@ -311,7 +366,7 @@
                     xAxis: [
                         {
                             type: 'category',
-                            data: data.XAxisData,
+                            data: arrCategoryData,
                             axisLabel: {
                                 interval: 0,
                                 rotate: rotate
@@ -320,45 +375,46 @@
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name: 'Rej Qty',
+                        },
+                        {
+                            type: 'value',
+                            name: 'Rej %',
+                            min: 0,
+                            nameTextStyle: {
+                                color: 'red',
+                            },
+                            axisLabel: {
+                                formatter: '{value}%',
+                                color: 'red',
+                            }
                         }
                     ],
-                    series: series
+                    series: [seriesRejQty, seriesRejRate]
                 };
-
-                topDefectChart.setOption(option, true);
-
-
-
+                              
                 topDefectChart.clear();
-                topDefectChart.setOption(option);
+                topDefectChart.setOption(option, true);
             },
 
             complete: function () {
                 topDefectChart.hideLoading();
-                topDefectChart.resize({ height: $(window).height() - 500 });
+                topDefectChart.resize({ height: chartHeight });
             },
-
-
             error: function (e) {
                 alert("Get chart data error !");
                 topDefectChart.hideLoading();
             }
         });
-
     }
 
 
 
 
     $(window).resize(function () {
-        topPartNoChart.resize({ height: $(window).height() - 500 });
-        topDefectChart.resize({ height: $(window).height() - 500 });
+        topPartNoChart.resize({ height: chartHeight });
+        topDefectChart.resize({ height: chartHeight });
     });
-
-
-
-   
-
 
 </script>

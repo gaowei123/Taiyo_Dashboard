@@ -89,79 +89,7 @@ namespace Common.Class.BLL
         }
 
 
-        public Common.Class.Model.MouldingMoldLife_Model GetModel(string  sMachineID)
-        {
-            DataSet ds = dal.SelectList("", sMachineID);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-            DataRow dr = dt.Rows[0];
-
-            Common.Class.Model.MouldingMoldLife_Model model = new Model.MouldingMoldLife_Model();
-            model.MoldID = dr["MoldID"].ToString();
-            model.MachineID = dr["MachineID"].ToString();
-            model.PartNumberAll = dr["PartNumberAll"].ToString();
-            model.Accumulate = int.Parse(dr["Accumulate"].ToString());
-            model.Clean1Qty = dr["Clean1Qty"].ToString() != "" ? int.Parse(dr["Clean1Qty"].ToString()) : 0;
-            if (dr["Clean1Time"].ToString() != "")
-            {
-                model.Clean1Time = DateTime.Parse(dr["Clean1Time"].ToString());
-            }
-            model.Clean1TimeBy = dr["Clean1TimeBy"].ToString();
-
-            model.Clean2Qty = dr["Clean2Qty"].ToString() != "" ? int.Parse(dr["Clean2Qty"].ToString()) : 0;
-            if (dr["Clean2Time"].ToString() != "")
-            {
-                model.Clean2Time = DateTime.Parse(dr["Clean2Time"].ToString());
-            }
-            model.Clean2TimeBy = dr["Clean2TimeBy"].ToString();
-
-            model.Clean3Qty = dr["Clean3Qty"].ToString() != "" ? int.Parse(dr["Clean3Qty"].ToString()) : 0;
-            if (dr["Clean3Time"].ToString() != "")
-            {
-                model.Clean3Time = DateTime.Parse(dr["Clean3Time"].ToString());
-            }
-            model.Clean3TimeBy = dr["Clean3TimeBy"].ToString();
-
-            model.Clean4Qty = dr["Clean4Qty"].ToString() != "" ? int.Parse(dr["Clean4Qty"].ToString()) : 0;
-            if (dr["Clean4Time"].ToString()!="")
-            {
-                model.Clean4Time = DateTime.Parse(dr["Clean4Time"].ToString());
-            }
-            model.Clean4TimeBy = dr["Clean4TimeBy"].ToString();
-
-            model.Clean5Qty = dr["Clean5Qty"].ToString() != "" ? int.Parse(dr["Clean5Qty"].ToString()) : 0;
-            if (dr["Clean5Time"].ToString() != "")
-            {
-                model.Clean5Time = DateTime.Parse(dr["Clean5Time"].ToString());
-            }
-            model.Clean5TimeBy = dr["Clean5TimeBy"].ToString();
-
-            model.ChangeQty = dr["ChangeQty"].ToString() != "" ? int.Parse(dr["ChangeQty"].ToString()) : 0;
-            if (dr["ChangeTime"].ToString() != "")
-            {
-                model.ChangeTime = DateTime.Parse(dr["ChangeTime"].ToString());
-            }
-            model.ChangeBy = dr["ChangeBy"].ToString();
-
-            if (dr["CreateTime"].ToString() != "")
-            {
-                model.CreateTime = DateTime.Parse(dr["CreateTime"].ToString());
-            }
-
-            if (dr["UpdatedTime"].ToString() != "")
-            {
-                model.UpdatedTime = DateTime.Parse(dr["UpdatedTime"].ToString());
-            }
-           
-
-
-            return model;
-        }
+      
         public Common.Class.Model.MouldingMoldLife_Model GetModelbyChaseID(string sChaseID)
         {
             DataSet ds = dal.SelectList(sChaseID, "");
@@ -256,23 +184,7 @@ namespace Common.Class.BLL
             return Result;
         }
 
-        public bool UpdateClean(Common.Class.Model.MouldingMoldLife_Model model)
-        {
-            bool Result = false;
-
-            int rows = dal.UpdateClean(model);
-
-            if (rows > 0)
-            {
-                Result = true;
-            }else
-            {
-                Result = false;
-            }
-
-            return Result;
-        }
-
+    
         public bool UpdateChange(Common.Class.Model.MouldingMoldLife_Model model_new, Common.Class.Model.MouldingMoldLife_Model model_old)
         {
             bool Result = false;

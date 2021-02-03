@@ -185,25 +185,6 @@ namespace Common.Class.BLL
             return userIDList;
         }
 
-
-        
-        
-        public DataTable GetManPower()
-        {
-            DataTable dt = dal.SelectManPower();
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-                    
-
-            //DataRow drTotal = dt.NewRow();
-            //drTotal["Department"] = "OverAll";
-            //drTotal["ManPower"] = double.Parse(dt.Compute(" Sum(ManPower) ", "").ToString());
-
-            //dt.Rows.Add(drTotal);
-
-
-            return dt;
-        }
         
         public bool Login(string sEmployeeID, string Password, out string ErrorStr, string sDepartment, string Group)
         {
@@ -330,11 +311,6 @@ namespace Common.Class.BLL
 
             return result;
         }
-
-
-
         
-        
-
     }
 }

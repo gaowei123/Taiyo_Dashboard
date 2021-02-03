@@ -119,8 +119,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.ExecuteSql(strSql.ToString(),parameters);
 		}
-
-		
+        		
 		public SqlCommand AddCommand(Common.Class.Model.PQCBom_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -232,7 +231,6 @@ namespace Common.DAL
             return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
 		}
   
-
 		public bool Update(Common.Class.Model.PQCBom_Model model)
 		{
 			StringBuilder strSql=new StringBuilder();
@@ -328,8 +326,7 @@ namespace Common.DAL
 				return false;
 			}
 		}
-
-
+        
 		public SqlCommand UpdateCommand(Common.Class.Model.PQCBom_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -442,8 +439,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
 		}
-
-
+        
 		public bool Delete()
 		{
 			//该表无主键信息，请自定义主键/条件字段
@@ -466,8 +462,7 @@ namespace Common.DAL
 				return false;
 			}
 		}
-
-	
+        	
 		public SqlCommand DeleteCommand(string sPartNumber)
 		{
 			//该表无主键信息，请自定义主键/条件字段
@@ -490,10 +485,7 @@ namespace Common.DAL
                                              "TableName:PQCBom" , "");
 			return DBHelp.SqlDB.generateCommand(strSql.ToString(),parameters);
 		}
-
-
-
-	
+        	
 		public DataSet GetList(string sPartNo)
 		{
 			StringBuilder strSql=new StringBuilder();
@@ -595,12 +587,7 @@ namespace Common.DAL
                 return ds.Tables[0];
             }
         }
-
-
-
-
-
-
+        
         public DataSet GetListWithDetail(string sPartNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -675,9 +662,7 @@ left join PQCBomDetail b on a.partNumber = b.partNumber where 1=1 ");
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-
-
+        
     }
 }
 

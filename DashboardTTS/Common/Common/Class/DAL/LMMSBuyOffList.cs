@@ -37,8 +37,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(),paras);
         }
-
-
+        
         public DataSet SelectBuyoffReport(string JobID, string PartNo, string Machine, string MC_Operator, string ApprovdeBy, string CheckBy, DateTime? From, DateTime? To)
         {
             StringBuilder strSql = new StringBuilder();
@@ -114,40 +113,6 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras);
         }
-
-
-
-
-        public DataSet GetLaserInfo(DateTime dDateFrom, DateTime dDateTo, string sJobNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(@"SELECT    
-                            [MACHINE_ID]
-                            ,[JOB_ID]
-                            ,convert(varchar, [DATE_TIME],23) as DATE_TIME
-                            ,[MC_OPERATOR]
-                            FROM [LMMS_TAIYO].[dbo].[LMMSBUYOFF_LIST]
-                            where DATE_TIME >= @DateFrom and DATE_TIME < @DateTo ");
-
-            if (!string.IsNullOrEmpty(sJobNumber))
-                strSql.Append(" and JOB_ID = @JOB_ID  ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@JOB_ID",SqlDbType.VarChar),
-                new SqlParameter("@DateFrom",SqlDbType.DateTime),
-                new SqlParameter("@DateTo",SqlDbType.DateTime)
-            };
-
-            if (!string.IsNullOrEmpty(sJobNumber)) { paras[0].Value = sJobNumber; } else { paras[0] = null; }
-            paras[1].Value = dDateFrom;
-            paras[2].Value = dDateTo;
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras);
-        }
-
 
         public SqlCommand AddCommand(Common.Class.Model.LMMSBuyOffList_Mode model)
         {
@@ -228,10 +193,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
-
-
-
-
+        
         public DataTable GetLaserInfoForButtonReport_NEW(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();

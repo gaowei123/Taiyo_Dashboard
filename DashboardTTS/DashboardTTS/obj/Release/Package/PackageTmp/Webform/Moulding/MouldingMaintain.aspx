@@ -2,12 +2,9 @@
 <%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-    <link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-    <link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-     
+         
     <div style="width: 100%;align-items:center;margin:auto">
         <table style =" padding: 0px; width: 100%; border-collapse: separate; border-spacing: 10px; table-layout: auto; line-height: 10px; vertical-align: 10%;">
-
             <tr style ="width: 100%">
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; font-family: 'Arial Unicode MS'; height: 50px; background-color: #003366; font-weight: bold;" colspan="5"> 
                     <img src="../../Resources/Images/headericon.gif" alt="" style="width: 15px; height: 15px" /> 
@@ -106,9 +103,6 @@
                     </asp:DataGrid>
                 </td>
             </tr>
-                        
-         
-
         </table>
     </div>
 </asp:Content>

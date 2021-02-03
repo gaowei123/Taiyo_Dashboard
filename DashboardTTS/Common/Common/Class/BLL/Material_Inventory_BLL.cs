@@ -125,63 +125,6 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable GetMaterialList()
-        {
-            DataSet ds = dal.SelectMaterialList();
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
-
-        public DataTable GetMaterialLotList(string sMaterialNo)
-        {
-            DataSet ds = dal.SelectMaterialLotList(sMaterialNo);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
-
-
-        public DataTable GetMaterialMachine(string sMaterialNo,string sMachine,DateTime dfrom, DateTime dto)
-        {
-            DataSet ds = dal.GetMaterialMachine(sMaterialNo, sMachine,dfrom,dto);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
-
-        public DataTable GetMaterialMonthly( DateTime dfrom, DateTime dto)
-        {
-            DataSet ds = dal.GetMaterialMonthly( dfrom, dto);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
-
         public string GetLotNoByPart(string sMaterial_Part ,string sSupplier)
         {
             DataSet ds_temp = dal.SelectLotNoByPart(sMaterial_Part, sSupplier);
@@ -223,8 +166,6 @@ namespace Common.Class.BLL
         }
 
         
-
-
         public bool UnloadTransaction(List<Common.Class.Model.Material_Inventory> modelList,string sUsername)
         {
             List<SqlCommand> CmdList = new List<SqlCommand>();

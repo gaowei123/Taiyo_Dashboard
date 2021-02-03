@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using Taiyo.Enum.Organization;
 
 namespace DashboardTTS.ViewBusiness
 {
@@ -26,8 +27,14 @@ namespace DashboardTTS.ViewBusiness
         {
             try
             {
-                DataTable dtMaterial = materialHisBLL.GetList(dDateFrom, dDateTo, sMachineID);
+                DataTable dtMaterial = materialHisBLL .GetList(dDateFrom, dDateTo, sMachineID);
                 DataTable dtTracking = trackingBLL.GetList(dDateFrom, dDateTo, "", "", sMachineID);
+
+
+                Common.Class.BLL.User_DB_BLL userBLL = new Common.Class.BLL.User_DB_BLL();
+                var userList = userBLL.GetModelList(Department.Moulding.ToString(),"","","");
+                var mouldingUserMHList = userList.Where(user => user.USER_GROUP == "MH").ToList();
+
 
                 if (dtMaterial == null || dtMaterial.Rows.Count == 0 || dtTracking == null || dtTracking.Rows.Count == 0)
                     return null;
@@ -66,7 +73,16 @@ namespace DashboardTTS.ViewBusiness
                         if (drTrackingDay.Length > 0)
                         {
                             dayModel.partNumberALL = drTrackingDay[0]["PartNumberAll"].ToString();
-                            dayModel.clientUserID = drTrackingDay[0]["userID"].ToString();
+
+                            //2021-02-01新增, MH ID列不能显示不是MH组别下的ID
+                            {
+                                string tempUserID = drTrackingDay[0]["userID"].ToString();                        
+                                if (mouldingUserMHList.Where(user=>user.USER_ID.ToUpper() == tempUserID.ToUpper()).Count() > 0)
+                                    dayModel.clientUserID = tempUserID;
+                                else
+                                    dayModel.clientUserID = string.Empty;
+                            }
+
 
                             foreach (DataRow dr in drTrackingDay)
                             {
@@ -115,7 +131,15 @@ namespace DashboardTTS.ViewBusiness
                         //获取dashboard-unload信息, 按照[materialNo - LotNo - weigh]的格式组合
                         if (drMaterialDay.Length > 0)
                         {
-                            dayModel.unloadUserID = drMaterialDay[0]["User_Name"].ToString();
+
+                            //2021-02-01新增, MH ID列不能显示不是MH组别下的ID
+                            {
+                                string tempUserID = drMaterialDay[0]["User_Name"].ToString();
+                                if (mouldingUserMHList.Where(user => user.USER_ID.ToUpper() == tempUserID.ToUpper()).Count() > 0)
+                                    dayModel.unloadUserID = tempUserID;
+                                else
+                                    dayModel.unloadUserID = string.Empty;
+                            }
 
                             foreach (DataRow dr in drMaterialDay)
                             {
@@ -159,7 +183,15 @@ namespace DashboardTTS.ViewBusiness
                         if (drTrackingNight.Length > 0)
                         {
                             nightModel.partNumberALL = drTrackingNight[0]["PartNumberAll"].ToString();
-                            nightModel.clientUserID = drTrackingNight[0]["userID"].ToString();
+
+                            //2021-02-01新增, MH ID列不能显示不是MH组别下的ID
+                            {
+                                string tempUserID = drTrackingDay[0]["userID"].ToString();
+                                if (mouldingUserMHList.Where(user => user.USER_ID.ToUpper() == tempUserID.ToUpper()).Count() > 0)
+                                    nightModel.clientUserID = tempUserID;
+                                else
+                                    nightModel.clientUserID = string.Empty;
+                            }
 
                             foreach (DataRow dr in drTrackingNight)
                             {
@@ -208,7 +240,14 @@ namespace DashboardTTS.ViewBusiness
                         //获取dashboard-unload信息, 按照[materialNo - LotNo - weigh]的格式组合
                         if (drMaterialNight.Length > 0)
                         {
-                            nightModel.unloadUserID = drMaterialNight[0]["User_Name"].ToString();
+                            //2021-02-01新增, MH ID列不能显示不是MH组别下的ID
+                            {
+                                string tempUserID = drMaterialNight[0]["User_Name"].ToString();
+                                if (mouldingUserMHList.Where(user => user.USER_ID.ToUpper() == tempUserID.ToUpper()).Count() > 0)
+                                    nightModel.unloadUserID = tempUserID;
+                                else
+                                    nightModel.unloadUserID = string.Empty;
+                            }
 
                             foreach (DataRow dr in drMaterialDay)
                             {

@@ -355,8 +355,7 @@ namespace Common.DAL
         #endregion  Method
 
 
-        #region MyRegion
-            
+     
         internal DataSet getAttendance(DateTime dDay, string sShift, string sDepartment)
         {
             StringBuilder strSql = new StringBuilder();
@@ -380,40 +379,7 @@ namespace Common.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
 
         }
-        
-        internal DataSet GetAttendanceByDayDept(DateTime dDay, string sDepartment)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" SELECT
-                              a.[UserID] AS USER_ID
-                              ,a.[UserName] AS USER_NAME
-                              ,a.[UserGroup] AS USER_GROUP
-                              ,a.[Department] AS DEPARTMENT
-                              ,a.[Shift] AS SHIFT
-                              ,a.[Attendance] 
-                              ,a.[OnLeave]
-                              ,a.[Day] 
-                              ,a.[UpdateBy]
-                              ,a.[DateTime]
-                              ,a.[Remarks]
-                          FROM [LMMSUserAttendanceTracking] a  ");
-            strSql.Append(" where  ");
-            strSql.Append(" a.Day=@Day  ");
-            if (sDepartment.Trim().Length > 0)
-            {
-                strSql.Append(" and a.Department = @Department ");
-            }
-            strSql.Append(" order by a.usergroup , a.userid ");
-            SqlParameter[] parameters = {
-                    new SqlParameter("@Day", SqlDbType.DateTime2,8),
-                    new SqlParameter("@Department", SqlDbType.VarChar , 50) };
-            parameters[0].Value = dDay == null ? (object)DBNull.Value : dDay;
-            parameters[1].Value = sDepartment == null || sDepartment.Trim().Length == 0 ? (object)DBNull.Value : sDepartment;
-
-            
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
-
+ 
         public SqlCommand DeleteAttendanceByDayDept(DateTime dDay, string sDepartment)
         {
             //该表无主键信息，请自定义主键/条件字段
@@ -432,7 +398,7 @@ namespace Common.DAL
  
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
-        #endregion
+
 
 
 

@@ -152,58 +152,64 @@ namespace DashboardTTS.Webform.Molding
 
         protected void btn_submit_Click(object sender, EventArgs e)
         {
-            Common.Class.Model.MouldingMachineInformation_Model model = new Common.Class.Model.MouldingMachineInformation_Model();
-            model.MachineID = this.ddl_machineID.SelectedValue;
-            model.UpdatedDate = DateTime.Now;
+            try
+            {
+                Common.Class.Model.MouldingMachineInformation_Model model = new Common.Class.Model.MouldingMachineInformation_Model();
+                model.MachineID = this.ddl_machineID.SelectedValue;
+                model.UpdatedDate = DateTime.Now;
 
-            string ListType = Request.QueryString["ListType"] == null ? "" : Request.QueryString["ListType"].ToString();
-            if (ListType == StaticRes.Global.MouldingModelType.Machine)
-            {
-                model.PartModel = StaticRes.Global.MouldingModelType.Machine;
-                model.CTRL = this.txt_Machine_CTRL.Text;
-                model.MakerModel = this.txt_Machine_MakerModel.Text;
-                model.SerialNo = this.txt_Machine_SerialNo.Text;
-                model.Type = this.txt_Machine_Type.Text;
-                model.DateOfManu = this.infDch_Machine.CalendarLayout.SelectedDate;
-            }
-            else if (ListType == StaticRes.Global.MouldingModelType.RobotArm)
-            {
-                model.PartModel = StaticRes.Global.MouldingModelType.RobotArm;
-                model.ControllerSerialNo = this.txt_RobotArm_ControllerSerialNo.Text;
-                model.ControllerType = this.txt_RobotArm_ControllerType.Text;
-                model.Model = this.txt_RobotArm_Model.Text;
-                model.SerialNo = this.txt_RobotArm_SerialNo.Text;
-                model.Date = this.txt_RobotArm_Date.Text;// this.infDch_RobotArm.CalendarLayout.SelectedDate;
-            }
-            else if (ListType == StaticRes.Global.MouldingModelType.Temperature || ListType == StaticRes.Global.MouldingModelType.Dryer)
-            {
-                model.PartModel = ListType == StaticRes.Global.MouldingModelType.Temperature ? StaticRes.Global.MouldingModelType.Temperature : StaticRes.Global.MouldingModelType.Dryer;
-                model.Date = this.txt_Temp_Dryer_Date.Text;// this.infDch_Temp_Dryer.CalendarLayout.SelectedDate;
-                model.Maker = this.txt_Temp_Dryer_Maker.Text;
-                model.Model = this.txt_Temp_Dryer_Model.Text;
-            }
-            else if (ListType == StaticRes.Global.MouldingModelType.Main)
-            {
+                string ListType = Request.QueryString["ListType"] == null ? "" : Request.QueryString["ListType"].ToString();
+                if (ListType == StaticRes.Global.MouldingModelType.Machine)
+                {
+                    model.PartModel = StaticRes.Global.MouldingModelType.Machine;
+                    model.CTRL = this.txt_Machine_CTRL.Text;
+                    model.MakerModel = this.txt_Machine_MakerModel.Text;
+                    model.SerialNo = this.txt_Machine_SerialNo.Text;
+                    model.Type = this.txt_Machine_Type.Text;
+                    model.DateOfManu = this.infDch_Machine.CalendarLayout.SelectedDate;
+                }
+                else if (ListType == StaticRes.Global.MouldingModelType.RobotArm)
+                {
+                    model.PartModel = StaticRes.Global.MouldingModelType.RobotArm;
+                    model.ControllerSerialNo = this.txt_RobotArm_ControllerSerialNo.Text;
+                    model.ControllerType = this.txt_RobotArm_ControllerType.Text;
+                    model.Model = this.txt_RobotArm_Model.Text;
+                    model.SerialNo = this.txt_RobotArm_SerialNo.Text;
+                    model.Date = this.txt_RobotArm_Date.Text;// this.infDch_RobotArm.CalendarLayout.SelectedDate;
+                }
+                else if (ListType == StaticRes.Global.MouldingModelType.Temperature || ListType == StaticRes.Global.MouldingModelType.Dryer)
+                {
+                    model.PartModel = ListType == StaticRes.Global.MouldingModelType.Temperature ? StaticRes.Global.MouldingModelType.Temperature : StaticRes.Global.MouldingModelType.Dryer;
+                    model.Date = this.txt_Temp_Dryer_Date.Text;// this.infDch_Temp_Dryer.CalendarLayout.SelectedDate;
+                    model.Maker = this.txt_Temp_Dryer_Maker.Text;
+                    model.Model = this.txt_Temp_Dryer_Model.Text;
+                }
+                else if (ListType == StaticRes.Global.MouldingModelType.Main)
+                {
+                    model.PartModel = ListType;
+                    model.Maker = this.txt_Main_Maker.Text;
+                    model.Info = this.txt_Main_Info.Text;
+                    model.Model = this.txt_Main_Model.Text;
+                    model.DateOfManu = this.infDch_Main.CalendarLayout.SelectedDate;
+                    model.ScrewDiameter = decimal.Parse(this.txt_Main_ScrewDiameter.Text.Trim('m'));
+                    model.MaxOPNStroke = decimal.Parse(this.txt_Main_MaxOPNStroke.Text.Trim('m'));
+                    model.EJTStroke = decimal.Parse(this.txt_Main_EJTStroke.Text.Trim('m'));
+                    model.TiebarDistance = this.txt_Main_TiebarDistance.Text;
+                    model.MinMoldSize = this.txt_Main_MinMoldSize.Text;
+                    model.MinMoldThickness = decimal.Parse(this.txt_Main_MinMoldThickness.Text.Trim('m'));
+                    model.Dimensions = this.txt_Main_Dimensions.Text;
+                }
                 model.PartModel = ListType;
-                model.Maker = this.txt_Main_Maker.Text;
-                model.Info = this.txt_Main_Info.Text;
-                model.Model = this.txt_Main_Model.Text;
-                model.DateOfManu = this.infDch_Main.CalendarLayout.SelectedDate;
-                model.ScrewDiameter = decimal.Parse(this.txt_Main_ScrewDiameter.Text.Trim('m'));
-                model.MaxOPNStroke = decimal.Parse(this.txt_Main_MaxOPNStroke.Text.Trim('m'));
-                model.EJTStroke = decimal.Parse(this.txt_Main_EJTStroke.Text.Trim('m'));
-                model.TiebarDistance = this.txt_Main_TiebarDistance.Text;
-                model.MinMoldSize = this.txt_Main_MinMoldSize.Text;
-                model.MinMoldThickness = decimal.Parse(this.txt_Main_MinMoldThickness.Text.Trim('m'));
-                model.Dimensions = this.txt_Main_Dimensions.Text;
+
+                Session["MouldingMachineInformation"] = model;
+
+
+                Response.Redirect("../Laser/Login.aspx?commandType=UpdateMachineInfo&Department=" + StaticRes.Global.Department.Moulding, false);
             }
-            model.PartModel = ListType;
-
-            Session["MouldingMachineInformation"] = model;
-
-
-            Response.Redirect("../Laser/Login.aspx?commandType=UpdateMachineInfo&Department="+StaticRes.Global.Department.Moulding,false);
-
+            catch (Exception ex)
+            {
+                DBHelp.Reports.LogFile.Log("MouldingMachineInfo_debug", "Catch exception: " + ex.ToString());
+            }
         }
 
         protected void btn_cancel_Click(object sender, EventArgs e)

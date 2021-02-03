@@ -171,7 +171,6 @@ group by MONTH(a.day)
         public DataSet GetList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJigNo, string sMachineID)
         {
             StringBuilder strSql = new StringBuilder();
-
             strSql.Append(@"
 SELECT [machineID]
       ,[dateTime]
@@ -224,10 +223,7 @@ SELECT [machineID]
 
             if (sPartNo != "") strSql.Append(" and partNumber = @partNumber");
             if (sJigNo != "") strSql.Append(" and jigNo = @jigNo");
-            if (sMachineID != "") strSql.Append(" and machineID = @machineID");
-
-
-         
+            if (sMachineID != "") strSql.Append(" and machineID = @machineID");         
 
 
             SqlParameter[] paras =
@@ -246,14 +242,9 @@ SELECT [machineID]
             if (sJigNo != "") paras[3].Value = sJigNo; else paras[3] = null;
             if (sMachineID != "") paras[4].Value = sMachineID; else paras[4] = null;
 
-
-
-
-
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
+        
         public DataSet getLaserVITracking(string sMachineID)
         {
             StringBuilder strSql = new StringBuilder();
@@ -283,9 +274,7 @@ SELECT [machineID]
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
-
+        
         public DataSet GetProductionList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sPartNo, string sShift, string sModule)
         {
             StringBuilder strSql = new StringBuilder();
@@ -418,8 +407,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
+        
         public DataSet SelectList(DateTime dDateFrom,DateTime dDateTo, string sMachineID, string sPartNo, string sShift, string sModule)
         {
             StringBuilder strSql = new StringBuilder();
@@ -595,8 +583,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
 
             return  DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
+        
         public DataSet SelectHourlyCheck(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sPartNo, string sShift, string sModule)
         {
             StringBuilder strSql = new StringBuilder();
@@ -711,9 +698,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
-
+        
         // 2018 12 08 modified by wei lijia , add 2 parameter : date not in & except weekend  
         internal DataSet ProductionReport_withMQC(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sPartNo, string sModule, bool bOnlyMqc)
         {
@@ -874,8 +859,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
             if (sModule != "") { paras[4].Value = sModule; } else { paras[4] = null; }
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-        
+                
         public SqlCommand UpdateSetupWasteMaterialCommond(Common.Class.Model.MouldingViHistory_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1022,8 +1006,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
+        
         public SqlCommand InsertProductionHistory(Common.Class.Model.MouldingViHistory_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1207,13 +1190,7 @@ and a.dateTime > @DateFrom  and a.dateTime < @DateTo  ");
             return ds;
 
         }
-
-
-      
-
-
-
-
+          
         internal DataTable getProductivityReportForMoulding(DateTime dDay, string sShift)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1732,11 +1709,6 @@ left join
             }
         }
         
-
-        
-
-
-
         //new daily report 
         public DataTable GetViForDailyReport_NEW(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJigNo, string sShift)
         {
@@ -2076,10 +2048,7 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and  day >= @da
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
-
-
+        
         #region Moulding Monthly Top Reject Report
         public DataTable GetTopRejParts(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
         {

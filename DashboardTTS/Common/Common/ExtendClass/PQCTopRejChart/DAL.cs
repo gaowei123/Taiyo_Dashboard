@@ -4,19 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using Taiyo.SearchParam.PQCParam;
 
 namespace Common.ExtendClass.PQCTopRejChart
 {
     internal class DAL
     {
 
-        public List<Model.TopPartNo> GetTopPartNoRej(Taiyo.SearchParam.PQCParam.PQCTopRejectCondition param)
+        public List<Model.TopPartNo> GetTopPartNoRej(PQCTopRejectCondition param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendFormat(@"select
                                     top {0}
                                     partNumber
                                     ,sum(rejectQty) as rejQty
+                                    ,sum(totalQty) as totalQty
                                     from PQCQaViTracking 
                                     where 1=1 and day >=@dateFrom and day < @dateTo
                                     group by partNumber order by rejQty desc", param.TopCount);
@@ -43,8 +45,8 @@ namespace Common.ExtendClass.PQCTopRejChart
             {
                 var model = new Model.TopPartNo();
                 model.PartNo = dr["partNumber"].ToString();
-                model.RejQty = int.Parse(dr["rejQty"].ToString());
-               
+                model.TotalQty = dr["totalQty"].ToString() ==""? 0: decimal.Parse(dr["totalQty"].ToString());
+                model.RejQty = dr["rejQty"].ToString() == "" ? 0 : decimal.Parse(dr["rejQty"].ToString());
                 modelList.Add(model);
             }
 
@@ -54,13 +56,17 @@ namespace Common.ExtendClass.PQCTopRejChart
         }
         
 
-        public List<Model.TopDefect> GetTopDefectRej(Taiyo.SearchParam.PQCParam.PQCTopRejectCondition param)
+        public List<Model.TopDefect> GetTopDefectRej(PQCTopRejectCondition param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendFormat(@"select
                                     top {0}
                                     defectDescription +'-'+defectCode as defect
                                     ,sum(rejectQty) as rejQty
+                                    ,(
+	                                    select sum(totalqty) from PQCQaViTracking
+	                                    where 1=1 and day >=@dateFrom and day < @dateTo
+                                    ) as totalQty
                                     from PQCQaViDefectTracking 
                                     where 1=1 and day >=@dateFrom and day < @dateTo
                                     group by defectDescription, defectCode order by  rejQty desc", param.TopCount);
@@ -87,8 +93,8 @@ namespace Common.ExtendClass.PQCTopRejChart
             {
                 var model = new Model.TopDefect();
                 model.DefectCode = dr["defect"].ToString();
-                model.RejQty = int.Parse(dr["rejQty"].ToString());
-
+                model.TotalQty = dr["totalQty"].ToString() == "" ? 0 : decimal.Parse(dr["totalQty"].ToString());
+                model.RejQty = dr["rejQty"].ToString() == "" ? 0 : decimal.Parse(dr["rejQty"].ToString());
                 modelList.Add(model);
             }
 

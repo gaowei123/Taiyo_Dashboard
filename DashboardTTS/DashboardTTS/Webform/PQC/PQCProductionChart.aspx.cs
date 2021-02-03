@@ -19,19 +19,13 @@ namespace DashboardTTS.Webform.PQC
             {
                 try
                 {
-
                     this.infDchFrom.CalendarLayout.SelectedDate = DateTime.Now.AddDays(-30);
                     this.infDchFrom.Value = DateTime.Now.AddDays(-30);
                     this.infDchTo.CalendarLayout.SelectedDate = DateTime.Now;
                     this.infDchTo.Value = DateTime.Now;
                     
                     setYearDDL();
-
                     
-                    //string sYear = Request.QueryString["Year"] == null ? "" : Request.QueryString["Year"].ToString();
-                    //string sMonth = Request.QueryString["Month"] == null ? "" : Request.QueryString["Month"].ToString();
-                    //string sDay = Request.QueryString["Day"] == null ? "" : Request.QueryString["Day"].ToString();
-
 
                     btnGenerate_Click(new object(), new EventArgs());
                     

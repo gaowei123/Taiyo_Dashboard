@@ -572,33 +572,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
         }
-
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select ");
-            if (Top > 0)
-            {
-                strSql.Append(" top " + Top.ToString());
-            }
-            strSql.Append(" jobNumber,lotNo,partNumber,materialName,lotQty,setupRejQty,qaTestQty,coat_1st,pMachine_1st,coat_2nd,pMachine_2nd,coat_3rd,pMachine_3rd,paintingDate,UCDate,TCDate,laserMachine,laserOperator,laserDate,MFGDate,createdTime,updatedTime ");
-            strSql.Append(" FROM PaintingTempInfo ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            strSql.Append(" order by " + filedOrder);
-            return DBHelp.SqlDB.Query(strSql.ToString());
-        }
-
-
-
-
-
-
+        
 
         #endregion  BasicMethod
 

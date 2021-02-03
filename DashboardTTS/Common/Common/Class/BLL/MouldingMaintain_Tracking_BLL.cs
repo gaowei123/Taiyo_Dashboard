@@ -58,9 +58,7 @@ namespace Common.Class.BLL
         
 		#endregion  BasicMethod
 
-
-		#region  MyFunc
-
+        
         public DataTable GetList()
         {
             DataSet ds = dal.GetList();
@@ -90,10 +88,7 @@ namespace Common.Class.BLL
 
             return DBHelp.SqlDB.SetData_Rollback(CmdList, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
-
-        #endregion
+        
     }
 }
 

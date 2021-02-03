@@ -120,20 +120,6 @@ namespace Common.Class.BLL
         }
         
 
-        public DataTable GetDayOuput(DateTime dDay)
-        {
-            DataSet ds_temp = dal.GetDayOuput(dDay);
-            if (ds_temp == null || ds_temp.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds_temp.Tables[0];
-            
-            return dt;
-        }
-
-
         public DataTable GetMonthlyReport(string sYear, string sPartNo)
         {
 

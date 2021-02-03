@@ -3,18 +3,17 @@
     ViewBag.Title = "PQCOperatorPerformanceChart";
 }
 
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-@*echart*@
-<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
-
-
+<style>
+    label{
+        width:35%
+    }
+    #txtDateFrom, #txtDateTo{
+        width:60%;
+    }
+    .searchingPanel{
+        padding-top:10px;
+    }
+</style>
 
 <div class="container">
     <div class="row titleRow">
@@ -23,29 +22,18 @@
     </div>
 
     <div class="row searchingBar">
-        <div class="col-sm-12 panel panel-default searchingPanel" style="padding-top:10px;">
+        <div class="col-sm-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
                 <div class="col-sm-3">
-                    <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" 
-                           CssClass="form-control formDateTimePicker"
-                           data-date-format="yyyy-mm-dd"
-                           placeholder="Please choose date" 
-                           style="width:60%;" />
+                    <label>Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
                 </div>
                 <div class="col-sm-3">
-                    <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" 
-                           CssClass="form-control formDateTimePicker"          
-                           data-date-format="yyyy-mm-dd"               
-                           placeholder="Please choose date" 
-                           style="width:60%;" />
+                    <label>Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
                 </div>
-                <div class="col-sm-3">
-                    @*<label for="ddlPIC" style="width:35%">PIC:</label>
-                    <select id="ddlPIC" class="form-control selectpicker" data-ng-style="btn-info"></select>*@
-                </div>
-                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3"  style="text-align:right; padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="generate();" />
                 </div>
             </div>
@@ -61,6 +49,16 @@
 
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*echart*@
+<script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 
 <script type="text/javascript">
 
@@ -111,52 +109,124 @@
             return false;
         }
 
-
-
+        let searchParam = {
+            DateFrom: $("#txtDateFrom").val(),
+            DateTo: $("#txtDateTo").val()
+        }
 
 
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetChartData,
-            data: {
-                DateFrom: $("#txtDateFrom").val(),
-                DateTo: $("#txtDateTo").val(),
-                //PIC: $('#ddlPIC').val()
-            },
+            data: searchParam,
 
             beforeSend: function(){
                 chart.showLoading();
             },
 
             success: function (data) {
-
-                if (data == null || data.length == 0 || data==undefined) {
+                if (data == null || data == undefined || data.length == 0) {
                     alert('No data found!');
+                    chart.clear();
                     return false;
                 }
 
-                var series = [];
-                for (var i = 0; i < data.SeriesData.length; i++) {
-                    series.push({
-                        name: data.SeriesData[i].Name,
-                        type: data.SeriesData[i].Type,
-                        stack: data.SeriesData[i].Stack,
-                        data: data.SeriesData[i].Data,
-                        label: {
-                            show: true,
-                            position: 'inside',
-                            formatter: function (data) {
-                                if (data.data === 0) {
-                                    return '';
-                                } else {
-                                    return data.data;
-                                }
-                            },
-                            //color: 'black'
+                //console.log(data);
+
+
+                let axisXLabel = [];
+                let series = [];
+
+
+                let onlineData = [];
+                let wipData = [];
+                let pOnlineData = [];
+                let pOfflineData = [];
+
+                data.forEach(function (item) {
+                    axisXLabel.push(item.UserID);
+
+                    onlineData.push(item.LaserQty);
+                    wipData.push(item.WIPQty);
+                    pOnlineData.push(item.PackOnlineQty);
+                    pOfflineData.push(item.PackOfflineQty);
+                })
+
+
+
+                //添加 online, wip, packing-online, packing-offline 4个series
+                series.push({
+                    name: 'Online',
+                    type: 'bar',
+                    stack: 'output',
+                    data: onlineData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
                         }
-                    });
-                }
+                    }
+                });
+                series.push({
+                    name: 'WIP',
+                    type: 'bar',
+                    stack: 'output',
+                    data: wipData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
+                        }
+                    }
+                });
+                series.push({
+                    name: 'Pack Online',
+                    type: 'bar',
+                    stack: 'output',
+                    data: pOnlineData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
+                        }
+                    }
+                });
+                series.push({
+                    name: 'Pack Offline',
+                    type: 'bar',
+                    stack: 'output',
+                    data: pOfflineData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (data) {
+                            if (data.data === 0) {
+                                return '';
+                            } else {
+                                return data.data;
+                            }
+                        }
+                    }
+                });
+                //添加 online, wip, packing-online, packing-offline 4个series
+
+              
 
 
                 option = {
@@ -171,41 +241,39 @@
                         }
                     },
                     legend: {
-                        data: data.LegendData
+                        data: ['Online', 'WIP', 'Pack Online', 'Pack Offline'],
+                        top: 10
                     },
                     grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
+                        bottom: 90
                     },
+                    dataZoom: [{
+                        type: 'inside'
+                    }, {
+                        type: 'slider'
+                    }],
                     xAxis: [
                         {
                             type: 'category',
-                            data: data.XAxisData,
+                            data: axisXLabel,
                             axisLabel: {
                                 interval: 0,
-                                //formatter: function (value) {
-                                //    return value.split('').join('\n');
-                                //},
+                                show: true,
                                 rotate: 45,
                             }
                         }
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name: 'Output Qty'
                         }
                     ],
                     series: series
                 };
 
-                chart.setOption(option, true);
-
-
-
                 chart.clear();
-                chart.setOption(option);
+                chart.setOption(option, true);
             },
 
             complete: function(){
@@ -213,13 +281,11 @@
                 chart.resize({ height: $(window).height()  - 300});
             },
 
-
             error: function (e) {
                 alert("Get chart data error !");
                 chart.hideLoading();
             }
         });
-
     }
 
 

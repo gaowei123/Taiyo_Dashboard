@@ -336,60 +336,6 @@ namespace Common.Class.DAL
             }
 		}
 
-
-        public DataTable GetPackForSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select 
-sum(a.TotalQty) as TotalQty
-,sum(a.acceptQty ) as acceptQty
-,sum(a.rejectQty ) as rejectQty
-,case when charindex('Laser',  b.processes,0) > 0  and charindex('Check#2',b.processes,0) = 0 and charindex('Check#3',b.processes,0) = 0 
-then 'Online' else 'Offline' end as packType
-from pqcpacktracking a 
-left join PQCBom b on a.partNumber = b.partNumber
-where 1=1 and a.day >= @dateFrom and a.day < @dateTo ");
-
-
-            if (sShift != "") strSql.Append(" and a.shift = @shift ");
-            if (sPartNo != "") strSql.Append(" and a.partNumber  = @partNumber ");
-
-            strSql.Append(@"group by 
-case when charindex('Laser', b.processes, 0) > 0  and charindex('Check#2', b.processes, 0) = 0 and charindex('Check#3', b.processes, 0) = 0
-then 'Online' else 'Offline' end ");
-
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@shift",SqlDbType.VarChar),
-                new SqlParameter("@partNumber", SqlDbType.VarChar)
-            };
-
-            paras[0].Value = dDateFrom;
-            paras[1].Value = dDateTo;
-            if (sShift != "") paras[2].Value = sShift; else paras[2] = null;        
-            if (sPartNo != "") paras[3].Value = sPartNo; else paras[3] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
-
-
-
         public DataTable GetProductDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sMachineID, string sJobNumber)
         {
             StringBuilder strSql = new StringBuilder();
@@ -469,45 +415,7 @@ where a.day >= @datefrom and a.day< @dateto ");
                 return ds.Tables[0];
             }
         }
-
-
-
-
-        public DataSet GetDayOutput(DateTime dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(@"
-select 
-
-SUM(a.totalQty) as Output_PCS
-,convert(float, Round(SUM(a.TotalQty/b.materialCount),0)) as Output_SET
-
-from pqcpacktracking a 
-left join 
-(
-	select partnumber , count(1) as materialCount from PQCBomDetail group by partnumber
-) b on a.partNumber = b.partNumber
-
-where day=@day  
-group by day  ");
-
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@day",SqlDbType.DateTime)
-            };
-
-            paras[0].Value = dDay;
-            
-
-
-           
-            return DBHelp.SqlDB.Query(strSql.ToString(),paras,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
-
-
+        
         public SqlCommand UpdatePQCMaintenance(Common.Class.Model.PQCPackTracking_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -549,58 +457,7 @@ group by day  ");
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-
-
-        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-jobID
-,startTime
-,stopTime
-,a.partNumber
-,'Packing' as Process
-,rejectQty
-,acceptQty
-,rejectQty *  isnull( c.unitCost,0) as rejPrice
-,Upper(userID) as userID
-,d.materialCount
-from PQCPackTracking a
-left join PQCBom c on a.partNumber = c.partNumber
-left join  (
-    select partNumber, count(1) as materialCount
-    from PQCBomDetail
-    group by partnumber
-) d on c.partNumber = d.partNumber
-where 1=1  ");
-
-            strSql.AppendLine(" and a.day = @date ");
-            if (!string.IsNullOrEmpty(sShift)) strSql.AppendLine(" and a.shift = @shift ");
-            if (!string.IsNullOrEmpty(sUserID)) strSql.AppendLine(" and a.userID = @userID");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@date", SqlDbType.DateTime2),
-                new SqlParameter("@shift", SqlDbType.VarChar,50),
-                new SqlParameter("@userID", SqlDbType.VarChar,50),
-            };
-
-            parameters[0].Value = dDate;
-            if (!string.IsNullOrEmpty(sShift)) parameters[1].Value = sShift; else parameters[1] = null;
-            if (!string.IsNullOrEmpty(sUserID)) parameters[2].Value = sUserID; else parameters[2] = null;
-
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
-
+        
         public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -685,10 +542,7 @@ and a.day < @dateTo ");
                 return ds.Tables[0];
 
         }
-
-
-
-
+        
     }
 }
 

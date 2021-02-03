@@ -13,9 +13,6 @@ namespace Common.Class.BLL
 
 
 
-        #region  Method
-   
-
 
         public bool Add(Common.Class.Model.PaintingDeliveryHis_Model model)
         {
@@ -60,10 +57,6 @@ namespace Common.Class.BLL
             }
 
         }
-
-    
-        
-        #endregion
 
         public DataTable GetList(DateTime dDateFrom, DateTime dDateTo,string sJobNo)
         {

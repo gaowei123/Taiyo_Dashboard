@@ -9,6 +9,7 @@ namespace Taiyo.Enum.Production
     {
         Laser,
         WIP,
-        Packing
+        PackOnline,
+        PackOffline
     }
 }

@@ -314,47 +314,6 @@ namespace Common.Class.DAL
 
         }
         
-
-        public DataSet GetInventoryQty()
-        { 
-            StringBuilder strSql = new StringBuilder();
-
-
-            strSql.Append(@"select sum(Inventory_SET) as Inventory_SET, sum(Inventory_PCS) as Inventory_PCS from 
-(
-	select 
-
-	1 as ID                   
-	, a.quantity  - isnull( a.buyOffQty,0) - isnull(a.pqcQuantity,0) - isnull(a.setupQTY,0) - isnull( (c.totalpass + c.totalFail ),0) / b.materialCount as Inventory_SET
-	,( a.quantity  - isnull( a.buyOffQty,0) - isnull(a.pqcQuantity,0) - isnull(a.setupQTY,0)) * b.materialCount -  isnull(c.totalpass,0)  -  isnull(c.totalFail,0) as Inventory_PCS
-
-
-
-	from LMMSInventory a
-	left join (   select partNumber, COUNT(1) as materialCount from LMMSBomDetail group by partNumber ) b   on a.partNumber = b.partNumber  
-	left join LMMSWatchLog c  on a.jobNumber = c.jobNumber  
-
-	where 1=1  and showFlag = 'TRUE'      
-	and  a.datetime  > '2018-8-14'  
-	and a.datetime  < GETDATE()
-	and isnull( c.totalPass,0) + isnull(c.totalFail,0) < (a.quantity  -  isnull( a.setupQTY,0) - isnull( a.pqcQuantity,0) - isnull(a.buyOffQty,0))  * b.materialCount  
-) a 
-group by a.ID");
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString());
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds;
-            }
-        }
-
-
         public DataTable GetList(string sJobNo)
         {
             StringBuilder strSql = new StringBuilder();

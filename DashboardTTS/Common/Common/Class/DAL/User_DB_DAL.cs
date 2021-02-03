@@ -314,33 +314,6 @@ where 1=1 ");
 
             return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), paras, cn);
         }
-
-
-        public DataTable SelectManPower()
-        {
-            StringBuilder strSql = new StringBuilder();
-            
-            strSql.Append(@" 
-select 
-DEPARTMENT as department
-,count(1) as manPower 
-from User_DB
-where USER_GROUP != 'Admin' and USER_GROUP != 'IPQC'
-group by DEPARTMENT ");
-
-            
-
-            DataSet ds =  DBHelp.SqlDB.Query(strSql.ToString());
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-      
-
+        
     }
 }

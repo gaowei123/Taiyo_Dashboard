@@ -13,40 +13,22 @@ namespace DashboardTTS.Webform.PQC {
     public partial class PQCRejectDetail {
         
         /// <summary>
-        /// lblUserHeader 控件。
+        /// txtDateFrom 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUserHeader;
+        protected global::System.Web.UI.WebControls.TextBox txtDateFrom;
         
         /// <summary>
-        /// ddlMachineType 控件。
+        /// txtDateTo 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMachineType;
-        
-        /// <summary>
-        /// ddlRejType 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRejType;
-        
-        /// <summary>
-        /// ddlRejCode 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRejCode;
+        protected global::System.Web.UI.WebControls.TextBox txtDateTo;
         
         /// <summary>
         /// txtPartNo 控件。
@@ -58,22 +40,40 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.TextBox txtPartNo;
         
         /// <summary>
-        /// infDchFrom 控件。
+        /// ddlStation 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::Infragistics.WebUI.WebSchedule.WebDateChooser infDchFrom;
+        protected global::System.Web.UI.WebControls.DropDownList ddlStation;
         
         /// <summary>
-        /// infDchTo 控件。
+        /// ddlRejType 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::Infragistics.WebUI.WebSchedule.WebDateChooser infDchTo;
+        protected global::System.Web.UI.WebControls.DropDownList ddlRejType;
+        
+        /// <summary>
+        /// ddlDefectCode 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDefectCode;
+        
+        /// <summary>
+        /// txtJobNo 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtJobNo;
         
         /// <summary>
         /// btn_generate 控件。

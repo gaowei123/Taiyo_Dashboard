@@ -45,11 +45,7 @@
     <Compile Include="ConcreteChartMethod\LaserMachineActivity.cs" />
     <Compile Include="ConcreteChartMethod\LaserProduction.cs" />
     <Compile Include="ConcreteChartMethod\PQCOperator.cs" />
-    <Compile Include="ConcreteChartMethod\PQCOperatorPerformance.cs" />
-    <Compile Include="ConcreteChartMethod\PQCOperatorSummary.cs" />
     <Compile Include="ConcreteChartMethod\PQCProduction.cs" />
-    <Compile Include="ConcreteChartMethod\PQCTopRejDefect.cs" />
-    <Compile Include="ConcreteChartMethod\PQCTopRejPartNo.cs" />
     <Compile Include="IChartMethod.cs" />
     <Compile Include="ChartFactory.cs" />
     <Compile Include="ChartModel.cs" />

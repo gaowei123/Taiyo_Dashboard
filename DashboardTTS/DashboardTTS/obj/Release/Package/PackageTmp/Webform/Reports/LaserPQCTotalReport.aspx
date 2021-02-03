@@ -27,7 +27,7 @@
 <body>
     <form id="form1" runat="server">
         
-        <div class="container container-fluid" style="width:100%;" >
+        <div class="container-fluid">
 
             <div class="row titleRow">
                 <img class="titleImg" src="../../Resources/Images/headericon.gif" />
@@ -42,10 +42,7 @@
                             <label>PQC Date:</label>
                             <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
                         </div>
-                        <%--<div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Date To:</label>
-                            <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
-                        </div>--%>
+             
 
                         <div class="form-group searchingBarCol" style="margin:5px;">
                             <label>Type:</label>
@@ -56,39 +53,7 @@
                             </asp:DropDownList>
                         </div>
 
-                        <%--<div class="form-group searchingBarCol">
-                            <label>Model:</label>
-                            <asp:DropDownList runat="server" ID="ddlModel" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Part No:</label>
-                            <asp:TextBox runat="server" ID="txtPartNo" CssClass="form-control" Width="120"></asp:TextBox>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Supplier:</label>
-                            <asp:DropDownList runat="server" ID="ddlSupplier" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Color:</label>
-                            <asp:DropDownList runat="server" ID="ddlColor" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Coating:</label>
-                            <asp:DropDownList runat="server" ID="ddlCoating" CssClass="form-control" Width="120">
-                                <asp:listitem Text="All" Value=""></asp:listitem>
-                                <asp:listitem Text="One Coat" Value="One Coat"></asp:listitem>
-                                <asp:listitem Text="Two Coat" Value="Two Coat"></asp:listitem>
-                                <asp:listitem Text="Three Coat" Value="Three Coat"></asp:listitem>
-                                <asp:listitem Text="Print Coat" Value="Print Coat"></asp:listitem>
-                            </asp:DropDownList>
-                        </div>
-                        
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Job No:</label>
-                            <asp:TextBox runat="server" ID="txtJobNo" CssClass="form-control" Width="120"></asp:TextBox>
-                        </div>--%>
-
+                   
                         <div class="form-group searchingBarCol" style="margin:5px; float:right;">
                             <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="BtnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
                         </div>

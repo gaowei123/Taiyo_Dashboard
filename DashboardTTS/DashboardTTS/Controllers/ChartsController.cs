@@ -131,81 +131,91 @@ namespace DashboardTTS.Controllers
 
         public JsonResult GetPQCOperatorPerformanceData(DateTime DateFrom, DateTime DateTo)
         {
-            var param = new Taiyo.SearchParam.BaseParam();
-            param.DateFrom = DateFrom;
-            param.DateTo = DateTo.AddDays(1);
+            var param = new Taiyo.SearchParam.PQCParam.PQCOperatorParam()
+            {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1),
+                OpID = "",
+                Shift = ""
+            };
 
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorPerformance");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(param);
+            var bll = new Common.ExtendClass.PQCProduction.OperatorPerformanceChart.BLL();
+            var result = bll.GetChartData(param);
 
-
-            return chartData == null ? Json("") : Json(chartData);
+            return result == null ? Json("") : Json(result);
         }
 
-        public JsonResult GetPQCOperatorSummaryData()
+        public JsonResult GetPQCOperatorSummaryData(string GroupBy, string PIC)
         {
-            var param = new Taiyo.SearchParam.PQCParam.PQCOperatorSummaryCondition();
+            var bll = new Common.ExtendClass.PQCProduction.OperatorSummaryChart.BLL();
 
-            param.GroupBy = Request.Form["GroupBy"];
-            if (param.GroupBy == "Daily")
+            var param = new Taiyo.SearchParam.PQCParam.PQCOperatorParam();
+            param.Shift = "";
+            param.OpID = PIC;
+
+
+            var result = new List<Common.ExtendClass.PQCProduction.OperatorSummaryChart.Model>();
+            if (GroupBy == "Daily")
             {
                 param.DateFrom = DateTime.Parse(Request.Form["DateFrom"]);
                 param.DateTo = DateTime.Parse(Request.Form["DateTo"]).AddDays(1);
+
+                result = bll.GetDailyList(param);
             }
-            else if (param.GroupBy == "Monthly")
+            else if (GroupBy == "Monthly")
             {
                 int year = int.Parse(Request.Form["Year"]);
-                param.DateFrom = DateTime.Parse($"{year}-1-1");
+                param.DateFrom = new DateTime(year, 1, 1);
                 param.DateTo = param.DateFrom.Value.AddYears(1);
+                
+                result = bll.GetMonthlyList(param);
             }
-            else if (param.GroupBy == "Yearly")
+            else if (GroupBy == "Yearly")
             {
-                param.DateFrom = DateTime.Parse("2017-1-1");
-                param.DateTo = DateTime.Now.AddDays(1);
+                param.DateFrom = new DateTime(2018, 1, 1);
+                param.DateTo = DateTime.Now;
+
+                result = bll.GetYearlyList(param);
             }
             else
             {
                 throw new NullReferenceException("No such type for group by!");
             }
-            param.PIC = Request.Form["PIC"];
-
-            
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCOperatorSummary");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(param);
 
 
-            return chartData == null ? Json("") : Json(chartData);
+            return result == null ? Json("") : Json(result);
         }
 
 
         #region Top Reject
-        public JsonResult GetTopPartNoRejData(DateTime dateFrom, DateTime dateTo, int topCount)
+        public JsonResult GetTopPartNoRejData(DateTime DateFrom, DateTime DateTo, int TopCount)
         {
-            var param = new Taiyo.SearchParam.PQCParam.PQCTopRejectCondition();
-            param.DateFrom = dateFrom;
-            param.DateTo = dateTo.AddDays(1);
-            param.TopCount = topCount;
-            
+            var param = new Taiyo.SearchParam.PQCParam.PQCTopRejectCondition()
+            {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1),
+                TopCount = TopCount
+            };
 
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCTopRejPartNo");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(param);
-
-            return chartData == null ? Json("") : Json(chartData);
+            Common.ExtendClass.PQCTopRejChart.BLL bll = new Common.ExtendClass.PQCTopRejChart.BLL();
+            var result = bll.GetPartNoList(param);
+             
+            return result == null ? Json("") : Json(result);
         }
         
-        public JsonResult GetTopDefectRejData(DateTime dateFrom, DateTime dateTo, int topCount)
+        public JsonResult GetTopDefectRejData(DateTime DateFrom, DateTime DateTo, int TopCount)
         {
-            var param = new Taiyo.SearchParam.PQCParam.PQCTopRejectCondition();
-            param.DateFrom = dateFrom;
-            param.DateTo = dateTo.AddDays(1);
-            param.TopCount = topCount;
+            var param = new Taiyo.SearchParam.PQCParam.PQCTopRejectCondition()
+            {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1),
+                TopCount = TopCount
+            };
+          
+            Common.ExtendClass.PQCTopRejChart.BLL bll = new Common.ExtendClass.PQCTopRejChart.BLL();
+            var result = bll.GetDefectList(param);
 
-
-            MyChart.IChartMethod chartProvidor = _chartFactory.CreateInstance("PQCTopRejDefect");
-            MyChart.ChartModel chartData = chartProvidor.GetChartData(param);
-
-            return chartData == null ? Json("") : Json(chartData);
+            return result == null ? Json("") : Json(result);
         }
 
         #endregion

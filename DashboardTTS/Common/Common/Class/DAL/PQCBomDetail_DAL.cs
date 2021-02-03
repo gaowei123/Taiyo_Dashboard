@@ -379,51 +379,33 @@ namespace Common.Class.DAL
             return DBHelp.SqlDB.Query(strSql.ToString(),paras,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
 
-        /// <summary>
-        /// 获得前几行数据
-        /// </summary>
-        public DataSet GetList(int Top, string strWhere, string filedOrder)
+
+        public DataTable GetMaterialCount(string PartNo)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select ");
-            if (Top > 0)
-            {
-                strSql.Append(" top " + Top.ToString());
-            }
-            strSql.Append(" sn,partNumber,materialPartNo,partCount,userName,dateTime,partImage,color ");
-            strSql.Append(" FROM PQCBomDetail ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            strSql.Append(" order by " + filedOrder);
-            return DBHelp.SqlDB.Query(strSql.ToString());
-        }
+            strSql.Append(@"select 
+partNumber,
+count(1) as materialCount 
+from PQCBomDetail
+where 1=1 ");
+            if (!string.IsNullOrEmpty(PartNo))
+                strSql.AppendLine(" and partNumber = @PartNo ");
+            strSql.AppendLine(" group by partNumber ");
 
-        /*
-		/// <summary>
-		/// 分页获取数据列表
-		/// </summary>
-		public DataSet GetList(int PageSize,int PageIndex,string strWhere)
-		{
-			SqlParameter[] parameters = {
-					new SqlParameter("@tblName", SqlDbType.VarChar, 255),
-					new SqlParameter("@fldName", SqlDbType.VarChar, 255),
-					new SqlParameter("@PageSize", SqlDbType.Int),
-					new SqlParameter("@PageIndex", SqlDbType.Int),
-					new SqlParameter("@IsReCount", SqlDbType.Bit),
-					new SqlParameter("@OrderType", SqlDbType.Bit),
-					new SqlParameter("@strWhere", SqlDbType.VarChar,1000),
-					};
-			parameters[0].Value = "PQCBom";
-			parameters[1].Value = "";
-			parameters[2].Value = PageSize;
-			parameters[3].Value = PageIndex;
-			parameters[4].Value = 0;
-			parameters[5].Value = 0;
-			parameters[6].Value = strWhere;	
-			return DBHelp.SqlDB.RunProcedure("UP_GetRecordByPage",parameters,"ds");
-		}*/
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@PartNo",SqlDbType.VarChar)
+            };
+            if (!string.IsNullOrEmpty(PartNo)) parameters[0].Value = PartNo; else parameters[0] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0)
+                return null;
+            else
+                return ds.Tables[0];
+        }
 
         #endregion  Method
     }

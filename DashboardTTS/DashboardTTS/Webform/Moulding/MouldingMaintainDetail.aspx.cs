@@ -159,10 +159,6 @@ namespace DashboardTTS.Webform
                 ClientScript.RegisterStartupScript(Page.GetType(), "", "alert('Submit fail, Please try again !');", true);
             }
 
-
-
-            //Session["List_MouldingMaintain_His_Model"] = List_Model;
-            //Response.Redirect("../Laser/Login.aspx?Department="+StaticRes.Global.Department.Moulding+"&commandType=Maintain");
         }
 
         protected void btn_cancel_Click(object sender, EventArgs e)

@@ -19,6 +19,7 @@ namespace Common.BLL
         private readonly Common.DAL.LMMSEventLog_DAL _dal = new Common.DAL.LMMSEventLog_DAL();
 
 
+        
         bool IsRightShift(DateTime dt, string shift)
         {
             bool result = false;

@@ -76,7 +76,7 @@ namespace DashboardTTS.Controllers
 
 
 
-        #region summary report
+        #region summary report  2021/1/21 new logic 
         public JsonResult GetSummaryCheckingList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo)
         {
             PQCSummaryParam param = new PQCSummaryParam();
@@ -109,7 +109,6 @@ namespace DashboardTTS.Controllers
 
 
         #region daily report
-
         public ActionResult GetCheckingData()
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
@@ -541,20 +540,21 @@ namespace DashboardTTS.Controllers
 
 
 
-
-        public ActionResult GetDailyOperatorList()
+        // 2021/1/22 new logic, Operator Daily Output Report
+        public JsonResult GetDailyOperatorList(DateTime Date, string Shift, string UserID)
         {
-            DateTime date = DateTime.Parse(Request.Form["Date"]);
+            PQCOperatorParam param = new PQCOperatorParam()
+            {
+                DateFrom = Date,
+                DateTo = Date.AddDays(1),
+                Shift = Shift,
+                OpID = UserID
+            };
 
-            string shift = Request.Form["Shift"];
-            string userID = Request.Form["UserID"];
+            var bll = new Common.ExtendClass.PQCProduction.OperatorDailyOutputReport.BLL();
+            var result = bll.GetReportList(param);
 
-
-
-            List<ViewModel.PQCOperatorDailyReport> modelList = vBLL.GetDailyOperatorList(date, shift, userID);
-
-
-            return Json(modelList);
+            return result == null ? Json("") : Json(result);
         }
 
 

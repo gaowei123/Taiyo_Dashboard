@@ -258,14 +258,6 @@ namespace Common.Class.BLL
         #endregion  Method
 
 
-        #region MyRegion
-        
-       
-            
-
-
-
-        #endregion
     }
 }
 

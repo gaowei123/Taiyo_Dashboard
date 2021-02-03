@@ -43,8 +43,7 @@ where a.nextviflag = 'true'");
             else
                 return ds.Tables[0];
         }
-
-
+        
         public DataTable GetJobCheck2Output(string jobNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -79,9 +78,7 @@ where a.nextviflag = 'true' ");
             else
                 return ds.Tables[0];
         }
-
-
-
+        
         public DataTable GetList(DateTime? dDateFrom, DateTime? dDateTo, string sJobNo, string sProcess)
         {
             StringBuilder strSql = new StringBuilder();
@@ -288,141 +285,7 @@ where 1 = 1  and a.day >= @DateFrom  and a.day < @DateTo ", StaticRes.Global.Sql
                 return ds.Tables[0];
             }
         }
-
-        public DataTable GetLatestModelByJob(string sJobNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" SELECT top 1  * FROM PQCQaViTracking where 1 = 1 and jobId = @jobId  order by datetime desc");
-
-
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@jobId", SqlDbType.VarChar,50)
-            };
-
-            parameters[0].Value = sJobNo;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        /// new logic , 以tracking为一条记录, 汇总defect中 mould,paint,laser,other的rejqty, 以及bom中num, type等设定值
-        /// 在代码中在判断归类.
-        /// </summary>
-        /// <param name="dDateFrom">UI查询参数</param>
-        /// <param name="dDateTo">UI查询参数</param>
-        /// <param name="sShift">UI查询参数</param>
-        /// <param name="sPartNo">UI查询参数</param>
-        /// <returns></returns>
-        public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-
-            string searchShift = sShift == "" ? "" : " and a.shift = @shift";
-            string searchPartNo = sPartNo == "" ? "" : " and a.partNumber = @partNumber";
-
-            strSql.AppendFormat(@"
-select 
- a.trackingID
-,a.partnumber  
-,a.TotalQty
-,a.acceptQty
-,a.rejectQty
-,a.processes as currentProcess
-,c.description
-,c.number
-,c.isContainLaser
-,c.lastCheckProcess
-
-,isnull( case when c.MouldRejType  = 'TTS' then b.mouldRej end ,0) as ttsRej
-,isnull( case when c.MouldRejType != 'TTS' then b.mouldrej end ,0) as vendorRej
-,b.paintRej
-,b.laserRej
-,b.othersRej
-
-from PQCQaViTracking a
-
-left join (
-	select 
-	trackingID
-	,ISNULL(SUM( case when defectdescription = 'Mould' then rejectQty end),0) as mouldRej
-	,ISNULL(SUM( case when defectdescription = 'Paint' then rejectQty end),0) as paintRej
-	,ISNULL(SUM( case when defectdescription = 'Laser' then rejectQty end),0) as laserRej
-	,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
-	from PQCQaViDefectTracking
-	where day >= @DateFrom and day < @DateTo
-	group by trackingID
-) b on a.trackingID = b.trackingID
-
-left join (
-	select 
-	partNumber
-	,description
-	,isnull(number,'') as number
-	,case when charindex('Laser', processes,0) > 0 then 'TRUE' ELSE 'FALSE' END AS isContainLaser
-	,case when charindex('Check#3',processes,0) > 0 then 'CHECK#3' 
-		  when charindex('Check#2',processes,0) > 0 then 'CHECK#2'
-		  else 'CHECK#1' 
-	END as lastCheckProcess
-	,case when remark_1 = 'TTS' then 'TTS' else 'Vendor' end as MouldRejType
-	from PQCBom
-) c on a.partNumber = c.partNumber
-
-where a.day >= @DateFrom and a.day < @DateTo
- {1}  {2} ", searchShift, searchShift,searchPartNo);
-
-
-            
-            SqlParameter[] parameters = {
-                new SqlParameter("@DateFrom", SqlDbType.DateTime),
-                new SqlParameter("@DateTo", SqlDbType.DateTime),
-                new SqlParameter("@Shift", SqlDbType.VarChar),
-                new SqlParameter("@partNumber", SqlDbType.VarChar)
-            };
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-            if (sShift.Trim() != "") parameters[2].Value = sShift; else parameters[2] = null;
-            if (sPartNo.Trim() != "") parameters[3].Value = sPartNo; else parameters[3] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-
-        }
         
-        
-       
         public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
         {
             StringBuilder strSql = new StringBuilder();
@@ -458,10 +321,7 @@ where 1=1 ");
             else
                 return ds.Tables[0];
         }
-
-
-
-
+        
         public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
         {
             StringBuilder strSql = new StringBuilder();
@@ -558,11 +418,7 @@ where b.curCheckProcess = c.lastCheckingProcess ");
             else
                 return ds.Tables[0];
         }
-
-
-
-
-
+        
         public DataTable GetCheckingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sStation, string sPIC, string sType)
         {
             StringBuilder strSql = new StringBuilder();
@@ -697,8 +553,7 @@ and a.day < @dDateTo ");
                 return ds.Tables[0];
             }
         }
-
-
+        
         public DataTable GetPackingDailyList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sStation, string sPIC)
         {
             StringBuilder strSql = new StringBuilder();
@@ -800,10 +655,7 @@ and a.day < @dDateTo ");
                 return ds.Tables[0];
             }
         }
-
-
-
-
+        
         public SqlCommand UpdateJob(Common.Class.Model.PQCQaViTracking model,SqlCommand cmd=null)
         {
             StringBuilder strSql = new StringBuilder();
@@ -857,7 +709,6 @@ and a.day < @dDateTo ");
             return  DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
         
-
         internal DataTable getProductivityReportForPQC(DateTime dDay, string sShift)
         {
             StringBuilder strSql = new StringBuilder();
@@ -968,8 +819,7 @@ and a.day < @dDateTo ");
                 return ds.Tables[0];
             }
         }
-
-
+        
         internal DataTable getBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription, string sNumber,DateTime? dPaintingDate, string sPIC, DateTime? dMFGDate)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1550,20 +1400,20 @@ order by a.userID asc");
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
                     select 
-                    case 
-	                    when month(a.day) = 1 then 'Jan-'
-	                    when month(a.day) = 2 then 'Feb-'
-	                    when month(a.day) = 3 then 'Mar-'
-	                    when month(a.day) = 4 then 'Apr-'
-	                    when month(a.day) = 5 then 'May-'
-	                    when month(a.day) = 6 then 'Jun-'
-	                    when month(a.day) = 7 then 'Jul-'
-	                    when month(a.day) = 8 then 'Aug-'
-	                    when month(a.day) = 9 then 'Sep-'
-	                    when month(a.day) = 10 then 'Oct-'
-	                    when month(a.day) = 11 then 'Nov-'
-	                    when month(a.day) = 12 then 'Dec-' 
-                    end + convert(varchar, Day(a.day)) as [Day]
+                    convert(varchar, Day(a.day)) + case 
+	                                                when month(a.day) = 1 then '/Jan'
+	                                                when month(a.day) = 2 then '/Feb'
+	                                                when month(a.day) = 3 then '/Mar'
+	                                                when month(a.day) = 4 then '/Apr'
+	                                                when month(a.day) = 5 then '/May'
+	                                                when month(a.day) = 6 then '/Jun'
+	                                                when month(a.day) = 7 then '/Jul'
+	                                                when month(a.day) = 8 then '/Aug'
+	                                                when month(a.day) = 9 then '/Sep'
+	                                                when month(a.day) = 10 then '/Oct'
+	                                                when month(a.day) = 11 then '/Nov'
+	                                                when month(a.day) = 12 then '/Dec' 
+                    end as [Day]
                     ,sum(isnull(a.TotalQty,0)) as totalQuantity
                     ,sum(isnull(a.acceptQty,0)) as totalPass
                     ,sum(isnull(a.rejectQty,0)) as totalFail
@@ -1797,84 +1647,8 @@ order by a.userID asc");
                 return ds.Tables[0];
             }
         }
-
         #endregion
-
-
-
-        public DataTable GetOuput(DateTime DateFrom, DateTime DateTo, string Shift, string DateNotIn, bool ExceptWeekends)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-sum(a.TotalOuput) as TotalOutput
-,sum(a.TotalRej) as TotalRej
-from 
-(
-	select 
-	1 as id
-	,isnull(TotalQty,0) as TotalOuput
-	,isnull(rejectQty,0) as TotalRej
-	from PQCQaViTracking 
-	where datetime >= @dateFrom and datetime < @dateTo");
-            if (Shift != "")
-            {
-                strSql.Append(" and shift = @shift ");
-            }
-
-            if (DateNotIn != "")
-            {
-                strSql.Append(" and day(day) not in (");
-
-                string[] strArrDate = DateNotIn.Split(',');
-                foreach (string date in strArrDate)
-                {
-                    if (Common.CommFunctions.isNumberic(date))
-                        strSql.Append(" '" + date + "', ");
-                }
-                strSql.Remove(strSql.Length, 1);
-
-                strSql.Append(" ) ");
-            }
-
-            if (ExceptWeekends)
-            {
-                strSql.Append("  DATEPART(WEEKDAY,datetime) not in (1,7) ");
-            }
-
-
-
-            strSql.Append(" ) a group by a.id ");
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@dateFrom",SqlDbType.DateTime),
-                new SqlParameter("@dateTo",SqlDbType.DateTime),
-                new SqlParameter("@shift",SqlDbType.VarChar,16)
-            };
-
-
-            paras[0].Value = DateFrom;
-            paras[1].Value = DateTo;
-            if (Shift != "")
-            {
-                paras[2].Value = DateTo;
-            }else
-            {
-                paras[2] = null;
-            }
-           
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-
-        }
-
-
+        
 
         public DataTable GetRealTime()
         {
@@ -1904,162 +1678,7 @@ from pqcpacktracking where day =@day ");
             else
                 return ds.Tables[0];
         }
-
-
-
-
-        public DataTable GetOnlineDayOutput(DateTime dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select 
-SUM(a.TotalQty) as Output_PCS
-,CONVERT(decimal(18,0), ROUND( SUM(a.TotalQty / b.materialCount ),0)) as Output_SET
-from pqcqavitracking a 
-left join (select partnumber, count(1) as materialCount from PQCBomDetail group by partNumber) b 
-on a.partNumber = b.partnumber
-where a.machineID in (1,2,3,4,5,6,7,8) and day = @day
-group by a.day ");
-
-
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@day", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = dDay;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
         
-        public DataTable GetWIPDayOutput(DateTime dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" select 
-SUM(a.TotalQty) as Output_PCS
-,CONVERT(decimal(18,0), ROUND( SUM(a.TotalQty / b.materialCount),0)) as Output_SET
-from pqcqavitracking a 
-left join (select partnumber, count(1) as materialCount from PQCBomDetail group by partNumber) b 
-on a.partNumber = b.partnumber
-where a.machineID in (11,12,13,14,15,16,17,21,22,23,24,25) and day = @day
-group by a.day ");
-
-
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@day", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = dDay;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
-
-
-        public DataTable GetRealTimeForOnline(DateTime day)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-
-            strSql.AppendFormat(@"
-with paintHis as (
-    select jobNumber, LotNo, PartNumber, convert(float,inquantity) as mrpTotal
-    from OPENDATASOURCE('SQLOLEDB',{0}).Taiyo_Painting.dbo.PaintingDeliveryHis
-    where datetime >= DATEADD(day, -30, @day) 
-)", StaticRes.Global.SqlConnection.SqlconnPainting);
-
-            
-            strSql.Append(@"
-select 
-a.machineID
-,a.nextViFlag
-,b.lotNo
-,a.jobId
-,a.partNumber 
-,ISNULL(b.mrpTotal,0) as mrpTotal
-,a.acceptQty
-,a.rejectQty
-,userID
-,dateTime
-
-from PQCQaViTracking a
-left join paintHis b 
-on a.jobId collate Chinese_PRC_CI_AS = b.jobNumber collate Chinese_PRC_CI_AS
-where 1=1 and machineID in (1,2,3,4,5,6,7,8)
-and a.day=@day ");
-            
-
-            SqlParameter[] paras ={new SqlParameter("@day",SqlDbType.DateTime)};
-            paras[0].Value = day;
-            
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-
-        }
-
-        public DataTable GetRealTimeForWIP(DateTime day)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-
-            strSql.AppendFormat(@"
-with paintHis as (
-    select jobNumber, LotNo, PartNumber, convert(float,inquantity) as mrpTotal
-    from OPENDATASOURCE('SQLOLEDB',{0}).Taiyo_Painting.dbo.PaintingDeliveryHis
-    where datetime >= DATEADD(day, -30, @day) 
-)", StaticRes.Global.SqlConnection.SqlconnPainting);
-
-
-            strSql.Append(@"
-select 
-a.machineID
-,a.nextViFlag
-,b.lotNo
-,a.jobId
-,a.partNumber 
-,ISNULL(b.mrpTotal,0) as mrpTotal
-,a.acceptQty
-,a.rejectQty
-,a.TotalQty
-,userID
-,dateTime
-from PQCQaViTracking a
-left join paintHis b 
-on a.jobId collate Chinese_PRC_CI_AS = b.jobNumber collate Chinese_PRC_CI_AS
-where 1=1 and machineID in (11,13,14,15,16,17)
-and a.day=@day ");
-
-
-            SqlParameter[] paras ={new SqlParameter("@day",SqlDbType.DateTime)};
-            paras[0].Value = day;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
-
-
         public SqlCommand UpdateForQASetup(Common.Class.Model.PQCQaViTracking model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -2092,53 +1711,7 @@ and a.day=@day ");
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
 
-
-
-        public DataTable GetRealTimeForPack(DateTime day)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-
-            strSql.AppendFormat(@"
-with paintHis as (
-    select jobNumber, LotNo, PartNumber, convert(float,inquantity) as mrpTotal
-    from OPENDATASOURCE('SQLOLEDB',{0}).Taiyo_Painting.dbo.PaintingDeliveryHis
-    where datetime >= DATEADD(day, -30, @day) 
-)", StaticRes.Global.SqlConnection.SqlconnPainting);
-
-
-            strSql.Append(@"
-select 
-a.machineID
-,a.nextViFlag
-,b.lotNo
-,a.jobId
-,a.partNumber 
-,ISNULL(b.mrpTotal,0) as mrpTotal
-,a.acceptQty
-,a.rejectQty
-,a.TotalQty
-,userID
-,dateTime
-from PQCPackTracking a
-left join paintHis b 
-on a.jobId collate Chinese_PRC_CI_AS = b.jobNumber collate Chinese_PRC_CI_AS
-where 1=1 and machineID in (12,21,22,23,24,25)
-and a.day=@day ");
-
-
-            SqlParameter[] paras ={new SqlParameter("@day",SqlDbType.DateTime)};
-            paras[0].Value = day;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
-      
+        
 
         public SqlCommand UpdatePQCMaintenance(Common.Class.Model.PQCQaViTracking model)
         {
@@ -2373,74 +1946,6 @@ where day >= @dateFrom and day < @dateTo ");
             };
 
             parameters[0].Value = sJob;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-                return null;
-            else
-                return ds.Tables[0];
-        }
-
-
-        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select
-jobID 
-,startTime
-,stopTime
-,a.partNumber
-,case when  CHARINDEX('Laser',c.processes,0) > 0 and a.processes = 'CHECK#1' 
-	then 'Laser'
-	else 'WIP' 
-end as Process
-,b.MouldRej
-,b.PaintRej
-,b.LaserRej
-,b.OthersRej
-,rejectQty
-,acceptQty
-,rejectQty *  isnull( c.unitCost,0) as rejPrice
-,Upper(userID) as userID
-,d.materialCount
-from PQCQaViTracking a
-left join (
-	select 
-	trackingID
-	,isnull(sum(case when defectDescription = 'Mould' then isnull(rejectQty,0) end),0) as MouldRej
-	,isnull(sum(case when defectDescription = 'Paint' then isnull(rejectQty,0) end) ,0) as PaintRej
-	,isnull(sum(case when defectDescription = 'Laser' then isnull(rejectQty,0) end) ,0) as LaserRej
-	,isnull(sum(case when defectDescription = 'Others' then isnull(rejectQty,0) end),0)  as OthersRej
-	from PQCQaViDefectTracking
-    where day = @date
-	group by trackingID
-) b on a.trackingID = b.trackingID
-left join PQCBom c on a.partNumber = c.partNumber
-left join  (
-    select partNumber , count(1) as materialCount 
-    from PQCBomDetail 
-    group by partnumber 
-) d  on c.partNumber = d.partNumber
-where 1=1  ");
-
-            strSql.AppendLine(" and a.day = @date ");
-            if (!string.IsNullOrEmpty(sShift)) strSql.AppendLine(" and a.shift = @shift ");
-            if (!string.IsNullOrEmpty(sUserID)) strSql.AppendLine(" and a.userID = @userID");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@date", SqlDbType.DateTime2),
-                new SqlParameter("@shift", SqlDbType.VarChar,50),
-                new SqlParameter("@userID", SqlDbType.VarChar,50),
-            };
-
-            parameters[0].Value = dDate;
-            if (!string.IsNullOrEmpty(sShift)) parameters[1].Value = sShift; else parameters[1] = null;
-            if (!string.IsNullOrEmpty(sUserID)) parameters[2].Value = sUserID; else parameters[2] = null;
-            
 
 
 

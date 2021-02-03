@@ -15,9 +15,10 @@ namespace Common.ExtendClass.PQCSummaryReport
         /// <summary>
         /// vitracking 根据partNumber, jobId, processes汇总
         /// 通过part no关联 pqcbom
-        /// 通过jobid关联 根据jobId, processes汇总的defect tracking
-        /// 获取一个job一条的详细列表
-        /// currentProcess, containLaserFlag, lastCheckProcess用于判断分类 laser, wip.
+        /// 通过jobid关联 (根据jobId, processes汇总的defect tracking)
+        /// 
+        /// 来获取一个job一条的详细列表
+        /// 字段currentProcess, containLaserFlag, lastCheckProcess用于判断分类 laser, wip.
         /// 
         /// 具体的分组,归类在代码中根据具体需求再改.
         /// </summary>

@@ -2,10 +2,6 @@
 <%@ Register assembly="Infragistics2.WebUI.WebDateChooser.v7.3, Version=7.3.20073.38, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI.WebSchedule" tagprefix="igsch" %>
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-<link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-<link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-
-<script src="../js/Dashboard.js"> </script>
 
     <div style="position: relative; width: 1125px; height: 257px; margin: auto; top: 0px; left: 0px;">
 
@@ -32,6 +28,7 @@
                         <asp:ListItem Value="6">Machine 6</asp:ListItem>
                         <asp:ListItem Value="7">Machine 7</asp:ListItem>
                         <asp:ListItem Value="8">Machine 8</asp:ListItem>
+                        <asp:ListItem Value="9">Machine 9</asp:ListItem>
                     </asp:DropDownList>
                 </td>
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%;   font-family: 'Arial Unicode MS'; height: 50px;" >
@@ -89,7 +86,7 @@
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 15%;   font-family: 'Arial Unicode MS'; height: 50px;" >
                     <asp:Label runat="server" Visible="false" Text="CTRL :" ID="lb_Machine_CTRL"></asp:Label>
                     <asp:Label runat="server" Visible="false" Text="Date :" ID="lb_RobotArm_Date"></asp:Label>
-                    <asp:Label runat="server" Visible="false" Text="Date :" ID="lb_Main_ScrewDiameter"></asp:Label>
+                    <asp:Label runat="server" Visible="false" Text="Screw Diameter :" ID="lb_Main_ScrewDiameter"></asp:Label>
                 </td>
                 <td style = "padding: 10px 10px 10px 25px; border: 1px solid #CCCCCC; width: 25%;   font-family: 'Arial Unicode MS'; height: 50px;">
                     <asp:TextBox AutoCompleteType="Disabled" Visible="false" runat="server" ID="txt_Machine_CTRL" Width="100%" BorderStyle="Solid" BorderWidth="1px" Height="23px" ></asp:TextBox>  

@@ -3,122 +3,81 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Taiyo - Button Report</title>
-
-
-    <script src="../../plugins/TableFreeze-master/jquery.js"></script>
-    <script src="../../plugins/TableFreeze-master/jquery-migrate-1.2.1.js"></script>
-    <script src="../../plugins/TableFreeze-master/TableFreeze.js"></script>
-
-
-
     <link href="../../plugins/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="../../plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <link href="../../plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-    <script src="../../Dashboard CSS JS/JS/GlobalConfig.js"></script>
-    <script src="../../Dashboard CSS JS/JS/SharedJS.js"></script>
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
-
-
-
+    <style>
+        #divTableContainer{
+            overflow: auto;
+        }
+        #ddlType,#txtDateFrom{
+            width:120px;
+        }
+        .m5{
+            margin:5px;
+        }
+        .mt_mb{
+            margin-top:6px;
+            margin-bottom:4px;
+        }
+        .fr{
+            float:right;
+        }
+        #Button1{
+            width:100px; 
+            height:34px; 
+            border-radius:4px;
+        }
+        #dgButton{
+            width:100%;
+            border: 1px solid #000;
+        }
+   
+    </style>
 </head>
 <body>
-    <form id="form1" runat="server">
-        
-        <div class="container container-fluid" style="width:100%;" >
-
+    <form id="form1" runat="server">        
+        <div class="container-fluid">
             <div class="row titleRow">
                 <img class="titleImg" src="../../Resources/Images/headericon.gif" />
-                <span class="titleText"><asp:label runat="server" ID="lblUserHeader"/></span>
+                <span class="titleText"><asp:Label runat="server" ID="lbHeader"></asp:Label></span>
             </div>
-
-
             <div class="row">
-                <div class="col-md-12 panel panel-default" style=" margin-bottom:4px;margin-top:6px;">
+                <div class="col-md-12 panel panel-default mt_mb">
                     <div class="form-inline" role="form">
-                        <div class="form-group searchingBarCol" style="margin:5px;">
+                        <div class="form-group searchingBarCol m5">
                             <label>PQC Date:</label>
-                            <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control" data-date-format="yyyy-mm-dd"></asp:TextBox>
                         </div>
-                        <%--<div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Date To:</label>
-                            <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="120"></asp:TextBox>
-                        </div>--%>
-
-                        <div class="form-group searchingBarCol" style="margin:5px;">
+                        <div class="form-group searchingBarCol m5">
                             <label>Type:</label>
-                            <asp:DropDownList runat="server" ID="ddlType" CssClass="form-control" Width="120">
+                            <asp:DropDownList runat="server" ID="ddlType" CssClass="form-control">
                                 <asp:listitem Text="All" Value=""></asp:listitem>
                                 <asp:listitem Text="WIP" Value="WIP"></asp:listitem>
                                 <asp:listitem Text="Laser" Value="Laser"></asp:listitem>
                             </asp:DropDownList>
                         </div>
-
-                        <%--<div class="form-group searchingBarCol">
-                            <label>Model:</label>
-                            <asp:DropDownList runat="server" ID="ddlModel" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Part No:</label>
-                            <asp:TextBox runat="server" ID="txtPartNo" CssClass="form-control" Width="120"></asp:TextBox>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Supplier:</label>
-                            <asp:DropDownList runat="server" ID="ddlSupplier" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Color:</label>
-                            <asp:DropDownList runat="server" ID="ddlColor" CssClass="form-control" Width="120"></asp:DropDownList>
-                        </div>
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Coating:</label>
-                            <asp:DropDownList runat="server" ID="ddlCoating" CssClass="form-control" Width="120">
-                                <asp:listitem Text="All" Value=""></asp:listitem>
-                                <asp:listitem Text="One Coat" Value="One Coat"></asp:listitem>
-                                <asp:listitem Text="Two Coat" Value="Two Coat"></asp:listitem>
-                                <asp:listitem Text="Three Coat" Value="Three Coat"></asp:listitem>
-                                <asp:listitem Text="Print Coat" Value="Print Coat"></asp:listitem>
-                            </asp:DropDownList>
-                        </div>
-                        
-                        <div class="form-group searchingBarCol" style="margin:5px;">
-                            <label>Job No:</label>
-                            <asp:TextBox runat="server" ID="txtJobNo" CssClass="form-control" Width="120"></asp:TextBox>
-                        </div>--%>
-
-                        <div class="form-group searchingBarCol" style="margin:5px; float:right;">
-                            <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="BtnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
+                        <div class="form-group searchingBarCol fr m5">
+                            <asp:Button ID="Button1" runat="server" Text="Generate" OnClick="BtnGenerate_Click" CssClass="btn-success" />
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
 
-
-        <div id="divTableContainer" style="overflow: auto;" >
-
-            <asp:DataGrid runat="server" Width ="100%" ID ="dgButton" CellPadding="10" BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" ForeColor="#333333"  CellSpacing="2" AutoGenerateColumns="false" CssClass="table">
-                <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
-                <EditItemStyle BackColor="#999999" />
-                <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-                <HeaderStyle BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Wrap="False" Height="30px" HorizontalAlign="left" VerticalAlign="Middle"/>
-                <ItemStyle BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" BackColor="#F7F6F3" ForeColor="#333333" Wrap="False"  HorizontalAlign="left" VerticalAlign="Middle"  />
-                <PagerStyle BackColor="#284775" HorizontalAlign="Center" BorderStyle="Solid" BorderColor="Black" BorderWidth="1px" PageButtonCount="5" />
-                <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+        <div id="divTableContainer">
+            <asp:DataGrid runat="server" ID ="dgButton" AutoGenerateColumns="false" CssClass="table">                
+                <HeaderStyle BorderColor="Black" BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" HorizontalAlign="left" VerticalAlign="Middle"/>
+                <ItemStyle BorderColor="Black" BackColor="#F7F6F3" HorizontalAlign="left" VerticalAlign="Middle"  />
                 <Columns>
-
                     <asp:BoundColumn DataField="SN" HeaderText="SN"></asp:BoundColumn>
                     <asp:BoundColumn DataField="model" HeaderText="Model" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="jobID" HeaderText="Job No"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="lotNo" HeaderText="Lot No" Visible="false"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="lotNo" HeaderText="Lot No" Visible="true"></asp:BoundColumn>
                     <asp:BoundColumn DataField="partNo" HeaderText="Part No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="materialNo" HeaderText="Material No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="lotQty" HeaderText="Lot<br/>Qty"></asp:BoundColumn>
@@ -126,12 +85,11 @@
                     <asp:BoundColumn DataField="rejQty" HeaderText="Rej Qty" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="rejRate" HeaderText="Rej%" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn DataField="rejRateDisplay" HeaderText="Rej(%)"></asp:BoundColumn>
-                    <%--<asp:BoundColumn DataField="supplier" HeaderText="Supplier" Visible="false"></asp:BoundColumn>--%>
                     <asp:BoundColumn DataField="rejCost" HeaderText="Rej<br/>Amount" HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
 
 
                     <%--12--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Raw_Part_Scratch" HeaderText="(TM)<br/>Raw Part<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Raw_Part_Scratch" HeaderText="(TM)<br/>Raw<br/>Part<br/>Scratch"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Oil_Stain" HeaderText="(TM)<br/>Oil Stain"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dented" HeaderText="(TM)<br/>Dented"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Dust" HeaderText="(TM)<br/>Dust"></asp:BoundColumn>
@@ -168,7 +126,7 @@
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="TTS_Mould_TotalRejRate" HeaderText="(TM)<br/>TotalRej%"></asp:BoundColumn>
 
                     <%--47--%>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Raw_Part_Scratch" HeaderText="(VM)<br/>Raw Part<br/>Scratch"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Raw_Part_Scratch" HeaderText="(VM)<br/>Raw<br/>Part<br/>Scratch"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Oil_Stain" HeaderText="(VM)<br/>Oil Stain"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dented" HeaderText="(VM)<br/>Dented"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#ddebf7" ItemStyle-HorizontalAlign="Center" DataField="Vendor_Dust" HeaderText="(VM)<br/>Dust"></asp:BoundColumn>
@@ -295,21 +253,20 @@
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRej" HeaderText="(O)<br/>TotalRej"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRejRate" HeaderText="(O)<br/>TotalRej%"></asp:BoundColumn>
 
-                    <asp:BoundColumn DataField="InspBy" HeaderText="Insp By"></asp:BoundColumn>
-                            
+                    <asp:BoundColumn DataField="InspBy" HeaderText="Insp By"></asp:BoundColumn>                            
                 </Columns>
             </asp:DataGrid>
-        </div>
-      
+        </div>      
     </form>
 
-
-
-    <link href="../../plugins/bigautocomplete/jquery.bigautocomplete.css" rel="stylesheet" />
-    <script src="../../plugins/bigautocomplete/jquery.bigautocomplete.js"></script>
-
+    <script src="../../plugins/TableFreeze-master/jquery.js"></script>
+    <script src="../../plugins/TableFreeze-master/jquery-migrate-1.2.1.js"></script>
+    <script src="../../plugins/TableFreeze-master/TableFreeze.js"></script>
+    <script src="../../plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+    <script src="../../Dashboard CSS JS/JS/GlobalConfig.js"></script>
+    <script src="../../Dashboard CSS JS/JS/SharedJS.js"></script>
     <script type='text/javascript'>
-        $('.formDateTimePicker').datetimepicker({
+        $('#txtDateFrom').datetimepicker({
             weekStart: 1,
             todayBtn: 1,    
             autoclose: 1,
@@ -320,23 +277,29 @@
             initialDate: new Date()
         });
 
-
         $(document).ready(function () {
-
-            setAutoComplete($('#txtPartNo'), 'Laser');
+            
+            var type = getUrlParam('Description');
+            if (type === 'BUTTON') {
+                document.title = 'Taiyo - Button Report';
+            } else {
+                document.title = 'Taiyo - Total Report';
+            }
 
             var height = $(window).height() - 120;
             var width = $(window).width() + 10;
-
             $('#divTableContainer').height(height);
             $('#divTableContainer').width(width);
 
-            
-            
-            $("#dgButton").FrozenTable(1, 0, 7);
-
+            $("#dgButton").FrozenTable(1, 0, 8);
         });
 
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数   
+            if (r != null) return unescape(r[2]); return null; //返回参数值  
+        }
     </script>
 
 </body>

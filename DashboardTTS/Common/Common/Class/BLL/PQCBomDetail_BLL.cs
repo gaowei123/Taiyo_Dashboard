@@ -220,6 +220,25 @@ namespace Common.Class.BLL
         }
 
 
+        public Dictionary<string,int> GetMaterialCountList(string PartNo)
+        {
+            DataTable dt  = dal.GetMaterialCount(PartNo);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+            Dictionary<string, int> dicMaterialCount = new Dictionary<string, int>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                string partNo = dr["partNumber"].ToString();
+                int count = int.Parse(dr["materialCount"].ToString());
+
+                dicMaterialCount.Add(partNo, count);
+            }
+
+            return dicMaterialCount;
+        }
+
         #endregion
     }
 }

@@ -3,65 +3,60 @@
     ViewBag.Title = "OutputSummaryChart";
 }
 
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-
+<style>
+    label{
+        width:35%;
+    }
+    #txtDateFrom,#txtDateTo{
+        width:60%;
+    }
+</style>
 
 <div class="container">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Overall Output Summary Chart</span>
     </div>
-    
-
     <div class="row">
         <div class="col-md-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
                 <div class="col-md-3">
-                    <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                    <label>Date From:</label>
+                    <input id="txtDateFrom"  type="text" class="form-control" 
+                           data-date-format="yyyy-mm-dd" 
+                           placeholder="Please choose date" />
                 </div>
                 <div class="col-md-3">
-                    <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                    <label>Date To:</label>
+                    <input id="txtDateTo" type="text" class="form-control" 
+                           data-date-format="yyyy-mm-dd" 
+                           placeholder="Please choose date" />
                 </div>
-                <div class="col-md-3">
-                    <label for="ddlShift">Shift:</label>
-                    <select id="ddlShift" class="form-control">
-                        <option value="">All</option>
-                        <option value="Day">Day</option>
-                        <option value="Night">Night</option>
-                    </select>
-                </div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
-                    <input type="button" class="btn btn-success" value="Generate" onclick="generateChart();" />
+                <div class="col-md-3"></div>
+                <div class="col-md-3" style="text-align:center; padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" />
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
     <div class="row panel panel-default">
         <div class="col-lg-12">
-            <div id="chartOutput" style="width:100%;"></div>
+            <div id="chart"></div>
         </div>
     </div>
-
 </div>
 
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*echarts组件*@
 <script src="~/plugins/incubator-echarts-master/dist/echarts.min.js"></script>
 
 <script type="text/javascript">
 
-    var apiGetOutputChartData = window.globalConfig.rootDirectory + '/OverallReport/GetOutputChartData';
-
-    //初始化时间框
-    $('#txtDateFrom').datetimepicker({
+    $("input[type='text']").datetimepicker({
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
@@ -71,32 +66,18 @@
         forceParse: 0,
         initialDate: new Date()
     });
-    $('#txtDateTo').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0,
-        initialDate: new Date()
-    });
-
-    //初始化echart
-    var outputChart = echarts.init(document.getElementById('chartOutput'));
-
-
+    var apiGetData = window.globalConfig.rootDirectory + '/OverallReport/GetOutputChartData';
+    var chart = echarts.init(document.getElementById('chart')); 
+    $("input[type='button']").on("click", generateChart);
+    let chartHeight = $(window).height() - 220;
 
 
     $(document).ready(function () {
-
         var lastDay = getLastReportDay();
         var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
-
         $('#txtDateFrom').val(strLastDay);
         $('#txtDateTo').val(strLastDay);
         
-
         generateChart();
     });
 
@@ -105,8 +86,7 @@
 
 
     function generateChart() {
-
-
+             
         if ($("#txtDateFrom").val() == '') {
             alert('Date From can not be empty, please choose !')
             return false;
@@ -120,290 +100,153 @@
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: apiGetOutputChartData,
+            url: apiGetData,
             data: {
-                "DateFrom": $("#txtDateFrom").val(),
-                "DateTo": $("#txtDateTo").val(),
-                "Shift": $("#ddlShift").val()
+                DateFrom: $("#txtDateFrom").val(),
+                DateTo: $("#txtDateTo").val()
             },
 
             beforeSend: function () {
-                outputChart.showLoading();
+                chart.showLoading();
             },
 
             success: function (data) {
-
-                if (data == null || data == undefined || data.length == 0) {
-                    alert('There is no record found, Please try again!');
+                if (data == '' || data.length == 0) {
+                    alert('There is no record found!');
                     return false;
                 }
 
-           
-                var passSeries = {
-                    name: 'Output',
-                    type: 'bar',
-                    stack: 'output',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-                var rejSeries = {
-                    name: 'Rej',
-                    type: 'bar',
-                    stack: 'output',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
 
-                
-                //var mouldSetupSeries = {
-                //    name: 'Moulding Setup',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-                //var mouldIPQCSeries = {
-                //    name: 'Moulding IPQC Rej',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
+                let xAxisCategory = [];
+                let totalQtyData = [];
+                let rejQtyData = [];
+                let rejRateData = [];
 
-
-                //var paintQARejSeries = {
-                //    name: 'Painting QA',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-                //var paintSetupSeries = {
-                //    name: 'Painting Setup',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-
-
-                //var laserVisionRejSeries = {
-                //    name: 'Laser Vision Rej',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-                //var laserSetupSeries = {
-                //    name: 'Laser Setup',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-                //var laserBuyoffSeries = {
-                //    name: 'Laser Buyoff',
-                //    type: 'bar',
-                //    stack: 'detailRej',
-                //    data: [],
-                //    label: {
-                //        show: true,
-                //        position: 'inside'
-                //    }
-                //};
-
-
-                var ttsMouldRejSeries = {
-                    name: 'TTS Moulding Rej',
-                    type: 'bar',
-                    stack: 'detailRej',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-                var vendorMouldRejSeries = {
-                    name: 'Vendor Moulding Rej',
-                    type: 'bar',
-                    stack: 'detailRej',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-                var paintRejSeries = {
-                    name: 'Painting Rej',
-                    type: 'bar',
-                    stack: 'detailRej',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-                var laserRejSeries = {
-                    name: 'Laser Rej',
-                    type: 'bar',
-                    stack: 'detailRej',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-                var othersRejSeries = {
-                    name: 'Others Rej',
-                    type: 'bar',
-                    stack: 'detailRej',
-                    data: [],
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    }
-                };
-
-
-                for (var i = 0; i < data.length; i++) {
-
-                    var model = data[i];
-
-                    passSeries.data.push(model.PassQty);
-                    rejSeries.data.push(model.RejQty);
-
-
-                    //mouldSetupSeries.data.push(model.MouldSetup);
-                    //mouldIPQCSeries.data.push(model.IPQCRej);
-
-
-                    //paintQARejSeries.data.push(model.PaintQARej);
-                    //paintSetupSeries.data.push(model.PaintSetupRej);
-
-
-                    //laserVisionRejSeries.data.push(Number(model.RejQty) - Number(model.LaserSetup) - Number(model.LaserBuyoff));
-                    //laserSetupSeries.data.push(model.LaserSetup);
-                    //laserBuyoffSeries.data.push(model.LaserBuyoff);
-
-                    
-                    ttsMouldRejSeries.data.push(model.TTSMouldRej);
-                    vendorMouldRejSeries.data.push(model.VendorMouldRej);
-                    paintRejSeries.data.push(model.PaintRej);
-                    laserRejSeries.data.push(model.LaserRej);
-                    othersRejSeries.data.push(model.OthersRej);
-
+              
+                for (let item of data) {
+                    xAxisCategory.push(item.Department);
+                    totalQtyData.push(item.TotalQty);
+                    rejQtyData.push(item.RejQty);
+                    rejRateData.push(item.RejRate.replace('%', ''));
                 }
+
+               
+
+
+
+                let seriesTotalQty = {
+                    name: 'Output Qty',
+                    type: 'bar',
+                    stack: 'output',
+                    yAxisIndex: 0,
+                    data: totalQtyData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (obj) {
+                            return Number(obj.value) == 0 ? '' : obj.value;
+                        }
+                    }
+                };
+                let seriesRejQty = {
+                    name: 'Rej Qty',
+                    type: 'bar',
+                    stack: 'output',
+                    yAxisIndex: 0,
+                    data: rejQtyData,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: function (obj) {
+                            return Number(obj.value) == 0 ? '' : obj.value;
+                        }
+                    }
+                };
+                let seriesRejRate = {
+                    name: 'Rej %',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: rejRateData,
+                    label: {
+                        show: true,
+                        formatter: function (obj) {
+                            return obj.value == '0.00'  ? '' : obj.value + '%';
+                        }
+                    }
+                };
 
 
                 var option = {
-
+                    color: ['#006400', '#c23531', '#c23531'],
                     title: {
                         text: 'Overall Output Summary Chart'
                     },
-
                     legend: {
-                        data: ['Output', 'Rej', 'TTSMouldRej', 'VendorMouldRej', 'PaintRej', 'LaserRej', 'OthersRej']
+                        data: ['Output Qty', 'Rej Qty', 'Rej %'],
+                        top: 10
                     },
-
-                    //tooltip: {
-                    //    show: true,
-                    //    //trigger: 'axis',
-                    //    crossStyle: {
-                    //        color: '#999'
-                    //    },
-                    //    //自定义tooltip格式
-                    //    formatter: function (params) {
-                    //        var dataModel = data.find(function (x) {
-                    //            return x.empoyeeID == params.name;
-                    //        })
-                    //        var res = '<div>';
-                    //        res += '<p><b>' + dataModel.empoyeeID + '  -  ' + dataModel.userName + '</b></p>';
-                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#91c7ae;"></span>Attendance:' + dataModel.attendanceDays + ' Days</p>';
-                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#c23531;"></span>Leave: ' + dataModel.leaveDays + ' Days</p>';
-                    //        res += '<p><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#FFA500;"></span>Attend Rate: ' + dataModel.attendaneRate + '% </p>';
-                    //        res += "</div>";
-                    //        return res;
-                    //    }
-                    //},
-
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
                             type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                        formatter: function (params) {
+                            let html = params[0].name + "<br>";
+                            for (let i = 0; i < params.length; i++) {
+                                html += '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:' + params[i].color + ';"></span>'
+                                if (params[i].seriesName == "Rej %") {
+                                    html += params[i].seriesName + ":" + params[i].value + "%<br>";
+                                } else {
+                                    html += params[i].seriesName + ":" + params[i].value + "<br>";
+                                }                               
+                            }
+                            return html;
                         }
+                      
                     },
                     xAxis: [
                         {
                             type: 'category',                    
-                            data: ['Moulding', 'Painting', 'Laser', 'PQC', 'Packing']        
+                            data: xAxisCategory
                         }
                     ],
                     yAxis: [
                         {
-                            type: 'value'
+                            type: 'value',
+                            name: 'Output'
+                        },
+                        {
+                            type: 'value',
+                            name: 'Rej%',
+                            min: 0,                          
+                            position: 'right',
+                            axisLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: 'red'
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} %'
+                            }
                         }
                     ],
 
-
-                    series: [
-                       passSeries,
-                       rejSeries,
-
-                       //mouldSetupSeries,
-                       //mouldIPQCSeries,
-
-                       //paintQARejSeries,
-                       //paintSetupSeries,
-
-
-                       //laserVisionRejSeries,
-                       //laserSetupSeries,
-                       //laserBuyoffSeries,
-
-
-                       ttsMouldRejSeries,
-                       vendorMouldRejSeries,
-                       paintRejSeries,
-                       laserRejSeries,
-                       othersRejSeries
-                    ]
+                    series: [ seriesTotalQty, seriesRejQty, seriesRejRate ]
                 };
 
-                outputChart.hideLoading();
-
-                outputChart.clear();
-                outputChart.setOption(option);
-
-                var bHeight = $(window).height() - 220;
-                outputChart.resize({ height: bHeight });
+                chart.clear();
+                chart.setOption(option, true);
 
             },
+
+            complete: function () {
+                chart.hideLoading();              
+                chart.resize({ height: chartHeight });
+            },
+
             error: function () {
-                alert("Get chart data error !");
+                alert("error, get data fail !");
             }
         });
     }
@@ -411,14 +254,7 @@
 
 
     $(window).resize(function () {
-        var bHeight = $(window).height() - 220;
-        outputChart.resize({ height: bHeight });
+        chart.resize({ height: chartHeight });
     });
-
-
-
-
-
-
 
 </script>

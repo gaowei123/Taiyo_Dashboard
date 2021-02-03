@@ -78,8 +78,6 @@
 
 <script type="text/javascript">
 
-    
-
     var apiGetCheckingData = window.globalConfig.rootDirectory + '/PQC_Product/GetSummaryCheckingList';
     var apiGetPackingData = window.globalConfig.rootDirectory + '/PQC_Product/GetSummaryPackingList';
 
@@ -119,7 +117,7 @@
 
 
 
-
+   
 
     function search() {
 
@@ -129,6 +127,14 @@
             PartNo: $('#ddlPartNo').val(),
             Shift: $("#ddlShift").val()
         }
+
+        //查询条件限制, 没选定PartNo的情况下, from-to跨度最多180天
+        let days =   datedifference(searchParams.DateFrom, searchParams.DateTo);
+        if (searchParams.PartNo === '' && days > 180) {
+            alert('From - To can not over 180 days');
+            return false;
+        }
+
 
 
         let baseColumn = [
@@ -223,15 +229,12 @@
 
             success: function (data) {
                 if (data == null || data == undefined || data === "" || data.length== 0) {
-                    $('#tbLaser').bootstrapTable('hideLoading');
-                    $('#tbWIP').bootstrapTable('hideLoading');
+                    $('#tbLaser').bootstrapTable('destroy');
+                    $('#tbWIP').bootstrapTable('destroy');
+                    $('#tbPacking').bootstrapTable('destroy');
                     alert("No record found !");
                     return false;
                 }
-
-
-                console.log(data);
-
 
                 let laserData = data.filter(function (item) {
                     return  item.Type == "Laser";
@@ -321,11 +324,8 @@
 
             error: function () {
                 alert("Get laser/wip data fail !");
-                $('#tbLaser').bootstrapTable('hideLoading');
-                $('#tbWIP').bootstrapTable('hideLoading');
-                
-                $('#tbLaser').bootstrapTable('resetView');
-                $('#tbWIP').bootstrapTable('resetView');
+                $('#tbLaser').bootstrapTable('destroy');
+                $('#tbWIP').bootstrapTable('destroy');
             }
         });
 
@@ -375,7 +375,7 @@
             },
             onLoadError: function () {
                 alert('Get packing data error');
-                $('#tbPacking').bootstrapTable('resetView');
+                $('#tbPacking').bootstrapTable('destroy');
             }
         });
       

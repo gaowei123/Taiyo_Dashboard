@@ -13,8 +13,7 @@ namespace Common.DAL
 	{
 		public PQCQaViDetailTracking_DAL()
 		{}
-		#region  Method
-
+	
 		public Common.Class.Model.PQCQaViDetailTracking_Model GetModel(string sTrackingID, string sMaterialNo)
 		{
 			//该表无主键信息，请自定义主键/条件字段
@@ -225,68 +224,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-        public SqlCommand UpdateJob(Common.Class.Model.PQCQaViDetailTracking_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"update PQCQaViDetailTracking set 
-                                    totalQty = @totalQty , 
-                                    passQty = @passQty, 
-                                    updatedTime =  GETDATE()
-                                    where trackingID  =@trackingID and materialPartNo = @materialPartNo ");
-            SqlParameter[] parameters = {
-                new SqlParameter("@totalQty", SqlDbType.Decimal),
-                new SqlParameter("@passQty", SqlDbType.Decimal),
-                new SqlParameter("@trackingID", SqlDbType.VarChar,100),
-                new SqlParameter("@materialPartNo", SqlDbType.VarChar,100)              
-            };
-
-            parameters[0].Value = model.totalQty;
-            parameters[1].Value = model.passQty;
-            parameters[2].Value = model.trackingID;
-            parameters[3].Value = model.materialPartNo;
-     
-
-         
-            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
-
-        public SqlCommand UpdateJobByLaserMaintenance(Common.Class.Model.PQCQaViDetailTracking_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@" update PQCQaViDetailTracking set
-                                totalQty = @totalQty, 
-                                passQty = @passQty, 
-                                lastUpdatedTime = @lastUpdatedTime,
-                                updatedTime =  @updatedTime,
-                                remarks = @remarks
-                            where trackingID  =@trackingID ");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@totalQty", SqlDbType.Decimal),
-                new SqlParameter("@passQty", SqlDbType.Decimal),
-                new SqlParameter("@trackingID", SqlDbType.VarChar),
-                new SqlParameter("@remarks", SqlDbType.VarChar),
-                new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
-                new SqlParameter("@updatedTime", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = model.totalQty;
-            parameters[1].Value = model.passQty;
-            parameters[2].Value = model.trackingID;
-            parameters[3].Value = model.remarks;
-            parameters[4].Value = model.lastUpdatedTime;
-            parameters[5].Value = model.lastUpdatedTime;
-
-
-
-            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-        }
-
-
-
-
+           
         public SqlCommand UpdatePQCMaintenance(Common.Class.Model.PQCQaViDetailTracking_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -327,9 +265,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-
-
+        
         public SqlCommand UpdateForQASetup(Common.Class.Model.PQCQaViDetailTracking_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -362,9 +298,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-
-
+        
         public SqlCommand DeleteJobCommand(string  sJobNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -379,8 +313,7 @@ namespace Common.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
-
-
+        
         internal DataTable GetPaintTcInventory(DateTime dStartTime)
         {
             StringBuilder strSql = new StringBuilder();
@@ -420,12 +353,7 @@ group by a.jobId, b.materialName ");
 
             return ds.Tables[0];
         }
-
-
-
-        #endregion  Method
-
-
+        
     }
 }
 

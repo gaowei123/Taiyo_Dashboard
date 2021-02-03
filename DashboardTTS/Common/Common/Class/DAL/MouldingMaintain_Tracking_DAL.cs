@@ -169,9 +169,7 @@ namespace Common.Class.DAL
 
 
         #endregion  BasicMethod
-
-
-        #region  MyFunc
+        
         public DataSet GetList()
         {
             StringBuilder strSql = new StringBuilder();
@@ -243,9 +241,7 @@ namespace Common.Class.DAL
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
 
-
-
-        #endregion
+        
     }
 }
 

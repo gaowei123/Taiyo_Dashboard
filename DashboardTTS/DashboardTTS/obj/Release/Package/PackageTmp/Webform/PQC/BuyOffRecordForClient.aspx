@@ -25,7 +25,7 @@
         .tr{
             width:100%;
         }
-            .tableMain{
+        .tableMain{
             width: 100%; 
             border-collapse: separate; 
             border-spacing: 10px; 

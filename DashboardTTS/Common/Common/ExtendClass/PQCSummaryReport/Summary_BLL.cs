@@ -24,7 +24,7 @@ namespace Common.ExtendClass.PQCSummaryReport
         /// checking/wip由同一段逻辑生成, 通过type字段区分.
         /// 
         /// 
-        /// job查询不做限制 -- 旧逻辑保留下来的
+        /// job查询不做限制  --旧逻辑保留
         /// 
         /// checking分laser,wip2个表格显示.
         /// laser btn: 
@@ -308,7 +308,7 @@ namespace Common.ExtendClass.PQCSummaryReport
         /// 用于生成packing列表信息.
         /// 
         /// 
-        /// job查询不做限制 -- 旧逻辑保留下来的
+        /// job查询不做限制   --旧逻辑保留
         /// 
         /// packing分online, offline
         /// online: 有laser工序, 并且只check一次的为online
@@ -358,12 +358,12 @@ namespace Common.ExtendClass.PQCSummaryReport
                 offlineRej = offlineList.Sum(p => p.RejQty);
                 offlineRejRate = offlineTotalQty == 0 ? "0.00%" : Math.Round(offlineRej / offlineTotalQty * 100, 2).ToString("0.00") + "%";
             }
-            
+
 
             return new List<Summary_Model.Report>() {
                 new Summary_Model.Report()
                 {
-                    Type = PQCReportType.Packing.GetDescription(),
+                    Type = PQCReportType.PackOnline.GetDescription(),
                     PQCDept = "On-Line",
                     TotalOutput = onlineTotalQty,
                     ActualOutput = onlinePassQty,
@@ -371,7 +371,7 @@ namespace Common.ExtendClass.PQCSummaryReport
                 },
                 new Summary_Model.Report()
                 {
-                    Type = PQCReportType.Packing.GetDescription(),
+                    Type = PQCReportType.PackOffline.GetDescription(),
                     PQCDept = "Off-Line",
                     TotalOutput = offlineTotalQty,
                     ActualOutput = offlinePassQty,
@@ -379,7 +379,7 @@ namespace Common.ExtendClass.PQCSummaryReport
                 },
                 new Summary_Model.Report()
                 {
-                    Type = PQCReportType.Packing.GetDescription(),
+                    Type = "",
                     PQCDept = "Total",
                     TotalOutput = detailList.Sum(p => p.TotalQty),
                     ActualOutput = detailList.Sum(p => p.PassQty),

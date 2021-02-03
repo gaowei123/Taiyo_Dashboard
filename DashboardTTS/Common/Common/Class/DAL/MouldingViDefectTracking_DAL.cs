@@ -154,8 +154,7 @@ namespace Common.Class.DAL
             }
             return DBHelp.SqlDB.Query(strSql.ToString(),paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-      
+              
         public DataSet GetCheckerByPart(string sMaterial_No, DateTime? dDay)
         {
             StringBuilder strSql = new StringBuilder();
@@ -204,34 +203,6 @@ namespace Common.Class.DAL
             return ds;
         }
 
-        public DataSet GetDayOuput(DateTime dDay)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            strSql.Append(@" select 
-                            day
-                            ,sum(isnull( acountReading,0)) as TotalOuput
-                            ,sum(convert(decimal(18,0), isnull(acountReading,0)/isnull(cavityCount,1) ))  as TotalShots
-                            ,sum(isnull(rejectQty,0)) as TotalRej
-                            from MouldingViTracking where day=@day 
-                            group by day ");
-
-        
-      
-
-            SqlParameter[] paras =
-            {
-                new SqlParameter("@day",SqlDbType.DateTime)
-            };
-
-
-            paras[0].Value = dDay;
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-            return ds;
-        }
-
-        
         public DataSet GetMonthlyRejectReport(string sYear,string sPartNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -463,8 +434,7 @@ where status != 'Mould_Testing' and status != 'Material_Testing' and day >= @dat
                 return ds.Tables[0];
             }
         }
-
-
+        
         public DataTable GetRejTimeDetail(DateTime dDateFrom, DateTime dDateTo, string sShift, string sMachineID, string sPartNo, string sDefectCode, string sJigNo)
         {
             StringBuilder strSql = new StringBuilder();
@@ -533,9 +503,7 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
                 return ds.Tables[0];
             }
         }
-
-
-
+        
         public SqlCommand DeleteCommand(string sTrackingID)
         {
             if (string.IsNullOrEmpty(sTrackingID))
@@ -555,8 +523,7 @@ from MouldingViDefectTracking where 1=1 and rejectQty != 0  and day >= @datefrom
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
         }
-
-
+        
         public SqlCommand MaintenanceCommand(string sTrackingID, string sPartNo, string sModel, string sJigNo)
         {
             string strSql = @"

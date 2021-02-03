@@ -16,11 +16,10 @@ namespace Common.Class.BLL
         private readonly Common.DAL.PQCQaViDetailTracking_DAL dal = new Common.DAL.PQCQaViDetailTracking_DAL();
 		public PQCQaViDetailTracking_BLL()
 		{}
-		#region  Method
+
         
 		public Common.Class.Model.PQCQaViDetailTracking_Model GetModel(string sTrackingID, string sMaterialNo)
 		{
-			//该表无主键信息，请自定义主键/条件字段
 			return dal.GetModel(sTrackingID, sMaterialNo);
 		}
         
@@ -39,33 +38,11 @@ namespace Common.Class.BLL
             }
 		}
 
-
-        public DataTable GetList(string sTrackingID, string sJobID, DateTime dDatefrom, DateTime dDateto)
-        {
-            DataSet ds = dal.GetList(sTrackingID, sJobID, dDatefrom, dDateto);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
         public SqlCommand UpdateJob(Common.Class.Model.PQCQaViDetailTracking_Model model,SqlCommand cmd=null)
         {
             SqlCommand updateJobCmd = dal.UpdateJob(model,cmd);
             return updateJobCmd;
         }
-
-        public SqlCommand UpdatePassQty(Common.Class.Model.PQCQaViDetailTracking_Model model)
-        {
-            SqlCommand updateJobCmd = dal.UpdateJob(model);
-            return updateJobCmd;
-        }
-
 
         public List<Common.Class.Model.PQCQaViDetailTracking_Model> GetModelList(string sTrackingID, string sJobID, DateTime? dDatefrom, DateTime? dDateto)
         {
@@ -222,8 +199,7 @@ namespace Common.Class.BLL
             return dal.GetPaintTcInventory(dStartTime);
         }
 
-
-        #endregion  Method
+        
 
     }
 }

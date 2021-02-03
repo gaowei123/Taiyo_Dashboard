@@ -16,53 +16,12 @@ namespace DashboardTTS.Webform.PQC
             {
                 if (!IsPostBack)
                 {
-                    //request parameters
-                    string RejType = Request.QueryString["Type"] == null ? "" : Request.QueryString["Type"].ToString();
-                    DateTime? dDateFrom = null;
-                    DateTime? dDateTo = null;
-                    if (Request.QueryString["DateFrom"] != null)
-                    {
-                        dDateFrom = DateTime.Parse(Request.QueryString["DateFrom"].ToString());
-                    }
-                    if (Request.QueryString["DateTo"] != null)
-                    {
-                        dDateTo = DateTime.Parse(Request.QueryString["DateTo"].ToString());
-                    }
-
-
-
-                    //init
-                
-                    setRejType(RejType);
                     setRejCode("");
-
-                    if (dDateFrom != null)
-                    {
-                        this.infDchFrom.CalendarLayout.SelectedDate = dDateFrom.Value.Date;
-                        this.infDchFrom.Value = dDateFrom.Value.Date;
-                    }
-                    else
-                    {
-                        this.infDchFrom.CalendarLayout.SelectedDate = DateTime.Now.Date;
-                        this.infDchFrom.Value = DateTime.Now.Date;
-                    }
-                    if (dDateTo !=null)
-                    {
-                        this.infDchTo.CalendarLayout.SelectedDate = dDateTo.Value.Date;
-                        this.infDchTo.Value = dDateTo.Value.Date;
-                    }else
-                    {
-                        this.infDchTo.CalendarLayout.SelectedDate = DateTime.Now.Date;
-                        this.infDchTo.Value = DateTime.Now.Date;
-                    }
-                    
-
+                                        
+                    this.txtDateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                    this.txtDateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     btn_generate_Click(new object(), new EventArgs());
-
                 }
-
-
-                Common.CommFunctions.SetAutoComplete(this.Page, "#MainContent_txtPartNo", "");
             }
             catch (Exception ee)
             {
@@ -74,26 +33,32 @@ namespace DashboardTTS.Webform.PQC
         protected void ddlRejType_SelectedIndexChanged(object sender, EventArgs e)
         {
             string rejType = ((DropDownList)sender).SelectedValue;
-
             setRejCode(rejType);
         }
-
+         
 
 
         protected void btn_generate_Click(object sender, EventArgs e)
         {
             try
             {
-
                 string sLotNo = Request.QueryString["lotNo"] == null ? "" : Request.QueryString["lotNo"].ToString();
-                string sMachineID = this.ddlMachineType.SelectedValue;
+                string sMachineID = this.ddlStation.SelectedValue;
                 string sRejType = this.ddlRejType.SelectedValue;
-                string sRejCode = this.ddlRejCode.SelectedValue;
+                string sRejCode = this.ddlDefectCode.SelectedValue;
                 string sPartNo = this.txtPartNo.Text.Trim();
-            
 
-                DateTime DateFrom = infDchFrom.CalendarLayout.SelectedDate.Date;
-                DateTime DateTo = infDchTo.CalendarLayout.SelectedDate.Date.AddDays(1);
+
+                DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text);
+                DateTime DateTo = DateTime.Parse(this.txtDateTo.Text).AddDays(1);
+
+
+
+                if ((DateTo-DateFrom).TotalDays > 7)
+                {
+                    Common.CommFunctions.ShowMessage(this.Page, "From - To can not over 7 days!");
+                    return;
+                }
 
 
                 Common.Class.BLL.PQCQaViDefectTracking_BLL bll = new Common.Class.BLL.PQCQaViDefectTracking_BLL();
@@ -122,56 +87,17 @@ namespace DashboardTTS.Webform.PQC
 
 
 
-
-
-        //============== func ==============//
-        private void setRejType(string sType)
-        {
-
-            this.ddlRejType.Items.Clear();
-
-            ListItem Li = new ListItem();
-            Li.Text = "All";
-            Li.Value = "";
-            this.ddlRejType.Items.Add(Li);
-            
-            Li = new ListItem();
-            Li.Text = "Mould";
-            Li.Value = "Mould";
-            this.ddlRejType.Items.Add(Li);
-
-            Li = new ListItem();
-            Li.Text = "Paint";
-            Li.Value = "Paint";
-            this.ddlRejType.Items.Add(Li);
-
-            Li = new ListItem();
-            Li.Text = "Laser";
-            Li.Value = "Laser";
-            this.ddlRejType.Items.Add(Li);
-
-            Li = new ListItem();
-            Li.Text = "Others";
-            Li.Value = "Others";
-            this.ddlRejType.Items.Add(Li);
-
-            if (sType.Trim() != "")
-            {
-                this.ddlRejType.SelectedValue = sType;
-            }
-
-        }
-
+        
+       
 
         private void setRejCode(string sRejType)
         {
-
-            this.ddlRejCode.Items.Clear();
+            this.ddlDefectCode.Items.Clear();
 
             ListItem Li = new ListItem();
             Li.Text = "All";
             Li.Value = "";
-            this.ddlRejCode.Items.Add(Li);
+            this.ddlDefectCode.Items.Add(Li);
 
 
             Common.Class.BLL.PQCDefectSetting_BLL bll = new Common.Class.BLL.PQCDefectSetting_BLL();
@@ -182,9 +108,8 @@ namespace DashboardTTS.Webform.PQC
                 Li = new ListItem();
                 Li.Text = dr["defectCode"].ToString();
                 Li.Value = dr["defectCode"].ToString();
-                this.ddlRejCode.Items.Add(Li);
+                this.ddlDefectCode.Items.Add(Li);
             }
-            
         }
 
       

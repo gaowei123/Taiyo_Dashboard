@@ -169,11 +169,6 @@ namespace Common.Class.BLL
         
    
 
-        public DataTable GetSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
-        {
-           return  dal.GetSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
-        }
-        
         public Common.Class.Model.PQCQaViTracking GetModelByTrackingID(string sTrackingID)
         {
             if (sTrackingID == "")
@@ -776,61 +771,7 @@ namespace Common.Class.BLL
             return hisModel;
         }
         
-        
-        
-        public DataTable GetRealTimeData(string sType)
-        {
-
-            DateTime day = DateTime.Now.AddHours(-8).Date;
-
-            //day = DateTime.Parse("2019-12-10");
-         
-
-            DataTable dt = new DataTable();
-
-            if (sType == "Online")
-            {
-                dt = dal.GetRealTimeForOnline(day);
-            }
-            else if (sType == "WIP")
-            {
-                dt = dal.GetRealTimeForWIP(day);
-            }
-            else if (sType =="Packing")
-            {
-                dt = dal.GetRealTimeForPack(day);
-            }
-            else
-            {
-                dt = null;
-            }
-
-            return dt;
-        }
-        
-        public DataTable GetOnlineDayOutput(DateTime dDay)
-        {
-            DataTable dt = dal.GetOnlineDayOutput(dDay);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            return dt;
-        }
-
-        public DataTable GetWIPDayOutput(DateTime dDay)
-        {
-            DataTable dt = dal.GetWIPDayOutput(dDay);
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                return null;
-            }
-
-            return dt;
-        }
-
-
+   
 
 
 
@@ -1024,14 +965,6 @@ namespace Common.Class.BLL
             
 
 
-
-        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
-        {
-
-            return dal.GetDailyOperatorList(dDate, sShift, sUserID);
-
-
-        }
 
 
         public List<Common.Class.Model.PQCQaViTracking> GetModelList(DateTime? dDateFrom, DateTime? dDateTo, string sJobNo, string sProcess)

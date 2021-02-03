@@ -979,158 +979,7 @@ and a.datetime < @dDateTo ");
 
         #endregion  Method
 
-        #region MyRegion
-      
-      
-        internal DataTable getList(string jobNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select materialPartNo, defectCode, defectDescription, sum(rejectQty) as rejectQty
-                            from PQCQaViDefectTracking
-                            where jobId = @jobNumber
-                            group by materialPartNo, defectCode, defectDescription ");
-      
-            SqlParameter[] parameters = {
-                new SqlParameter("@jobNumber", SqlDbType.VarChar, 50)
-            };
-            parameters[0].Value = jobNumber;
-         
-
-            
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-            if (ds== null || ds.Tables.Count == 0)
-            {
-                return null;
-            }else
-            {
-                return ds.Tables[0];
-            }
-            
-       
-        }
-        
-        internal DataTable GetDefectDetailForPQCReport(DateTime dDateFrom, DateTime dDateTo, string sPartNumber, string sModel, string sColor, string sType, string sSupplier, string sDescription, string sCoating, string sJobNo)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            //查询出所有job到临时表
-            strSql.Append(@"
-with allJobsForReports as (
-    select
-    distinct UPPER(jobid) as jobID
-    from PQCQaViTracking a
-    left join PQCBom b on a.partNumber = b.partNumber
-    where 1 = 1 and acceptQty + rejectQty >= totalQty
-
-    --Bom中有check2的, 先查check2的nextViFlag
-    and case when b.processes like '%Check#2%'
-        then  case when a.processes = 'CHECK#2' and a.nextViFlag = 'True' then 'True' else 'False' end
-        --只有check1的, 直接以nextViFlag定
-		else a.nextViFlag
-    end = 'True'
-
-    and a.dateTime >= @DateFrom
-    and a.datetime < @DateTo ");
-
-
-            if (sPartNumber.Trim() != "")
-                strSql.AppendLine(" and b.partnumber = @PartNumber ");
-
-            if (sModel.Trim() != "")
-                strSql.AppendLine(" and b.model = @Model");
-
-            if (sColor.Trim() != "")
-                strSql.AppendLine(" and b.color = @Color  ");
-
-            if (sSupplier.Trim() != "")
-                strSql.AppendLine(" and b.remark_1 = @supplier");
-
-            if (sCoating.Trim() != "")
-                strSql.AppendLine(" and b.coating = @coating");
-
-            if (sDescription.Trim() != "")
-                strSql.AppendLine(" and b.description = @description ");
-
-            if (sType.Trim() != "")
-                strSql.AppendLine(" and b.Type = @Type");
-
-            if (sJobNo.Trim() != "")
-                strSql.AppendLine(" and a.JobID = @JobNo");
-
-
-            strSql.AppendLine(")");
-            //查询出所有job到临时表
-            
-
-            strSql.Append(@"
-select 
-a.jobID as JobNumber
-,'' as PartNumber
-,b.materialPartNo as materialNo
-,b.processes as process
-,case when d.processes like '%Laser%' then 'LASER' else 'WIP' end BomProcess
-,'' as LotNo
-,'' as LotQty
-
-,case when b.defectDescription = 'Others' then 'OTHERS ' + b.defectCode
-	  when b.defectDescription = 'Mould' then 'MOULDING ' + b.defectCode
-      when b.defectDescription = 'Paint' then 'PAINTING ' + b.defectCode
-	  when b.defectDescription = 'Laser' then 'LASER ' + b.defectCode
-end  as defectCode
-
-,b.rejectQty
-,b.defectDescription
-,b.dateTime
-,b.processes
-
-from allJobsForReports a 
-left join PQCQaViDefectTracking b on a.jobID = b.jobId
-left join PQCQaViTracking c on b.trackingID=c.trackingID
-left join pqcbom d on c.partnumber= d.partnumber
-
-where b.datetime > DATEADD(day,-30, @DateFrom)  ");
-
-
-            
-            SqlParameter[] parameters = {
-                new SqlParameter("@DateFrom", SqlDbType.DateTime),
-                new SqlParameter("@DateTo", SqlDbType.DateTime),
-                new SqlParameter("@description", SqlDbType.VarChar,50),
-                new SqlParameter("@PartNumber", SqlDbType.VarChar,50),
-                new SqlParameter("@Model", SqlDbType.VarChar,50),
-                new SqlParameter("@Color", SqlDbType.VarChar,50),
-                new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50),
-                new SqlParameter("@Type", SqlDbType.VarChar,50),
-                new SqlParameter("JobNo",SqlDbType.VarChar,50)
-            };
-
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-            if (sDescription != "") parameters[2].Value = sDescription; else parameters[2] = null;
-            if (sPartNumber != "") parameters[3].Value = sPartNumber; else parameters[3] = null;
-            if (sModel != "") parameters[4].Value = sModel; else parameters[4] = null;
-            if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
-            if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
-            if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
-            if (sType != "") parameters[8].Value = sType; else parameters[8] = null;
-            if (sJobNo != "") parameters[9].Value = sJobNo; else parameters[9] = null;
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-        
+  
         internal DataTable GetDefectDetailForBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription, string sNumber)
         {
             StringBuilder strSql = new StringBuilder();
@@ -1224,12 +1073,7 @@ left join PaintingDeliveryHis f on a.jobID collate Chinese_PRC_CI_AS = f.jobNumb
             }
         }
         
-        #endregion
-
-
-
-     
-
+        
         public DataTable GetVIDefectForButtonReport_NEW(string sqlWhere)
         {
             StringBuilder strSql = new StringBuilder();           
@@ -1262,55 +1106,7 @@ left join PQCBom c on  b.partNumber = c.partNumber where 1=1 ");
                 return ds.Tables[0];
         }
 
-
-
-
-        public DataTable GetViDefect_ForSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"
-select 
-trackingID
-,ISNULL(SUM( case when defectdescription = 'Mould' then rejectQty end),0) as mouldRej
-,ISNULL(SUM( case when defectdescription = 'Paint' then rejectQty end),0) as paintRej
-,ISNULL(SUM( case when defectdescription = 'Laser' then rejectQty end),0) as laserRej
-,ISNULL(SUM( case when defectdescription = 'others' then rejectQty end),0) as othersRej
-
-from PQCQaViDefectTracking
-where day >= @DateFrom  and day < @DateTo ");
-
-            if (sShift != "")
-            {
-                strSql.Append(" and shift = @shift");
-            }
-
-            strSql.Append("group by trackingID");
-
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@DateFrom", SqlDbType.DateTime),
-                new SqlParameter("@DateTo", SqlDbType.DateTime),
-                new SqlParameter("@Shift", SqlDbType.VarChar)
-            };
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-            if (sShift.Trim() != "") parameters[2].Value = sShift; else parameters[2] = null;
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
-
+        
 
         #region defect detail list
         public DataTable GetMouldDefect(string sJobId,string sTrackingID, string CheckProcess, bool IsExcludeTracking)

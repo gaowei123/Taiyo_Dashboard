@@ -176,15 +176,7 @@ namespace Common.Class.BLL
             return dal.GetFgAndAssembly();
         }
 
-
-
-
-
-
-
-
-
-
+        
     }
 }
 

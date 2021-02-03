@@ -380,3 +380,17 @@ function getLaserIDList(selectControl) {
     });
 
 }
+
+
+//计算from - to相差多少天
+function datedifference(sDateFrom, sDateTo) {    //sDate1和sDate2是2006-12-18格式 
+    var dateSpan,
+        tempDate,
+        iDays;
+    sDateFrom = Date.parse(sDateFrom);
+    sDateTo = Date.parse(sDateTo);
+    dateSpan = sDateTo - sDateFrom;
+    dateSpan = Math.abs(dateSpan);
+    iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+    return iDays
+};

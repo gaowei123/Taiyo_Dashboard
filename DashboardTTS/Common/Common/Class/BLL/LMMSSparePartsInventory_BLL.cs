@@ -108,8 +108,6 @@ namespace Common.Class.BLL
 		/// </summary>
 		public Common.Class.Model.LMMSSparePartsInventory_Model GetModelByName(string sSparePartsName)
 		{
-         
-			
 			return dal.GetModel(sSparePartsName);
 		}
 

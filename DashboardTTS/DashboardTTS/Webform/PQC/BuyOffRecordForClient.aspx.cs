@@ -611,7 +611,7 @@ namespace DashboardTTS.Webform.PQC
                 DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", "In func UpdatePaintQaSetup");
 
                 string jobNo = this.txtJobNumber.Text.Trim();
-                string checkProcess = this.lbCheckProcess.Text.Trim();
+                string checkProcess = "CHECK#" + this.lbCheckProcess.Text.Split('#')[1].Trim();
 
                 DateTime currentDay = DateTime.Now.AddHours(-8).Date;
                 string currentShift = DateTime.Now >= currentDay.AddHours(8) && DateTime.Now < currentDay.AddHours(20) ? StaticRes.Global.Shift.Day : StaticRes.Global.Shift.Night;
@@ -638,6 +638,10 @@ namespace DashboardTTS.Webform.PQC
                 var currentTracking = (from a in modelList
                                        where a.day == currentDay && a.shift == currentShift
                                        select a).FirstOrDefault();
+
+
+
+
                 if (currentTracking == null)
                 {
                     DBHelp.Reports.LogFile.Log("Debug_UpdatePaintQaSetup", "UpdatePaintQaSetup,  not find current tracking!");
@@ -652,8 +656,6 @@ namespace DashboardTTS.Webform.PQC
                 int totalQty = int.Parse(string.IsNullOrEmpty(currentTracking.TotalQty) ? "0" : currentTracking.TotalQty);
                 if (totalQty != 0 && modelList.Count == 1)
                 {
-                   
-
                     bool result =  bll.UpdateQASetupForWipPart(currentTracking.trackingID, qaQty, setupQty);
                 }
 
@@ -661,11 +663,7 @@ namespace DashboardTTS.Webform.PQC
             catch (Exception ee)
             {
                 DBHelp.Reports.LogFile.Log("BuyOffRecordForClient", "UpdatePaintQaSetup, catch exception:"+ ee.ToString());
-                Common.CommFunctions.ShowMessage(this.Page, "Catch exception during update qa, setup. msg:" + ee.ToString());
-                return;
             }
-
-
         }
 
 

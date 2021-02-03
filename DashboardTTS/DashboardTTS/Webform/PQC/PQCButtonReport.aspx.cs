@@ -16,11 +16,19 @@ namespace DashboardTTS.Webform.PQC
             {
                 try
                 {
-                    this.lblUserHeader.Text = "PQC Button Report";                 
-                    
+                    if (string.IsNullOrEmpty(Request.QueryString["Description"]))
+                    {
+                        Common.CommFunctions.ShowMessage(this.Page, "Open error, No report type specified!");
+                        return;
+                    }
+
+
                     //周日, 周一显示 上周五的. 默认显示前一天的.
                     DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
                     this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");
+
+                    
+                    this.lbHeader.Text = Request.QueryString["Description"] == "BUTTON" ? "PQC Button Report" : "Laser & PQC Total Report";
 
 
                     BtnGenerate_Click(new object(), new EventArgs());
@@ -44,8 +52,8 @@ namespace DashboardTTS.Webform.PQC
                 string coating = "";// this.ddlCoating.SelectedValue;
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
-                string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表
-                string sDescription = "BUTTON";//除了panel, bezel的part都显示.
+                string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表            
+                string sDescription = Request.QueryString["Description"];//除了panel, bezel的part都显示.
                 
 
                 ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();
@@ -78,8 +86,6 @@ namespace DashboardTTS.Webform.PQC
                 }
                 else
                 {
-                    //dt.Columns.RemoveAt(3);//remove column job no
-                    //dt.Columns.RemoveAt(2);//remove column parts type
                     this.dgButton.Visible = true;
                 }
 
@@ -136,7 +142,6 @@ namespace DashboardTTS.Webform.PQC
                         {
                             if (columnName.Contains("(VM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                                 item.Cells[i].Text = "";
-                            //else if (columnName == "Lot Qty" || columnName == "Pass")
                             else if (columnName == "Pass")
                                 item.Cells[i].Text = "";
                         }
@@ -144,7 +149,6 @@ namespace DashboardTTS.Webform.PQC
                         {
                             if (columnName.Contains("(TM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                                 item.Cells[i].Text = "";
-                            //else if (columnName == "Lot Qty" || columnName == "Pass")
                             else if (columnName == "Pass")
                                 item.Cells[i].Text = "";
                         }

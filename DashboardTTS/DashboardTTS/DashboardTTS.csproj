@@ -781,27 +781,6 @@
     <Compile Include="Webform\PQC\PQCBomList.aspx.designer.cs">
       <DependentUpon>PQCBomList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\PQC\PQCCheckerOutputChart.aspx.cs">
-      <DependentUpon>PQCCheckerOutputChart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\PQC\PQCCheckerOutputChart.aspx.designer.cs">
-      <DependentUpon>PQCCheckerOutputChart.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\PQC\PQCDailyReport.aspx.cs">
-      <DependentUpon>PQCDailyReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\PQC\PQCDailyReport.aspx.designer.cs">
-      <DependentUpon>PQCDailyReport.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\PQC\PQCDefectCodeList.aspx.cs">
-      <DependentUpon>PQCDefectCodeList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\PQC\PQCDefectCodeList.aspx.designer.cs">
-      <DependentUpon>PQCDefectCodeList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\PQC\PQCPackingLiveReport.aspx.cs">
       <DependentUpon>PQCPackingLiveReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -843,13 +822,6 @@
     </Compile>
     <Compile Include="Webform\PQC\PQCRejectDetail.aspx.designer.cs">
       <DependentUpon>PQCRejectDetail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\PQC\PQC_PIC_PerformReport.aspx.cs">
-      <DependentUpon>PQC_PIC_PerformReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\PQC\PQC_PIC_PerformReport.aspx.designer.cs">
-      <DependentUpon>PQC_PIC_PerformReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Reports\LaserPQCTotalReport.aspx.cs">
       <DependentUpon>LaserPQCTotalReport.aspx</DependentUpon>
@@ -2913,16 +2885,12 @@
     <Content Include="Webform\PQC\PQCBezelPanelReport.aspx" />
     <Content Include="Webform\PQC\PQCBomFormMenu.aspx" />
     <Content Include="Webform\PQC\PQCBomList.aspx" />
-    <Content Include="Webform\PQC\PQCCheckerOutputChart.aspx" />
-    <Content Include="Webform\PQC\PQCDailyReport.aspx" />
-    <Content Include="Webform\PQC\PQCDefectCodeList.aspx" />
     <Content Include="Webform\PQC\PQCPackingLiveReport.aspx" />
     <Content Include="Webform\PQC\PQCPackingMaintenance.aspx" />
     <Content Include="Webform\PQC\PQCProductionChart.aspx" />
     <Content Include="Webform\PQC\PQCCheckingLiveReport.aspx" />
     <Content Include="Webform\PQC\PQCRealTime.aspx" />
     <Content Include="Webform\PQC\PQCRejectDetail.aspx" />
-    <Content Include="Webform\PQC\PQC_PIC_PerformReport.aspx" />
     <Content Include="Webform\Reports\LaserPQCTotalReport.aspx" />
     <Content Include="Webform\Reports\Productivity.aspx" />
     <Content Include="Webform\TTSHomePage.aspx" />

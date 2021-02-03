@@ -273,7 +273,7 @@ namespace Common.Class.DAL
             strSql.Append("remark_4=@remark_4,");
             strSql.Append("remarks=@remarks,");
             strSql.Append("updatedTime=@updatedTime");
-            strSql.Append(" where  trackingID=@trackingID and  materialPartNo=@materialPartNo ");
+            strSql.Append(" where  trackingID=@trackingID and  materialPartNo=@materialPartNo and processes=@processes");
             SqlParameter[] parameters = {
                     new SqlParameter("@id", SqlDbType.VarChar,50),
                     new SqlParameter("@trackingID", SqlDbType.VarChar,50),

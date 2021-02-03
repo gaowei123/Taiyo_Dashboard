@@ -216,22 +216,6 @@ namespace Common.Class.BLL
             }
         }
 
-        public DataTable GetInventoryQty()
-        {
-            DataSet ds = dal.GetInventoryQty();
-
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
 
         public DataTable GetList(string sJobNo)
         {
@@ -252,10 +236,7 @@ namespace Common.Class.BLL
         {
             return dal.GetInventoryInfoForAllInventoryReport(dStartTime);
         }
-
-
-
-
+        
         public Common.Class.Model.LMMSInventory_Model GetModel(string sJobNo)
         {
             if (string.IsNullOrEmpty(sJobNo))
@@ -289,8 +270,6 @@ namespace Common.Class.BLL
 
             return model;
         }
-
-
-
+        
     }
 }

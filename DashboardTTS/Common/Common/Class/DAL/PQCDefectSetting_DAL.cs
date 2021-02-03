@@ -340,6 +340,8 @@ namespace Common.Class.DAL
 				strSql.Append(" and defectDescription = @defectDescription ");
 			}
 
+            strSql.Append(" order by convert(decimal,defectCodeID) asc ");
+
 
             SqlParameter[] paras =
             {
@@ -357,30 +359,6 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(),paras,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
-
-
-
-        public DataTable GetAll() 
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select * FROM PQCDefectSetting ");
-          
-          
-            DataSet ds  = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-
-
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-
-             
-        }
 
 
         public DataTable GetAllForPQCLaserTotalReport()

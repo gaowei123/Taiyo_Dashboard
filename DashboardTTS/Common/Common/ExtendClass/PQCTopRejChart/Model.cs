@@ -10,13 +10,16 @@ namespace Common.ExtendClass.PQCTopRejChart
         public class TopPartNo
         {
             public string PartNo { get; set; }
-            public int RejQty { get; set; }
+            public decimal TotalQty { get; set; }
+            public decimal RejQty { get; set; }
+           
         }
 
         public class TopDefect
         {
             public string DefectCode { get; set; }
-            public int RejQty { get; set; }
+            public decimal TotalQty { get; set; }
+            public decimal RejQty { get; set; }
         }
     }
 }

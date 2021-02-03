@@ -80,20 +80,6 @@ namespace Common.Class.BLL
 
         Common.Class.DAL.MouldingBom_DAL dal = new DAL.MouldingBom_DAL();
 
-        public DataTable GetList()
-        {
-            DataSet ds = dal.SelectAll("");
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-
-            DataTable dt = ds.Tables[0];
-
-            return dt;
-        }
-
         public List<String> GetPartNumberAllList()
         {
             DataSet ds = dal.SelectAll("");
@@ -217,7 +203,7 @@ namespace Common.Class.BLL
 
 
 
-        public Common.Class.Model.MouldingBom_Model convertModel(DataRow    dr)
+        public Common.Class.Model.MouldingBom_Model convertModel(DataRow dr)
         {
             if (dr == null )
                 return null;

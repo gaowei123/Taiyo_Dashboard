@@ -231,39 +231,6 @@ namespace Common.Class.DAL
         }
 
 
-        public DataSet CheckLotno(string sLotno)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select lotNo FROM MouldingDeliveryHis where lotNo = @lotNo ");
-
-            SqlParameter[] paras = {
-                new SqlParameter("@lotNo",SqlDbType.VarChar)
-            };
-
-
-            paras[0].Value = sLotno;
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-
-        public DataSet CheckJobno(string sJobno)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select JobNumber FROM MouldingDeliveryHis where jobNumber = @jobNumber ");
-
-            SqlParameter[] paras = {
-                new SqlParameter("@jobNumber",SqlDbType.VarChar)
-            };
-
-
-            paras[0].Value = sJobno;
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), paras, DBHelp.Connection.SqlServer.SqlConn_Moulding_Server);
-        }
-
-
-
-
     }
 }
 

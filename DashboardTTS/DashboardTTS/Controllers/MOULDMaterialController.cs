@@ -11,38 +11,17 @@ namespace DashboardTTS.Controllers
     {
         private readonly ViewBusiness.MOULDMaterial vBLL = new ViewBusiness.MOULDMaterial();
         
-
-        #region view 
-        // GET: MOULDMaterial
-        public ActionResult Index()
-        {
-            return View();
-        }
-        
         public ActionResult Traceability()
         {
             return View();
         }
-
-        #endregion
-
-
-
-
-
-        public JsonResult GetMaterialTraceability()
-        {
-            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
-            dateTo = dateTo.AddDays(1);
-            string machineID = Request.Form["machineID"];
-            
-            List<ViewModel.MouldMaterialTraceability> modelList = vBLL.GetMaterialTraceability(dateFrom, dateTo, machineID);
-
         
+
+        public JsonResult GetMaterialTraceability(DateTime DateFrom, DateTime DateTo, string machineID)
+        {
+            List<ViewModel.MouldMaterialTraceability> modelList = vBLL.GetMaterialTraceability(DateFrom, DateTo.AddDays(1), machineID);
             return Json(modelList);
         }
-        
 
     }
 }

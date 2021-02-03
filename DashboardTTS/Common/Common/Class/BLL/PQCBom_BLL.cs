@@ -421,12 +421,8 @@ namespace Common.Class.BLL
         private List<string> GetGroupByList(string sGroupByField)
         {
             DataTable dt = dal.GetALL();
-
             if (dt == null || dt.Rows.Count == 0)
                 return null;
-
-
-
 
             List<string> modelList = new List<string>();
             foreach (DataRow dr in dt.Rows)
@@ -469,9 +465,7 @@ namespace Common.Class.BLL
 
             return modelList;
         }
-
-      
-
+        
         public List<string> GetPatNoList()
         {
             return GetGroupByList(constPartNo);
@@ -490,11 +484,7 @@ namespace Common.Class.BLL
         }
         #endregion
 
-
-
-
-
-
+        
     }
 }
 

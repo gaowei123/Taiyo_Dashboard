@@ -17,6 +17,14 @@
         height: auto;       /* let the content decide it  */
     }
 
+    label{
+        width:35%
+    }
+
+    #txtDateFrom,#txtDateTo,#ddlShift, #ddlStation, #txtPIC, #txtJobNo{
+        width:60%;
+    }
+
 
 </style>
 
@@ -25,36 +33,34 @@
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Daily PQC Report</span>
     </div>
-
     <div class="row">
         <div class="col-md-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Shift:</label>
-                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                <div class="col-sm-3">
+                    <label>Shift:</label>
+                    <select id="ddlShift" class="form-control">
                         <option value="">All</option>
                         <option value="Day">Day</option>
                         <option value="Night">Night</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="ddlPartNo" style="width:35%;">Part No:</label>
-                    <select id="ddlPartNo" class="form-control selectpicker " data-live-search="true" data-ng-style="btn-info"></select>
+                <div class="col-sm-3">
+                    <label>Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker " data-live-search="true"></select>
                 </div>
             </div>
-
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Station:</label>
-                    <select id="ddlStation" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                <div class="col-sm-3">
+                    <label>Station:</label>
+                    <select id="ddlStation" class="form-control" data-ng-style="btn-info">
                         <option value="">All</option>
                         <optgroup label="Online">
                             <option value="1">Online1(Sta1)</option>
@@ -84,47 +90,39 @@
                         </optgroup>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">PIC:</label>
-                    <input type="text" class="form-control" id="txtPIC" CssClass="form-control" placeholder="Please input PIC" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>PIC:</label>
+                    <input type="text" class="form-control" id="txtPIC" placeholder="Please input PIC"/>
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Job No:</label>
-                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job no" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" placeholder="Please input job no" />
                 </div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3" style="text-align:right; padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="Search();" />
                 </div>
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <div class="col-md-12 panel panel-default"  style="padding:10px;">
-
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#online" aria-controls="home" role="tab" data-toggle="tab">Online</a></li>
                 <li role="presentation"><a href="#wip" aria-controls="wip" role="tab" data-toggle="tab">WIP</a></li>
                 <li role="presentation"><a href="#packing" aria-controls="packing" role="tab" data-toggle="tab">Packing</a></li>
             </ul>
-
             <!-- Tab panes -->
             <div class="tab-content" style="margin-top:10px;">
-
                 <div role="tabpanel" class="tab-pane active" id="online">
                     <table id="tableOnline" data-toggle="table"></table>
                 </div>
-
                 <div role="tabpanel" class="tab-pane" id="wip">
                     <table id="tableWIP" data-toggle="table"></table>
                 </div>
-
                 <div role="tabpanel" class="tab-pane" id="packing">
                     <table id="tablePacking" data-toggle="table"></table>
                 </div>
-
             </div>
         </div>
     </div>
@@ -164,7 +162,6 @@
         forceParse: 0,
         initialDate: new Date()
     });
-
     $('#txtDateTo').datetimepicker({
         weekStart: 1,
         todayBtn: 1,
@@ -175,101 +172,50 @@
         forceParse: 0,
         initialDate: new Date()
     });
-
     $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
 
 
 
-    //设置part no, machine id 下拉框
     $(document).ready(function () {
-        setPartNoDDL($('#ddlPartNo'), 'Laser','');
-
+        setPartNoDDL($('#ddlPartNo'), 'Laser', '');
 
         var lastDay = getLastReportDay();
         var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
-
         $('#txtDateFrom').val(strLastDay);
         $('#txtDateTo').val(strLastDay);
-
-
+        
         Search();
-
     });
 
 
     function Search() {
        
-        //重新加载必须将原本table清空
-        $('#tableOnline').bootstrapTable('destroy');
-        $('#tableWIP').bootstrapTable('destroy');
-        $('#tablePacking').bootstrapTable('destroy');
+        let param = {
+            DateFrom: $("#txtDateFrom").val(),
+            DateTo: $("#txtDateTo").val(),
+            Shift: $("#ddlShift").val(),
+            PartNo: $("#ddlPartNo").val(),
+            Station: $("#ddlStation").val(),
+            PIC: $("#txtPIC").val(),
+            JobNo: $("#txtJobNo").val()
+        };
 
 
-        //初始化
-        $('#tableOnline').bootstrapTable({ // 对应table标签的id
+        //查询条件限制
+        //没选定PartNo, PIC, Job No的情况下, from - to跨度最多31天
+        let days = datedifference(param.DateFrom, param.DateTo);
+        if (param.PartNo === '' &&
+            param.PIC === '' &&
+            param.JobNo === '' &&
+            param.Station === '' &&
+            days > 31)
+        {
+            alert('From - To can not over 31 days');
+            return false;
+        }
+        
 
-
-            //call后台数据
-            method: 'post',
-            dataType: 'json',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            url: apiGetCheckingData,
-
-            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-
-            //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    DateFrom: $("#txtDateFrom").val(),
-                    DateTo: $("#txtDateTo").val(),
-                    Shift: $("#ddlShift").val(),
-                    PartNo: $("#ddlPartNo").val(),
-                    Station: $("#ddlStation").val(),
-                    PIC: $("#txtPIC").val(),
-                    JobNo: $("#txtJobNo").val(),
-                    Type:"Online"
-
-                }
-            },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
-
-
-            //表头样式 undefined, thead-light, thead-dark,
-            theadClasses: 'thead-title',
-
-            //表格样式
-            classes: 'table table-bordered table-hover table-striped',
-
-
-            striped: false,  //表格显示条纹，默认为false
-            pagination: false, // 在表格底部显示分页组件，默认false
-            //pageList: [10, 20], // 设置页面可以显示的数据条数
-            //pageSize: 10, // 页面数据条数
-            //pageNumber: 1, // 首页页码
-
-
-            //height: 650,
-
-
-
-            rowStyle: function (row, index) {
-                //console.log(row);
-
-                return {
-                    //防止数据自动换行
-                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
-                }
-            },
-
-            columns: [
+        let columns =[
             {
                 field: 'sn',
                 title: 'S/N',
@@ -402,7 +348,48 @@
                 align: 'center',
                 valign: 'middle'
             }
-            ],
+        ];
+
+
+        //重新加载必须将原本table清空
+        $('#tableOnline').bootstrapTable('destroy');
+        $('#tableWIP').bootstrapTable('destroy');
+        $('#tablePacking').bootstrapTable('destroy');
+
+        $('#tableOnline').bootstrapTable({
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetCheckingData,
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //sidePagination: 'server', // 设置为服务器端分页
+            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+                param.Type = 'Online';
+                return param;
+            },
+            //sortName: 'id', // 要排序的字段
+            //sortOrder: 'desc', // 排序规则
+
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+
+            striped: false,  //表格显示条纹，默认为false
+            pagination: false,
+
+            rowStyle: function (row, index) {
+                return {
+                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                }
+            },
+
+            columns: columns,
 
             onLoadSuccess: function (data) {  //加载成功时执行              
                 $('#tableOnline').bootstrapTable('resetView', { height: $(window).height() - 320 });
@@ -412,11 +399,7 @@
             }
 
         });
-
-        $('#tableWIP').bootstrapTable({ // 对应table标签的id
-
-
-            //call后台数据
+        $('#tableWIP').bootstrapTable({
             method: 'post',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -426,24 +409,8 @@
 
             //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    DateFrom: $("#txtDateFrom").val(),
-                    DateTo: $("#txtDateTo").val(),
-                    Shift: $("#ddlShift").val(),
-                    PartNo: $("#ddlPartNo").val(),
-                    Station: $("#ddlStation").val(),
-                    PIC: $("#txtPIC").val(),
-                    JobNo: $("#txtJobNo").val(),
-                    Type: "WIP"
-
-                }
+                param.Type = 'WIP';
+                return param;
             },
             //sortName: 'id', // 要排序的字段
             //sortOrder: 'desc', // 排序规则
@@ -462,153 +429,13 @@
             //pageSize: 10, // 页面数据条数
             //pageNumber: 1, // 首页页码
 
-
-
-            //height: 650,
-
             rowStyle: function (row, index) {
-                //console.log(row);
-
                 return {
-                    //防止数据自动换行
                     css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
                 }
             },
 
-            columns: [
-            {
-                field: 'sn',
-                title: 'S/N',
-                align: 'center',
-                valign: 'middle',
-
-                formatter: function (value, row, index) {
-                    return index + 1;
-                }
-            },
-            {
-                field: 'sDate',
-                title: 'Date',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'station',
-                title: 'Station',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'partNo',
-                title: 'Part No',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'jobNo',
-                title: 'Job No',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'lotNo',
-                title: 'Lot No',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'sMrpQty',
-                title: 'MRP Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'sTotalQty',
-                title: 'Total Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'sTotalPass',
-                title: 'Pass Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'mouldingRej',
-                title: 'Moulding Rej',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'paintingRej',
-                title: 'Painting Rej',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'laserRej',
-                title: 'Laser Rej',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'othersRej',
-                title: 'Others Rej',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'totalRej',
-                title: 'Total Rej',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'startTime',
-                title: 'Start Time',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    if (row.sDate == 'Total' || value == null) {
-                        return '-';
-                    }
-
-                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
-
-
-                    return dateFormat('yyyy/MM/dd HH:mm', date);
-                }
-            },
-            {
-                field: 'stopTime',
-                title: 'Stop Time',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-
-                    if (row.sDate == 'Total' || value == null) {
-                        return '-';
-                    }
-
-                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
-
-                    return dateFormat('yyyy/MM/dd HH:mm', date);
-                }
-            },
-            {
-                field: 'sUsedTime',
-                title: 'Time',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'pic',
-                title: 'PIC',
-                align: 'center',
-                valign: 'middle'
-            }
-            ],
+            columns: columns,
 
             onLoadSuccess: function (data) {  //加载成功时执行
                 $('#tableWIP').bootstrapTable('resetView', { height: $(window).height() - 320 });
@@ -618,65 +445,25 @@
             }
 
         });
-
-        $('#tablePacking').bootstrapTable({ // 对应table标签的id
-
-            //call后台数据
+        $('#tablePacking').bootstrapTable({           
             method: 'post',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             url: apiGetPackingData,
 
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-
-            //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
-                return {
-                    //pageSize: params.limit, // 每页要显示的数据条数
-                    //offset: params.offset, // 每页显示数据的开始行号
-                    //sort: params.sort, // 要排序的字段
-                    //sortOrder: params.order, // 排序规则
-                    //dataId: $("#dataId").val() // 额外添加的参数
-
-                    DateFrom: $("#txtDateFrom").val(),
-                    DateTo: $("#txtDateTo").val(),
-                    Shift: $("#ddlShift").val(),
-                    PartNo: $("#ddlPartNo").val(),
-                    Station: $("#ddlStation").val(),
-                    JobNo: $("#txtJobNo").val(),
-                    PIC: $("#txtPIC").val()
-
-
-                }
-            },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
-
+            queryParams: param,
 
             //表头样式 undefined, thead-light, thead-dark,
             theadClasses: 'thead-title',
 
             //表格样式
             classes: 'table table-bordered table-hover table-striped',
-
-
             striped: false,  //表格显示条纹，默认为false
             pagination: false, // 在表格底部显示分页组件，默认false
-            //pageList: [10, 20], // 设置页面可以显示的数据条数
-            //pageSize: 10, // 页面数据条数
-            //pageNumber: 1, // 首页页码
-
-           
-            //height: 650,
-
-
 
             rowStyle: function (row, index) {
-                //console.log(row);
-
                 return {
-                    //防止数据自动换行
                     css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
                 }
             },
@@ -798,20 +585,12 @@
             onLoadError: function () {  //加载失败时执行
                 console.log("加载数据失败");
             }
-
         });
-
-     
     }
-
-
-
 
     $(window).resize(function () {
         $('#tableOnline').bootstrapTable('resetView', { height: $(window).height() - 320 });
         $('#tableWIP').bootstrapTable('resetView', { height: $(window).height() - 320 });
         $('#tablePacking').bootstrapTable('resetView', { height: $(window).height() - 320 });
     });
-   
-
 </script>

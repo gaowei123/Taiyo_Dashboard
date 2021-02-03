@@ -29,94 +29,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(),parameters);
         }
-
-        public DataSet SelectMaterialByModel(Common.Class.Model.LMMSBomDetail_Model model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(1) from LMMSBomDetail");
-            strSql.Append(" where partNumber = @partNumber and materialPartNo = @materialPartNo");
-            //if (type == "add")
-            //{
-               
-            //}
-            //else if (type == "update")
-            //{
-            //    strSql.Append(" where partNumber = @partNumber and materialPartNo not in (@materialPartNo)");
-            //}
-          
-            SqlParameter[] parameters = {
-                 new SqlParameter("@partNumber", SqlDbType.VarChar),
-                 new SqlParameter("@materialPartNo", SqlDbType.VarChar)
-            };
-            parameters[0].Value = model.partNumber;
-            parameters[1].Value = model.MaterialPartNo;
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
-
-
-        public DataSet SelectMaterialCount(string PartNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("select count(1) from LMMSBomDetail");
-            strSql.Append(" where partNumber = @partNumber");
         
-            SqlParameter[] parameters = {
-                 new SqlParameter("@partNumber", SqlDbType.VarChar)
-            };
-            parameters[0].Value = PartNumber;
-         
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
-
-        public int DeleteByPart(string PartNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from LMMSBomDetail ");
-
-            if (PartNumber == "")
-            {
-                DBHelp.Reports.LogFile.Log("Delete warning", "will delete all BOM detail data");
-                return -1;
-            }
-            else
-            {
-                strSql.Append("where partNumber = @partNumber");
-            }
-
-
-            SqlParameter[] parameters = {
-                  new SqlParameter("@partNumber", SqlDbType.VarChar)
-            };
-            parameters[0].Value = PartNumber;// == null ? (object)DBNull.Value : materialPart;
-
-            return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), parameters);
-        }
-
-
-        public DataSet SelectMaterialList(string PartNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("  select sn, partNumber, materialPartNo, partCount, dateTime from LMMSBomDetail  ");
-
-            if (PartNumber != "")
-            {
-                strSql.Append("  where partNumber  = @partNumber  ");
-            }
-
-            strSql.Append("  order by materialPartNo asc  ");
-
-            SqlParameter[] parameters = {
-                  new SqlParameter("@partNumber", SqlDbType.VarChar)
-            };
-            parameters[0].Value = PartNumber;
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
-
         public SqlCommand DeleteCommand(string PartNumber)
         {
             StringBuilder strSql = new StringBuilder();
@@ -154,37 +67,6 @@ namespace Common.Class.DAL
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
 
-        public int DeleteMaterial(string MaterialPart, string PartNumber)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("delete from LMMSBomDetail ");
-
-            if (MaterialPart == "")
-            {
-                DBHelp.Reports.LogFile.Log("Delete warning", "will delete all BOM detail data");
-                return -1;
-            }
-            else
-            {
-                strSql.Append("where partNumber = @partNumber and materialPartNo = @materialPartNo");
-            }
-
-
-            SqlParameter[] parameters = {
-                  new SqlParameter("@partNumber", SqlDbType.VarChar),
-                  new SqlParameter("@materialPartNo", SqlDbType.VarChar)
-            };
-            parameters[0].Value = PartNumber;// == null ? (object)DBNull.Value : materialPart;
-            parameters[1].Value = MaterialPart;
-
-            return DBHelp.SqlDB.ExecuteSql(strSql.ToString(), parameters);
-        }
-
-
-
-      
-
-
         public SqlCommand AddCommand(Common.Class.Model.LMMSBomDetail_Model model)
         {
             StringBuilder strSql = new StringBuilder();
@@ -210,22 +92,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
         }
-
-       
-
-        public bool Add_Rollback(List<SqlCommand> list_cmd)
-        {
-            if (list_cmd.Count != 0)
-            {
-                return DBHelp.SqlDB.SetData_Rollback(list_cmd);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
+        
         public DataTable SearchByPart(string PartNumber)
         {
             StringBuilder strSql = new StringBuilder();
@@ -254,8 +121,6 @@ namespace Common.Class.DAL
 
           
         }
-
-
-
+        
     }
 }

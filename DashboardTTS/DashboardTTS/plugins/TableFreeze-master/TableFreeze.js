@@ -32,7 +32,14 @@ $.fn.mergeAttributes = function(src){
 			if(name.toLowerCase() === 'id' || attrs[i].value=="" || attrs[i].value==null ||attrs[i].value=="null"){
 				continue;
 			}
-			try{
+		    try {
+
+		        if (name == 'height') {
+		            console.log(name, attrs[i].value);
+		        }
+
+
+
 				$(this).attr(name,attrs[i].value);
 			}catch(e){
 			}

@@ -16,9 +16,7 @@ namespace DashboardTTS.Webform.Molding
             {
                 if (!IsPostBack)
                 {
-                    this.lb_Header.Text = "Moulding Machine Information";
-
-
+                    
                     Common.Class.BLL.MouldingMachineInformation_BLL Bll = new Common.Class.BLL.MouldingMachineInformation_BLL();
 
                     DataTable dt = Bll.SelectList();

@@ -281,105 +281,12 @@ namespace Common.Class.BLL
         }
         #endregion  Method
 
-        #region MyRegion
-      
         
 
         public SqlCommand UpdateJob(Common.Class.Model.PQCQaViDefectTracking_Model model,SqlCommand cmd=null)
         {
             return dal.UpdateJob(model,cmd);
         }
-        
-
-
-
-        public DataTable getBuyoffReport(string sDepartment, string sJobNumber)
-        {
-
-            string sDefectDescription = "";
-
-            if (sDepartment == StaticRes.Global.Department.Laser)
-                sDefectDescription = "Laser";
-            else if (sDepartment == StaticRes.Global.Department.Painting)
-                sDefectDescription = "Paint";
-            else if (sDepartment == StaticRes.Global.Department.Moulding)
-                sDefectDescription = "Mould";
-            else
-                sDefectDescription = "Others";
-
-
-
-            #region  set dtBuyoff columns
-            Common.Class.DAL.PQCDefectSetting_DAL dalDefectSetting = new DAL.PQCDefectSetting_DAL();
-            DataTable dt = dalDefectSetting.GetAll();
-
-            if (dt == null || dt.Rows.Count == 0)
-                return null;
-
-
-          
-            DataTable dtBuyoff = new DataTable();
-            dtBuyoff.Columns.Add("MaterialNo");
-            foreach (DataRow dr in dt.Select(" defectDescription = '" + sDefectDescription + "'  "))
-            {
-                dtBuyoff.Columns.Add(dr["defectCode"].ToString());
-            }
-
-            #endregion
-
-
-
-
-
-
-            DataTable dtDefectTracking = dal.getList(sJobNumber);
-
-         
-            DataRow[] drArr = dtDefectTracking.Select(" defectDescription = '"+ sDefectDescription + "'  ");
-
-            foreach (DataRow dr in drArr)
-            {
-                try
-                {
-                    string materialNo = dr["materialPartNo"].ToString();
-                    string defectCode = dr["defectCode"].ToString();
-                    
-
-                    if (dtBuyoff.Select(" materialNo = '" + materialNo + "'  ").Length == 0)
-                    {
-
-                        DataRow drNew = dtBuyoff.NewRow();
-
-
-                        drNew["MaterialNo"] = dr["materialPartNo"];
-
-
-                        drNew[defectCode] = dr["rejectQty"].ToString();
-
-                        dtBuyoff.Rows.Add(drNew);
-
-                    }
-                    else
-                    {
-                        dtBuyoff.Select(" MaterialNo = '" + materialNo + "'  ")[0][defectCode] = dr["rejectQty"].ToString();
-                    }
-                }
-                catch (Exception ee)
-                {
-
-                    
-                }
-               
-            }
-
-
-
-
-            return dtBuyoff;
-        }
-
-
-    
 
         public DataTable getPQCDefectForBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription,string sNumber)
         {
@@ -665,11 +572,6 @@ namespace Common.Class.BLL
 
             return dtPQCDefectOutPut;
         }
-
-
-        #endregion
-
-
 
         
 

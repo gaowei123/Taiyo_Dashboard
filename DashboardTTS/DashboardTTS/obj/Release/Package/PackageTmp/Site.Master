@@ -110,8 +110,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">Production</font><span class="caret"></span></a>
                         <ul class="dropdown-menu menu-top">
                             <li><a runat="server" href="./Webform/TTSHomePage.aspx">Production Overview</a></li> 
-                            <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>  
-                            <li><a runat="server" href="./Webform/Reports/LaserPQCTotalReport.aspx" target="_blank">PQC Total Report</a></li>
+                            <li><a runat="server" href="./Webform/Reports/Productivity.aspx">Productivity Report</a></li>
+                            <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx?Description=%23" target="_blank">PQC Total Report</a></li>
                             <li><a runat="server" href="./Buyoff/OverallBuyoff">Buy Off Report</a></li>
                             <li><a runat="server" href="./OverallReport/OutputSummaryChart">Overall Output Chart</a></li>
                             <li><a runat="server" href="./OverallReport/AllSectionInventoryReport">Production Inventory</a></li>
@@ -229,7 +229,7 @@
                         <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
                         <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output Report</a></li>
 
-                        <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx" target="_blank">PQC Analysis Report - Button</a></li>
+                        <li><a runat="server" href="./Webform/PQC/PQCButtonReport.aspx?Description=BUTTON" target="_blank">PQC Analysis Report - Button</a></li>
                         <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Bezel" target="_blank">PQC Analysis Report - Bezel</a></li>
                         <li><a runat="server" href="./Webform/PQC/PQCBezelPanelReport.aspx?Description=Panel" target="_blank">PQC Analysis Report - Panel</a></li>
 
@@ -256,7 +256,6 @@
                         <li class="divider"></li>
                        
                         <li><a runat="server" href="./Webform/PQC/PQCProductionChart.aspx">PQC Chart</a></li>
-                        <li><a runat="server" href="./Webform/PQC/PQCCheckerOutputChart.aspx">Checker Output Chart</a></li>
                         <li><a runat="server" href="./Webform/PQC/PQCBomList.aspx">Bom List</a></li>
                         <li><a runat="server" href="./Buyoff/PQCBuyoffList">PQC Buyoff Record History</a></li>
 
@@ -308,10 +307,7 @@
         </div>
     </nav>
 
-    
-
     <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
-
 
     </form>
 

@@ -1,4 +1,3 @@
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.App.JobExecution.exe.config
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\ApplicationInsights.config
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\roslyn\csc.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -12,6 +11,7 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bi
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\roslyn\vbc.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\roslyn\VBCSCompiler.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\roslyn\VBCSCompiler.exe.config
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.App.JobExecution.exe.config
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.App.JobExecution.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.App.JobExecution.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Common.dll
@@ -19,6 +19,7 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bi
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\DBHelp.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.SearchParam.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.Enum.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\StaticRes.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.Tool.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.dll
@@ -35,7 +36,6 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bi
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\MyChart.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\EntityFramework.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
-E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Web.Infrastructure.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\System.Web.Razor.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\System.Web.WebPages.Razor.dll

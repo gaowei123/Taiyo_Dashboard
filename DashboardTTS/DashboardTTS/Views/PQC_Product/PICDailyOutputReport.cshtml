@@ -3,51 +3,50 @@
     ViewBag.Title = "OperatorDailyOutput";
 }
 
-<div class="container-fluid" style="max-width:1600px;">
+<style>
+    label{
+        width:35%;
+    }
+    #txtDate,#ddlShift{
+        width:60%;
+    }
+</style>
 
+<div class="container-fluid">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">PQC Operator Daily Output Report</span>
+        <span class="titleText">Operator Daily Output Report</span>
     </div>
-
-
     <div class="row searchingBar">
-
         <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
-
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Date:</label>
-                    <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
-                </div>                
-                <div class="col-md-3">
-                    <label style="width:35%">Shift:</label>
-                    <select id="ddlShift" class="form-control" data-ng-style="btn-info" style="width:60%;">
+                <div class="col-sm-3">
+                    <label>Date:</label>
+                    <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                </div>
+                <div class="col-sm-3">
+                    <label>Shift:</label>
+                    <select id="ddlShift" class="form-control" data-ng-style="btn-info">
                         <option value="">All</option>
                         <option value="Day">Day</option>
                         <option value="Night">Night</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Operator ID:</label>
+                <div class="col-sm-3">
+                    <label>Operator ID:</label>
                     <select id="ddlUserID" class="form-control selectpicker" data-ng-style="btn-info"></select>
                 </div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3" style="text-align:right; padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
                 </div>
             </div>
         </div>
     </div>
-
-
-
     <div class="row">
-        <div class="col-lg-12" style="padding:0px;">
+        <div class="col-sm-12" style="padding:0px;">
             <table id="tbOperator" data-toggle="table"></table>
         </div>
     </div>
-
-
 </div>
 
 
@@ -65,7 +64,7 @@
 
 <script type="text/javascript">
 
-    var apiGetOperatorList = window.globalConfig.rootDirectory + '/PQC_Product/GetDailyOperatorList';
+    var apiGetData = window.globalConfig.rootDirectory + '/PQC_Product/GetDailyOperatorList';
 
 
     //初始化时间框
@@ -83,11 +82,9 @@
     $('#ddlUserID').selectpicker({ width: 'calc(60%)' });
 
 
-    
     $(document).ready(function () {
 
         setUserIDDDL($('#ddlUserID'), 'PQC');
-
         var lastDay = getLastReportDay();
         var strLastDay = dateFormat('yyyy-MM-dd', lastDay);
         $('#txtDate').val(strLastDay);
@@ -102,32 +99,146 @@
 
     function search() {
 
+        let searchParams = {
+            Date: $("#txtDate").val(),
+            Shift: $("#ddlShift").val(),
+            UserID: $('#ddlUserID').val()
+        }
 
+        let columns = [
+            {
+                title: 'SN',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
+            {
+                field: 'StartTime',
+                title: 'Start Time',
+                align: 'center',
+                valign: 'middle'               
+             },
+            {
+                field: 'EndTime',
+                title: 'End Time',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'OperatedTime',
+                title: 'Operated Time',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'PartNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'LotNo',
+                title: 'Lot No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'CheckOnlineQty',
+                title: 'Online',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'CheckWIPQty',
+                title: 'WIP',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'PackOnlineQty',
+                title: 'Pack Online',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'PackOfflineQty',
+                title: 'Pack Offline',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'LotQty',
+                title: 'Lot Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'MouldRej',
+                title: 'Mould Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'PaintRej',
+                title: 'Paint Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'LaserRej',
+                title: 'Laser Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'OthersRej',
+                title: 'Others Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'TotalRej',
+                title: 'Total Rej(%)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'PassQty',
+                title: 'Pass Qty',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'LoseAmounts',
+                title: 'Lose($)',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'Operator',
+                title: 'Operator',
+                align: 'center',
+                valign: 'middle'
+            }
+        ]
+
+      
         //重新加载必须将原本table清空
         $('#tbOperator').bootstrapTable('destroy');
-
         $('#tbOperator').bootstrapTable({ // 对应table标签的id
-
 
             //call后台数据
             method: 'post',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            url: apiGetOperatorList,
+            url: apiGetData,
 
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
             //sidePagination: 'server', // 设置为服务器端分页
-            queryParams: function (params) {
-                return {
-                    Date: $("#txtDate").val(),
-                    Shift: $("#ddlShift").val(),
-                    UserID: $('#ddlUserID').val()
-                }
-            },
-            //sortName: 'id', // 要排序的字段
-            //sortOrder: 'desc', // 排序规则
-
+            queryParams: searchParams,
 
             //表头样式 undefined, thead-light, thead-dark,
             theadClasses: 'thead-title',
@@ -137,169 +248,35 @@
 
 
             striped: false,  //表格显示条纹，默认为false
-            pagination: false, // 在表格底部显示分页组件，默认false
+            //pagination: true, // 在表格底部显示分页组件，默认false
             //pageList: [10, 20], // 设置页面可以显示的数据条数
             //pageSize: 10, // 页面数据条数
             //pageNumber: 1, // 首页页码
 
             
-
-
             rowStyle: function (row, index) {
-                return {
-                    //防止数据自动换行
-                    css: { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" }
+                let style = { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" };
+                if (row.StartTime == 'Total') {
+                    style['font-weight'] = 'bold';
                 }
+                return { css: style };
             },
 
-          
-
-            columns: [
-            {              
-                title: 'SN',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    return index + 1;
-                }
-            },
-            {
-                field: 'startTime',
-                title: 'Start Time',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    if (row.sDate == '-' || value == null) {
-                        return 'Total';
-                    }
-                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
-                    return dateFormat('HH:mm:ss', date);
-                }
-            },
-            {
-                field: 'endTime',
-                title: 'End Time',
-                align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    if (row.sDate == 'Total' || value == null) {
-                        return '-';
-                    }
-                    var date = new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
-                    return dateFormat('HH:mm:ss', date);
-                }
-            },
-            {
-                field: 'operatedTime',
-                title: 'Operated Time',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'partNo',
-                title: 'Part No',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'lotNo',
-                title: 'Lot No',
-                align: 'center',
-                valign: 'middle'
-            },
-            //{
-            //    field: 'process',
-            //    title: 'Process',
-            //    align: 'center',
-            //    valign: 'middle'
-            //},
-            {
-                field: 'checking',
-                title: 'Checking',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'packing',
-                title: 'Packing',
-                align: 'center',
-                valign: 'middle'
-            },
-
-            {
-                field: 'lotQty',
-                title: 'Lot Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'mouldRejDisplay',
-                title: 'Mould Rej(%)',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'paintRejDisplay',
-                title: 'Paint Rej(%)',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'laserRejDisplay',
-                title: 'Laser Rej(%)',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'othersRejDisplay',
-                title: 'Others Rej(%)',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'totalRejDisplay',
-                title: 'Total Rej(%)',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'passQty',
-                title: 'Pass Qty',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'rejPrice',
-                title: 'Lose Amounts',
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                field: 'userID',
-                title: 'Operator',
-                align: 'center',
-                valign: 'middle'
-            }
-            
-            ],
+            columns: columns,
 
             onLoadSuccess: function (data) {  //加载成功时执行
                 $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 220 });
             },
 
             onLoadError: function () {  //加载失败时执行
-                console.log("加载数据失败");
+                console.log("Get data error");
             }
-
         });
-
     }
 
 
     $(window).resize(function () {
         $('#tbOperator').bootstrapTable('resetView', { height: $(window).height() - 220 });
     });
-
-
 
 </script>

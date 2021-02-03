@@ -182,7 +182,7 @@ namespace Common.BLL
         #endregion  Method
 
 
-        #region MyRegion
+      
      
 
         internal DataSet getAttendance(DateTime dDay, string sShift, string  sDepartment)
@@ -190,13 +190,6 @@ namespace Common.BLL
             return dal.getAttendance(dDay, sShift, sDepartment);
         }
         
-        
-       
-
-
-        #endregion
-
-
         public bool IsSubmited(DateTime dDay, string sDepartment)
         {
             DataTable dt = dal.GetList(dDay, dDay.AddDays(1),sDepartment);

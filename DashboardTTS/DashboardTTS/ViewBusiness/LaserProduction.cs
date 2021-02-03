@@ -204,14 +204,7 @@ namespace DashboardTTS.ViewBusiness
             return js.Serialize(objResult);
         }
 
-
-         
-
-
-
-
-
-
+        
 
     }
 }

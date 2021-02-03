@@ -75,38 +75,10 @@ namespace Common.Class.BLL
 
 	
 
-
-        public DataTable GetDayOutput(DateTime dDay)
-        {
-            DataSet ds = dal.GetDayOutput(dDay);
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
-
-    
-
         public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo, string sStation, string sPIC, string sJobNo)
         {
-
-            DataTable dt = dal.GetList(dDateFrom, dDateTo, sShift, sPartNo, sStation, sPIC, sJobNo);
-
-            return dt;
+            return dal.GetList(dDateFrom, dDateTo, sShift, sPartNo, sStation, sPIC, sJobNo);
         }
-
-
-        public DataTable GetPackForSummaryReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNo)
-        {
-            return dal.GetPackForSummaryReport(dDateFrom, dDateTo, sShift, sPartNo);
-        }
-
-
 
         public DataTable GetProductDetailList(DateTime dDateFrom, DateTime dDateTo, string sShift, string sPartNumber, string sMachineID, string sJobNumber, string sLotNo)
         {
@@ -197,10 +169,7 @@ namespace Common.Class.BLL
             return dt;
         }
 
-
-
-
-
+        
         public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, 
             List<Model.PQCPackDetailTracking_Model> detailModelList, 
             List<Model.PQCQaViBinning> packBinList, 
@@ -252,20 +221,10 @@ namespace Common.Class.BLL
         }
 
 
-
-        public DataTable GetDailyOperatorList(DateTime dDate, string sShift, string sUserID)
-        {
-            return dal.GetDailyOperatorList(dDate, sShift, sUserID);
-        }
-
-
         public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
             return dal.GetPackInventoryDetailList(dDateFrom, dDateTo, sPartNo, sJobNo);
         }
-
-
-
 
     }
 }

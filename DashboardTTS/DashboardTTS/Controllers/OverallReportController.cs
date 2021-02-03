@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Taiyo.SearchParam;
 
 namespace DashboardTTS.Controllers
 {
@@ -26,7 +27,6 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
-        
         #endregion
 
         
@@ -59,23 +59,17 @@ namespace DashboardTTS.Controllers
         }
 
 
-        public JsonResult GetOutputChartData()
+        public JsonResult GetOutputChartData(DateTime DateFrom, DateTime DateTo)
         {
-            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
-            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
-            dateTo = dateTo.AddDays(1);
-            string shift = Request.Form["Shift"];
+            var bll = new Common.ExtendClass.OverallOutputChart.OverallOutputChart_BLL();
+            var result = bll.GetDataList(new BaseParam()
+            {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1)
+            });
 
-            Common.ExtendClass.OverallOutputChart.OverallOutputChart_BLL bll = new Common.ExtendClass.OverallOutputChart.OverallOutputChart_BLL();            
-            var  result = bll.GetDataList(dateFrom, dateTo, shift);
-
-            
-            return Json(result);
+            return result == null ? Json("") : Json(result);
         }
-
-        
-
-
 
     }
 }

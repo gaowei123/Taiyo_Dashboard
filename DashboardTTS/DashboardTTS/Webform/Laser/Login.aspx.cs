@@ -272,24 +272,21 @@ namespace DashboardTTS.Webform
                         #region UpdateMachineInfo
                         else if (Type == "UpdateMachineInfo")
                         {
-                            
+                            bool Result;
 
-                            Common.Class.Model.MouldingMachineInformation_Model model = (Common.Class.Model.MouldingMachineInformation_Model)Session["MouldingMachineInformation"];
-
-                            Common.Class.BLL.MouldingMachineInformation_BLL bll = new Common.Class.BLL.MouldingMachineInformation_BLL();
-
-                            bool Result = bll.Update(model);
-
-
-
-                            if (Result)
+                            try
                             {
-                                strUrl = "../Moulding/MachineInformation.aspx?Result=TRUE";
+                                var model = (Common.Class.Model.MouldingMachineInformation_Model)Session["MouldingMachineInformation"];
+                                var bll = new Common.Class.BLL.MouldingMachineInformation_BLL();
+                                Result = bll.Update(model);
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                strUrl = "../Moulding/MachineInformation.aspx?Result=FALSE";
+                                DBHelp.Reports.LogFile.Log("", "Catch exception: " + ex.ToString());
+                                Result = false;
                             }
+
+                            strUrl = Result ? "../Moulding/MachineInformation.aspx?Result=TRUE": "../Moulding/MachineInformation.aspx?Result=FALSE";
                         }
                         #endregion
 
