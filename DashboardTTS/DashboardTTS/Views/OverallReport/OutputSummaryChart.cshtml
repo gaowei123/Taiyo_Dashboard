@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">Overall Output Summary Chart</span>
+        <span class="titleText">Production Chart</span>
     </div>
     <div class="row">
         <div class="col-md-12 panel panel-default searchingPanel">
@@ -128,12 +128,9 @@
                     totalQtyData.push(item.TotalQty);
                     rejQtyData.push(item.RejQty);
                     rejRateData.push(item.RejRate.replace('%', ''));
-                }
+                } 
 
                
-
-
-
                 let seriesTotalQty = {
                     name: 'Output Qty',
                     type: 'bar',
@@ -179,7 +176,7 @@
                 var option = {
                     color: ['#006400', '#c23531', '#c23531'],
                     title: {
-                        text: 'Overall Output Summary Chart'
+                        text: 'Production Chart'
                     },
                     legend: {
                         data: ['Output Qty', 'Rej Qty', 'Rej %'],

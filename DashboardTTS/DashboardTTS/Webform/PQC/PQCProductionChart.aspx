@@ -135,5 +135,15 @@
 
     </div>
 
+
+
+    <link href="../../plugins/bigautocomplete/jquery.bigautocomplete.css" rel="stylesheet" />
+    <script src="../../plugins/bigautocomplete/jquery.bigautocomplete.js"></script>
+    <script type="text/javascript">
+        jQuery(function($){  $(function(){
+            setAutoComplete($('#MainContent_txtPartNo'), 'PQC');
+        }); });
+    </script>
+
  </asp:Content>
 

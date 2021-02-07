@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.RedisCache", "Taiyo.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRedisCache", "TestRedisCache\TestRedisCache.csproj", "{DD3104B8-9A68-487E-A481-0597E39B9F1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Data", "Taiyo.Data\Taiyo.Data.csproj", "{94106398-2B13-42D2-BC56-B12D2B759E8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{DD3104B8-9A68-487E-A481-0597E39B9F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD3104B8-9A68-487E-A481-0597E39B9F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD3104B8-9A68-487E-A481-0597E39B9F1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94106398-2B13-42D2-BC56-B12D2B759E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94106398-2B13-42D2-BC56-B12D2B759E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94106398-2B13-42D2-BC56-B12D2B759E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94106398-2B13-42D2-BC56-B12D2B759E8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,16 +14,10 @@ namespace DashboardTTS.Controllers
         private readonly Common.Class.BLL.User_DB_BLL _userBLL = new Common.Class.BLL.User_DB_BLL();
         private readonly Common.BLL.LMMSUserAttendanceTracking_BLL attendanceBLL = new Common.BLL.LMMSUserAttendanceTracking_BLL();
 
-
         private readonly Common.ExtendClass.Attendance.DailySummary_BLL dailySummaryBLL = new Common.ExtendClass.Attendance.DailySummary_BLL();
         private readonly Common.ExtendClass.Attendance.MonthlySummary_BLL monthlySummaryBLL = new Common.ExtendClass.Attendance.MonthlySummary_BLL();
 
-
-        private readonly  JavaScriptSerializer _jsSerializer = new JavaScriptSerializer();
-
-
-
-
+        
         #region view
         public ActionResult UserManagement()
         {
@@ -57,13 +51,7 @@ namespace DashboardTTS.Controllers
 
 
 
-
-
-
-
-
-
-
+        
 
 
         #region User Management
@@ -159,18 +147,13 @@ namespace DashboardTTS.Controllers
         /// 保存Attendance信息
         /// </summary>
         /// <returns></returns>
-        public JsonResult SubmitAttendance()
+        public JsonResult SubmitAttendance(DateTime Day, string Department, string AttendanceList)
         {
-            string strJsonObj = Request.Form["AttendanceList"];
-            DateTime day = DateTime.Parse(Request.Form["Day"]);
-            string department = Request.Form["Department"];
-            
-            List<Common.Model.LMMSUserAttendanceTracking_Model> modelList = _jsSerializer.Deserialize<List<Common.Model.LMMSUserAttendanceTracking_Model>>(strJsonObj);
+            var modelList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Common.Model.LMMSUserAttendanceTracking_Model>>(AttendanceList);
             if (modelList == null)
                 return Json("false");
-
             
-            bool result = attendanceBLL.SubmitAttendance(day, department, modelList);
+            bool result = attendanceBLL.SubmitAttendance(Day, Department, modelList);
             return Json(result);
         }
         
@@ -207,14 +190,13 @@ namespace DashboardTTS.Controllers
         /// <returns></returns>
         public ActionResult GetMonthlySummaryReport(int Year, int Month)
         {
-            Taiyo.SearchParam.BaseParam param = new Taiyo.SearchParam.BaseParam();
-            param.DateFrom = new DateTime(Year, Month, 1);
-            param.DateTo = param.DateFrom.Value.AddMonths(1);
-
-
+            BaseParam param = new BaseParam()
+            {
+                DateFrom = new DateTime(Year, Month, 1),
+                DateTo = new DateTime(Year, Month, 1).AddMonths(1)
+            };
 
             string strResult = monthlySummaryBLL.GetMonthlyListJsonString(param);
-
             return Content(strResult);
         }
 

@@ -6,11 +6,6 @@ namespace DashboardTTS.ViewModel
 {
     public class PQCDailyReport_ViewModel
     {
-
-
-        
-        
-
         public string sDate { get; set; }
         public string station { get; set; }
         public string partNo { get; set; }

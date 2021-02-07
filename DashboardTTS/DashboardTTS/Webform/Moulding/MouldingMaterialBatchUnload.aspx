@@ -1,24 +1,11 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MouldingMaterialBatchUnload.aspx.cs" MasterPageFile="~/Site.Master" Inherits="DashboardTTS.Webform.Moulding.MouldingMaterialBatchUnload" %>
 
-<asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
-    <link href="../Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />  
-    <link href="/Resources/Stylesheets/StyleCSS.css" rel="stylesheet" type="text/css" />
-
-    
+<asp:Content runat="server" ContentPlaceHolderID ="MainContent" >    
     <script>
         function Cancel()
         {
-            try
-            {
-                if (confirm('Your action will not save, are you sure?') == true)
-                {
-                    //alert("./BOMList.aspx" + "?CommandName=" + CommandName + "&PartNumberAll=" + PartNumberAll);
-                    window.location.href = "./MouldingMaintain.aspx";
-                }
-            }
-            catch (e)
-            {
-                alert('exception' + e.message);
+            if (confirm('Your action will not save, are you sure?') == true) {
+                window.location.href = "./MouldingMaintain.aspx";
             }
         }
     </script>

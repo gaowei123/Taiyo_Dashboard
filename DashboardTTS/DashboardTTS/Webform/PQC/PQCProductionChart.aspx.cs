@@ -35,9 +35,6 @@ namespace DashboardTTS.Webform.PQC
                     DBHelp.Reports.LogFile.Log("PQCProductionChart", "Page_Load Exception : " + ex.ToString());
                 }
             }
-           
-
-            Common.CommFunctions.SetAutoComplete(this.Page, "#MainContent_txtPartNo", "#MainContent_txtModel");
         }
 
 

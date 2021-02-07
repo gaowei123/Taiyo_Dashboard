@@ -46,19 +46,9 @@ namespace DashboardTTS.Controllers
             return Json(modelList);
         }
         
-        public ActionResult GetSummaryData()
-        {
-            DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"].ToString());
-            DateTime dateTo = DateTime.Parse(Request.Form["DateTo"].ToString());
-            dateTo = dateTo.AddDays(1);
-            
-            string partNo = Request.Form["PartNo"] == null ? "" : Request.Form["PartNo"].ToString();
-            string shift = Request.Form["Shift"] == null ? "" : Request.Form["Shift"].ToString();
-
-
-
-            string jsonResult = vBLL.GetSummaryList(dateFrom, dateTo, partNo, shift);
-            
+        public ActionResult GetSummaryData(DateTime DateFrom, DateTime DateTo, string PartNo, string Shift)
+        {           
+            string jsonResult = vBLL.GetSummaryList(DateFrom, DateTo.AddDays(1), PartNo, Shift);            
             return Content(jsonResult);
         }
 

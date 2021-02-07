@@ -286,7 +286,6 @@
     <Compile Include="Controllers\LASER_MachineSettingController.cs" />
     <Compile Include="Controllers\MOULD_DailyReportController.cs" />
     <Compile Include="Controllers\MOULD_MonthlyHightestRejectController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -345,9 +344,7 @@
     <Compile Include="ViewModel\Attendance_ViewModel.cs" />
     <Compile Include="ViewModel\BuyoffReport_ViewModel.cs" />
     <Compile Include="ViewModel\CheckingDetail_ViewModel.cs" />
-    <Compile Include="ViewModel\HomePage_ViewModel.cs" />
     <Compile Include="ViewModel\LaserMachineSetting_ViewModel.cs" />
-    <Compile Include="ViewModel\LaserMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\LaserSummaryReport_ViewModel.cs" />
     <Compile Include="ViewModel\MouldDailyReport_ViewModel.cs" />
     <Compile Include="ViewModel\MouldDailyVerifyReport_ViewModel.cs" />
@@ -356,18 +353,13 @@
     <Compile Include="ViewModel\MouldMaterialTraceability.cs" />
     <Compile Include="ViewModel\MouldMonthlyHighestReject.cs" />
     <Compile Include="ViewModel\MouldRejTimeDetail.cs" />
-    <Compile Include="ViewModel\OverallOutputChart_ViewModel.cs" />
     <Compile Include="ViewModel\PackingDetail_ViewModel.cs" />
     <Compile Include="ViewModel\PackingInventory_ViewModel.cs" />
     <Compile Include="ViewModel\PackingProductChart_ViewModel.cs" />
     <Compile Include="ViewModel\PQCButtonReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCCheckingMaintenance_ViewModel.cs" />
     <Compile Include="ViewModel\PQCDailyReport_ViewModel.cs" />
-    <Compile Include="ViewModel\PQCOperatorDailyReport.cs" />
-    <Compile Include="ViewModel\PQCRealTime_ViewModel.cs" />
-    <Compile Include="ViewModel\PQCSummaryReport_ViewModel.cs" />
     <Compile Include="ViewModel\PQCWIPInventory_ViewModel.cs" />
-    <Compile Include="ViewModel\test.cs" />
     <Compile Include="Webform\Laser\Add_BUY_OFF.aspx.cs">
       <DependentUpon>Add_BUY_OFF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -822,13 +814,6 @@
     </Compile>
     <Compile Include="Webform\PQC\PQCRejectDetail.aspx.designer.cs">
       <DependentUpon>PQCRejectDetail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Webform\Reports\LaserPQCTotalReport.aspx.cs">
-      <DependentUpon>LaserPQCTotalReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Reports\LaserPQCTotalReport.aspx.designer.cs">
-      <DependentUpon>LaserPQCTotalReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Webform\Reports\Productivity.aspx.cs">
       <DependentUpon>Productivity.aspx</DependentUpon>
@@ -2891,7 +2876,6 @@
     <Content Include="Webform\PQC\PQCCheckingLiveReport.aspx" />
     <Content Include="Webform\PQC\PQCRealTime.aspx" />
     <Content Include="Webform\PQC\PQCRejectDetail.aspx" />
-    <Content Include="Webform\Reports\LaserPQCTotalReport.aspx" />
     <Content Include="Webform\Reports\Productivity.aspx" />
     <Content Include="Webform\TTSHomePage.aspx" />
     <Content Include="plugins\bootstrap-3.3.7\.editorconfig" />
@@ -3742,7 +3726,6 @@
     <None Include="Service References\LMMS_Webservice\LMMS_Webservice.wsdl" />
     <None Include="Service References\LocalTest\LMMS_Webservice.wsdl" />
     <Content Include="Views\LASER_MachineSetting\Index.cshtml" />
-    <Content Include="Views\Test\Test_Bootstrap_Table.cshtml" />
     <Content Include="Views\MOULD_MonthlyHightestReject\Index.cshtml" />
     <Content Include="Views\MOULD_DailyReport\Index.cshtml" />
     <Content Include="Views\LASER_Product\SummaryReport.cshtml" />
@@ -3774,13 +3757,7 @@
     <Content Include="Views\PQC_Product\PackingProductionTrendChart.cshtml" />
     <Content Include="Views\PQC_Product\PICDailyOutputReport.cshtml" />
     <Content Include="Views\OverallReport\OutputSummaryChart.cshtml" />
-    <Content Include="Views\Test\LaserProductionChart.cshtml" />
-    <Content Include="Views\Test\LaserMachineChart.cshtml" />
-    <Content Include="Views\Test\PQCOperatorChart.cshtml" />
-    <Content Include="Views\Test\PQCProductionChart.cshtml" />
-    <Content Include="Views\Test\ChartIndex.cshtml" />
     <Content Include="Views\Bom\PQCBomMenu.cshtml" />
-    <Content Include="Views\Test\TestFileInput.cshtml" />
     <Content Include="Views\Charts\LaserProductionChart.cshtml" />
     <Content Include="Views\Charts\LaserMachineChart.cshtml" />
     <Content Include="Views\Charts\PQCProductionChart.cshtml" />

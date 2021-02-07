@@ -1966,13 +1966,13 @@
       <publishTime>11/13/2020 18:44:06</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>02/03/2021 16:41:08</publishTime>
+      <publishTime>02/05/2021 14:18:25</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>02/03/2021 16:41:14</publishTime>
+      <publishTime>02/07/2021 15:47:42</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>01/27/2021 14:12:08</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2086,7 +2086,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>02/03/2021 16:41:08</publishTime>
+      <publishTime>02/05/2021 14:18:25</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -2134,7 +2134,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/StaticRes.dll">
-      <publishTime>01/29/2021 10:59:25</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/StatusConverter.dll">
       <publishTime>11/10/2020 17:09:44</publishTime>
@@ -2179,16 +2179,16 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="bin/Taiyo.Enum.dll">
-      <publishTime>01/27/2021 14:12:08</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/Taiyo.JobSchedule.dll">
-      <publishTime>01/27/2021 14:12:09</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/Taiyo.SearchParam.dll">
-      <publishTime>01/29/2021 09:38:14</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/Taiyo.Tool.dll">
-      <publishTime>01/27/2021 14:12:09</publishTime>
+      <publishTime>02/05/2021 14:18:24</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11188,7 +11188,7 @@
       <publishTime>11/13/2020 13:53:46</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>02/03/2021 13:44:53</publishTime>
+      <publishTime>02/05/2021 17:06:20</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11347,7 +11347,7 @@
       <publishTime>01/11/2021 17:20:48</publishTime>
     </File>
     <File Include="Views/LASER_Product/SummaryReport.cshtml">
-      <publishTime>01/13/2021 10:25:59</publishTime>
+      <publishTime>02/05/2021 11:04:54</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11383,7 +11383,7 @@
       <publishTime>09/23/2020 10:28:54</publishTime>
     </File>
     <File Include="Views/MOULDProduct/DailyVerifyReport.cshtml">
-      <publishTime>09/11/2020 11:03:22</publishTime>
+      <publishTime>02/05/2021 14:05:28</publishTime>
     </File>
     <File Include="Views/MOULDProduct/RejectionDetailReport.cshtml">
       <publishTime>06/30/2020 15:35:40</publishTime>
@@ -11398,7 +11398,7 @@
       <publishTime>12/17/2020 13:42:57</publishTime>
     </File>
     <File Include="Views/OverallReport/OutputSummaryChart.cshtml">
-      <publishTime>02/03/2021 16:48:38</publishTime>
+      <publishTime>02/05/2021 13:51:08</publishTime>
     </File>
     <File Include="Views/OverallReport/ProductivityReport.cshtml">
       <publishTime>12/07/2020 15:53:13</publishTime>
@@ -11425,7 +11425,7 @@
       <publishTime>12/08/2020 09:58:24</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingJobOrder.cshtml">
-      <publishTime>11/25/2020 11:28:33</publishTime>
+      <publishTime>02/05/2021 10:05:04</publishTime>
     </File>
     <File Include="Views/PQC_Product/PackingPicChart.cshtml">
       <publishTime>10/29/2020 16:39:52</publishTime>
@@ -11449,7 +11449,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>02/01/2021 16:13:10</publishTime>
+      <publishTime>02/07/2021 10:17:57</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -12022,7 +12022,7 @@
       <publishTime>06/15/2020 19:58:42</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport.aspx">
-      <publishTime>02/01/2021 16:20:49</publishTime>
+      <publishTime>02/07/2021 11:13:56</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport_New.aspx">
       <publishTime>12/25/2019 15:10:53</publishTime>

@@ -12,7 +12,7 @@
     }
 </style>
 
-<div class="container-fluid" style="max-width:1500px;">
+<div class="container">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Laser Productivity Chart</span>
@@ -31,11 +31,13 @@
                 </div>
                 <div class="col-sm-3" id="condition1">
                     <label>Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                    <input type="text" class="form-control" id="txtDateFrom" 
+                           data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
                 </div>
                 <div class="col-sm-3" id="condition2">
                     <label>Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
+                    <input type="text" class="form-control" id="txtDateTo" 
+                           data-date-format="yyyy-mm-dd" placeholder="Please choose date"/>
                 </div>
                 <div class="col-sm-3" id="condition3">
                     <label>Part No:</label>
@@ -46,7 +48,7 @@
                 <div class="col-sm-3"></div>                
                 <div class="col-sm-3"></div>
                 <div class="col-sm-3"></div>
-                <div class="col-sm-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3" style="text-align:right; padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="initChart();" />
                 </div>
             </div>
@@ -77,9 +79,9 @@
 <script type="text/javascript">
 
     var apiGetChartData = window.globalConfig.rootDirectory + '/Charts/GetLaserProductionData';
-
-    //初始化 echart
     var chart = echarts.init(document.getElementById('chart'));
+
+
     
     $(document).ready(function () {
         setPartNoDDL($('#ddlPartNo'), 'Laser', '');
@@ -177,6 +179,11 @@
                         data: data.LegendData,
                         top:10
                     },
+                    dataZoom: [{
+                        type: 'inside'
+                    }, {
+                        type: 'slider'
+                    }],
                     xAxis: [
                         {
                             type: 'category',
@@ -197,28 +204,32 @@
                                 lineStyle: {
                                     color: '#FF0000'
                                 }
-                            },
-                            //max:100
+                            },                          
                         }
                     ],
                     series:[{
                         name: data.SeriesData[0].Name,
                         type: data.SeriesData[0].Type,
-                        //stack: data.SeriesData[0].Stack,
                         yAxisIndex: 0,
+                        large: true,
                         label: {
                             show: true,
-                            position: 'top'
+                            position: 'top',
+                            formatter: function (obj) {
+                                return Number(obj.value) == 0 ? '' : obj.value;
+                            }
                         },
                         data: data.SeriesData[0].Data
                     },{
                         name: data.SeriesData[1].Name,
                         type: data.SeriesData[1].Type,
-                        //stack: data.SeriesData[1].Stack,
                         yAxisIndex: 1,
+                        large: true,
                         label: {
                             show: true,
-                           
+                            formatter: function (obj) {
+                                return Number(obj.value) == 0 ? '' : obj.value;
+                            }
                         },
                         data: data.SeriesData[1].Data
                     }]

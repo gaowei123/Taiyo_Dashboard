@@ -87,11 +87,11 @@ namespace DashboardTTS.Webform.Moulding
             {
                 DataTable dt_Inventory = (DataTable)Session["dt_Inventory"];
                 if (dt_Inventory != null)
-                {               
+                {
                     DataRow[] Rows = dt_Inventory.Select("Material_No = '" + sMaterialNo + "'  and Inventory_Weight <> '0'");
                     if (Rows.Length != 0)
                     {
-                        DataView dv = Common.CommFunctions.DataRowToDataTable(Rows).DefaultView;
+                        DataView dv = Rows.CopyToDataTable().DefaultView;
                         DataTable dt_Material_LotNo = dv.ToTable(true, "Material_LotNo");
                         SetDDL(this.ddl_MaterialLotNo, dt_Material_LotNo, "Material_LotNo");
                         this.ddl_MaterialLotNo.Enabled = true;
@@ -119,7 +119,7 @@ namespace DashboardTTS.Webform.Moulding
                 DataRow[] Rows = dt_Inventory.Select("Material_No = '" + sMaterialNo + "' and Material_LotNo = '"+ sMaterialLotNo + "' and Inventory_Weight <> '0' ");
                 if (Rows.Length != 0)
                 {
-                    DataView dv = Common.CommFunctions.DataRowToDataTable(Rows).DefaultView;
+                    DataView dv = Rows.CopyToDataTable().DefaultView;
                     DataTable dt_LoadTime = dv.ToTable(true, "Load_Time");
                     SetDDL(this.ddl_UnloadDate, dt_LoadTime, "Load_Time");
                     this.ddl_UnloadDate.Enabled = true;

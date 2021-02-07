@@ -499,7 +499,6 @@ namespace DashboardTTS.ViewBusiness
             string sJobNo,string sModel, string sSupplier, string sColor, string sCoating, string sReportType,
             out ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
         {
-
             try
             {
 
@@ -532,7 +531,7 @@ namespace DashboardTTS.ViewBusiness
 
                     #region 合并数据源 赋值到 PQCButtonReport_ViewModel.Report
                  
-                        ViewModel.PQCButtonReport_ViewModel.LaserInfo laserInfoModel = new ViewModel.PQCButtonReport_ViewModel.LaserInfo();
+                    ViewModel.PQCButtonReport_ViewModel.LaserInfo laserInfoModel = new ViewModel.PQCButtonReport_ViewModel.LaserInfo();
                     laserInfoModel = laserInfoList == null ? null : (from a in laserInfoList
                                                                      where a.jobNo == pqcdetailModel.jobID
                                                                      select a).FirstOrDefault();
@@ -556,23 +555,24 @@ namespace DashboardTTS.ViewBusiness
 
 
                     ViewModel.PQCButtonReport_ViewModel.Report reportModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                        reportModel.partsType = pqcdetailModel.partsType;//区分laser, wip part.   
-                        reportModel.model = pqcdetailModel.model;
-                        reportModel.jobID = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", pqcdetailModel.jobID, pqcdetailModel.jobID);
+                    reportModel.partsType = pqcdetailModel.partsType;//区分laser, wip part.   
+                    reportModel.model = pqcdetailModel.model;
+                    reportModel.jobID = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", pqcdetailModel.jobID, pqcdetailModel.jobID);
 
 
 
 
-                        reportModel.lotNo = paintDeliveryModel.lotNo;
+                    reportModel.lotNo = paintDeliveryModel.lotNo;
                         reportModel.partNo = pqcdetailModel.partNumber;
                         reportModel.materialNo = pqcdetailModel.materialNo;
                         reportModel.lotQty = paintDeliveryModel.mrpQty;
-                        reportModel.pass = pqcdetailModel.passQty;
+                    
 
 
                         //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
                         double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
                         double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
+                        reportModel.pass = pqcdetailModel.passQty - paintQA + paintSetup;
                         reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
                         reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
 

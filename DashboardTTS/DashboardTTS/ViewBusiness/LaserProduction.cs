@@ -59,10 +59,6 @@ namespace DashboardTTS.ViewBusiness
         /// 对单一machine通过dictionary来动态保存num对应的数据信息
         /// 遍历8台机器, 并将8组dictionary保存到list中, 最终转换成json传递到前台
         /// </summary>
-        /// <param name="dDateFrom">UI查询参数</param>
-        /// <param name="dDateTo">UI查询参数</param>
-        /// <param name="sPartNo">UI查询参数</param>
-        /// <param name="sShift">UI查询参数</param>
         /// <returns></returns>
         public string GetSummaryList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sShift)
         {

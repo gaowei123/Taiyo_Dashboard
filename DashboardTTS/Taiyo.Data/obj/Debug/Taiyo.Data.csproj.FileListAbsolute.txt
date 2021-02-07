@@ -1,0 +1,5 @@
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.dll
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.pdb
+E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache

@@ -10,6 +10,7 @@
     <link href="../../plugins/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../../plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
+
     <style>
         #divTableContainer{
             overflow: auto;
@@ -35,6 +36,9 @@
         #dgButton{
             width:100%;
             border: 1px solid #000;
+        }
+        td{
+            white-space:nowrap;
         }
    
     </style>
@@ -70,9 +74,9 @@
         </div>
 
         <div id="divTableContainer">
-            <asp:DataGrid runat="server" ID ="dgButton" AutoGenerateColumns="false" CssClass="table">                
-                <HeaderStyle BorderColor="Black" BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" HorizontalAlign="left" VerticalAlign="Middle"/>
-                <ItemStyle BorderColor="Black" BackColor="#F7F6F3" HorizontalAlign="left" VerticalAlign="Middle"  />
+            <asp:DataGrid runat="server" ID ="dgButton" AutoGenerateColumns="false" CssClass="table">
+                <HeaderStyle BorderColor="Black" BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" HorizontalAlign="left" VerticalAlign="Middle" Height="96" />
+                <ItemStyle BorderColor="Black" BackColor="#F7F6F3" HorizontalAlign="left" VerticalAlign="Middle" Height="35"/>
                 <Columns>
                     <asp:BoundColumn DataField="SN" HeaderText="SN"></asp:BoundColumn>
                     <asp:BoundColumn DataField="model" HeaderText="Model" Visible="false"></asp:BoundColumn>
@@ -292,6 +296,9 @@
             $('#divTableContainer').width(width);
 
             $("#dgButton").FrozenTable(1, 0, 8);
+
+            let oTable = document.querySelector('#oDivL_dgButton>table');
+            oTable.style.height = '';
         });
 
 

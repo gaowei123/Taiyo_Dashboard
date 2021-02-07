@@ -58,8 +58,7 @@ namespace DashboardTTS.Webform
 
                 #region Moulding
                 if (Department.ToUpper() == StaticRes.Global.Department.Moulding.ToUpper())
-                {
-                   
+                {                   
                     string Type = Request.QueryString["commandType"] == null ? "" : Request.QueryString["commandType"].ToString();
 
                     #region Get user group
@@ -83,7 +82,7 @@ namespace DashboardTTS.Webform
                     {
                         Group = StaticRes.Global.UserGroup.MH;
                     }
-                    else if (Type == "SubmitAttendance" || Type == "CheckDailyReport")
+                    else if (Type == "CheckDailyReport")
                     {
                         Group = StaticRes.Global.UserGroup.SUPERVISOR;
                     }
@@ -699,33 +698,6 @@ namespace DashboardTTS.Webform
                         #endregion
 
                         
-
-                        #region Submit Attendance
-                        else if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["MouldingSubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "../Moulding/MouldingUserAttendance.aspx?Result=true";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "../Moulding/MouldingUserAttendance.aspx?Result=false";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "../Moulding/MouldingUserAttendance.aspx?Result=false";
-                            }
-                        }
-                        #endregion
-
                         #region Add Parts Moving
                         else if (Type == "Moulding_AddMouldingPartsMovement")
                         {
@@ -909,23 +881,14 @@ namespace DashboardTTS.Webform
 
                 #region Painting
                 else if (Department.ToUpper() == StaticRes.Global.Department.Painting.ToUpper())
-                {
-                  
+                {                  
                     string Type = Request.QueryString["commandType"] == null ? "" : Request.QueryString["commandType"].ToString();
 
                     #region get user group
                     string Group = "";
-                    if (Type == "AddUser" || Type == "UpdateUser" || Type == "DeleteUser")
-                    {
-                        Group = StaticRes.Global.UserGroup.ADMIN;
-                    }
-                    else if (Type == "UpdateProductivity" || Type == "SubmitAttendance")
+                    if (Type == "UpdateProductivity")
                     {
                         Group = StaticRes.Global.UserGroup.SUPERVISOR;
-                    }
-                    else if (Type == "")
-                    {
-                        Group = StaticRes.Global.UserGroup.ENGINEER;
                     }
                     else if (Type == "ScanJob")
                     {
@@ -958,46 +921,14 @@ namespace DashboardTTS.Webform
                             {
                                 strUrl = "../Reports/Productivity.aspx?Result=FALSE";
                             }
-
-
-
                         }
-                        #endregion
-
-               
-
-                        #region Submit Attendance
-                        else if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["PaintingSubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "../Painting/PaintingUserAttendance.aspx?Result=true";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "../Painting/PaintingUserAttendance.aspx?Result=false";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "../Painting/PaintingUserAttendance.aspx?Result=false";
-                            }
-                        }
-                        #endregion
+                        #endregion                        
                     }
                     else
                     {
                         ClientScript.RegisterStartupScript(Page.GetType(), "", "alert('" + errorStr + "');", true);
                         return;
-                    }
-                   
+                    }                   
                 }
                 #endregion
 
@@ -1006,19 +937,9 @@ namespace DashboardTTS.Webform
                 else if (Department.ToUpper() == StaticRes.Global.Department.Laser.ToUpper())
                 {
                     string Type = Request.QueryString["commandType"] == null ? "" : Request.QueryString["commandType"].ToString();
-                    
-
                     #region get user group
-                    string Group = "";
-                    if (Type == "AddUser" || Type == "UpdateUser" || Type == "DeleteUser")
-                    {
-                        Group = StaticRes.Global.UserGroup.ADMIN;
-                    }
-                    else if (Type == "SubmitAttendance")
-                    {
-                        Group = StaticRes.Global.UserGroup.SUPERVISOR;
-                    }
-                    else if (Type == "Delete" || Type == "Submit" || Type =="AddBom" || Type=="UpdateBom" 
+                    string Group = "";                   
+                    if (Type == "Delete" || Type == "Submit" || Type =="AddBom" || Type=="UpdateBom" 
                         || Type == "DownTimeRecord" || Type== "deleteJob" || Type == "AddSparePart"|| Type == "DeleteSparePart")
                     {
                         Group = StaticRes.Global.UserGroup.ENGINEER;
@@ -1028,8 +949,6 @@ namespace DashboardTTS.Webform
                     {
                         Group = StaticRes.Global.UserGroup.OPERATOR;
                     }
-                    
-             
                     #endregion
 
                     bool result = UserBll.Login(Username, Password, out errorStr, Department, Group);
@@ -1159,8 +1078,7 @@ namespace DashboardTTS.Webform
                             #endregion
 
                         }
-                        #endregion
-                        
+                        #endregion                        
                         
                         #region Delete  Inventory
                         if (Type == "deleteJob")
@@ -1235,8 +1153,7 @@ namespace DashboardTTS.Webform
                                 strUrl = "./LaserEquipmentCheckList.aspx";
                             }
                         }
-                        #endregion
-                        
+                        #endregion                        
                   
                         #region Daily Check 
                         else if (Type == "Check")
@@ -1293,34 +1210,7 @@ namespace DashboardTTS.Webform
                             }
                         }
                         #endregion
-
-                  
-                        #region Submit Attendance
-                        else if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["LaserSubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "./UserAttendance.aspx?Result=TRUE";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "./UserAttendance.aspx?Result=FALSE";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "./UserAttendance.aspx?Result=FALSE";
-                            }
-                        }
-                        #endregion
-
+                                          
                         #region Addbuyoff
                         else if (Type == "Addbuyoff")
                         {
@@ -1379,7 +1269,6 @@ namespace DashboardTTS.Webform
                         }
                         #endregion
 
-
                         #region Update SparePart
                         else if (Type == "UpdateSparePart")
                         {
@@ -1406,7 +1295,6 @@ namespace DashboardTTS.Webform
                             }
                         }
                         #endregion
-
 
                         #region Delete SparePart
                         else if (Type == "DeleteSparePart")
@@ -1467,11 +1355,7 @@ namespace DashboardTTS.Webform
 
                     #region get user group
                     string Group = "";
-                    if (Type == "AddUser" || Type == "UpdateUser" || Type == "DeleteUser")
-                    {
-                        Group = StaticRes.Global.UserGroup.ADMIN;
-                    }
-                    else if (Type == "AddBom" || Type == "UpdateBom"|| Type == "DeleteBom" || Type == "SubmitAttendance" || Type == "UpdateProductivity" || Type == "deleteJob")
+                    if (Type == "AddBom" || Type == "UpdateBom"|| Type == "DeleteBom" || Type == "UpdateProductivity" || Type == "deleteJob")
                     {
                         Group = StaticRes.Global.UserGroup.SUPERVISOR;
                     }
@@ -1688,34 +1572,7 @@ namespace DashboardTTS.Webform
                             #endregion
 
                         }
-                        #endregion
-
-                
-                        #region Submit Attendance
-                        else if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["PQCSubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "../PQC/PQCUserAttendance.aspx?Result=true";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "../PQC/PQCUserAttendance.aspx?Result=false";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "../PQC/PQCUserAttendance.aspx?Result=false";
-                            }
-                        }
-                        #endregion
+                        #endregion                        
 
                         #region AddbuyoffPaintingPart
                         else if (Type == "AddbuyoffPaintingPart")
@@ -1745,7 +1602,6 @@ namespace DashboardTTS.Webform
                             }
                         }
                         #endregion
-
                     }
                     else
                     {
@@ -1759,34 +1615,13 @@ namespace DashboardTTS.Webform
 
                 #region Assemble
                 else if (Department.ToUpper() == StaticRes.Global.Department.Assembly.ToUpper())
-                {
-                   
+                {                   
                     string Type = Request.QueryString["commandType"] == null ? "" : Request.QueryString["commandType"].ToString();
-
-                    #region get user group
                     string Group = "";
-                    if (Type == "AddUser" || Type == "UpdateUser" || Type == "DeleteUser")
-                    {
-                        Group = StaticRes.Global.UserGroup.ADMIN;
-                    }
-                    else if (Type == "UpdateProductivity")
+                    if (Type == "UpdateProductivity")
                     {
                         Group = StaticRes.Global.UserGroup.SUPERVISOR;
                     }
-                    else if (Type == "")
-                    {
-                        Group = StaticRes.Global.UserGroup.ENGINEER;
-                    }
-                    else if (Type == "")
-                    {
-                        Group = StaticRes.Global.UserGroup.OPERATOR;
-                    }
-                    else if (Type == "SubmitAttendance")
-                    {
-                        Group = StaticRes.Global.UserGroup.SUPERVISOR;
-                    }
-                    #endregion
-
                     bool result = UserBll.Login(Username, Password, out errorStr, Department, Group);
                     if (result)
                     {
@@ -1814,35 +1649,6 @@ namespace DashboardTTS.Webform
 
                         }
                         #endregion
-
-                  
-
-                        #region Submit Attendance
-                        else if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["AssySubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "../Assy/AssyUserAttendance.aspx?Result=true";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "../Assy/AssyUserAttendance.aspx?Result=false";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "../Assy/AssyUserAttendance.aspx?Result=false";
-                            }
-                        }
-                        #endregion
-
                     }
                     else
                     {
@@ -1852,75 +1658,7 @@ namespace DashboardTTS.Webform
                    
                 }
                 #endregion
-
-
-                #region Office
-                else if (Department.ToUpper() == StaticRes.Global.Department.Office.ToUpper())
-                {
-
-                    string Type = Request.QueryString["commandType"] == null ? "" : Request.QueryString["commandType"].ToString();
-
-                    #region get user group
-                    string Group = "";
-                    if (Type == "AddUser" || Type == "UpdateUser" || Type == "DeleteUser")
-                    {
-                        Group = StaticRes.Global.UserGroup.ADMIN;
-                    }
-                    else if (Type == "SubmitAttendance")
-                    {
-                        Group = StaticRes.Global.UserGroup.SUPERVISOR;
-                    }
-                    else if (Type == "")
-                    {
-                        Group = StaticRes.Global.UserGroup.ENGINEER;
-                    }
-                    else if (Type == "")
-                    {
-                        Group = StaticRes.Global.UserGroup.OPERATOR;
-                    }
-                  
-                    #endregion
-
-                    bool result = UserBll.Login(Username, Password, out errorStr, Department, Group);
-                    if (result)
-                    {
-                        #region Submit Attendance
-                        if (Type == "SubmitAttendance")
-                        {
-                            List<System.Data.SqlClient.SqlCommand> lSqlCmd = new List<System.Data.SqlClient.SqlCommand>();
-                            try
-                            {
-                                lSqlCmd = (List<System.Data.SqlClient.SqlCommand>)Session["OfficeSubmitAttendanceSqlList"];
-
-                                if (lSqlCmd != null && lSqlCmd.Count > 0 && DBHelp.SqlDB.SetData_Rollback(lSqlCmd))
-                                {
-                                    //return successful;
-                                    strUrl = "../Office/OfficeUserAttendance.aspx?Result=true";
-                                }
-                                else
-                                {
-                                    //show message;
-                                    strUrl = "../Office/OfficeUserAttendance.aspx?Result=false";
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                strUrl = "../Office/OfficeUserAttendance.aspx?Result=false";
-                            }
-                        }
-                        #endregion
-                        
-                    }
-                    else
-                    {
-                        ClientScript.RegisterStartupScript(Page.GetType(), "", "alert('" + errorStr + "');", true);
-                        return;
-                    }
-
-                }
-                #endregion
-
-
+                
                 #region else
                 else
                 {

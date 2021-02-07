@@ -14,11 +14,7 @@ namespace Common.BLL
 		private readonly Common.DAL.LMMSWatchLog_DAL dal=new Common.DAL.LMMSWatchLog_DAL();
 		public LMMSWatchLog_BLL()
 		{}
-		#region  Method
-		
-
         
-
 
         public DataTable GetMaterialList(string sDay, string sShift, DateTime dDateFrom, DateTime dDateTo, string sJobnumber, string sMachineID, string sPartNumber, string sModule)
         {
@@ -84,11 +80,9 @@ namespace Common.BLL
                 }
             }
 
+            
 
-            //sort
-            DataRow[] drArry = dt_MaterialList.Select("", "MachineID asc, partnumber asc");
-            DataTable dt_MaterialListAfterSort = Common.CommFunctions.DataRowToDataTable(drArry);
-            //sort
+            DataTable dt_MaterialListAfterSort = dt_MaterialList.Select("", "MachineID asc, partnumber asc").CopyToDataTable();
 
 
 
@@ -565,8 +559,6 @@ namespace Common.BLL
             return Result;
         }
 
-        #endregion  Method
-
 
 
 
@@ -821,10 +813,7 @@ namespace Common.BLL
                 }
             }
         }
-
-   
-
-
+        
         public DataTable getProductivityReportForLaser(DateTime dDay, string sShift, string sDepartment)
         {
 
@@ -978,11 +967,6 @@ namespace Common.BLL
             return dtProduct;
         }
         
-
-      
-
-
-
         private int GetSN(string type)
         {
             int SN = 0;
@@ -1022,11 +1006,7 @@ namespace Common.BLL
             }
             return SN;
         }
-
-
-
-
-
+        
         public DataTable GetLaserRejButtonReport_NEW(string strWhere )
         {
             DataTable dt = dal.GetLaserRejForButtonReport_NEW(strWhere);
@@ -1039,14 +1019,7 @@ namespace Common.BLL
                 return dt;
             }
         }
-
-
-
-
-
-
-
-
+        
         #endregion
 
 

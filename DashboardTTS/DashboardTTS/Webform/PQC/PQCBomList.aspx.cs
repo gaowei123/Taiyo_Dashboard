@@ -40,10 +40,7 @@ namespace DashboardTTS.Webform
             {
                 DBHelp.Reports.LogFile.Log("PQCBomList", "Page_Load Exception --" + ee.ToString());
                 ShowWarning(ee.ToString());
-            }
-
-            
-            Common.CommFunctions.SetAutoComplete(this.Page, "#MainContent_txt_partNo", "");
+            }            
         }
 
         

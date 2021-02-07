@@ -37,8 +37,7 @@ namespace DashboardTTS.Webform.Moulding
                     }
                     #endregion
                 }
-
-                Common.CommFunctions.SetAutoComplete(this.Page, "MainContent_txt_PartNo", "");
+                
             }
             catch (Exception ee)
             {

@@ -28,19 +28,7 @@ namespace Common
                 return false;
         }
 
-        public static DataTable DataRowToDataTable(DataRow[] Rows)
-        {
-            if (Rows == null || Rows.Length == 0)
-                return null;
-            DataTable tmp = Rows[0].Table.Clone();
-            foreach (DataRow row in Rows)
-            {
-                tmp.ImportRow(row);
-            }
-            return tmp;
-        }
-
-
+     
         public static void ShowMessage(System.Web.UI.Page page, string sMessage)
         {
             page.ClientScript.RegisterStartupScript(page.GetType(), "", "alert('"+ sMessage + "');", true);
@@ -209,93 +197,6 @@ namespace Common
                 dg.Visible = true;
             }
         }
-
-
-        public static void SetAutoComplete(System.Web.UI.Page page, string sControlID_Part, string sControlID_Model)
-        {
-            Common.Class.BLL.LMMSBom_BLL bll = new Common.Class.BLL.LMMSBom_BLL();
-            
-
-            //拼JS
-            StringBuilder strJS = new StringBuilder();
-            //strJS.AppendLine("<script src=\"../../assets/js/jquery-1.7.min.js\" type=\"text/javascript\"></script>");
-            strJS.AppendLine("<script src=\"../../assets/js/jquery.bigautocomplete.js?v=2\"></script> ");
-            strJS.AppendLine("<link rel=\"stylesheet\" href=\"../../assets/css/jquery.bigautocomplete.css\" type=\"text/css\" />");
-            strJS.AppendLine("");
-
-
-
-
-
-            strJS.AppendLine("<script type=\"text/javascript\">");
-
-            #region part no
-            if (sControlID_Part != "")
-            {
-                List<string> partNoList = bll.GetPatNoList();
-                if (partNoList == null)
-                    return;
-
-
-                strJS.AppendLine("  jQuery(function($){  $(function(){");
-                strJS.AppendLine(" $(\"" + sControlID_Part + "\").bigAutocomplete({");
-                strJS.AppendLine(" data:[ ");
-                foreach (string str in partNoList)
-                {
-                    strJS.Append("{\"title\":\"" + str + "\"},");
-                }
-                strJS.Remove(strJS.Length - 1, 1);
-                strJS.AppendLine(" ], ");
-
-                strJS.AppendLine(" callback:function(data){ }");
-                strJS.AppendLine(" }); });});");
-
-                strJS.AppendLine("");
-            }
-            #endregion
-
-            #region model
-            if (sControlID_Model != "")
-            {
-                List<string> modelList = bll.GetModelList();
-                if (modelList == null)
-                    return;
-
-
-                strJS.AppendLine("  jQuery(function($){  $(function(){");
-                strJS.AppendLine(" $(\"" + sControlID_Model + "\").bigAutocomplete({");
-                strJS.AppendLine(" data:[ ");
-                foreach (string str in modelList)
-                {
-                    strJS.Append("{\"title\":\"" + str + "\"},");
-                }
-                strJS.Remove(strJS.Length - 1, 1);
-                strJS.AppendLine(" ], ");
-
-                strJS.AppendLine(" callback:function(data){ }");
-                strJS.AppendLine(" }); });});");
-
-                strJS.AppendLine("");
-            }
-            #endregion
-
-            #region supplier   
-
-            #endregion
-
-            #region customer
-
-            #endregion
-
-
-            strJS.AppendLine("</script>");
-
-
-
-
-            page.ClientScript.RegisterClientScriptBlock(page.GetType(), "", strJS.ToString());
-        }
-
 
         /// <summary>
         /// list to datatable

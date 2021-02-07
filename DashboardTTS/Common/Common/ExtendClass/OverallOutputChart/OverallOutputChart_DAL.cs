@@ -12,9 +12,14 @@ namespace Common.ExtendClass.OverallOutputChart
     internal class OverallOutputChart_DAL
     {
         //2021-2-3, 再次重写, 草泥马
+        //┻━┻︵╰(‵□′)╯︵┻━┻
+        //┻━┻︵╰(‵□′)╯︵┻━┻
+        //┻━┻︵╰(‵□′)╯︵┻━┻
+
 
         /// <summary>
         /// 获取Moulding的totalqty, rejqty
+        /// ** 其中Mould_Testing & Material_Testing不属于output.
         /// </summary>
         public OverallOutputChart_Model GetMouldOutput(BaseParam param)
         {
@@ -23,7 +28,9 @@ namespace Common.ExtendClass.OverallOutputChart
 SUM(acountReading) as TotalQty
 ,SUM(rejectQty) as RejQty
 from MouldingViTracking
-where day >= @dateFrom and day<@dateTo ");
+where 1=1 
+and status != 'Mould_Testing' and status != 'Material_Testing'
+and day >= @dateFrom and day<@dateTo ");
 
             SqlParameter[] paras =
             {
@@ -85,7 +92,7 @@ and updatedTime < @dateTo  ");
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"select 
-SUM(totalQuantity) as TotalQty
+SUM(ISNULL(totalpass,0) + ISNULL(totalfail,0)) as TotalQty
 ,SUM(totalFail) as RejQty
 from LMMSWatchDog_Shift
 where day >= @dateFrom and day < @dateTo ");

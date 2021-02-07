@@ -3,16 +3,27 @@
     ViewBag.Title = "DailyVerifyReport";
 }
 
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
-
-
 <style type="text/css">
 
-    a[href]:after{content:normal;}
+    a[href]:after{
+        content:normal;
+    }
 
+    .searchDate{
+        float:right !important;
+    }
+    .searchDate>div{
+        width:260px;
+        display: flex; 
+        justify-content:center;
+        align-items:center;
+    }
+    .searchDate>div>label{
+        width:50px;
+    }
+    .searchDate>div>#txtDate{
+        width:150px;
+    }
 </style>
 
 
@@ -21,7 +32,7 @@
 
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">Daily Report  (Check & Verify)</span>
+        <span class="titleText">Daily Report (Check & Verify)</span>
     </div>
 
     <div class="row">
@@ -34,12 +45,14 @@
                 <li role="presentation"><a href="#Summary" aria-controls="wip" role="tab" data-toggle="tab">Summary</a></li>
 
                 @*嵌在 tab标签内的 date 查询条件*@
-                <li style="float:right;">
-                    <div style="width:260px;display: flex; justify-content:center;align-items:center;">
-                        <label for="txtDate" style="width:50px;">Date:</label>
-                        <input type="text" class="form-control" id="txtDate" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:150px;" onchange="showReport();" />
+                <li class="searchDate">
+                    <div>
+                        <label for="txtDate">Date:</label>
+                        <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" 
+                               placeholder="Please choose date" onchange="showReport();" />
                     </div>
                 </li>
+                @*嵌在 tab标签内的 date 查询条件*@
             </ul>
 
             
@@ -101,11 +114,12 @@
 </div>
 
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
-
-
 
 <script>
 
@@ -137,6 +151,7 @@
 
         showReport();
     });
+
     $(window).resize(function () {
         $('#tableDayPCS').bootstrapTable('resetView');
         $('#tableNightPCS').bootstrapTable('resetView');
@@ -1942,7 +1957,6 @@
 
             //sidePagination: 'server', // 设置为服务器端分页
             queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-
                 return {
                     Date: $('#txtDate').val()
                 }
@@ -2091,11 +2105,6 @@
                 alert("a exception happend during login !");
             }
         });
-
     }
-
-
-
-
 
 </script>
