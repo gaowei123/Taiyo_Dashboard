@@ -67,13 +67,12 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+        public ActionResult CheckingLiveReport()
+        {
+            return View();
+        }
         #endregion
-
-
-
-
-
-
+        
 
 
         #region summary report  2021/1/21 new logic 
@@ -191,152 +190,81 @@ namespace DashboardTTS.Controllers
 
         #region pqc checking maintenance
 
-        public ActionResult GetJobInfo()
+        public JsonResult GetJobInfo(string TrackingID, string JobNo)
         {
-
-            string trackingID = Request.Form["TrackingID"];
-            string jobNo = Request.Form["JobNo"];
-           
-          
-
-
-           
-            string jsonResult = "";
-
-
-            ViewModel.PQCCheckingMaintenance_ViewModel.JobInfo model = new ViewModel.PQCCheckingMaintenance_ViewModel.JobInfo();
-
-
-
+            var model = new ViewModel.PQCCheckingMaintenance_ViewModel.JobInfo();
+            
             try
             {
-                model = vBLL.GetJobInfo(trackingID, jobNo);
+                model = vBLL.GetJobInfo(TrackingID, JobNo);
             } 
             catch (Exception ee)
             {
-                DBHelp.Reports.LogFile.Log("PQC_ProductController", "GetJobInfo Exception" + ee.ToString());
+                model = null;
+                DBHelp.Reports.LogFile.Log("PQC_ProductController", "GetJobInfo Exception" + ee.ToString());               
             }
 
-
-            if (model != null)
-            {
-                jsonResult = _js.Serialize(model);
-            }
-            else
-            {
-                jsonResult = _js.Serialize("");
-            }
-
-
-            return Content(jsonResult);
+            return model == null ? Json("") : Json(model);
         }
 
-        public ActionResult GetMaterialInfo()
+        public JsonResult GetMaterialInfo(string TrackingID, string JobNo)
         {
-            string trackingID = Request.Form["TrackingID"];
-            
-
-         
-            string jsonResult = "";
-
-
             List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> modelList = new List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo>();
             
             try
             {
-                modelList = vBLL.GetMaterialList(trackingID);
+                modelList = vBLL.GetMaterialList(TrackingID, JobNo);
             }
             catch (Exception ee)
             {
+                modelList = null;
                 DBHelp.Reports.LogFile.Log("PQC_ProductController", "GetMaterialInfo Exception" + ee.ToString());
             }
 
-
-            if (modelList != null)
-            {
-                jsonResult = _js.Serialize(modelList);
-            }
-            else
-            {
-                jsonResult = _js.Serialize("");
-            }
-
-
-            return Content(jsonResult);
+            return modelList == null ? Json("") : Json(modelList);
         }
         
-        public ActionResult GetDefectInfo()
+        public ActionResult GetDefectInfo(string TrackingID, string MaterialNo, string TabSN)
         {
-            string trackingID = Request.Form["TrackingID"];
-            string materialNo = Request.Form["MaterialNo"];
-
-            string tabSN = Request.Form["TabSN"];
-
-
-          
-            string jsonResult = "";
-
-
             List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo> modelList = new List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo>();
 
             try
             {
-                modelList = vBLL.GetDefectInfo(trackingID, materialNo);
-                modelList.ForEach(p => p.tabSN = tabSN);
+                modelList = vBLL.GetDefectInfo(TrackingID, MaterialNo);
+                modelList.ForEach(p => p.tabSN = TabSN);
             }
             catch (Exception ee)
             {
+                modelList = null;
                 DBHelp.Reports.LogFile.Log("PQC_ProductController", "GetDefectInfo Exception" + ee.ToString());
             }
 
-
-            if (modelList != null)
-            {
-                jsonResult = _js.Serialize(modelList);
-            }
-            else
-            {
-                jsonResult = _js.Serialize("");
-            }
-
-
-            return Content(jsonResult);
+            return modelList == null ? Json("") : Json(modelList);
         }
 
 
 
-        public ActionResult EndJob()
+        public JsonResult EndJob(string TrackingID, bool Complete)
         {
-            string trackingID = Request.Form["TrackingID"];
-            bool complete = bool.Parse(Request.Form["Complete"]);
-
-
-            bool updateResult = false;
+            bool updateResult;
 
             try
             {
                 Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
-                updateResult = bll.MaintenanceUpdateEndFlag(trackingID, complete);   
+                updateResult = bll.MaintenanceUpdateEndFlag(TrackingID, Complete);   
             }
             catch (Exception ee)
             {
+                updateResult = false;
                 DBHelp.Reports.LogFile.Log("PQC_ProductController", "GetJobInfo Exception" + ee.ToString());
             }
 
-
-
-
-
-        
-
-
-            return Content(_js.Serialize(updateResult));
+            return Json(updateResult);
         }
         
-        public ActionResult UpdateQty()
+        public JsonResult UpdateQty()
         {
-            
-            bool updateResult = false;
+            bool updateResult;
             
             try
             {
@@ -344,14 +272,11 @@ namespace DashboardTTS.Controllers
             }
             catch (Exception ee)
             {
+                updateResult = false;
                 DBHelp.Reports.LogFile.Log("PQC_ProductController", "UpdateQty Exception" + ee.ToString());
             }
 
-
-
-           
-
-            return Content(_js.Serialize(updateResult));
+            return Json(updateResult);
         }
 
         #endregion
@@ -565,7 +490,6 @@ namespace DashboardTTS.Controllers
         {
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
             string partNo = Request.Form["PartNo"];
-            //string type = Request.Form["Type"];
 
 
             string result = vBLL.GetPackingInventory(dateFrom, partNo);
@@ -576,7 +500,6 @@ namespace DashboardTTS.Controllers
 
         public ActionResult GetPackingJobOrderList()
         {
-
             DateTime dateFrom = DateTime.Parse(Request.Form["DateFrom"]);
             DateTime dateTo = DateTime.Parse(Request.Form["DateTo"]);
             dateTo = dateTo.AddDays(1);
@@ -606,6 +529,29 @@ namespace DashboardTTS.Controllers
 
         #endregion
 
+
+        /// <summary>
+        /// 2021/3/2,重写checking live report
+        /// 从原本通过sqlserver opendatasource来跨库查询
+        /// 现在拆分成分别单独查询paint, pqc的数据,在代码中合并.
+        /// 提高查询效率
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetCheckingLiveList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string Station, string JobNo, string LotNo )
+        {
+            var bll = new Common.ExtendClass.PQCProduction.CheckingLiveReport.BLL();
+            var result = bll.GetReportList(new CheckingLiveParam() {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1),
+                Shift = Shift,
+                PartNo = PartNo,
+                MachineID = Station,
+                JobNo = JobNo,
+                LotNo = LotNo
+            });
+
+            return Json(result);
+        }
 
 
     }

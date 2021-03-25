@@ -15,7 +15,7 @@
 <div class="container-fluid" style="max-width:1500px;">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">Packing Job Order</span>
+        <span class="titleText">Packing Job Order Detail</span>
         <label id="lbDeleteJob" style="display:none;"></label>
     </div>
 
@@ -157,11 +157,7 @@
 
 
 
-    function Search() {
-
-        alert('lalal');
-        return false;
-
+    function Search() {     
         var partNo = getUrlParam("PartNo");
         if (partNo == null || partNo == "") {
             partNo = $('#ddlPartNo').val();
@@ -331,7 +327,9 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-
+                if (data ==='' || data.length ===0) {
+                    return false;
+                }
 
                 var totalMrpSET = 0;
                 var totalMrpPCS = 0;

@@ -371,6 +371,7 @@ namespace DashboardTTS.ViewBusiness
                     ViewModel.PQCButtonReport_ViewModel.PaintTempInfo model = new ViewModel.PQCButtonReport_ViewModel.PaintTempInfo();
                     model.jobNo = dr["JobID"].ToString().ToUpper();
                     model.lotNo = dr["lotNo"].ToString();
+                    model.materialName = dr["materialName"].ToString();
 
                     if (dr["MFGDate"].ToString() != "")
                     {
@@ -525,7 +526,7 @@ namespace DashboardTTS.ViewBusiness
                 List<ViewModel.PQCButtonReport_ViewModel.Report> reportList = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
                 foreach (var pqcdetailModel in pqcDetailList)
                 {
-
+            
                     DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "job - " + pqcdetailModel.jobID);
 
 
@@ -537,10 +538,10 @@ namespace DashboardTTS.ViewBusiness
                                                                      select a).FirstOrDefault();
                     
                     ViewModel.PQCButtonReport_ViewModel.PaintTempInfo paintTempInfoModel = new ViewModel.PQCButtonReport_ViewModel.PaintTempInfo();
-                    paintTempInfoModel =  (from a in paintTempInfoList
-                                          where a.jobNo == pqcdetailModel.jobID
+                    paintTempInfoModel = (from a in paintTempInfoList
+                                          where a.jobNo == pqcdetailModel.jobID && a.materialName == pqcdetailModel.materialNo
                                           select a).FirstOrDefault();
-                    
+
                     ViewModel.PQCButtonReport_ViewModel.PaintDelivery paintDeliveryModel = new ViewModel.PQCButtonReport_ViewModel.PaintDelivery();
                     paintDeliveryModel = (from a in paintDeliveryList
                                           where a.jobNo == pqcdetailModel.jobID & a.paintProcess.ToUpper() == "PAINT#1"
@@ -563,21 +564,21 @@ namespace DashboardTTS.ViewBusiness
 
 
                     reportModel.lotNo = paintDeliveryModel.lotNo;
-                        reportModel.partNo = pqcdetailModel.partNumber;
-                        reportModel.materialNo = pqcdetailModel.materialNo;
-                        reportModel.lotQty = paintDeliveryModel.mrpQty;
-                    
+                    reportModel.partNo = pqcdetailModel.partNumber;
+                    reportModel.materialNo = pqcdetailModel.materialNo;
+                    reportModel.lotQty = paintDeliveryModel.mrpQty;
 
 
-                        //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
-                        double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
-                        double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
-                        reportModel.pass = pqcdetailModel.passQty - paintQA + paintSetup;
-                        reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
-                        reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
 
-                        reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup) / paintDeliveryModel.mrpQty * 100, 2);
-                        reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate);
+                    //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
+                    double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
+                    double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
+                    reportModel.pass = pqcdetailModel.passQty - paintQA + paintSetup;
+                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
+                    reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
+
+                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup) / paintDeliveryModel.mrpQty * 100, 2);
+                    reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate);
 
 
 

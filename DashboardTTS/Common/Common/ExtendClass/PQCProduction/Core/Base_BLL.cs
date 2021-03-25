@@ -32,6 +32,11 @@ namespace Common.ExtendClass.PQCProduction.Core
             return result;
         }
 
+        public List<BaseVI_Model> GetCheckingList(PQCOperatorParam param)
+        {
+            return _dal.GetCheckViList(param);           
+        }
+
         public List<BaseDefect_Model> GetDefectList(PQCOperatorParam param)
         {
             return _dal.GetDefectList(param);

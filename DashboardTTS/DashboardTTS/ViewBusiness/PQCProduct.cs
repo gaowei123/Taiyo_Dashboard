@@ -272,22 +272,42 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
-        public List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> GetMaterialList(string sTrackingID)
+        public List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> GetMaterialList(string sTrackingID, string sJobNo)
         {
             DataTable dt = viDetailBLL.GetList(sTrackingID);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
 
+            
+
+            //2021-03-25
+            //获取painting qa, setup的数量计算在material list的rej中. 保持和defect rej数量的一致
+            Common.Class.BLL.PaintingTempInfo paintTempBLL = new Common.Class.BLL.PaintingTempInfo();
+            DataTable dtPaintTemp = paintTempBLL.GetList(null, null, string.Empty, sJobNo);
+
             List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> modelList = new List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo>();
-
-
             foreach (DataRow dr in dt.Rows)
             {
                 ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo model = new ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo();
                 model.materialNo = dr["materialPartNo"].ToString();
                 model.passQty = double.Parse(dr["passQty"].ToString());
                 model.rejQty = double.Parse(dr["rejectQty"].ToString());
+
+                double qaQty = 0;
+                double setupQty = 0;
+                if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
+                {
+                    DataRow[] arrDrs = dtPaintTemp.Select($" materialPartNo = '{model.materialNo}'");
+                    if (arrDrs != null && arrDrs.Length != 0)
+                    {
+                        qaQty = int.Parse(arrDrs[0]["qaTestQty"].ToString());
+                        setupQty = int.Parse(arrDrs[0]["setupRejQty"].ToString());
+                    }
+                }
+
+
+                model.rejQty = model.rejQty + qaQty + setupQty;
 
 
                 modelList.Add(model);
@@ -304,31 +324,55 @@ namespace DashboardTTS.ViewBusiness
             return sorted;
         }
 
-
+        
         public List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo> GetDefectInfo(string sTrackingID, string sMaterialNo)
         {
             DataTable dt = viDefectBLL.GetListByTrackingID(sTrackingID);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
 
+            string jobNo = "";
 
-            List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo> modelList = new List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo>();
-
-
+            var modelList = new List<ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo>();
             foreach (DataRow dr in dt.Rows)
             {
-                ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo model = new ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo();
-
+                var model = new ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo();
                 model.materialNo = dr["materialPartNo"].ToString();
                 model.defectCodeID = int.Parse(dr["defectCodeID"].ToString());
                 model.defectCode = dr["defectCode"].ToString();
                 model.defectDescription = dr["defectDescription"].ToString();
                 model.rejQty = double.Parse(dr["rejectQty"].ToString());
+                jobNo = dr["jobId"].ToString();
 
 
                 modelList.Add(model);
             }
 
+
+
+            //为了同步overall buyoff report & button report中的数据的一致性. 
+            //在painting defectcode中添加QA, Setup显示, 来提供维护.
+            #region 2021-03-25 qa, setup
+            int qaQty = 0;
+            int setupQty = 0;
+
+            Common.Class.BLL.PaintingTempInfo paintTempBLL = new Common.Class.BLL.PaintingTempInfo();
+            DataTable dtPaintTemp =  paintTempBLL.GetList(null, null, string.Empty, jobNo);
+            if (dtPaintTemp != null && dtPaintTemp.Rows.Count !=0 )
+            {
+                DataRow[] arrDrs = dtPaintTemp.Select($" materialPartNo = '{sMaterialNo}'");
+                if (arrDrs!= null && arrDrs.Length != 0)
+                {
+                     qaQty = int.Parse(arrDrs[0]["qaTestQty"].ToString());
+                     setupQty= int.Parse(arrDrs[0]["setupRejQty"].ToString());
+                }
+            }
+           
+            // 89 - QA
+            // 90 - Setup
+            modelList.Add(CreateExtraDefect(sMaterialNo, 89, "QA", qaQty));
+            modelList.Add(CreateExtraDefect(sMaterialNo, 90, "Setup", setupQty));
+            #endregion
 
 
             var materialList = (from a in modelList where a.materialNo == sMaterialNo orderby a.materialNo ascending, a.defectCodeID ascending select a).ToList();
@@ -338,20 +382,30 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
+        private ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo CreateExtraDefect(string MaterialNo, int ID, string Code, int RejQty )
+        {
+            return new ViewModel.PQCCheckingMaintenance_ViewModel.DefectInfo()
+            {
+                materialNo = MaterialNo,
+                defectCodeID = ID,
+                defectCode = Code,
+                defectDescription = "Paint",
+                rejQty = RejQty
+            };
+        }
+
+
+
         public bool UpdateQty( System.Collections.Specialized.NameValueCollection formParameters)
         {
-
             string trackingID = formParameters["TrackingID"];
+            string jobNo = formParameters["JobNo"];
 
 
             //关联获取 material sn
-            List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> materialList = GetMaterialList(trackingID);
-
-
+            List<ViewModel.PQCCheckingMaintenance_ViewModel.MaterialInfo> materialList = GetMaterialList(trackingID, jobNo);
             
-
-
-
+            
             //处理 defect list
             List<Common.Class.Model.PQCQaViDefectTracking_Model> defectTrackingList = viDefectBLL.GetModelList(trackingID);
             foreach (Common.Class.Model.PQCQaViDefectTracking_Model model in defectTrackingList)
@@ -360,10 +414,10 @@ namespace DashboardTTS.ViewBusiness
                 int materialSN = (from a in materialList where a.materialNo == model.materialPartNo select a).FirstOrDefault().sn;
 
 
-                //前台id自动命名规则,   txtid_SN_CodeID   获取提交的数量
-                decimal rejQty = decimal.Parse(formParameters["txtid_" + materialSN.ToString() + "_" + model.defectCodeID]);
+                //根据前台id自动命名规则,   txtid_{material sn}_{defect code id}   获取提交的数量
+                decimal rejQty = decimal.Parse(formParameters[$"txtid_{materialSN.ToString()}_{model.defectCodeID}"]);
 
-
+                
                 model.rejectQty = rejQty;
                 model.updatedTime = DateTime.Now;
                 model.lastUpdatedTime = DateTime.Now;
@@ -372,13 +426,36 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+            #region ================ 2021-03-25  更新paintingTempInfo中的qa,setup数量. ================
+            List<Common.Class.Model.PaintingTempInfo_Model> paintTempModelList = new List<Common.Class.Model.PaintingTempInfo_Model>();
+            foreach (var model in materialList)
+            {
+                paintTempModelList.Add(new Common.Class.Model.PaintingTempInfo_Model()
+                {
+                    jobNumber = jobNo,
+                    materialName = model.materialNo,
+                    updatedTime = DateTime.Now,
+
+                    // 89 - QA, 90 - Setup
+                    qaTestQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_89"]),
+                    setupRejQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_90"])
+                });
+            }
+            Common.Class.BLL.PaintingTempInfo paintTempInfoBLL = new Common.Class.BLL.PaintingTempInfo();
+            bool result = paintTempInfoBLL.UpdateQASetup(paintTempModelList);
+            if (!result)
+            {
+                DBHelp.Reports.LogFile.Log("CheckingMaintenance", "Func UpdateQty, update PaintTempInfo qa,setup fail!");
+            }
+            #endregion ================ 2021-03-25  更新paintingTempInfo中的qa,setup数量. ================
+          
+
 
 
 
 
 
             //处理 detail list
-
             //收集对应material pass qty修改后增加了多少。 用于更新 vi bin history。
             Dictionary<string, decimal> dicAddedPassQty = new Dictionary<string, decimal>();
 

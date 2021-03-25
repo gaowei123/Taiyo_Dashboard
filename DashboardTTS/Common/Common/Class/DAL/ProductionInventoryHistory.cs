@@ -232,7 +232,7 @@ namespace Common.Class.DAL
 		{
 			//该表无主键信息，请自定义主键/条件字段
 			StringBuilder strSql=new StringBuilder();
-			strSql.Append(@"select  Id,Day,PartNumber,Model,MaterialName,Assembly,FG,AfterPacking,BeforePacking,AfterWIP,BeforeWIP,AfterLaser,BeforeLaser,TCPaint,MCPaint,PrintSupplier,UCPaint,PaintRawPart 
+			strSql.Append(@"select  Id,Day,PartNumber,Model,ShipTo, MaterialName,Assembly,FG,AfterPacking,BeforePacking,AfterWIP,BeforeWIP,AfterLaser,BeforeLaser,TCPaint,MCPaint,PrintSupplier,UCPaint,PaintRawPart 
                 from ProductionInventoryHistory  where 1=1  and day = @day ");
 
 
@@ -288,7 +288,11 @@ namespace Common.Class.DAL
 				{
 					model.PartNumber=row["PartNumber"].ToString();
 				}
-				if(row["Model"]!=null)
+                if (row["ShipTo"] != null)
+                {
+                    model.ShipTo = row["ShipTo"].ToString();
+                }
+                if (row["Model"]!=null)
 				{
 					model.Model=row["Model"].ToString();
 				}

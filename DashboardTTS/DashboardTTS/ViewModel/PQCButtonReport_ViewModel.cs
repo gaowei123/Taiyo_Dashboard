@@ -278,6 +278,7 @@ namespace DashboardTTS.ViewModel
         {
             public string jobNo = "";
             public string lotNo = "";
+            public string materialName { get; set; }
 
             public DateTime? mfgDate = new DateTime();
             public double paintSetUpQty = 0;

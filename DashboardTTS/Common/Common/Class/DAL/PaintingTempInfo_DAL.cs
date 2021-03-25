@@ -308,6 +308,31 @@ namespace Common.Class.DAL
             }
         }
 
+
+        public SqlCommand UpdateQASetupCommand(Common.Class.Model.PaintingTempInfo_Model model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(" update PaintingTempInfo set ");    
+            strSql.Append(" setupRejQty=@setupRejQty, ");
+            strSql.Append(" qaTestQty=@qaTestQty, ");
+            strSql.Append(" updatedTime=@updatedTime ");
+            strSql.Append(" where 1=1 ");
+            strSql.Append(" and jobNumber=@jobNumber ");
+            strSql.Append(" and materialName=@materialName ");
+            SqlParameter[] parameters = {
+                new SqlParameter("@jobNumber", SqlDbType.VarChar,50),                 
+                new SqlParameter("@materialName", SqlDbType.VarChar,50),                
+                new SqlParameter("@setupRejQty", SqlDbType.Decimal,9),
+                new SqlParameter("@qaTestQty", SqlDbType.Decimal,9),
+                new SqlParameter("@updatedTime", SqlDbType.DateTime)};
+            parameters[0].Value = model.jobNumber;
+            parameters[1].Value = model.materialName;
+            parameters[2].Value = model.setupRejQty;
+            parameters[3].Value = model.qaTestQty;
+            parameters[4].Value = model.updatedTime;
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -585,6 +610,7 @@ namespace Common.Class.DAL
             strSql.Append(@"select
                             jobNumber as JobID
                             ,lotNo
+                            ,materialName
                             ,MFGDate
                             ,ISNULL(setupRejQty,0) as setupRejQty
                             ,ISNULL(qaTestQty, 0) as qaTestQty
@@ -603,7 +629,7 @@ namespace Common.Class.DAL
 
                             from PaintingTempInfo
 
-                            where 1=1  and jobnumber in " + strWhere);       
+                            where 1=1  and jobnumber in " + strWhere);
 
 
 

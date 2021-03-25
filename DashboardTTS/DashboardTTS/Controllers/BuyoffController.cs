@@ -52,8 +52,7 @@ namespace DashboardTTS.Controllers
 
             return Content(day.ToString("yyyy-MM-dd"));
         }
-
-
+        
         public ActionResult GetJobList()
         {
             Common.Class.BLL.PQCQaViTracking_BLL trackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
@@ -82,8 +81,7 @@ namespace DashboardTTS.Controllers
 
             return Content(jsonResult);
         }
-
-
+        
         public ActionResult GetLaserBuyoffRecord()
         {
             string jobno = Request.Form["JobNo"];
@@ -107,8 +105,7 @@ namespace DashboardTTS.Controllers
 
             return Content(jsonResult);
         }
-
-
+        
         public ActionResult GetLaserParameter()
         {
             string jobno = Request.Form["JobNo"];
@@ -192,9 +189,6 @@ namespace DashboardTTS.Controllers
 
             return Content(jsonResult);
         }
-
-
-
-
+        
     }
 }

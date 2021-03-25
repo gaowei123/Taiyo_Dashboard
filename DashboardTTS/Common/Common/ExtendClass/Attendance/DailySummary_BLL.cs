@@ -25,7 +25,7 @@ namespace Common.ExtendClass.Attendance
             if (departmentAttendanceList == null)
                 return null;
 
-            Dictionary<Department, decimal> dicDeparmentUserCount = _bll.GetDepartmentUserCount();
+            //Dictionary<Department, decimal> dicDeparmentUserCount = _bll.GetDepartmentUserCount();
 
 
             //用于计算summary row中的 excludedAL,includedAL.
@@ -44,8 +44,6 @@ namespace Common.ExtendClass.Attendance
 
                 DailySummary_Model model = new DailySummary_Model();
                 model.Department = item.GetDescription();
-                model.TotalUser = dicDeparmentUserCount[item];
-
 
                 var dptModel = departmentAttendanceList.Where(p => p.Department == item).FirstOrDefault();
                 if (dptModel != null)
@@ -53,7 +51,10 @@ namespace Common.ExtendClass.Attendance
                     model.BackgroundColor = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.White);
                     model.DayShiftUserCount = dptModel.DayShift;
                     model.NightShiftUserCount = dptModel.NightShift;
-                
+                    //2021-2-9, 按照attendance中当天提交的人数算.  而不是user表中总人数.
+                    model.TotalUser = dptModel.DayShift + dptModel.NightShift;
+
+
                     model.AnnualLeave = dptModel.AnnualLeavel;
                     
                     //Others Leave are Hospitalization,  Maternity,  Marriage,  Paternity,  Compassiondate,  Reservist,  Child Care Leave 
@@ -108,6 +109,7 @@ namespace Common.ExtendClass.Attendance
                    
                     model.DayShiftUserCount = 0;
                     model.NightShiftUserCount = 0;
+                    model.TotalUser = 0;
                     model.TotalPresent = 0;
                     model.AnnualLeave = 0;
                     model.MC_UPMC = 0;
@@ -144,8 +146,8 @@ namespace Common.ExtendClass.Attendance
             modelSummary.Pending = resultList.Sum(p => p.Pending);
             modelSummary.TotalPresent = resultList.Sum(p => p.TotalPresent);
             
-            modelSummary.ExcludedAL = Math.Round((dicDeparmentUserCount.Sum(p => p.Value) -allExcludedAL) / dicDeparmentUserCount.Sum(p => p.Value) * 100, 2).ToString() + "%";
-            modelSummary.IncludedAL = Math.Round((dicDeparmentUserCount.Sum(p => p.Value) - allIncludedAL) / dicDeparmentUserCount.Sum(p=>p.Value) * 100, 2).ToString() + "%";
+            modelSummary.ExcludedAL = Math.Round((resultList.Sum(p => p.TotalUser) -allExcludedAL) / resultList.Sum(p => p.TotalUser) * 100, 2).ToString() + "%";
+            modelSummary.IncludedAL = Math.Round((resultList.Sum(p => p.TotalUser) - allIncludedAL) / resultList.Sum(p => p.TotalUser) * 100, 2).ToString() + "%";
 
             modelSummary.Target = "";
             modelSummary.Remarks = "";

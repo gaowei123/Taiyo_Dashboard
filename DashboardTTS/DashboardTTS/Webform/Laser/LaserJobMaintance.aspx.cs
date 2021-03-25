@@ -286,7 +286,7 @@ namespace DashboardTTS.Webform.Laser
                 curWatchdogModel.buyoffQty = iBuyoff;
                 curWatchdogModel.shortage = iShortage;
 
-
+                
 
 
 
@@ -805,6 +805,8 @@ namespace DashboardTTS.Webform.Laser
                 watchlogModel.jobNumber = this.lbJob.Text;
                 watchlogModel.totalPass = curWatchdogModel.totalPass + (summaryModel == null ? 0 : summaryModel.totalPass);
                 watchlogModel.totalFail = curWatchdogModel.totalFail + (summaryModel == null ? 0 : summaryModel.totalFail);
+                //2021/2/25, 用status字段来记录这个job是不是结束了.
+                watchlogModel.status = this.radiobtnList.SelectedItem.Text == "Yes" ? true.ToString() : false.ToString();
 
                 watchlogModel.ok1Count = curWatchdogModel.ok1Count + (summaryModel == null ? 0 : summaryModel.ok1Count);
                 watchlogModel.ok2Count = curWatchdogModel.ok2Count + (summaryModel == null ? 0 : summaryModel.ok2Count);
@@ -947,12 +949,6 @@ namespace DashboardTTS.Webform.Laser
                 DBHelp.Reports.LogFile.Log("LaserJobMaintance", string.Format("[Page_Load] set material detail list --  sn: {0}, material no: {1}, ng{2}",item.Cells[0].Text, item.Cells[1].Text, item.Cells[4].Text));
             }
         }
-
-
-
-
-
-
         
     }
 }

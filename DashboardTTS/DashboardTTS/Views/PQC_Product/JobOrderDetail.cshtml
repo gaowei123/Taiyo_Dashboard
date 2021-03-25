@@ -3,52 +3,42 @@
     ViewBag.Title = "JobOrderDetail";
 }
 
-@*下拉框组件*@
-<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
-<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
-
-
-@*时间框组件*@
-<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
 
 <style>
-    .container-fluid {
-        max-width: 1500px;
+    label{
+        width:35%;
+    }
+    #txtDateFrom,#txtDateTo,#ddlStatus,#txtJobNo{
+        width:60%;
     }
 </style>
 
-
-<div class="container-fluid">
-
+<div class="container-fluid" style="max-width: 1500px;">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
-        <span class="titleText">PQC WIP Inventory Detail</span>
-
-        <label id="lbDeleteJob" style="display:none;"></label>
+        <span class="titleText">WIP Job Order Detail Report</span>        
+        <label id="lbDeleteJob" style="display:none;"></label>@*用来记录要删除的jobid*@
     </div>
 
 
     <div class="row">
         <div class="col-md-12 panel panel-default searchingPanel">
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Date From:</label>
-                    <input type="text" class="form-control" id="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Date To:</label>
-                    <input type="text" class="form-control" id="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
                 </div>
-                <div class="col-md-3">
-                    <label style="width:35%">Part No:</label>
+                <div class="col-sm-3">
+                    <label>Part No:</label>
                     <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
                 </div>
-
-                <div class="col-md-3">
-                    <label style="width:35%">Status:</label>
-                    <select id="ddlStatus" class="form-control"  data-ng-style="btn-info" style="width:60%;">
+                <div class="col-sm-3">
+                    <label>Status:</label>
+                    <select id="ddlStatus" class="form-control"  data-ng-style="btn-info" >
                         <option value="">All</option>
                         <option value="Pending">Pending</option>
                         <option value="Inprocess">Inprocess</option>
@@ -59,22 +49,18 @@
             </div>
 
             <div class="row form-inline searchingBar ">
-                <div class="col-md-3">
-                    <label style="width:35%">Job No:</label>
-                    <input type="text" class="form-control" id="txtJobNo" CssClass="form-control" placeholder="Please input job no" style="width:60%;" />
+                <div class="col-sm-3">
+                    <label>Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" placeholder="Please input job no" style="width:60%;" />
                 </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-3"></div>
-                <div class="col-md-3" align="right" style="padding-right:2%;">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3" style="text-align:center; padding-right:2%;">
                     <input type="button" class="btn btn-success" value="Generate" onclick="Search();" />
                 </div>
             </div>
-
         </div>
     </div>
-
-
-
     <div class="row">
         <div class="col-lg-12" style="padding:0px;">
             <table id="tableJobOrderDetail" data-toggle="table"></table>
@@ -100,13 +86,13 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 form-inline">
-                        <label style="width:35%">User Name :</label>
+                        <label>User Name :</label>
                         <input type="text" class="form-control" id="txtUsername" />
                     </div>
                 </div>
                 <div class="row" style="margin-top:15px;">
                     <div class="col-md-12 form-inline">
-                        <label style="width:35%">Password :</label>
+                        <label>Password :</label>
                         <input type="password" class="form-control" id="txtPassword" />
                     </div>
                 </div>
@@ -120,8 +106,15 @@
 </div>
 
 
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
 
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
+@*bootstrap table插件*@
 <script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
 <link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
 
@@ -135,20 +128,12 @@
 
     //设置part no, machine id 下拉框
     $(document).ready(function () {
-
-
         setPartNoDDL($('#ddlPartNo'), 'PQC','');
         $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
 
-
-
         $('#txtDateFrom').val('2020-6-1');
-
         var today = dateFormat('yyyy-MM-dd', new Date());
         $('#txtDateTo').val(today);
-
-
-
 
 
         Search();

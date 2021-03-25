@@ -48,6 +48,7 @@
     <Compile Include="LaserParam\LaserProductionCondition.cs" />
     <Compile Include="LaserParam\LaserProductChartParam.cs" />
     <Compile Include="PaintingParam\DeliveryRecordParams.cs" />
+    <Compile Include="PQCParam\CheckingLiveParam.cs" />
     <Compile Include="PQCParam\PQCOperatorParam.cs" />
     <Compile Include="PQCParam\PQCOperatorSummaryCondition.cs" />
     <Compile Include="PQCParam\PQCSummaryParam.cs" />

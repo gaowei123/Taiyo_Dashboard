@@ -76,7 +76,7 @@
                      </div>
                  </div>
 
-                <hr />pI23HNROQNFWKSD MC203[EWOP
+                <hr />
 
                 <div class="row">
                     <div class="col-sm-12" style="padding:0px 30px 0 30px;">

@@ -44,12 +44,15 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
-                string JobNo = "";// this.txtJobNo.Text.Trim();
-                string partNumber = "";//this.txtPartNo.Text.Trim();
-                string model = "";// this.ddlModel.SelectedValue;
-                string color = "";// this.ddlColor.SelectedValue;
-                string supplier = "";// this.ddlSupplier.SelectedValue;
-                string coating = "";// this.ddlCoating.SelectedValue;
+                //这几个条件都不用了.
+                string JobNo = "";
+                string partNumber = "";
+                string model = "";
+                string color = "";
+                string supplier = "";
+                string coating = "";
+                //这几个条件都不用了.
+
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
                 string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表            

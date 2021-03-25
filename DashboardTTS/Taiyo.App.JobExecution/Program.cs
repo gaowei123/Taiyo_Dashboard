@@ -50,8 +50,9 @@ namespace Taiyo.App.JobExecution
 
 
                 //按照dashbaord原本的逻辑生成当前的list.
-                DashboardTTS.ViewBusiness.OverallReport_ViewBusiness overallBLL = new DashboardTTS.ViewBusiness.OverallReport_ViewBusiness();           
-                var  list = overallBLL.GetAllSectionResult(_startTime, "", "", DateTime.Now.Date.AddDays(-1));//每天8点执行, 当作前一天的库存信息
+                DashboardTTS.ViewBusiness.OverallReport_ViewBusiness overallBLL = new DashboardTTS.ViewBusiness.OverallReport_ViewBusiness();
+                //每天8点执行, 当作前一天的库存信息   
+                var list = overallBLL.GetAllSectionResult(_startTime, "", "","", DateTime.Now.Date.AddDays(-1));
                 if (list != null)
                 {
                     DBHelp.Reports.LogFile.Log("Taiyo.App.JobExecution", "Gerenate today list success, list.count = " + list.Count);

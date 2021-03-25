@@ -931,7 +931,6 @@ and a.datetime < @dDateTo ");
 
         public DataSet GetListByTrackingID(string sTrackingID)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@" select * from PQCQaViDefectTracking where 1=1  ");
 
@@ -1226,6 +1225,7 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Buyoff' then rejectQty end),0) as [Buyoff]
 ,'0' as Shortage
 ,'0' as QA
+,'0' as Setup
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Other' then rejectQty end),0) as [Other]
 from PQCQaViDefectTracking 
 where 1=1  ");

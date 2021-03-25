@@ -437,11 +437,8 @@ $(document).ready(function () {
 
 
 function search() {
-
-
     //重新加载必须将原本table清空
     $('#tableDailyReport').bootstrapTable('destroy');
-
     $('#tableDailyReport').bootstrapTable({ // 对应table标签的id
 
 
@@ -839,5 +836,3 @@ function search() {
 $(window).resize(function () {
     $('#tableDailyReport').bootstrapTable('resetView');
 });
-
-

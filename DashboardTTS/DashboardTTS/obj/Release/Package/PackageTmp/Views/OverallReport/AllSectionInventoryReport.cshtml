@@ -3,39 +3,45 @@
     ViewBag.Title = "Production Inventory";
 }
 
-<div class="container-fluid">
+<style>
+    .form-group{
+        margin-right:20px;
+    }
+    input[type=button]{
+        float:right;
+        margin-right:2%;
+    }
+</style>
 
+<div class="container-fluid">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">Production Inventory</span>
     </div>
 
-
     <div class="row">
-        <div class="col-sm-12 panel panel-default searchingPanel">
-            <div class="row form-inline searchingBar ">
-                <div class="col-sm-3">
-                    <label for="ddlPartNo" style="width:35%;">Part No:</label>
-                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
-                </div>
-
-                <div class="col-sm-3">
-                    <label style="width:35%">Inventory:</label>
-                    <select id="ddlShipTo" class="form-control" data-ng-style="btn-info" style="width:60%;"> 
-                        <option value="">All</option>
-                        <option value="FG">FG</option>
-                        <option value="Assembly">Assembly</option>
-                    </select>
-                </div>
-                <div class="col-sm-3">
-                    <label for="txtDate" style="width:35%;">Date:</label>
-                    <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" placeholder="Please choose date" style="width:60%;" />
-                </div>
-                <div class="col-sm-3" align="right" style="padding-right:2%;">
-                    <input type="button" class="btn btn-success" value="Generate" onclick="search();" />
-                </div>
+        <div class="col-sm-12 panel panel-default searchingPanel form-inline" role="form" style="padding:6px;">        
+            <div class="form-group">
+                <label for="txtDate">Date:</label>
+                <input type="text" class="form-control" id="txtDate" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
+            </div>    
+            <div class="form-group">
+                <label>Model No:</label>
+                <select id="ddlModel" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
             </div>
-
+            <div class="form-group">
+                <label>Part No:</label>
+                <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true" data-ng-style="btn-info"></select>
+            </div>
+            <div class="form-group">
+                <label>Inventory:</label>
+                <select id="ddlShipTo" class="form-control" data-ng-style="btn-info">
+                    <option value="">All</option>
+                    <option value="FG">FG</option>
+                    <option value="Assembly">Assembly</option>
+                </select>
+            </div>
+            <input type="button" class="btn btn-success" value="Generate" onclick="search();" />            
         </div>
     </div>
 
@@ -44,8 +50,6 @@
             <table id="tableInventory" data-toggle="table"></table>
         </div>
     </div>
-
-
 </div>
 
 
@@ -67,8 +71,6 @@
 
     var apiGetAllSectionIventoryReport = window.globalConfig.rootDirectory + '/OverallReport/GetAllSectionInventoryReport';
 
-
-    $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
     
     $('#txtDate').datetimepicker({
         weekStart: 1,
@@ -84,6 +86,7 @@
     $(document).ready(function () {
 
         setPartNoDDL($('#ddlPartNo'), 'PQC');
+        setModelDDL($('#ddlModel'), 'PQC');
 
         let date = new Date();
         $('#txtDate').val(dateFormat('yyyy-MM-dd', date))
@@ -108,12 +111,11 @@
             cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
 
       
-            queryParams: function (params) { 
-                return {
-                    SearchDay: $("#txtDate").val(),
-                    PartNo: $("#ddlPartNo").val(),
-                    ShipTo: $("#ddlShipTo").val()
-                }
+            queryParams: {
+                SearchDay: $("#txtDate").val(),
+                PartNo: $("#ddlPartNo").val(),
+                ShipTo: $("#ddlShipTo").val(),
+                Model: $("#ddlModel").val(),
             },
 
 
@@ -345,7 +347,8 @@
                         }
                     }
                     return count;
-                }
+                },
+                visible:false
             },
             {
                 field: 'PaintRawPart',
@@ -374,6 +377,8 @@
                 console.log("加载数据失败");
             }
         });
+
+
     }
 
 

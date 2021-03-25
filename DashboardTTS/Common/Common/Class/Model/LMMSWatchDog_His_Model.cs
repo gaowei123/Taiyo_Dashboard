@@ -40,6 +40,7 @@ namespace Common.Model
 		private int? _totalfail;
 		private DateTime? _lastupdated;
 		private string _rmsstatus;
+        private string _status;
 		private string _startok;
 		private string _stopok;
 		private string _newok;
@@ -794,6 +795,19 @@ namespace Common.Model
         {
             set { _shortage = value; }
             get { return _shortage; }
+        }
+
+        public string Status
+        {
+            get
+            {
+                return _status;
+            }
+
+            set
+            {
+                _status = value;
+            }
         }
 
 

@@ -68,12 +68,24 @@ namespace Common.Class.BLL
 			return dal.GetModel(sJobNumber);
 		}
 
+        public bool UpdateQASetup(List<PaintingTempInfo_Model> modelList)
+        {
+            List<SqlCommand> cmdList = new List<SqlCommand>();
+            foreach (var model in modelList)
+            {
+                cmdList.Add(dal.UpdateQASetupCommand(model));
+            }
+            
+
+            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+        }
 
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataTable GetList(DateTime? dDateFrom, DateTime? dDateTo, string sPartNo, string sJobnumber )
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public DataTable GetList(DateTime? dDateFrom, DateTime? dDateTo, string sPartNo, string sJobnumber )
 		{
             DataSet ds = dal.GetList(dDateFrom, dDateTo, "", sJobnumber, "");
 

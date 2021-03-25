@@ -512,7 +512,8 @@ left join (
 ) d on a.jobId = d.jobid and a.materialPartNo = d.materialPartNo
 
 
-where 1=1 and a.processes = b.lastCheckProcess
+where 1=1 and a.materialQty > 0
+and a.processes = b.lastCheckProcess
 and a.day >= @dateFrom 
 and a.day < @dateTo ");
 

@@ -1822,7 +1822,6 @@ and
     or 
     a.nextviflag != 'true' 
 )
-
 group by a.partNumber, b.materialName ");
 
 

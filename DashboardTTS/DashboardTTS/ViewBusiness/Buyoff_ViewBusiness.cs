@@ -441,13 +441,10 @@ namespace DashboardTTS.ViewBusiness
                     model.dented = double.Parse(dr["Dented"].ToString());
                     model.particleForLaserSetup = double.Parse(dr["Particle for laser setup"].ToString());
                     model.buyoff = double.Parse(dr["Buyoff"].ToString());
-                    //model.qa = double.Parse(dr["QA"].ToString());
-
+                    model.qa = double.Parse(dr["QA"].ToString());
+                    model.setup = double.Parse(dr["Setup"].ToString());
                     model.shortage = double.Parse(dr["Shortage"].ToString());
-
                     model.other = double.Parse(dr["Other"].ToString());
-
-
                     model.totalRej = double.Parse(dr["rejectQty"].ToString());
 
                     paintDefectList.Add(model);

@@ -9,9 +9,14 @@ namespace Common.ExtendClass.PQCProduction.Core
     {
         public string TrackingID { get; set; }
         public string PartNo { get; set; }
+        public string MachineID { get; set; }
         public string JobNo { get; set; }
         public string Opertor { get; set; }
         public DateTime Day { get; set; }
+        public string Shift { get; set; }
+        public bool NextViFlag { get; set; }
+        public string Status { get; set; }
+        public string Processes { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
 

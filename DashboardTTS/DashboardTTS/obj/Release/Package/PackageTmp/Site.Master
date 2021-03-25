@@ -209,7 +209,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">PQC</font><span class="caret"></span></a>
                     <ul class="dropdown-menu menu-top">
                         <li><a runat="server" href="./Webform/PQC/PQCRealTime.aspx">PQC Station Real Time</a></li>
-                        <li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>           
+                        <%--<li><a runat="server" href="./Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>--%>
+                        <li><a runat="server" href="./PQC_Product/CheckingLiveReport">Checking Live Report</a></li>
                         <li><a runat="server" href="./PQC_Product/SummaryReport">PQC Summary Report</a></li>
                         <li><a runat="server" href="./PQC_Product/DailyReport">Daily PQC Report</a></li>
                         <li><a runat="server" href="./PQC_Product/PICDailyOutputReport">Operator Daily Output Report</a></li>

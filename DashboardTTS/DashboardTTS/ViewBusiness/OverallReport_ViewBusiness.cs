@@ -26,11 +26,10 @@ namespace DashboardTTS.ViewBusiness
 
 
         #region all section inventory report 
-        public List<Common.Class.Model.ProductionInventoryHistory> GetAllSectionResult(DateTime dStartTime, string sPartNo, string sShipTo, DateTime dSearchingDay)
+        public List<Common.Class.Model.ProductionInventoryHistory> GetAllSectionResult(DateTime dStartTime, string sPartNo, string sShipTo, string Model, DateTime dSearchingDay)
         {
             try
-            {
-                JavaScriptSerializer js = new JavaScriptSerializer();
+            {       
                 List<Common.Class.Model.ProductionInventoryHistory> reportList = new List<Common.Class.Model.ProductionInventoryHistory>();
 
 
@@ -88,6 +87,10 @@ namespace DashboardTTS.ViewBusiness
 
                     //check#1完成要被送去做第二次paint的数量. 
                     Dictionary<string, double> dicPaintTC = GetPaintTC(dStartTime);
+
+
+                    //paint print数量
+                    Dictionary<string, double> dicPaintPrint = GetPaintPrint();
 
 
                     reportList = new List<Common.Class.Model.ProductionInventoryHistory>();
@@ -206,6 +209,7 @@ namespace DashboardTTS.ViewBusiness
 
 
 
+
                         Common.Class.Model.ProductionInventoryHistory reportModel = new Common.Class.Model.ProductionInventoryHistory();
                         reportModel.Model = material.model;
                         reportModel.PartNumber = material.partNo;
@@ -213,9 +217,9 @@ namespace DashboardTTS.ViewBusiness
                         reportModel.ShipTo = material.shipTo;
                         reportModel.PaintRawPart = null;
                         reportModel.UCPaint = null;
-                        reportModel.MCPaint = null;
-                        reportModel.PrintSupplier = null;
+                        reportModel.MCPaint = null;                   
                         reportModel.TCPaint = null;
+                        reportModel.PrintSupplier = null;
 
                         if (beforeLaserModel != null) reportModel.BeforeLaser = (int)beforeLaserModel.qty;
                         if (afterLaserModel != null) reportModel.AfterLaser = (int)afterLaserModel.qty;
@@ -234,8 +238,13 @@ namespace DashboardTTS.ViewBusiness
                         {
                             reportModel.TCPaint = (int)dicPaintTC[material.materialName];
                         }
-                        
-                        
+                        if (dicPaintPrint != null && dicPaintPrint.ContainsKey(material.materialName))
+                        {
+                            reportModel.PrintSupplier = (int)dicPaintPrint[material.materialName];
+                        }
+
+
+
 
 
                         reportList.Add(reportModel);
@@ -245,7 +254,7 @@ namespace DashboardTTS.ViewBusiness
                 
 
 
-
+                //排除数量都是0的记录
                 var orderbyList = from a in reportList
                                   where a.AfterLaser != null
                                   || a.BeforePacking != null
@@ -259,8 +268,15 @@ namespace DashboardTTS.ViewBusiness
                                   select a;
 
 
+                //过滤删选条件 part no, model, shipto
+                var result = (from a in orderbyList
+                              where (string.IsNullOrEmpty(sPartNo) ? true : a.PartNumber == sPartNo)
+                              && (string.IsNullOrEmpty(sShipTo) ? true : a.ShipTo == sShipTo)
+                              && (string.IsNullOrEmpty(Model) ? true : a.Model == Model)
+                              select a).ToList();
 
-                return orderbyList.ToList();
+
+                return result.ToList();
             }
             catch (Exception ee)
             {
@@ -302,7 +318,6 @@ namespace DashboardTTS.ViewBusiness
         //从painting delivery中获取list, 生成material list 作为主表.
         private List<ViewModel.AllSectionInventory.mainMaterialList> GetMainMaterialList(DateTime dStartTime)
         {
-
             DataTable dt = paintDeliveryBLL.GetList(dStartTime, DateTime.Now.AddDays(1), "");
             if (dt == null || dt.Rows.Count == 0)
                 return null;
@@ -326,8 +341,6 @@ namespace DashboardTTS.ViewBusiness
 
             //排除laser delete掉的job
             DataTable dtPaintDelivery = dt.Select(" status is  null").CopyToDataTable();
-
-
             foreach (DataRow dr in dtPaintDelivery.Rows)
             {
                 string tempPartNo = dr["partNumber"].ToString();
@@ -374,10 +387,6 @@ namespace DashboardTTS.ViewBusiness
 
                 }
             }
-
-
-            
-
 
 
             return modelList;
@@ -648,10 +657,61 @@ namespace DashboardTTS.ViewBusiness
         }
 
 
+        //Print Supplier: 显示painting print的数量和moulding print的数量
+        //moulding print的数量暂时无法获取, 先只显示paint print数量
+        private Dictionary<string, double> GetPaintPrint()
+        {
+            DataTable dt = paintDeliveryBLL.GetList(DateTime.Now.AddDays(-1), DateTime.Now.Date, "");
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+            //pqc bom list, 用于生成不同material name的主表信息. 
+            List<ViewModel.AllSectionInventory.pqcBomInfo> bomList = GetPQCBomInfo();
+
+            //用于记录每种material的数量.
+            Dictionary<string, double> dicMaterialQty = new Dictionary<string, double>();
+
+            //删选出print的记录
+            DataRow[] temp = dt.Select(" status is  null and sendingTo = 'Print'");
+            foreach (DataRow dr in temp)
+            {
+                string tempPartNo = dr["partNumber"].ToString();
+                var partMaterialList = from a in bomList
+                                       where a.partNo == tempPartNo
+                                       group a by new { a.materialName, a.model, a.shipTo } into c
+                                       select new
+                                       {
+                                           model = c.Key.model,
+                                           materialName = c.Key.materialName,
+                                           shipTo = c.Key.shipTo
+                                       };
+                if (partMaterialList == null || partMaterialList.Count() == 0)
+                {
+                    DBHelp.Reports.LogFile.Log("AllSectionInventory", "OverallReport_ViewBusiness, GetAllMaterialList, can not find part no from pqc bom [" + tempPartNo + "]");
+                    continue;
+                }
+
+
+
+                foreach (var material in partMaterialList)
+                {
+                    double qty = double.Parse(dr["inQuantity"].ToString());
+
+                    if (dicMaterialQty.ContainsKey(material.materialName))
+                    {
+                        dicMaterialQty[material.materialName] = dicMaterialQty[material.materialName] + qty;
+                    }else
+                    {
+                        dicMaterialQty.Add(material.materialName, qty);
+                    }
+                }
+            }
+
+            return dicMaterialQty;
+        }
+
+
         #endregion
-
-
-
 
     }
 }

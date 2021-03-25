@@ -19,7 +19,12 @@ namespace Common.ExtendClass.PQCProduction.Core
             strSql.AppendLine(@"select
 trackingID,
 DAY,
+machineID,
+shift,
+processes,
+status,
 a.partNumber,
+nextViFlag,
 jobId,
 userID,
 startTime,
@@ -73,10 +78,15 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
             {
                 BaseVI_Model model = new BaseVI_Model();
                 model.TrackingID = dr["trackingID"].ToString();
+                model.MachineID = dr["machineID"].ToString();
                 model.PartNo = dr["partNumber"].ToString();
+                model.Processes = dr["processes"].ToString();
+                model.Status = dr["status"].ToString();
+                model.NextViFlag = bool.Parse(dr["nextViFlag"].ToString());
                 model.JobNo = dr["jobId"].ToString();
                 model.Opertor = dr["userID"].ToString();
                 model.Day = DateTime.Parse(dr["DAY"].ToString());
+                model.Shift = dr["shift"].ToString();
                 model.StartTime = DateTime.Parse(dr["startTime"].ToString());
 
                 if (dr["stopTime"].ToString() == "")
@@ -105,6 +115,11 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
             strSql.AppendLine(@"select
 trackingID,
 DAY,
+machineID,
+shift,
+processes,
+nextViFlag,
+status,
 a.partNumber,
 jobId,
 userID,
@@ -160,10 +175,15 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
                 BaseVI_Model model = new BaseVI_Model();
                 model.TrackingID = dr["trackingID"].ToString();
                 model.PartNo = dr["partNumber"].ToString();
+                model.MachineID = dr["machineID"].ToString();
+                model.NextViFlag = bool.Parse(dr["nextViFlag"].ToString());
+                model.Status = dr["status"].ToString();
                 model.JobNo = dr["jobId"].ToString();
                 model.Opertor = dr["userID"].ToString();
+                model.Processes = dr["processes"].ToString();
                 model.Day = DateTime.Parse(dr["DAY"].ToString());
                 model.StartTime = DateTime.Parse(dr["startTime"].ToString());
+                model.Shift = dr["shift"].ToString();
                 if (dr["stopTime"].ToString() == "")
                     model.EndTime = null;
                 else
@@ -231,9 +251,15 @@ where 1=1 and day >= @DateFrom and day < @DateTo  ");
 
             return viList;
         }
-        
 
 
+        /// <summary>
+        /// 获取只有paint delivery记录的lotNo,inQuantity,paintProcess等信息.
+        /// </summary>
+        /// <param name="param">
+        ///  param.starttime:  painting工序在先, 默认延长到3个月前的数据,以防数据找不到.
+        /// </param>
+        /// <returns></returns>
         public List<BaseLotInfo_Model> GetLotInfoList(PQCOperatorParam param)
         {
             StringBuilder strSql = new StringBuilder();

@@ -4,21 +4,15 @@
 }
 
 
-<style>
-    .container-fluid{
-        max-width:1480px;
-    }
-</style>
+<div class="container-fluid" style="max-width:1480px;">
 
-
-<div class="container-fluid">
     <div class="row titleRow">
         <img class="titleImg" src="~/Resources/Images/headericon.gif" />
         <span class="titleText">PQC Online&WIP Job Maintance</span>
     </div>
 
 
-    @*Job Info & end functin*@
+    <!-- Job Info & End Button -->
     <div class="row" style="margin-top:10px;">
         <div class="col-md-12 panel panel-default">
             <div class="row" style="padding:10px 10px 0px 18px;">
@@ -59,56 +53,59 @@
                     <label>
                         <input type="radio" name="complete" id="radioNotComplete" value="0"> Lot Not Complete
                     </label>
-                    <button type="button" class="btn btn-primary" style="width:70px;" onclick="initEndLogin();">End</button> @*根据End按钮 生成login中绑定endJob function的submit按钮*@
+                    @*根据End按钮 生成login拟态框中绑定endJob function的submit按钮*@
+                    <button type="button" class="btn btn-primary" style="width:70px;" onclick="initEndLogin();">End</button> 
                 </div>
             </div>
         </div>
     </div>
+    <!-- Job Info & End Button -->
 
 
-
-
-    @*material info list*@
+    <!-- material info list -->
     <div class="row">
         <div class="col-md-12 panel panel-default" id="divForm">
 
-                <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
-                    <div class="col-md-12">
-                        <h4><b>Material Info :</b></h4>
-                    </div>
+            <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
+                <div class="col-md-12">
+                    <h4><b>Material Info :</b></h4>
                 </div>
+            </div>
 
-                <table class="table table-bordered table-hover" style="width:500px;margin-bottom:10px;border:1px solid 	#DCDCDC;">
-                    <thead class="thead-title">
-                        <tr><th>SN</th><th>Material No</th><th>Pass Qty</th><th>Reject Qty</th></tr>
-                    </thead>
-                    <tbody id="tbMaterial"></tbody>
-                </table>
-
-
-                <hr />
+            <table class="table table-bordered table-hover" style="width:500px;margin-bottom:10px;border:1px solid 	#DCDCDC;">
+                <thead class="thead-title">
+                    <tr><th>SN</th><th>Material No</th><th>Pass Qty</th><th>Reject Qty</th></tr>
+                </thead>
+                <tbody id="tbMaterial"></tbody>
+            </table>
 
 
+            <hr />
 
-                @*defect detail info*@
-                <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
-                    <div class="col-md-11">
-                        <h4><b>Defect Info :</b></h4>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-primary" style="width:100px;" onclick="initUpdateLogin();">Update</button>  @*根据update按钮 生成login中绑定updateqty function的submit按钮*@
-                    </div>
+       
+            <!-- defect list -->
+            <div class="row" style="padding:10px 10px 0px 18px; margin-bottom:15px;">
+                <div class="col-md-11">
+                    <h4><b>Defect Info :</b></h4>
                 </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" style="width:100px;" onclick="initUpdateLogin();">Update</button>  @*根据update按钮 生成login中绑定updateqty function的submit按钮*@
+                </div>
+            </div>
 
 
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist" id="ulMaterialTab"></ul>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="ulMaterialTab"></ul>
 
-                <!-- Tab panes -->
-                <div class="tab-content" id="divMaterialTabContent" style="margin-top:10px;"></div>
+            <!-- Tab panes -->
+            <div class="tab-content" id="divMaterialTabContent" style="margin-top:10px;"></div>
 
+
+            <!-- defect list -->
         </div>
     </div>
+    <!-- material info list -->
+
 </div>
 
 
@@ -144,11 +141,11 @@
         </div>
     </div>
 </div>
+<!-- Login 拟态框 -->
 
 
 
-
-<!-- 等待后台处理缓冲界面 -->
+<!-- 等待后台处理的缓冲界面 -->
 <div id="divLoading" style="position:fixed;left:0;top:0; width:100%;height:100%;background-color:black; opacity:0.8; z-index:9999;display:none;">
     <div style="position: absolute; left:50%; top:50%; transform:translate(-50%,-50%);">
         <div class="row text-center">
@@ -159,146 +156,109 @@
         </div>
     </div>
 </div>
-
+<!-- 等待后台处理的缓冲界面 -->
 
 
 
 
 <script type="text/javascript">
 
-
-    //============================= 初始化界面 & 界面操作逻辑 =============================//
     var apiGetJobInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetJobInfo';
     var apiGetMaterialInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetMaterialInfo';
     var apiGetDefectInfo = window.globalConfig.rootDirectory + '/PQC_Product/GetDefectInfo';
-    
-    //init page
+
+    var apiUpdateEndJobFlag = window.globalConfig.rootDirectory + '/PQC_Product/EndJob';
+    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
+
+    var apiUpdateQty = window.globalConfig.rootDirectory + '/PQC_Product/UpdateQty';
+
+
+    //============================= 初始化界面 & 界面操作逻辑 =============================//
     $(document).ready(function () {
-
-
-        var jobNo = getUrlParam('JobID');
-        var trackingID = getUrlParam('TrackingID');
 
         //var jobNo = 'JOT2000003936';
         //var trackingID = 'c79ac943-6075-4a45-899a-36f16837c327';
 
-        $('#lbJobNo').text(jobNo);
+        var jobNo = getUrlParam('JobID');
+        var trackingID = getUrlParam('TrackingID');
         $('#lbTrackingID').text(trackingID);
 
-
+        let objParams = {
+            JobNo: jobNo,
+            TrackingID: trackingID
+        };
 
 
         //init job info
-        initJobInfo();
-
-        //init material list table & defect detail form
-        initMaterialInfoAndMaterialTab();
-
-    });
-
-
-    function initJobInfo() {
-
-        var jobNo = $('#lbJobNo').text();
-        var trackingID = $('#lbTrackingID').text();
-
-
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetJobInfo,
-            data: {
-                TrackingID: trackingID,
-                JobNo: jobNo
-            },
+            data: objParams,
             success: function (data) {
 
                 var date = new Date(parseInt(data.day.replace("/Date(", "").replace(")/", ""), 10));
 
-
-                $('#lbDay').text(dateFormat('yyyy/MM/dd HH:mm', date));
+                $('#lbDay').text(dateFormat('yyyy/MM/dd', date));
                 $('#lbShift').text(data.shift);
                 $('#lbJobNo').text(data.jobNo);
                 $('#lbTrackingID').text(data.trackingID);
 
                 $('#lbPartNo').text(data.partNo);
                 $('#lbMrpQty').text(data.mrpQty);
-
-
             },
             error: function () {
                 alert("Init job info error !");
             }
         });
 
-    }
-
-
-    function initMaterialInfoAndMaterialTab() {
-
-        var trackingID = $('#lbTrackingID').text();
-
-
+        //init material list table & defect detail form
         $.ajax({
             type: "POST",
             dataType: "json",
             url: apiGetMaterialInfo,
-            data: {
-                TrackingID: trackingID
-            },
+            data: objParams,
             success: function (data) {
-
-                if (data == null || data.length ==0)
+                if (data == null || data.length == 0)
                     return;
-                
 
-                //初始化 material table
                 $('#tbMaterial').html('');
-
-                var strHtml = '';
-                for (var i = 0; i < data.length; i++) {
-                    strHtml += '<tr>\
-                                    <td>' + (data[i].sn+1) + '</td>\
-                                    <td>' + data[i].materialNo  + '</td>\
-                                    <td><input type="text" class="form-control input-sm" id="txtid_' + data[i].sn + '" value="' + data[i].passQty + '" style="width:80px;text-align:center;" placeholder="' + data[i].passQty + '" oninput="checkInputValue($(this));" /></td>\
-                                    <td>' + data[i].rejQty + '</td>\
-                                </tr>';
-                }
-                $('#tbMaterial').html(strHtml);
-
-
-
-
-
-                //初始化 material tab标签
                 $('#ulMaterialTab').html('');
-
-                var strUlHtml = '';
-                for (var i = 0; i < data.length; i++) {
-
-                    if (i==0) {
-                        strUlHtml += '<li role="presentation" class="active"><a href="#material_' + i + '" aria-controls="home" role="tab" data-toggle="tab">' + data[i].materialNo + '</a></li>';
-                    } else {
-                        strUlHtml += '<li role="presentation"><a href="#material_' + i + '" aria-controls="home" role="tab" data-toggle="tab">' + data[i].materialNo + '</a></li>';
-                    }
-                }
-                $('#ulMaterialTab').html(strUlHtml);
-
-
-
-
-                //初始化 material tab content 
                 $('#divMaterialTabContent').html('');
-
-                var strDivContentHtml = '';
                 for (var i = 0; i < data.length; i++) {
-                    if (i == 0) {
-                        strDivContentHtml += '<div role="tabpanel" class="tab-pane fade in active" id="material_' + i + '"></div>'
-                    } else {
-                        strDivContentHtml += '<div role="tabpanel" class="tab-pane fade" id="material_' + i + '"></div>'
-                    }
+                    let materialNo = data[i].materialNo;
+                    let passQty = data[i].passQty;
+                    let rejQty = data[i].rejQty;
+
+                    //================== 初始化 material table ==================//
+                    $('#tbMaterial').append('<tr>\
+                                                <td>' + (i + 1) + '</td>\
+                                                <td>' + materialNo + '</td>\
+                                                <td><input type="text" class="form-control input-sm" id="txtid_' + i + '" value="' + passQty + '" style="width:80px;text-align:center;" placeholder="' + passQty + '" oninput="checkInputValue($(this));" /></td>\
+                                                <td>' + rejQty + '</td>\
+                                            </tr>');
+
+
+                    //================== 初始化 material tab li ==================//
+                    let $li = $(`<li role="presentation"><a href="#material_${i}" aria-controls="home" role="tab" data-toggle="tab">${materialNo}</a></li>`);
+
+                    //默认选中第一个tab页
+                    if (i === 0)
+                        $li.addClass('active');
+
+                    $('#ulMaterialTab').append($li);
+
+
+                    //================== 初始化 material tab content div ==================//
+                    let $div = $(`<div role="tabpanel" class="tab-pane fade" id="material_${i}"></div>`);
+
+                    //默认选中第一个tab页
+                    if (i === 0)
+                        $div.addClass('in active');
+
+                    $('#divMaterialTabContent').append($div);
                 }
-                $('#divMaterialTabContent').html(strDivContentHtml);
+
 
 
                 //必须在material tab, tab content生成之后再初始化
@@ -308,42 +268,35 @@
                 alert("Init job info error !");
             }
         });
-    }
 
+    });
 
+    
     function initTabContent() {
-
-
-        //循环每个 material tab, 给对应content 生成 defect
-        var arrli = $('#ulMaterialTab')[0].children;
-
-        for (var i = 0; i < arrli.length; i++) {
-
-
-
-            var materialNo = arrli[i].textContent;
-            var trackingID = $('#lbTrackingID').text();
-
-
-
+        //循环每个 material tab, 给对应div content 生成 defect
+        let $lis = $('#ulMaterialTab>li');
+        for (var i = 0; i < $lis.length; i++) {
+                      
             $.ajax({
                 type: "POST",
                 dataType: "json",
                 url: apiGetDefectInfo,
                 data: {
-                    TrackingID: trackingID,
-                    MaterialNo: materialNo,
-                    TabSN: i
+                    TrackingID: $('#lbTrackingID').text(),
+                    MaterialNo: $lis[i].innerText,
+                    TabSN: i //来回传一下, 记录当前是哪个material
                 },
-                success: function (data) {
 
+                success: function (data) {
                     if (data == null || data.length == 0)
                         return;
 
 
                     var tabSN = data[0].tabSN;
 
-                    //异步传输, 无法获取for循环到第几次.  直接把i当参数赋值到 defectInfo.tabSN 来回传.
+                
+                    //ajax是异步执行, 回调函数不能直接用for中定义的i,
+                    //直接把i来回传一下, 通过i指定material.
                     $('#material_' + tabSN).html('');
 
 
@@ -469,10 +422,6 @@
                     }
 
 
-
-                  
-                   
-
                 },
                 error: function () {
                     alert("Init job info error !");
@@ -498,7 +447,6 @@
         initMaterialRejQty();
     }
 
-
     function minusValue(object) {
         var value = object.val();
 
@@ -511,7 +459,6 @@
 
         initMaterialRejQty();
     }
-
 
     function setInputStyle(input) {
 
@@ -539,12 +486,6 @@
                 break;
             }
         }
-
-        //var totalRej = 0;
-        //$("#material_" + i + " input[type='text']").each(function () {
-        //    totalRej += parseInt($(this).val());
-        //});
-
 
         var totalRej = 0;
         $("input[name='defect_" + i + "']").each(function () {
@@ -578,9 +519,7 @@
 
 
     //============================= End Job =============================//
-    var apiUpdateEndJobFlag = window.globalConfig.rootDirectory + '/PQC_Product/EndJob';
-    var apiLogin = window.globalConfig.rootDirectory + '/Common/Login';
-
+   
     function initEndLogin() {
 
 
@@ -709,7 +648,6 @@
 
 
     //============================= Update Qty =============================//
-    var apiUpdateQty = window.globalConfig.rootDirectory + '/PQC_Product/UpdateQty';
 
     function initUpdateLogin() {
 
@@ -789,7 +727,10 @@
     function updateQty() {
               
         //将所有input 添加到datas对象中.
-        var datas = { TrackingID: $('#lbTrackingID').text()};
+        var datas = {
+            TrackingID: $('#lbTrackingID').text(),
+            JobNo: $('#lbJobNo').text()
+        };
         $("input").each(function () {
             var id = $(this).attr("id");
             var value = $(this).val();
@@ -805,18 +746,15 @@
             data: datas,
 
             beforeSend: function () {
-                $("#divLoading").css("display", "block");
+                $('#divLoading').show();
             },
 
             success: function (data) {
-
                 if (data == true) {
-                    //alert('Update Sucess');
+                    let jobNo = getUrlParam('JobID');                
+                    let date = $('#lbDay').text().replace('/', '-');
 
-                    var jobNo = getUrlParam('JobID');
-
-                    window.location.replace("../Webform/PQC/PQCCheckingLiveReport.aspx?jobNumber=" + jobNo);
-
+                    window.location.replace(`./CheckingLiveReport?JobNo=${jobNo}&Date=${date}`);
                 } else {
                     alert('Update Fail');
                 }
@@ -826,17 +764,14 @@
             },
 
             complete: function () {
-                $("#divLoading").css("display", "none");
+                $('#divLoading').hide();
             },
 
             error: function () {
-
-                $("#divLoading").css("display", "none");
-
+                $('#divLoading').hide();
                 alert("Update Qty error !");
             }
         });
-
     }
 
 
@@ -864,8 +799,4 @@
     //============================= Update Qty =============================//
 
 
-
 </script>
-
-
-

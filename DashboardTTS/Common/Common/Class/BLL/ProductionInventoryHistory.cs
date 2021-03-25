@@ -50,7 +50,7 @@ namespace Common.Class.BLL
 		/// <summary>
 		/// 得到一天的实体列表
 		/// </summary>
-		public List<Common.Class.Model.ProductionInventoryHistory> GetDayList(DateTime Day)
+		public List<Common.Class.Model.ProductionInventoryHistory> GetDayList(DateTime? Day)
 		{
 			return dal.GetDayList(Day);
 		} 

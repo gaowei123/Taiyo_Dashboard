@@ -32,7 +32,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorDailyOutputReport
                        join b in defectList on a.TrackingID equals b.TrackingID
                        into temp1
                        join c in lotInfoList on a.JobNo equals c.JobNo
-                       into temp2
+                       into temp2 orderby a.StartTime ascending
                        select new
                        {
                            StartTime = a.StartTime.ToString("HH:mm:ss"),
