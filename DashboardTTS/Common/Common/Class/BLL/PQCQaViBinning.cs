@@ -55,9 +55,16 @@ namespace Common.Class.BLL
         }
 
 
+
+
         public SqlCommand UpdateCommand(Common.Class.Model.PQCQaViBinning model)
         {
             return dal.UpdateCommand(model);
+        }
+
+        public SqlCommand DeleteCheckCommand(string sTrackingID, string sMaterialPartNo)
+        {
+            return dal.DeleteCheckCommand(sTrackingID, sMaterialPartNo);
         }
 
 

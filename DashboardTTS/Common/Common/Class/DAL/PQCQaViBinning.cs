@@ -12,6 +12,7 @@ namespace Common.Class.DAL
 	{
 		public PQCQaViBinning()
 		{}
+
 		#region  BasicMethod
 
 
@@ -87,6 +88,30 @@ namespace Common.Class.DAL
 			}
 		}
 
+        public SqlCommand DeleteCheckCommand(string sTrackingID, string sMaterialPartNo)
+        {
+            if (string.IsNullOrEmpty(sTrackingID) || string.IsNullOrEmpty(sMaterialPartNo))
+            {
+                throw new Exception($"TrackingID, MaterialPartNo can not be empty!");
+            }
+
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"delete from PQCQaViBinning where 1=1 
+                and trackingID = @trackingID 
+                and materialPartNo = @materialPartNo
+                and processes != 'PACKING'");
+
+            SqlParameter[] parameters = {
+                    new SqlParameter("@trackingID", SqlDbType.VarChar,64),
+                    new SqlParameter("@materialPartNo", SqlDbType.VarChar,64)
+             };
+
+            parameters[0].Value = sTrackingID;
+            parameters[1].Value = sMaterialPartNo;
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
 
 
 

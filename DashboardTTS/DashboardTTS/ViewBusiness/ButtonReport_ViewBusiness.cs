@@ -495,7 +495,9 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
+        //如果你要改这段逻辑
+        //那么我没什么想说的,祝你好运.
+        //               --- 来自初代的忠告.
         public DataTable GetResultDt(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, 
             string sJobNo,string sModel, string sSupplier, string sColor, string sCoating, string sReportType,
             out ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
@@ -512,7 +514,7 @@ namespace DashboardTTS.ViewBusiness
                 }
 
 
-            
+
 
                 //获取数据源
                 List<ViewModel.PQCButtonReport_ViewModel.PQCDetail> pqcDetailList = GetPQCDetialList(strSqlJobIn);

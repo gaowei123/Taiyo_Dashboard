@@ -88,7 +88,6 @@ namespace DashboardTTS.Controllers
             var result = bll.GetCheckingList(param);
 
             return result == null ? Json("") : Json(result);
-
         }
         public JsonResult GetSummaryPackingList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo)
         {

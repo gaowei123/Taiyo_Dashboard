@@ -82,7 +82,7 @@ namespace DashboardTTS.Webform.PQC
                 }
                 else
                 {
-                    Response.Redirect("./PQCPackingMaintenance.aspx?trackingID=" + sTrackingID);
+                    Response.Redirect($"./PQCPackingMaintenance.aspx?trackingID={sTrackingID}&jobNo={sJobID}");
                 }
             }
         }

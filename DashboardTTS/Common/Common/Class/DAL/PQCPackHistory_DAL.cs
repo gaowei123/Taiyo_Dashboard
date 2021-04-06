@@ -447,19 +447,21 @@ namespace Common.Class.DAL
 		}
 
 
-		/// <summary>
-		/// 得到一个对象实体
-		/// </summary>
-		public Common.Class.Model.PQCPackHistory_Model GetModel()
-		{
-			//该表无主键信息，请自定义主键/条件字段
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select  top 1 id,machineID,dateTime,partNumber,jobId,processes,jigNo,model,cavityCount,cycleTime,targetQty,userName,userID,TotalQty,rejectQty,acceptQty,startTime,stopTime,nextViFlag,day,shift,status,remark_1,remark_2,refField01,refField02,refField03,refField04,refField05,refField06,refField07,refField08,refField09,refField10,refField11,refField12,customer,lastUpdatedTime,trackingID,lastTrackingID,remarks,department,TotalRejectQty,updatedTime,totalPassQty,shipTo,indexId from PQCPackHistory ");
-			strSql.Append(" where ");
-			SqlParameter[] parameters = {
-			};
 
-			Common.Class.Model.PQCPackHistory_Model model =new Common.Class.Model.PQCPackHistory_Model();
+		public Common.Class.Model.PQCPackHistory_Model GetModel(string sTrackingID)
+		{
+            if (string.IsNullOrEmpty(sTrackingID))
+                throw new Exception("Tracking ID can not be empty!");
+
+            StringBuilder strSql=new StringBuilder();
+			strSql.Append("select  top 1 id,machineID,dateTime,partNumber,jobId,processes,jigNo,model,cavityCount,cycleTime,targetQty,userName,userID,TotalQty,rejectQty,acceptQty,startTime,stopTime,nextViFlag,day,shift,status,remark_1,remark_2,refField01,refField02,refField03,refField04,refField05,refField06,refField07,refField08,refField09,refField10,refField11,refField12,customer,lastUpdatedTime,trackingID,lastTrackingID,remarks,department,TotalRejectQty,updatedTime,totalPassQty,shipTo,indexId from PQCPackHistory ");
+			strSql.Append(" where 1=1 and trackingID = @trackingID");
+            SqlParameter[] parameters = {
+                new SqlParameter("@trackingID",SqlDbType.VarChar,64)
+			};
+            parameters[0].Value = sTrackingID;
+
+            Common.Class.Model.PQCPackHistory_Model model =new Common.Class.Model.PQCPackHistory_Model();
 			DataSet ds=DBHelp.SqlDB.Query(strSql.ToString(),parameters);
 			if(ds.Tables[0].Rows.Count>0)
 			{

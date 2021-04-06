@@ -664,16 +664,24 @@ namespace Common.Class.DAL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public DataSet GetList(string strWhere)
+		public DataSet GetList(string sTrackingID)
 		{
-			StringBuilder strSql=new StringBuilder();
+            if (string.IsNullOrEmpty(sTrackingID))
+                throw new Exception("Tracking ID can not be empty");
+
+            StringBuilder strSql=new StringBuilder();
 			strSql.Append("select id,trackingID,machineID,dateTime,materialPartNo,jigNo,model,cavityCount,userName,userID,startTime,stopTime,day,shift,status,remark_1,remark_2,rejectQty,rejectQtyHour01,rejectQtyHour02,rejectQtyHour03,rejectQtyHour04,rejectQtyHour05,rejectQtyHour06,rejectQtyHour07,rejectQtyHour08,rejectQtyHour09,rejectQtyHour10,rejectQtyHour11,rejectQtyHour12,lastUpdatedTime,remarks,processes,jobId,totalQty,updatedTime,passQty,totalPassQty,totalRejectQty,color,materialName,outerBoxQty,packingTrays,customer,shipTo,module,sn,indexId ");
 			strSql.Append(" FROM PQCPackDetailHistory ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			return DBHelp.SqlDB.Query(strSql.ToString());
+            strSql.Append(" where 1=1 and trackingID = @trackingID ");
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@trackingID", SqlDbType.VarChar,64)
+            };
+
+            parameters[0].Value = sTrackingID;
+
+
+            return DBHelp.SqlDB.Query(strSql.ToString(), parameters,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
 
 		/// <summary>

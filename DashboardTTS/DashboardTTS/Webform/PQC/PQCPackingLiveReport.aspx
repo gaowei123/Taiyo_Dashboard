@@ -12,18 +12,18 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default searchingPanel" >
+            <div class="col-sm-12 panel panel-default searchingPanel" >
 
                 <div class="row form-inline searchingBar ">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date From:</label>
                         <asp:TextBox runat="server" ID="txtDateFrom" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Date To:</label>
                         <asp:TextBox runat="server" ID="txtDateTo" CssClass="form-control formDateTimePicker" data-date-format="yyyy-mm-dd" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Shift:</label>
                         <asp:DropDownList runat="server" ID="ddlShift" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="">All</asp:ListItem>
@@ -31,15 +31,14 @@
                             <asp:ListItem Value="Night">Night</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Part No:</label>
                         <asp:TextBox runat="server" ID="txtPartNo" CssClass="form-control" Width="60%" AutoCompleteType="Disabled"></asp:TextBox>
                     </div>
                 </div>
 
                 <div class="row form-inline searchingBar ">
-
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Station:</label>
                         <asp:DropDownList runat="server" ID="ddlStation" CssClass="form-control" Width="60%">
                             <asp:ListItem Value="">All</asp:ListItem>
@@ -67,24 +66,23 @@
                             <asp:ListItem Value="12">Packing6(Sta12)</asp:ListItem>
                         </asp:DropDownList>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Job No:</label>
                         <asp:TextBox runat="server" ID="txtJobNo" CssClass="form-control" Width="60%"></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <label style="width:35%">Lot No:</label>
                         <asp:TextBox runat="server" ID="txtLotNo" CssClass="form-control" Width="60%"></asp:TextBox>
                     </div>
                     
-                    <div class="col-md-3" align="right" style="padding-right:2%;">
+                    <div class="col-sm-3" align="right" style="padding-right:2%;">
                         <asp:Button ID="Button2" runat="server" Text="Generate" OnClick="btnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
                     </div>
                 </div>
-
             </div>
         </div>
 
-         <div class="row">
+        <div class="row">
            <h3> <asp:Label ID="lblResult" runat="server" /> </h3>
         </div>
 
@@ -92,8 +90,7 @@
 
 
         <div class="row">
-            <div class="col-md-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
-
+            <div class="col-sm-12 panel panel-default" style="padding-top:10px;padding-bottom:10px;">
                 <asp:DataGrid runat="server" ID ="dgPacking" AutoGenerateColumns="false" CssClass="table" Width ="100%" CellPadding="10" ForeColor="#333333" GridLines="None" CellSpacing="2" >
                     <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
                     <EditItemStyle BackColor="#999999" />
@@ -120,9 +117,9 @@
                         <asp:BoundColumn DataField="rejectQty" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="TotalQty" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="RejRate" HeaderText="REJ%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="userID" HeaderText="Operator"></asp:BoundColumn>
                     </Columns>
                 </asp:DataGrid>
-             
             </div>
         </div>
     </div>
@@ -145,7 +142,6 @@
             forceParse: 0,
             initialDate: new Date()
         });
-
         $('#MainContent_txtDateTo').datetimepicker({
             weekStart: 1,
             todayBtn: 1,

@@ -169,6 +169,10 @@ namespace Common.Class.BLL
             return dt;
         }
 
+        public SqlCommand UpdateCommand(Model.PQCPackTracking_Model model)
+        {
+            return dal.UpdatePQCMaintenance(model);
+        }
         
         public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, 
             List<Model.PQCPackDetailTracking_Model> detailModelList, 

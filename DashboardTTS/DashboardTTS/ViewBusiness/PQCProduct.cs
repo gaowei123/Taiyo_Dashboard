@@ -499,14 +499,16 @@ namespace DashboardTTS.ViewBusiness
 
             //处理 vi tracing model
             Common.Class.Model.PQCQaViTracking viTrackingModel = viTrackingBLL.GetModelByTrackingID(trackingID);
-
+            
             viTrackingModel.TotalQty = detailTrackingList.Sum(p => p.totalQty).ToString();
             viTrackingModel.acceptQty = detailTrackingList.Sum(p => p.passQty).ToString();
             viTrackingModel.rejectQty = detailTrackingList.Sum(p => p.rejectQty).ToString();
             viTrackingModel.updatedTime = DateTime.Now;
             viTrackingModel.lastUpdatedTime = DateTime.Now;
             viTrackingModel.remarks = "PQC Job Maintenance Update Qty";
-            
+
+            //2021-03-26, 避免没有endtime operator daily report不显示, 直接赋值成starttime.
+            viTrackingModel.stopTime = viTrackingModel.stopTime == null ? viTrackingModel.startTime : viTrackingModel.stopTime;
 
 
 
@@ -1274,7 +1276,7 @@ namespace DashboardTTS.ViewBusiness
         {
             try
             {
-                List<ViewModel.PackingInventory_ViewModel.Detail> detailList = GetPackBinDetailList(dDateFrom, DateTime.Now, sPartNo, string.Empty);
+                List<ViewModel.PackingInventory_ViewModel.Detail> detailList = GetPackBinDetailList(dDateFrom, DateTime.Now, sPartNo, sJobNo);
                 if (detailList == null)
                     return _js.Serialize("");
 

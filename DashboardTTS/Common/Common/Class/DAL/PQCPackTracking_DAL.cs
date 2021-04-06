@@ -359,6 +359,7 @@ trackingID
 ,ISNULL(a.rejectQty,0) as rejectQty
 ,ISNULL(a.TotalQty,0) as TotalQty
 ,a.datetime 
+,a.userID
 FROM PQCPackTracking a
 where a.day >= @datefrom and a.day< @dateto ");
 

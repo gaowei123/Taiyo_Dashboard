@@ -2,13 +2,17 @@
 
 <asp:Content runat="server" ContentPlaceHolderID ="MainContent" >
 
-
-
     <style>
         @media (min-width: 1200px) {
             .container{
                 max-width: 900px;
             }
+        }
+        .top10{
+            margin-top:10px;
+        }
+        .bottom6{
+            margin-bottom:6px;
         }
     </style>
 
@@ -19,56 +23,66 @@
             <span class="titleText">PQC Packing Job Maintance</span>
         </div>
 
-        <div class="row" style="margin-top:10px;">
-            <div class="col-md-12 panel panel-default" role="form">
-                <div class="row form-inline" style="padding:10px 10px 0px 18px;">
-                    <div class="col-md-2">
-                        <b>Job Info :</b>
-                    </div>
-                    <div class="col-md-9">
+        <div class="row top10">
+            <div class="col-sm-12 panel panel-default">
+                <div class="row form-inline top10">
+                    <div class="col-sm-2"><b>Job Info :</b></div>
+                    <div class="col-sm-9">
                         <asp:Label runat="server" ID="lbDay" Font-Bold="true"></asp:Label> &nbsp-&nbsp
                         <asp:Label runat="server" ID="lbShift" Font-Bold="true"></asp:Label>&nbsp-&nbsp
                         <asp:Label runat="server" ID="lbJob" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
-                        <asp:Label runat="server" ID="lbMaterialName" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
                         <asp:Label runat="server" ID="lbTrackingID" Font-Bold="true"></asp:Label>
                     </div>
                 </div>
-                <div class="row form-inline" style="margin:14px 4px 4px 4px;"> 
-                    <div class="col-md-2">
-                        Part No :
-                    </div>
+                <div class="row form-inline top10"> 
+                    <div class="col-sm-2">Part No :</div>
                     <div class="col-sm-9">
                         <asp:Label runat="server" ID="lbPartNo"></asp:Label>
                     </div>
                 </div>
-                <div class="row form-inline" style="margin:4px;">
-                    <div class="col-md-2">
-                        MRP QTY :
-                    </div>
-                    <div class="col-md-9">
+                <div class="row form-inline bottom6">
+                    <div class="col-sm-2">MRP QTY :</div>
+                    <div class="col-sm-9">
                         <asp:Label runat="server" ID="lbMrpQty" Width="50px"></asp:Label>
-                    </div>
-                </div>
-
-                 <hr />
-
-                <div class="row form-inline" style="margin:4px 4px 20px 4px;">
-                    <div class="col-md-2">
-                        Packed Qty :
-                    </div>
-                    <div class="col-md-4">
-                        <asp:Label runat="server" ID="lbPackedQty" Width="50px"></asp:Label>
-                        <asp:Label runat="server" Text ="-->" width="50"></asp:Label>
-                        <asp:TextBox runat="server"  ID="txtPackQty" CssClass="form-control" BackColor="#90ee90" Width="140px" AutoCompleteType="Disabled" ></asp:TextBox>
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2">
-                         <asp:Button runat="server" ID="btnConfirm" Text="End" Height="38px" Width="100%" CssClass="btn-primary" style="border-radius:4px;" data-toggle="modal" data-target="#modalLogin" OnClientClick="return false;" />
                     </div>
                 </div>
             </div>
         </div>
-
+        
+        <div class="row">
+            <div class="col-sm-12 panel panel-default">
+                <div class="row form-inline top10">
+                    <div class="col-sm-12">
+                        <b>Material List</b>
+                    </div>
+                </div>
+                <div class="row form-inline top10">
+                    <div class="col-sm-12">
+                        <asp:DataGrid runat="server" ID ="dgMaterial" AutoGenerateColumns="false" CssClass="table table-bordered" Width ="100%"  >
+                            <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
+                            <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" Height="30px" />                      
+                            <Columns>                              
+                                <asp:BoundColumn DataField="MaterialName" HeaderText="Material Name"></asp:BoundColumn>
+                                <asp:BoundColumn DataField="InventoryQty" HeaderText="Inventory Qty"></asp:BoundColumn>
+                                <asp:BoundColumn DataField="MaterialQty" HeaderText="Current Packing Set Qty" Visible="true"></asp:BoundColumn>
+                                <asp:TemplateColumn HeaderText="Update">
+                                    <ItemTemplate>
+                                        <asp:TextBox runat="server" Width="150" ID="txtPackSetQty"></asp:TextBox>
+                                    </ItemTemplate>
+                                </asp:TemplateColumn>
+                                
+                            </Columns>
+                        </asp:DataGrid>
+                    </div>
+                </div>
+                <div class="row form-inline top10 bottom6">
+                    <div class="col-sm-12" style="display:flex; justify-content:center;">
+                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLogin">Confirm</button>
+                        <asp:Button runat="server" ID="btnCancel" Text="Cancel" CssClass="btn btn-danger" style="margin:0 10px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
       
@@ -99,12 +113,12 @@
                     </div>
 			    </div>
 			    <div class="modal-footer">
-				    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				    <button type="button" class="btn btn-danger"  data-dismiss="modal">Cancel</button>
                     <asp:Button runat="server" ID="btn_generate" Text="Submit" Width="100px" Height="38px" CssClass="btn-success" OnClick="btn_confirm_Click" style="border-radius:4px;" UseSubmitBehavior="false" />
 			    </div>
 		    </div>
 	    </div>
     </div>
+    <!-- Login 拟态框 -->
 
-   
 </asp:Content>

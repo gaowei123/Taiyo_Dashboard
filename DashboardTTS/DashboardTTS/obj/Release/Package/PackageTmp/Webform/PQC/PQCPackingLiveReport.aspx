@@ -80,11 +80,10 @@
                         <asp:Button ID="Button2" runat="server" Text="Generate" OnClick="btnGenerate_Click" CssClass="btn-success" style="width:100px; height:34px; border-radius:4px;" />
                     </div>
                 </div>
-
             </div>
         </div>
 
-         <div class="row">
+        <div class="row">
            <h3> <asp:Label ID="lblResult" runat="server" /> </h3>
         </div>
 
@@ -120,6 +119,7 @@
                         <asp:BoundColumn DataField="rejectQty" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="TotalQty" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
                         <asp:BoundColumn DataField="RejRate" HeaderText="REJ%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="userID" HeaderText="Operator"></asp:BoundColumn>
                     </Columns>
                 </asp:DataGrid>
              
@@ -145,7 +145,6 @@
             forceParse: 0,
             initialDate: new Date()
         });
-
         $('#MainContent_txtDateTo').datetimepicker({
             weekStart: 1,
             todayBtn: 1,

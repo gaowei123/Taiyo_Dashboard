@@ -1722,6 +1722,7 @@ from pqcpacktracking where day =@day ");
                                 acceptQty = @acceptQty, 
                                 rejectQty = @rejectQty,
                                 status = @status,
+                                stopTime = @stopTime,
                                 nextViFlag = @nextViFlag,
                                 lastUpdatedTime = @lastUpdatedTime,
                                 updatedTime =  @updatedTime,
@@ -1738,7 +1739,8 @@ from pqcpacktracking where day =@day ");
                 new SqlParameter("@nextViFlag", SqlDbType.VarChar),
                 new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime),
                 new SqlParameter("@updatedTime", SqlDbType.DateTime),
-                new SqlParameter("@remarks", SqlDbType.VarChar)
+                new SqlParameter("@remarks", SqlDbType.VarChar),
+                new SqlParameter("@stopTime", SqlDbType.DateTime2)
             };
 
             parameters[0].Value = model.trackingID;
@@ -1754,6 +1756,7 @@ from pqcpacktracking where day =@day ");
             parameters[7].Value = model.lastUpdatedTime;
             parameters[8].Value = model.updatedTime;
             parameters[9].Value = model.remarks;
+            parameters[10].Value = model.stopTime;
 
 
 

@@ -1,23 +1,9 @@
-﻿/**  版本信息模板在安装目录下，可自行修改。
-* PQCPackDetailHistory.cs
-*
-* 功 能： N/A
-* 类 名： PQCPackDetailHistory
-*
-* Ver    变更日期             负责人  变更内容
-* ───────────────────────────────────
-* V0.01  2020/3/9 11:36:05   N/A    初版
-*
-* Copyright (c) 2012 Maticsoft Corporation. All rights reserved.
-*┌──────────────────────────────────┐
-*│　此技术信息为本公司机密信息，未经本公司书面同意禁止向第三方披露．　│
-*│　版权所有：动软卓越（北京）科技有限公司　　　　　　　　　　　　　　│
-*└──────────────────────────────────┘
-*/
-using System;
+﻿using System;
 using System.Data;
 using System.Collections.Generic;
 using Common.Class.Model;
+using System.Data.SqlClient;
+
 namespace Common.Class.BLL
 {
 	/// <summary>
@@ -38,10 +24,15 @@ namespace Common.Class.BLL
 			return dal.Add(model);
 		}
 
-		/// <summary>
-		/// 更新一条数据
-		/// </summary>
-		public bool Update(Common.Class.Model.PQCPackDetailHistory_Model model)
+        public SqlCommand AddCommand(Common.Class.Model.PQCPackDetailTracking_Model model)
+        {
+            return dal.AddCommand(model);
+        }
+
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        public bool Update(Common.Class.Model.PQCPackDetailHistory_Model model)
 		{
 			return dal.Update(model);
 		}
@@ -66,26 +57,14 @@ namespace Common.Class.BLL
 
 		
 
+
+
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public DataSet GetList(string strWhere)
+		public List<Common.Class.Model.PQCPackDetailHistory_Model> GetModelList(string sTrackingID)
 		{
-			return dal.GetList(strWhere);
-		}
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			return dal.GetList(Top,strWhere,filedOrder);
-		}
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public List<Common.Class.Model.PQCPackDetailHistory_Model> GetModelList(string strWhere)
-		{
-			DataSet ds = dal.GetList(strWhere);
+			DataSet ds = dal.GetList(sTrackingID);
 			return DataTableToList(ds.Tables[0]);
 		}
 		/// <summary>
@@ -110,13 +89,7 @@ namespace Common.Class.BLL
 			return modelList;
 		}
 
-		/// <summary>
-		/// 获得数据列表
-		/// </summary>
-		public DataSet GetAllList()
-		{
-			return GetList("");
-		}
+
 
 	
 		/// <summary>

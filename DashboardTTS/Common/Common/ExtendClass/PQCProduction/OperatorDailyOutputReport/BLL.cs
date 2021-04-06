@@ -53,7 +53,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorDailyOutputReport
                            PassQty = a.PassQty,
                            LoseAmounts = a.LoseAmounts,
                            Operator = a.Opertor.ToUpper(),
-                           TotalQty = a.TotalQty,
+                           TotalQty = a.TotalQty
                        };
 
 
