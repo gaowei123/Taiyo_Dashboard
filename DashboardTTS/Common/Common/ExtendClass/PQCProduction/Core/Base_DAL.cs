@@ -253,6 +253,7 @@ where 1=1 and day >= @DateFrom and day < @DateTo  ");
         }
 
 
+
         /// <summary>
         /// 获取只有paint delivery记录的lotNo,inQuantity,paintProcess等信息.
         /// </summary>

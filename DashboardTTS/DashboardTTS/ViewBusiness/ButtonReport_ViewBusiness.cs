@@ -74,14 +74,13 @@ namespace DashboardTTS.ViewBusiness
                     model.process = dr["processes"].ToString();
                     model.partsType = dr["PartsType"].ToString();
                     model.mouldType = dr["mouldType"].ToString();
-
                     model.OP = dr["OP"].ToString();
 
                     models.Add(model);
                 }
 
 
-
+                // 生成每个job和它最后一道check工序的记录. 
                 var jobList = from a in models
                               group a by a.jobID into b
                               select new
@@ -91,6 +90,7 @@ namespace DashboardTTS.ViewBusiness
                               };
 
 
+                // 只有这个job完成了最后一道check工序,才显示出来.
                 var result = (from a in models
                               join b in jobList on a.jobID equals b.Key
                               where a.process == b.lastProcess
@@ -563,7 +563,7 @@ namespace DashboardTTS.ViewBusiness
                     reportModel.jobID = string.Format("<a href=\"../../Buyoff/OverallBuyoff?JobNumber={0}\" target=\"_blank\">{1}</a>", pqcdetailModel.jobID, pqcdetailModel.jobID);
 
 
-
+            
 
                     reportModel.lotNo = paintDeliveryModel.lotNo;
                     reportModel.partNo = pqcdetailModel.partNumber;
@@ -575,7 +575,7 @@ namespace DashboardTTS.ViewBusiness
                     //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
                     double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
                     double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
-                    reportModel.pass = pqcdetailModel.passQty - paintQA + paintSetup;
+                    reportModel.pass = pqcdetailModel.passQty - (paintQA + paintSetup);
                     reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
                     reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
 
@@ -2350,6 +2350,8 @@ namespace DashboardTTS.ViewBusiness
                 return null;
             }
         }
+
+
 
     }
 }

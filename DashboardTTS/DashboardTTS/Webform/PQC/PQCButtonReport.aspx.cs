@@ -25,9 +25,7 @@ namespace DashboardTTS.Webform.PQC
 
                     //周日, 周一显示 上周五的. 默认显示前一天的.
                     DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
-                    this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");
-
-                    
+                    this.txtDateFrom.Text = dLastDay.ToString("yyyy-MM-dd");                    
                     this.lbHeader.Text = Request.QueryString["Description"] == "BUTTON" ? "PQC Button Report" : "Laser & PQC Total Report";
 
 
@@ -35,7 +33,7 @@ namespace DashboardTTS.Webform.PQC
                 }
                 catch (Exception ex)
                 {
-                    DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "Page_Load error : " + ex.ToString());                   
+                    DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "Page_Load error : " + ex.ToString());
                 }
             }
         }
@@ -44,19 +42,24 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
-                //这几个条件都不用了.
+                #region 这几个条件都不用了.
                 string JobNo = "";
                 string partNumber = "";
                 string model = "";
                 string color = "";
                 string supplier = "";
                 string coating = "";
-                //这几个条件都不用了.
+                #endregion
 
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
-                DateTime DateTo = DateFrom.AddDays(1);// DateTime.Parse(this.txtDateTo.Text).Date.AddDays(1);
-                string reportType = this.ddlType.SelectedItem.Value; // 可以选定现显示 laser, wip部分列表            
-                string sDescription = Request.QueryString["Description"];//除了panel, bezel的part都显示.
+                DateTime DateTo = DateFrom.AddDays(1);
+
+                // 用来选定现显示 laser / wip 部分列表
+                string reportType = this.ddlType.SelectedItem.Value;
+
+                // "BUTTON": 只显示pqcbom description设定为button的part
+                // ""(传空): 不指定type类型, 全显示.
+                string sDescription = Request.QueryString["Description"];
                 
 
                 ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();

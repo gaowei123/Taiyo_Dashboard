@@ -3,9 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8" />
-    
+    <meta charset="utf-8" />    
     <title>Taiyo - @ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
  
 
     @*jquery, bootstrap*@
@@ -27,10 +27,12 @@
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top " role="navigation">
         <div class="container-fluid">
+
+            @*dashboard logo*@
             <div class="navbar-header">
                 <div class="row">
                     <div class="col-xs-10" style="margin:0px;padding:0px;">
-                        <a href="~/Webform/TTSHomePage.aspx" style="margin-right:0px;padding-right:0px;" >
+                        <a href="~/Home/Index" style="margin-right:0px;padding-right:0px;" >
                             <img id="imglogo" class="img-responsive" 
                                  src="~/Resources/Images/logo-ir4-tts-lmms.png"
                                  style="width:380px;height:50px;"/>
@@ -46,6 +48,7 @@
                     </div>
                 </div>
             </div>
+            @*dashboard logo*@
 
             @*多级菜单栏*@
             <div class="collapse navbar-collapse" id="target-menu">
@@ -159,7 +162,6 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><font size="4">PQC</font><span class="caret"></span></a>
                         <ul class="dropdown-menu menu-top">
                             <li><a href="~/Webform/PQC/PQCRealTime.aspx">PQC Station Real Time</a></li>
-                            @*<li><a href="~/Webform/PQC/PQCCheckingLiveReport.aspx">Checking Live Report</a></li>*@
                             <li><a href="~/PQC_Product/CheckingLiveReport">Checking Live Report</a></li>
                             <li><a href="~/PQC_Product/SummaryReport">PQC Summary Report</a></li>
                             <li><a href="~/PQC_Product/DailyReport">Daily PQC Report</a></li>
@@ -196,9 +198,8 @@
 
                             <li class="divider"></li>
 
-                            @*  
-                                !!!
-                                URL传递的Department参数必须和Enum中设定的Description保持一致.
+                            @*
+                                ** URL地址传递Department参数的值必须和Taiyo.Enum.Organization.Department中对应Enum的Description保持一致.
                                 不然submit界面会查询不到数据
                             *@
                             <li><a href="~/Attendance/Attendance?Department=Moulding">Moulding</a></li>
@@ -224,15 +225,13 @@
                     </li>
                 </ul>
             </div>
+            @*多级菜单栏*@
+
         </div>
-</nav>
-
-
+    </nav>
 
 
     @RenderBody()
-
-
 
 
     <script type="text/javascript">

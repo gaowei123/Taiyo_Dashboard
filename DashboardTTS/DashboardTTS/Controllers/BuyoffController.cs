@@ -52,82 +52,27 @@ namespace DashboardTTS.Controllers
 
             return Content(day.ToString("yyyy-MM-dd"));
         }
+
         
-        public ActionResult GetJobList()
+        // 获取选择日期下所有的job, (nextviflag == true)
+        public JsonResult GetJobList(DateTime? Date)
         {
             Common.Class.BLL.PQCQaViTracking_BLL trackingBLL = new Common.Class.BLL.PQCQaViTracking_BLL();
+            List<string>  jobList = trackingBLL.GetBuyoffJobList(Date);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            DateTime? day = DateTime.Parse(Request.Form["Date"]);
-
-            List<string> jobList = new List<string>();
-
-
-            jobList = trackingBLL.GetBuyoffJobList(day);
-
-            string jsonResult = "";
-
-            if (jobList == null)
-            {
-                jsonResult = js.Serialize("");
-
-            }
-            else{
-                jsonResult = js.Serialize(jobList);
-            }
-
-
-
-            return Content(jsonResult);
+            return jobList == null ? Json("") : Json(jobList);
         }
         
-        public ActionResult GetLaserBuyoffRecord()
+        public JsonResult GetLaserBuyoffRecord(string JobNo)
         {
-            string jobno = Request.Form["JobNo"];
-
-
-            ViewModel.BuyoffReport_ViewModel.LaserRecord model = vbBuyoff.GetLaserModel(jobno);
-
-
-            string jsonResult = "";
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            if (model == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(model);
-            }
-
-
-            return Content(jsonResult);
+            var model = vbBuyoff.GetLaserModel(JobNo);
+            return model == null ? Json("") : Json(model);            
         }
         
-        public ActionResult GetLaserParameter()
+        public JsonResult GetLaserParameter(string JobNo)
         {
-            string jobno = Request.Form["JobNo"];
-
-
-            ViewModel.BuyoffReport_ViewModel.LaserParameter model = vbBuyoff.GetLaserParameter(jobno);
-
-
-            string jsonResult = "";
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-            if (model == null)
-            {
-                jsonResult = js.Serialize("");
-            }
-            else
-            {
-                jsonResult = js.Serialize(model);
-            }
-
-
-            return Content(jsonResult);
+            var model = vbBuyoff.GetLaserParameter(JobNo);
+            return model == null ? Json("") : Json(model);
         }
 
 

@@ -27,3 +27,32 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\bin\Debug\
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.exe
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\TestRedisCache.exe.config
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\TestRedisCache.exe
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\TestRedisCache.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\Pipelines.Sockets.Unofficial.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\StackExchange.Redis.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Buffers.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Diagnostics.PerformanceCounter.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.IO.Compression.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.IO.Pipelines.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Memory.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Numerics.Vectors.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Channels.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\Pipelines.Sockets.Unofficial.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\StackExchange.Redis.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Buffers.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Diagnostics.PerformanceCounter.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.IO.Pipelines.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Memory.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Numerics.Vectors.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Channels.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.exe
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\TestRedisCache\obj\Debug\TestRedisCache.pdb

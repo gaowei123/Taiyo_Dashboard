@@ -14,3 +14,19 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\bin\Debug\zh-Ha
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\StaticRes.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\StaticRes.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\System.Windows.Interactivity.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\System.Windows.Interactivity.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\de\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\en\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\es\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\it\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb

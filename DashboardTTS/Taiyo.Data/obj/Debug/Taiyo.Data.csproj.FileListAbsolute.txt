@@ -3,3 +3,8 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiy
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.pdb

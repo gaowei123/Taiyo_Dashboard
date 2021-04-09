@@ -14,3 +14,19 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Common.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Common.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.pdb

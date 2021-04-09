@@ -16,3 +16,21 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.csprojResolveAssemblyReference.cache
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\MyChart.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\MyChart.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Common.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\StaticRes.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Enum.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.SearchParam.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Common.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\StaticRes.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Enum.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.SearchParam.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb

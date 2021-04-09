@@ -15,8 +15,5 @@ namespace DashboardTTS.ViewModel
             public double leaveDays { get; set; }
             public double attendaneRate { get; set; }
         }
-
-
-
     }
 }

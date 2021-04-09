@@ -15,7 +15,7 @@ namespace DashboardTTS.Webform
         {
 
             //不要删掉这个aspx界面, taiyo那边的人在游览器标签上都保存这个旧地址.
-            //但新home page用mvc的模板重做了, 这里只做个跳转的功能.
+            //但新home page用mvc的模板重做了 在Home/Index里, 这里只做个跳转的功能.
             //如果删了, 发现网页404, taiyo那边又要BB个不停.
 
           
@@ -25,7 +25,7 @@ namespace DashboardTTS.Webform
             if (rootPath == "/")
                 Response.Redirect("/Home/Index");
             else
-                Response.Redirect(rootPath + "/Home/Index");            
+                Response.Redirect(rootPath + "/Home/Index");
             return;
         }
     }

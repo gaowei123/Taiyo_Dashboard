@@ -5,3 +5,10 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Relea
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Tool.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Enum.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Enum.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.pdb

@@ -3,3 +3,8 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
