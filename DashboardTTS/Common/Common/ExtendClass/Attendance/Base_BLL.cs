@@ -7,7 +7,6 @@ using System.Data;
 using Taiyo.Enum.Organization;
 using Taiyo.Tool.Extension;
 using Taiyo.Enum;
-using Taiyo.Enum.Organization;
 
 namespace Common.ExtendClass.Attendance
 {

@@ -14,7 +14,6 @@ namespace Common.ExtendClass.PQCProduction.Core
             _dal = new Base_DAL();
         }
 
-
         public List<BaseVI_Model> GetViList(PQCOperatorParam param)
         {
             var checkViList = _dal.GetCheckViList(param);
@@ -28,9 +27,11 @@ namespace Common.ExtendClass.PQCProduction.Core
             if (packViList != null)
                 result.AddRange(packViList);
 
-            
+
             return result;
         }
+
+
 
         public List<BaseVI_Model> GetCheckingList(PQCOperatorParam param)
         {

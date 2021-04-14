@@ -5,6 +5,16 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiy
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.pdb
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\obj\Debug\Taiyo.Data.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.Core.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Enum.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Data.Core.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Enum.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Newtonsoft.Json.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\DBHelp.pdb

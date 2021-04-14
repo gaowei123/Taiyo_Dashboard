@@ -40,13 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Laser\Production.cs" />
+    <Compile Include="Paint\Production.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Laser\" />
-    <Folder Include="Moulding\" />
-    <Folder Include="Painting\" />
+    <Folder Include="Mould\" />
     <Folder Include="PQC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StatusConverter\Taiyo.Tool.csproj">
+      <Project>{9ee7ab40-6b50-47a4-9f3a-3b3f3520cadb}</Project>
+      <Name>Taiyo.Tool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Taiyo.Data.Core\Taiyo.Data.Core.csproj">
+      <Project>{46db7e3f-75b4-491a-9a5a-3bc2ebd15eab}</Project>
+      <Name>Taiyo.Data.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,6 +16,12 @@ namespace DashboardTTS.Webform
     public partial class ProductivityDetail : System.Web.UI.Page
     {
     
+        public class modela
+        {
+            public string aaaa { get; set; }
+            public string ccc { get; set; }
+            public string bbb { get; set; }
+        }
         
         protected void Page_Load(object sender, EventArgs e)
         {

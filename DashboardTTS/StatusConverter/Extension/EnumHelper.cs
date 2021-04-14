@@ -27,5 +27,7 @@ namespace Taiyo.Tool.Extension
             }
             return enumType.ToString();
         }
+
+
     }
 }

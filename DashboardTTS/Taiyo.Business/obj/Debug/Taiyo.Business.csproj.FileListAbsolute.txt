@@ -1,0 +1,5 @@
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Business\bin\Debug\Taiyo.Business.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Business\bin\Debug\Taiyo.Business.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Business\obj\Debug\Taiyo.Business.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Business\obj\Debug\Taiyo.Business.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Business\obj\Debug\Taiyo.Business.pdb

@@ -53,6 +53,5 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\bin\Debug
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\bin\Debug\System.Threading.Channels.xml
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\bin\Debug\System.Threading.Tasks.Extensions.xml
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.RedisCache\obj\Debug\Taiyo.RedisCache.pdb

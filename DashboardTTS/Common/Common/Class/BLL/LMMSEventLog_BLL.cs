@@ -381,10 +381,14 @@ namespace Common.BLL
 
 
 
+
+
+
+
         //以下为新逻辑, 由于旧逻辑遍历到每一秒, 极大影响了生成yearly的数据的速度.
         //新逻辑 将原数据按照 8:00,  20:00的时间点来切分重组.
-        //将lmmseventlog 表中的数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
-        #region 只有GetStatusModelList方法对外public使用
+        //将lmmseventlog表中的源数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
+        #region 
         private List<string> GetMachineStatusList()
         {
             return new List<string>()
@@ -434,8 +438,12 @@ namespace Common.BLL
 
 
                 //buyoff, setup, testing等状态超过12小时的全部跳过.
-                if ( (new string[] { "BUYOFF", "NO SCHEDULE", "SETUP" , "TESTING" }).Contains(status) 
-                    &&  (stopTime - startTime ).TotalHours >= 12  )
+                if ( (new string[] { "BUYOFF", "SETUP" ,"TESTING" }).Contains(status) &&  (stopTime - startTime ).TotalHours >= 12)
+                    continue;
+
+                //2021-4-14
+                //no schedule单独设置, 实际情况确实会有挂机超过12小时的, 放宽到13小时
+                if (status == "NO SCHEDULE" && (stopTime - startTime).TotalHours > 13)
                     continue;
 
 
@@ -704,6 +712,7 @@ namespace Common.BLL
 
 
 
+            
 
 
             return allStatusModels;
@@ -986,6 +995,7 @@ namespace Common.BLL
             return result;
         }
         #endregion
+
         
 
         public class UsedRate
@@ -1006,6 +1016,8 @@ namespace Common.BLL
             List<Common.Model.LMMSEventLog_Model.Detail> statusList = GetStatusModelList(DateTime.Now.Date, DateTime.Now.Date.AddDays(1), "", "", "", false);
             if (statusList == null)
                 return null;
+
+            var test = from a in statusList where a.machineID == "7" select a;
 
 
             var runList = from a in statusList

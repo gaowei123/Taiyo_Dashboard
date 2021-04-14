@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Taiyo.Enum.Organization;
 using Newtonsoft.Json;
-using Taiyo.Enum.Organization;
 using Taiyo.Tool.Extension;
 
 namespace Common.ExtendClass.Attendance

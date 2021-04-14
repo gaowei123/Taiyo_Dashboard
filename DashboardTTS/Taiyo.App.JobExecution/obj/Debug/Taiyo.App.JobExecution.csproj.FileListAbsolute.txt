@@ -102,7 +102,6 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\DBHelp.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.SearchParam.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.Enum.dll
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\StaticRes.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Taiyo.Tool.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.dll
@@ -161,6 +160,13 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\zh-Hans\System.Web.WebPages.resources.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.csprojResolveAssemblyReference.cache
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.csproj.Taiyo.App.JobExecution.exe.config
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.exe
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\WebGrease.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.Security.OAuth.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Antlr3.Runtime.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Microsoft.Owin.Security.OAuth.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Antlr3.Runtime.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.csproj.Taiyo.App.JobExecution.exe.config

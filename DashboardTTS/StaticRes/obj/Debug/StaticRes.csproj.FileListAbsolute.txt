@@ -27,6 +27,6 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ja\Sys
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ko\System.Windows.Interactivity.resources.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache

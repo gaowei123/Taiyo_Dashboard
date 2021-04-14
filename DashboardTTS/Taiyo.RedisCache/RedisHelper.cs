@@ -60,11 +60,6 @@ namespace Taiyo.RedisCache
         }
 
 
-
-
-
-
-
         public void Dispose()
         {
             if (_connections != null && _connections.Count > 0)

@@ -12,3 +12,5 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Debug\
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Debug\Taiyo.Tool.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Debug\Taiyo.Tool.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Debug\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Debug\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Debug\Newtonsoft.Json.xml
