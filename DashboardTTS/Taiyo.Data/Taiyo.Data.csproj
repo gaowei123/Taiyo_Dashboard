@@ -57,6 +57,10 @@
       <Project>{46db7e3f-75b4-491a-9a5a-3bc2ebd15eab}</Project>
       <Name>Taiyo.Data.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Taiyo.Query\Taiyo.Data.Query.csproj">
+      <Project>{DA56631F-65DF-4F8C-8382-202F92046BCA}</Project>
+      <Name>Taiyo.Data.Query</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

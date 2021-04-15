@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Taiyo.Data.Core;
 using System.Data.SqlClient;
 using Taiyo.Tool;
+using Taiyo.Data.Query;
 
 namespace Taiyo.Data.Paint
 {
@@ -22,10 +23,10 @@ namespace Taiyo.Data.Paint
             public decimal? MrpQty { get; set; }
         }
         
-        public List<LotInfo> GetLotList(List<string> queryList, SqlParameter[] parameters)
+        public List<LotInfo> GetLotList(Taiyo.Data.Query.PaintQuery.Delivery querys)
         {
-            Core.Paint_Delivery _delivery = new Paint_Delivery(queryList, parameters);
-            var result = from a in _delivery.DeliveryList
+            Core.Paint_Delivery delivery = new Paint_Delivery(querys);
+            var result = from a in delivery.DeliveryList
                          select new
                          {
                              LotNo = a.LotNo,
@@ -39,25 +40,11 @@ namespace Taiyo.Data.Paint
 
         public LotInfo GetLot(string sJobNo)
         {
-      
-            List<string> querylist = new List<string>();
-            querylist.Add(" and jobnumber = @jobnumber");
+            var list = GetLotList(new PaintQuery.Delivery() {
+                JobNo = sJobNo
+            });
 
-            
-            SqlParameter[] parameters =
-            {
-                new SqlParameter("@jobnumber", System.Data.SqlDbType.VarChar,32)
-            };
-            parameters[0].Value = sJobNo;
-
-
-
-            var list = GetLotList(querylist, parameters);
-            if (list == null || list.Count() == 0)
-                return null;
-            else
-                return list.FirstOrDefault();
-
+            return list == null || list.Count() == 0? null: list.FirstOrDefault();
         }
         
         #endregion

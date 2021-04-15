@@ -7,7 +7,7 @@
     <ProjectGuid>{DA56631F-65DF-4F8C-8382-202F92046BCA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Taiyo.Query</RootNamespace>
+    <RootNamespace>Taiyo.Data.Query</RootNamespace>
     <AssemblyName>Taiyo.Query</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base.cs" />
-    <Compile Include="Painting.cs" />
+    <Compile Include="BaseQuery.cs" />
+    <Compile Include="PaintQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

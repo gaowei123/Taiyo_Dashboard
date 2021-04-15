@@ -18,3 +18,5 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Enum.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Newtonsoft.Json.xml
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Query.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data\bin\Debug\Taiyo.Query.pdb

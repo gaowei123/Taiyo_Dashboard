@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRedisCache", "TestRedis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Data", "Taiyo.Data\Taiyo.Data.csproj", "{94106398-2B13-42D2-BC56-B12D2B759E8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Query", "Taiyo.Query\Taiyo.Query.csproj", "{DA56631F-65DF-4F8C-8382-202F92046BCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Data.Query", "Taiyo.Query\Taiyo.Data.Query.csproj", "{DA56631F-65DF-4F8C-8382-202F92046BCA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taiyo.Data.Core", "Taiyo.Data.Core\Taiyo.Data.Core.csproj", "{46DB7E3F-75B4-491A-9A5A-3BC2EBD15EAB}"
 EndProject

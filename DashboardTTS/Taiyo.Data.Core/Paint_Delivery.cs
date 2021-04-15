@@ -17,9 +17,9 @@ namespace Taiyo.Data.Core
             DeliveryList = new List<Delivery_Model>();
         }
 
-        public Paint_Delivery(List<string> queryList, SqlParameter[] parameters)
+        public Paint_Delivery(Taiyo.Data.Query.PaintQuery.Delivery querys)
         {
-            DeliveryList = GetList(queryList, parameters);
+            DeliveryList = Fill(querys);
         }
 
 
@@ -49,7 +49,7 @@ namespace Taiyo.Data.Core
 
         }
 
-        public List<Delivery_Model> GetList(List<string> queryList, SqlParameter[] parameters)
+        public List<Delivery_Model> Fill(Taiyo.Data.Query.PaintQuery.Delivery querys)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
@@ -68,10 +68,53 @@ namespace Taiyo.Data.Core
                 FROM [PaintingDeliveryHis]
                 where 1=1 ");
 
-            foreach (string query in queryList)
+
+            if (querys.DateFrom != null)
+                strSql.AppendLine(" and updatedTime >= @dateFrom ");
+
+            if (querys.DateTo != null)
+                strSql.AppendLine(" and updatedTime < @dateTo ");
+
+            if (!string.IsNullOrEmpty(querys.PartNo))
+                strSql.AppendLine(" and partNumber = @partNo ");
+
+            if (!string.IsNullOrEmpty(querys.JobNo))
+                strSql.AppendLine(" and jobNumber = @jobNo ");
+
+            if (!string.IsNullOrEmpty(querys.LotNo))
+                strSql.AppendLine(" and lotNo = @lotNo ");
+
+            if (!string.IsNullOrEmpty(querys.PaintProcess))
+                strSql.AppendLine(" and paintProcess = @paintProcess ");
+
+            if (!string.IsNullOrEmpty(querys.SendingTo))
+                strSql.AppendLine(" and sendingTo = @sendingTo ");
+
+            if (querys.Status != null)
+                strSql.AppendLine(" and status = @status ");
+
+
+
+            SqlParameter[] parameters =
             {
-                strSql.AppendLine(query);
-            }
+                new SqlParameter("@dateFrom", SqlDbType.DateTime2),
+                new SqlParameter("@dateTo", SqlDbType.DateTime2),
+                new SqlParameter("@partNo", SqlDbType.VarChar),
+                new SqlParameter("@jobNo", SqlDbType.VarChar),
+                new SqlParameter("@lotNo", SqlDbType.VarChar),
+                new SqlParameter("@paintProcess", SqlDbType.VarChar),
+                new SqlParameter("@sendingTo", SqlDbType.VarChar),
+                new SqlParameter("@status", SqlDbType.VarChar)
+            };
+            if (querys.DateFrom != null)                    parameters[0].Value = querys.DateFrom.Value; else parameters[0] = null;
+            if (querys.DateTo != null)                      parameters[1].Value = querys.DateTo.Value; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(querys.PartNo))       parameters[2].Value = querys.PartNo; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(querys.JobNo))        parameters[3].Value = querys.JobNo; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(querys.LotNo))        parameters[4].Value = querys.LotNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(querys.PaintProcess)) parameters[5].Value = querys.PaintProcess; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(querys.SendingTo))    parameters[6].Value = querys.SendingTo; else parameters[6] = null;
+            if (querys.Status != null)                      parameters[7].Value = querys.Status; else parameters[7] = null;
+
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);          
