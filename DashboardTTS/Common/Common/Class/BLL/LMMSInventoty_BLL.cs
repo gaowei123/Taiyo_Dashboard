@@ -201,21 +201,7 @@ namespace Common.Class.BLL
 
 
 
-        public DataTable GetListForPQCReport(DateTime dDateFrom, DateTime dDateTo)
-        {
-            DataSet ds = dal.GetListForPQCReport(dDateFrom, dDateTo);
-
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
-
+     
 
         public DataTable GetList(string sJobNo)
         {

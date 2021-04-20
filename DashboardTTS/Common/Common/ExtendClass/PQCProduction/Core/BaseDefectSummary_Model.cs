@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Common.ExtendClass.PQCProduction.Core
 {
-    public class BaseDefect_Model
+    public class BaseDefectSummary_Model
     {
         public string TrackingID { get; set; }
         public string JobNo { get; set; }

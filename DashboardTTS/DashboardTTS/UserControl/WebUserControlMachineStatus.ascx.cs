@@ -37,6 +37,9 @@ namespace DashboardTTS.UserControl
 
         }
 
+
+
+
         public void SetUI(UIModel model)
         {
             this.lbMachineID.Text = model.MachineID;
@@ -55,6 +58,7 @@ namespace DashboardTTS.UserControl
             this.lbUsedRate.Text = model.UsedRate;
             this.lbUsedRate.ToolTip = model.UsedRateDescription;
         }
+
 
         public void SetShutdown(string machineID, string imgURL)
         {
@@ -75,6 +79,7 @@ namespace DashboardTTS.UserControl
             this.lbUsedRate.Text = "0.00%";
             this.lbUsedRate.ToolTip = "";
         }
+
         
         private System.Drawing.Color GetStatusColor(LaserStatus status)
         {

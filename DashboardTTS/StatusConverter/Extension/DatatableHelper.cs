@@ -31,7 +31,7 @@ namespace Taiyo.Tool.Extension
             // 2.遍历table的每一行
             foreach (DataRow dr in dt.Rows)
             {
-                T t = default(T);
+                T t = new T();
 
 
                 // 4.遍历要转换对象的每一个属性

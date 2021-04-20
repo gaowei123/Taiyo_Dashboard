@@ -100,54 +100,42 @@ namespace Common.Class.BLL
             }
 		}
 
-        public DataTable GetAllForPQCLaserTotalReport()
+        public DataTable GetDefectSetting()
         {
             DataTable dt = dal.GetAllForPQCLaserTotalReport();
 
+
+            #region 2021/04/20 特殊defect code
+
+            //laser shortage 属于paint下数量
+            DataRow drShortage = dt.NewRow();
+            drShortage["defectcodeID"] = 100;
+            drShortage["defectDescription"] = "Paint";
+            drShortage["defectCode"] = "Paint Shortage";
+            drShortage["defectCodeSource"] = "Shortage";
+            dt.Rows.Add(drShortage);
+
+            //laser buyoff
+            DataRow drBuyoff = dt.NewRow();
+            drBuyoff["defectcodeID"] = 101;
+            drBuyoff["defectDescription"] = "Laser";
+            drBuyoff["defectCode"] = "Laser Buyoff";
+            drBuyoff["defectCodeSource"] = "Buyoff";
+            dt.Rows.Add(drBuyoff);
+
+            //laser setup
+            DataRow drSetup = dt.NewRow();
+            drSetup["defectcodeID"] = 101;
+            drSetup["defectDescription"] = "Laser";
+            drSetup["defectCode"] = "Laser Setup";
+            drSetup["defectCodeSource"] = "Setup";
+            dt.Rows.Add(drSetup);
+
+
+
+            //painting setup, qa直接设置在defectcode的表中, 不再做处理
+            #endregion
             
-
-            if (dt.Select(string.Format(" defectCodeSource = '{0}' and defectDescription =  'Paint' ", "Shortage")).Length == 0)
-            {
-                DataRow drShortage = dt.NewRow();
-                drShortage["defectcodeID"] = 101;
-                drShortage["defectDescription"] = "Paint";
-                drShortage["defectCode"] = "PAINTING Shortage";
-                drShortage["defectCodeSource"] = "Shortage";
-
-                dt.Rows.Add(drShortage);
-            }
-
-            if (dt.Select(string.Format(" defectCodeSource = '{0}' and defectDescription =  'Laser'", "Set-up")).Length == 0)
-            {
-                DataRow drSetup = dt.NewRow();
-                drSetup["defectcodeID"] = 102;
-                drSetup["defectDescription"] = "Laser";
-                drSetup["defectCode"] = "LASER Set-up";
-                drSetup["defectCodeSource"] = "Set-up";
-                dt.Rows.Add(drSetup);
-            }
-
-            if (dt.Select(string.Format(" defectCodeSource = '{0}' and defectDescription =  'Laser'", "Buyoff")).Length == 0)
-            {
-                DataRow drBuyoff = dt.NewRow();
-                drBuyoff["defectcodeID"] = 103;
-                drBuyoff["defectDescription"] = "Laser";
-                drBuyoff["defectCode"] = "LASER Buyoff";
-                drBuyoff["defectCodeSource"] = "Buyoff";
-                dt.Rows.Add(drBuyoff);
-            }
-
-            DataRow drPaintQA = dt.NewRow();
-            drPaintQA["defectcodeID"] = 104;
-            drPaintQA["defectDescription"] = "Others";
-            drPaintQA["defectCode"] = "OTHERS QA";
-            drPaintQA["defectCodeSource"] = "QA";
-            dt.Rows.Add(drPaintQA);
-
-
-
-
-
             return dt;
         }
 

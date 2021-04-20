@@ -140,18 +140,17 @@ namespace Common.BLL
         }
 
 
-        public DataTable GetJobNG(DateTime dDateFrom, DateTime dDateTo)
+        public DataTable GetLaserQty(string strJobIn)
         {
-
-            DataSet ds = dal.GetJobNG(dDateFrom, dDateTo);
-
+            DataSet ds = dal.GetLaserQty(strJobIn);
             if (ds == null || ds.Tables.Count == 0)
-            {
                 return null;
-            }
 
             return ds.Tables[0];
         }
+
+
+    
 
 
 

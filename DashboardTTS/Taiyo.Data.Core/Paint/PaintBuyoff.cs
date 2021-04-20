@@ -9,23 +9,23 @@ using Taiyo.Tool.Extension;
 
 namespace Taiyo.Data.Core
 {
-    internal class Paint_Buyoff
+    public class PaintBuyoff
     {
-        public Paint_Buyoff()
+        public PaintBuyoff()
         {
             BuyoffList = new List<Buyoff_Model>();
         }
 
-        public Paint_Buyoff(List<string> queryList, SqlParameter[] parameters)
+        public PaintBuyoff(Query.PaintQuery.Buyoff querys)
         {
-            BuyoffList = GetList(queryList, parameters);
+            BuyoffList = GetList(querys);
         }
 
 
         public List<Buyoff_Model> BuyoffList { get; set; }
 
 
-        internal class Buyoff_Model
+        public class Buyoff_Model
         {
             public string JobNo { get; set; }
             public string LotNo { get; set; }
@@ -34,15 +34,16 @@ namespace Taiyo.Data.Core
 
         }
 
-        internal List<Buyoff_Model> GetList(List<string> queryList, SqlParameter[] parameters)
+        public List<Buyoff_Model> GetList(Query.PaintQuery.Buyoff querys)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"");
 
-            foreach (string query in queryList)
+
+            SqlParameter[] parameters =
             {
-                strSql.AppendLine(query);
-            }
+
+            };
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);

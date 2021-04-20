@@ -3809,6 +3809,10 @@
       <Project>{9ee7ab40-6b50-47a4-9f3a-3b3f3520cadb}</Project>
       <Name>Taiyo.Tool</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Taiyo.Business\Taiyo.Business.csproj">
+      <Project>{df873ad5-39f4-451c-a85c-85c70ac270aa}</Project>
+      <Name>Taiyo.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Taiyo.Enum\Taiyo.Enum.csproj">
       <Project>{7eef5249-5d72-4470-a952-94983fad5433}</Project>
       <Name>Taiyo.Enum</Name>

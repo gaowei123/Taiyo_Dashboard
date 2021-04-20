@@ -272,7 +272,8 @@
     <Compile Include="ExtendClass\PaintingRecord\Model.cs" />
     <Compile Include="ExtendClass\PQCProduction\CheckingLiveReport\BLL.cs" />
     <Compile Include="ExtendClass\PQCProduction\CheckingLiveReport\Model.cs" />
-    <Compile Include="ExtendClass\PQCProduction\Core\BaseDefect_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\BaseDefectDetail_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\BaseDefectSummary_Model.cs" />
     <Compile Include="ExtendClass\PQCProduction\Core\BaseLotInfo_Model.cs" />
     <Compile Include="ExtendClass\PQCProduction\Core\Base_BLL.cs" />
     <Compile Include="ExtendClass\PQCProduction\Core\Base_DAL.cs" />

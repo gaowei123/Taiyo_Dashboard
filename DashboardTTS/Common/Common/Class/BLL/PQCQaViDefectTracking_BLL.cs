@@ -288,234 +288,141 @@ namespace Common.Class.BLL
 
         public DataTable getPQCDefectForBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription,string sNumber)
         {
-          
+            // 从defect tracking表中 defect rej等信息
             DataTable dtDefectDetailList = dal.GetDefectDetailForBezelPanelReport(dDateFrom, dDateTo, sType, sDescription, sNumber);
             if(dtDefectDetailList == null || dtDefectDetailList.Rows.Count == 0 )
                 return null;
 
 
-
+            
+            // 从defect setting表中获取所有的defect code
             Common.Class.BLL.PQCDefectSetting_BLL defectSettingBLL = new BLL.PQCDefectSetting_BLL();
-            DataTable dtDefectCode = defectSettingBLL.GetAllForPQCLaserTotalReport();
-            if (dtDefectCode == null || dtDefectCode.Rows.Count == 0)
+            DataTable dtDefectSetting = defectSettingBLL.GetDefectSetting();
+            if (dtDefectSetting == null || dtDefectSetting.Rows.Count == 0)
                 return null;
 
 
+
+            #region  设置defect信息表的结构
             DataTable dtPQCDefectOutPut = new DataTable();
             dtPQCDefectOutPut.Columns.Add("JobNumber");
             dtPQCDefectOutPut.Columns.Add("lotQty");
             dtPQCDefectOutPut.Columns.Add("unitCost");
-            foreach (DataRow dr in dtDefectCode.Rows)
+            foreach (DataRow dr in dtDefectSetting.Rows)
             {
                 DataColumn dc = new DataColumn();
                 dc.ColumnName = dr["defectCodeID"].ToString();
                 dc.Caption = dr["defectCode"].ToString();
                 dtPQCDefectOutPut.Columns.Add(dc);
             }
-
-
-
-
-
-
             dtPQCDefectOutPut.Columns.Add("Total REJ QTY");
             dtPQCDefectOutPut.Columns.Add("Total REJ AMT");
             dtPQCDefectOutPut.Columns.Add("Total Mould REJ%");
             dtPQCDefectOutPut.Columns.Add("Painting Particle REJ%");
             dtPQCDefectOutPut.Columns.Add("Painting Many Particle REJ%");
             dtPQCDefectOutPut.Columns.Add("Painting Fiber REJ%");
-
             dtPQCDefectOutPut.Columns.Add("Painting Dust REJ%");
             dtPQCDefectOutPut.Columns.Add("Painting Scratch REJ%");
-
             dtPQCDefectOutPut.Columns.Add("Painting REJ%");
             dtPQCDefectOutPut.Columns.Add("Total Laser REJ%");
             dtPQCDefectOutPut.Columns.Add("Total Others REJ%");
             dtPQCDefectOutPut.Columns.Add("Total REJ%");
+            #endregion
 
 
 
-            //bezel, panel, 都是1pcs for 1set, 直接查询的totalFail, 不需要material匹配
+
+            #region 2021/04/20 获取laser的 vision ng, setup, buyoff, shortage数量
+            string strJobIn = "";
+            DataTable dtTemp = dtDefectDetailList.DefaultView.ToTable(true, "Jobnumber");
+            foreach (DataRow dr in dtTemp.Rows)
+            {
+                strJobIn += $"'{dr["Jobnumber"].ToString()}', ";
+            }
+            strJobIn = strJobIn.Substring(0, strJobIn.Length - 1);
+
             Common.BLL.LMMSWatchLog_BLL watchLogBLL = new Common.BLL.LMMSWatchLog_BLL();
-            DataTable dtWatchLog = watchLogBLL.GetJobNG(dDateFrom.AddDays(-7), dDateTo);
+            DataTable dtLaser = watchLogBLL.GetLaserQty(strJobIn);
+            #endregion 2021/04/20 获取laser的 vision ng, setup, buyoff, shortage数量
+
+            
 
 
-
-
-            Dictionary<string, int> dicTotalRejForJob = new Dictionary<string, int>();
-            Dictionary<string, int> dicMouldingRejForJob = new Dictionary<string, int>();
-            Dictionary<string, int> dicPaintingRejForJob = new Dictionary<string, int>();
-            Dictionary<string, int> dicLaserRejForJob = new Dictionary<string, int>();
-            Dictionary<string, int> dicOthersRejForJob = new Dictionary<string, int>();
-
+            #region 遍历一个code一行的detail list, 转换成一个job一条的记录.
             foreach (DataRow dr in dtDefectDetailList.Rows)
             {
-                string JobNumber = dr["jobnumber"].ToString();
-                string DefectCodeID = dr["defectCodeID"].ToString();
-                string DefectDescription = dr["DefectDescription"].ToString();
-                int LotQty = int.Parse(dr["LotQty"].ToString());
+                // defect中的数据
+                string jobNo = dr["Jobnumber"].ToString();
+                decimal lotQty = decimal.Parse(dr["LotQty"].ToString());
+                string defectCodeID = dr["defectCodeID"].ToString();
+                string defectDescription = dr["defectDescription"].ToString();
+                decimal rejQty = decimal.Parse(dr["rejectQty"].ToString());
 
-                //从laser中获取vision ng的数量.
-                if (dr["defectCode"].ToString() == "Graphic Shift check by M/C")
-                {
-                    DataRow[] drArrWatchLog = dtWatchLog.Select(string.Format("jobnumber = '{0}'", JobNumber));
-                    if (drArrWatchLog.Length > 0)
-                    {
-                        double ngCount = double.Parse(dtDefectDetailList.Compute(" Sum(rejectQty)", "Jobnumber = '" + JobNumber + "' and defectCode = 'Graphic Shift check by M/C'").ToString());
 
-                        //同一条job可能会有多条. 避免重复赋值. 查询到0的才赋值
-                        if (ngCount == 0)
-                        {
-                            dr["rejectQty"] = drArrWatchLog[0]["totalFail"].ToString();
-                        }
-                    }
-                }
+                // 取出laser job的各种数量
+                DataRow[] temp = dtLaser.Select($"jobnumber = '{jobNo}'");
+                DataRow drLaser = temp == null || temp.Count() == 0 ? null : temp[0];
+                decimal laserNG = decimal.Parse(drLaser["ngQty"].ToString());
+                decimal laserSetup = decimal.Parse(drLaser["setupQty"].ToString());
+                decimal laserBuyoff = decimal.Parse(drLaser["buyoffQty"].ToString());
+                decimal laserShortage = decimal.Parse(drLaser["shortage"].ToString());
 
-                int RejQty = dr["rejectQty"].ToString() == "" ? 0 : int.Parse(dr["rejectQty"].ToString());
 
-               
+
+                // 先把laser的特殊数量赋值到查询出来的defect detail中, 后续操作直接取,汇总.
+                if (dr["defectCode"].ToString() == "Graphic Shift check by M/C") dr["rejectQty"] = laserNG;
+                if (dr["defectCode"].ToString() == "Paint Shortage") dr["rejectQty"] = laserShortage;
+                if (dr["defectCode"].ToString() == "Laser Buyoff") dr["rejectQty"] = laserBuyoff;
+                if (dr["defectCode"].ToString() == "Laser Setup") dr["rejectQty"] = laserSetup;
+
 
 
                 try
                 {
-                    if (dtPQCDefectOutPut.Select(" jobnumber = '" + JobNumber + "'").Length > 0)
+                    //如果加过这个job信息, 就更新遍历到defectcode的rej数量.
+                    if (dtPQCDefectOutPut.Select($"jobnumber = '{jobNo}'").Length > 0)
                     {
-                        string sRejTemp = dtPQCDefectOutPut.Select(" jobnumber = '" + JobNumber + "' ")[0][DefectCodeID].ToString();
-                        int RejQtyTemp = sRejTemp == "" ? 0 : int.Parse(sRejTemp);
-                        dtPQCDefectOutPut.Select(" jobnumber = '" + JobNumber + "'")[0][DefectCodeID] = RejQtyTemp + RejQty;
+                        string sRejTemp = dtPQCDefectOutPut.Select($"jobnumber = '{jobNo}'")[0][defectCodeID].ToString();
+                        decimal RejQtyTemp = sRejTemp == "" ? 0 : int.Parse(sRejTemp);
+                        dtPQCDefectOutPut.Select($"jobnumber = '{jobNo}'")[0][defectCodeID] = RejQtyTemp + rejQty;
                     }
                     else
                     {
                         DataRow drPQCDefect = dtPQCDefectOutPut.NewRow();
-
-                        drPQCDefect["jobnumber"] = JobNumber;
-                        drPQCDefect["lotQty"] = LotQty;
+                        drPQCDefect["jobnumber"] = jobNo;
+                        drPQCDefect["lotQty"] = lotQty;
                         drPQCDefect["unitCost"] = dr["unitCost"].ToString();
-                        drPQCDefect[DefectCodeID] = RejQty;
+                        drPQCDefect[defectCodeID] = rejQty;
                         dtPQCDefectOutPut.Rows.Add(drPQCDefect);
                     }
-
-
-                    if (!dicTotalRejForJob.ContainsKey(JobNumber))
-                        dicTotalRejForJob.Add(JobNumber, RejQty);
-                    else
-                        dicTotalRejForJob[JobNumber] += RejQty;
-
-                    switch (DefectDescription)
-                    {
-                        case "Laser":
-                            if (!dicLaserRejForJob.ContainsKey(JobNumber))
-                                dicLaserRejForJob.Add(JobNumber, RejQty);
-                            else
-                                dicLaserRejForJob[JobNumber] += RejQty;
-                            break;
-                        case "Paint":
-                            if (!dicPaintingRejForJob.ContainsKey(JobNumber))
-                                dicPaintingRejForJob.Add(JobNumber, RejQty);
-                            else
-                                dicPaintingRejForJob[JobNumber] += RejQty;
-                            break;
-                        case "Mould":
-                            if (!dicMouldingRejForJob.ContainsKey(JobNumber))
-                                dicMouldingRejForJob.Add(JobNumber, RejQty);
-                            else
-                                dicMouldingRejForJob[JobNumber] += RejQty;
-                            break;
-                        case "Others":
-                            if (!dicOthersRejForJob.ContainsKey(JobNumber))
-                                dicOthersRejForJob.Add(JobNumber, RejQty);
-                            else
-                                dicOthersRejForJob[JobNumber] += RejQty;
-                            break;
-                        default:
-                            break;
-                    }
                 }
-                catch
+                catch (Exception)
                 {
-                    //由于修改defect setting中的修改后.  
+                    //由于修改defect setting的code之后
                     //defect tracking中历史的defect code无法对应到 defect setting中. 
                     //在根据defect setting动态生成的dtDefect中无法找到这些修改后的 defect code.导致报错.
                     //这里做跳过, 放弃这些数量. 
-
                     continue;
                 }
-                
             }
-
-            #region  赋值 shortage, setup, buyoff,    painting qa &setup
-            Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
-            DataTable dtInventory = inventoryBLL.GetListForPQCReport(dDateFrom.AddDays(-20), dDateTo);
-
-            //painting qa &setup
-            Common.Class.BLL.PaintingTempInfo paintTempBLL = new PaintingTempInfo();
-            DataTable dtPaintTemp = paintTempBLL.GetList(dDateFrom.AddDays(-20), dDateTo, "", "");
-
-
-            //等shortage, buyoff, setup从defect setting中去掉后, defect tracking中没有该defectcode的记录
-            //没法在defect tracking中遍历 获取该code加到dtPQCDefect
-            //而在dtPQCDefectOutPut中遍历, 从inventory找对应job的shortage, buyoff, setup
-            foreach (DataRow drPQCDefect in dtPQCDefectOutPut.Rows)
-            {
-
-                string JobNumber = drPQCDefect["jobnumber"].ToString();
-
-                double setup = 0;
-                double shortage = 0;
-                double buyoff = 0;
-                double qa = 0;              
-                DataRow[] drArrInventoryTemp = dtInventory.Select(string.Format(" jobnumber = '{0}'", JobNumber));
-                DataRow[] drArrPaintTemp = dtPaintTemp.Select(string.Format(" jobnumber = '{0}'", JobNumber));
-                if (drArrInventoryTemp.Length > 0)
-                {
-                    DataRow drInventory = drArrInventoryTemp[0];
-                    setup = double.Parse(drInventory["Setup"].ToString());
-                    shortage = double.Parse(drInventory["Shortage"].ToString());
-                    buyoff = double.Parse(drInventory["Buyoff"].ToString());
-
-
-                    //setup, buyoff, shortage都是set.
-                    try { drPQCDefect["101"] = shortage; } catch { }
-                    try { drPQCDefect["102"] = setup; } catch { }
-                    try { drPQCDefect["103"] = buyoff; } catch { }
-
-
-                    dicTotalRejForJob[JobNumber] += (int)shortage;
-                    dicTotalRejForJob[JobNumber] += (int)setup;
-                    dicTotalRejForJob[JobNumber] += (int)buyoff;
-
-                    dicPaintingRejForJob[JobNumber] += (int)shortage;
-                    dicPaintingRejForJob[JobNumber] += (int)buyoff;
-                    dicLaserRejForJob[JobNumber] += (int)setup;
-                }
-
-                if (drArrPaintTemp.Length > 0)
-                {
-                    DataRow drPaintTemp = drArrPaintTemp[0];
-                    qa = double.Parse(drPaintTemp["qaTestQty"].ToString());
-                    double paintSetup = double.Parse(drPaintTemp["setupRejQty"].ToString());
-
-
-                    //setup, buyoff, shortage都是set.
-                    try { drPQCDefect["101"] = shortage + paintSetup; } catch { }
-                    try { drPQCDefect["104"] = qa; } catch { }
-
-
-                    dicTotalRejForJob[JobNumber] += (int)paintSetup;
-                    dicTotalRejForJob[JobNumber] += (int)qa;
-
-                    dicPaintingRejForJob[JobNumber] += (int)paintSetup;
-                    dicPaintingRejForJob[JobNumber] += (int)qa;
-                }                
-            }
-
-           
-          
-
-
-
             #endregion
 
+
+
+
+            //遍历转换后的dtPQCDefectOutPut
+            foreach (DataRow dr in dtPQCDefectOutPut.Rows)
+            {
+                string jobNo = dr["JobNumber"].ToString();
+                DataRow[] jobDefectList = dtDefectDetailList.Select($"JobNumber = '{jobNo}'");
+
+
+               根据job汇总paint, mould, laser, other的总rej数量
+
+
+
+
+            }
 
 
 

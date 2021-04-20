@@ -7,3 +7,4 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Debug\DBHelp.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Debug\DBHelp.csprojResolveAssemblyReference.cache

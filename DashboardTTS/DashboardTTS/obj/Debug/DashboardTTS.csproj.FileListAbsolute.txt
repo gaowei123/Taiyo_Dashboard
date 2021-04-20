@@ -280,3 +280,9 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\zh-Hans\M
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\obj\Debug\DashboardTTS.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Business.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Data.Core.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Query.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Business.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Data.Core.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DashboardTTS\bin\Taiyo.Query.pdb

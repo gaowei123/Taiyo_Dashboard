@@ -41,7 +41,9 @@ namespace DashboardTTS.Webform
                 {
                     UserControl.WebUserControlMachineStatus.UIModel uiModel = new UserControl.WebUserControlMachineStatus.UIModel();
                     uiModel.MachineID = "Machine " + i.ToString();
-                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL; //img url  1~5: strRobortArmImgURL  6,7,8: strTurnTableImgURL
+
+                    //img url  1~5: strRobortArmImgURL  6,7,8: strTurnTableImgURL
+                    uiModel.ImgURL = (new int[] { 1, 2, 3, 4, 5 }).Contains(i) ? strRobortArmImgURL : strTurnTableImgURL; 
 
 
 

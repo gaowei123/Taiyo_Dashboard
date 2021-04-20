@@ -341,7 +341,6 @@ namespace Common.Class.DAL
             StringBuilder strSql = new StringBuilder();
 
 
-
             strSql.Append(@"
 SELECT distinct
 trackingID

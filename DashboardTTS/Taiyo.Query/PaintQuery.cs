@@ -16,7 +16,18 @@ namespace Taiyo.Data.Query
             public string PaintProcess { get; set; }
             public string SendingTo { get; set; }
             // 是否被laser/wip库存删除的flag.
-            public bool? Status { get; set; }
+            // 取消 Cancel, 默认是null.
+            public string Status { get; set; }
         }
+
+
+        public class Buyoff : BaseQuery
+        {
+            public string PartNo { get; set; }
+            public string JobNo { get; set; }
+            public string LotNo { get; set; }
+        }
+
+
     }
 }

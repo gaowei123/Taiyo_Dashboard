@@ -23,7 +23,7 @@ namespace DashboardTTS.Webform.PQC
                     this.lbBezelPanelName.Text = reportType + " No:";
 
 
-                    //周日, 周一显示 上周五的. 默认显示前一天的.
+                    //周日, 周一显示上周五的. 默认显示前一天的.
                     DateTime dLastDay = Common.CommFunctions.GetDefaultReportsSearchingDay();
 
 
@@ -50,20 +50,23 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
-                //搜索条件
+                
                 DateTime? dDateFrom = new DateTime();
                 DateTime? dDateTo = new DateTime();
                 DateTime? dMFGDate = null;
                 DateTime? dPaintDate = null;
-
-                try { dDateFrom = DateTime.Parse(txtDateFrom.Text); } catch { dDateFrom = null; }
-
-
-                if (dDateFrom == null)
+                try
+                {
+                    dDateFrom = DateTime.Parse(txtDateFrom.Text);
+                }
+                catch
                 {
                     Common.CommFunctions.ShowMessage(this.Page, "Please choose date !");
                     return;
                 }
+
+
+            
 
 
                 dDateFrom = dDateFrom.Value;
@@ -100,7 +103,7 @@ namespace DashboardTTS.Webform.PQC
                 }
 
                 Common.Class.BLL.PQCDefectSetting_BLL defectSettingBLL = new Common.Class.BLL.PQCDefectSetting_BLL();
-                DataTable dtAllDefectCode = defectSettingBLL.GetAllForPQCLaserTotalReport();
+                DataTable dtAllDefectCode = defectSettingBLL.GetDefectSetting();
 
 
 

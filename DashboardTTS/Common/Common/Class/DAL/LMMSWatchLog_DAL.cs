@@ -414,28 +414,39 @@ where 1=1 and a.day >= @dateFrom and a.day < @dateTo ");
             }
         }
         
-        internal DataSet GetJobNG(DateTime dDateFrom, DateTime dDateTo)
+        internal DataSet GetLaserQty(string strJobIn)
         {
             StringBuilder strSql = new StringBuilder();
 
-            strSql.Append(" select jobNumber, isnull( totalFail ,0) as totalFail from lmmswatchlog where dateTime >= @dateFrom and datetime < @dateTo ");
+            strSql.Append(@"
+select 
+a.jobNumber,
+partNumber,
+quantity as mrpQty,
+isnull(b.outputQty,0) as outputQty,
+isnull(b.okQty,0) as okQty,
+isnull(b.ngQty,0) as ngQty,
+pqcQuantity as shortage,
+isnull(setupQty,0) as setupQty,
+isnull(buyoffqty, 0) as buyoffQty
+from LMMSInventory a 
+left join (
+	select 
+	jobNumber,
+	sum(totalpass + totalfail) as outputQty,
+	sum(totalPass) as okQty,
+	sum(totalFail) as ngQty
+	from LMMSWatchDog_Shift group by jobNumber
+) b on a.jobNumber = b.jobNumber 
+where 1=1 and a.jobnumber in ("+ strJobIn + ")");
 
-            
 
-            SqlParameter[] parameters =
-            {
-                    new SqlParameter("@dateFrom", SqlDbType.DateTime),
-                    new SqlParameter("@dateTo",SqlDbType.DateTime),
-                };
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-
-
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
+            return DBHelp.SqlDB.Query(strSql.ToString());
         }
+
+
+
+
         
        
 

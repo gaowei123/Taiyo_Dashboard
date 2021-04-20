@@ -385,14 +385,14 @@ namespace Common.BLL
 
 
 
-        //以下为新逻辑, 由于旧逻辑遍历到每一秒, 极大影响了生成yearly的数据的速度.
+        //由于旧逻辑遍历到每一秒, 在生成yearly的数据时处理时间过长,改为以下为新逻辑, 
         //新逻辑 将原数据按照 8:00,  20:00的时间点来切分重组.
         //将lmmseventlog表中的源数据按照 year, month, day , shift , machine , status , totalseconds归类重组.
         #region 
+
         private List<string> GetMachineStatusList()
         {
-            return new List<string>()
-            {
+            return new List<string>(){
                 StaticRes.Global.LaserStatus.Run,
                 StaticRes.Global.LaserStatus.Buyoff,
                 StaticRes.Global.LaserStatus.Setup,
@@ -400,10 +400,11 @@ namespace Common.BLL
                 StaticRes.Global.LaserStatus.Testing,
                 StaticRes.Global.LaserStatus.Maintenance,
                 StaticRes.Global.LaserStatus.Breakdown,
-                StaticRes.Global.LaserStatus.Shutdown
-            };
+                StaticRes.Global.LaserStatus.Shutdown};
         }
         
+
+        //获取元数据,并切分重组到新集合中.
         private List<Common.Model.LMMSEventLog_Model.Detail> GetBaseList(DateTime dDateFrom, DateTime dDateTo)
         {
 
@@ -435,15 +436,18 @@ namespace Common.BLL
                 DateTime stopTime = DateTime.Parse(dr["stopTime"].ToString());
 
 
+           
 
 
                 //buyoff, setup, testing等状态超过12小时的全部跳过.
                 if ( (new string[] { "BUYOFF", "SETUP" ,"TESTING" }).Contains(status) &&  (stopTime - startTime ).TotalHours >= 12)
                     continue;
 
+
+
                 //2021-4-14
                 //no schedule单独设置, 实际情况确实会有挂机超过12小时的, 放宽到13小时
-                if (status == "NO SCHEDULE" && (stopTime - startTime).TotalHours > 13)
+                if (status == "NO SCHEDULE" && (stopTime - startTime).TotalHours > 14)
                     continue;
 
 
@@ -718,6 +722,8 @@ namespace Common.BLL
             return allStatusModels;
         }
         
+
+        //补充缺少的天数, 状态, 避免调用时查询某个状态数据不存在而导致报错.
         private List<Common.Model.LMMSEventLog_Model.Detail> AddLackData(List<Common.Model.LMMSEventLog_Model.Detail> modelList, DateTime dDateFrom, DateTime dDateTo)
         {
 
@@ -796,9 +802,7 @@ namespace Common.BLL
             //将缺少的数据合并到list中.
             modelList.AddRange(lackModelList);
 
-
-
-
+           
 
             #region power off, 查询该机器, 该天总时长是否为0, 是则将power off赋值 12*3600
             
@@ -812,6 +816,9 @@ namespace Common.BLL
                     var machineDayList = from a in modelList
                                   where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day
                                   select a;
+
+
+
 
 
                     //如果总时长为0, 并且start/stop time为null,  则将poweroff的时长设置为12*3600;
@@ -949,13 +956,19 @@ namespace Common.BLL
 
             return modelList;
         }
-        
+
+
         /// <summary>
-        /// 对外的detial model的list
+        /// 返回包括 
+        /// year,
+        /// month, 
+        /// day, 
+        /// shift, 
+        /// machineID, 
+        /// status, 
+        /// total usage seconds
+        /// 的集合
         /// </summary>
-        /// <returns>
-        /// 返回包括 year, month, day, shift, machineID, status, total usage seconds的详细列表
-        /// </returns>
         public List<Common.Model.LMMSEventLog_Model.Detail> GetStatusModelList(DateTime dDateFrom, DateTime dDateTo, string sMachineID, string sStatus, string sShift, bool bExceptWeekend)
         {
 
@@ -965,7 +978,6 @@ namespace Common.BLL
                 return null;
 
 
-          
 
 
             //添加缺失的天, 机器, 状态数据.
@@ -1017,7 +1029,7 @@ namespace Common.BLL
             if (statusList == null)
                 return null;
 
-            var test = from a in statusList where a.machineID == "7" select a;
+            var test = from a in statusList where a.machineID == "1" select a;
 
 
             var runList = from a in statusList

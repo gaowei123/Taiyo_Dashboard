@@ -25,7 +25,7 @@ namespace DashboardTTS.Controllers
 
 
 
-        public JsonResult GetRecordList(DateTime DateFrom, DateTime DateTo, string PartNo, string SendingTo, string JobNo)
+        public ActionResult GetRecordList(DateTime DateFrom, DateTime DateTo, string PartNo, string SendingTo, string JobNo)
         {
             Taiyo.SearchParam.PaintingParam.DeliveryRecordParam param = new Taiyo.SearchParam.PaintingParam.DeliveryRecordParam();
             param.DateFrom = DateFrom;
@@ -36,9 +36,13 @@ namespace DashboardTTS.Controllers
 
             Common.ExtendClass.PaintingRecord.BLL bll = new Common.ExtendClass.PaintingRecord.BLL();
             var result = bll.GetList(param);
-            
 
-            return result == null ? Json("") : Json(result);
+            //Taiyo.Business.PaintDelivery_BLL bll = new Taiyo.Business.PaintDelivery_BLL();
+            //string  strJsonResult = bll.GetDeliveryList(DateFrom, DateTo, PartNo, SendingTo, JobNo);
+
+
+
+            return result == null? Json(null): Json(result);
         }
 
 

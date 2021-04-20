@@ -40,8 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Paint_Buyoff.cs" />
-    <Compile Include="Paint_Delivery.cs" />
+    <Compile Include="Paint\PaintBuyoff.cs" />
+    <Compile Include="Paint\PaintDelivery.cs" />
+    <Compile Include="PQC\PQCBom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

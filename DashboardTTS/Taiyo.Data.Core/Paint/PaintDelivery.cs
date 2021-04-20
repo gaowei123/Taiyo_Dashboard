@@ -10,14 +10,14 @@ using Taiyo.Tool.Extension;
 
 namespace Taiyo.Data.Core
 {
-    public class Paint_Delivery
+    public class PaintDelivery
     {
-        public Paint_Delivery()
+        public PaintDelivery()
         {
             DeliveryList = new List<Delivery_Model>();
         }
 
-        public Paint_Delivery(Taiyo.Data.Query.PaintQuery.Delivery querys)
+        public PaintDelivery(Taiyo.Data.Query.PaintQuery.Delivery querys)
         {
             DeliveryList = Fill(querys);
         }
@@ -45,7 +45,7 @@ namespace Taiyo.Data.Core
             public DateTime? UpdatedTime { get; set; }
 
             // 是否被laser/wip库存删除的flag.
-            public bool Status { get; set; }
+            public string Status { get; set; }
 
         }
 
@@ -57,14 +57,14 @@ namespace Taiyo.Data.Core
                 [partNumber] as PartNo
                 ,[jobNumber] as JobNo
                 ,[lotNo] as LotNo
-                ,convert(int, [inQuantity]) as MrpQty
-                ,ISNULL([PaintRejQty],0) as RejQty
+                ,convert(decimal, [inQuantity]) as MrpQty
+                ,convert(decimal,ISNULL([PaintRejQty],0)) as RejQty
                 ,[paintProcess] as PaintProcess
                 ,[sendingTo] as SendingTo
                 ,[remark] as Description
                 ,[dateTime] as MFGDate
                 ,[updatedTime] as UpdatedTime
-                ,[status] as Status
+                ,ISNULL([status],'') as Status
                 FROM [PaintingDeliveryHis]
                 where 1=1 ");
 
@@ -90,10 +90,9 @@ namespace Taiyo.Data.Core
             if (!string.IsNullOrEmpty(querys.SendingTo))
                 strSql.AppendLine(" and sendingTo = @sendingTo ");
 
-            if (querys.Status != null)
+            if (!string.IsNullOrEmpty(querys.Status))
                 strSql.AppendLine(" and status = @status ");
-
-
+            
 
             SqlParameter[] parameters =
             {
@@ -113,10 +112,9 @@ namespace Taiyo.Data.Core
             if (!string.IsNullOrEmpty(querys.LotNo))        parameters[4].Value = querys.LotNo; else parameters[4] = null;
             if (!string.IsNullOrEmpty(querys.PaintProcess)) parameters[5].Value = querys.PaintProcess; else parameters[5] = null;
             if (!string.IsNullOrEmpty(querys.SendingTo))    parameters[6].Value = querys.SendingTo; else parameters[6] = null;
-            if (querys.Status != null)                      parameters[7].Value = querys.Status; else parameters[7] = null;
+            if (!string.IsNullOrEmpty(querys.Status))       parameters[7].Value = querys.Status; else parameters[7] = null;
 
-
-
+            
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);          
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                 return null;

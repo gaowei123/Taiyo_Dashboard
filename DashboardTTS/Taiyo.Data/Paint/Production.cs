@@ -12,7 +12,16 @@ namespace Taiyo.Data.Paint
 {
     public class Production
     {
-        
+     
+
+        public Production()
+        {
+            // 构造时初始化下, 以免直接调用时报错null exception
+            LotList = new List<LotInfo>();
+            
+        }
+
+
         #region lot info
 
         public class LotInfo
@@ -22,10 +31,13 @@ namespace Taiyo.Data.Paint
             public DateTime? MFGDate { get; set; }
             public decimal? MrpQty { get; set; }
         }
+
+        public List<LotInfo> LotList { get; set; }
         
-        public List<LotInfo> GetLotList(Taiyo.Data.Query.PaintQuery.Delivery querys)
+        
+        public List<LotInfo> GetLotList(PaintQuery.Delivery querys)
         {
-            Core.Paint_Delivery delivery = new Paint_Delivery(querys);
+            Core.PaintDelivery delivery = new PaintDelivery(querys);
             var result = from a in delivery.DeliveryList
                          select new
                          {
@@ -46,12 +58,22 @@ namespace Taiyo.Data.Paint
 
             return list == null || list.Count() == 0? null: list.FirstOrDefault();
         }
-        
         #endregion
 
 
     
-        
+
+        #region buyoff
+
+
+
+        #endregion
+
+
+
+
+
+
 
     }
 }

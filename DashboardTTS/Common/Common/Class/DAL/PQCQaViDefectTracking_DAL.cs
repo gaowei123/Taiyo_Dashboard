@@ -982,9 +982,7 @@ and a.datetime < @dDateTo ");
         internal DataTable GetDefectDetailForBezelPanelReport(DateTime dDateFrom, DateTime dDateTo, string sType, string sDescription, string sNumber)
         {
             StringBuilder strSql = new StringBuilder();
-
-
-
+            
             //所有check完成的jobs 临时表
             strSql.AppendLine(@"
 with allJobsForReports as (
@@ -1034,14 +1032,13 @@ UPPER(a.jobId) as Jobnumber
 ,b.defectCode
 ,b.defectDescription
 ,isnull( e.unitCost, 0.1) as unitCost
-,b.rejectQty
+,isnull(b.rejectQty,0) as rejectQty
 
 from allJobsForReports a
 left join PQCQaViDefectTracking b on a.jobID = b.jobID
 left join PQCQaViTracking d on d.trackingID = b.trackingID
 left join PQCBom e on e.partNumber = d.partNumber 
 left join PaintingDeliveryHis f on a.jobID collate Chinese_PRC_CI_AS = f.jobNumber collate Chinese_PRC_CI_AS ");
-
 
             SqlParameter[] paras =
             {

@@ -202,7 +202,7 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
         
 
 
-        public List<BaseDefect_Model> GetDefectList(PQCOperatorParam param)
+        public List<BaseDefectSummary_Model> GetDefectList(PQCOperatorParam param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine(@"select 
@@ -235,10 +235,10 @@ where 1=1 and day >= @DateFrom and day < @DateTo  ");
             DataTable dt = ds.Tables[0];
 
 
-            List<BaseDefect_Model> viList = new List<BaseDefect_Model>();
+            List<BaseDefectSummary_Model> viList = new List<BaseDefectSummary_Model>();
             foreach (DataRow dr in dt.Rows)
             {
-                BaseDefect_Model model = new BaseDefect_Model();
+                BaseDefectSummary_Model model = new BaseDefectSummary_Model();
                 model.TrackingID = dr["trackingID"].ToString();
                 //model.JobNo = dr["jobId"].ToString();
                 model.MouldRej = decimal.Parse(dr["MouldRej"].ToString());

@@ -113,31 +113,7 @@ namespace Common.Class.DAL
 
         
 
-        public DataSet GetListForPQCReport(DateTime dDateFrom, DateTime dDateTo)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select 
-                            jobNumber
-                            , isnull(pqcquantity, 0) as Shortage
-                            , isnull(setUpQTY, 0) as Setup
-                            , isnull(buyoffQty, 0) as Buyoff
-                            from LMMSInventory
-                            where datetime >= @dDateFrom and datetime < @dDateTo  ");
-            
-
-            SqlParameter[] parameters =
-            {
-                new SqlParameter("@dDateFrom", SqlDbType.DateTime),
-                new SqlParameter("@dDateTo", SqlDbType.DateTime)
-            };
-
-            parameters[0].Value = dDateFrom;
-            parameters[1].Value = dDateTo;
-
-
-            return DBHelp.SqlDB.Query(strSql.ToString(), parameters);
-        }
-
+       
         
 
         public DataSet Exsit(string jobnumber)
