@@ -220,8 +220,10 @@ namespace DashboardTTS.Webform.PQC
                 {
                     string sJobNumber = dr["JobNumber"].ToString();
 
+                    DataRow drDefectDetail = dtPQCDefect.Select($"JobNumber = '{sJobNumber}'")[0];
+
                     DataRow drOutput = dtOutput.NewRow();
-                    drOutput["Part No"] = dr["PartNumber"].ToString();
+                    drOutput["Part No"] = sJobNumber;
                     drOutput["Lot No"] = dr["LotNo"].ToString();
 
                     //带a连接标签的jobno, 做跳转连接
@@ -268,7 +270,7 @@ namespace DashboardTTS.Webform.PQC
                     drOutput["PQC PIC"] = dr["PQC PIC"].ToString();
                     //drOutput["Total Checked Qty"] = dr["Total Checked Qty"].ToString();
                     drOutput["OK QTY"] = dr["OK QTY"].ToString();
-                    drOutput["Lot Qty"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["lotQty"].ToString();
+                    drOutput["Lot Qty"] = drDefectDetail["lotQty"].ToString();
 
                     drOutput["Laser & Checking Date"] = dr["Laser & Checking Date"].ToString();
                     drOutput["Laser M/C No"] = dr["Laser M/C No"].ToString();
@@ -280,32 +282,23 @@ namespace DashboardTTS.Webform.PQC
                     foreach (DataRow drDefect in dtAllDefectCode.Rows)
                     {
                         string defectCodeID = drDefect["DefectCodeID"].ToString();
-
-
-                        string sTemp = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0][defectCodeID].ToString();
-                        if (sTemp == "")
-                        {
-                            drOutput[defectCodeID] = "0";
-                        }
-                        else
-                        {
-                            drOutput[defectCodeID] = sTemp;
-                        }
+                        string sTemp = drDefectDetail[defectCodeID].ToString();
+                        drOutput[defectCodeID] = sTemp == "" ? "0" : sTemp;                  
                     }
 
-                    drOutput["Total REJ QTY"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total REJ QTY"].ToString();
-                    drOutput["Total REJ AMT"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total REJ AMT"].ToString();
-                    drOutput["Total Mould REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total Mould REJ%"].ToString();
-                    drOutput["Painting Particle REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting Particle REJ%"].ToString();
-                    drOutput["Painting Many Particle REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting Many Particle REJ%"].ToString();
-                    drOutput["Painting Fiber REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting Fiber REJ%"].ToString();
-                    drOutput["Painting Dust REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting Dust REJ%"].ToString();
-                    drOutput["Painting Scratch REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting Scratch REJ%"].ToString();
+                    drOutput["Total REJ QTY"] = drDefectDetail["Total REJ QTY"].ToString();
+                    drOutput["Total REJ AMT"] = drDefectDetail["Total REJ AMT"].ToString();
+                    drOutput["Total Mould REJ%"] = drDefectDetail["Total Mould REJ%"].ToString();
+                    drOutput["Painting Particle REJ%"] = drDefectDetail["Painting Particle REJ%"].ToString();
+                    drOutput["Painting Many Particle REJ%"] = drDefectDetail["Painting Many Particle REJ%"].ToString();
+                    drOutput["Painting Fiber REJ%"] = drDefectDetail["Painting Fiber REJ%"].ToString();
+                    drOutput["Painting Dust REJ%"] = drDefectDetail["Painting Dust REJ%"].ToString();
+                    drOutput["Painting Scratch REJ%"] = drDefectDetail["Painting Scratch REJ%"].ToString();
 
-                    drOutput["Painting REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Painting REJ%"].ToString();
-                    drOutput["Total Laser REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total Laser REJ%"].ToString();
-                    drOutput["Total Others REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total Others REJ%"].ToString();
-                    drOutput["Total REJ%"] = dtPQCDefect.Select(" JobNumber = '" + sJobNumber + "' ")[0]["Total REJ%"].ToString();
+                    drOutput["Painting REJ%"] = drDefectDetail["Painting REJ%"].ToString();
+                    drOutput["Total Laser REJ%"] = drDefectDetail["Total Laser REJ%"].ToString();
+                    drOutput["Total Others REJ%"] = drDefectDetail["Total Others REJ%"].ToString();
+                    drOutput["Total REJ%"] = drDefectDetail["Total REJ%"].ToString();
 
 
                     dtOutput.Rows.Add(drOutput);

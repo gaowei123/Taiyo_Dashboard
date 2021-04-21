@@ -141,12 +141,19 @@ namespace DashboardTTS.ViewBusiness
                 }
 
 
-                #region 处理laser ng, shortage, buyoff, setup数量.
-                //1000 - Shortage - Paint
-                //1001 - Buyoff - Laser
-                //1002 - Setup - Laser
 
-                //获取2个月内的信息, 防止找不到.
+
+
+
+                #region 处理laser ng, shortage, buyoff, setup数量.
+
+
+
+                //laser shortage    100
+                //laser buyoff   101;
+                //laser setup   102;
+
+
                 List<ViewModel.PQCButtonReport_ViewModel.LaserNG> laserNGList = new List<ViewModel.PQCButtonReport_ViewModel.LaserNG>();
                 laserNGList = GetLaserNG(sqlWhere);
 
@@ -216,33 +223,33 @@ namespace DashboardTTS.ViewBusiness
                     pqcDefectModelNew.rejectQty = laserNG;
                     pqcDefectModelList.Add(pqcDefectModelNew);
 
-                    //添加shortage    1000 - Shortage - Paint
+                    //添加shortage    100 - Shortage - Paint
                     pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
                     pqcDefectModelNew.jobID = pqcDefectModel.jobID;
                     pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "1000";
+                    pqcDefectModelNew.defectCodeID = "100";
                     pqcDefectModelNew.defectCode = "Shortage";
                     pqcDefectModelNew.defectDescription = "Paint";
                     pqcDefectModelNew.process = pqcDefectModel.process;
                     pqcDefectModelNew.rejectQty = laserShortage;
                     pqcDefectModelList.Add(pqcDefectModelNew);
 
-                    //添加buyoff     1001 - Buyoff - Laser
+                    //添加buyoff     101 - Buyoff - Laser
                     pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
                     pqcDefectModelNew.jobID = pqcDefectModel.jobID;
                     pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "1001";
+                    pqcDefectModelNew.defectCodeID = "101";
                     pqcDefectModelNew.defectCode = "Buyoff";
                     pqcDefectModelNew.defectDescription = "Laser";
                     pqcDefectModelNew.process = pqcDefectModel.process;
                     pqcDefectModelNew.rejectQty = laserBuyoff;
                     pqcDefectModelList.Add(pqcDefectModelNew);
 
-                    //添加setup       1002 - Setup - Laser
+                    //添加setup       102 - Setup - Laser
                     pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
                     pqcDefectModelNew.jobID = pqcDefectModel.jobID;
                     pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "1002";
+                    pqcDefectModelNew.defectCodeID = "102";
                     pqcDefectModelNew.defectCode = "Setup";
                     pqcDefectModelNew.defectDescription = "Laser";
                     pqcDefectModelNew.process = pqcDefectModel.process;
@@ -495,13 +502,46 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-        // wdnmd
+      
         public DataTable GetResultDt(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, 
             string sJobNo,string sModel, string sSupplier, string sColor, string sCoating, string sReportType,
             out ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
         {
             try
             {
+                /**      又改需求， 改你马的。
+                 *                                         ,s555SB@@&                          
+                 *                                      :9H####@@@@@Xi                        
+                 *                                     1@@@@@@@@@@@@@@8                       
+                 *                                   ,8@@@@@@@@@B@@@@@@8                      
+                 *                                  :B@@@@X3hi8Bs;B@@@@@Ah,                   
+                 *             ,8i                  r@@@B:     1S ,M@@@@@@#8;                 
+                 *            1AB35.i:               X@@8 .   SGhr ,A@@@@@@@@S                
+                 *            1@h31MX8                18Hhh3i .i3r ,A@@@@@@@@@5               
+                 *            ;@&i,58r5                 rGSS:     :B@@@@@@@@@@A               
+                 *             1#i  . 9i                 hX.  .: .5@@@@@@@@@@@1               
+                 *              sG1,  ,G53s.              9#Xi;hS5 3B@@@@@@@B1                
+                 *               .h8h.,A@@@MXSs,           #@H1:    3ssSSX@1                  
+                 *               s ,@@@@@@@@@@@@Xhi,       r#@@X1s9M8    .GA981               
+                 *               ,. rS8H#@@@@@@@@@@#HG51;.  .h31i;9@r    .8@@@@BS;i;          
+                 *                .19AXXXAB@@@@@@@@@@@@@@#MHXG893hrX#XGGXM@@@@@@@@@@MS        
+                 *                s@@MM@@@hsX#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&,      
+                 *              :GB@#3G@@Brs ,1GM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B,     
+                 *            .hM@@@#@@#MX 51  r;iSGAM@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8     
+                 *          :3B@@@@@@@@@@@&9@h :Gs   .;sSXH@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@:    
+                 *      s&HA#@@@@@@@@@@@@@@M89A;.8S.       ,r3@@@@@@@@@@@@@@@@@@@@@@@@@@@r    
+                 *   ,13B@@@@@@@@@@@@@@@@@@@5 5B3 ;.         ;@@@@@@@@@@@@@@@@@@@@@@@@@@@i    
+                 *  5#@@#&@@@@@@@@@@@@@@@@@@9  .39:          ;@@@@@@@@@@@@@@@@@@@@@@@@@@@;    
+                 *  9@@@X:MM@@@@@@@@@@@@@@@#;    ;31.         H@@@@@@@@@@@@@@@@@@@@@@@@@@:    
+                 *   SH#@B9.rM@@@@@@@@@@@@@B       :.         3@@@@@@@@@@@@@@@@@@@@@@@@@@5    
+                 *     ,:.   9@@@@@@@@@@@#HB5                 .M@@@@@@@@@@@@@@@@@@@@@@@@@B    
+                 *           ,ssirhSM@&1;i19911i,.             s@@@@@@@@@@@@@@@@@@@@@@@@@@S   
+                 *              ,,,rHAri1h1rh&@#353Sh:          8@@@@@@@@@@@@@@@@@@@@@@@@@#:  
+                 *            .A3hH@#5S553&@@#h   i:i9S          #@@@@@@@@@@@@@@@@@@@@@@@@@A. 
+                 */
+
+
+
 
                 //先拉取满足条件的所有job id.
                 string strSqlJobIn = GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
@@ -570,29 +610,27 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-                    //defect list中 rejqty的总和, 包括了laser ng, shortage, buyoff, setup, painting setup, painting qa
-                    double paintQA = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintQAQty;
-                    double paintSetup = paintTempInfoModel == null ? 0 : paintTempInfoModel.paintSetUpQty;
-                    reportModel.pass = pqcdetailModel.passQty - (paintQA + paintSetup);
-                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup;
+                    // 2021-04-21 qa, setup 放到 defect code 中, 不需要额外计算 qa, setup
+                    reportModel.pass = pqcdetailModel.passQty;
+                    reportModel.rejQty = jobDefectList.Sum(p => p.rejectQty);
                     reportModel.rejCost = reportModel.rejQty * pqcdetailModel.unitCost;//新增 rej cost
-
-                    reportModel.rejRate = Math.Round((jobDefectList.Sum(p => p.rejectQty) + paintQA + paintSetup) / paintDeliveryModel.mrpQty * 100, 2);
-                    reportModel.rejRateDisplay = string.Format("{0}({1}%)", reportModel.rejQty, reportModel.rejRate);
-
+                    reportModel.rejRate = Math.Round(reportModel.rejQty / paintDeliveryModel.mrpQty * 100, 2);
+                    reportModel.rejRateDisplay = $"{reportModel.rejQty}({reportModel.rejRate}%)";
 
 
 
-                        //tts = tts rej/tts total,    vendor = vendor rej/ vendor total
-                        if (pqcdetailModel.mouldType == "TTS")
-                            reportModel.ttsLotQty = paintDeliveryModel.mrpQty;
-                        else
-                            reportModel.vendorLotQty = paintDeliveryModel.mrpQty;
+
+
+                    //tts = tts rej/tts total,    vendor = vendor rej/ vendor total
+                    if (pqcdetailModel.mouldType == "TTS")
+                        reportModel.ttsLotQty = paintDeliveryModel.mrpQty;
+                    else
+                        reportModel.vendorLotQty = paintDeliveryModel.mrpQty;
 
 
 
-                        #region  TTS defect code
-                        reportModel.TTS_Raw_Part_Scratch = GetDefectCodeRejQty(jobDefectList, "Raw Part Scratch", "TTS");
+                    #region  TTS defect code
+                    reportModel.TTS_Raw_Part_Scratch = GetDefectCodeRejQty(jobDefectList, "Raw Part Scratch", "TTS");
                         reportModel.TTS_Oil_Stain = GetDefectCodeRejQty(jobDefectList, "Oil Stain", "TTS");
                         reportModel.TTS_Dented = GetDefectCodeRejQty(jobDefectList, "Dented", "TTS");
                         reportModel.TTS_Dust = GetDefectCodeRejQty(jobDefectList, "Dust", "TTS");

@@ -308,6 +308,7 @@ namespace Common.Class.BLL
             dtPQCDefectOutPut.Columns.Add("JobNumber");
             dtPQCDefectOutPut.Columns.Add("lotQty");
             dtPQCDefectOutPut.Columns.Add("unitCost");
+
             foreach (DataRow dr in dtDefectSetting.Rows)
             {
                 DataColumn dc = new DataColumn();
@@ -315,6 +316,7 @@ namespace Common.Class.BLL
                 dc.Caption = dr["defectCode"].ToString();
                 dtPQCDefectOutPut.Columns.Add(dc);
             }
+
             dtPQCDefectOutPut.Columns.Add("Total REJ QTY");
             dtPQCDefectOutPut.Columns.Add("Total REJ AMT");
             dtPQCDefectOutPut.Columns.Add("Total Mould REJ%");
@@ -337,7 +339,7 @@ namespace Common.Class.BLL
             DataTable dtTemp = dtDefectDetailList.DefaultView.ToTable(true, "Jobnumber");
             foreach (DataRow dr in dtTemp.Rows)
             {
-                strJobIn += $"'{dr["Jobnumber"].ToString()}', ";
+                strJobIn += $"'{dr["Jobnumber"].ToString()}',";
             }
             strJobIn = strJobIn.Substring(0, strJobIn.Length - 1);
 
@@ -350,30 +352,37 @@ namespace Common.Class.BLL
 
             #region 遍历一个code一行的detail list, 转换成一个job一条的记录.
             foreach (DataRow dr in dtDefectDetailList.Rows)
-            {
-                // defect中的数据
+            {           
                 string jobNo = dr["Jobnumber"].ToString();
-                decimal lotQty = decimal.Parse(dr["LotQty"].ToString());
-                string defectCodeID = dr["defectCodeID"].ToString();
-                string defectDescription = dr["defectDescription"].ToString();
-                decimal rejQty = decimal.Parse(dr["rejectQty"].ToString());
 
 
                 // 取出laser job的各种数量
+                // 什么都不管，先直接赋值到 defect detail 中
+                // 后续所有操作都用dtDefectDetail中的数据
                 DataRow[] temp = dtLaser.Select($"jobnumber = '{jobNo}'");
                 DataRow drLaser = temp == null || temp.Count() == 0 ? null : temp[0];
                 decimal laserNG = decimal.Parse(drLaser["ngQty"].ToString());
                 decimal laserSetup = decimal.Parse(drLaser["setupQty"].ToString());
                 decimal laserBuyoff = decimal.Parse(drLaser["buyoffQty"].ToString());
                 decimal laserShortage = decimal.Parse(drLaser["shortage"].ToString());
-
-
-
-                // 先把laser的特殊数量赋值到查询出来的defect detail中, 后续操作直接取,汇总.
+                
+                // 先把 laser 的特殊数量赋值到查询出来的 defect detail 中, 后续操作直接在 dtDefectDetailList 中获取取,汇总.
                 if (dr["defectCode"].ToString() == "Graphic Shift check by M/C") dr["rejectQty"] = laserNG;
                 if (dr["defectCode"].ToString() == "Paint Shortage") dr["rejectQty"] = laserShortage;
                 if (dr["defectCode"].ToString() == "Laser Buyoff") dr["rejectQty"] = laserBuyoff;
                 if (dr["defectCode"].ToString() == "Laser Setup") dr["rejectQty"] = laserSetup;
+
+
+
+
+                // defect中的数据
+                decimal lotQty = decimal.Parse(dr["LotQty"].ToString());
+                string defectCodeID = dr["defectCodeID"].ToString();
+                string defectDescription = dr["defectDescription"].ToString();
+                decimal rejQty = decimal.Parse(dr["rejectQty"].ToString());
+
+
+               
 
 
 
@@ -396,12 +405,11 @@ namespace Common.Class.BLL
                         dtPQCDefectOutPut.Rows.Add(drPQCDefect);
                     }
                 }
-                catch (Exception)
+                catch (Exception ee)
                 {
-                    //由于修改defect setting的code之后
-                    //defect tracking中历史的defect code无法对应到 defect setting中. 
-                    //在根据defect setting动态生成的dtDefect中无法找到这些修改后的 defect code.导致报错.
-                    //这里做跳过, 放弃这些数量. 
+                    // 由于 defect setting 中的 defect code 以及对应 id 修改过后，
+                    // tracking 记录保留这之前的 defect code & id 无法在 defect setting 中找到而导致报错。 
+                    // 所以在 catch 到错误后跳过这个 code rej 数量， 不做处理（反正后面也不算这些code了）
                     continue;
                 }
             }
@@ -410,69 +418,65 @@ namespace Common.Class.BLL
 
 
 
-            //遍历转换后的dtPQCDefectOutPut
+            //遍历转换后的 dtPQCDefectOutPut 中的每一个 job
+            //再通过 dtDefectDetailList 中将 mould, paint, laser, other rej 汇总起来
             foreach (DataRow dr in dtPQCDefectOutPut.Rows)
             {
                 string jobNo = dr["JobNumber"].ToString();
-                DataRow[] jobDefectList = dtDefectDetailList.Select($"JobNumber = '{jobNo}'");
+                DataTable dtDefectListByJob = dtDefectDetailList.Select($"JobNumber = '{jobNo}'").CopyToDataTable();
 
+                string temp = dtDefectListByJob.Compute("sum(rejectQty) ", $"defectDescription = 'Mould'").ToString();
+                decimal allMouldDefectRej = decimal.Parse(temp);
 
-               根据job汇总paint, mould, laser, other的总rej数量
+                temp = dtDefectListByJob.Compute("sum(rejectQty) ", $"defectDescription = 'Paint'").ToString();
+                decimal allPaintDefectRej = decimal.Parse(temp);
 
+                temp = dtDefectListByJob.Compute("sum(rejectQty) ", $"defectDescription = 'Laser'").ToString();
+                decimal allLaserDefectRej = decimal.Parse(temp);
 
-
-
-            }
-
-
-
-            foreach (KeyValuePair<string,int> kv in dicTotalRejForJob)
-            {
-                DataRow drJob = dtPQCDefectOutPut.Select(" JobNumber = '" + kv.Key + "'")[0];
-
-                double lotQty = double.Parse(drJob["LotQty"].ToString());
-                float unitCost = float.Parse(drJob["unitCost"].ToString());
-
-                //defectSetting中对应codeID的 defect rej qty
-                int particleRej = int.Parse(drJob["34"].ToString());  
-                int fibreRej = int.Parse(drJob["35"].ToString());
-                int manyParticleRej = int.Parse(drJob["36"].ToString());
-                int dustRej = int.Parse(drJob["43"].ToString());
-                int scratchRej = int.Parse(drJob["46"].ToString());
+                temp = dtDefectListByJob.Compute("sum(rejectQty) ", $"defectDescription = 'Others'").ToString();
+                decimal allOthersDefectRej = decimal.Parse(temp);
 
 
 
+                decimal lotQty = decimal.Parse(dr["LotQty"].ToString());
+                decimal unitCost = decimal.Parse(dr["unitCost"].ToString());
 
-                drJob["Total REJ QTY"] = kv.Value;
-                drJob["Total REJ AMT"] = "$" + Math.Round(kv.Value * unitCost, 2).ToString() ;
-                drJob["Total Mould REJ%"] = Math.Round(dicMouldingRejForJob[kv.Key] / lotQty * 100.0, 2).ToString("0.00") + "%";
-                drJob["Painting Particle REJ%"] = Math.Round(particleRej / lotQty * 100.0, 2).ToString("0.00") + "%";
-                drJob["Painting Many Particle REJ%"] = Math.Round(manyParticleRej / lotQty * 100.0, 2).ToString("0.00") + "%";
-                drJob["Painting Fiber REJ%"] = Math.Round(fibreRej / lotQty * 100.0, 2).ToString("0.00") + "%";
+                // 特殊 code 需要单独计算 rejrate.
+                // Painting Particle  -- 34
+                // Painting Many Particle -- 36
+                // Painting Fiber -- 35
+                // Painting Dust -- 43
+                // Painting Scratch -- 46
+                decimal particleRej = decimal.Parse(dr["34"].ToString());
+                decimal manyParticleRej = decimal.Parse(dr["36"].ToString());
+                decimal fibreRej = decimal.Parse(dr["35"].ToString());
+                decimal dustRej = decimal.Parse(dr["43"].ToString());
+                decimal scratchRej = decimal.Parse(dr["46"].ToString());
 
-                drJob["Painting Dust REJ%"] = Math.Round(dustRej / lotQty * 100.0, 2).ToString("0.00") + "%";
-                drJob["Painting Scratch REJ%"] = Math.Round(scratchRej / lotQty * 100.0, 2).ToString("0.00") + "%";
 
 
 
-                drJob["Painting REJ%"] = Math.Round(dicPaintingRejForJob[kv.Key] / lotQty * 100.0, 2).ToString("0.00") + "%";
-                drJob["Total Laser REJ%"] = Math.Round(dicLaserRejForJob[kv.Key] / lotQty * 100.0, 2).ToString("0.00") + "%";
-                try
-                {
-                    drJob["Total Others REJ%"] = Math.Round(dicOthersRejForJob[kv.Key] / lotQty * 100.0, 2).ToString("0.00") + "%";
-                }
-                catch 
-                {
-                    drJob["Total Others REJ%"] = "0.00%";
-                }
+
+                dr["Total REJ QTY"] = allMouldDefectRej + allPaintDefectRej + allLaserDefectRej + allOthersDefectRej;
+                dr["Total REJ AMT"] = "$" + Math.Round((allMouldDefectRej + allPaintDefectRej + allLaserDefectRej + allOthersDefectRej) * unitCost, 2).ToString();
+                dr["Total Mould REJ%"] = Math.Round(allMouldDefectRej / lotQty * 100, 2).ToString("0.00") + "%";
+
+                dr["Painting Particle REJ%"] = Math.Round(particleRej / lotQty * 100, 2).ToString("0.00") + "%";
+                dr["Painting Many Particle REJ%"] = Math.Round(manyParticleRej / lotQty * 100, 2).ToString("0.00") + "%";
+                dr["Painting Fiber REJ%"] = Math.Round(fibreRej / lotQty * 100, 2).ToString("0.00") + "%";
+                dr["Painting Dust REJ%"] = Math.Round(dustRej / lotQty * 100, 2).ToString("0.00") + "%";
+                dr["Painting Scratch REJ%"] = Math.Round(scratchRej / lotQty * 100, 2).ToString("0.00") + "%";
+                dr["Painting REJ%"] = Math.Round(allPaintDefectRej / lotQty * 100, 2).ToString("0.00") + "%";
+
+                dr["Total Laser REJ%"] = Math.Round(allLaserDefectRej / lotQty * 100, 2).ToString("0.00") + "%";
+
+                dr["Total Others REJ%"] = Math.Round(allOthersDefectRej / lotQty * 100, 2).ToString("0.00") + "%";
                 
-                drJob["Total REJ%"] = Math.Round(kv.Value / lotQty * 100.0, 2).ToString("0.00") + "%";
+                dr["Total REJ%"] = Math.Round((allMouldDefectRej + allPaintDefectRej + allLaserDefectRej + allOthersDefectRej) / lotQty * 100, 2).ToString("0.00") + "%";
+
+
             }
-
-
-            
-
-
 
 
             return dtPQCDefectOutPut;

@@ -23,6 +23,16 @@
 
     <link href="../../Dashboard CSS JS/CSS/SharedCSS.css" rel="stylesheet" />
 
+    <style>
+        #dgBezelPanel{
+            width:100%;
+            border: 1px solid #000;
+        }
+        td{
+            white-space:nowrap;
+        }
+    </style>
+
 </head>
 <body>
     <form id="form1" runat="server">

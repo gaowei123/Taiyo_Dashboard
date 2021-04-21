@@ -125,7 +125,7 @@ namespace Common.Class.BLL
 
             //laser setup
             DataRow drSetup = dt.NewRow();
-            drSetup["defectcodeID"] = 101;
+            drSetup["defectcodeID"] = 102;
             drSetup["defectDescription"] = "Laser";
             drSetup["defectCode"] = "Laser Setup";
             drSetup["defectCodeSource"] = "Setup";

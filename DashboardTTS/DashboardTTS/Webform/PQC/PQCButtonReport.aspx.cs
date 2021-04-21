@@ -64,7 +64,6 @@ namespace DashboardTTS.Webform.PQC
 
                 ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();
 
-
                 ViewBusiness.ButtonReport_ViewBusiness vBLL = new ViewBusiness.ButtonReport_ViewBusiness();
                 DataTable dtReport = vBLL.GetResultDt(DateFrom, DateTo, sDescription, partNumber, JobNo, model, supplier, color, coating, reportType, out modelForDisplay);
                 

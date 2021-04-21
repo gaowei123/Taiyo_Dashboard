@@ -1028,7 +1028,7 @@ with laserInfo as
     , b.setUpQTY
     from LMMSWatchLog a
     left join LMMSInventory b on a.jobnumber = b.jobnumber
-    where 1=1  and a.jobNumber in  " + strWhere + " )");    
+    where 1=1  and a.jobNumber in  " + strWhere + " )");
 
 
             strSql.Append(@"
