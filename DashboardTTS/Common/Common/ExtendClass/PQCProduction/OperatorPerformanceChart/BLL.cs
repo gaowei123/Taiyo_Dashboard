@@ -25,7 +25,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorPerformanceChart
                 return null;
 
             var temp = from a in viList
-                       where a.Opertor != "" && a.Opertor.ToUpper() != "LASER"
+                       where a.Opertor != "" && a.Opertor.ToUpper() != "LASER" && a.Opertor.ToUpper() != "ADMIN"
                        group a by a.Opertor.ToUpper() into opList
                        select new
                        {

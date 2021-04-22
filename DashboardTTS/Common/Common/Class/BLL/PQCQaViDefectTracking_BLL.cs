@@ -89,9 +89,9 @@ namespace Common.Class.BLL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sTouchPC, string sRejType, string sRejCode, string sLotNo, string sPartNo)
+		public DataTable GetList(DateTime dDateFrom, DateTime dDateTo, string sTouchPC, string sRejType, string sRejCode, string sPartNo, string sJobNo)
 		{
-            DataSet ds = dal.GetList(dDateFrom, dDateTo, sTouchPC, sRejType, sRejCode, sLotNo, sPartNo);
+            DataSet ds = dal.GetList(dDateFrom, dDateTo, sTouchPC, sRejType, sRejCode, sPartNo, sJobNo);
             if (ds == null || ds.Tables.Count==0)
             {
                 return null;
@@ -511,8 +511,6 @@ namespace Common.Class.BLL
             DataTable dt = ds.Tables[0];
 
             return DataTableToList(dt);
-
-
         }
 
 
@@ -526,46 +524,31 @@ namespace Common.Class.BLL
             }
             else if (sDefectDescription == "Paint")
             {
-                DBHelp.Reports.LogFile.Log("TouchPCBuyoff", "GetDefectDetail,  in paint branch");
-
                 dt = dal.GetPaintDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
-                //check#2 不经过laser, 不去累加laser的维护的 shortage
-                //CheckProcess == "" 说明是overall buyoff调用的. 需要显示job的qa, setup, shortage   (2021-03-24)
+
+
+                // 2021-03-24
+                // check#2 不经过laser, 不去累加laser的维护的 shortage
+                // CheckProcess == "" 说明是overall buyoff调用的. 需要显示job的qa, setup, shortage   (
+                
+
+                // 2021-04-22
+                // qa, setup 放到 defect setting 中了.不用单独去查询
+                // 只需要查询 laser 维护的 shortage 数量.
                 if (CheckProcess == "CHECK#1" || CheckProcess == "")
                 {
-                    #region 处理paint record中的setup,qa 和 laser inventory中的shortage.
                     Common.Class.BLL.LMMSInventoty_BLL inventoryBLL = new LMMSInventoty_BLL();
                     DataTable dtInventory = inventoryBLL.GetList(sJobID);
-
-                    Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
-                    DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
-
+                    
                     foreach (DataRow dr in dt.Rows)
                     {
-                        double shortage = 0;
-                        double setup = 0;
-                        double qa = 0;
-
                         if (dtInventory != null && dtInventory.Rows.Count != 0)
-                            shortage = double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
-
-
-                        
-                        if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
                         {
-                            DataRow[] drs = dtPaintTemp.Select($"materialPartNo = '{dr["materialpartNo"].ToString()}'");
-                            if (drs != null || drs.Count() != 0)
-                            {
-                                setup = double.Parse(drs[0]["setupRejQty"].ToString());
-                                qa = double.Parse(drs[0]["qaTestQty"].ToString());
-                            }                        }
-
-                        dr["Shortage"] = shortage;
-                        dr["Setup"] = setup;
-                        dr["QA"] = qa;                    
-                        dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + shortage + setup + qa); 
+                            double shortage = double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
+                            dr["Shortage"] = shortage;
+                            dr["rejectQty"] = double.Parse(dr["rejectQty"].ToString()) + shortage;
+                        }
                     }
-                    #endregion
                 }
             }
             else if (sDefectDescription == "Laser")
@@ -623,26 +606,6 @@ namespace Common.Class.BLL
             else if (sDefectDescription == "Others")
             {
                 dt = dal.GetOthersDefect(sJobID, sTrackingID, CheckProcess, IsExcludeTracking);
-
-                #region 处理 qa
-                //Common.Class.BLL.PaintingTempInfo paintBLL = new PaintingTempInfo();
-                //DataTable dtPaintTemp = paintBLL.GetList(null, null, "", sJobID);
-
-                //foreach (DataRow dr in dt.Rows)
-                //{
-                  
-                //    double qa = 0;
-                    
-
-                //    if (dtPaintTemp != null && dtPaintTemp.Rows.Count != 0)
-                //        qa = double.Parse(dtPaintTemp.Rows[0]["qaTestQty"].ToString());
-
-
-                //    //dr["Shortage"] = shortage;
-                //    dr["QA"] = qa;
-                //    dr["rejectQty"] = (double.Parse(dr["rejectQty"].ToString()) + qa);
-                //}
-                #endregion
             }
 
 

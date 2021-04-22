@@ -128,6 +128,8 @@ namespace DashboardTTS.ViewModel
             public double Paint_Particle_for_laser_setup { get; set; }
             public double Paint_Buyoff { get; set; }
             public double Paint_Shortage { get; set; }
+            public double Paint_Setup { get; set; }
+            public double Paint_QA { get; set; }
 
             //laser defect code
             public double Laser_Black_Mark { get; set; }

@@ -20,7 +20,7 @@ namespace DashboardTTS.Webform.PQC
                                         
                     this.txtDateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
                     this.txtDateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                    btn_generate_Click(new object(), new EventArgs());
+                   
                 }
             }
             catch (Exception ee)
@@ -42,11 +42,11 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
-                string sLotNo = Request.QueryString["lotNo"] == null ? "" : Request.QueryString["lotNo"].ToString();
                 string sMachineID = this.ddlStation.SelectedValue;
                 string sRejType = this.ddlRejType.SelectedValue;
                 string sRejCode = this.ddlDefectCode.SelectedValue;
                 string sPartNo = this.txtPartNo.Text.Trim();
+                string sJobNo = this.txtJobNo.Text.Trim();
 
 
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text);
@@ -62,7 +62,7 @@ namespace DashboardTTS.Webform.PQC
 
 
                 Common.Class.BLL.PQCQaViDefectTracking_BLL bll = new Common.Class.BLL.PQCQaViDefectTracking_BLL();
-                DataTable dt = bll.GetList(DateFrom,DateTo, sMachineID, sRejType,sRejCode,sLotNo, sPartNo);
+                DataTable dt = bll.GetList(DateFrom,DateTo, sMachineID, sRejType,sRejCode, sPartNo, sJobNo);
 
                 
 

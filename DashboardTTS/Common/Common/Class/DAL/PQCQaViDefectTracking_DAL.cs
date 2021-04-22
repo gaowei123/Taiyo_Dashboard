@@ -826,18 +826,12 @@ namespace Common.Class.DAL
 		/// <summary>
 		/// 获得数据列表
 		/// </summary>
-		public DataSet GetList(DateTime dDateFrom, DateTime dDateTo, string sTouchPC, string sRejType,string sRejCode, string sLotNo, string sPartNo)
+		public DataSet GetList(DateTime dDateFrom, DateTime dDateTo, string sTouchPC, string sRejType,string sRejCode, string sPartNo, string sJobNo)
 		{
             StringBuilder strSql=new StringBuilder();
 
-            strSql.AppendFormat(@"
-with PaintDelivery as (
-	select Jobnumber, Lotno from OPENDATASOURCE('SQLOLEDB', {0} ).taiyo_painting.dbo.PaintingDeliveryHis
-	where updatedtime > dateadd(day, -60, updatedtime)
-)", StaticRes.Global.SqlConnection.SqlconnPainting);
-
             strSql.Append(@"
-                select
+select
 convert(varchar(50), a.day, 111) as Day
 , a.shift as Shift
 , 'Station' + a.machineID as touchPC
@@ -845,7 +839,6 @@ convert(varchar(50), a.day, 111) as Day
 , a.model as model
 , c.partNumber as partNumber
 , a.jobId as JobNumber
-, b.LotNo as lotNo
 , materialPartNo as materialNo
 , defectDescription as RejType
 , defectCode as RejCode
@@ -859,8 +852,6 @@ end as RejRate
 , a.userName as Operator
 , a.dateTime as DateTime
 from PQCQaViDefectTracking a
-left
-join PaintDelivery b   on a.jobId COLLATE Chinese_PRC_CI_AS = b.JobNumber  COLLATE Chinese_PRC_CI_AS
 left join PQCQaViTracking c on a.trackingID = c.trackingID
 
 where 1 = 1 and a.rejectQty > 0
@@ -876,11 +867,11 @@ and a.datetime < @dDateTo ");
             if (sRejCode.Trim() != "")
                 strSql.Append("  and a.defectCode = @RejCode ");
             
-            if (sLotNo.Trim() != "")
-                strSql.Append(" and b.LotNo = @LotNo");
-
             if (sPartNo.Trim() != "")
                 strSql.Append(" and c.PartNumber = @PartNo");
+
+            if (sJobNo.Trim() != "")
+                strSql.Append(" and a.jobId = @JobNo");
 
 
 
@@ -890,9 +881,9 @@ and a.datetime < @dDateTo ");
                 new SqlParameter("@dDateTo", SqlDbType.DateTime),
                 new SqlParameter("@TouchPC", SqlDbType.VarChar),
                 new SqlParameter("@RejType", SqlDbType.VarChar),
-                new SqlParameter("@RejCode", SqlDbType.VarChar),
-                new SqlParameter("@LotNo", SqlDbType.VarChar),
-                new SqlParameter("@PartNo", SqlDbType.VarChar)
+                new SqlParameter("@RejCode", SqlDbType.VarChar),               
+                new SqlParameter("@PartNo", SqlDbType.VarChar),
+                 new SqlParameter("@JobNo", SqlDbType.VarChar)
             };
 
 
@@ -914,13 +905,13 @@ and a.datetime < @dDateTo ");
             else
                 paras[4] = null;
 
-            if (sLotNo.Trim() != "")
-                paras[5].Value = sLotNo;
+            if (sPartNo.Trim() != "")
+                paras[5].Value = sPartNo;
             else
                 paras[5] = null;
 
-            if (sPartNo.Trim() != "")
-                paras[6].Value = sPartNo;
+            if (sJobNo.Trim() != "")
+                paras[6].Value = sJobNo;
             else
                 paras[6] = null;
 
@@ -1220,9 +1211,8 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Dented' then rejectQty end),0) as [Dented]
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Particle for laser setup' then rejectQty end),0) as [Particle for laser setup]
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Buyoff' then rejectQty end),0) as [Buyoff]
+,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Setup' then rejectQty end),0) as [Setup]
 ,'0' as Shortage
-,'0' as QA
-,'0' as Setup
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Other' then rejectQty end),0) as [Other]
 from PQCQaViDefectTracking 
 where 1=1  ");
@@ -1350,8 +1340,8 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Light Leakage' then rejectQty end),0) as [Light Leakage]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Light Bubble' then rejectQty end),0) as [Light Bubble]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='White Dot in Material' then rejectQty end),0) as [White Dot in Material]
+,ISNULL(SUM(case when defectDescription='Others' and defectCode='QA' then rejectQty end),0) as [QA]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Other' then rejectQty end),0) as [Other]
-,'0' as QA
 from PQCQaViDefectTracking 
 where 1=1  ");
 

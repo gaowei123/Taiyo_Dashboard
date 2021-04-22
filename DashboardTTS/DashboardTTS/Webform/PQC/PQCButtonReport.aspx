@@ -193,15 +193,15 @@
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_White_Mark" HeaderText="(P)<br/>White<br/>Mark"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Dented" HeaderText="(P)<br/>Dented"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Other" HeaderText="(P)<br/>Other"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle_for_laser_setup" HeaderText="(P)<br/>Particle for<br/>laser setup"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Buyoff" HeaderText="(P)<br/>Buyoff"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Particle_for_laser_setup" Visible="false" HeaderText="(P)<br/>Particle for<br/>laser setup"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Buyoff" Visible="false" HeaderText="(P)<br/>Buyoff"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Shortage" HeaderText="(P)<br/>Shortage"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRej" HeaderText="(P)<br/>TotalRej"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_TotalRejRate" HeaderText="(P)<br/>TotalRej%"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRej" HeaderText="(P)<br/>SetupRej"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_Setup" HeaderText="(P)<br/>SetupRej"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_SetupRejRate" HeaderText="(P)<br/>SetupRej%"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRej" HeaderText="(P)QA<br/>Reliability<br/>test Qty"></asp:BoundColumn>
-                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRejRate" HeaderText="(P)<br/>Qty%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QA" Visible="false" HeaderText="(P)QA<br/>Reliability<br/>test Qty"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRejRate" Visible="false" HeaderText="(P)<br/>Qty%"></asp:BoundColumn>
 
                     <asp:BoundColumn DataField="paintCoat1st" HeaderText="(P)U/C<br/>1st Coat"></asp:BoundColumn>
                     <asp:BoundColumn DataField="paintMachine1st" HeaderText="(P)1st<br/>Machine"></asp:BoundColumn>
@@ -256,6 +256,10 @@
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Other" HeaderText="(O)<br/>Other"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRej" HeaderText="(O)<br/>TotalRej"></asp:BoundColumn>
                     <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#e6e6fa" ItemStyle-HorizontalAlign="Center" DataField="Others_TotalRejRate" HeaderText="(O)<br/>TotalRej%"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QA" HeaderText="(P)QA<br/>Reliability<br/>test Qty"></asp:BoundColumn>
+                    <asp:BoundColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-BackColor="#fff2cc" ItemStyle-HorizontalAlign="Center" DataField="Paint_QATestRejRate" HeaderText="(P)<br/>Qty%"></asp:BoundColumn>
+
+
 
                     <asp:BoundColumn DataField="InspBy" HeaderText="Insp By"></asp:BoundColumn>                            
                 </Columns>

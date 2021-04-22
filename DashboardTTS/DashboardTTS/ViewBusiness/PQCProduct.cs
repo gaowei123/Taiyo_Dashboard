@@ -250,8 +250,11 @@ namespace DashboardTTS.ViewBusiness
                 return null;
 
 
-            Common.Class.Model.PaintingDeliveryHis_Model paintModel = paintBLL.GetModel(sJobNo, "Paint#1");
-
+            //Common.Class.Model.PaintingDeliveryHis_Model paintModel = paintBLL.GetModel(sJobNo, "Paint#1");
+            //if (paintModel != null)
+            //{
+            //    jobInfoModel.mrpQty = double.Parse(paintModel.inQuantity.ToString());
+            //}
 
 
 
@@ -261,11 +264,10 @@ namespace DashboardTTS.ViewBusiness
             jobInfoModel.jobNo = sJobNo;
             jobInfoModel.trackingID = sTrackingID;
             jobInfoModel.partNo = viModel.partNumber;
+            jobInfoModel.totalQty = decimal.Parse(viModel.TotalQty);
 
-            if (paintModel != null)
-            {
-                jobInfoModel.mrpQty = double.Parse(paintModel.inQuantity.ToString());
-            }
+
+          
 
 
             return jobInfoModel;
@@ -350,31 +352,6 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-            //为了同步overall buyoff report & button report中的数据的一致性. 
-            //在painting defectcode中添加QA, Setup显示, 来提供维护.
-            #region 2021-03-25 qa, setup
-            int qaQty = 0;
-            int setupQty = 0;
-
-            Common.Class.BLL.PaintingTempInfo paintTempBLL = new Common.Class.BLL.PaintingTempInfo();
-            DataTable dtPaintTemp =  paintTempBLL.GetList(null, null, string.Empty, jobNo);
-            if (dtPaintTemp != null && dtPaintTemp.Rows.Count !=0 )
-            {
-                DataRow[] arrDrs = dtPaintTemp.Select($" materialPartNo = '{sMaterialNo}'");
-                if (arrDrs!= null && arrDrs.Length != 0)
-                {
-                     qaQty = int.Parse(arrDrs[0]["qaTestQty"].ToString());
-                     setupQty= int.Parse(arrDrs[0]["setupRejQty"].ToString());
-                }
-            }
-           
-            // 89 - QA
-            // 90 - Setup
-            modelList.Add(CreateExtraDefect(sMaterialNo, 89, "QA", qaQty));
-            modelList.Add(CreateExtraDefect(sMaterialNo, 90, "Setup", setupQty));
-            #endregion
-
-
             var materialList = (from a in modelList where a.materialNo == sMaterialNo orderby a.materialNo ascending, a.defectCodeID ascending select a).ToList();
 
 
@@ -425,28 +402,28 @@ namespace DashboardTTS.ViewBusiness
             }
 
 
-
+            // 2021/04/22  qa, setup 算在 defect code 中了, 不用额外更新 painting temp 表
             #region ================ 2021-03-25  更新paintingTempInfo中的qa,setup数量. ================
-            List<Common.Class.Model.PaintingTempInfo_Model> paintTempModelList = new List<Common.Class.Model.PaintingTempInfo_Model>();
-            foreach (var model in materialList)
-            {
-                paintTempModelList.Add(new Common.Class.Model.PaintingTempInfo_Model()
-                {
-                    jobNumber = jobNo,
-                    materialName = model.materialNo,
-                    updatedTime = DateTime.Now,
+            //List<Common.Class.Model.PaintingTempInfo_Model> paintTempModelList = new List<Common.Class.Model.PaintingTempInfo_Model>();
+            //foreach (var model in materialList)
+            //{
+            //    paintTempModelList.Add(new Common.Class.Model.PaintingTempInfo_Model()
+            //    {
+            //        jobNumber = jobNo,
+            //        materialName = model.materialNo,
+            //        updatedTime = DateTime.Now,
 
-                    // 89 - QA, 90 - Setup
-                    qaTestQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_89"]),
-                    setupRejQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_90"])
-                });
-            }
-            Common.Class.BLL.PaintingTempInfo paintTempInfoBLL = new Common.Class.BLL.PaintingTempInfo();
-            bool result = paintTempInfoBLL.UpdateQASetup(paintTempModelList);
-            if (!result)
-            {
-                DBHelp.Reports.LogFile.Log("CheckingMaintenance", "Func UpdateQty, update PaintTempInfo qa,setup fail!");
-            }
+            //        // 89 - QA, 90 - Setup
+            //        qaTestQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_89"]),
+            //        setupRejQty = decimal.Parse(formParameters[$"txtid_{model.sn.ToString()}_90"])
+            //    });
+            //}
+            //Common.Class.BLL.PaintingTempInfo paintTempInfoBLL = new Common.Class.BLL.PaintingTempInfo();
+            //bool result = paintTempInfoBLL.UpdateQASetup(paintTempModelList);
+            //if (!result)
+            //{
+            //    DBHelp.Reports.LogFile.Log("CheckingMaintenance", "Func UpdateQty, update PaintTempInfo qa,setup fail!");
+            //}
             #endregion ================ 2021-03-25  更新paintingTempInfo中的qa,setup数量. ================
           
 

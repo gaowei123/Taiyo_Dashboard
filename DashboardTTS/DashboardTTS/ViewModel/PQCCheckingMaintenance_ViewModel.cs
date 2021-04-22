@@ -17,7 +17,8 @@ namespace DashboardTTS.ViewModel
             
 
             public string partNo { get; set; }
-            public double mrpQty { get; set; }
+            //public double mrpQty { get; set; }
+            public decimal totalQty { get; set; }
         }
 
 

@@ -403,7 +403,6 @@
     }
 
 
-
     function ShowReport() {
 
 
@@ -415,7 +414,6 @@
 
 
         setLaserBuyoff(jobNo);
-
 
         setLaserParameters(jobNo);
 
@@ -1148,22 +1146,11 @@
                 valign: 'middle'
             },
             {
-                field: 'buyoff',
-                title: 'Buyoff',
-                align: 'center',
-                valign: 'middle'
-            }, {
                 field: 'shortage',
                 title: 'Shortage',
                 align: 'center',
                 valign: 'middle'
-            },
-            {
-                field: 'qa',
-                title: 'QA',
-                align: 'center',
-                valign: 'middle'
-            },
+            },         
             {
                 field: 'setup',
                 title: 'Setup',
@@ -1210,9 +1197,7 @@
                 let whiteMark = 0;
                 let dented = 0;
                 let particleForLaserSetup = 0;
-                let buyoff = 0;
                 let shortage = 0;
-                let qa = 0;
                 let setup = 0;
                 let other = 0;
               
@@ -1245,9 +1230,7 @@
                     whiteMark += data[i].whiteMark;
                     dented += data[i].dented;
                     particleForLaserSetup += data[i].particleForLaserSetup;
-                    buyoff += data[i].buyoff;
                     shortage += data[i].shortage;
-                    qa += data[i].qa;
                     setup += data[i].setup;
                     other += data[i].other;
                 }
@@ -1276,9 +1259,7 @@
                 if (whiteMark == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'whiteMark');
                 if (dented == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'dented');
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
-                if (buyoff == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'buyoff');
                 if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
-                if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
                 if (setup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'setup');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 
@@ -1479,9 +1460,6 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                //console.log(data);
-
-
 
                 var blackMark = 0;
                 var blackDot = 0;
@@ -1664,12 +1642,12 @@
                 align: 'center',
                 valign: 'middle',
             },
-             //{
-             //    field: 'qa',
-             //    title: 'QA',
-             //    align: 'center',
-             //    valign: 'middle'
-             //},
+             {
+                 field: 'qa',
+                 title: 'QA',
+                 align: 'center',
+                 valign: 'middle'
+             },
             {
                 field: 'other',
                 title: 'Other',
@@ -1699,7 +1677,7 @@
                 var lightBubble = 0;
                 var whiteDotInMaterial = 0;
                 var other = 0;
-                //var qa = 0;
+                var qa = 0;
 
 
 
@@ -1715,7 +1693,7 @@
                     lightBubble += data[i].lightBubble;
                     whiteDotInMaterial += data[i].whiteDotInMaterial;
                     other += data[i].other;
-                    //qa += data[i].qa;
+                    qa += data[i].qa;
                 }
 
 
@@ -1730,7 +1708,7 @@
                 if (lightBubble == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'lightBubble');
                 if (whiteDotInMaterial == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'whiteDotInMaterial');
                 if (other == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'other');
-                //if (qa == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'qa');
+                if (qa == 0) $('#tableOthersDefect').bootstrapTable('hideColumn', 'qa');
 
 
             },

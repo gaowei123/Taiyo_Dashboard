@@ -441,7 +441,7 @@ namespace DashboardTTS.ViewBusiness
                     model.dented = double.Parse(dr["Dented"].ToString());
                     model.particleForLaserSetup = double.Parse(dr["Particle for laser setup"].ToString());
                     model.buyoff = double.Parse(dr["Buyoff"].ToString());
-                    model.qa = double.Parse(dr["QA"].ToString());
+            
                     model.setup = double.Parse(dr["Setup"].ToString());
                     model.shortage = double.Parse(dr["Shortage"].ToString());
                     model.other = double.Parse(dr["Other"].ToString());
@@ -502,7 +502,6 @@ namespace DashboardTTS.ViewBusiness
                     model.setup = double.Parse(dr["Setup"].ToString());
                     model.buyoff = double.Parse(dr["Buyoff"].ToString());
                     model.other = double.Parse(dr["Other"].ToString());
-
                     model.totalRej = double.Parse(dr["rejectQty"].ToString());
 
                     laserDefectList.Add(model);
@@ -571,15 +570,9 @@ namespace DashboardTTS.ViewBusiness
 
         public List<ViewModel.BuyoffReport_ViewModel.PQCBuyoffList> GetPQCBuyoffList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
-
             DataTable dt = paintTempBLL.GetBuyoffList(dDateFrom, dDateTo, sPartNo, sJobNo);
-
-
             if (dt == null || dt.Rows.Count == 0)
-            {
                 return null;
-            }
-
 
             List<ViewModel.BuyoffReport_ViewModel.PQCBuyoffList> buyoffList = new List<ViewModel.BuyoffReport_ViewModel.PQCBuyoffList>();
 
