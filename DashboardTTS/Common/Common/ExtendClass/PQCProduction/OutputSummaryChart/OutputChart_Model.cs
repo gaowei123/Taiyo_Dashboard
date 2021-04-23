@@ -7,6 +7,13 @@ namespace Common.ExtendClass.PQCProduction.OutputSummaryChart
 {
     public class OutputChart_Model
     {
+
+        // 2021-02-30
+        // 本来想重写 pqc chart的
+        // 想想算了
+        // 这是个可有可无的文件, 想删就删吧
+
+
         /*                                                                        
          *          .,:,,,                                        .::,,,::.          
          *        .::::,,;;,                                  .,;;:,,....:i:         

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Taiyo.SearchParam.PQCParam
 {
-    public class PQCOperatorParam:BaseParam
+    public class PQCOutputParam:BaseParam
     {
         public string Shift { get; set; }
         public string OpID { get; set; }

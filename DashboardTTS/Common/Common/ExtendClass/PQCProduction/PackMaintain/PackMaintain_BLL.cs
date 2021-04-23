@@ -5,14 +5,15 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Common.ExtendClass.PackMaintain
+namespace Common.ExtendClass.PQCProduction.PackMaintain
 {
     public class PackMaintain_BLL
     {
-        private readonly PackMaintain_DAL _dal;
+        private readonly Core.Base_BLL _baseBLL;
+
         public PackMaintain_BLL()
         {
-            _dal = new PackMaintain_DAL();
+            _baseBLL = new Core.Base_BLL();
         }
 
 
@@ -22,72 +23,72 @@ namespace Common.ExtendClass.PackMaintain
                 throw new Exception("Job No, Tracking ID can not be empty!");
 
 
-            var model = new PackMaintain_Model();
-
+            var maintainModel = new PackMaintain_Model();
 
 
 
             // ========== 获取job的基本信息, jobId, trackingID, day, shift, partNumber, mrp qty ==========//
-            model.Job = _dal.GetJobInfo(sTrackingID);
+            var baseModel = _baseBLL.GetCheckingModel(sTrackingID);
+            maintainModel.Job.JobNo = baseModel.JobNo;
+            maintainModel.Job.TrackingID = baseModel.TrackingID;
+            maintainModel.Job.Day = baseModel.Day;
+            maintainModel.Job.Shift = baseModel.Shift;
+            maintainModel.Job.PartNo = baseModel.PartNo;
 
-            DataTable dtPaint = _dal.GetPaintDelivery(sJobNo);
-            if (dtPaint != null && dtPaint.Rows.Count != 0)
-            {
-                model.Job.MRPQty = decimal.Parse(dtPaint.Rows[0]["MrpQty"].ToString());
-            }
-            // ========== 获取job的基本信息, jobId, trackingID, day, shift, partNumber, mrp qty ==========//
+            var paintBaseModel = _baseBLL.GetLotInfoModel(sJobNo);
+            maintainModel.Job.MRPQty = paintBaseModel == null? 0: _baseBLL.GetLotInfoModel(sJobNo).LotQty;
 
 
 
-
+            
 
             // ========== 获取material 信息 ==========//
-            // 获取material剩下的库存数量.
-            DataTable dtMaterialBinQty = _dal.GetMaterialBinQty(sTrackingID);
-            if (dtMaterialBinQty != null || dtMaterialBinQty.Rows.Count != 0)
+
+            // 获取 bom, 用来遍历每一个 material. 以当前 bom 为准.
+            var bom = _baseBLL.GetBomModel(maintainModel.Job.PartNo);
+            
+            // 从 pack vi detial 中获取 op pack 每个 material part 的数量
+            var checkViDetailList = _baseBLL.GetPackDetailList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
-                foreach (DataRow dr in dtMaterialBinQty.Rows)
-                {
-                    string materialName = dr["materialName"].ToString();
-                    string materialPartNo = dr["materialPartNo"].ToString();
-                    decimal binQty = decimal.Parse(dr["Qty"].ToString());
-                    model.MaterialNameList.Add(new PackMaintain_Model.MaterialInfo()
-                    {
-                        MaterialName = materialName,
-                        MaterialPartNo = materialPartNo,
-                        InventoryQty = binQty
-                    });
-                }
+                TrackingID = sTrackingID
+            });
+
+
+            // 从 checking bin 中获取还没有 pack 的库存.
+
+
+
+            // 从 bin history 中获取 scrap 的数量.
+
+
+
+            // 遍历每个 material 进行赋值
+            foreach (var item in bom.MaterialPartList)
+            {
+                var maintainMaterial = new PackMaintain_Model.MaterialInfo();
+                maintainMaterial.MaterialName = item.MaterialName;
+                maintainMaterial.MaterialPartNo = item.MaterialPartNo;
+
+
+                // checking bin inventory 数量
+                maintainMaterial.InventoryQty = item.MaterialPartNo;
+
+                // op pack 的数量
+                var checkViDetailModel = checkViDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                maintainMaterial.MaterialQty = checkViDetailModel == null ? 0 : checkViDetailModel.TotalQty;
+
+                // 被 scrap 掉的数量
+                maintainMaterial.ScrapQty = item.MaterialPartNo;
+
+
+
+                maintainModel.MaterialNameList.Add(maintainMaterial);
             }
 
 
-            // 获取detail tracking实际pack的material 数量
-            DataTable dtMaterialPackQty = _dal.GetMaterialPackQty(sTrackingID);
-            if (dtMaterialPackQty != null || dtMaterialPackQty.Rows.Count != 0)
-            {
-                foreach (DataRow dr in dtMaterialPackQty.Rows)
-                {
-                    string materialName = dr["materialName"].ToString();
-                    string materialPartNo = dr["materialPartNo"].ToString();
-                    decimal materialQty = decimal.Parse(dr["Qty"].ToString());                    
-                    var newModel = model.MaterialNameList.Where(p => p.MaterialPartNo == materialPartNo).FirstOrDefault();
-                    if (newModel == null)
-                    {
-                        model.MaterialNameList.Add(new PackMaintain_Model.MaterialInfo()
-                        {
-                            MaterialName = materialName,
-                            MaterialPartNo = materialPartNo,
-                            MaterialQty = materialQty
-                        });
-                    }else
-                    {
-                        newModel.MaterialQty = materialQty;
-                    }
-                }
-            }
-            // ========== 获取material 信息 ==========//
+            
 
-            return model;
+            return maintainModel;
         }
 
 

@@ -13,7 +13,7 @@ namespace Common.ExtendClass.PQCProduction.Core
     {
 
 
-        public List<BaseVI_Model> GetCheckViList(PQCOperatorParam param)
+        internal List<BaseVI_Model> GetCheckViList(PQCOutputParam param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine(@"select
@@ -46,8 +46,13 @@ left join (
 	case when CHARINDEX('Check#2',processes,0) > 1 then 'Check#2' else 'Check#1' end as lastCheckProcess
 	from PQCBom
 ) b on a.partNumber = b.partNumber
-where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
+where 1=1 ");
 
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and a.day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and a.day < @DateTo ");
 
             if (!string.IsNullOrEmpty(param.Shift))
                 strSql.AppendLine(" and a.shift = @Shift ");
@@ -55,19 +60,30 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
             if (!string.IsNullOrEmpty(param.OpID))
                 strSql.AppendLine(" and a.userID = @UserID");
 
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and a.jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and a.trackingID = @TrackingID");
+
 
             SqlParameter[] parameters =
             {
                 new SqlParameter("@DateFrom",SqlDbType.DateTime),
                 new SqlParameter("@DateTo",SqlDbType.DateTime),
                 new SqlParameter("@Shift",SqlDbType.VarChar),
-                new SqlParameter("@UserID",SqlDbType.VarChar)
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar)
             };
-            parameters[0].Value = param.DateFrom;
-            parameters[1].Value = param.DateTo;
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;        
             if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
-            
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count ==0) return null;
             DataTable dt = ds.Tables[0];
@@ -106,10 +122,91 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
 
             return viList;
         }
-        
 
 
-        public List<BaseVI_Model> GetPackViList(PQCOperatorParam param)
+        internal List<BaseVIDetail_Model> GetCheckVIDetailList(PQCOutputParam param)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+select 
+trackingID
+,jobId
+,materialName
+,materialPartNo
+,totalQty
+,passQty
+,rejectQty
+from PQCQaViDetailTracking
+where 1=1 ");
+
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and day < @DateTo ");
+
+            if (!string.IsNullOrEmpty(param.Shift))
+                strSql.AppendLine(" and shift = @Shift ");
+
+            if (!string.IsNullOrEmpty(param.OpID))
+                strSql.AppendLine(" and userID = @UserID");
+
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and trackingID = @TrackingID");
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@DateFrom",SqlDbType.DateTime),
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@Shift",SqlDbType.VarChar),
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+            };
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
+            DataTable dt = ds.Tables[0];
+
+
+            List<BaseVIDetail_Model> viDetailList = new List<BaseVIDetail_Model>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                BaseVIDetail_Model model = new BaseVIDetail_Model();
+                model.TrackingID = dr["trackingID"].ToString();          ;
+                model.JobNo = dr["jobId"].ToString();
+                model.MaterialName = dr["materialName"].ToString();
+                model.MaterialPartNo = dr["materialPartNo"].ToString();
+                model.TotalQty = decimal.Parse(dr["totalQty"].ToString());
+                model.PassQty = decimal.Parse(dr["passQty"].ToString());
+                model.RejQty = decimal.Parse(dr["rejectQty"].ToString());
+
+
+
+                viDetailList.Add(model);
+            }
+
+            return viDetailList;
+        }
+
+
+
+
+
+
+
+        internal List<BaseVI_Model> GetPackViList(PQCOutputParam param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine(@"select
@@ -142,8 +239,14 @@ left join (
 	case when CHARINDEX('Check#2',processes,0) > 1 then 'Check#2' else 'Check#1' end as lastCheckProcess
 	from PQCBom
 ) b on a.partNumber = b.partNumber
-where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
+where 1=1 ");
 
+
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and a.day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and a.day < @DateTo ");
 
             if (!string.IsNullOrEmpty(param.Shift))
                 strSql.AppendLine(" and a.shift = @Shift ");
@@ -151,18 +254,29 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
             if (!string.IsNullOrEmpty(param.OpID))
                 strSql.AppendLine(" and a.userID = @UserID");
 
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and a.jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and a.trackingID = @TrackingID");
+
 
             SqlParameter[] parameters =
             {
                 new SqlParameter("@DateFrom",SqlDbType.DateTime),
                 new SqlParameter("@DateTo",SqlDbType.DateTime),
                 new SqlParameter("@Shift",SqlDbType.VarChar),
-                new SqlParameter("@UserID",SqlDbType.VarChar)
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar)
             };
-            parameters[0].Value = param.DateFrom;
-            parameters[1].Value = param.DateTo;
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
             if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
@@ -199,10 +313,87 @@ where 1=1 and a.day >= @DateFrom and a.day < @DateTo ");
 
             return viList;
         }
-        
 
 
-        public List<BaseDefectSummary_Model> GetDefectList(PQCOperatorParam param)
+        internal List<BasePackDetail_Model> GetPackDetailList(PQCOutputParam param)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+select 
+trackingID
+,jobId
+,materialName
+,materialPartNo
+,totalQty
+,passQty
+,rejectQty
+from PQCQaViDetailTracking
+where 1=1 ");
+
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and day < @DateTo ");
+
+            if (!string.IsNullOrEmpty(param.Shift))
+                strSql.AppendLine(" and shift = @Shift ");
+
+            if (!string.IsNullOrEmpty(param.OpID))
+                strSql.AppendLine(" and userID = @UserID");
+
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and trackingID = @TrackingID");
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@DateFrom",SqlDbType.DateTime),
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@Shift",SqlDbType.VarChar),
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+            };
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
+            DataTable dt = ds.Tables[0];
+
+
+            List<BasePackDetail_Model> packDetailModelList = new List<BasePackDetail_Model>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                BasePackDetail_Model model = new BasePackDetail_Model();
+                model.TrackingID = dr["trackingID"].ToString(); ;
+                model.JobNo = dr["jobId"].ToString();
+                model.MaterialName = dr["materialName"].ToString();
+                model.MaterialPartNo = dr["materialPartNo"].ToString();
+                model.TotalQty = decimal.Parse(dr["totalQty"].ToString());
+                model.PassQty = decimal.Parse(dr["passQty"].ToString());
+                model.RejQty = decimal.Parse(dr["rejectQty"].ToString());
+
+
+
+                packDetailModelList.Add(model);
+            }
+
+            return packDetailModelList;
+        }
+
+
+
+        internal List<BaseDefectSummary_Model> GetDefectList(PQCOutputParam param)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.AppendLine(@"select 
@@ -261,10 +452,11 @@ where 1=1 and day >= @DateFrom and day < @DateTo  ");
         ///  param.starttime:  painting工序在先, 默认延长到3个月前的数据,以防数据找不到.
         /// </param>
         /// <returns></returns>
-        public List<BaseLotInfo_Model> GetLotInfoList(PQCOperatorParam param)
+        internal List<BaseLotInfo_Model> GetLotInfoList(PQCOutputParam param)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.AppendLine(@"select 
+            strSql.AppendLine(@"
+select 
 jobNumber,
 lotNo,
 partNumber,
@@ -272,20 +464,28 @@ dateTime,
 inQuantity,
 paintProcess
 from PaintingDeliveryHis
-where 1=1 
-and updatedTime >= @DateFrom 
-and updatedTime < @DateTo  ");
+where 1=1  ");
 
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and updatedTime >= @DateFrom ");
 
+            if (param.DateTo != null)
+                strSql.AppendLine(" and updatedTime < @DateTo ");
+            
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobNumber = @JobNo");
+            
             SqlParameter[] parameters =
             {
                 new SqlParameter("@DateFrom",SqlDbType.DateTime),
-                new SqlParameter("@DateTo",SqlDbType.DateTime)
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@JobNo",SqlDbType.VarChar)
             };
 
             //painting工序在先, 延长到3个月前的数据,以防数据找不到.
             parameters[0].Value = param.DateFrom.Value.AddMonths(-3);
             parameters[1].Value = param.DateTo;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[2].Value = param.JobNo; else parameters[2] = null;
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
@@ -321,6 +521,64 @@ and updatedTime < @DateTo  ");
         }
 
 
+
+        internal DataTable GetBom()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+select 
+partNumber
+,customer
+,model
+,jigNo
+,color
+,processes
+,case when CHARINDEX('Laser',processes,0) > 0 then 'True' else 'False' end as withLaser
+,case when CHARINDEX('Check#3',processes,0) > 0 then 'Check#3'
+      when CHARINDEX('Check#2',processes,0) > 0 then 'Check#2'
+	  else 'Check#1'
+end as lastCheckProcess
+,remark_1 as supplier
+,shipTo
+,coating
+,description
+,ISNULL(number,'') as num
+,ISNULL(unitCost,0) as unitCost
+from PQCBom");
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                return null;
+
+            return ds.Tables[0];
+        }
+
+        internal DataTable GetBomDetail()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+select
+partNumber
+,materialName
+,materialPartNo
+,partCount
+,outerBoxQty
+,packingTrays
+,module
+from PQCBomDetail ");
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                return null;
+
+            return ds.Tables[0];
+        }
+
+
+        internal List<BaseBin_Model> GetBinList(PQCOutputParam param)
+        {
+            9uwafoeih;asklnfdoi
+
+            return new List<BaseBin_Model>();
+        }
 
 
 

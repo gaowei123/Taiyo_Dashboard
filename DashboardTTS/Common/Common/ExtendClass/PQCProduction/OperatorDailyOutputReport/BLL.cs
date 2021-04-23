@@ -17,7 +17,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorDailyOutputReport
         }
         
 
-        public List<Model> GetReportList(PQCOperatorParam param)
+        public List<Model> GetReportList(PQCOutputParam param)
         {
             var viList = _bll.GetViList(param);
             if (viList == null || viList.Count== 0)

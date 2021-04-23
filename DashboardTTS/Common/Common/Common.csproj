@@ -264,9 +264,12 @@
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_BLL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_DAL.cs" />
     <Compile Include="ExtendClass\OverallOutputChart\OverallOutputChart_Model.cs" />
-    <Compile Include="ExtendClass\PackMaintain\PackMaintain_BLL.cs" />
-    <Compile Include="ExtendClass\PackMaintain\PackMaintain_DAL.cs" />
-    <Compile Include="ExtendClass\PackMaintain\PackMaintain_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\BaseBin_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\BasePackDetail_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\BaseVIDetail_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\Core\Bom_Model.cs" />
+    <Compile Include="ExtendClass\PQCProduction\PackMaintain\PackMaintain_BLL.cs" />
+    <Compile Include="ExtendClass\PQCProduction\PackMaintain\PackMaintain_Model.cs" />
     <Compile Include="ExtendClass\PaintingRecord\BLL.cs" />
     <Compile Include="ExtendClass\PaintingRecord\DAL.cs" />
     <Compile Include="ExtendClass\PaintingRecord\Model.cs" />

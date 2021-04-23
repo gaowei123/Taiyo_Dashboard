@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Common.ExtendClass.PackMaintain
+namespace Common.ExtendClass.PQCProduction.PackMaintain
 {
     public class PackMaintain_Model
     {
-        public JobInfo Job { get; set; }
-        public List<MaterialInfo> MaterialNameList { get; set; }
-
         public PackMaintain_Model()
         {
             Job = new JobInfo();
             MaterialNameList = new List<MaterialInfo>();
         }
+
+
+        public JobInfo Job { get; set; }
+        public List<MaterialInfo> MaterialNameList { get; set; }
+
+      
 
         
        
@@ -34,6 +37,8 @@ namespace Common.ExtendClass.PackMaintain
             public string MaterialPartNo { get; set; }
             public decimal InventoryQty { get; set; }
             public decimal MaterialQty { get; set; }
+            public decimal ScrapQty { get; set; }
+
         }
     }
 }

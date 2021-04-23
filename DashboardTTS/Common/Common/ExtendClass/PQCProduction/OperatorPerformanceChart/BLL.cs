@@ -18,7 +18,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorPerformanceChart
         }
 
 
-        public List<Model> GetChartData(PQCOperatorParam param)
+        public List<Model> GetChartData(PQCOutputParam param)
         {
             var viList = _bll.GetViList(param);
             if (viList == null)

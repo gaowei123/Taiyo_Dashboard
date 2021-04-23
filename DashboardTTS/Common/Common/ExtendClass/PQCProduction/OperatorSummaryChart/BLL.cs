@@ -19,7 +19,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorSummaryChart
         
 
 
-        public List<Model> GetDailyList(PQCOperatorParam param)
+        public List<Model> GetDailyList(PQCOutputParam param)
         {
             var viList = _bll.GetViList(param);
             if (viList == null)
@@ -46,7 +46,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorSummaryChart
             return JsonConvert.DeserializeObject<List<Model>>(strJson);
         }
 
-        public List<Model> GetMonthlyList(PQCOperatorParam param)
+        public List<Model> GetMonthlyList(PQCOutputParam param)
         {
             var viList = _bll.GetViList(param);
             if (viList == null)
@@ -73,7 +73,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorSummaryChart
             return JsonConvert.DeserializeObject<List<Model>>(strJson);
         }
 
-        public List<Model> GetYearlyList(PQCOperatorParam param)
+        public List<Model> GetYearlyList(PQCOutputParam param)
         {
             var viList = _bll.GetViList(param);
             if (viList == null)

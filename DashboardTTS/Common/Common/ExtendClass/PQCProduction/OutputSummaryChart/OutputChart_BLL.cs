@@ -13,9 +13,10 @@ namespace Common.ExtendClass.PQCProduction.OutputSummaryChart
             _bll = new Core.Base_BLL();
         }
 
-        //2021-02-30
-        //本来想重写 pqc chart的
-        //想想算了.....
+        // 2021-02-30
+        // 本来想重写 pqc chart的
+        // 想想算了
+        // 这是个可有可无的文件, 想删就删吧
 
 
         /**

@@ -10,7 +10,7 @@ namespace DashboardTTS.Webform.PQC
 {
     public partial class PQCPackingMaintenance : System.Web.UI.Page
     {
-        private readonly Common.ExtendClass.PackMaintain.PackMaintain_BLL _bll = new Common.ExtendClass.PackMaintain.PackMaintain_BLL();
+        private readonly Common.ExtendClass.PQCProduction.PackMaintain.PackMaintain_BLL _bll = new Common.ExtendClass.PQCProduction.PackMaintain.PackMaintain_BLL();
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace DashboardTTS.Webform.PQC
             }
         }
 
-        private void initUIJobInfo(Common.ExtendClass.PackMaintain.PackMaintain_Model model)
+        private void initUIJobInfo(Common.ExtendClass.PQCProduction.PackMaintain.PackMaintain_Model model)
         {
             this.lbDay.Text = model.Job.Day.ToString("yyyy-MM-dd");
             this.lbShift.Text = model.Job.Shift;
@@ -50,7 +50,7 @@ namespace DashboardTTS.Webform.PQC
             this.lbPartNo.Text = model.Job.PartNo;
             this.lbMrpQty.Text = model.Job.MRPQty.ToString();
         }
-        private void initUIMaterialList(Common.ExtendClass.PackMaintain.PackMaintain_Model model)
+        private void initUIMaterialList(Common.ExtendClass.PQCProduction.PackMaintain.PackMaintain_Model model)
         {
             this.dgMaterial.DataSource = model.MaterialNameList;
             this.dgMaterial.DataBind();

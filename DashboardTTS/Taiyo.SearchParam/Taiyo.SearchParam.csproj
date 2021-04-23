@@ -51,6 +51,7 @@
     <Compile Include="PQCParam\CheckingLiveParam.cs" />
     <Compile Include="PQCParam\PQCOperatorParam.cs" />
     <Compile Include="PQCParam\PQCOperatorSummaryCondition.cs" />
+    <Compile Include="PQCParam\PQCOutputParam.cs" />
     <Compile Include="PQCParam\PQCSummaryParam.cs" />
     <Compile Include="PQCParam\PQCTopRejectCondition.cs" />
     <Compile Include="PQCParam\ProductionChartParam.cs" />
