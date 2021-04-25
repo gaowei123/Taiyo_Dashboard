@@ -732,13 +732,6 @@
     <Compile Include="Webform\Painting\InventoryRecord.aspx.designer.cs">
       <DependentUpon>InventoryRecord.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Webform\Painting\PaintingJobOrder.aspx.cs">
-      <DependentUpon>PaintingJobOrder.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Webform\Painting\PaintingJobOrder.aspx.designer.cs">
-      <DependentUpon>PaintingJobOrder.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Webform\PQC\PQCButtonReport.aspx.cs">
       <DependentUpon>PQCButtonReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3694,7 +3687,6 @@
     <Content Include="Webform\Moulding\RejDetail.aspx" />
     <Content Include="Webform\Moulding\UpdateProduction.aspx" />
     <Content Include="Webform\Painting\InventoryRecord.aspx" />
-    <Content Include="Webform\Painting\PaintingJobOrder.aspx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />

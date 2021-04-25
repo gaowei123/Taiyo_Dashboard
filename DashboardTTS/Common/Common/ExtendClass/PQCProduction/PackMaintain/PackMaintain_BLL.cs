@@ -28,7 +28,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
 
             // ========== 获取job的基本信息, jobId, trackingID, day, shift, partNumber, mrp qty ==========//
-            var baseModel = _baseBLL.GetCheckingModel(sTrackingID);
+            var baseModel = _baseBLL.GetPackingModel(sTrackingID);
             maintainModel.Job.JobNo = baseModel.JobNo;
             maintainModel.Job.TrackingID = baseModel.TrackingID;
             maintainModel.Job.Day = baseModel.Day;
@@ -47,6 +47,8 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
             // 获取 bom, 用来遍历每一个 material. 以当前 bom 为准.
             var bom = _baseBLL.GetBomModel(maintainModel.Job.PartNo);
             
+
+
             // 从 pack vi detial 中获取 op pack 每个 material part 的数量
             var checkViDetailList = _baseBLL.GetPackDetailList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
@@ -54,11 +56,22 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
             });
 
 
+
             // 从 checking bin 中获取还没有 pack 的库存.
+            var checkBinList = _baseBLL.GetBinList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+            {
+                TrackingID = sTrackingID
+            });
+            checkBinList = checkBinList == null ? null: checkBinList.Where(p => p.Processes == bom.LastCheckProcess).ToList();
 
 
 
             // 从 bin history 中获取 scrap 的数量.
+            var scrapList = _baseBLL.GetBinHisScrapList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+            {
+                TrackingID = sTrackingID
+            });
+
 
 
 
@@ -71,14 +84,16 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
 
                 // checking bin inventory 数量
-                maintainMaterial.InventoryQty = item.MaterialPartNo;
+                var checkMaterialBinModel = checkBinList == null? null: checkBinList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                maintainMaterial.InventoryQty = checkMaterialBinModel == null? 0: checkMaterialBinModel.MaterialQty;
 
                 // op pack 的数量
-                var checkViDetailModel = checkViDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                var checkViDetailModel = checkViDetailList ==null? null : checkViDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
                 maintainMaterial.MaterialQty = checkViDetailModel == null ? 0 : checkViDetailModel.TotalQty;
 
                 // 被 scrap 掉的数量
-                maintainMaterial.ScrapQty = item.MaterialPartNo;
+                var scrapModel = scrapList == null? null: scrapList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                maintainMaterial.ScrapQty = scrapModel == null ? 0 : scrapModel.MaterialQty;
 
 
 

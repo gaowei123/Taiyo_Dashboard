@@ -131,16 +131,11 @@ namespace DashboardTTS.Controllers
 
         public JsonResult GetPQCOperatorPerformanceData(DateTime DateFrom, DateTime DateTo)
         {
-            var param = new Taiyo.SearchParam.PQCParam.PQCOperatorParam()
-            {
-                DateFrom = DateFrom,
-                DateTo = DateTo.AddDays(1),
-                OpID = "",
-                Shift = ""
-            };
-
             var bll = new Common.ExtendClass.PQCProduction.OperatorPerformanceChart.BLL();
-            var result = bll.GetChartData(param);
+            var result = bll.GetChartData(new Taiyo.SearchParam.PQCParam.PQCOutputParam() {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1)
+            });
 
             return result == null ? Json("") : Json(result);
         }
@@ -149,7 +144,7 @@ namespace DashboardTTS.Controllers
         {
             var bll = new Common.ExtendClass.PQCProduction.OperatorSummaryChart.BLL();
 
-            var param = new Taiyo.SearchParam.PQCParam.PQCOperatorParam();
+            var param = new Taiyo.SearchParam.PQCParam.PQCOutputParam();
             param.Shift = "";
             param.OpID = PIC;
 

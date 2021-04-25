@@ -88,67 +88,6 @@ namespace Common.Class.DAL
         }
 
 
-
-        public DataTable SelectInventoryDailyReport(string partNo, string customer)
-        {
-            StringBuilder strSql = new StringBuilder();
-
-            #region latest optimized sql 
-            strSql.Append(@"select
-                              [jobNumber]
-                              ,[partNumber]
-                              ,[description]
-                              ,[quantity]
-                              ,[pqcQuantity]
-                              ,[startOnTime]
-                              ,[dateTime]
-                              ,[day]
-                              ,[month]
-                              ,[year]
-                              ,[showFlag]
-                              ,[setUpQTY]
-                              ,[buyOffQty]
-                              ,[lotNo]
-                          FROM [Taiyo_Painting].[dbo].[PaintInventory] where 1=1
-                            ");
-            #endregion
-
-
-            if (partNo != "")
-            {
-                strSql.Append(" and a.partnumber = @partnumber ");
-            }
-
-            //if (customer != "")
-            //{
-            //    strSql.Append(" and Customer = @Customer ");
-            //}
-
-            //old sql
-            //strSql.Append(" group by a.partNumber , b.materialCount, b.cycleTime, b.blockCount, b.unitCount");
-           // strSql.Append(" group by a.partNumber   order by Customer asc, a.partNumber asc ");
-
-            SqlParameter[] parameters = {
-                new SqlParameter("@partNumber", SqlDbType.VarChar),
-                new SqlParameter("@Customer",SqlDbType.VarChar)
-            };
-
-            if (partNo == "") { parameters[0] = null; } else { parameters[0].Value = partNo; }
-
-            if (customer == "") { parameters[1] = null; } else { parameters[1].Value = customer; }
-
-
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
-
-            if (ds == null || ds.Tables.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return ds.Tables[0];
-            }
-        }
+        
     }
 }

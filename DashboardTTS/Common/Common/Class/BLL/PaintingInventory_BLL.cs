@@ -41,14 +41,6 @@ namespace Common.Class.BLL
         }
 
 
-        public DataTable Report(string partNo, string customer)
-        {
-            DataTable dt = dal.SelectInventoryDailyReport(partNo, customer);
-
-            if (dt.Rows.Count == 0)
-                return null;
-            else
-                return dt;
-        }
+       
     }
 }

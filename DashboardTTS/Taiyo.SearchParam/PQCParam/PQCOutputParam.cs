@@ -7,9 +7,13 @@ namespace Taiyo.SearchParam.PQCParam
 {
     public class PQCOutputParam:BaseParam
     {
-        public string Shift { get; set; }
-        public string OpID { get; set; }
         public string JobNo { get; set; }
         public string TrackingID { get; set; }
+        public string PartNo { get; set; }
+        public string MachineID { get; set; }
+
+        public string Shift { get; set; }
+        public string OpID { get; set; }
+        
     }
 }

@@ -66,6 +66,12 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.TrackingID))
                 strSql.AppendLine(" and a.trackingID = @TrackingID");
 
+            if (!string.IsNullOrEmpty(param.PartNo))
+                strSql.AppendLine(" and a.partNumber = @PartNo");
+
+            if (!string.IsNullOrEmpty(param.MachineID))
+                strSql.AppendLine(" and a.machineID = @MachineID");
+
 
             SqlParameter[] parameters =
             {
@@ -74,7 +80,9 @@ where 1=1 ");
                 new SqlParameter("@Shift",SqlDbType.VarChar),
                 new SqlParameter("@UserID",SqlDbType.VarChar),
                 new SqlParameter("@JobNo",SqlDbType.VarChar),
-                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@PartNo",SqlDbType.VarChar),
+                new SqlParameter("@MachineID",SqlDbType.VarChar)
             };
 
             if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
@@ -83,6 +91,8 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
             if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
             if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.PartNo)) parameters[6].Value = param.PartNo; else parameters[6] = null;
+            if (!string.IsNullOrEmpty(param.MachineID)) parameters[7].Value = param.MachineID; else parameters[7] = null;
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count ==0) return null;
@@ -157,6 +167,9 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.TrackingID))
                 strSql.AppendLine(" and trackingID = @TrackingID");
 
+            if (!string.IsNullOrEmpty(param.MachineID))
+                strSql.AppendLine(" and machineID = @MachineID");
+
 
             SqlParameter[] parameters =
             {
@@ -165,7 +178,8 @@ where 1=1 ");
                 new SqlParameter("@Shift",SqlDbType.VarChar),
                 new SqlParameter("@UserID",SqlDbType.VarChar),
                 new SqlParameter("@JobNo",SqlDbType.VarChar),
-                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@MachineID",SqlDbType.VarChar)
             };
 
             if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
@@ -174,6 +188,7 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
             if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
             if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.MachineID)) parameters[6].Value = param.MachineID; else parameters[6] = null;
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
@@ -200,6 +215,86 @@ where 1=1 ");
             return viDetailList;
         }
 
+        
+        internal List<BaseDefectSummary_Model> GetDefectList(PQCOutputParam param)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+select 
+trackingID
+,isnull(sum(case when defectDescription = 'Mould' then isnull(rejectQty,0) end),0) as MouldRej
+,isnull(sum(case when defectDescription = 'Paint' then isnull(rejectQty,0) end) ,0) as PaintRej
+,isnull(sum(case when defectDescription = 'Laser' then isnull(rejectQty,0) end) ,0) as LaserRej
+,isnull(sum(case when defectDescription = 'Others' then isnull(rejectQty,0) end),0)  as OthersRej
+from PQCQaViDefectTracking
+where 1=1   ");
+
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and day < @DateTo ");
+
+            if (!string.IsNullOrEmpty(param.Shift))
+                strSql.AppendLine(" and shift = @Shift ");
+
+            if (!string.IsNullOrEmpty(param.OpID))
+                strSql.AppendLine(" and userID = @UserID");
+
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and trackingID = @TrackingID");
+
+            if (!string.IsNullOrEmpty(param.MachineID))
+                strSql.AppendLine(" and machineID = @MachineID");
+
+
+
+            strSql.AppendLine(" group by trackingID ");
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@DateFrom",SqlDbType.DateTime),
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@Shift",SqlDbType.VarChar),
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@MachineID",SqlDbType.VarChar)
+            };
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.MachineID)) parameters[6].Value = param.MachineID; else parameters[6] = null;
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
+            DataTable dt = ds.Tables[0];
+
+
+            List<BaseDefectSummary_Model> viList = new List<BaseDefectSummary_Model>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                BaseDefectSummary_Model model = new BaseDefectSummary_Model();
+                model.TrackingID = dr["trackingID"].ToString();
+                //model.JobNo = dr["jobId"].ToString();
+                model.MouldRej = decimal.Parse(dr["MouldRej"].ToString());
+                model.PaintRej = decimal.Parse(dr["PaintRej"].ToString());
+                model.LaserRej = decimal.Parse(dr["LaserRej"].ToString());
+                model.OthersRej = decimal.Parse(dr["OthersRej"].ToString());
+
+                viList.Add(model);
+            }
+
+            return viList;
+        }
 
 
 
@@ -260,6 +355,13 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.TrackingID))
                 strSql.AppendLine(" and a.trackingID = @TrackingID");
 
+              if (!string.IsNullOrEmpty(param.PartNo))
+                strSql.AppendLine(" and a.partNumber = @PartNo");
+
+            if (!string.IsNullOrEmpty(param.MachineID))
+                strSql.AppendLine(" and a.machineID = @MachineID");
+
+
 
             SqlParameter[] parameters =
             {
@@ -268,7 +370,9 @@ where 1=1 ");
                 new SqlParameter("@Shift",SqlDbType.VarChar),
                 new SqlParameter("@UserID",SqlDbType.VarChar),
                 new SqlParameter("@JobNo",SqlDbType.VarChar),
-                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@PartNo",SqlDbType.VarChar),
+                new SqlParameter("@MachineID",SqlDbType.VarChar)
             };
             if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
             if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
@@ -276,6 +380,8 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
             if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
             if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.PartNo)) parameters[6].Value = param.PartNo; else parameters[6] = null;
+            if (!string.IsNullOrEmpty(param.MachineID)) parameters[7].Value = param.MachineID; else parameters[7] = null;
 
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
@@ -327,7 +433,7 @@ trackingID
 ,totalQty
 ,passQty
 ,rejectQty
-from PQCQaViDetailTracking
+from PQCPackDetailTracking
 where 1=1 ");
 
             if (param.DateFrom != null)
@@ -348,6 +454,9 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.TrackingID))
                 strSql.AppendLine(" and trackingID = @TrackingID");
 
+            if (!string.IsNullOrEmpty(param.MachineID))
+                strSql.AppendLine(" and a.machineID = @MachineID");
+
 
             SqlParameter[] parameters =
             {
@@ -356,7 +465,8 @@ where 1=1 ");
                 new SqlParameter("@Shift",SqlDbType.VarChar),
                 new SqlParameter("@UserID",SqlDbType.VarChar),
                 new SqlParameter("@JobNo",SqlDbType.VarChar),
-                new SqlParameter("@TrackingID",SqlDbType.VarChar)
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@MachineID",SqlDbType.VarChar)
             };
 
             if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
@@ -365,6 +475,7 @@ where 1=1 ");
             if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
             if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
             if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.MachineID)) parameters[6].Value = param.MachineID; else parameters[6] = null;
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
@@ -393,56 +504,6 @@ where 1=1 ");
 
 
 
-        internal List<BaseDefectSummary_Model> GetDefectList(PQCOutputParam param)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.AppendLine(@"select 
-trackingID
-,isnull(sum(case when defectDescription = 'Mould' then isnull(rejectQty,0) end),0) as MouldRej
-,isnull(sum(case when defectDescription = 'Paint' then isnull(rejectQty,0) end) ,0) as PaintRej
-,isnull(sum(case when defectDescription = 'Laser' then isnull(rejectQty,0) end) ,0) as LaserRej
-,isnull(sum(case when defectDescription = 'Others' then isnull(rejectQty,0) end),0)  as OthersRej
-from PQCQaViDefectTracking
-where 1=1 and day >= @DateFrom and day < @DateTo  ");
-
-            if (!string.IsNullOrEmpty(param.Shift))
-                strSql.AppendLine(" and shift = @Shift ");
-
-            strSql.AppendLine(" group by trackingID ");
-
-
-            SqlParameter[] parameters =
-            {
-                new SqlParameter("@DateFrom",SqlDbType.DateTime),
-                new SqlParameter("@DateTo",SqlDbType.DateTime),
-                new SqlParameter("@Shift",SqlDbType.VarChar)
-            };
-            parameters[0].Value = param.DateFrom;
-            parameters[1].Value = param.DateTo;
-            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
-
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
-            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0) return null;
-            DataTable dt = ds.Tables[0];
-
-
-            List<BaseDefectSummary_Model> viList = new List<BaseDefectSummary_Model>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                BaseDefectSummary_Model model = new BaseDefectSummary_Model();
-                model.TrackingID = dr["trackingID"].ToString();
-                //model.JobNo = dr["jobId"].ToString();
-                model.MouldRej = decimal.Parse(dr["MouldRej"].ToString());
-                model.PaintRej = decimal.Parse(dr["PaintRej"].ToString());
-                model.LaserRej = decimal.Parse(dr["LaserRej"].ToString());
-                model.OthersRej = decimal.Parse(dr["OthersRej"].ToString());
-
-                viList.Add(model);
-            }
-
-            return viList;
-        }
-
 
 
         /// <summary>
@@ -461,7 +522,7 @@ jobNumber,
 lotNo,
 partNumber,
 dateTime,
-inQuantity,
+convert(int,inQuantity) as inQuantity,
 paintProcess
 from PaintingDeliveryHis
 where 1=1  ");
@@ -474,6 +535,8 @@ where 1=1  ");
             
             if (!string.IsNullOrEmpty(param.JobNo))
                 strSql.AppendLine(" and jobNumber = @JobNo");
+
+
             
             SqlParameter[] parameters =
             {
@@ -483,8 +546,8 @@ where 1=1  ");
             };
 
             //painting工序在先, 延长到3个月前的数据,以防数据找不到.
-            parameters[0].Value = param.DateFrom.Value.AddMonths(-3);
-            parameters[1].Value = param.DateTo;
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom.Value.AddMonths(-3); else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;         
             if (!string.IsNullOrEmpty(param.JobNo)) parameters[2].Value = param.JobNo; else parameters[2] = null;
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
@@ -522,6 +585,7 @@ where 1=1  ");
 
 
 
+
         internal DataTable GetBom()
         {
             StringBuilder strSql = new StringBuilder();
@@ -545,7 +609,7 @@ end as lastCheckProcess
 ,ISNULL(number,'') as num
 ,ISNULL(unitCost,0) as unitCost
 from PQCBom");
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                 return null;
 
@@ -565,7 +629,7 @@ partNumber
 ,packingTrays
 ,module
 from PQCBomDetail ");
-            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_Painting_Server);
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                 return null;
 
@@ -573,13 +637,206 @@ from PQCBomDetail ");
         }
 
 
+
+
         internal List<BaseBin_Model> GetBinList(PQCOutputParam param)
         {
-            9uwafoeih;asklnfdoi
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+SELECT 
+[day]
+,[shift]
+,[trackingID]
+,[jobId]
+,[PartNumber]
+,[processes]
+,[materialName]
+,[materialPartNo]
+,[materialQty]
+,[status]
+,[shipTo]
+,[userName]
+,[userID]
+,remark_1
+FROM PQCQaViBinning
+where 1=1 ");
 
-            return new List<BaseBin_Model>();
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and day < @DateTo ");
+
+            if (!string.IsNullOrEmpty(param.Shift))
+                strSql.AppendLine(" and shift = @Shift ");
+
+            if (!string.IsNullOrEmpty(param.OpID))
+                strSql.AppendLine(" and userID = @UserID");
+
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and trackingID = @TrackingID");
+
+            if (!string.IsNullOrEmpty(param.PartNo))
+                strSql.AppendLine(" and PartNumber = @PartNo");
+
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@DateFrom",SqlDbType.DateTime),
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@Shift",SqlDbType.VarChar),
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@PartNo",SqlDbType.VarChar)
+            };
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.PartNo)) parameters[6].Value = param.PartNo; else parameters[6] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                return null;
+
+
+            List<BaseBin_Model> list = new List<BaseBin_Model>();
+
+
+            DataTable dt = ds.Tables[0];
+            foreach (DataRow dr in dt.Rows)
+            {
+                BaseBin_Model model = new BaseBin_Model();
+                model.Day = DateTime.Parse(dr["day"].ToString());
+                model.Shift = dr["shift"].ToString();
+                model.TrackingID = dr["trackingID"].ToString();
+                model.PartNo = dr["PartNumber"].ToString();
+                model.JobNo = dr["jobId"].ToString();
+                model.MaterialName = dr["materialName"].ToString();
+                model.MaterialPartNo = dr["materialPartNo"].ToString();
+                model.MaterialQty = decimal.Parse(dr["materialQty"].ToString());
+                model.Status = dr["status"].ToString();
+                model.Processes = dr["processes"].ToString();
+                model.ShipTo = dr["shipTo"].ToString();
+                model.PackBundle = dr["remark_1"].ToString();
+                model.UserID = dr["userID"].ToString();
+
+                list.Add(model);
+            }
+
+
+
+            return list;
         }
 
+        internal List<BaseBin_Model> GetBinHisScrapList(PQCOutputParam param)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.AppendLine(@"
+SELECT 
+[day]
+,[shift]
+,[trackingID]
+,[jobId]
+,[PartNumber]
+,[processes]
+,[materialName]
+,[materialPartNo]
+,[materialQty]
+,[status]
+,[shipTo]
+,[userName]
+,[userID]
+,remark_1
+FROM PQCQaViBinHistory
+where 1=1 
+and status = 'SCRAP' ");
+
+            if (param.DateFrom != null)
+                strSql.AppendLine(" and day >= @DateFrom ");
+
+            if (param.DateTo != null)
+                strSql.AppendLine(" and day < @DateTo ");
+
+            if (!string.IsNullOrEmpty(param.Shift))
+                strSql.AppendLine(" and shift = @Shift ");
+
+            if (!string.IsNullOrEmpty(param.OpID))
+                strSql.AppendLine(" and userID = @UserID");
+
+            if (!string.IsNullOrEmpty(param.JobNo))
+                strSql.AppendLine(" and jobId = @JobNo");
+
+            if (!string.IsNullOrEmpty(param.TrackingID))
+                strSql.AppendLine(" and trackingID = @TrackingID");
+
+            if (!string.IsNullOrEmpty(param.PartNo))
+                strSql.AppendLine(" and PartNumber = @PartNo");
+
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@DateFrom",SqlDbType.DateTime),
+                new SqlParameter("@DateTo",SqlDbType.DateTime),
+                new SqlParameter("@Shift",SqlDbType.VarChar),
+                new SqlParameter("@UserID",SqlDbType.VarChar),
+                new SqlParameter("@JobNo",SqlDbType.VarChar),
+                new SqlParameter("@TrackingID",SqlDbType.VarChar),
+                new SqlParameter("@PartNo",SqlDbType.VarChar)
+            };
+
+            if (param.DateFrom != null) parameters[0].Value = param.DateFrom; else parameters[0] = null;
+            if (param.DateTo != null) parameters[1].Value = param.DateTo; else parameters[1] = null;
+            if (!string.IsNullOrEmpty(param.Shift)) parameters[2].Value = param.Shift; else parameters[2] = null;
+            if (!string.IsNullOrEmpty(param.OpID)) parameters[3].Value = param.OpID; else parameters[3] = null;
+            if (!string.IsNullOrEmpty(param.JobNo)) parameters[4].Value = param.JobNo; else parameters[4] = null;
+            if (!string.IsNullOrEmpty(param.TrackingID)) parameters[5].Value = param.TrackingID; else parameters[5] = null;
+            if (!string.IsNullOrEmpty(param.PartNo)) parameters[6].Value = param.PartNo; else parameters[6] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                return null;
+
+
+            List<BaseBin_Model> list = new List<BaseBin_Model>();
+
+
+            DataTable dt = ds.Tables[0];
+            foreach (DataRow dr in dt.Rows)
+            {
+                BaseBin_Model model = new BaseBin_Model();
+                model.Day = DateTime.Parse(dr["day"].ToString());
+                model.Shift = dr["shift"].ToString();
+                model.TrackingID = dr["trackingID"].ToString();
+                model.PartNo = dr["PartNumber"].ToString();
+                model.JobNo = dr["jobId"].ToString();
+                model.MaterialName = dr["materialName"].ToString();
+                model.MaterialPartNo = dr["materialPartNo"].ToString();
+                model.MaterialQty = decimal.Parse(dr["materialQty"].ToString());
+                model.Status = dr["status"].ToString();
+                model.Processes = dr["processes"].ToString();
+                model.ShipTo = dr["shipTo"].ToString();
+                model.PackBundle = dr["remark_1"].ToString();
+                model.UserID = dr["userID"].ToString();
+
+                list.Add(model);
+            }
+
+
+
+            return list;
+        }
 
 
 

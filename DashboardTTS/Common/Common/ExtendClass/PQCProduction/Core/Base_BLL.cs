@@ -71,6 +71,14 @@ namespace Common.ExtendClass.PQCProduction.Core
         {
             return _dal.GetPackViList(param);
         }
+        public BaseVI_Model GetPackingModel(string trackingID)
+        {
+            return _dal.GetPackViList(new PQCOutputParam()
+            {
+                TrackingID = trackingID
+            }).FirstOrDefault();
+        }
+
 
         public List<BasePackDetail_Model> GetPackDetailList(PQCOutputParam param)
         {
@@ -88,6 +96,18 @@ namespace Common.ExtendClass.PQCProduction.Core
             {
                 JobNo = jobNo
             }).FirstOrDefault();
+        }
+
+
+
+        public List<BaseBin_Model> GetBinList(PQCOutputParam param)
+        {
+            return _dal.GetBinList(param);
+        }
+
+        public List<BaseBin_Model> GetBinHisScrapList(PQCOutputParam param)
+        {
+            return _dal.GetBinHisScrapList(param);
         }
 
 
@@ -123,18 +143,18 @@ namespace Common.ExtendClass.PQCProduction.Core
 
 
 
-                DataRow[] materialArrs = dtBomDetail.Select($" partNumber = {bom.PartNo} ");
+                DataRow[] materialArrs = dtBomDetail.Select($" partNumber = '{bom.PartNo}' ");
                 if (materialArrs != null && materialArrs.Count() != 0)
                 {
                     foreach (DataRow drMaterial in materialArrs)
                     {
                         Bom_Model.MaterialPart material = new Bom_Model.MaterialPart();
-                        material.MaterialName = dr["materialName"].ToString();
-                        material.MaterialPartNo = dr["materialPartNo"].ToString();
-                        material.PartCount = int.Parse(dr["partCount"].ToString());
-                        material.OuterBoxQty = int.Parse(dr["outerBoxQty"].ToString());
-                        material.PackingTrays = dr["packingTrays"].ToString();
-                        material.Module = dr["module"].ToString();
+                        material.MaterialName = drMaterial["materialName"].ToString();
+                        material.MaterialPartNo = drMaterial["materialPartNo"].ToString();
+                        material.PartCount = int.Parse(drMaterial["partCount"].ToString());
+                        material.OuterBoxQty = int.Parse(drMaterial["outerBoxQty"].ToString());
+                        material.PackingTrays = drMaterial["packingTrays"].ToString();
+                        material.Module = drMaterial["module"].ToString();
 
                         bom.MaterialPartList.Add(material);
                     }
@@ -145,8 +165,6 @@ namespace Common.ExtendClass.PQCProduction.Core
 
             return bomList;
         }
-
-
         public Bom_Model GetBomModel(string partNo)
         {
             return GetBomList()

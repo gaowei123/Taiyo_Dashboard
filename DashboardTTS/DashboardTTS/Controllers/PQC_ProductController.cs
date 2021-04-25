@@ -467,16 +467,14 @@ namespace DashboardTTS.Controllers
         // 2021/1/22 new logic, Operator Daily Output Report
         public JsonResult GetDailyOperatorList(DateTime Date, string Shift, string UserID)
         {
-            PQCOperatorParam param = new PQCOperatorParam()
+            var bll = new Common.ExtendClass.PQCProduction.OperatorDailyOutputReport.BLL();
+            var result = bll.GetReportList(new PQCOutputParam()
             {
                 DateFrom = Date,
                 DateTo = Date.AddDays(1),
                 Shift = Shift,
                 OpID = UserID
-            };
-
-            var bll = new Common.ExtendClass.PQCProduction.OperatorDailyOutputReport.BLL();
-            var result = bll.GetReportList(param);
+            });
 
             return result == null ? Json("") : Json(result);
         }
@@ -539,15 +537,13 @@ namespace DashboardTTS.Controllers
         public JsonResult GetCheckingLiveList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string Station, string JobNo, string LotNo )
         {
             var bll = new Common.ExtendClass.PQCProduction.CheckingLiveReport.BLL();
-            var result = bll.GetReportList(new CheckingLiveParam() {
+            var result = bll.GetReportList(new PQCOutputParam() {
                 DateFrom = DateFrom,
                 DateTo = DateTo.AddDays(1),
                 Shift = Shift,
                 PartNo = PartNo,
                 MachineID = Station,
-                JobNo = JobNo,
-                LotNo = LotNo
-            });
+                JobNo = JobNo}, LotNo);
 
             return Json(result);
         }

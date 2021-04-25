@@ -15,7 +15,7 @@ namespace Common.ExtendClass.PQCProduction.CheckingLiveReport
         }
         
 
-        public List<Model> GetReportList(CheckingLiveParam param)
+        public List<Model> GetReportList(PQCOutputParam param, string lotNo)
         {
             var checkingList = _bll.GetCheckingList(param);
             if (checkingList == null || checkingList.Count == 0)
@@ -33,7 +33,7 @@ namespace Common.ExtendClass.PQCProduction.CheckingLiveReport
                        && (string.IsNullOrEmpty(param.JobNo) ? true : a.JobNo == param.JobNo)
                        //&& a.TotalQty > 0
                        join b in lotInfoList on a.JobNo equals b.JobNo
-                       where (string.IsNullOrEmpty(param.LotNo) ? true : b.LotNo == param.LotNo)
+                       where (string.IsNullOrEmpty(lotNo) ? true : b.LotNo == lotNo)
                        select new
                        {
                            Date = $"{a.Day.ToString("dd/MM/yyyy") }-{a.Shift}",
