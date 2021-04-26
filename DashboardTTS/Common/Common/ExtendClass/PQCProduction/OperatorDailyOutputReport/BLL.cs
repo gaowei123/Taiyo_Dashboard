@@ -24,15 +24,23 @@ namespace Common.ExtendClass.PQCProduction.OperatorDailyOutputReport
                 return null;
 
             var defectList = _bll.GetDefectList(param);
-            var lotInfoList = _bll.GetLotInfoList(param);
+            // 避免 linq join null 导致报错
+            if (defectList ==  null)
+                defectList = new List<Core.BaseDefectSummary_Model>();
 
-           
+            var lotInfoList = _bll.GetLotInfoList(param);
+            // 避免 linq join null 导致报错
+            if (lotInfoList == null)
+                lotInfoList = new List<Core.BaseLotInfo_Model>();
+
+
             var temp = from a in viList
                        where a.EndTime != null && a.TotalQty != 0
                        join b in defectList on a.TrackingID equals b.TrackingID
                        into temp1
                        join c in lotInfoList on a.JobNo equals c.JobNo
-                       into temp2 orderby a.StartTime ascending
+                       into temp2
+                       orderby a.StartTime ascending
                        select new
                        {
                            StartTime = a.StartTime.ToString("HH:mm:ss"),

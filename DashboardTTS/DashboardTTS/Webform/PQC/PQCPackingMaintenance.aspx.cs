@@ -52,12 +52,24 @@ namespace DashboardTTS.Webform.PQC
         }
         private void initUIMaterialList(Common.ExtendClass.PQCProduction.PackMaintain.PackMaintain_Model model)
         {
-            this.dgMaterial.DataSource = model.MaterialNameList;
+            var materialNameList = from a in model.MaterialPartList
+                                   group a by a.MaterialName into MaterialNameList
+                                   select new
+                                   {
+                                       MaterialName = MaterialNameList.Key,
+                                       InventoryQty = MaterialNameList.Sum(p => p.InventoryQty),
+                                       MaterialQty = MaterialNameList.Sum(p => p.MaterialQty),
+                                       ScrapQty = MaterialNameList.Sum(p => p.ScrapQty)
+                                   };
+            this.dgMaterial.DataSource = materialNameList;
             this.dgMaterial.DataBind();
 
             foreach (DataGridItem item in this.dgMaterial.Items)
             {
-                string packQty = item.Cells[2].Text;
+                string packQty = materialNameList.Where(p => p.MaterialName == item.Cells[0].Text).FirstOrDefault().MaterialQty.ToString();
+
+                Label lb = (Label)item.Cells[3].FindControl("lbCurPackQty");
+                lb.Text = packQty;
 
                 TextBox tb = (TextBox)item.Cells[3].FindControl("txtPackSetQty");
                 tb.Attributes.Add("placeholder", packQty);
@@ -104,13 +116,14 @@ namespace DashboardTTS.Webform.PQC
                 #endregion
 
 
-                var maintainModel = _bll.GetMaintainInfo(this.lbJob.Text, this.lbTrackingID.Text);                
+                var maintainModel = _bll.GetMaintainInfo(this.lbJob.Text, this.lbTrackingID.Text);
 
                 //遍历datagrid的每一行
                 foreach (DataGridItem item in this.dgMaterial.Items)
                 {
                     string materialName = item.Cells[0].Text;
                     decimal binQty = decimal.Parse(item.Cells[1].Text);
+                    decimal scrapQty = decimal.Parse(item.Cells[2].Text);
                     string materialQty = item.Cells[2].Text;
                     string packSetQty = ((TextBox)item.Cells[3].FindControl("txtPackSetQty")).Text;
                     
@@ -125,16 +138,19 @@ namespace DashboardTTS.Webform.PQC
                     }
 
                     //防止维护填写的数量比库存还多.
-                    if (decimal.Parse(packSetQty) - decimal.Parse(materialQty) > binQty)
+                    if (decimal.Parse(packSetQty) - decimal.Parse(materialQty) > binQty + scrapQty)
                     {
                         ((TextBox)item.Cells[3].FindControl("txtPackSetQty")).Text = "";
                         ((TextBox)item.Cells[3].FindControl("txtPackSetQty")).Focus();
-                        Common.CommFunctions.ShowMessage(this.Page, "Packing Set Qty can not bigger than inventory qty!");
+                        Common.CommFunctions.ShowMessage(this.Page, "Packing Set Qty can not bigger than inventory qty and scrap qty!");
                         return;
                     }
 
 
-                    var  materialNames = maintainModel.MaterialNameList.Where(p => p.MaterialName == materialName);
+
+
+
+                    var  materialNames = maintainModel.MaterialPartList.Where(p => p.MaterialName == materialName);
                     foreach (var materialPart in materialNames)
                     {
                         //重新赋值, 维护后的数量.

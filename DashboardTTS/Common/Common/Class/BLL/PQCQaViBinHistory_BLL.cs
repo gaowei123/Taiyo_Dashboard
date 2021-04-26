@@ -59,6 +59,69 @@ namespace Common.Class.BLL
             return hisModel;
         }
 
+
+        public List<Model.PQCQaViBinHistory_Model> GetList(string sJobNo)
+        {
+            DataTable dt = dal.GetList(sJobNo);
+            if (dt == null || dt.Rows.Count == 0)
+                return null;
+
+
+            List<Model.PQCQaViBinHistory_Model> list = new List<Model.PQCQaViBinHistory_Model>();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                Model.PQCQaViBinHistory_Model model = new Model.PQCQaViBinHistory_Model();
+                
+                model.id = dr["id"].ToString();
+                model.trackingID = dr["trackingID"].ToString();
+                model.processes = dr["processes"].ToString();
+                model.jobId = dr["jobId"].ToString();
+                model.PartNumber = dr["PartNumber"].ToString();
+                model.materialPartNo = dr["materialPartNo"].ToString();
+                model.materialName = dr["materialName"].ToString();
+                model.shipTo = dr["shipTo"].ToString();
+                model.model = dr["model"].ToString();
+                model.jigNo = dr["jigNo"].ToString();
+
+                if (dr["materialQty"].ToString() == "")
+                    model.materialQty = 0;
+                else
+                    model.materialQty = decimal.Parse(dr["materialQty"].ToString());
+          
+                model.status = dr["status"].ToString();
+                model.nextViFlag = dr["nextViFlag"].ToString();
+
+                if (dr["dateTime"].ToString() != "")
+                    model.dateTime = DateTime.Parse(dr["dateTime"].ToString());
+                if (dr["day"].ToString() != "")
+                    model.day = DateTime.Parse(dr["day"].ToString());
+
+                model.shift = dr["shift"].ToString();
+                model.userName = dr["userName"].ToString();
+                model.userID = dr["userID"].ToString();
+                model.remark_1 = dr["remark_1"].ToString();
+                model.remark_2 = dr["remark_2"].ToString();
+                model.remark_3 = dr["remark_3"].ToString();
+                model.remark_4 = dr["remark_4"].ToString();
+                model.remarks = dr["remarks"].ToString();
+                if (dr["updatedTime"].ToString() != "")
+                    model.updatedTime = DateTime.Parse(dr["updatedTime"].ToString());
+
+                if (dr["materialFromQty"].ToString() == "")
+                    model.materialFromQty = 0;
+                else
+                    model.materialFromQty = decimal.Parse(dr["materialFromQty"].ToString());
+
+               
+
+                list.Add(model);
+            }
+
+            return list;
+        }
+
+
     }
 
 }

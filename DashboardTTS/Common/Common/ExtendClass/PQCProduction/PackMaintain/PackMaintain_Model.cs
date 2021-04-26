@@ -10,12 +10,12 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
         public PackMaintain_Model()
         {
             Job = new JobInfo();
-            MaterialNameList = new List<MaterialInfo>();
+            MaterialPartList = new List<MaterialInfo>();
         }
 
 
         public JobInfo Job { get; set; }
-        public List<MaterialInfo> MaterialNameList { get; set; }
+        public List<MaterialInfo> MaterialPartList { get; set; }
 
       
 
@@ -29,6 +29,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
             public string Shift { get; set; }
             public string PartNo { get; set; }
             public decimal MRPQty { get; set; }
+            public decimal PackQty { get; set; }
         }
 
         public class MaterialInfo

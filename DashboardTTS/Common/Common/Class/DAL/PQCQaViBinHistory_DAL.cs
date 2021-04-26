@@ -74,5 +74,64 @@ namespace Common.Class.DAL
         }
 
 
+        public DataTable GetList(string sJobNo)
+        {
+            StringBuilder strSql = new StringBuilder();
+
+            strSql.Append(@"
+SELECT
+[id]
+,[trackingID]
+,[processes]
+,[jobId]
+,[PartNumber]
+,[materialPartNo]
+,[materialName]
+,[shipTo]
+,[model]
+,[jigNo]
+,[materialQty]
+,[status]
+,[nextViFlag]
+,[dateTime]
+,[day]
+,[shift]
+,[userName]
+,[userID]
+,[remark_1]
+,[remark_2]
+,[remark_3]
+,[remark_4]
+,[remarks]
+,[materialFromQty]
+,[updatedTime]
+FROM [PQCQaViBinHistory]
+where 1=1 ");
+
+            if (!string.IsNullOrEmpty(sJobNo))
+            {
+                strSql.AppendLine(" and jobid = @jobNo");
+            }
+
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@jobNo",SqlDbType.VarChar,32)
+            };
+
+            if (!string.IsNullOrEmpty(sJobNo)) parameters[0].Value = sJobNo; else parameters[0] = null;
+
+            DataSet ds =  DBHelp.SqlDB.Query(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+
+            }else
+            {
+                return ds.Tables[0];
+            }
+        }
+
     }
 }
