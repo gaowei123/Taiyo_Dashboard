@@ -34,3 +34,4 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Release\DBHelp
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Release\MyChart.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Release\MyChart.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Release\MyChart.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Release\Newtonsoft.Json.xml

@@ -44,6 +44,7 @@
                     <div class="col-sm-2">MRP QTY :</div>
                     <div class="col-sm-9">
                         <asp:Label runat="server" ID="lbMrpQty" Width="50px"></asp:Label>
+                        <asp:Button runat="server" ID="btnEnd" Text="End" CssClass="btn btn-primary" style="float:right; width:60px;"/>
                     </div>
                 </div>
             </div>
@@ -64,13 +65,14 @@
                             <Columns>                              
                                 <asp:BoundColumn DataField="MaterialName" HeaderText="Material Name"></asp:BoundColumn>
                                 <asp:BoundColumn DataField="InventoryQty" HeaderText="Inventory Qty"></asp:BoundColumn>
-                                <asp:BoundColumn DataField="MaterialQty" HeaderText="Current Packing Set Qty" Visible="true"></asp:BoundColumn>
-                                <asp:TemplateColumn HeaderText="Update">
+                                <asp:BoundColumn DataField="ScrapQty" HeaderText="Scrap Qty"></asp:BoundColumn>
+                                <asp:TemplateColumn HeaderText="Packing Set Qty" >
                                     <ItemTemplate>
-                                        <asp:TextBox runat="server" Width="150" ID="txtPackSetQty"></asp:TextBox>
+                                        <asp:Label runat="server" ID="lbCurPackQty"></asp:Label> 
+                                        &nbsp;&nbsp;<asp:Label runat="server" Text="-->"></asp:Label>  &nbsp;&nbsp;
+                                        <asp:TextBox runat="server" Width="100" ID="txtUpdatedQty"></asp:TextBox>
                                     </ItemTemplate>
                                 </asp:TemplateColumn>
-                                
                             </Columns>
                         </asp:DataGrid>
                     </div>

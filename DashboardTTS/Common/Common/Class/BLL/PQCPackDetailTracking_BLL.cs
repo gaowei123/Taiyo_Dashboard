@@ -21,9 +21,14 @@ namespace Common.Class.BLL
         {
             return dal.UpdatePQCMaintenance(model);
         }
-        
 
-		public List<Common.Class.Model.PQCPackDetailTracking_Model> GetModelList(string trackingID)
+        public SqlCommand AddCommand(Model.PQCPackDetailTracking_Model model)
+        {
+            return dal.AddCommand(model);
+        }
+
+
+        public List<Common.Class.Model.PQCPackDetailTracking_Model> GetModelList(string trackingID)
 		{
 			DataSet ds = dal.GetList(trackingID);
 			return DataTableToList(ds.Tables[0]);

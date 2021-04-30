@@ -3,3 +3,8 @@ E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.SearchParam\bin\Rel
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.dll
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.pdb
 E:\Git Source Code Storage\TaiyoDashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\bin\Release\Taiyo.SearchParam.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\bin\Release\Taiyo.SearchParam.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.pdb

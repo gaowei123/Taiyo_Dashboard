@@ -46,14 +46,6 @@ namespace Common.Class.BLL
 		}
 
 
-	
-		public List<Common.Class.Model.PQCPackTracking_Model> GetModelList(DateTime dDateFrom , DateTime dDateTo)
-		{
-			DataSet ds = dal.GetList(dDateFrom, dDateTo);
-			return DataTableToList(ds.Tables[0]);
-		}
-
-
 		public List<Common.Class.Model.PQCPackTracking_Model> DataTableToList(DataTable dt)
 		{
 			List<Common.Class.Model.PQCPackTracking_Model> modelList = new List<Common.Class.Model.PQCPackTracking_Model>();
@@ -173,55 +165,10 @@ namespace Common.Class.BLL
         {
             return dal.UpdatePQCMaintenance(model);
         }
-        
-        public bool UpdatePQCJobMaintenance(Model.PQCPackTracking_Model trackingModel, 
-            List<Model.PQCPackDetailTracking_Model> detailModelList, 
-            List<Model.PQCQaViBinning> packBinList, 
-            List<Model.PQCQaViBinHistory_Model> packBinHisList, 
-            bool isUpdate)
+
+        public SqlCommand AddCommand(Model.PQCPackTracking_Model model)
         {
-
-            Common.Class.DAL.PQCPackDetailTracking_DAL detailTrackingDAL = new DAL.PQCPackDetailTracking_DAL();
-            Common.Class.DAL.PQCPackHistory_DAL packHisDAL = new DAL.PQCPackHistory_DAL();
-            Common.Class.DAL.PQCPackDetailHistory_DAL packDetailHisDAL = new DAL.PQCPackDetailHistory_DAL();
-            Common.Class.DAL.PQCPackDefectHistory_DAL packDefectHisDAL = new DAL.PQCPackDefectHistory_DAL();
-            Common.Class.DAL.PQCQaViBinning binDAL = new DAL.PQCQaViBinning();
-            Common.Class.DAL.PQCQaViBinHistory_DAL binHisDAL = new DAL.PQCQaViBinHistory_DAL();
-
-
-            List<SqlCommand> cmdList = new List<SqlCommand>();
-
-
-            //update vi tracking model
-            cmdList.Add(dal.UpdatePQCMaintenance(trackingModel));
-            
-            //add vi tracking his
-            cmdList.Add(packHisDAL.AddCommand(trackingModel));
-            
-            //update detail tracking model
-            foreach (var model in detailModelList)
-            {
-                cmdList.Add(detailTrackingDAL.UpdatePQCMaintenance(model));
-
-                cmdList.Add(packDetailHisDAL.AddCommand(model));
-            }
-
-            //update bin
-            foreach (var model in packBinList)
-            {
-                SqlCommand sqlCMD = isUpdate ? binDAL.PackMaintenanceCommand(model) : binDAL.AddCommand(model);
-                cmdList.Add(sqlCMD);
-            }
-
-            //add bin his
-            foreach (var model in packBinHisList)
-            {
-                cmdList.Add(binHisDAL.AddCommand(model));
-            }
-
-
-
-            return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            return dal.AddCommand(model);
         }
 
 

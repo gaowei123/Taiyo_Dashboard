@@ -1,19 +1,4 @@
-﻿/**  版本信息模板在安装目录下，可自行修改。
-* PQCPackTracking.cs
-*
-* 功 能： N/A
-* 类 名： PQCPackTracking
-*
-* Ver    变更日期             负责人  变更内容
-* ───────────────────────────────────
-* V0.01  2020/1/30 21:14:51   N/A    初版
-*
-* Copyright (c) 2012 Maticsoft Corporation. All rights reserved.
-*┌──────────────────────────────────┐
-*│　此技术信息为本公司机密信息，未经本公司书面同意禁止向第三方披露．　│
-*│　版权所有：动软卓越（北京）科技有限公司　　　　　　　　　　　　　　│
-*└──────────────────────────────────┘
-*/
+﻿
 using System;
 using System.Data;
 using System.Text;
@@ -457,7 +442,114 @@ where a.day >= @datefrom and a.day< @dateto ");
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
+
         
+        public SqlCommand AddCommand(Common.Class.Model.PQCPackTracking_Model model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into PQCPackTracking(");
+            strSql.Append("id,machineID,dateTime,partNumber,jobId,processes,jigNo,model,cavityCount,cycleTime,targetQty,userName,userID,TotalQty,rejectQty,acceptQty,startTime,stopTime,nextViFlag,day,shift,status,remark_1,remark_2,refField01,refField02,refField03,refField04,refField05,refField06,refField07,refField08,refField09,refField10,refField11,refField12,customer,lastUpdatedTime,trackingID,lastTrackingID,remarks,department,totalRejectQty,updatedTime,totalPassQty,shipTo,indexId)");
+            strSql.Append(" values (");
+            strSql.Append("@id,@machineID,@dateTime,@partNumber,@jobId,@processes,@jigNo,@model,@cavityCount,@cycleTime,@targetQty,@userName,@userID,@TotalQty,@rejectQty,@acceptQty,@startTime,@stopTime,@nextViFlag,@day,@shift,@status,@remark_1,@remark_2,@refField01,@refField02,@refField03,@refField04,@refField05,@refField06,@refField07,@refField08,@refField09,@refField10,@refField11,@refField12,@customer,@lastUpdatedTime,@trackingID,@lastTrackingID,@remarks,@department,@totalRejectQty,@updatedTime,@totalPassQty,@shipTo,@indexId)");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.Int,4),
+                    new SqlParameter("@machineID", SqlDbType.VarChar,50),
+                    new SqlParameter("@dateTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@partNumber", SqlDbType.VarChar,50),
+                    new SqlParameter("@jobId", SqlDbType.VarChar,20),
+                    new SqlParameter("@processes", SqlDbType.VarChar,100),
+                    new SqlParameter("@jigNo", SqlDbType.VarChar,50),
+                    new SqlParameter("@model", SqlDbType.VarChar,50),
+                    new SqlParameter("@cavityCount", SqlDbType.Decimal,9),
+                    new SqlParameter("@cycleTime", SqlDbType.Decimal,9),
+                    new SqlParameter("@targetQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@userName", SqlDbType.VarChar,50),
+                    new SqlParameter("@userID", SqlDbType.VarChar,50),
+                    new SqlParameter("@TotalQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@rejectQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@acceptQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@startTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@stopTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@nextViFlag", SqlDbType.VarChar,50),
+                    new SqlParameter("@day", SqlDbType.DateTime2,8),
+                    new SqlParameter("@shift", SqlDbType.VarChar,50),
+                    new SqlParameter("@status", SqlDbType.VarChar,50),
+                    new SqlParameter("@remark_1", SqlDbType.VarChar,50),
+                    new SqlParameter("@remark_2", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField01", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField02", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField03", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField04", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField05", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField06", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField07", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField08", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField09", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField10", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField11", SqlDbType.VarChar,50),
+                    new SqlParameter("@refField12", SqlDbType.VarChar,50),
+                    new SqlParameter("@customer", SqlDbType.VarChar,50),
+                    new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@trackingID", SqlDbType.VarChar,50),
+                    new SqlParameter("@lastTrackingID", SqlDbType.VarChar,50),
+                    new SqlParameter("@remarks", SqlDbType.VarChar,50),
+                    new SqlParameter("@department", SqlDbType.VarChar,20),
+                    new SqlParameter("@totalRejectQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@updatedTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@totalPassQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@shipTo", SqlDbType.VarChar,50),
+                    new SqlParameter("@indexId", SqlDbType.Int,4)};
+            parameters[0].Value = model.id == null ? (object)DBNull.Value : model.id;
+            parameters[1].Value = model.machineID;
+            parameters[2].Value = model.dateTime;
+            parameters[3].Value = model.partNumber;
+            parameters[4].Value = model.jobId;
+            parameters[5].Value = model.processes;
+            parameters[6].Value = model.jigNo;
+            parameters[7].Value = model.model;
+            parameters[8].Value = model.cavityCount == null ? (object)DBNull.Value : model.cavityCount;
+            parameters[9].Value = model.cycleTime == null ? (object)DBNull.Value : model.cycleTime;
+            parameters[10].Value = model.targetQty == null ? (object)DBNull.Value : model.targetQty;
+            parameters[11].Value = model.userName;
+            parameters[12].Value = model.userID;
+            parameters[13].Value = model.TotalQty;
+            parameters[14].Value = model.rejectQty;
+            parameters[15].Value = model.acceptQty;
+            parameters[16].Value = model.startTime;
+            parameters[17].Value = model.stopTime;
+            parameters[18].Value = model.nextViFlag;
+            parameters[19].Value = model.day;
+            parameters[20].Value = model.shift;
+            parameters[21].Value = model.status;
+            parameters[22].Value = model.remark_1;
+            parameters[23].Value = model.remark_2;
+            parameters[24].Value = model.refField01;
+            parameters[25].Value = model.refField02;
+            parameters[26].Value = model.refField03;
+            parameters[27].Value = model.refField04;
+            parameters[28].Value = model.refField05;
+            parameters[29].Value = model.refField06;
+            parameters[30].Value = model.refField07;
+            parameters[31].Value = model.refField08;
+            parameters[32].Value = model.refField09;
+            parameters[33].Value = model.refField10;
+            parameters[34].Value = model.refField11;
+            parameters[35].Value = model.refField12;
+            parameters[36].Value = model.customer;
+            parameters[37].Value = model.lastUpdatedTime;
+            parameters[38].Value = model.trackingID;
+            parameters[39].Value = model.lastTrackingID;
+            parameters[40].Value = model.remarks;
+            parameters[41].Value = model.department;
+            parameters[42].Value = model.totalRejectQty == null ? (object)DBNull.Value : model.totalRejectQty;
+            parameters[43].Value = model.updatedTime;
+            parameters[44].Value = model.totalPassQty == null ? (object)DBNull.Value : model.totalPassQty;
+            parameters[45].Value = model.shipTo;
+            parameters[46].Value = model.indexId;
+
+           return  DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters);
+        }
+
         public DataTable GetPackInventoryDetailList(DateTime dDateFrom, DateTime dDateTo, string sPartNo, string sJobNo)
         {
             StringBuilder strSql = new StringBuilder();

@@ -13,6 +13,24 @@ namespace DashboardTTS.Webform.PQC {
     public partial class PQCPackingMaintenance {
         
         /// <summary>
+        /// txtJobNo 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtJobNo;
+        
+        /// <summary>
+        /// btnSearch 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSearch;
+        
+        /// <summary>
         /// lbDay 控件。
         /// </summary>
         /// <remarks>
@@ -49,6 +67,15 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.Label lbTrackingID;
         
         /// <summary>
+        /// btnEnd 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEnd;
+        
+        /// <summary>
         /// lbPartNo 控件。
         /// </summary>
         /// <remarks>
@@ -67,15 +94,6 @@ namespace DashboardTTS.Webform.PQC {
         protected global::System.Web.UI.WebControls.Label lbMrpQty;
         
         /// <summary>
-        /// btnEnd 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEnd;
-        
-        /// <summary>
         /// dgMaterial 控件。
         /// </summary>
         /// <remarks>
@@ -83,15 +101,6 @@ namespace DashboardTTS.Webform.PQC {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataGrid dgMaterial;
-        
-        /// <summary>
-        /// btnCancel 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
         /// txtUserName 控件。

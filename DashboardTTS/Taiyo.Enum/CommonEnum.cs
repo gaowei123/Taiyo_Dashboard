@@ -12,6 +12,7 @@ namespace Taiyo.Enum
         public enum Shift
         {
             Day=0,
+
             Night=1
         }
 

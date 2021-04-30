@@ -110,13 +110,12 @@
                     <asp:BoundColumn DataField="model" HeaderText="Model"></asp:BoundColumn>
                     <asp:BoundColumn DataField="partNumber" HeaderText="Part No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="JobNumber" HeaderText="Job No"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="lotNo" HeaderText="Lot No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="materialNo" HeaderText="Material No"></asp:BoundColumn>
                     <asp:BoundColumn DataField="RejType" HeaderText="Dept"></asp:BoundColumn>
                     <asp:BoundColumn DataField="RejCode" HeaderText="Rej Code"></asp:BoundColumn>
                     <asp:BoundColumn DataField="TotalQty" HeaderText="Total Qty"></asp:BoundColumn>
                     <asp:BoundColumn DataField="RejQty" HeaderText="Rej Qty"></asp:BoundColumn>
-                    <asp:BoundColumn DataField="RejRate" HeaderText="REJ%"></asp:BoundColumn>                            
+                    <asp:BoundColumn DataField="RejRate" HeaderText="REJ%"></asp:BoundColumn>
                     <asp:BoundColumn DataField="Operator" HeaderText="PIC"></asp:BoundColumn>
                     <asp:BoundColumn DataField="DateTime" HeaderText="Date Time"></asp:BoundColumn>
                 </Columns>

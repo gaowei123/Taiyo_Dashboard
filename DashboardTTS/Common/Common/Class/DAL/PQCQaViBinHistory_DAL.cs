@@ -74,6 +74,44 @@ namespace Common.Class.DAL
         }
 
 
+        public SqlCommand UpdateScrapCommand(Common.Class.Model.PQCQaViBinHistory_Model model)
+        {
+            StringBuilder strSql = new StringBuilder();
+
+            strSql.AppendLine(@" update pqcqavibinhistory  set ");
+            strSql.AppendLine(" materialQty = @materialQty");
+            strSql.AppendLine(" ,userid = @userID");
+            strSql.AppendLine(" ,updatedTime = @updatedTime");
+            strSql.AppendLine(", remarks = @remarks");
+            strSql.AppendLine(", materialFromQty = @materialFromQty");
+            strSql.AppendLine(" where 1=1 and status = 'SCRAP' and trackingID = @trackingID ");
+            strSql.AppendLine(" and materialPartNo = @materialPartNo ");
+
+            
+            SqlParameter[] parameters = {
+                new SqlParameter("@materialQty", SqlDbType.Decimal,9),
+                new SqlParameter("@userID", SqlDbType.VarChar,50),
+                new SqlParameter("@updatedTime", SqlDbType.DateTime2,8),
+                new SqlParameter("@remarks", SqlDbType.VarChar,500),
+                new SqlParameter("@materialFromQty",SqlDbType.Decimal,9),
+                new SqlParameter("@trackingID", SqlDbType.VarChar,50),
+                new SqlParameter("@materialPartNo", SqlDbType.VarChar,50)};
+
+            parameters[0].Value = model.materialQty;
+            parameters[1].Value = model.userID;
+            parameters[2].Value = model.updatedTime;
+            parameters[3].Value = model.remarks;
+            parameters[4].Value = model.materialFromQty;
+            parameters[5].Value = model.trackingID;
+            parameters[6].Value = model.materialPartNo;
+         
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
+
+
+
         public DataTable GetList(string sJobNo)
         {
             StringBuilder strSql = new StringBuilder();

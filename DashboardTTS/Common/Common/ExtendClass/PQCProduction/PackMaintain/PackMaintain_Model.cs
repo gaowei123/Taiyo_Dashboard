@@ -25,7 +25,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
         {
             public string JobNo { get; set; }
             public string TrackingID { get; set; }
-            public DateTime Day { get; set; }
+            public DateTime? Day { get; set; }
             public string Shift { get; set; }
             public string PartNo { get; set; }
             public decimal MRPQty { get; set; }
@@ -36,9 +36,18 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
         {
             public string MaterialName { get; set; }
             public string MaterialPartNo { get; set; }
-            public decimal InventoryQty { get; set; }
-            public decimal MaterialQty { get; set; }
+
+            // bin check 的数量
+            public decimal InventoryQty { get; set; }         
+               
+            // bin his scrap 的数量
             public decimal ScrapQty { get; set; }
+
+            // pack detial tracking 中的数量
+            public decimal MaterialQty { get; set; }
+
+            // 维护后填的数量
+            public decimal UpdatedQty { get; set; }
 
         }
     }

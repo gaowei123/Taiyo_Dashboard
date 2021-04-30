@@ -1,20 +1,4 @@
-﻿/**  版本信息模板在安装目录下，可自行修改。
-* PQCPackDetailTracking.cs
-*
-* 功 能： N/A
-* 类 名： PQCPackDetailTracking
-*
-* Ver    变更日期             负责人  变更内容
-* ───────────────────────────────────
-* V0.01  2020/1/30 21:14:51   N/A    初版
-*
-* Copyright (c) 2012 Maticsoft Corporation. All rights reserved.
-*┌──────────────────────────────────┐
-*│　此技术信息为本公司机密信息，未经本公司书面同意禁止向第三方披露．　│
-*│　版权所有：动软卓越（北京）科技有限公司　　　　　　　　　　　　　　│
-*└──────────────────────────────────┘
-*/
-using System;
+﻿using System;
 using System.Data;
 using System.Text;
 using System.Data.SqlClient;
@@ -29,36 +13,6 @@ namespace Common.Class.DAL
 		public PQCPackDetailTracking_DAL()
 		{}
 	
-
-
-
-		
-
-		/// <summary>
-		/// 得到一个对象实体
-		/// </summary>
-		public Common.Class.Model.PQCPackDetailTracking_Model GetModel()
-		{
-			//该表无主键信息，请自定义主键/条件字段
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select  top 1 id,trackingID,machineID,dateTime,materialPartNo,jigNo,model,cavityCount,userName,userID,startTime,stopTime,day,shift,status,remark_1,remark_2,rejectQty,rejectQtyHour01,rejectQtyHour02,rejectQtyHour03,rejectQtyHour04,rejectQtyHour05,rejectQtyHour06,rejectQtyHour07,rejectQtyHour08,rejectQtyHour09,rejectQtyHour10,rejectQtyHour11,rejectQtyHour12,lastUpdatedTime,remarks,processes,jobId,totalQty,updatedTime,passQty,totalPassQty,totalRejectQty,color,materialName,outerBoxQty,packingTrays,customer,shipTo,module,sn,indexId from PQCPackDetailTracking ");
-			strSql.Append(" where ");
-			SqlParameter[] parameters = {
-			};
-
-			Common.Class.Model.PQCPackDetailTracking_Model model=new Common.Class.Model.PQCPackDetailTracking_Model();
-			DataSet ds=DBHelp.SqlDB.Query(strSql.ToString(),parameters);
-			if(ds.Tables[0].Rows.Count>0)
-			{
-				return DataRowToModel(ds.Tables[0].Rows[0]);
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-
 		/// <summary>
 		/// 得到一个对象实体
 		/// </summary>
@@ -282,30 +236,7 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.Query(strSql.ToString(), parameters,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
 		}
-
-		/// <summary>
-		/// 获得前几行数据
-		/// </summary>
-		public DataSet GetList(int Top,string strWhere,string filedOrder)
-		{
-			StringBuilder strSql=new StringBuilder();
-			strSql.Append("select ");
-			if(Top>0)
-			{
-				strSql.Append(" top "+Top.ToString());
-			}
-			strSql.Append(" id,trackingID,machineID,dateTime,materialPartNo,jigNo,model,cavityCount,userName,userID,startTime,stopTime,day,shift,status,remark_1,remark_2,rejectQty,rejectQtyHour01,rejectQtyHour02,rejectQtyHour03,rejectQtyHour04,rejectQtyHour05,rejectQtyHour06,rejectQtyHour07,rejectQtyHour08,rejectQtyHour09,rejectQtyHour10,rejectQtyHour11,rejectQtyHour12,lastUpdatedTime,remarks,processes,jobId,totalQty,updatedTime,passQty,totalPassQty,totalRejectQty,color,materialName,outerBoxQty,packingTrays,customer,shipTo,module,sn,indexId ");
-			strSql.Append(" FROM PQCPackDetailTracking ");
-			if(strWhere.Trim()!="")
-			{
-				strSql.Append(" where "+strWhere);
-			}
-			strSql.Append(" order by " + filedOrder);
-			return DBHelp.SqlDB.Query(strSql.ToString());
-		}
-
-
-
+        
 
         public SqlCommand UpdatePQCMaintenance(Common.Class.Model.PQCPackDetailTracking_Model model)
         {
@@ -344,6 +275,118 @@ namespace Common.Class.DAL
 
             return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
         }
+
+
+        public SqlCommand AddCommand(Common.Class.Model.PQCPackDetailTracking_Model model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into PQCPackDetailTracking(");
+            strSql.Append("id,trackingID,machineID,dateTime,materialPartNo,jigNo,model,cavityCount,userName,userID,startTime,stopTime,day,shift,status,remark_1,remark_2,rejectQty,rejectQtyHour01,rejectQtyHour02,rejectQtyHour03,rejectQtyHour04,rejectQtyHour05,rejectQtyHour06,rejectQtyHour07,rejectQtyHour08,rejectQtyHour09,rejectQtyHour10,rejectQtyHour11,rejectQtyHour12,lastUpdatedTime,remarks,processes,jobId,totalQty,updatedTime,passQty,totalPassQty,totalRejectQty,color,materialName,outerBoxQty,packingTrays,customer,shipTo,module,sn,indexId)");
+            strSql.Append(" values (");
+            strSql.Append("@id,@trackingID,@machineID,@dateTime,@materialPartNo,@jigNo,@model,@cavityCount,@userName,@userID,@startTime,@stopTime,@day,@shift,@status,@remark_1,@remark_2,@rejectQty,@rejectQtyHour01,@rejectQtyHour02,@rejectQtyHour03,@rejectQtyHour04,@rejectQtyHour05,@rejectQtyHour06,@rejectQtyHour07,@rejectQtyHour08,@rejectQtyHour09,@rejectQtyHour10,@rejectQtyHour11,@rejectQtyHour12,@lastUpdatedTime,@remarks,@processes,@jobId,@totalQty,@updatedTime,@passQty,@totalPassQty,@totalRejectQty,@color,@materialName,@outerBoxQty,@packingTrays,@customer,@shipTo,@module,@sn,@indexId)");
+            SqlParameter[] parameters = {
+                    new SqlParameter("@id", SqlDbType.Int,4),
+                    new SqlParameter("@trackingID", SqlDbType.VarChar,50),
+                    new SqlParameter("@machineID", SqlDbType.VarChar,50),
+                    new SqlParameter("@dateTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@materialPartNo", SqlDbType.VarChar,50),
+                    new SqlParameter("@jigNo", SqlDbType.VarChar,50),
+                    new SqlParameter("@model", SqlDbType.VarChar,50),
+                    new SqlParameter("@cavityCount", SqlDbType.Decimal,9),
+                    new SqlParameter("@userName", SqlDbType.VarChar,50),
+                    new SqlParameter("@userID", SqlDbType.VarChar,50),
+                    new SqlParameter("@startTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@stopTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@day", SqlDbType.DateTime2,8),
+                    new SqlParameter("@shift", SqlDbType.VarChar,50),
+                    new SqlParameter("@status", SqlDbType.VarChar,50),
+                    new SqlParameter("@remark_1", SqlDbType.VarChar,250),
+                    new SqlParameter("@remark_2", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@rejectQtyHour01", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour02", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour03", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour04", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour05", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour06", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour07", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour08", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour09", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour10", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour11", SqlDbType.VarChar,50),
+                    new SqlParameter("@rejectQtyHour12", SqlDbType.VarChar,50),
+                    new SqlParameter("@lastUpdatedTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@remarks", SqlDbType.VarChar,50),
+                    new SqlParameter("@processes", SqlDbType.VarChar,20),
+                    new SqlParameter("@jobId", SqlDbType.VarChar,20),
+                    new SqlParameter("@totalQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@updatedTime", SqlDbType.DateTime2,8),
+                    new SqlParameter("@passQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@totalPassQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@totalRejectQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@color", SqlDbType.VarChar,50),
+                    new SqlParameter("@materialName", SqlDbType.VarChar,50),
+                    new SqlParameter("@outerBoxQty", SqlDbType.Decimal,9),
+                    new SqlParameter("@packingTrays", SqlDbType.VarChar,50),
+                    new SqlParameter("@customer", SqlDbType.VarChar,50),
+                    new SqlParameter("@shipTo", SqlDbType.VarChar,50),
+                    new SqlParameter("@module", SqlDbType.VarChar,50),
+                    new SqlParameter("@sn", SqlDbType.Int,4),
+                    new SqlParameter("@indexId", SqlDbType.Int,4)};
+            parameters[0].Value = model.id == null ? (object)DBNull.Value : model.id;
+            parameters[1].Value = model.trackingID;
+            parameters[2].Value = model.machineID;
+            parameters[3].Value = model.dateTime;
+            parameters[4].Value = model.materialPartNo;
+            parameters[5].Value = model.jigNo;
+            parameters[6].Value = model.model;
+            parameters[7].Value = model.cavityCount == null ? (object)DBNull.Value : model.cavityCount;
+            parameters[8].Value = model.userName;
+            parameters[9].Value = model.userID;
+            parameters[10].Value = model.startTime;
+            parameters[11].Value = model.stopTime;
+            parameters[12].Value = model.day;
+            parameters[13].Value = model.shift;
+            parameters[14].Value = model.status;
+            parameters[15].Value = model.remark_1;
+            parameters[16].Value = model.remark_2;
+            parameters[17].Value = model.rejectQty;
+            parameters[18].Value = model.rejectQtyHour01;
+            parameters[19].Value = model.rejectQtyHour02;
+            parameters[20].Value = model.rejectQtyHour03;
+            parameters[21].Value = model.rejectQtyHour04;
+            parameters[22].Value = model.rejectQtyHour05;
+            parameters[23].Value = model.rejectQtyHour06;
+            parameters[24].Value = model.rejectQtyHour07;
+            parameters[25].Value = model.rejectQtyHour08;
+            parameters[26].Value = model.rejectQtyHour09;
+            parameters[27].Value = model.rejectQtyHour10;
+            parameters[28].Value = model.rejectQtyHour11;
+            parameters[29].Value = model.rejectQtyHour12;
+            parameters[30].Value = model.lastUpdatedTime;
+            parameters[31].Value = model.remarks;
+            parameters[32].Value = model.processes;
+            parameters[33].Value = model.jobId;
+            parameters[34].Value = model.totalQty;
+            parameters[35].Value = model.updatedTime;
+            parameters[36].Value = model.passQty;
+            parameters[37].Value = model.totalPassQty == null ? (object)DBNull.Value : model.totalPassQty;
+            parameters[38].Value = model.totalRejectQty == null ? (object)DBNull.Value : model.totalRejectQty;
+            parameters[39].Value = model.color;
+            parameters[40].Value = model.materialName;
+            parameters[41].Value = model.outerBoxQty;
+            parameters[42].Value = model.packingTrays;
+            parameters[43].Value = model.customer;
+            parameters[44].Value = model.shipTo;
+            parameters[45].Value = model.module;
+            parameters[46].Value = model.sn;
+            parameters[47].Value = model.indexId;
+
+
+
+            return DBHelp.SqlDB.generateCommand(strSql.ToString(), parameters, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+        }
+
 
     }
 }

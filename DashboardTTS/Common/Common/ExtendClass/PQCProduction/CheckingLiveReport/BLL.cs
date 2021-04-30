@@ -21,7 +21,8 @@ namespace Common.ExtendClass.PQCProduction.CheckingLiveReport
             if (checkingList == null || checkingList.Count == 0)
                 return null;
 
-            var lotInfoList = _bll.GetLotInfoList(param);
+            // 2021-4-27, 部分 part 有 paint#1,#2, 会导致同一个 job 生成2条记录, 只是显示 lotno, 所有只需要获取都有的 Paint#1的记录  
+            var lotInfoList = _bll.GetLotInfoList(param).Where(p => p.PaintProcess == "Paint#1");
 
             //后重写的checking live report,
             //为了不改core base_dal,  

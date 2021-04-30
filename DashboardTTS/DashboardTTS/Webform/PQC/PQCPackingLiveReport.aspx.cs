@@ -17,37 +17,20 @@ namespace DashboardTTS.Webform.PQC
             {
                 try
                 {
-                    string sJobNo = Request.QueryString["jobNumber"] == null ? "" : Request.QueryString["jobNumber"].ToString();
 
+                    string sJobNo = Request.QueryString["JobNo"] == null ? "" : Request.QueryString["JobNo"].ToString();
+                    string sTrackingID = Request.QueryString["TrackingID"] == null ? "" : Request.QueryString["TrackingID"].ToString();
+                    string sDateFrom = Request.QueryString["DateFrom"] == null ? "" : Request.QueryString["DateFrom"].ToString();
+                    string sDateTo = Request.QueryString["DateTo"] == null ? "" : Request.QueryString["DateTo"].ToString();
+                    
 
+                    this.txtDateFrom.Text = !string.IsNullOrEmpty(sDateFrom) ? sDateFrom :  DateTime.Now.ToString("yyyy-MM-dd");
+                    this.txtDateTo.Text = !string.IsNullOrEmpty(sDateTo) ? sDateTo : DateTime.Now.ToString("yyyy-MM-dd");
+                    this.txtJobNo.Text = sJobNo;
 
-                    DateTime dDateFrom = new DateTime();
-                    DateTime dDateTo = new DateTime();
+                    
 
-
-                    if (sJobNo != "")
-                    {
-                        dDateFrom = DateTime.Parse("2019-1-1");
-                        dDateTo = DateTime.Now.Date;
-
-                        this.txtJobNo.Text = sJobNo;
-                    }
-                    else
-                    {
-                        dDateFrom = DateTime.Now.Date;
-                        dDateTo = DateTime.Now.Date;
-                    }
-
-
-
-                    this.txtDateFrom.Text = dDateFrom.ToString("yyyy-MM-dd");
-                    this.txtDateTo.Text = dDateTo.ToString("yyyy-MM-dd");
-
-
-
-
-                    btnGenerate_Click(new object(), new EventArgs());
-
+                    btnGenerate_Click(null,null);
                 }
                 catch (Exception ex)
                 {
@@ -67,22 +50,23 @@ namespace DashboardTTS.Webform.PQC
                 string sTrackingID = e.Item.Cells[0].Text;
                 string sJobID = e.Item.Cells[4].Text;
 
-                DateTime dateFrom = DateTime.Parse(txtDateFrom.Text).AddMonths(-6);
-                DateTime dateTo = DateTime.Parse(txtDateTo.Text).AddDays(1);
-
-
-                DataTable dt = packBLL.GetProductDetailList(dateFrom, dateTo, "", "", "", sJobID, "");
-
+                Common.ExtendClass.PQCProduction.Core.Base_BLL _bll = new Common.ExtendClass.PQCProduction.Core.Base_BLL();
+                var packList = _bll.GetPackingList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+                {
+                    JobNo = sJobID
+                });
 
 
                 //有跨班多条记录的, 并且没有自跳转过的.
-                if (dt.Rows.Count > 2 && Request.QueryString["jobNumber"] == null)
+                if (packList.Count >= 2 && Request.QueryString["JobNo"] == null)
                 {
-                    Response.Redirect("./PQCPackingLiveReport.aspx?jobNumber=" + sJobID);
+                    string sDateFrom = packList.Min(p => p.Day).ToString("yyyy-MM-dd");
+                    string sDateTo = packList.Max(p => p.Day).ToString("yyyy-MM-dd");
+                    Response.Redirect($"./PQCPackingLiveReport.aspx?JobNo={sJobID}&DateFrom={sDateFrom}&DateTo={sDateTo}");
                 }
                 else
                 {
-                    Response.Redirect($"./PQCPackingMaintenance.aspx?trackingID={sTrackingID}&jobNo={sJobID}");
+                    Response.Redirect($"./PQCPackingMaintenance.aspx?TrackingID={sTrackingID}&JobNo={sJobID}");
                 }
             }
         }
@@ -103,16 +87,13 @@ namespace DashboardTTS.Webform.PQC
                 
 
                 DataTable dtPacking = packBLL.GetProductDetailList(DateFrom, DateTo, shift, partNumber, machineID, jobNumber, lotNo);
-
-
                 if (dtPacking == null || dtPacking.Rows.Count == 0)
                 {
                     Common.CommFunctions.ShowWarning(this.lblResult, this.dgPacking, StaticRes.Global.ErrorLevel.Warning, "");
                 }
                 else
                 {
-                    Common.CommFunctions.HideWarning(this.lblResult, this.dgPacking);
-                
+                    Common.CommFunctions.HideWarning(this.lblResult, this.dgPacking);                
 
                     this.dgPacking.DataSource = dtPacking.DefaultView;
                     this.dgPacking.DataBind();

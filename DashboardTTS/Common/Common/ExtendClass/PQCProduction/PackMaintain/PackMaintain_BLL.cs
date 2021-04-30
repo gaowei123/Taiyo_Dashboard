@@ -4,70 +4,114 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using Taiyo.Tool.Extension;
 
 namespace Common.ExtendClass.PQCProduction.PackMaintain
 {
     public class PackMaintain_BLL
     {
-        private readonly Core.Base_BLL _baseBLL;
+        private readonly Core.Base_BLL _baseBLL = new Core.Base_BLL();
 
-        public PackMaintain_BLL()
-        {
-            _baseBLL = new Core.Base_BLL();
-        }
+
+
+        private readonly Common.Class.BLL.PQCPackTracking _packTrackingBLL = new Class.BLL.PQCPackTracking();
+        private readonly Common.Class.BLL.PQCPackHistory _packTrackingHisBLL = new Class.BLL.PQCPackHistory();
+
+        private readonly Common.Class.BLL.PQCPackDetailTracking _packTrackingDetailBLL = new Class.BLL.PQCPackDetailTracking();
+        private readonly Common.Class.BLL.PQCPackDetailHistory_BLL _packTrackingDetailHisBLL = new Class.BLL.PQCPackDetailHistory_BLL();
+
+        private readonly Common.Class.BLL.PQCQaViBinning _binBLL = new Class.BLL.PQCQaViBinning();
+        private readonly Common.Class.BLL.PQCQaViBinHistory_BLL _binHisBLL = new Class.BLL.PQCQaViBinHistory_BLL();
+
 
 
         public PackMaintain_Model GetMaintainInfo(string sJobNo, string sTrackingID)
         {
-            if (string.IsNullOrEmpty(sJobNo) || string.IsNullOrEmpty(sTrackingID))
-                throw new Exception("Job No, Tracking ID can not be empty!");
+            if (string.IsNullOrEmpty(sJobNo) && string.IsNullOrEmpty(sTrackingID))
+                throw new Exception("Job No,Tracking ID can not be both empty!");
 
+
+
+            // 1. 获取job的基本信息
+            // 1.1 有 tracking id, 说明有 pack tracking 记录,直接从 pack tracking 表获取
+            // 1.2 没 tracking id, 说明在做 pack 之前就被 scrap 掉了. 
+            //     导致没有任何 packing tracking, bin check/pack 的数据, 
+            //     所以根据 jobno 从 checking tracking 表中获取记录
+            // 1.3 从 painting 中获取 mrp qty
+
+            // 2. 获取 material 信息
+            // 2.1 获取 bom, 以 bom 中的 material part 为准
+            // 2.2 从 pack vi detial 中获取 op 实际 pack qty
+            // 2.3 从 bin 中获取 check qty
+            // 2.4 从 bin history 中获取 scrap qty
+            // 2.5 遍历每个 material, 生成 job 的 material part list
+
+
+
+            #region 1. 获取job的基本信息
 
             var maintainModel = new PackMaintain_Model();
 
+            // 1.1 有 tracking id, 说明有 pack tracking 记录,直接从 pack tracking 表获取
+            if (!string.IsNullOrEmpty(sTrackingID))
+            {
+                var baseModel = _baseBLL.GetPackingModel(sTrackingID);
+                maintainModel.Job.JobNo = baseModel.JobNo;
+                maintainModel.Job.TrackingID = baseModel.TrackingID;
+                maintainModel.Job.Day = baseModel.Day;
+                maintainModel.Job.Shift = baseModel.Shift;
+                maintainModel.Job.PartNo = baseModel.PartNo;
+                maintainModel.Job.PackQty = baseModel.TotalQty;
+            }
+            // 1.2 没 tracking id, 说明在做 pack 之前就被 scrap 掉了. 
+            // 导致没有任何 packing tracking, bin check/pack 的数据, 
+            // 所以根据 jobno 从 checking tracking 表中获取记录
+            else
+            {
+                // 随便从 list 中取出一个就行, 只需要显示 job 的基础信息.
+                var checkModel = _baseBLL.GetCheckingList(new Taiyo.SearchParam.PQCParam.PQCOutputParam(){JobNo = sJobNo}).FirstOrDefault(); 
 
+                maintainModel.Job.JobNo = checkModel.JobNo;
+                maintainModel.Job.TrackingID = "";
+                maintainModel.Job.Day = null;
+                maintainModel.Job.Shift = "";
+                maintainModel.Job.PartNo = checkModel.PartNo;
+                maintainModel.Job.PackQty = 0;
+            }
 
-            // ========== 获取job的基本信息, jobId, trackingID, day, shift, partNumber, mrp & total pack qty ==========//
-            var baseModel = _baseBLL.GetPackingModel(sTrackingID);
-            maintainModel.Job.JobNo = baseModel.JobNo;
-            maintainModel.Job.TrackingID = baseModel.TrackingID;
-            maintainModel.Job.Day = baseModel.Day;
-            maintainModel.Job.Shift = baseModel.Shift;
-            maintainModel.Job.PartNo = baseModel.PartNo;
-            maintainModel.Job.PackQty = baseModel.TotalQty;
-
+            // 1.3 从 painting 中获取 mrp qty
             var paintBaseModel = _baseBLL.GetLotInfoModel(sJobNo);
-            maintainModel.Job.MRPQty = paintBaseModel == null? 0: _baseBLL.GetLotInfoModel(sJobNo).LotQty;
-
+            maintainModel.Job.MRPQty = paintBaseModel == null ? 0 : _baseBLL.GetLotInfoModel(sJobNo).LotQty;
+            
+            #endregion
 
 
             
+            #region 2. 获取 material 信息
 
-            // ========== 获取material 信息 ==========//
-
-            // 获取 bom, 用来遍历每一个 material. 以当前 bom 为准.
+            // 2.1 获取 bom, 以 bom 中的 material part 为准
             var bom = _baseBLL.GetBomModel(maintainModel.Job.PartNo);
             
 
 
-            // 从 pack vi detial 中获取 op pack 每个 material part 的数量
-            var checkViDetailList = _baseBLL.GetPackDetailList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+            // 2.2 从 pack vi detial 中获取 op 实际 pack qty
+            var packDetailList = string.IsNullOrEmpty(sTrackingID) ? null : _baseBLL.GetPackDetailList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
                 TrackingID = sTrackingID
             });
 
 
 
-            // 从 checking bin 中获取还没有 pack 的库存.
-            var checkBinList = _baseBLL.GetBinList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+            // 2.3 从 bin 中获取 check qty
+            var checkBinList = string.IsNullOrEmpty(sTrackingID) ? null :  _baseBLL.GetBinList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
-                TrackingID = sTrackingID
+                JobNo = maintainModel.Job.JobNo
             });
-            checkBinList = checkBinList == null ? null: checkBinList.Where(p => p.Processes == bom.LastCheckProcess).ToList();
+            checkBinList = checkBinList == null ? null: checkBinList.Where(p => p.Processes == bom.LastCheckProcess.ToUpper()).ToList();
 
 
 
-            // 从 bin history 中获取 scrap 的数量.
+            // 2.4 从 bin history 中获取 scrap qty
             var scrapList = _baseBLL.GetBinHisScrapList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
                 JobNo = maintainModel.Job.JobNo
@@ -76,7 +120,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
 
 
-            // 遍历每个 material 进行赋值
+            // 2.5 遍历每个 material, 生成 job 的 material part list
             foreach (var item in bom.MaterialPartList)
             {
                 var maintainMaterial = new PackMaintain_Model.MaterialInfo();
@@ -84,15 +128,15 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                 maintainMaterial.MaterialPartNo = item.MaterialPartNo;
 
 
-                // checking bin inventory 数量
+                // 2.5.1 取出这个 material's checking bin qty
                 var checkMaterialBinModel = checkBinList == null? null: checkBinList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
                 maintainMaterial.InventoryQty = checkMaterialBinModel == null? 0: checkMaterialBinModel.MaterialQty;
 
-                // op pack 的数量
-                var checkViDetailModel = checkViDetailList ==null? null : checkViDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
-                maintainMaterial.MaterialQty = checkViDetailModel == null ? 0 : checkViDetailModel.TotalQty;
+                // 2.5.2 取出这个 material's pack qty
+                var packDetailModel = packDetailList == null? null : packDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                maintainMaterial.MaterialQty = packDetailModel == null ? 0 : packDetailModel.TotalQty;
 
-                // 被 scrap 掉的数量
+                // 2.5.3 取出这个 material's scrap qty
                 var scrapModel = scrapList == null? null: scrapList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
                 maintainMaterial.ScrapQty = scrapModel == null ? 0 : scrapModel.MaterialQty;
 
@@ -100,308 +144,495 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
                 maintainModel.MaterialPartList.Add(maintainMaterial);
             }
+            #endregion
 
 
-            
 
             return maintainModel;
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// 2021 - 04 - 27
+        /// 1. 更新 pack tracking 记录
+        /// 1.1 有 pack tracking,  直接更新
+        /// 1.2 没有 pack tracking 记录, 创建一条新的记录
+        /// 1.3 插入 pack tracking history 记录
+        /// 
+        /// 
+        /// 2. 更新 pack detail tracking 记录
+        /// 2.1 有 pack detial tracking, 直接更新
+        /// 2.2 没有 pack detail tracking, 创建一条新的记录
+        /// 2.3 插入 pack detail tracking history 记录
+        /// 
+        /// 
+        /// 3. 更新 bin 表
+        /// 
+        /// 3.1 更新 bin pack 记录
+        /// 3.1.1 有 bin pack 记录, 直接更新 
+        /// 3.1.2 没有 bin pack 记录, 创建一条新的记录
+        /// 3.1.3 insert bin his
+        /// 
+        /// 3.2 更新 bin check 记录
+        /// 3.2.1 有 bin check 库存 
+        /// 3.2.1.1 维护 pack 多了, 还给 check 库存
+        /// 3.2.1.2 维护 pack 少了, 从 check 库存扣除
+        /// 3.2.1.2.1 如果库存不够. 从 scrap 中拉回数量, check 库存则直接删除.
+        /// 3.2.1.2.1 如果库存够. 直接更新 check bin
+        /// 3.2.2 没有 bin check 库存
+        /// 3.2.2.1 维护 pack 多了, 还给 check 库存, 创建一条新的记录.
+        /// 3.2.2.2 维护 pack 少了, 没库存, 不做处理.
+        /// 3.2.3 insert his
+        /// 
+        /// 
+        /// 4. 更新 packing scrap bin history
+        /// 4.1 更新 laser user event log , 只有在更新 packing scrap history 的记录才记录下更新动作, 以作记录追踪.
+        ///
+        /// </summary>
         public bool Update(PackMaintain_Model maintainModel, string sUserID)
         {
-            List<SqlCommand> cmdList = new List<SqlCommand>();
-
-            string lastCheckProcess = _baseBLL.GetBomModel(maintainModel.Job.PartNo).LastCheckProcess;
-            string remark = $"Updated by packing maintenance, userID:{sUserID}";
-            
-
-
-            #region pack tracking, pack detial tracking & history
-
-            // ================ 更新pack tracking ================ //
-            Common.Class.BLL.PQCPackTracking trackBLL = new Class.BLL.PQCPackTracking();
-            var trackModel = trackBLL.GetModel(maintainModel.Job.TrackingID);
-
-            decimal totalIncreaseQty = maintainModel.MaterialPartList.Sum(p => p.MaterialQty) - trackModel.acceptQty.Value;
-            trackModel.TotalQty += totalIncreaseQty;
-            trackModel.acceptQty += totalIncreaseQty;
-            trackModel.status = "End";
-            trackModel.nextViFlag = "True";
-            trackModel.updatedTime = DateTime.Now;
-            trackModel.remarks = remark;
-            trackModel.lastUpdatedTime = DateTime.Now;
-            cmdList.Add(trackBLL.UpdateCommand(trackModel));
-
-            // ================ insert tracking history ================ //
-            Common.Class.BLL.PQCPackHistory trackHisBLL = new Class.BLL.PQCPackHistory();
-            cmdList.Add(trackHisBLL.AddCommand(trackModel));
-
-
-
-
-            //================ 更新pack detial tracking ================//
-            Common.Class.BLL.PQCPackDetailTracking detailBLL = new Class.BLL.PQCPackDetailTracking();
-            Common.Class.BLL.PQCPackDetailHistory_BLL detailHisBLL = new Class.BLL.PQCPackDetailHistory_BLL();
-
-            var detialList = detailBLL.GetModelList(maintainModel.Job.TrackingID);
-            foreach (var detail in detialList)
+            try
             {
-                var material = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == detail.materialPartNo).FirstOrDefault();
 
-                detail.totalQty += (material.MaterialQty - detail.passQty);
-                detail.passQty = material.MaterialQty;
-                detail.status = "End";
-                detail.lastUpdatedTime = DateTime.Now;
-                detail.updatedTime = DateTime.Now;
-                detail.remarks = remark;
+                #region 提前 声明 & 处理 一些更新时需要的数据.
 
-                cmdList.Add(detailBLL.UpdateCommand(detail));
+                // 给没有 pack 记录, 生成新建时统一的一个 guid.
+                string packTrackingID = Guid.NewGuid().ToString();
 
-                //insert tracking detail history
-                cmdList.Add(detailHisBLL.AddCommand(detail));
-            }
+                string remark = $"Updated by packing maintenance, userID:{sUserID}";
 
+                // 维护后, 增加的数量
+                decimal totalIncreaseQty = maintainModel.MaterialPartList.Sum(p => p.UpdatedQty - p.MaterialQty);
 
-            #endregion
-            
-
-
-            #region 更新 pqc qa vi bin
-
-            Common.Class.BLL.PQCQaViBinning binBLL = new Class.BLL.PQCQaViBinning();
-            Common.Class.BLL.PQCQaViBinHistory_BLL binHisBLL = new Class.BLL.PQCQaViBinHistory_BLL();
-
-
-
-            //获取这个job的所有记录, 包括checking和packing
-            var binList = binBLL.GetModelList(null, null, maintainModel.Job.JobNo, "");
-
-            //获取 binList中packing的记录
-            var binPackList = binList.Where(p => p.processes == "PACKING" && p.trackingID == maintainModel.Job.TrackingID);
-            
-            //获取 binList中最后一道checking的的数据,   有check#2的数据的话要无视check#1的.
-            var binCheckList = binList.Where(p => p.processes == lastCheckProcess.ToUpper() && p.trackingID == maintainModel.Job.TrackingID);
-
-            //获取 bin his中的scrap的数据.
-            var hisScrapList = binHisBLL.GetList(maintainModel.Job.JobNo).Where(p => p.status == "SCRAP").ToList();
-
-
-            // 遍历每个material part no
-            foreach (var material in maintainModel.MaterialPartList)
-            {
-                //计算每个material维护后的差值.
-                var temp = detailBLL.GetModelList(maintainModel.Job.TrackingID);
-                var detailModel = temp.Where(p => p.materialPartNo == material.MaterialPartNo).FirstOrDefault();
-                decimal increaseQty = material.MaterialQty - detailModel.passQty.Value;
-
-
-                //在重新赋值前,先用来记录下更新前的数量, 追踪变化
-                decimal hisFromQty = 0;
-
-
-
-                //获取并更新pack material model
-                var binPackMaterial = binPackList.Where(p => p.materialPartNo == material.MaterialPartNo).FirstOrDefault();
-                hisFromQty = binPackMaterial.materialQty.Value;//保存更新前的数量
-                binPackMaterial.materialQty += increaseQty;
-                binPackMaterial.remarks = remark;
-                binPackMaterial.updatedTime = DateTime.Now;
-                cmdList.Add(binBLL.UpdateCommand(binPackMaterial));
-
-
-                //拷贝保存到his list中.
-                var binHisModel = binHisBLL.CopyModel(binPackMaterial);
-                binHisModel.materialFromQty = hisFromQty;         
-                cmdList.Add(binHisBLL.AddCommand(binHisModel));
-
-
-                var binCheckMaterial = binCheckList.Where(p => p.materialPartNo == material.MaterialPartNo).FirstOrDefault();
-                if (increaseQty < 0 )
+                // 每个 material 以及对应更新前的数量的 dictionary.
+                Dictionary<string, decimal> dicMaterialIncreaseQty = new Dictionary<string, decimal>();
+                maintainModel.MaterialPartList.ForEach(material =>
                 {
-                    #region pack 多了， 将一部分数量还给库存
-                    if (binCheckMaterial == null)
-                    {
-                        // 没有则新建一条.
-                        Common.Class.Model.PQCQaViBinning binModel = new Common.Class.Model.PQCQaViBinning();
-                        binModel.PartNumber = maintainModel.Job.PartNo;
-                        binModel.jobId = maintainModel.Job.JobNo;
-                        binModel.trackingID = maintainModel.Job.TrackingID;
-                        binModel.materialPartNo = material.MaterialPartNo;
-                        binModel.materialName = material.MaterialName;
-                        binModel.shipTo = binPackMaterial.shipTo;
-                        binModel.model = binPackMaterial.model;
-                        binModel.jigNo = binPackMaterial.jigNo;
-                        binModel.updatedTime = DateTime.Now;
-                        binModel.status = "LOAD";
-                        binModel.nextViFlag = "true";
-                        binModel.remark_1 = binPackMaterial.remark_1;
-                        binModel.remark_2 = binPackMaterial.remark_2;
-                        binModel.remark_3 = "";
-                        binModel.remark_4 = "";
-                        binModel.remarks = remark;
-                        binModel.processes = lastCheckProcess.ToUpper();
+                    dicMaterialIncreaseQty.Add(material.MaterialPartNo, material.UpdatedQty - material.MaterialQty);
+                });
+                 
+                // 该 part bom 信息.
+                var bom = _baseBLL.GetBomModel(maintainModel.Job.PartNo);
 
-                        binModel.day = binPackMaterial.day;
-                        binModel.shift = binPackMaterial.shift;
-                        binModel.userName = binPackMaterial.userName;//偷懒了直接用pack的user了
-                        binModel.userID = binPackMaterial.userID;//偷懒了直接用pack的user了
+                // 最后一道 check 的工序
+                string lastCheckProcess = bom.LastCheckProcess;
 
-                        binModel.id = Guid.NewGuid().ToString();
-                        binModel.materialQty = Math.Abs(increaseQty);
-                        binModel.dateTime = DateTime.Now;
-
-                        //insert new bin model
-                        cmdList.Add(binBLL.AddCommand(binModel));
+                // 获取该记录 check model
+                var checkTrackingModel = _baseBLL.GetCheckingList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+                {
+                    JobNo = maintainModel.Job.JobNo
+                }).OrderByDescending(p => p.EndTime).First();
+          
 
 
+                List<SqlCommand> cmdList = new List<SqlCommand>();
 
-                        //copy to his model and insert
-                        Common.Class.Model.PQCQaViBinHistory_Model hisModel = new Common.Class.Model.PQCQaViBinHistory_Model();
-                        hisModel = binHisBLL.CopyModel(binModel);
-                        hisModel.materialFromQty = 0;
-                        cmdList.Add(binHisBLL.AddCommand(hisModel));
-                    }
-                    else
-                    {
-                        //处理拷贝到bin his model
-                        binHisModel = new Class.Model.PQCQaViBinHistory_Model();
-                        binHisModel = binHisBLL.CopyModel(binCheckMaterial);
-                        binHisModel.materialFromQty = binCheckMaterial.materialQty.Value;//在更新check bin material前先保存下更新前的数量
+                #endregion
 
 
-                        //处理bin check material
-                        binCheckMaterial.materialQty += Math.Abs(increaseQty);
-                        binCheckMaterial.remarks = remark;
-                        binCheckMaterial.updatedTime = DateTime.Now;
+                
+                #region 1. 更新 pack tracking 记录
 
+                var packTrackingModel = _packTrackingBLL.GetModel(maintainModel.Job.TrackingID);
 
-                        //如果更新后库存数量为0, 则直接删除, 不是则直接更新
-                        if (binCheckMaterial.materialQty == 0)
-                        {
-                            SqlCommand cmdDelete = binBLL.DeleteCheckCommand(maintainModel.Job.TrackingID, material.MaterialPartNo);
-                            cmdList.Add(cmdDelete);
-
-
-
-                            binHisModel.status = "Delete"; //标记下再bin中被删除了
-                            binHisModel.materialQty = binCheckMaterial.materialQty;
-                        }
-                        else
-                        {
-                            //直接更新bin check material.
-                            cmdList.Add(binBLL.UpdateCommand(binCheckMaterial));
-
-
-                            binHisModel.materialQty = binCheckMaterial.materialQty;
-                        }
-
-                        //添加到bin his list中
-                        cmdList.Add(binHisBLL.AddCommand(binHisModel));
-                    }
-                    #endregion
+                if (packTrackingModel != null)
+                {
+                    // 1.1 有 pack tracking,  直接更新                    
+                    packTrackingModel.TotalQty += totalIncreaseQty;
+                    packTrackingModel.acceptQty += totalIncreaseQty;
+                    packTrackingModel.status = "End";
+                    packTrackingModel.nextViFlag = "True";
+                    packTrackingModel.updatedTime = DateTime.Now;
+                    packTrackingModel.remarks = remark;
+                    packTrackingModel.lastUpdatedTime = DateTime.Now;
+                    cmdList.Add(_packTrackingBLL.UpdateCommand(packTrackingModel));
                 }
                 else
                 {
-                    #region pack 少了， 直接从库存中扣掉数量
+                    // 1.2 没有 pack tracking 记录, 创建一条新的记录
+                    packTrackingModel = new Class.Model.PQCPackTracking_Model();
+                    packTrackingModel.id = 0;
+                    packTrackingModel.machineID = "";
+                    packTrackingModel.dateTime = DateTime.Now;
+                    packTrackingModel.partNumber = maintainModel.Job.PartNo;
+                    packTrackingModel.jobId = maintainModel.Job.JobNo;
+                    packTrackingModel.processes = "PACKING";
+                    packTrackingModel.jigNo = bom.JigNo;
+                    packTrackingModel.model = bom.Model;
+                    packTrackingModel.cavityCount = null;
+                    packTrackingModel.cycleTime = null;
+                    packTrackingModel.targetQty = null;
+                    packTrackingModel.userName = "";
+                    packTrackingModel.userID = sUserID;
+                    packTrackingModel.TotalQty = maintainModel.MaterialPartList.Sum(p => p.UpdatedQty);
+                    packTrackingModel.rejectQty = 0;
+                    packTrackingModel.acceptQty = maintainModel.MaterialPartList.Sum(p => p.UpdatedQty);
+                    packTrackingModel.startTime = DateTime.Now;
+                    packTrackingModel.stopTime = DateTime.Now;
+                    packTrackingModel.nextViFlag = (true).ToString();
+                    packTrackingModel.day = DateTime.Now.Date;
+                    packTrackingModel.shift = Taiyo.Tool.Common.GetCurrentShift().GetDescription();
+                    packTrackingModel.status = "End";
+                    packTrackingModel.remark_1 = "";
+                    packTrackingModel.remark_2 = "";
+                    packTrackingModel.refField01 = "";
+                    packTrackingModel.refField02 = "";
+                    packTrackingModel.refField03 = "";
+                    packTrackingModel.refField04 = "";
+                    packTrackingModel.refField05 = "";
+                    packTrackingModel.refField06 = "";
+                    packTrackingModel.refField07 = "";
+                    packTrackingModel.refField08 = "";
+                    packTrackingModel.refField09 = "";
+                    packTrackingModel.refField10 = "";
+                    packTrackingModel.refField11 = "";
+                    packTrackingModel.refField12 = "";
+                    packTrackingModel.customer = bom.Customer;
+                    packTrackingModel.lastUpdatedTime = DateTime.Now;
+                    packTrackingModel.trackingID = packTrackingID;
+                    packTrackingModel.lastTrackingID = "";
+                    packTrackingModel.remarks = remark;
+                    packTrackingModel.department = "Packing";
+                    packTrackingModel.totalRejectQty = null;
+                    packTrackingModel.updatedTime = DateTime.Now;
+                    packTrackingModel.totalPassQty = null;
+                    packTrackingModel.shipTo = bom.ShipTo;
+                    packTrackingModel.indexId = 0;
 
-                    //处理拷贝到bin his model
-                    binHisModel = new Class.Model.PQCQaViBinHistory_Model();
-                    binHisModel = binHisBLL.CopyModel(binCheckMaterial);
-                    binHisModel.materialFromQty = binCheckMaterial.materialQty.Value;//在更新check bin material前先保存下更新前的数量
+                    cmdList.Add(_packTrackingBLL.AddCommand(packTrackingModel));
+                }
 
+                // 1.3 插入 pack tracking history 记录
+                cmdList.Add(_packTrackingHisBLL.AddCommand(packTrackingModel));
 
-                 
-                   
+                #endregion
+                
 
-                    if (binCheckMaterial.materialQty.Value - increaseQty < 0)
+                #region 2. 更新 pack detail tracking 记录
+
+                var packTrackingDetailList = _packTrackingDetailBLL.GetModelList(maintainModel.Job.TrackingID);
+             
+                if (packTrackingDetailList != null && packTrackingDetailList.Count != 0)
+                {
+                    // 2.1 有 pack tracking detail , 直接更新
+                    packTrackingDetailList.ForEach(packDetail =>
                     {
-                        #region 当库存不够扣了, 就从 scrap 的数量中拉回来, 并更新 bin history 和 user event log 表.
+                        //pack detail 中 totalQty 是这个 job 上一站的总数量, 不需要更新
+                        packDetail.passQty += dicMaterialIncreaseQty[packDetail.materialPartNo];
+                        packDetail.status = "End";
+                        packDetail.lastUpdatedTime = DateTime.Now;
+                        packDetail.updatedTime = DateTime.Now;
+                        packDetail.remarks = remark;
+                        packDetail.userID = sUserID;
+                        cmdList.Add(_packTrackingDetailBLL.UpdateCommand(packDetail));
 
-                        // 将库存改为0, 不够的数量从 scrap 中扣除
-                        binCheckMaterial.materialQty = 0;
 
-                        var scrapMaterial = hisScrapList.Where(p => p.materialPartNo == material.MaterialPartNo).FirstOrDefault();
+                        // 2.3 插入 pack detail tracking history 记录
+                        cmdList.Add(_packTrackingDetailHisBLL.AddCommand(packDetail));
+                    });
+                }
+                else
+                {
+                    // 2.2 没有 pack detail tracking, 创建新的记录
+                    maintainModel.MaterialPartList.ForEach(maintainMaterialModel =>
+                    {
+                        var packTrackDetialModel = new Class.Model.PQCPackDetailTracking_Model();
+                        packTrackDetialModel.id = 0;
+                        packTrackDetialModel.trackingID = packTrackingID;
+                        packTrackDetialModel.machineID = "";
+                        packTrackDetialModel.dateTime = DateTime.Now;
+                        packTrackDetialModel.materialPartNo = maintainMaterialModel.MaterialPartNo;
+                        packTrackDetialModel.jigNo = bom.JigNo;
+                        packTrackDetialModel.model = bom.Model;
+                        packTrackDetialModel.cavityCount = null;
+                        packTrackDetialModel.userName = "";
+                        packTrackDetialModel.userID = sUserID;
+                        packTrackDetialModel.startTime = DateTime.Now;
+                        packTrackDetialModel.stopTime = DateTime.Now;
+                        packTrackDetialModel.day = DateTime.Now.Date;
+                        packTrackDetialModel.shift = Taiyo.Tool.Common.GetCurrentShift().GetDescription();
+                        packTrackDetialModel.status = "End";
+                        packTrackDetialModel.remark_1 = "";
+                        packTrackDetialModel.remark_2 = "";
+                        packTrackDetialModel.rejectQty = 0;
+                        packTrackDetialModel.rejectQtyHour01 = "";
+                        packTrackDetialModel.rejectQtyHour02 = "";
+                        packTrackDetialModel.rejectQtyHour03 = "";
+                        packTrackDetialModel.rejectQtyHour04 = "";
+                        packTrackDetialModel.rejectQtyHour05 = "";
+                        packTrackDetialModel.rejectQtyHour06 = "";
+                        packTrackDetialModel.rejectQtyHour07 = "";
+                        packTrackDetialModel.rejectQtyHour08 = "";
+                        packTrackDetialModel.rejectQtyHour09 = "";
+                        packTrackDetialModel.rejectQtyHour10 = "";
+                        packTrackDetialModel.rejectQtyHour11 = "";
+                        packTrackDetialModel.rejectQtyHour12 = "";
+                        packTrackDetialModel.lastUpdatedTime = DateTime.Now;
+                        packTrackDetialModel.remarks = remark;
+                        packTrackDetialModel.processes = "PACKING";
+                        packTrackDetialModel.jobId = maintainModel.Job.JobNo;
+                        packTrackDetialModel.totalQty = maintainModel.MaterialPartList.Sum(p => p.UpdatedQty);
+                        packTrackDetialModel.updatedTime = DateTime.Now;
+                        packTrackDetialModel.passQty = maintainMaterialModel.UpdatedQty;
+                        packTrackDetialModel.totalPassQty = null;
+                        packTrackDetialModel.totalRejectQty = null;
+                        packTrackDetialModel.color = bom.Color;
+                        packTrackDetialModel.materialName = maintainMaterialModel.MaterialName;
+                        packTrackDetialModel.outerBoxQty = bom.MaterialPartList.Where(p => p.MaterialPartNo == maintainMaterialModel.MaterialName).FirstOrDefault().OuterBoxQty;
+                        packTrackDetialModel.packingTrays = bom.MaterialPartList.Where(p => p.MaterialPartNo == maintainMaterialModel.MaterialName).FirstOrDefault().PackingTrays;
+                        packTrackDetialModel.customer = bom.Customer;
+                        packTrackDetialModel.shipTo = bom.ShipTo;
+                        packTrackDetialModel.module = bom.MaterialPartList.Where(p => p.MaterialPartNo == maintainMaterialModel.MaterialName).FirstOrDefault().Module;
+                        packTrackDetialModel.sn = 0;
+                        packTrackDetialModel.indexId = 0;
+
+                        cmdList.Add(_packTrackingDetailBLL.AddCommand(packTrackDetialModel));
+
+                        // 2.3 插入 pack detail tracking history 记录
+                        cmdList.Add(_packTrackingDetailHisBLL.AddCommand(packTrackDetialModel));
+                    });
+                }
+                #endregion
+
+
+                // 3. 更新 bin 表      册那 最烦的地方来了
+                var binList = _binBLL.GetModelList(null, null, maintainModel.Job.JobNo, "");
+                
+                #region 3.1 更新 bin pack 记录
+                var packList = binList == null ? null : binList.Where(p => p.processes == "PACKING").ToList();
+                if (packList != null && packList.Count != 0)
+                {
+                    // 3.1.1 有 bin pack 记录, 直接更新
+                    packList.ForEach(packMaterial =>
+                    {
+                       packMaterial.materialQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().UpdatedQty;
+                       packMaterial.status = "End";
+                       packMaterial.nextViFlag = "True";
+                       packMaterial.userID = sUserID;
+                       packMaterial.remarks = remark;
+                       packMaterial.updatedTime = DateTime.Now;
+                       cmdList.Add(_binBLL.UpdateCommand(packMaterial));
+
+
+                       // 3.1.3 插入 pack detail tracking history 记录
+                       var packMaterialHisModel = _binHisBLL.CopyModel(packMaterial);
+                       packMaterialHisModel.materialFromQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().MaterialQty;
+                       cmdList.Add(_binHisBLL.AddCommand(packMaterialHisModel));                       
+                    });
+                }
+                else
+                {
+                    // 3.1.2 没有 bin pack 记录, 创建一条新的记录
+                    maintainModel.MaterialPartList.ForEach(maintainMaterialModel =>
+                    {
+                        var binModel = new Common.Class.Model.PQCQaViBinning();
+                        binModel.id = "";
+                        binModel.trackingID = packTrackingID;
+                        binModel.processes = "PACKING";
+                        binModel.jobId = maintainModel.Job.JobNo;
+                        binModel.PartNumber = bom.PartNo;
+                        binModel.materialPartNo = maintainMaterialModel.MaterialPartNo;
+                        binModel.materialName = maintainMaterialModel.MaterialName;
+                        binModel.shipTo = bom.ShipTo;
+                        binModel.model = bom.Model;
+                        binModel.jigNo = bom.JigNo;
+                        binModel.materialQty = maintainMaterialModel.UpdatedQty;
+                        binModel.status = "End";
+                        binModel.nextViFlag = "True";
+                        binModel.dateTime = DateTime.Now;
+                        binModel.day = DateTime.Now.Date;
+                        binModel.shift = Taiyo.Tool.Common.GetCurrentShift().GetDescription();
+                        binModel.userName = "";
+                        binModel.userID = sUserID;
+                        binModel.remark_1 = "";
+                        binModel.remark_2 = "";
+                        binModel.remark_3 = "";
+                        binModel.remark_4 = "";
+                        binModel.remarks = remark;
+                        binModel.updatedTime = DateTime.Now;
+                        cmdList.Add(_binBLL.AddCommand(binModel));
+
+
+                        // 3.1.3 insert bin his 
+                        var binHisModel = _binHisBLL.CopyModel(binModel);
+                        binHisModel.materialFromQty = 0;
+                        cmdList.Add(_binHisBLL.AddCommand(binHisModel));
+                    });
+                }
+                #endregion
+
+                #region 3.2 更新 bin check 记录
+                
+                // 遍历每个 materialpart
+                maintainModel.MaterialPartList.ForEach(maintainMaterialPart =>
+                {
+                    var binCheckMaterial = binList.Where(p => p.processes == lastCheckProcess.ToUpper() && p.materialPartNo == maintainMaterialPart.MaterialPartNo).ToList().FirstOrDefault();
+                    if (binCheckMaterial != null)
+                    {
+                        #region 3.2.1 有 bin check 库存
+                        if (dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo] < 0)
+                        {
+                            // 3.2.1.1 维护 pack 多了, 还给 check 库存    --- (维护增加的数量 < 0,  说明原先 pack 数量多了, 还给 check 库存)
+                            binCheckMaterial.materialQty += Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                            binCheckMaterial.status = "LOAD";
+                            binCheckMaterial.userID = sUserID;
+                            binCheckMaterial.remarks = remark;
+                            binCheckMaterial.updatedTime = DateTime.Now;
+                            binCheckMaterial.userID = sUserID;
+                            cmdList.Add(_binBLL.UpdateCommand(binCheckMaterial));
+
+
+                            // 3.2.3 insert his
+                            var binCheckHisModel = _binHisBLL.CopyModel(binCheckMaterial);
+                            binCheckHisModel.materialFromQty -= Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                            cmdList.Add(_binHisBLL.AddCommand(binCheckHisModel));
+                        }
+                        else
+                        {
+                            // 3.2.1.2 维护 pack 少了, 从 check 库存扣除    --- (维护增加的数量 > 0,  说明原先 pack 数量少了, 从 check 库存扣除)
+                            if (maintainMaterialPart.UpdatedQty - maintainMaterialPart.MaterialQty >= maintainMaterialPart.InventoryQty)
+                            {
+                                // 3.2.1.2.1 如果库存不够. 从 scrap 中拉回数量, check 库存则直接删除.
+                                cmdList.Add(_binBLL.DeleteCheckCommand(binCheckMaterial.trackingID, binCheckMaterial.materialPartNo));
+
+                                // 3.2.3 insert his
+                                var binCheckHisModel = _binHisBLL.CopyModel(binCheckMaterial);
+                                binCheckHisModel.materialFromQty = binCheckMaterial.materialQty;
+                                binCheckHisModel.status = "DELETE";
+                                cmdList.Add(_binHisBLL.AddCommand(binCheckHisModel));
+                            }
+                            else
+                            {
+                                // 3.2.1.2.1 如果库存够. 直接更新 check bin
+                                binCheckMaterial.materialQty -= Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                                binCheckMaterial.status = "UNLOAD";
+                                binCheckMaterial.userID = sUserID;
+                                binCheckMaterial.remarks = remark;
+                                binCheckMaterial.updatedTime = DateTime.Now;
+                                binCheckMaterial.userID = sUserID;
+                                cmdList.Add(_binBLL.UpdateCommand(binCheckMaterial));
+
+
+                                // 3.2.3 insert his
+                                var binCheckHisModel = _binHisBLL.CopyModel(binCheckMaterial);
+                                binCheckHisModel.materialFromQty += Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                                cmdList.Add(_binHisBLL.AddCommand(binCheckHisModel));
+                            }
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 3.2.2 没有 bin check 库存
+                        if (dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo] < 0)
+                        {
+                            // 3.2.2.1 维护 pack 多了, 还给 check 库存    --- (维护增加的数量 < 0,  说明原先 pack 数量多了, 还给 check 库存)
+                            binCheckMaterial = new Common.Class.Model.PQCQaViBinning();
+                            binCheckMaterial.PartNumber = maintainModel.Job.PartNo;
+                            binCheckMaterial.jobId = maintainModel.Job.JobNo;
+                            binCheckMaterial.trackingID = checkTrackingModel.TrackingID;// check tracking 最后一次 check 记录的 tracking id
+                            binCheckMaterial.materialPartNo = maintainMaterialPart.MaterialPartNo;
+                            binCheckMaterial.materialName = maintainMaterialPart.MaterialName;
+                            binCheckMaterial.shipTo = bom.ShipTo;
+                            binCheckMaterial.model = bom.Model;
+                            binCheckMaterial.jigNo = bom.JigNo;
+                            binCheckMaterial.updatedTime = DateTime.Now;
+                            binCheckMaterial.status = "LOAD";
+                            binCheckMaterial.nextViFlag = "true";
+                            binCheckMaterial.remark_1 = "";
+                            binCheckMaterial.remark_2 = "";
+                            binCheckMaterial.remark_3 = "";
+                            binCheckMaterial.remark_4 = "";
+                            binCheckMaterial.remarks = remark;
+                            binCheckMaterial.processes = lastCheckProcess.ToUpper();
+                            binCheckMaterial.day = checkTrackingModel.Day;
+                            binCheckMaterial.shift = checkTrackingModel.Shift;
+                            binCheckMaterial.userName = checkTrackingModel.Opertor;
+                            binCheckMaterial.userID = sUserID;
+                            binCheckMaterial.id = "";
+                            binCheckMaterial.materialQty = Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                            binCheckMaterial.dateTime = DateTime.Now;
+                            cmdList.Add(_binBLL.AddCommand(binCheckMaterial));
+
+
+                            // 3.2.3 insert his
+                            var binCheckHisModel = _binHisBLL.CopyModel(binCheckMaterial);
+                            binCheckHisModel.materialFromQty -= Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                            cmdList.Add(_binHisBLL.AddCommand(binCheckHisModel));
+                        }
+                        else
+                        {
+                            // 3.2.2.2 维护 pack 少了, 从 check 库存扣除    --- (维护增加的数量 > 0,  说明原先 pack 数量少了, 从 check 库存扣除)
+
+                            // 由于本身就没 check 库存信息, 这里不做任何处理
+                        }
+                        #endregion
+                    }
+                });
+                #endregion
+
+                             
+                #region 4. 更新 packing scrap bin history
+
+                // 为了尽量让逻辑清晰, 分离每个表的更新逻辑
+                // scrap 的更新不嵌入到步骤3中的分支判断中
+                // 而在这里从新判断.
+
+
+                //获取 bin his中的scrap的数据.
+                var hisScrapList = _binHisBLL.GetList(maintainModel.Job.JobNo).Where(p => p.status == "SCRAP").ToList();
+
+                maintainModel.MaterialPartList.ForEach(maintainMaterialPart =>
+                {
+                    // 只有当维护新增的数量 (updatedqty - materialqty) > check 库存的数量时, 才从 scrap 中拉回数量.
+                    if (maintainMaterialPart.UpdatedQty - maintainMaterialPart.MaterialQty > maintainMaterialPart.InventoryQty)
+                    {
+                        var scrapMaterial = hisScrapList.Where(p => p.materialPartNo == maintainMaterialPart.MaterialPartNo).FirstOrDefault();
                         scrapMaterial.materialFromQty = scrapMaterial.materialQty;// 先保存下更新前的数量.
-                        scrapMaterial.materialQty = (binCheckMaterial.materialQty.Value - increaseQty);
+                        scrapMaterial.materialQty -= Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);// 报废数量 - 被维护拉回来的数量
                         scrapMaterial.userID = sUserID;
                         scrapMaterial.updatedTime = DateTime.Now;
+                        scrapMaterial.remarks = remark;
+                        cmdList.Add(_binHisBLL.UpdateScrapCommand(scrapMaterial));
 
-                        cmdList.Add(binHisBLL.AddCommand(scrapMaterial));
-
-
-
-                        //顺便更新到 laser 的 usereventlog 表中
+                        #region 4.1 更新 laser user event log , 只有在更新 packing scrap history 的记录才记录下更新动作, 以作记录追踪.
                         var userEventModel = new Common.Class.Model.LMMSUserEventLog();
                         userEventModel.jobnumber = maintainModel.Job.JobNo;
-                        userEventModel.material = material.MaterialPartNo;
+                        userEventModel.material = maintainMaterialPart.MaterialPartNo;
                         userEventModel.dateTime = DateTime.Now;
                         userEventModel.startTime = DateTime.Now;
                         userEventModel.endTime = DateTime.Now;
                         userEventModel.eventType = "Packing Maintenance";
                         userEventModel.pageName = "Packing Maintenance";
-                        userEventModel.action = $"material [{material.MaterialPartNo}],  before qty {hisFromQty} --> after maintained qty {material.MaterialQty}";
+                        userEventModel.action = $"material [{maintainMaterialPart.MaterialPartNo}],  before qty {scrapMaterial.materialFromQty} --> after maintained qty {scrapMaterial.materialQty}";
                         userEventModel.temp1 = "";
                         userEventModel.temp2 = "";
                         userEventModel.userID = sUserID;
+                        
                         var eventBLL = new Common.Class.BLL.LMMSUserEventLog_BLL();
-                        bool result =  eventBLL.AddRollBack(new List<Class.Model.LMMSUserEventLog>() { userEventModel });
+                        bool result = eventBLL.AddRollBack(new List<Class.Model.LMMSUserEventLog>() { userEventModel });
                         if (!result)
                         {
                             DBHelp.Reports.LogFile.Log("Packing Maintenance", "Insert event into user event log  fail!");
                         }
                         #endregion
                     }
-                    else
-                    {
-                        binCheckMaterial.materialQty -= increaseQty;
-                    }
-                    //处理bin check material
-                    binCheckMaterial.remarks = remark;
-                    binCheckMaterial.updatedTime = DateTime.Now;
+                });
+                #endregion
 
+                
 
-                    //如果更新后库存数量为0, 则直接删除, 不是则直接更新
-                    if (binCheckMaterial.materialQty == 0)
-                    {
-                        SqlCommand cmdDelete = binBLL.DeleteCheckCommand(maintainModel.Job.TrackingID, material.MaterialPartNo);
-                        cmdList.Add(cmdDelete);
-
-
-
-                        binHisModel.status = "Delete"; //标记下再bin中被删除了
-                        binHisModel.materialQty = binCheckMaterial.materialQty;
-                    }
-                    else
-                    {
-                        //直接更新bin check material.
-                        cmdList.Add(binBLL.UpdateCommand(binCheckMaterial));
-
-
-                        binHisModel.materialQty = binCheckMaterial.materialQty;
-                    }
-
-                    //添加到bin his list中
-                    cmdList.Add(binHisBLL.AddCommand(binHisModel));
-
-                    #endregion
-                }
-
-
-
-
-
-
-             
-
-
-
+                return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
             }
-            #endregion
-
-            
-
-            return DBHelp.SqlDB.SetData_Rollback(cmdList,DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            catch (Exception ee)
+            {
+                throw ee;
+            }
         }
         
 

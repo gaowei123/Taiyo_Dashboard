@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Taiyo.Tool.Extension;
 
 namespace Taiyo.Tool
 {
@@ -32,7 +33,13 @@ namespace Taiyo.Tool
             return resultList;
         }
 
-        
+        public static Taiyo.Enum.CommonEnum.Shift GetCurrentShift()
+        {
+            // 8:00 - 20:00 是 day.
+            bool isDay = DateTime.Now >= DateTime.Now.Date.AddHours(8) && DateTime.Now < DateTime.Now.Date.AddHours(20);
+
+            return isDay ? Taiyo.Enum.CommonEnum.Shift.Day : Taiyo.Enum.CommonEnum.Shift.Night;
+        }
 
 
     }

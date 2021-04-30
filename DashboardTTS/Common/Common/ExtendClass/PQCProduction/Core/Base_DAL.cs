@@ -430,7 +430,7 @@ trackingID
 ,jobId
 ,materialName
 ,materialPartNo
-,totalQty
+, (passQty + rejectQty)   as   totalQty
 ,passQty
 ,rejectQty
 from PQCPackDetailTracking

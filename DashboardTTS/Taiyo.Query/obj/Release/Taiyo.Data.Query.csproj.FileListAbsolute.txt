@@ -1,0 +1,4 @@
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\bin\Release\Taiyo.Query.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\bin\Release\Taiyo.Query.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\obj\Release\Taiyo.Query.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\obj\Release\Taiyo.Query.pdb

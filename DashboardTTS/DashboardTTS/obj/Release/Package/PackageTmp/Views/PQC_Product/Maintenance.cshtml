@@ -39,10 +39,10 @@
             </div>
             <div class="row " style="margin:4px;">
                 <div class="col-md-2">
-                    MRP QTY :
+                    Checking QTY :
                 </div>
                 <div class="col-md-7">
-                    <label id="lbMrpQty"></label>
+                    <label id="lbCheckingQty"></label>
                 </div>
 
                 <div class="col-md-3">
@@ -205,7 +205,7 @@
                 $('#lbTrackingID').text(data.trackingID);
 
                 $('#lbPartNo').text(data.partNo);
-                $('#lbMrpQty').text(data.mrpQty);
+                $('#lbCheckingQty').text(data.totalQty);
             },
             error: function () {
                 alert("Init job info error !");

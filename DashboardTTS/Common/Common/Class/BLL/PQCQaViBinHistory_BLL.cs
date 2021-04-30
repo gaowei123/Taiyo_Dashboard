@@ -21,6 +21,11 @@ namespace Common.Class.BLL
             return dal.AddCommand(Model);
         }
 
+        public SqlCommand UpdateScrapCommand(Common.Class.Model.PQCQaViBinHistory_Model Model)
+        {
+            return dal.UpdateScrapCommand(Model);
+        }
+
 
 
         public Model.PQCQaViBinHistory_Model CopyModel(Model.PQCQaViBinning model)

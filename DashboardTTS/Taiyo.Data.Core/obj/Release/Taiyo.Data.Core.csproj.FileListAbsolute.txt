@@ -1,0 +1,15 @@
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Data.Core.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Data.Core.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\DBHelp.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Query.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Tool.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Enum.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Newtonsoft.Json.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\DBHelp.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Tool.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Query.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Taiyo.Enum.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\bin\Release\Newtonsoft.Json.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\obj\Release\Taiyo.Data.Core.csprojResolveAssemblyReference.cache
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\obj\Release\Taiyo.Data.Core.dll
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Data.Core\obj\Release\Taiyo.Data.Core.pdb

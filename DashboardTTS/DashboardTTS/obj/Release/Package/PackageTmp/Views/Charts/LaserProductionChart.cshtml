@@ -173,6 +173,17 @@
                         trigger: 'axis',
                         axisPointer: {
                             type: 'shadow'
+                        },
+                        formatter: function (params) {
+                            
+                            let ok = params[0].value;
+                            let ng = params[1].value;
+                            let rejRate = ng / (ok + ng) * 100;
+
+                            let strHtml = `<p>${params[0].axisValue}</P>`;
+                            strHtml += `<p>${params[0].marker}&nbsp;${params[0].seriesName}:&nbsp;${params[0].value}</p>`;
+                            strHtml += `<p>${params[1].marker}&nbsp;${params[1].seriesName}:&nbsp;${params[1].value}(${rejRate.toFixed(2)}%)</p>`;
+                            return strHtml
                         }
                     },
                     legend: {
@@ -228,7 +239,10 @@
                         label: {
                             show: true,
                             formatter: function (obj) {
-                                return Number(obj.value) == 0 ? '' : obj.value;
+                                let ok = data.SeriesData[0].Data[obj.dataIndex]
+                                let ng = data.SeriesData[1].Data[obj.dataIndex];
+                                let rejRate = ng / (ok + ng) * 100;
+                                return Number(obj.value) == 0 ? '' : `${ng}(${rejRate.toFixed(2)}%)`;
                             }
                         },
                         data: data.SeriesData[1].Data
