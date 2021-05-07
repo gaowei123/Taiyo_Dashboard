@@ -114,9 +114,9 @@
                         <asp:BoundColumn DataField="Time" HeaderText="Time"></asp:BoundColumn>
                         <asp:BoundColumn DataField="Status" HeaderText="Status"></asp:BoundColumn>
                         <asp:BoundColumn DataField="acceptQty" HeaderText="OK Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="rejectQty" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="rejectQty" HeaderText="NG Qty" ItemStyle-HorizontalAlign="Center" Visible="false"></asp:BoundColumn>
                         <asp:BoundColumn DataField="TotalQty" HeaderText="Output" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
-                        <asp:BoundColumn DataField="RejRate" HeaderText="REJ%" ItemStyle-HorizontalAlign="Center"></asp:BoundColumn>
+                        <asp:BoundColumn DataField="RejRate" HeaderText="REJ%" ItemStyle-HorizontalAlign="Center" Visible="false"></asp:BoundColumn>
                         <asp:BoundColumn DataField="userID" HeaderText="Operator"></asp:BoundColumn>
                     </Columns>
                 </asp:DataGrid>

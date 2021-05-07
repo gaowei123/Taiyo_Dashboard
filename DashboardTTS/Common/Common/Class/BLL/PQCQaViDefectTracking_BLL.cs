@@ -334,7 +334,7 @@ namespace Common.Class.BLL
 
 
 
-            #region 2021/04/20 获取laser的 vision ng, setup, buyoff, shortage数量
+            // 2021/04/20 获取laser的 vision ng, setup, buyoff, shortage数量
             string strJobIn = "";
             DataTable dtTemp = dtDefectDetailList.DefaultView.ToTable(true, "Jobnumber");
             foreach (DataRow dr in dtTemp.Rows)
@@ -345,47 +345,87 @@ namespace Common.Class.BLL
 
             Common.BLL.LMMSWatchLog_BLL watchLogBLL = new Common.BLL.LMMSWatchLog_BLL();
             DataTable dtLaser = watchLogBLL.GetLaserQty(strJobIn);
-            #endregion 2021/04/20 获取laser的 vision ng, setup, buyoff, shortage数量
 
-            
+
+
+
+
+            #region 提前处理 laser 的数据到 dtDefectDetailList 中
+            foreach (DataRow dr in dtLaser.Rows)
+            {
+                string jobNo = dr["jobNumber"].ToString();
+                decimal laserNG = decimal.Parse(dr["ngQty"].ToString());
+                decimal laserSetup = decimal.Parse(dr["setupQty"].ToString());
+                decimal laserBuyoff = decimal.Parse(dr["buyoffQty"].ToString());
+                decimal laserShortage = decimal.Parse(dr["shortage"].ToString());
+
+
+                // 随便取一条用来赋值一些信息.
+                DataRow[] jobDefects = dtDefectDetailList.Select($" Jobnumber = '{jobNo}' ");
+
+
+
+                // 处理 laser ng
+                DataRow visionDefect = dtDefectDetailList.Select($" Jobnumber = '{jobNo}' and defectCode = 'Graphic Shift check by M/C' ")[0];
+                visionDefect["rejectQty"] = laserNG;
+
+
+
+                // 处理 shortage 合并到 painting 的 setup 中.
+                // 早期数据没有 setup 的 code
+                DataRow[] paintSetupDefect = dtDefectDetailList.Select($" Jobnumber = '{jobNo}' and defectCode = 'Setup' and defectDescription = 'Paint' ");
+                if (paintSetupDefect != null && paintSetupDefect.Count() != 0)
+                {
+                    decimal setup = paintSetupDefect[0]["rejectQty"].ToString() == "" ? 0 : decimal.Parse(paintSetupDefect[0]["rejectQty"].ToString());
+                    paintSetupDefect[0]["rejectQty"] = (laserBuyoff + setup);
+                }
+
+
+
+                // 新增 laser buyoff
+                DataRow drSpecialCodeBuyoff = dtDefectDetailList.NewRow();
+                drSpecialCodeBuyoff["Jobnumber"] = jobDefects[0]["Jobnumber"].ToString();
+                drSpecialCodeBuyoff["LotQty"] = jobDefects[0]["LotQty"].ToString();
+                drSpecialCodeBuyoff["unitCost"] = jobDefects[0]["unitCost"].ToString();
+                drSpecialCodeBuyoff["defectCodeID"] = 101;
+                drSpecialCodeBuyoff["defectDescription"] = "Laser";
+                drSpecialCodeBuyoff["defectCode"] = "Laser Buyoff";
+                drSpecialCodeBuyoff["rejectQty"] = laserBuyoff;
+                dtDefectDetailList.Rows.Add(drSpecialCodeBuyoff);
+
+
+
+
+                // 新增 laser setup
+                DataRow drSpecialCodeSetup = dtDefectDetailList.NewRow();
+                drSpecialCodeSetup["Jobnumber"] = jobDefects[0]["Jobnumber"].ToString();
+                drSpecialCodeSetup["LotQty"] = jobDefects[0]["LotQty"].ToString();                
+                drSpecialCodeSetup["unitCost"] = jobDefects[0]["unitCost"].ToString();
+                drSpecialCodeSetup["defectCodeID"] = 102;
+                drSpecialCodeSetup["defectDescription"] = "Laser";
+                drSpecialCodeSetup["defectCode"] = "Laser Setup";
+                drSpecialCodeSetup["rejectQty"] = laserSetup;
+                dtDefectDetailList.Rows.Add(drSpecialCodeSetup);
+                
+
+            }
+            #endregion
+
+
+
 
 
             #region 遍历一个code一行的detail list, 转换成一个job一条的记录.
             foreach (DataRow dr in dtDefectDetailList.Rows)
-            {           
-                string jobNo = dr["Jobnumber"].ToString();
-
-
-                // 取出laser job的各种数量
-                // 什么都不管，先直接赋值到 defect detail 中
-                // 后续所有操作都用dtDefectDetail中的数据
-                DataRow[] temp = dtLaser.Select($"jobnumber = '{jobNo}'");
-                DataRow drLaser = temp == null || temp.Count() == 0 ? null : temp[0];
-                decimal laserNG = decimal.Parse(drLaser["ngQty"].ToString());
-                decimal laserSetup = decimal.Parse(drLaser["setupQty"].ToString());
-                decimal laserBuyoff = decimal.Parse(drLaser["buyoffQty"].ToString());
-                decimal laserShortage = decimal.Parse(drLaser["shortage"].ToString());
-                
-                // 先把 laser 的特殊数量赋值到查询出来的 defect detail 中, 后续操作直接在 dtDefectDetailList 中获取取,汇总.
-                if (dr["defectCode"].ToString() == "Graphic Shift check by M/C") dr["rejectQty"] = laserNG;
-                if (dr["defectCode"].ToString() == "Paint Shortage") dr["rejectQty"] = laserShortage;
-                if (dr["defectCode"].ToString() == "Laser Buyoff") dr["rejectQty"] = laserBuyoff;
-                if (dr["defectCode"].ToString() == "Laser Setup") dr["rejectQty"] = laserSetup;
-
-
-
-
+            {
                 // defect中的数据
+                string jobNo = dr["Jobnumber"].ToString();
                 decimal lotQty = decimal.Parse(dr["LotQty"].ToString());
                 string defectCodeID = dr["defectCodeID"].ToString();
                 string defectDescription = dr["defectDescription"].ToString();
                 decimal rejQty = decimal.Parse(dr["rejectQty"].ToString());
 
-
-               
-
-
-
+                
                 try
                 {
                     //如果加过这个job信息, 就更新遍历到defectcode的rej数量.

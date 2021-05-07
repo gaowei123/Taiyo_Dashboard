@@ -328,7 +328,7 @@ namespace Common.Class.DAL
 
             strSql.Append(@"
 SELECT distinct
-trackingID
+a.trackingID
 ,convert(varchar(32), a.day,111) + ' - ' +  a.shift as shift
 ,'Station' + a.machineID as machineID
 ,a.partNumber
@@ -340,32 +340,31 @@ trackingID
 ,a.stopTime
 ,a.status
 ,ISNULL(a.acceptQty,0) as acceptQty
-,ISNULL(a.rejectQty,0) as rejectQty
+,ISNULL(b.materialQty,0) as rejectQty
 ,ISNULL(a.TotalQty,0) as TotalQty
 ,a.datetime 
 ,a.userID
 FROM PQCPackTracking a
+left join (
+	select day, shift, jobId, sum(materialQty) as materialQty from  PQCQaViBinHistory
+	where status = 'SCRAP'
+    group by day, shift, jobId
+)b on a.day = b.day and a.shift = b.shift and a.jobId = b.jobId
 where a.day >= @datefrom and a.day< @dateto ");
 
             if (sShift != "")
-            {
                 strSql.Append(" and a.shift = @shift");
-            }
 
             if (sPartNumber != "")
-            {
                 strSql.Append(" and a.PartNumber = @partNo");
-            }
-            if (sMachineID != "")
-            {
-                strSql.Append(" and a.machineID = @machineID");
-            }
-            if (sJobNumber != "")
-            {
-                strSql.Append(" and a.jobId = @jobId");
-            }
 
-            
+            if (sMachineID != "")
+                strSql.Append(" and a.machineID = @machineID");
+
+            if (sJobNumber != "")
+                strSql.Append(" and a.jobId = @jobId");
+
+
 
 
             SqlParameter[] paras =

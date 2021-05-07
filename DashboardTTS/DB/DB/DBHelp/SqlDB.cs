@@ -123,7 +123,10 @@ namespace DBHelp
         public static System.Data.DataSet  Query(string strSql , SqlParameter[] parameters)
         {
             try
-            { 
+            {
+
+             
+
                 DataSet ds = new DataSet();
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandText = strSql;
@@ -140,7 +143,7 @@ namespace DBHelp
             }
             catch (Exception e)
             {
-
+                DBHelp.Reports.LogFile.Log("ProductivityDetail", "4.1 ===== error: " + e.ToString());
                 throw e;
             }
         }

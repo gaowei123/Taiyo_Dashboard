@@ -80,7 +80,6 @@ namespace DashboardTTS.Webform.PQC
 
         void Display(DataTable dt, ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
         {
-
             try
             {
                 if (dt == null || dt.Rows.Count == 0)
@@ -319,8 +318,8 @@ namespace DashboardTTS.Webform.PQC
                         item.Cells[1].Font.Bold = true;
                         item.Cells[4].Font.Bold = true;
                     }
-                    else if (summaryRowText == "OTHERS >" || summaryRowText == "TTS MOULD >" || summaryRowText == "VENDOR MOULD >" || summaryRowText == "PAINTING >"
-                        || summaryRowText == "PAINTING SETUP >" || summaryRowText == "QA PAINT TEST >" || summaryRowText == "LASER >" || summaryRowText == "OVERALL >")
+                    else if (summaryRowText == "MT-Mould >" || summaryRowText == "VM-Mould >" || summaryRowText == "P-Paint >" || summaryRowText == "P-Setup >"
+                        || summaryRowText == "L-Laser >" || summaryRowText == "O-Others >" || summaryRowText == "O-QA >" || summaryRowText == "Overall >")
                     {
                         for (int i = 3; i < 12; i++)
                         {

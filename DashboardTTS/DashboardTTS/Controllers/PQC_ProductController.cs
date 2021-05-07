@@ -71,6 +71,10 @@ namespace DashboardTTS.Controllers
         {
             return View();
         }
+        public ActionResult ScrapReport()
+        {
+            return View();
+        }
         #endregion
         
 
@@ -533,7 +537,6 @@ namespace DashboardTTS.Controllers
         /// 现在拆分成分别单独查询paint, pqc的数据,在代码中合并.
         /// 提高查询效率
         /// </summary>
-        /// <returns></returns>
         public JsonResult GetCheckingLiveList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string Station, string JobNo, string LotNo )
         {
             var bll = new Common.ExtendClass.PQCProduction.CheckingLiveReport.BLL();
@@ -548,6 +551,22 @@ namespace DashboardTTS.Controllers
             return Json(result);
         }
 
+
+
+        public JsonResult GetScrapList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string JobNo)
+        {
+            Common.ExtendClass.PQCProduction.ScrapReport.Scrap_BLL bll = new Common.ExtendClass.PQCProduction.ScrapReport.Scrap_BLL();
+            var result = bll.GetScrapList(new PQCOutputParam()
+            {
+                DateFrom = DateFrom,
+                DateTo = DateTo.AddDays(1),
+                Shift = Shift,
+                PartNo = PartNo,
+                JobNo = JobNo
+            });
+
+            return result == null ? Json("") : Json(result);
+        }
 
     }
 }

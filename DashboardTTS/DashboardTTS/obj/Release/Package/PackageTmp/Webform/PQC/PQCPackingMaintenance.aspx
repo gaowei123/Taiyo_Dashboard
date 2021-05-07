@@ -25,13 +25,32 @@
 
         <div class="row top10">
             <div class="col-sm-12 panel panel-default">
+               <div class="row form-inline top10">
+                    <div class="col-sm-2">
+                        Job No:                         
+                    </div>
+                    <div class="col-sm-4">
+                        <asp:TextBox runat="server" ID="txtJobNo" ></asp:TextBox>
+                    </div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3">
+                         <asp:Button runat="server" ID="btnSearch" Text="Search" OnClick="btnSearch_Click" CssClass="btn btn-primary" style="float:right;width:70px;margin: -4px 0 4px 0px;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 panel panel-default">
                 <div class="row form-inline top10">
                     <div class="col-sm-2"><b>Job Info :</b></div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                         <asp:Label runat="server" ID="lbDay" Font-Bold="true"></asp:Label> &nbsp-&nbsp
                         <asp:Label runat="server" ID="lbShift" Font-Bold="true"></asp:Label>&nbsp-&nbsp
                         <asp:Label runat="server" ID="lbJob" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
                         <asp:Label runat="server" ID="lbTrackingID" Font-Bold="true"></asp:Label>
+
+                        <asp:Button runat="server" ID="btnEnd" Text="End" OnClick="btnEnd_Click" CssClass="btn btn-success" style="float:right; width:70px;"/>
                     </div>
                 </div>
                 <div class="row form-inline top10"> 
@@ -43,8 +62,7 @@
                 <div class="row form-inline bottom6">
                     <div class="col-sm-2">MRP QTY :</div>
                     <div class="col-sm-9">
-                        <asp:Label runat="server" ID="lbMrpQty" Width="50px"></asp:Label>
-                        <asp:Button runat="server" ID="btnEnd" Text="End" CssClass="btn btn-primary" style="float:right; width:60px;"/>
+                        <asp:Label runat="server" ID="lbMrpQty" Width="50px"></asp:Label>                        
                     </div>
                 </div>
             </div>
@@ -79,8 +97,7 @@
                 </div>
                 <div class="row form-inline top10 bottom6">
                     <div class="col-sm-12" style="display:flex; justify-content:center;">
-                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLogin">Confirm</button>
-                        <asp:Button runat="server" ID="btnCancel" Text="Cancel" CssClass="btn btn-danger" style="margin:0 10px"/>
+                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLogin" style="width:150px;">Confirm</button>
                     </div>
                 </div>
             </div>

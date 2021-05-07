@@ -9,6 +9,12 @@
     <_PublishTargetUrl>D:\Programme Publish\TaiyoDashboard</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
+    <File Include="api/index.js">
+      <publishTime>05/06/2021 11:01:30</publishTime>
+    </File>
+    <File Include="api/myAxios.js">
+      <publishTime>05/07/2021 13:30:52</publishTime>
+    </File>
     <File Include="ApplicationInsights.config">
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
@@ -1966,13 +1972,13 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="bin/Common.dll">
-      <publishTime>04/28/2021 10:54:41</publishTime>
+      <publishTime>05/07/2021 15:01:43</publishTime>
     </File>
     <File Include="bin/DashboardTTS.dll">
-      <publishTime>04/28/2021 10:54:45</publishTime>
+      <publishTime>05/07/2021 15:01:47</publishTime>
     </File>
     <File Include="bin/DBHelp.dll">
-      <publishTime>04/28/2021 10:54:40</publishTime>
+      <publishTime>05/07/2021 14:36:06</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>04/07/2021 09:54:19</publishTime>
@@ -2086,7 +2092,7 @@
       <publishTime>04/07/2021 09:54:20</publishTime>
     </File>
     <File Include="bin/MyChart.dll">
-      <publishTime>04/28/2021 10:54:41</publishTime>
+      <publishTime>05/07/2021 15:01:43</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>11/09/2019 00:56:44</publishTime>
@@ -2179,16 +2185,16 @@
       <publishTime>04/07/2021 09:54:19</publishTime>
     </File>
     <File Include="bin/Taiyo.Business.dll">
-      <publishTime>04/28/2021 10:54:41</publishTime>
+      <publishTime>05/07/2021 14:36:09</publishTime>
     </File>
     <File Include="bin/Taiyo.Data.Core.dll">
-      <publishTime>04/28/2021 10:54:40</publishTime>
+      <publishTime>05/07/2021 14:36:06</publishTime>
     </File>
     <File Include="bin/Taiyo.Enum.dll">
-      <publishTime>04/07/2021 09:54:19</publishTime>
+      <publishTime>05/07/2021 13:36:13</publishTime>
     </File>
     <File Include="bin/Taiyo.JobSchedule.dll">
-      <publishTime>04/28/2021 10:54:40</publishTime>
+      <publishTime>05/07/2021 14:36:07</publishTime>
     </File>
     <File Include="bin/Taiyo.Query.dll">
       <publishTime>04/28/2021 10:54:40</publishTime>
@@ -2197,7 +2203,7 @@
       <publishTime>04/28/2021 10:54:40</publishTime>
     </File>
     <File Include="bin/Taiyo.Tool.dll">
-      <publishTime>04/28/2021 10:54:40</publishTime>
+      <publishTime>05/07/2021 13:36:13</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>04/07/2021 09:54:20</publishTime>
@@ -2804,6 +2810,9 @@
     </File>
     <File Include="plugins/autocomplete/jquery.mockjax.js">
       <publishTime>11/01/2015 14:55:24</publishTime>
+    </File>
+    <File Include="plugins/axios/axios.min.js">
+      <publishTime>05/06/2021 10:02:48</publishTime>
     </File>
     <File Include="plugins/bigautocomplete/jquery.bigautocomplete.css">
       <publishTime>04/07/2021 09:54:17</publishTime>
@@ -11197,7 +11206,7 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>04/07/2021 14:01:40</publishTime>
+      <publishTime>05/06/2021 14:38:46</publishTime>
     </File>
     <File Include="TempImages/temp.txt">
       <publishTime>06/15/2020 19:58:42</publishTime>
@@ -11419,7 +11428,7 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="Views/PQC_Product/CheckingLiveReport.cshtml">
-      <publishTime>04/07/2021 09:54:14</publishTime>
+      <publishTime>05/06/2021 14:16:05</publishTime>
     </File>
     <File Include="Views/PQC_Product/DailyReport.cshtml">
       <publishTime>04/07/2021 09:54:14</publishTime>
@@ -11448,6 +11457,9 @@
     <File Include="Views/PQC_Product/PICDailyOutputReport.cshtml">
       <publishTime>04/26/2021 09:24:50</publishTime>
     </File>
+    <File Include="Views/PQC_Product/ScrapReport.cshtml">
+      <publishTime>05/06/2021 16:39:36</publishTime>
+    </File>
     <File Include="Views/PQC_Product/SummaryReport.cshtml">
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
@@ -11461,7 +11473,7 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>04/07/2021 14:04:22</publishTime>
+      <publishTime>05/06/2021 14:39:20</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>04/07/2021 09:54:14</publishTime>
@@ -11494,7 +11506,7 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/28/2021 10:57:47</publishTime>
+      <publishTime>05/07/2021 15:01:48</publishTime>
     </File>
     <File Include="Webform/Assy/AssyUserAttendance.aspx">
       <publishTime>01/19/2020 15:52:12</publishTime>
@@ -12034,7 +12046,7 @@
       <publishTime>04/07/2021 09:54:14</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport.aspx">
-      <publishTime>04/22/2021 10:38:11</publishTime>
+      <publishTime>05/07/2021 13:35:53</publishTime>
     </File>
     <File Include="Webform/PQC/PQCButtonReport_New.aspx">
       <publishTime>12/25/2019 15:10:53</publishTime>
@@ -12064,10 +12076,10 @@
       <publishTime>03/01/2020 13:32:59</publishTime>
     </File>
     <File Include="Webform/PQC/PQCPackingLiveReport.aspx">
-      <publishTime>04/19/2021 16:48:21</publishTime>
+      <publishTime>05/06/2021 16:41:28</publishTime>
     </File>
     <File Include="Webform/PQC/PQCPackingMaintenance.aspx">
-      <publishTime>04/27/2021 10:02:41</publishTime>
+      <publishTime>05/06/2021 14:56:54</publishTime>
     </File>
     <File Include="Webform/PQC/PQCProductionChart.aspx">
       <publishTime>04/07/2021 09:54:14</publishTime>

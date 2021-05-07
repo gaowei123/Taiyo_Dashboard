@@ -452,6 +452,8 @@ where 1=1 and a.jobnumber in ("+ strJobIn + ")");
 
         public DataTable GetProductionDetailReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sModel,string sPartNo, string sMachineID, string sJobNo)
         {
+
+        
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select
@@ -521,6 +523,7 @@ where 1=1
 
             strSql.Append(" order by a.datetime desc ");
 
+            
 
 
 
@@ -543,7 +546,7 @@ where 1=1
             if (!string.IsNullOrEmpty(sMachineID)) parameters[5].Value = sMachineID; else parameters[5] = null;
             if (!string.IsNullOrEmpty(sJobNo)) parameters[6].Value = sJobNo; else parameters[6] = null;
 
-
+            
 
             DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), parameters);
             if (ds == null || ds.Tables.Count == 0)

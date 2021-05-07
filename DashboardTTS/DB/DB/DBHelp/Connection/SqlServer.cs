@@ -26,7 +26,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever"].ToString());
                         break;
                 }
 
@@ -55,7 +55,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever"].ToString());
                         break;
                 }
 
@@ -84,7 +84,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr"].ToString());
                         break;
                 }
 
@@ -113,7 +113,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever"].ToString());
                         break;
                 }
 
@@ -142,7 +142,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever"].ToString());
                         break;
                 }
 
@@ -171,7 +171,7 @@ namespace DBHelp.Connection
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever3"].ToString());
                         break;
                     default:
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever1"].ToString());
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever"].ToString());
                         break;
                 }
 

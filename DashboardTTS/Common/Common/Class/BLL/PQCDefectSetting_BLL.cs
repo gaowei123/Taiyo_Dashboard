@@ -108,12 +108,12 @@ namespace Common.Class.BLL
             #region 2021/04/20 特殊defect code
 
             //laser shortage 属于paint下数量
-            DataRow drShortage = dt.NewRow();
-            drShortage["defectcodeID"] = 100;
-            drShortage["defectDescription"] = "Paint";
-            drShortage["defectCode"] = "Paint Shortage";
-            drShortage["defectCodeSource"] = "Shortage";
-            dt.Rows.Add(drShortage);
+            //DataRow drShortage = dt.NewRow();
+            //drShortage["defectcodeID"] = 100;
+            //drShortage["defectDescription"] = "Paint";
+            //drShortage["defectCode"] = "Paint Shortage";
+            //drShortage["defectCodeSource"] = "Shortage";
+            //dt.Rows.Add(drShortage);
 
             //laser buyoff
             DataRow drBuyoff = dt.NewRow();

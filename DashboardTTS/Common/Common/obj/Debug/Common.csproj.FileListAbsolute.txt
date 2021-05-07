@@ -30,3 +30,5 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Debug\Ta
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Debug\Common.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Debug\Newtonsoft.Json.pdb
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Debug\Newtonsoft.Json.xml

@@ -35,3 +35,4 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.xml
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.pdb

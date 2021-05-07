@@ -507,10 +507,6 @@ namespace DashboardTTS.ViewBusiness
             try
             {
 
-
-
-
-
                 /**        又改需求， 改你马的
                  *                                         ,s555SB@@&                          
                  *                                      :9H####@@@@@Xi                        
@@ -1044,37 +1040,11 @@ namespace DashboardTTS.ViewBusiness
                 var laserPartModel = (from a in partsTypeSummaryList where a.partsType == "Laser" select a).FirstOrDefault();
                 if (laserPartModel != null)
                 {
-                    #region add  laser summary part   others >
-                    ViewModel.PQCButtonReport_ViewModel.Report othersLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    othersLaserSummaryModel.partNo = "OTHERS >";
-                    othersLaserSummaryModel.rejQty = laserPartModel.Others_TotalRej;
-                    othersLaserSummaryModel.rejCost = laserPartModel.Others_TotalRejCost;
-                    othersLaserSummaryModel.rejRate = laserPartModel.Others_TotalRejRate;
-                    othersLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersLaserSummaryModel.rejQty, othersLaserSummaryModel.rejRate);
-
-
-
-                    othersLaserSummaryModel.PQC_Scratch = laserPartModel.PQC_Scratch;
-                    othersLaserSummaryModel.Over_Spray = laserPartModel.Over_Spray;
-                    othersLaserSummaryModel.Bubble = laserPartModel.Bubble;
-                    othersLaserSummaryModel.Oil_Stain = laserPartModel.Oil_Stain;
-                    othersLaserSummaryModel.Drag_Mark = laserPartModel.Drag_Mark;
-                    othersLaserSummaryModel.Light_Leakage = laserPartModel.Light_Leakage;
-                    othersLaserSummaryModel.Light_Bubble = laserPartModel.Light_Bubble;
-                    othersLaserSummaryModel.White_Dot_in_Material = laserPartModel.White_Dot_in_Material;
-                    othersLaserSummaryModel.Other = laserPartModel.Other;
-
-                    othersLaserSummaryModel.Others_TotalRej = laserPartModel.Others_TotalRej;
-                    othersLaserSummaryModel.Others_TotalRejCost = laserPartModel.Others_TotalRejCost;
-                    othersLaserSummaryModel.Others_TotalRejRate = laserPartModel.Others_TotalRejRate;
-
-
-                    laserPartSummaryInfo.Add(othersLaserSummaryModel);
-                    #endregion
+                
 
                     #region add  laser summary part   tts - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    ttsMouldingLaserSummaryModel.partNo = "TTS MOULD >";
+                    ttsMouldingLaserSummaryModel.partNo = "MT-Mould >";
                     ttsMouldingLaserSummaryModel.lotQty = laserPartModel.ttsLotQty;
                     ttsMouldingLaserSummaryModel.rejQty = laserPartModel.TTS_Mould_TotalRej;
                     ttsMouldingLaserSummaryModel.rejCost = laserPartModel.TTS_Mould_TotalRejCost;
@@ -1124,7 +1094,7 @@ namespace DashboardTTS.ViewBusiness
 
                     #region add  laser summary part   vendor - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    vendorMouldingLaserSummaryModel.partNo = "VENDOR MOULD >";
+                    vendorMouldingLaserSummaryModel.partNo = "VM-Mould >";
                     vendorMouldingLaserSummaryModel.lotQty = laserPartModel.vendorLotQty;
                     vendorMouldingLaserSummaryModel.rejQty = laserPartModel.Vendor_Mould_TotalRej;
                     vendorMouldingLaserSummaryModel.rejCost = laserPartModel.Vendor_Mould_TotalRejCost;
@@ -1174,7 +1144,7 @@ namespace DashboardTTS.ViewBusiness
 
                     #region add  laser summary part   paint >
                     ViewModel.PQCButtonReport_ViewModel.Report paintLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintLaserSummaryModel.partNo = "PAINTING >";
+                    paintLaserSummaryModel.partNo = "P-Paint >";
                     paintLaserSummaryModel.rejQty = laserPartModel.Paint_TotalRej;
                     paintLaserSummaryModel.rejCost = laserPartModel.Paint_TotalRejCost;
                     paintLaserSummaryModel.rejRate = laserPartModel.Paint_TotalRejRate;
@@ -1216,25 +1186,17 @@ namespace DashboardTTS.ViewBusiness
 
                     // add  laser summary part   paint setup >
                     ViewModel.PQCButtonReport_ViewModel.Report paintSetupLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintSetupLaserSummaryModel.partNo = "PAINTING SETUP >";
+                    paintSetupLaserSummaryModel.partNo = "P-Setup >";
                     paintSetupLaserSummaryModel.rejQty = laserPartModel.Paint_SetupRej;
                     paintSetupLaserSummaryModel.rejCost = laserPartModel.Paint_SetupRejCost;
                     paintSetupLaserSummaryModel.rejRate = laserPartModel.Paint_SetupRejRate;           
                     paintSetupLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintSetupLaserSummaryModel.rejQty, paintSetupLaserSummaryModel.rejRate);
                     laserPartSummaryInfo.Add(paintSetupLaserSummaryModel);
 
-                    // add laser summary part   paint qa test >
-                    ViewModel.PQCButtonReport_ViewModel.Report paintQALaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintQALaserSummaryModel.partNo = "QA PAINT TEST >";
-                    paintQALaserSummaryModel.rejQty = laserPartModel.Paint_QATestRej;
-                    paintQALaserSummaryModel.rejCost = laserPartModel.Paint_QATestRejCost;
-                    paintQALaserSummaryModel.rejRate = laserPartModel.Paint_QATestRejRate;
-                    paintQALaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQALaserSummaryModel.rejQty, paintQALaserSummaryModel.rejRate);
-                    laserPartSummaryInfo.Add(paintQALaserSummaryModel);
 
                     #region add  laser summary part   laser >
                     ViewModel.PQCButtonReport_ViewModel.Report laserLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    laserLaserSummaryModel.partNo = "LASER >";
+                    laserLaserSummaryModel.partNo = "L-Laser >";
                     laserLaserSummaryModel.rejQty = laserPartModel.Laser_TotalRej;
                     laserLaserSummaryModel.rejCost = laserPartModel.Laser_TotalRejCost;
                     laserLaserSummaryModel.rejRate = laserPartModel.Laser_TotalRejRate;
@@ -1270,10 +1232,50 @@ namespace DashboardTTS.ViewBusiness
                     laserPartSummaryInfo.Add(laserLaserSummaryModel);
                     #endregion
 
+                    #region add  others summary part   others >
+                    ViewModel.PQCButtonReport_ViewModel.Report othersLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                    othersLaserSummaryModel.partNo = "O-Others >";
+                    othersLaserSummaryModel.rejQty = laserPartModel.Others_TotalRej;
+                    othersLaserSummaryModel.rejCost = laserPartModel.Others_TotalRejCost;
+                    othersLaserSummaryModel.rejRate = laserPartModel.Others_TotalRejRate;
+                    othersLaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersLaserSummaryModel.rejQty, othersLaserSummaryModel.rejRate);
+
+
+
+                    othersLaserSummaryModel.PQC_Scratch = laserPartModel.PQC_Scratch;
+                    othersLaserSummaryModel.Over_Spray = laserPartModel.Over_Spray;
+                    othersLaserSummaryModel.Bubble = laserPartModel.Bubble;
+                    othersLaserSummaryModel.Oil_Stain = laserPartModel.Oil_Stain;
+                    othersLaserSummaryModel.Drag_Mark = laserPartModel.Drag_Mark;
+                    othersLaserSummaryModel.Light_Leakage = laserPartModel.Light_Leakage;
+                    othersLaserSummaryModel.Light_Bubble = laserPartModel.Light_Bubble;
+                    othersLaserSummaryModel.White_Dot_in_Material = laserPartModel.White_Dot_in_Material;
+                    othersLaserSummaryModel.Other = laserPartModel.Other;
+
+                    othersLaserSummaryModel.Others_TotalRej = laserPartModel.Others_TotalRej;
+                    othersLaserSummaryModel.Others_TotalRejCost = laserPartModel.Others_TotalRejCost;
+                    othersLaserSummaryModel.Others_TotalRejRate = laserPartModel.Others_TotalRejRate;
+
+
+                    laserPartSummaryInfo.Add(othersLaserSummaryModel);
+                    #endregion
+
+
+                    // add laser summary part   paint qa test >
+                    ViewModel.PQCButtonReport_ViewModel.Report paintQALaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                    paintQALaserSummaryModel.partNo = "O-QA >";
+                    paintQALaserSummaryModel.rejQty = laserPartModel.Paint_QATestRej;
+                    paintQALaserSummaryModel.rejCost = laserPartModel.Paint_QATestRejCost;
+                    paintQALaserSummaryModel.rejRate = laserPartModel.Paint_QATestRejRate;
+                    paintQALaserSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQALaserSummaryModel.rejQty, paintQALaserSummaryModel.rejRate);
+                    laserPartSummaryInfo.Add(paintQALaserSummaryModel);
+
+             
+
 
                     // add laser summary part   overall >
                     ViewModel.PQCButtonReport_ViewModel.Report overallLaserSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    overallLaserSummaryModel.partNo = "OVERALL >";
+                    overallLaserSummaryModel.partNo = "Overall >";
                     overallLaserSummaryModel.lotQty = laserPartModel.lotQty;
                     overallLaserSummaryModel.pass = laserPartModel.pass;
                     overallLaserSummaryModel.rejQty = laserPartModel.rejQty;
@@ -1291,33 +1293,11 @@ namespace DashboardTTS.ViewBusiness
                 var wipPartModel = (from a in partsTypeSummaryList where a.partsType == "WIP" select a).FirstOrDefault();
                 if (wipPartModel != null)
                 {
-                    #region add  wip summary part   others >
-                    ViewModel.PQCButtonReport_ViewModel.Report othersWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    othersWIPSummaryModel.partNo = "OTHERS >";
-                    othersWIPSummaryModel.rejQty = wipPartModel.Others_TotalRej;
-                    othersWIPSummaryModel.rejCost = wipPartModel.Others_TotalRejCost;
-                    othersWIPSummaryModel.rejRate = wipPartModel.Others_TotalRejRate;
-                    othersWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersWIPSummaryModel.rejQty, othersWIPSummaryModel.rejRate);
-
-                    othersWIPSummaryModel.PQC_Scratch = wipPartModel.PQC_Scratch;
-                    othersWIPSummaryModel.Over_Spray = wipPartModel.Over_Spray;
-                    othersWIPSummaryModel.Bubble = wipPartModel.Bubble;
-                    othersWIPSummaryModel.Oil_Stain = wipPartModel.Oil_Stain;
-                    othersWIPSummaryModel.Drag_Mark = wipPartModel.Drag_Mark;
-                    othersWIPSummaryModel.Light_Leakage = wipPartModel.Light_Leakage;
-                    othersWIPSummaryModel.Light_Bubble = wipPartModel.Light_Bubble;
-                    othersWIPSummaryModel.White_Dot_in_Material = wipPartModel.White_Dot_in_Material;
-                    othersWIPSummaryModel.Other = wipPartModel.Other;
-                    othersWIPSummaryModel.Others_TotalRej = wipPartModel.Others_TotalRej;
-                    othersWIPSummaryModel.Others_TotalRejRate = wipPartModel.Others_TotalRejRate;
-
-
-                    WIPPartSummaryInfo.Add(othersWIPSummaryModel);
-                    #endregion
+                 
 
                     #region add  wip summary part   tts - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    ttsMouldingWIPSummaryModel.partNo = "TTS MOULD >";
+                    ttsMouldingWIPSummaryModel.partNo = "MT-Mould >";
                     ttsMouldingWIPSummaryModel.lotQty = wipPartModel.ttsLotQty;
                     ttsMouldingWIPSummaryModel.rejQty = wipPartModel.TTS_Mould_TotalRej;
                     ttsMouldingWIPSummaryModel.rejCost = wipPartModel.TTS_Mould_TotalRejCost;
@@ -1368,7 +1348,7 @@ namespace DashboardTTS.ViewBusiness
 
                     #region add  wip summary part   vendor - moulding >
                     ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    vendorMouldingWIPSummaryModel.partNo = "VENDOR MOULD >";
+                    vendorMouldingWIPSummaryModel.partNo = "VM-Mould >";
                     vendorMouldingWIPSummaryModel.lotQty = wipPartModel.vendorLotQty;
                     vendorMouldingWIPSummaryModel.rejQty = wipPartModel.Vendor_Mould_TotalRej;
                     vendorMouldingWIPSummaryModel.rejCost = wipPartModel.Vendor_Mould_TotalRejCost;
@@ -1415,10 +1395,10 @@ namespace DashboardTTS.ViewBusiness
 
                     WIPPartSummaryInfo.Add(vendorMouldingWIPSummaryModel);
                     #endregion
-
+                    
                     #region add  wip summary part   paint >
                     ViewModel.PQCButtonReport_ViewModel.Report paintWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintWIPSummaryModel.partNo = "PAINTING >";
+                    paintWIPSummaryModel.partNo = "P-Paint >";
                     paintWIPSummaryModel.rejQty = wipPartModel.Paint_TotalRej;
                     paintWIPSummaryModel.rejCost = wipPartModel.Paint_TotalRejCost;
                     paintWIPSummaryModel.rejRate = wipPartModel.Paint_TotalRejRate;
@@ -1460,7 +1440,7 @@ namespace DashboardTTS.ViewBusiness
 
                     // add  wip summary part   paint setup >
                     ViewModel.PQCButtonReport_ViewModel.Report paintSetupWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintSetupWIPSummaryModel.partNo = "PAINTING SETUP >";
+                    paintSetupWIPSummaryModel.partNo = "P-Setup >";
                     paintSetupWIPSummaryModel.rejQty = wipPartModel.Paint_SetupRej;
                     paintSetupWIPSummaryModel.rejCost = wipPartModel.Paint_SetupRejCost;
                     paintSetupWIPSummaryModel.rejRate = wipPartModel.Paint_SetupRejRate;
@@ -1468,19 +1448,10 @@ namespace DashboardTTS.ViewBusiness
 
                     WIPPartSummaryInfo.Add(paintSetupWIPSummaryModel);
 
-                    // add wip summary part   paint qa test >
-                    ViewModel.PQCButtonReport_ViewModel.Report paintQAWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    paintQAWIPSummaryModel.partNo = "QA PAINT TEST >";
-                    paintQAWIPSummaryModel.rejQty = wipPartModel.Paint_QATestRej;
-                    paintQAWIPSummaryModel.rejCost = wipPartModel.Paint_QATestRejCost;
-                    paintQAWIPSummaryModel.rejRate = wipPartModel.Paint_QATestRejRate;
-                    paintQAWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAWIPSummaryModel.rejQty, paintQAWIPSummaryModel.rejRate);
-
-                    WIPPartSummaryInfo.Add(paintQAWIPSummaryModel);
 
                     #region add  wip summary part   laser >
                     ViewModel.PQCButtonReport_ViewModel.Report laserWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    laserWIPSummaryModel.partNo = "LASER >";
+                    laserWIPSummaryModel.partNo = "L-Laser >";
                     laserWIPSummaryModel.rejQty = wipPartModel.Laser_TotalRej;
                     laserWIPSummaryModel.rejCost = wipPartModel.Laser_TotalRejCost;
                     laserWIPSummaryModel.rejRate = wipPartModel.Laser_TotalRejRate;
@@ -1515,9 +1486,46 @@ namespace DashboardTTS.ViewBusiness
                     WIPPartSummaryInfo.Add(laserWIPSummaryModel);
                     #endregion
 
+
+                    #region add  wip summary part   others >
+                    ViewModel.PQCButtonReport_ViewModel.Report othersWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                    othersWIPSummaryModel.partNo = "O-Others >";
+                    othersWIPSummaryModel.rejQty = wipPartModel.Others_TotalRej;
+                    othersWIPSummaryModel.rejCost = wipPartModel.Others_TotalRejCost;
+                    othersWIPSummaryModel.rejRate = wipPartModel.Others_TotalRejRate;
+                    othersWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersWIPSummaryModel.rejQty, othersWIPSummaryModel.rejRate);
+
+                    othersWIPSummaryModel.PQC_Scratch = wipPartModel.PQC_Scratch;
+                    othersWIPSummaryModel.Over_Spray = wipPartModel.Over_Spray;
+                    othersWIPSummaryModel.Bubble = wipPartModel.Bubble;
+                    othersWIPSummaryModel.Oil_Stain = wipPartModel.Oil_Stain;
+                    othersWIPSummaryModel.Drag_Mark = wipPartModel.Drag_Mark;
+                    othersWIPSummaryModel.Light_Leakage = wipPartModel.Light_Leakage;
+                    othersWIPSummaryModel.Light_Bubble = wipPartModel.Light_Bubble;
+                    othersWIPSummaryModel.White_Dot_in_Material = wipPartModel.White_Dot_in_Material;
+                    othersWIPSummaryModel.Other = wipPartModel.Other;
+                    othersWIPSummaryModel.Others_TotalRej = wipPartModel.Others_TotalRej;
+                    othersWIPSummaryModel.Others_TotalRejRate = wipPartModel.Others_TotalRejRate;
+
+
+                    WIPPartSummaryInfo.Add(othersWIPSummaryModel);
+                    #endregion
+
+                    // add wip summary part   paint qa test >
+                    ViewModel.PQCButtonReport_ViewModel.Report paintQAWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                    paintQAWIPSummaryModel.partNo = "O-QA >";
+                    paintQAWIPSummaryModel.rejQty = wipPartModel.Paint_QATestRej;
+                    paintQAWIPSummaryModel.rejCost = wipPartModel.Paint_QATestRejCost;
+                    paintQAWIPSummaryModel.rejRate = wipPartModel.Paint_QATestRejRate;
+                    paintQAWIPSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAWIPSummaryModel.rejQty, paintQAWIPSummaryModel.rejRate);
+
+                    WIPPartSummaryInfo.Add(paintQAWIPSummaryModel);
+
+                    
+
                     // add wip summary part   overall >
                     ViewModel.PQCButtonReport_ViewModel.Report overallWIPSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                    overallWIPSummaryModel.partNo = "OVERALL >";
+                    overallWIPSummaryModel.partNo = "Overall >";
                     overallWIPSummaryModel.lotQty = wipPartModel.lotQty;
                     overallWIPSummaryModel.pass = wipPartModel.pass;
                     overallWIPSummaryModel.rejQty = wipPartModel.rejQty;
@@ -1529,43 +1537,15 @@ namespace DashboardTTS.ViewBusiness
                 }
                 #endregion
 
-
-
-
-
-                
-
                 #region 生成 overall part summary 信息
 
                 List<ViewModel.PQCButtonReport_ViewModel.Report> OverallSummaryInfo = new List<ViewModel.PQCButtonReport_ViewModel.Report>();
 
-                #region add  overall summary part   others >
-                ViewModel.PQCButtonReport_ViewModel.Report othersOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                othersOverallSummaryModel.partNo = "OTHERS >";
-                othersOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
-                othersOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Others_TotalRejCost);
-                othersOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
-                othersOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersOverallSummaryModel.rejQty, othersOverallSummaryModel.rejRate);
-
-                othersOverallSummaryModel.PQC_Scratch = partsTypeSummaryList.Sum(p => p.PQC_Scratch);
-                othersOverallSummaryModel.Over_Spray = partsTypeSummaryList.Sum(p => p.Over_Spray);
-                othersOverallSummaryModel.Bubble = partsTypeSummaryList.Sum(p => p.Bubble);
-                othersOverallSummaryModel.Oil_Stain = partsTypeSummaryList.Sum(p => p.Oil_Stain);
-                othersOverallSummaryModel.Drag_Mark = partsTypeSummaryList.Sum(p => p.Drag_Mark);
-                othersOverallSummaryModel.Light_Leakage = partsTypeSummaryList.Sum(p => p.Light_Leakage);
-                othersOverallSummaryModel.Light_Bubble = partsTypeSummaryList.Sum(p => p.Light_Bubble);
-                othersOverallSummaryModel.White_Dot_in_Material = partsTypeSummaryList.Sum(p => p.White_Dot_in_Material);
-                othersOverallSummaryModel.Other = partsTypeSummaryList.Sum(p => p.Other);
-
-                othersOverallSummaryModel.Others_TotalRej = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
-                othersOverallSummaryModel.Others_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
-
-                OverallSummaryInfo.Add(othersOverallSummaryModel);
-                #endregion
+            
 
                 #region add  overall summary part   tts - moulding >
                 ViewModel.PQCButtonReport_ViewModel.Report ttsMouldingOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                ttsMouldingOverallSummaryModel.partNo = ("TTS MOULD >");
+                ttsMouldingOverallSummaryModel.partNo = ("MT-Mould >");
                 ttsMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.ttsLotQty);
                 ttsMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRej);
                 ttsMouldingOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.TTS_Mould_TotalRejCost);
@@ -1616,7 +1596,7 @@ namespace DashboardTTS.ViewBusiness
 
                 #region add  overall summary part   vendor - moulding >
                 ViewModel.PQCButtonReport_ViewModel.Report vendorMouldingOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                vendorMouldingOverallSummaryModel.partNo = ("VENDOR MOULD >");
+                vendorMouldingOverallSummaryModel.partNo = ("VM-Mould >");
                 vendorMouldingOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.vendorLotQty);
                 vendorMouldingOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRej);
                 vendorMouldingOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Vendor_Mould_TotalRejCost);
@@ -1666,7 +1646,7 @@ namespace DashboardTTS.ViewBusiness
 
                 #region add  overall summary part   paint >
                 ViewModel.PQCButtonReport_ViewModel.Report paintOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                paintOverallSummaryModel.partNo = ("PAINTING >");
+                paintOverallSummaryModel.partNo = ("P-Paint >");
                 paintOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_TotalRej);
                 paintOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_TotalRejCost);
                 paintOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);        
@@ -1708,7 +1688,7 @@ namespace DashboardTTS.ViewBusiness
 
                 // add  overall summary part   paint setup >
                 ViewModel.PQCButtonReport_ViewModel.Report paintSetupOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                paintSetupOverallSummaryModel.partNo = "PAINTING SETUP >";
+                paintSetupOverallSummaryModel.partNo = "P-Setup >";
                 paintSetupOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_SetupRej);
                 paintSetupOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_SetupRejCost);
                 paintSetupOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_SetupRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
@@ -1716,21 +1696,12 @@ namespace DashboardTTS.ViewBusiness
 
                 OverallSummaryInfo.Add(paintSetupOverallSummaryModel);
 
-                // add  overall summary part   paint qa test >
-                ViewModel.PQCButtonReport_ViewModel.Report paintQAOveralSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                paintQAOveralSummaryModel.partNo = "QA PAINT TEST >";
-                paintQAOveralSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_QATestRej);
-                paintQAOveralSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_QATestRejCost);
-                paintQAOveralSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_QATestRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
-                paintQAOveralSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAOveralSummaryModel.rejQty, paintQAOveralSummaryModel.rejRate);
-
-                OverallSummaryInfo.Add(paintQAOveralSummaryModel);
 
                 #region add  overall summary part   laser >
                 ViewModel.PQCButtonReport_ViewModel.Report laserOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                
 
-                laserOverallSummaryModel.partNo = ("LASER >");
+
+                laserOverallSummaryModel.partNo = ("L-Laser >");
                 laserOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Laser_TotalRej);
                 laserOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Laser_TotalRejCost);
                 laserOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Laser_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
@@ -1740,8 +1711,8 @@ namespace DashboardTTS.ViewBusiness
                 //DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "1.2 laserPartModel.Laser_TotalRejRate" + laserPartModel.Laser_TotalRejRate);
 
                 //summary汇总信息中 laser rej  按照 laser rej/laser part总数 计算. 
-                laserOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserOverallSummaryModel.rejQty, laserPartModel==null ? 0.00:   laserPartModel.Laser_TotalRejRate );
-                
+                laserOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", laserOverallSummaryModel.rejQty, laserPartModel == null ? 0.00 : laserPartModel.Laser_TotalRejRate);
+
                 //DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "2");
 
 
@@ -1773,9 +1744,45 @@ namespace DashboardTTS.ViewBusiness
                 OverallSummaryInfo.Add(laserOverallSummaryModel);
                 #endregion
 
+                #region add  overall summary part   others >
+                ViewModel.PQCButtonReport_ViewModel.Report othersOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                othersOverallSummaryModel.partNo = "O-Others >";
+                othersOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
+                othersOverallSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Others_TotalRejCost);
+                othersOverallSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                othersOverallSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", othersOverallSummaryModel.rejQty, othersOverallSummaryModel.rejRate);
+
+                othersOverallSummaryModel.PQC_Scratch = partsTypeSummaryList.Sum(p => p.PQC_Scratch);
+                othersOverallSummaryModel.Over_Spray = partsTypeSummaryList.Sum(p => p.Over_Spray);
+                othersOverallSummaryModel.Bubble = partsTypeSummaryList.Sum(p => p.Bubble);
+                othersOverallSummaryModel.Oil_Stain = partsTypeSummaryList.Sum(p => p.Oil_Stain);
+                othersOverallSummaryModel.Drag_Mark = partsTypeSummaryList.Sum(p => p.Drag_Mark);
+                othersOverallSummaryModel.Light_Leakage = partsTypeSummaryList.Sum(p => p.Light_Leakage);
+                othersOverallSummaryModel.Light_Bubble = partsTypeSummaryList.Sum(p => p.Light_Bubble);
+                othersOverallSummaryModel.White_Dot_in_Material = partsTypeSummaryList.Sum(p => p.White_Dot_in_Material);
+                othersOverallSummaryModel.Other = partsTypeSummaryList.Sum(p => p.Other);
+
+                othersOverallSummaryModel.Others_TotalRej = partsTypeSummaryList.Sum(p => p.Others_TotalRej);
+                othersOverallSummaryModel.Others_TotalRejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Others_TotalRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+
+                OverallSummaryInfo.Add(othersOverallSummaryModel);
+                #endregion
+
+                // add  overall summary part   paint qa test >
+                ViewModel.PQCButtonReport_ViewModel.Report paintQAOveralSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
+                paintQAOveralSummaryModel.partNo = "O-QA >";
+                paintQAOveralSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.Paint_QATestRej);
+                paintQAOveralSummaryModel.rejCost = partsTypeSummaryList.Sum(p => p.Paint_QATestRejCost);
+                paintQAOveralSummaryModel.rejRate = Math.Round(partsTypeSummaryList.Sum(p => p.Paint_QATestRej) / partsTypeSummaryList.Sum(p => p.lotQty) * 100, 2);
+                paintQAOveralSummaryModel.rejRateDisplay = string.Format("{0}({1}%)", paintQAOveralSummaryModel.rejQty, paintQAOveralSummaryModel.rejRate);
+
+                OverallSummaryInfo.Add(paintQAOveralSummaryModel);
+
+  
+
                 // add overall summary part   overall >
                 ViewModel.PQCButtonReport_ViewModel.Report overallOverallSummaryModel = new ViewModel.PQCButtonReport_ViewModel.Report();
-                overallOverallSummaryModel.partNo = "OVERALL >";
+                overallOverallSummaryModel.partNo = "Overall >";
                 overallOverallSummaryModel.lotQty = partsTypeSummaryList.Sum(p => p.lotQty);
                 overallOverallSummaryModel.pass = partsTypeSummaryList.Sum(p => p.pass);
                 overallOverallSummaryModel.rejQty = partsTypeSummaryList.Sum(p => p.rejQty);
@@ -1793,7 +1800,7 @@ namespace DashboardTTS.ViewBusiness
 
                 //在添加summary row之后, 再获取根据model汇总的信息.   
                 //mark:若在添加model汇总信息后, 再添加summary信息会导致summary数量翻倍.  
-                //model汇总信息也是添加在最初的reportlist中.  select出来的summary信息会随着reportlist中内容改变而改变.  
+                //model汇总信息也是添加在最初的reportlist中.  select出来的summary信息会随着reportlist中内容改变而改变.
                 //linq的特性 select出来的是寻址,而不是再分配内存.
                 #region 获取model汇总信息
                 var modelSummaryList = from a in reportList

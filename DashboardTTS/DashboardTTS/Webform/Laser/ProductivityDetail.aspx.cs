@@ -9,28 +9,16 @@ using System.Web.UI.HtmlControls;
 using System.Globalization;
 using System.Text;
 
-
-
 namespace DashboardTTS.Webform
 {
     public partial class ProductivityDetail : System.Web.UI.Page
-    {
-    
-        public class modela
-        {
-            public string aaaa { get; set; }
-            public string ccc { get; set; }
-            public string bbb { get; set; }
-        }
-        
+    {        
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 try
                 {
-
-                   
                     if (!string.IsNullOrEmpty(Request.QueryString["MachineID"]))
                     {
                         this.ddlMachineNo.SelectedValue = Request.QueryString["MachineID"].Replace("Machine", "").Replace("No.", "").Trim();
@@ -134,6 +122,7 @@ namespace DashboardTTS.Webform
         {
             try
             {
+              
                 //获取并处理查询参数
                 DateTime dDateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime dDateTo = DateTime.Parse(this.txtDateTo.Text).Date;
@@ -147,7 +136,7 @@ namespace DashboardTTS.Webform
                 string sJobNo = this.txtJobNo.Text.Trim();
 
 
-
+             
 
                 Common.BLL.LMMSWatchLog_BLL WatchDogBll = new Common.BLL.LMMSWatchLog_BLL();
                 DataTable dt = WatchDogBll.GetProductionDetailReport(dDateFrom, dDateTo, sShift, sModel, sPartNo, sMachineID, sJobNo);

@@ -150,6 +150,7 @@
 
     $(document).ready(function () {
 
+
         setPartNoDDL($('#ddlPartNo'), 'PQC', '');
         $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
 
@@ -184,11 +185,12 @@
             DateTo: $("#txtDateTo").val(),
             Shift: $("#ddlShift").val(),
             PartNo: $('#ddlPartNo').val(),
-            Station: $('#ddlStation').val(),            
+            Station: $('#ddlStation').val(),
             JobNo: $('#txtJobNo').val(),
             LotNo: $('#txtLotNo').val(),
         }
 
+      
         let columns = [
             {
                 field: 'Date',

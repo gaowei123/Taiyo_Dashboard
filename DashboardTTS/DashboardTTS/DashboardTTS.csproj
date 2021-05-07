@@ -825,11 +825,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="api\index.js" />
+    <Content Include="api\myAxios.js" />
     <Content Include="Dashboard CSS JS\CSS\HomePage.css" />
     <Content Include="Dashboard CSS JS\JS\HomePage.js" />
     <Content Include="Dashboard CSS JS\JS\GlobalConfig.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_DailyReport.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_MonthlyHighestReject.js" />
+    <Content Include="plugins\axios\axios.min.js" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.css" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.js" />
     <Content Include="Dashboard CSS JS\CSS\MasterPage.css" />
@@ -3767,6 +3770,7 @@
     <Content Include="Views\Painting_Product\DeliveryRecord.cshtml" />
     <Content Include="Views\LASER_Product\ProductivityLiveReport.cshtml" />
     <Content Include="Views\PQC_Product\CheckingLiveReport.cshtml" />
+    <Content Include="Views\PQC_Product\ScrapReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

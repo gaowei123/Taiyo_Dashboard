@@ -1,0 +1,290 @@
+﻿
+@{
+    ViewBag.Title = "ScrapReport";
+}
+
+<style>
+    label {
+        width: 35%;
+    }
+
+    #txtDateFrom,
+    #txtDateTo,
+    #ddlShift,
+    #ddlStation,
+    #txtJobNo {
+        width: 60%;
+    }
+</style>
+
+<div class="container">
+
+    <div class="row titleRow">
+        <img class="titleImg" src="~/Resources/Images/headericon.gif" />
+        <span class="titleText">Packing Scrap Report</span>
+    </div>
+
+    <div class="row searchingBar">
+        <div class="col-md-12 panel panel-default searchingPanel" style="padding-top:10px;">
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label>Date From:</label>
+                    <input type="text" class="form-control" id="txtDateFrom" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
+                </div>
+                <div class="col-sm-3">
+                    <label>Date To:</label>
+                    <input type="text" class="form-control" id="txtDateTo" data-date-format="yyyy-mm-dd" placeholder="Please choose date" />
+                </div>
+                <div class="col-sm-3">
+                    <label>Shift:</label>
+                    <select id="ddlShift" class="form-control">
+                        <option value="">All</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label>Part No:</label>
+                    <select id="ddlPartNo" class="form-control selectpicker" data-live-search="true"></select>
+                </div>
+            </div>
+
+            <div class="row form-inline searchingBar ">
+                <div class="col-sm-3">
+                    <label>Job No:</label>
+                    <input type="text" class="form-control" id="txtJobNo" placeholder="Please input job no" />
+                </div>
+                <div class="col-sm-3">
+                    @*<label>Station:</label>
+                    <select id="ddlStation" class="form-control" data-ng-style="btn-info">
+                        <option value="">All</option>
+                        <optgroup label="Online">
+                            <option value="1">Online1(Sta1)</option>
+                            <option value="2">Online2(Sta2)</option>
+                            <option value="3">Online3(Sta3)</option>
+                            <option value="4">Online4(Sta4)</option>
+                            <option value="5">Online5(Sta5)</option>
+                            <option value="6">Online6(Sta6)</option>
+                            <option value="7">Online7(Sta7)</option>
+                            <option value="8">Online8(Sta8)</option>
+                        </optgroup>
+                        <optgroup label="WIP">
+                            <option value="16">WIP1(Sta16)</option>
+                            <option value="17">WIP2(Sta17)</option>
+                            <option value="14">WIP3(Sta14)</option>
+                            <option value="15">WIP4(Sta15)</option>
+                            <option value="11">WIP5(Sta11)</option>
+                            <option value="13">WIP6(Sta13)</option>
+                        </optgroup>
+                        <optgroup label="Packing">
+                            <option value="25">Packing1(Sta25)</option>
+                            <option value="23">Packing2(Sta23)</option>
+                            <option value="22">Packing3(Sta22)</option>
+                            <option value="21">Packing4(Sta21)</option>
+                            <option value="24">Packing5(Sta24)</option>
+                            <option value="12">Packing6(Sta12)</option>
+                        </optgroup>
+                    </select>*@
+                </div>
+                
+                <div class="col-sm-3">
+                 
+                </div>
+
+                <div class="col-sm-3" style="text-align:right; padding-right:2%;">
+                    <input type="button" class="btn btn-success" value="Generate" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" style="padding:0px;margin-top:-10px;">
+            <table id="tb" data-toggle="table"></table>
+        </div>
+    </div>
+
+</div>
+
+
+@*下拉框组件*@
+<script src="~/Plugins/bootstrap-select-1.13.0/dist/js/bootstrap-select.min.js"></script>
+<link href="~/Plugins/bootstrap-select-1.13.0/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+
+@*时间框组件*@
+<script src="~/Plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<link href="~/Plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@*bootstrap table 组件*@
+<script src="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.js"></script>
+<link href="~/plugins/bootstrap-table-1.15.3/dist/bootstrap-table.min.css" rel="stylesheet" />
+
+
+
+<script type="text/javascript">
+
+    var apiGetData = window.globalConfig.rootDirectory + '/PQC_Product/GetScrapList';
+
+    //初始化时间框
+    $('#txtDateFrom').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+    $('#txtDateTo').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        initialDate: new Date()
+    });
+
+    $('input[type="button"]').click(search);
+
+    let tableHeight = $(window).height() - 230;
+
+   
+
+    $(document).ready(function () {
+
+        setPartNoDDL($('#ddlPartNo'), 'PQC', '');
+        $('#ddlPartNo').selectpicker({ width: 'calc(60%)' });
+
+        let today = dateFormat('yyyy-MM-dd', new Date());
+        $('#txtDateFrom').val(today);
+        $('#txtDateTo').val(today);
+
+
+        search();
+    })
+
+
+    function search() {
+
+        let searchParams = {
+            DateFrom: $('#txtDateFrom').val(),
+            DateTo: $("#txtDateTo").val(),
+            Shift: $("#ddlShift").val(),
+            PartNo: $('#ddlPartNo').val(),
+            JobNo: $('#txtJobNo').val(),
+        }
+
+
+
+
+        let columns = [
+            {
+                field: 'Day',
+                title: 'Day',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (data) {
+                    if (data == '' || data == null || data == undefined) {
+                        return '';
+                    }
+
+                    var date = new Date(parseInt(data.replace("/Date(", "").replace(")/", ""), 10));
+                    return dateFormat('yyyy/MM/dd', date);
+                },
+                footerFormatter: function (data) {
+                    return 'Total';
+                }
+            },
+            {
+                field: 'Shift',
+                title: 'Shift',
+                align: 'center',
+                valign: 'middle',
+            },
+            {
+                field: 'PartNo',
+                title: 'Part No',
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field: 'JobNo',
+                title: 'Job No',
+                align: 'center',
+                valign: 'middle',
+            },
+             {
+                 field: 'MaterialPartNo',
+                 title: 'Material Part No',
+                 align: 'center',
+                 valign: 'middle',
+             },
+            {
+                field: 'MaterialQty',
+                title: 'Scrap Qty',
+                align: 'center',
+                valign: 'middle',
+                footerFormatter: function (data) {
+                    let sum = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        sum += data[i].MaterialQty;
+                    }
+                    return sum;
+                }
+            }
+        ]
+
+
+        $('#tb').bootstrapTable('destroy');
+        $('#tb').bootstrapTable({
+
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: apiGetData,
+            queryParams: searchParams,
+
+
+
+            cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+
+            //表头样式 undefined, thead-light, thead-dark,
+            theadClasses: 'thead-title',
+
+            //表格样式
+            classes: 'table table-bordered table-hover table-striped',
+
+            showFooter: true,
+            striped: false,  //表格显示条纹，默认为false
+            //pagination: true, // 在表格底部显示分页组件，默认false
+            //pageList: [10, 20], // 设置页面可以显示的数据条数
+            //pageSize: 10, // 页面数据条数
+            //pageNumber: 1, // 首页页码
+
+
+            rowStyle: function (row, index) {
+                let style = { "overflow": "hidden", "text-overflow": "ellipsis", "white-space": "nowrap" };
+                return { css: style };
+            },
+
+            columns: columns,
+
+            onLoadSuccess: function (data) {  //加载成功时执行
+                $('#tb').bootstrapTable('resetView', { height: tableHeight });
+            },
+
+            onLoadError: function () {  //加载失败时执行
+                console.log("Get data error");
+            }
+        });
+    }
+
+    $(window).resize(function () {
+        $('#tb').bootstrapTable('resetView', { height: tableHeight });
+    });
+
+</script>

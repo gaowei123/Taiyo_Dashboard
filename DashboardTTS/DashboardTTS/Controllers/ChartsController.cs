@@ -217,6 +217,9 @@ namespace DashboardTTS.Controllers
 
         public JsonResult GetLaserProductionData()
         {
+            DBHelp.Reports.LogFile.Log("LaserProductionChart", "0.0 ===== in chartsController GetLaserProductionData");
+
+
             string type = Request.Form["Type"];
 
             var param = new Taiyo.SearchParam.LaserParam.LaserProductChartParam();

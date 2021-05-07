@@ -82,7 +82,7 @@ namespace DashboardTTS.Webform.PQC
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text.Trim()).Date;
                 DateTime DateTo = DateTime.Parse(this.txtDateTo.Text.Trim()).Date.AddDays(1);
                 string partNumber = this.txtPartNo.Text;
-                string jobNumber = this.txtJobNo.Text;
+                string jobNumber = this.txtJobNo.Text.Trim();
                 string shift = this.ddlShift.SelectedItem.Value;
                 
 

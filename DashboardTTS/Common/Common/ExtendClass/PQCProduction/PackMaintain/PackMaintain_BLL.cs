@@ -206,7 +206,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
                 string remark = $"Updated by packing maintenance, userID:{sUserID}";
 
-                // 维护后, 增加的数量
+                // 维护后, 增加的总数量
                 decimal totalIncreaseQty = maintainModel.MaterialPartList.Sum(p => p.UpdatedQty - p.MaterialQty);
 
                 // 每个 material 以及对应更新前的数量的 dictionary.

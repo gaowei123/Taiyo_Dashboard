@@ -16,66 +16,77 @@ namespace MyChart.ConcreteChartMethod
 
         public ChartModel GetChartData(BaseParam param)
         {
-            var productChartParam = (LaserProductChartParam)param;
-
-            MyChart.ChartModel model = new ChartModel();            
-            model.LegendData = GetLegend(param);
-
-            Series seriesPass = new Series();
-            Series seriesRej = new Series();
-
-            seriesPass.Name = "OK";
-            seriesPass.Type = "bar";
-            seriesPass.Stack = "output";
-
-            seriesRej.Name = "NG";
-            seriesRej.Type = "line";
-            seriesRej.Stack = "output";
-
-            if (productChartParam.Type == "Daily")
+            try
             {
-                #region daily
-                var dailyList = _bll.GetDailyList(productChartParam);                
-                foreach (var item in dailyList)
+                DBHelp.Reports.LogFile.Log("LaserProductionChart", "1.0 ===== in func GetChartData");
+
+                var productChartParam = (LaserProductChartParam)param;
+
+                MyChart.ChartModel model = new ChartModel();
+                model.LegendData = GetLegend(param);
+
+                Series seriesPass = new Series();
+                Series seriesRej = new Series();
+
+                seriesPass.Name = "OK";
+                seriesPass.Type = "bar";
+                seriesPass.Stack = "output";
+
+                seriesRej.Name = "NG";
+                seriesRej.Type = "line";
+                seriesRej.Stack = "output";
+
+                if (productChartParam.Type == "Daily")
                 {
-                    model.XAxisData.Add(string.Format("{0}/{1}", item.Day, (new DateTime(item.Year, item.Month, item.Day)).GetMonthName(false)));
-                    seriesPass.Data.Add(item.PassQty);
-                    seriesRej.Data.Add(item.RejQty);
+                    #region Daily
+                    var dailyList = _bll.GetDailyList(productChartParam);
+                    foreach (var item in dailyList)
+                    {
+                        model.XAxisData.Add(string.Format("{0}/{1}", item.Day, (new DateTime(item.Year, item.Month, item.Day)).GetMonthName(false)));
+                        seriesPass.Data.Add(item.PassQty);
+                        seriesRej.Data.Add(item.RejQty);
+                    }
+
+                    model.SeriesData = new List<Series>() { seriesPass, seriesRej };
+                    #endregion
+                }
+                else if (productChartParam.Type == "Monthly")
+                {
+                    #region Monthly
+                    var monthlyList = _bll.GetMonthlyList(productChartParam);
+                    foreach (var item in monthlyList)
+                    {
+                        model.XAxisData.Add(string.Format("{0}/{1}", (new DateTime(item.Year, item.Month, 1)).GetMonthName(false), item.Year));
+                        seriesPass.Data.Add(item.PassQty);
+                        seriesRej.Data.Add(item.RejQty);
+                    }
+
+                    model.SeriesData = new List<Series>() { seriesPass, seriesRej };
+                    #endregion
+                }
+                else if (productChartParam.Type == "Yearly")
+                {
+                    #region Yearly
+                    var yearlyList = _bll.GetYearList(productChartParam);
+                    foreach (var item in yearlyList)
+                    {
+                        model.XAxisData.Add(item.Year.ToString());
+                        seriesPass.Data.Add(item.PassQty);
+                        seriesRej.Data.Add(item.RejQty);
+                    }
+
+                    model.SeriesData = new List<Series>() { seriesPass, seriesRej };
+                    #endregion
                 }
 
-                model.SeriesData = new List<Series>() { seriesPass, seriesRej };
-                #endregion
-            }
-            else if(productChartParam.Type == "Monthly")
-            {
-                #region daily
-                var monthlyList = _bll.GetMonthlyList(productChartParam);
-                foreach (var item in monthlyList)
-                {
-                    model.XAxisData.Add(string.Format("{0}/{1}", (new DateTime(item.Year, item.Month,1)).GetMonthName(false), item.Year));
-                    seriesPass.Data.Add(item.PassQty);
-                    seriesRej.Data.Add(item.RejQty);
-                }
+                return model;
 
-                model.SeriesData = new List<Series>() { seriesPass, seriesRej };
-                #endregion
             }
-            else if (productChartParam.Type == "Yearly")
+            catch (Exception ee)
             {
-                #region daily
-                var yearlyList = _bll.GetYearList(productChartParam);
-                foreach (var item in yearlyList)
-                {
-                    model.XAxisData.Add(item.Year.ToString());
-                    seriesPass.Data.Add(item.PassQty);
-                    seriesRej.Data.Add(item.RejQty);
-                }
-
-                model.SeriesData = new List<Series>() { seriesPass, seriesRej };
-                #endregion
+                DBHelp.Reports.LogFile.Log("LaserProductionChart", "exception: " + ee.ToString());
+                throw;
             }
-            
-            return model;
         }
 
         public List<string> GetLegend(BaseParam param)

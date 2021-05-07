@@ -13,7 +13,7 @@ namespace MyChart
         public  MyChart.IChartMethod CreateInstance(string sChartName)
         {
 
-                        //命名空间.类型名
+            //命名空间.类型名
             string name = "MyChart.ConcreteChartMethod." + sChartName;
 
 

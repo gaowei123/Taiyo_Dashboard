@@ -58,6 +58,10 @@
       <Project>{11b39656-6562-41f7-a926-4d2202cd64ea}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DB\DB\DBHelp.csproj">
+      <Project>{c6ac93b9-faa8-4488-b2e7-56f278d67a24}</Project>
+      <Name>DBHelp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StaticRes\StaticRes.csproj">
       <Project>{0af99380-d78f-45da-9451-6957bc590183}</Project>
       <Name>StaticRes</Name>

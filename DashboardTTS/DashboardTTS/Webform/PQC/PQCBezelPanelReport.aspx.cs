@@ -281,7 +281,7 @@ namespace DashboardTTS.Webform.PQC
 
                     foreach (DataRow drDefect in dtAllDefectCode.Rows)
                     {
-                        string defectCodeID = drDefect["DefectCodeID"].ToString();
+                        string defectCodeID = drDefect["DefectCodeID"].ToString();                    
                         string sTemp = drDefectDetail[defectCodeID].ToString();
                         drOutput[defectCodeID] = sTemp == "" ? "0" : sTemp;                  
                     }
@@ -474,11 +474,7 @@ namespace DashboardTTS.Webform.PQC
             catch (Exception ee)
             {
                 DBHelp.Reports.LogFile.Log("PQCBezelPanelReport", "BtnGenerate_Click error : " + ee.ToString());
-
-                if (ee.ToString().ToUpper().Contains("TIMEOUT"))
-                {
-                    Common.CommFunctions.ShowMessage(this.Page, "Searching timeout, please reduce the searching days!");
-                }
+                Common.CommFunctions.ShowMessage(this.Page, "Catch exception: " + ee.ToString());
             }
         }
 

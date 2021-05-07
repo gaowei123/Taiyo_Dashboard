@@ -429,6 +429,7 @@ namespace Common.BLL
        
         public DataTable GetProductionDetailReport(DateTime dDateFrom, DateTime dDateTo, string sShift, string sModel, string sPartNo, string sMachineID, string sJobNo)
         {
+          
             DataTable dt = dal.GetProductionDetailReport(dDateFrom, dDateTo, sShift, sModel, sPartNo, sMachineID, sJobNo);
             if (dt == null || dt.Rows.Count == 0)
                 return null;
