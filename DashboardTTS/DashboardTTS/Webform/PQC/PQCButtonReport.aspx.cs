@@ -42,21 +42,13 @@ namespace DashboardTTS.Webform.PQC
         {
             try
             {
-                #region 这几个条件都不用了.
-                string JobNo = "";
-                string partNumber = "";
-                string model = "";
-                string color = "";
-                string supplier = "";
-                string coating = "";
-                #endregion
-
                 DateTime DateFrom = DateTime.Parse(this.txtDateFrom.Text).Date;
                 DateTime DateTo = DateFrom.AddDays(1);
 
                 // 用来选定现显示 laser / wip 部分列表
                 string reportType = this.ddlType.SelectedItem.Value;
 
+                // URL 转递的参数
                 // "BUTTON": 只显示pqcbom description设定为button的part
                 // ""(传空): 不指定type类型, 全显示.
                 string sDescription = Request.QueryString["Description"];
@@ -65,7 +57,7 @@ namespace DashboardTTS.Webform.PQC
                 ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay = new ViewModel.PQCButtonReport_ViewModel.Report();
 
                 ViewBusiness.ButtonReport_ViewBusiness vBLL = new ViewBusiness.ButtonReport_ViewBusiness();
-                DataTable dtReport = vBLL.GetResultDt(DateFrom, DateTo, sDescription, partNumber, JobNo, model, supplier, color, coating, reportType, out modelForDisplay);
+                DataTable dtReport = vBLL.GetResultDt(DateFrom, DateTo, sDescription, reportType, out modelForDisplay);
                 
                 Display(dtReport, modelForDisplay);
             }
@@ -198,20 +190,14 @@ namespace DashboardTTS.Webform.PQC
                         if (columnName.Contains("(TM)") || columnName.Contains("(VM)") || columnName.Contains("(P)") || columnName.Contains("(L)") || columnName.Contains("(O)"))
                         {
                             //特殊行跳过
-                            if (sPartRowText == "OTHERS >" || sPartRowText == "TTS MOULD >" ||
-                                sPartRowText == "VENDOR MOULD >" || sPartRowText == "PAINTING >" || sPartRowText == "PAINTING SETUP >" ||
-                                sPartRowText == "QA PAINT TEST >" || sPartRowText == "LASER >" || sPartRowText == "OVERALL >")
-                                continue;
+                            //string[] strArraySpecialRows = new string[] { "MT-Mould >", "VM-Mould >", "P-Paint >", "P-Setup >", "L-Laser >", "O-Others >", "O-QA >", "Overall >" };
+                            //if (strArraySpecialRows.Contains(sPartRowText))
+                            //    continue;
 
 
                             //特殊列跳过
-                            if (columnName == "(L)Machine" || columnName == "(L)OP" || columnName == "(L)Date" ||
-                                columnName == "(P)U/C 1st Coat" || columnName == "(P)1st Machine" || columnName == "(P)1st Date" ||
-                                columnName == "(P)M/C 2nd Coat" || columnName == "(P)2nd Machine" || columnName == "(P)2nd Date" ||
-                                columnName == "(P)T/C 3rd Coat" || columnName == "(P)3rd Machine" || columnName == "(P)3rd Date" ||
-                                columnName == "(L)Machine" || columnName == "(L)OP" || columnName == "(L)Date" ||
-                                columnName == "(TM)TotalRej" || columnName == "(VM)TotalRej" || columnName == "(P)TotalRej" ||
-                                columnName == "(L)TotalRej" || columnName == "(O)TotalRej" || columnName.Contains("%"))
+                            string[] strArraySpecialColumns = new string[] { "MFG<br/>Date", "(P)<br/>U/C<br/>1st<br/>Coat", "(P)<br/>1st<br/>Machine", "(P)<br/>1st<br/>Date","(P)<br/>M/C<br/>2nd<br/>Coat","(P)<br/>2nd<br/>Machine","(P)<br/>2nd<br/>Date", "(P)<br/>T/C<br/>3rd<br/>Coat" , "(P)<br/>3rd<br/>Machine" , "(P)<br/>3rd<br/>Date" , "(L)<br/>Machine", "(L)<br/>OP", "(L)<br/>Date", "Insp<br/>By", "(TM)<br/>Total<br/>Rej" , "(TM)<br/>Total<br/>Rej%" ,"(VM)<br/>Total<br/>Rej", "(VM)<br/>Total<br/>Rej%" , "(P)<br/>Total<br/>Rej", "(P)<br/>Total<br/>Rej%", "(L)<br/>Total<br/>Rej", "(L)<br/>Total<br/>Rej%" , "(O)<br/>Total<br/>Rej" , "(O)<br/>Total<br/>Rej%" };
+                            if (strArraySpecialColumns.Contains(columnName))
                                 continue;
 
 

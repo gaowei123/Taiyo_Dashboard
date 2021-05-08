@@ -453,7 +453,6 @@ namespace Common.Class.BLL
         
         public DataTable GetVIDetailForButtonReport_NEW(string strWhere)
         {
-
             DataTable dtViDetailTracking = new DataTable();
             dtViDetailTracking = dal.GetVIDetailForButtonReport_NEW(strWhere);
             
@@ -463,9 +462,9 @@ namespace Common.Class.BLL
                 return dtViDetailTracking;
         }
 
-        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription)
         {
-            return dal.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription,sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+            return dal.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription);
         }
         
         private int GetSN(string type)

@@ -1144,13 +1144,7 @@
                 title: 'Particle For Laser Setup',
                 align: 'center',
                 valign: 'middle'
-            },
-            {
-                field: 'shortage',
-                title: 'Shortage',
-                align: 'center',
-                valign: 'middle'
-            },         
+            },   
             {
                 field: 'setup',
                 title: 'Setup',
@@ -1197,7 +1191,7 @@
                 let whiteMark = 0;
                 let dented = 0;
                 let particleForLaserSetup = 0;
-                let shortage = 0;
+      
                 let setup = 0;
                 let other = 0;
               
@@ -1230,7 +1224,7 @@
                     whiteMark += data[i].whiteMark;
                     dented += data[i].dented;
                     particleForLaserSetup += data[i].particleForLaserSetup;
-                    shortage += data[i].shortage;
+              
                     setup += data[i].setup;
                     other += data[i].other;
                 }
@@ -1259,7 +1253,7 @@
                 if (whiteMark == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'whiteMark');
                 if (dented == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'dented');
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
-                if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
+           
                 if (setup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'setup');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 

@@ -158,8 +158,8 @@ namespace DashboardTTS.ViewModel
             public double dented { get; set; }
             public double particleForLaserSetup { get; set; }
             public double buyoff { get; set; }
-            public double shortage { get; set; }
-            public double qa { get; set; }
+            //public double shortage { get; set; }
+            //public double qa { get; set; }
             public double setup { get; set; }
             public double other { get; set; }
 

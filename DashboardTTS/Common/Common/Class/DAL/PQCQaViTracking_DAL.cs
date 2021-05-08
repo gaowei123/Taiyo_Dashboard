@@ -322,11 +322,9 @@ where 1=1 ");
                 return ds.Tables[0];
         }
         
-        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        public DataTable GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription)
         {
             StringBuilder strSql = new StringBuilder();
-
-            //查询出所有job到临时表
             strSql.Append(@"
 select a.jobId
 from (
@@ -336,13 +334,11 @@ from (
 	and day < @DateTo
 ) a 
 
-
 left join 
 (
 	select jobId, partnumber, max(processes) as curCheckProcess  from PQCQaViTracking   
 	group by jobid, partNumber
 ) b  on a.jobId = b.jobId
-
 
 left join (
 	select 
@@ -357,8 +353,6 @@ left join (
 	model
 	from pqcbom 
 ) c   on c.partNumber = b.partNumber 
-
-
 where b.curCheckProcess = c.lastCheckingProcess ");
 
             if (sDescription.Trim() == "BUTTON")
@@ -367,48 +361,16 @@ where b.curCheckProcess = c.lastCheckingProcess ");
                 strSql.AppendLine(" and c.description = '"+ sDescription + "' ");
 
 
-
-            if (sJobNo.Trim() != "")
-                strSql.AppendLine(" and a.JobID = @JobNo ");
-
-            if (sPartNumber.Trim() != "")
-                strSql.AppendLine(" and c.partnumber = @PartNumber ");
             
-            if (sModel.Trim() != "")
-                strSql.AppendLine(" and c.model = @Model");
-
-            if (sColor.Trim() != "")
-                strSql.AppendLine(" and c.color = @Color  ");
-
-            if (sSupplier.Trim() != "")
-                strSql.AppendLine(" and c.remark_1 = @supplier");
-
-            if (sCoating.Trim() != "")
-                strSql.AppendLine(" and c.coating = @coating");
-
-         
-          
-
             SqlParameter[] parameters = {
                 new SqlParameter("@DateFrom", SqlDbType.DateTime),
-                new SqlParameter("@DateTo", SqlDbType.DateTime),
-                new SqlParameter("@PartNumber", SqlDbType.VarChar,50),
-                new SqlParameter("@JobNo",SqlDbType.VarChar,50),
-                new SqlParameter("@Model", SqlDbType.VarChar,50),
-                new SqlParameter("@Color", SqlDbType.VarChar,50),
-                new SqlParameter("@supplier", SqlDbType.VarChar,50),
-                new SqlParameter("@coating", SqlDbType.VarChar,50)
+                new SqlParameter("@DateTo", SqlDbType.DateTime)            
             };
 
 
             if (dDateFrom != null) parameters[0].Value = dDateFrom; else parameters[0] = null;
             if (dDateTo != null) parameters[1].Value = dDateTo; else parameters[1] = null;
-            if (sPartNumber != "") parameters[2].Value = sPartNumber; else parameters[2] = null;
-            if (sJobNo != "") parameters[3].Value = sJobNo; else parameters[3] = null;
-            if (sModel != "") parameters[4].Value = sModel; else parameters[4] = null;
-            if (sColor != "") parameters[5].Value = sColor; else parameters[5] = null;
-            if (sSupplier != "") parameters[6].Value = sSupplier; else parameters[6] = null;
-            if (sCoating != "") parameters[7].Value = sCoating; else parameters[7] = null;
+       
 
 
 

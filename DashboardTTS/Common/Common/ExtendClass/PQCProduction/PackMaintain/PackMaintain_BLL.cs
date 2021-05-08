@@ -12,8 +12,6 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
     {
         private readonly Core.Base_BLL _baseBLL = new Core.Base_BLL();
 
-
-
         private readonly Common.Class.BLL.PQCPackTracking _packTrackingBLL = new Class.BLL.PQCPackTracking();
         private readonly Common.Class.BLL.PQCPackHistory _packTrackingHisBLL = new Class.BLL.PQCPackHistory();
 
@@ -634,9 +632,54 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                 throw ee;
             }
         }
-        
 
         
-        
+
+
+        public bool End(string sTrackingID, string sUserID)
+        {
+            try
+            {
+                List<SqlCommand> cmdList = new List<SqlCommand>();
+
+                var packTrackingModel = _packTrackingBLL.GetModel(sTrackingID);
+                packTrackingModel.status = "End";
+                packTrackingModel.nextViFlag = "True";
+                packTrackingModel.updatedTime = DateTime.Now;
+                packTrackingModel.remarks = $"Updated by packing maintenance, userID:{sUserID}";
+                packTrackingModel.lastUpdatedTime = DateTime.Now;
+                cmdList.Add(_packTrackingBLL.UpdateCommand(packTrackingModel));
+
+                cmdList.Add(_packTrackingHisBLL.AddCommand(packTrackingModel));
+
+
+
+                var packTrackingDetailList = _packTrackingDetailBLL.GetModelList(sTrackingID);
+                packTrackingDetailList.ForEach(packDetail =>
+                {
+                    packDetail.status = "End";
+                    packDetail.lastUpdatedTime = DateTime.Now;
+                    packDetail.updatedTime = DateTime.Now;
+                    packDetail.remarks = $"Updated by packing maintenance, userID:{sUserID}";
+                    packDetail.userID = sUserID;
+                    cmdList.Add(_packTrackingDetailBLL.UpdateCommand(packDetail));
+
+
+                    // 2.3 插入 pack detail tracking history 记录
+                    cmdList.Add(_packTrackingDetailHisBLL.AddCommand(packDetail));
+                });
+
+
+                return DBHelp.SqlDB.SetData_Rollback(cmdList, DBHelp.Connection.SqlServer.SqlConn_PQC_Server);
+            }
+            catch (Exception ee)
+            {
+
+                throw ee;
+            }
+        }
+
+
+
     }
 }

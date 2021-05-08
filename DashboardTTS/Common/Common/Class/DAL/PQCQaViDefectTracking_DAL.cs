@@ -1063,7 +1063,7 @@ left join PaintingDeliveryHis f on a.jobID collate Chinese_PRC_CI_AS = f.jobNumb
         
         public DataTable GetVIDefectForButtonReport_NEW(string sqlWhere)
         {
-            StringBuilder strSql = new StringBuilder();           
+            StringBuilder strSql = new StringBuilder();
             strSql.Append(@"
 select 
  a.jobID
@@ -1078,7 +1078,7 @@ select
 
 ,b.processes
 
-from PQCQaViDefectTracking a 
+from PQCQaViDefectTracking a
 left join PQCQaViTracking b on a.trackingID = b.trackingID
 left join PQCBom c on  b.partNumber = c.partNumber where 1=1 ");
             
@@ -1212,7 +1212,6 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Particle for laser setup' then rejectQty end),0) as [Particle for laser setup]
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Buyoff' then rejectQty end),0) as [Buyoff]
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Setup' then rejectQty end),0) as [Setup]
-,'0' as Shortage
 ,ISNULL(SUM(case when defectDescription='Paint' and defectCode='Other' then rejectQty end),0) as [Other]
 from PQCQaViDefectTracking 
 where 1=1  ");
@@ -1340,7 +1339,7 @@ jobid
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Light Leakage' then rejectQty end),0) as [Light Leakage]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Light Bubble' then rejectQty end),0) as [Light Bubble]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='White Dot in Material' then rejectQty end),0) as [White Dot in Material]
-,ISNULL(SUM(case when defectDescription='Others' and defectCode='QA' then rejectQty end),0) as [QA]
+,ISNULL(SUM(case when defectDescription='Others' and defectCode='QA Reliability' then rejectQty end),0) as [QA Reliability]
 ,ISNULL(SUM(case when defectDescription='Others' and defectCode='Other' then rejectQty end),0) as [Other]
 from PQCQaViDefectTracking 
 where 1=1  ");

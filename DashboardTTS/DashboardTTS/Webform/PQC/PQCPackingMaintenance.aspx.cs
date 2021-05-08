@@ -101,7 +101,56 @@ namespace DashboardTTS.Webform.PQC
 
         protected void btnEnd_Click(object sender, EventArgs e)
         {
+            #region login control 
+            string userName = this.txtUserName.Text;
+            string password = this.txtPassword.Text;
 
+            if (userName == "")
+            {
+                this.txtUserName.Text = "";
+                this.txtUserName.Focus();
+                Common.CommFunctions.ShowMessage(Page, "Username can not be empty!");
+                return;
+            }
+            if (password == "")
+            {
+                this.txtPassword.Text = "";
+                this.txtPassword.Focus();
+                Common.CommFunctions.ShowMessage(Page, "Password can not be empty!");
+                return;
+            }
+
+            string errorStr = "";
+
+            Common.Class.BLL.User_DB_BLL UserBll = new Common.Class.BLL.User_DB_BLL();
+            bool loginResult = UserBll.Login(userName, password, out errorStr, StaticRes.Global.Department.PQC, StaticRes.Global.UserGroup.OPERATOR);
+
+            if (!loginResult)
+            {
+                Common.CommFunctions.ShowMessage(Page, errorStr);
+                return;
+            }
+            #endregion
+
+            string trackingID = this.lbTrackingID.Text.Trim();
+            if (string.IsNullOrEmpty(trackingID))
+            {
+                Common.CommFunctions.ShowMessage(this.Page, "There is no pack trackingID, can't end!");
+                return;
+            }
+            
+            if (!_packMaintainBLL.End(trackingID, userName))
+            {
+                Common.CommFunctions.ShowMessage(this.Page, "Update Fail!");
+                return;
+            }
+            else
+            {
+                var packList = _baseBLL.GetPackingList(new Taiyo.SearchParam.PQCParam.PQCOutputParam() { JobNo = this.lbJob.Text });
+                string sDateFrom = packList.Min(p => p.Day).ToString("yyyy-MM-dd");
+                string sDateTo = packList.Max(p => p.Day).ToString("yyyy-MM-dd");
+                Response.Redirect($"./PQCPackingLiveReport.aspx?JobNo={this.lbJob.Text}&DateFrom={sDateFrom}&DateTo={sDateTo}");
+            }
         }
 
 

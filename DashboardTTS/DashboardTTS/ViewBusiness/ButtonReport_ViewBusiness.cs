@@ -12,16 +12,17 @@ namespace DashboardTTS.ViewBusiness
         
 
         //获取所有满足条件的job, 并组合sql in的格式.
-        private string GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, string sJobNo, string sModel, string sSupplier, string sColor, string sCoating)
+        private string GetAllDisplayJobs(DateTime dDateFrom, DateTime dDateTo, string sDescription)
         {
             try
             {
                 Common.Class.BLL.PQCQaViTracking_BLL bll = new Common.Class.BLL.PQCQaViTracking_BLL();
 
-                DataTable dt = bll.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+                DataTable dt = bll.GetAllDisplayJobs(dDateFrom, dDateTo, sDescription);
                 if (dt == null || dt.Rows.Count == 0)
                     return null;
 
+                
 
                 //组合成sql in格式.
                 string sqlJobIn = "(";
@@ -144,12 +145,7 @@ namespace DashboardTTS.ViewBusiness
 
 
 
-
-                #region 处理laser ng, shortage, buyoff, setup数量.
-
-
-
-                //laser shortage    100
+       
                 //laser buyoff   101;
                 //laser setup   102;
 
@@ -157,107 +153,61 @@ namespace DashboardTTS.ViewBusiness
                 List<ViewModel.PQCButtonReport_ViewModel.LaserNG> laserNGList = new List<ViewModel.PQCButtonReport_ViewModel.LaserNG>();
                 laserNGList = GetLaserNG(sqlWhere);
 
-
-                //获取Graphic Shift check by M/C code的列表
-                List<ViewModel.PQCButtonReport_ViewModel.PQCDefect> pqcDefectlaserMCRejList = new List<ViewModel.PQCButtonReport_ViewModel.PQCDefect>();
-                pqcDefectlaserMCRejList = (from a in pqcDefectModelList
-                                           where a.defectCode == "Graphic Shift check by M/C"
-                                           //目前只有check#1的才会经过laser工序
-                                           //没有过滤process, 会导致有check#2的多赋值一次laser ng的数量.
-                                           && a.process == "CHECK#1"
-                                           select a).ToList();
-
-                foreach (var pqcDefectModel in pqcDefectlaserMCRejList)
+                // 遍历每一个 laser job
+                laserNGList.ForEach((item) =>
                 {
-
-                    //  ==============================  // 
-                    //同一个job会有check多次才完成. 就会有N条记录. 每次都赋值laser ng数量就会导致 总数 > mrp qty.
-                    //如果Graphic Shift check by M/C 这个code的记录总数超过 2* materialCount就跳过. 防止重复赋值.  
-
-                    int materialCount = (from a in pqcDefectlaserMCRejList where a.jobID == pqcDefectModel.jobID group a by a.materialNo into material select new { material.Key }).Count();
-                    int trackingCount = (from a in pqcDefectlaserMCRejList where a.jobID == pqcDefectModel.jobID select a).Count() / materialCount;
-
-
-                    int totalListCount = (from a in pqcDefectModelList where a.jobID == pqcDefectModel.jobID && a.defectCode == "Graphic Shift check by M/C" select a).Count();
-
-
-
-
-                    if (totalListCount >= (trackingCount + 1) * materialCount)
+                    if (item.jobNo == "JOT2000012503")
                     {
-                        continue;
+
                     }
-                    //  ==============================  // 
-
-
-
-                    //2020/11/30
-                    //修复laserNGList为null时, linq从null中查询导致的 argumentNullException
-                    double laserNG = 0;
-                    double laserShortage = 0;
-                    double laserBuyoff = 0;
-                    double laserSetup = 0;
-
-                    if (laserNGList != null)
+                    // 处理 laser shortage, 合并到 paint setup defect
+                    var paintSetupDefect = pqcDefectModelList.Where(p => p.defectCode == "Setup" && p.defectDescription == "Paint" && p.jobID == item.jobNo);
+                    if (paintSetupDefect != null && paintSetupDefect.Count() != 0)
                     {
-                        var laserNGModel = (from a in laserNGList
-                                            where a.jobNo == pqcDefectModel.jobID
-                                            && a.materialNo == pqcDefectModel.materialNo
-                                            select a).FirstOrDefault();
-                        laserNG = laserNGModel == null? 0: laserNGModel.ng;
-                        laserShortage = laserNGModel == null ? 0 : laserNGModel.shortage;
-                        laserBuyoff = laserNGModel == null ? 0 : laserNGModel.buyoff;
-                        laserSetup = laserNGModel == null ? 0 : laserNGModel.setup;
+                        paintSetupDefect.First().rejectQty += item.shortage;
+                    }
+                    else
+                    {
+                        // 在更新 defect setting 之前没有 paint setup 这个 code,  直接新增一个
+                        pqcDefectModelList.Add(new ViewModel.PQCButtonReport_ViewModel.PQCDefect()
+                        {
+                            jobID = item.jobNo,
+                            materialNo = item.materialNo,
+                            defectCodeID = "59",// 偷懒直接写死了
+                            defectCode = "Setup",
+                            defectDescription = "Paint",
+                            rejectQty = item.shortage,
+                            process = "CHECK#1"
+                        });
                     }
 
 
-
-                    //laser ng赋值到 pqcdefect 并添加到list
-                    ViewModel.PQCButtonReport_ViewModel.PQCDefect pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
-                    pqcDefectModelNew.jobID = pqcDefectModel.jobID;
-                    pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = pqcDefectModel.defectCodeID;
-                    pqcDefectModelNew.defectCode = pqcDefectModel.defectCode;
-                    pqcDefectModelNew.defectDescription = pqcDefectModel.defectDescription;
-                    pqcDefectModelNew.process = pqcDefectModel.process;
-                    pqcDefectModelNew.rejectQty = laserNG;
-                    pqcDefectModelList.Add(pqcDefectModelNew);
-
-                    //添加shortage    100 - Shortage - Paint
-                    pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
-                    pqcDefectModelNew.jobID = pqcDefectModel.jobID;
-                    pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "100";
-                    pqcDefectModelNew.defectCode = "Shortage";
-                    pqcDefectModelNew.defectDescription = "Paint";
-                    pqcDefectModelNew.process = pqcDefectModel.process;
-                    pqcDefectModelNew.rejectQty = laserShortage;
-                    pqcDefectModelList.Add(pqcDefectModelNew);
-
-                    //添加buyoff     101 - Buyoff - Laser
-                    pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
-                    pqcDefectModelNew.jobID = pqcDefectModel.jobID;
-                    pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "101";
-                    pqcDefectModelNew.defectCode = "Buyoff";
-                    pqcDefectModelNew.defectDescription = "Laser";
-                    pqcDefectModelNew.process = pqcDefectModel.process;
-                    pqcDefectModelNew.rejectQty = laserBuyoff;
-                    pqcDefectModelList.Add(pqcDefectModelNew);
-
-                    //添加setup       102 - Setup - Laser
-                    pqcDefectModelNew = new ViewModel.PQCButtonReport_ViewModel.PQCDefect();
-                    pqcDefectModelNew.jobID = pqcDefectModel.jobID;
-                    pqcDefectModelNew.materialNo = pqcDefectModel.materialNo;
-                    pqcDefectModelNew.defectCodeID = "102";
-                    pqcDefectModelNew.defectCode = "Setup";
-                    pqcDefectModelNew.defectDescription = "Laser";
-                    pqcDefectModelNew.process = pqcDefectModel.process;
-                    pqcDefectModelNew.rejectQty = laserSetup;
-                    pqcDefectModelList.Add(pqcDefectModelNew);
+                    // 新增 laser buyoff
+                    pqcDefectModelList.Add(new ViewModel.PQCButtonReport_ViewModel.PQCDefect()
+                    {
+                        jobID = item.jobNo,
+                        materialNo = item.materialNo,
+                        defectCodeID = "101",
+                        defectCode = "Buyoff",
+                        defectDescription = "Laser",
+                        rejectQty = item.buyoff,
+                        process = "CHECK#1"
+                    });
                     
-                }
-                #endregion
+
+                    // 新增 laser setup
+                    pqcDefectModelList.Add(new ViewModel.PQCButtonReport_ViewModel.PQCDefect()
+                    {
+                        jobID = item.jobNo,
+                        materialNo = item.materialNo,
+                        defectCodeID = "102",
+                        defectCode = "Setup",
+                        defectDescription = "Laser",
+                        rejectQty = item.setup,
+                        process = "CHECK#1"
+                    });
+                });
+       
 
 
 
@@ -268,7 +218,7 @@ namespace DashboardTTS.ViewBusiness
             {
                 DBHelp.Reports.LogFile.Log("ButtonTotalReport_Debug", "GetPQCDefectList error : " + ee.ToString());
                 return null;
-            }           
+            }
         }
 
 
@@ -500,14 +450,16 @@ namespace DashboardTTS.ViewBusiness
 
 
       
-        public DataTable GetResultDt(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sPartNumber, 
-            string sJobNo,string sModel, string sSupplier, string sColor, string sCoating, string sReportType,
-            out ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
+        public DataTable GetResultDt(DateTime dDateFrom, DateTime dDateTo, string sDescription, string sReportType, out ViewModel.PQCButtonReport_ViewModel.Report modelForDisplay)
         {
             try
             {
 
-                /**        又改需求， 改你马的
+                /**        
+                 *                     又改需求,
+                 *                     改你马的!
+                 *         
+                 *         
                  *                                         ,s555SB@@&                          
                  *                                      :9H####@@@@@Xi                        
                  *                                     1@@@@@@@@@@@@@@8                       
@@ -536,6 +488,9 @@ namespace DashboardTTS.ViewBusiness
                  *           ,ssirhSM@&1;i19911i,.             s@@@@@@@@@@@@@@@@@@@@@@@@@@S   
                  *              ,,,rHAri1h1rh&@#353Sh:          8@@@@@@@@@@@@@@@@@@@@@@@@@#:  
                  *            .A3hH@#5S553&@@#h   i:i9S          #@@@@@@@@@@@@@@@@@@@@@@@@@A. 
+                 *            
+                 *            
+                 *            
                  */
 
 
@@ -549,7 +504,7 @@ namespace DashboardTTS.ViewBusiness
 
 
                 //先拉取满足条件的所有job id.
-                string strSqlJobIn = GetAllDisplayJobs(dDateFrom, dDateTo, sDescription, sPartNumber, sJobNo, sModel, sSupplier, sColor, sCoating);
+                string strSqlJobIn = GetAllDisplayJobs(dDateFrom, dDateTo, sDescription);
                 if (string.IsNullOrEmpty(strSqlJobIn))
                 {
                     modelForDisplay = null;

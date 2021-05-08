@@ -371,15 +371,39 @@ namespace Common.Class.BLL
 
 
 
-                // 处理 shortage 合并到 painting 的 setup 中.
-                // 早期数据没有 setup 的 code
+                // 处理 shortage 合并到 painting 的 setup 中.               
                 DataRow[] paintSetupDefect = dtDefectDetailList.Select($" Jobnumber = '{jobNo}' and defectCode = 'Setup' and defectDescription = 'Paint' ");
                 if (paintSetupDefect != null && paintSetupDefect.Count() != 0)
                 {
                     decimal setup = paintSetupDefect[0]["rejectQty"].ToString() == "" ? 0 : decimal.Parse(paintSetupDefect[0]["rejectQty"].ToString());
                     paintSetupDefect[0]["rejectQty"] = (laserBuyoff + setup);
                 }
+                else
+                {
+                    // 在修改 defect setting 之前是没有 paint setup 的, 没有则新增一条
 
+                    string setupCodeID;
+
+                    DataRow[] defectsettingPaintSetup = dtDefectSetting.Select(" defectDescription = 'Paint' and  defectCodeSource = 'Setup' ");
+                    if (defectsettingPaintSetup == null || defectsettingPaintSetup.Count() == 0)
+                    {
+                        setupCodeID = defectsettingPaintSetup[0]["defectCodeID"].ToString();
+                    }
+                    else
+                    {
+                        setupCodeID = "100";
+                    }
+
+                    DataRow drSpecialCodeShortage = dtDefectDetailList.NewRow();
+                    drSpecialCodeShortage["Jobnumber"] = jobDefects[0]["Jobnumber"].ToString();
+                    drSpecialCodeShortage["LotQty"] = jobDefects[0]["LotQty"].ToString();
+                    drSpecialCodeShortage["unitCost"] = jobDefects[0]["unitCost"].ToString();
+                    drSpecialCodeShortage["defectCodeID"] = setupCodeID;
+                    drSpecialCodeShortage["defectDescription"] = "Paint";
+                    drSpecialCodeShortage["defectCode"] = "Setup";
+                    drSpecialCodeShortage["rejectQty"] = laserShortage;
+                    dtDefectDetailList.Rows.Add(drSpecialCodeShortage);
+                }
 
 
                 // 新增 laser buyoff
@@ -585,7 +609,7 @@ namespace Common.Class.BLL
                         if (dtInventory != null && dtInventory.Rows.Count != 0)
                         {
                             double shortage = double.Parse(dtInventory.Rows[0]["pqcQuantity"].ToString());
-                            dr["Shortage"] = shortage;
+                            dr["Setup"] = double.Parse(dr["Setup"].ToString()) + shortage;
                             dr["rejectQty"] = double.Parse(dr["rejectQty"].ToString()) + shortage;
                         }
                     }
