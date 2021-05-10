@@ -553,10 +553,10 @@ namespace DashboardTTS.Controllers
 
 
 
-        public JsonResult GetScrapList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string JobNo)
+        public ActionResult GetScrapList(DateTime DateFrom, DateTime DateTo, string Shift, string PartNo, string JobNo)
         {
             Common.ExtendClass.PQCProduction.ScrapReport.Scrap_BLL bll = new Common.ExtendClass.PQCProduction.ScrapReport.Scrap_BLL();
-            var result = bll.GetScrapList(new PQCOutputParam()
+            var strJsonResult = bll.GetScrapList(new PQCOutputParam()
             {
                 DateFrom = DateFrom,
                 DateTo = DateTo.AddDays(1),
@@ -565,7 +565,7 @@ namespace DashboardTTS.Controllers
                 JobNo = JobNo
             });
 
-            return result == null ? Json("") : Json(result);
+            return string.IsNullOrEmpty( strJsonResult) ? Content("") : Content(strJsonResult);
         }
 
     }

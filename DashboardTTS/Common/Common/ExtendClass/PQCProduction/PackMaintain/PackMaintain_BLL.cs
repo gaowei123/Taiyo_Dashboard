@@ -101,7 +101,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
 
             // 2.3 从 bin 中获取 check qty
-            var checkBinList = string.IsNullOrEmpty(sTrackingID) ? null :  _baseBLL.GetBinList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
+            var checkBinList = _baseBLL.GetBinList(new Taiyo.SearchParam.PQCParam.PQCOutputParam()
             {
                 JobNo = maintainModel.Job.JobNo
             });
@@ -118,6 +118,8 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
 
 
+
+
             // 2.5 遍历每个 material, 生成 job 的 material part list
             foreach (var item in bom.MaterialPartList)
             {
@@ -126,13 +128,33 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                 maintainMaterial.MaterialPartNo = item.MaterialPartNo;
 
 
+
+
+                // 2.5.2 取出这个 material's pack qty
+                if (packDetailList == null)
+                {
+                    // 如果一条 packDetailList 记录都没有, 则说明是误操作直接 scrap 掉的, 直接赋值0.
+                    maintainMaterial.MaterialQty = 0;
+                }
+                else
+                {
+                    var packDetailModel = packDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
+                    // pack 可以分 set 做, 如果一条 tracking 没有这个 material part, 说明没做这一组, 不添加到列表中, 给与维护.
+                    if (packDetailModel == null)
+                        continue;
+                    else
+                        maintainMaterial.MaterialQty = packDetailModel.TotalQty;
+                }
+                
+               
+
+
+
                 // 2.5.1 取出这个 material's checking bin qty
                 var checkMaterialBinModel = checkBinList == null? null: checkBinList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
                 maintainMaterial.InventoryQty = checkMaterialBinModel == null? 0: checkMaterialBinModel.MaterialQty;
 
-                // 2.5.2 取出这个 material's pack qty
-                var packDetailModel = packDetailList == null? null : packDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
-                maintainMaterial.MaterialQty = packDetailModel == null ? 0 : packDetailModel.TotalQty;
+
 
                 // 2.5.3 取出这个 material's scrap qty
                 var scrapModel = scrapList == null? null: scrapList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
@@ -311,6 +333,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                 #endregion
                 
 
+
                 #region 2. 更新 pack detail tracking 记录
 
                 var packTrackingDetailList = _packTrackingDetailBLL.GetModelList(maintainModel.Job.TrackingID);
@@ -408,19 +431,23 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                     // 3.1.1 有 bin pack 记录, 直接更新
                     packList.ForEach(packMaterial =>
                     {
-                       packMaterial.materialQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().UpdatedQty;
-                       packMaterial.status = "End";
-                       packMaterial.nextViFlag = "True";
-                       packMaterial.userID = sUserID;
-                       packMaterial.remarks = remark;
-                       packMaterial.updatedTime = DateTime.Now;
-                       cmdList.Add(_binBLL.UpdateCommand(packMaterial));
+                        var maintaimMaterial = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).FirstOrDefault();
+                        if (maintaimMaterial != null)
+                        {
+                            packMaterial.materialQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().UpdatedQty;
+                            packMaterial.status = "End";
+                            packMaterial.nextViFlag = "True";
+                            packMaterial.userID = sUserID;
+                            packMaterial.remarks = remark;
+                            packMaterial.updatedTime = DateTime.Now;
+                            cmdList.Add(_binBLL.UpdateCommand(packMaterial));
 
 
-                       // 3.1.3 插入 pack detail tracking history 记录
-                       var packMaterialHisModel = _binHisBLL.CopyModel(packMaterial);
-                       packMaterialHisModel.materialFromQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().MaterialQty;
-                       cmdList.Add(_binHisBLL.AddCommand(packMaterialHisModel));                       
+                            // 3.1.3 插入 pack detail tracking history 记录
+                            var packMaterialHisModel = _binHisBLL.CopyModel(packMaterial);
+                            packMaterialHisModel.materialFromQty = maintainModel.MaterialPartList.Where(p => p.MaterialPartNo == packMaterial.materialPartNo).First().MaterialQty;
+                            cmdList.Add(_binHisBLL.AddCommand(packMaterialHisModel));
+                        }
                     });
                 }
                 else
@@ -518,7 +545,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
                                 // 3.2.3 insert his
                                 var binCheckHisModel = _binHisBLL.CopyModel(binCheckMaterial);
-                                binCheckHisModel.materialFromQty += Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
+                                binCheckHisModel.materialFromQty = binCheckMaterial.materialQty + Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);
                                 cmdList.Add(_binHisBLL.AddCommand(binCheckHisModel));
                             }
                         }

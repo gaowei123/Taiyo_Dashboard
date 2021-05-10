@@ -218,24 +218,31 @@
                 valign: 'middle',
             },
              {
-                 field: 'MaterialPartNo',
-                 title: 'Material Part No',
+                 field: 'MaterialName',
+                 title: 'Material Name',
                  align: 'center',
                  valign: 'middle',
              },
             {
-                field: 'MaterialQty',
+                field: 'ScrapQty',
                 title: 'Scrap Qty',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (data) {
                     let sum = 0;
                     for (var i = 0; i < data.length; i++) {
-                        sum += data[i].MaterialQty;
+                        sum += data[i].ScrapQty;
                     }
                     return sum;
                 }
-            }
+            },
+            //{
+            //    field: 'UserID',
+            //    title: 'Operator',
+            //    align: 'center',
+            //    valign: 'middle',
+            //},
+
         ]
 
 

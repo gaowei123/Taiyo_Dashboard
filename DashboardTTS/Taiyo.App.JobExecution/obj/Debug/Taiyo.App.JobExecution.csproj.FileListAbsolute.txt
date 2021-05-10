@@ -169,4 +169,4 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Antlr3.Runtime.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.xml
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\obj\Debug\Taiyo.App.JobExecution.csproj.Taiyo.App.JobExecution.exe.config
+D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.App.JobExecution\bin\Debug\Newtonsoft.Json.pdb
