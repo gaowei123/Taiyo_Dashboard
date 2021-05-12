@@ -140,7 +140,7 @@
     </div>
     <!-- 维护数量触发的拟态框 -->
 
-        <!-- End job 触发的拟态框 -->
+    <!-- End job 触发的拟态框 -->
     <div class="modal fade" id="modalLoginEnd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 	    <div class="modal-dialog" style="width:400px;">
 		    <div class="modal-content">

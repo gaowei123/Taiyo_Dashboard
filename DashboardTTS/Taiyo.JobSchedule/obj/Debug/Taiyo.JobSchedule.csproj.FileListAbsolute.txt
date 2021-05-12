@@ -52,3 +52,31 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debu
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Newtonsoft.Json.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.JobSchedule.dll.config
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.JobSchedule.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.JobSchedule.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\DBHelp.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Quartz.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Buffers.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Memory.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Tool.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Newtonsoft.Json.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\DBHelp.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Tool.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Quartz.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Buffers.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Memory.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\bin\Debug\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.JobSchedule\obj\Debug\Taiyo.JobSchedule.pdb

@@ -8,3 +8,8 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.p
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\DB\DB\bin\Release\DBHelp.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\DB\DB\obj\Release\DBHelp.pdb

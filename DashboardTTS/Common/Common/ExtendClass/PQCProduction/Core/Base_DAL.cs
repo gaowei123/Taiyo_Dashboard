@@ -575,7 +575,8 @@ where 1=1  ");
                 //从mrp中获取的inQuantity是set的数量, 转换成pcs
                 decimal setQty = decimal.Parse(dr["inQuantity"].ToString());
                 int materialCount = dicMaterialCount.ContainsKey(model.PartNo) ? dicMaterialCount[model.PartNo] : 1;
-                model.LotQty = setQty * materialCount;
+                model.LotQtyPCS = setQty * materialCount;
+                model.LotQtySET = setQty ;
 
                 lotInfoList.Add(model);
             }

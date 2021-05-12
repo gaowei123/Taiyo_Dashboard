@@ -7,3 +7,8 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\bin\Debug\Taiyo
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\bin\Debug\Taiyo.Enum.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\obj\Debug\Taiyo.Enum.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\obj\Debug\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\bin\Debug\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\bin\Debug\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\obj\Debug\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\obj\Debug\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.Enum\obj\Debug\Taiyo.Enum.csprojResolveAssemblyReference.cache

@@ -14,3 +14,12 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Releas
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Newtonsoft.Json.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Tool.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Tool.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Newtonsoft.Json.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\bin\Release\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StatusConverter\obj\Release\Taiyo.Tool.pdb

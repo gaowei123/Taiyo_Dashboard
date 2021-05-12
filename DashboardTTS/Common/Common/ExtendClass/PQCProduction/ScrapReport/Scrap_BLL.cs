@@ -102,7 +102,7 @@ namespace Common.ExtendClass.PQCProduction.ScrapReport
                          where c.ScrapQty != 0
                          select new
                          {
-                             Day = c.Day,
+                             Day = c.Day.ToString("dd/MM/yyyy"),
                              Shift = c.Shift,
                              PartNo = c.PartNo,
                              JobNo = c.JobNo,

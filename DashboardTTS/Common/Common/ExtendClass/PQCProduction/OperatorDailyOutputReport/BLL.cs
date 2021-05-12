@@ -52,7 +52,7 @@ namespace Common.ExtendClass.PQCProduction.OperatorDailyOutputReport
                            CheckWIPQty = a.ProductType == PQCReportType.WIP ? a.TotalQty : 0,
                            PackOnlineQty = a.ProductType == PQCReportType.PackOnline ? a.TotalQty : 0,
                            PackOfflineQty = a.ProductType == PQCReportType.PackOffline ? a.TotalQty : 0,
-                           LotQty = temp2.Select(t => t.LotQty).FirstOrDefault(),
+                           LotQty = temp2.Select(t => t.LotQtyPCS).FirstOrDefault(),
                            MouldRej = $"{ temp1.Select(t => t.MouldRej).FirstOrDefault()}({Math.Round(temp1.Select(t => t.MouldRej).FirstOrDefault() / a.TotalQty * 100, 2).ToString("0.00")}%)",
                            PaintRej = $"{temp1.Select(t => t.PaintRej).FirstOrDefault()}({Math.Round(temp1.Select(t => t.PaintRej).FirstOrDefault() / a.TotalQty * 100, 2).ToString("0.00")}%)",
                            LaserRej = $"{temp1.Select(t => t.LaserRej).FirstOrDefault()}({Math.Round(temp1.Select(t => t.LaserRej).FirstOrDefault() / a.TotalQty * 100, 2).ToString("0.00")}%)",

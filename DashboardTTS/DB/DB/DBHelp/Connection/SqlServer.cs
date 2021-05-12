@@ -19,8 +19,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Moulding_Sever3"].ToString());
@@ -48,8 +48,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Painting_Sever3"].ToString());
@@ -77,8 +77,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr3"].ToString());
@@ -106,8 +106,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_PQC_Sever3"].ToString());
@@ -135,8 +135,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Assy_Sever3"].ToString());
@@ -164,8 +164,8 @@ namespace DBHelp.Connection
                     case "DESKTOP-7DTS7E8":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever1"].ToString());
                         break;
-                    case "PC1":
-                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever2"].ToString());
+                    case "DWYANE":
+                        conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever1"].ToString());
                         break;
                     case "PC2":
                         conn = new SqlConnection(ConfigurationManager.AppSettings["SQL_ConnStr_Office_Sever3"].ToString());

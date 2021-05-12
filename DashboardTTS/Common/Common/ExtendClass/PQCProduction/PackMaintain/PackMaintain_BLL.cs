@@ -79,7 +79,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
 
             // 1.3 从 painting 中获取 mrp qty
             var paintBaseModel = _baseBLL.GetLotInfoModel(sJobNo);
-            maintainModel.Job.MRPQty = paintBaseModel == null ? 0 : _baseBLL.GetLotInfoModel(sJobNo).LotQty;
+            maintainModel.Job.MRPQty = paintBaseModel == null ? 0 : _baseBLL.GetLotInfoModel(sJobNo).LotQtySET;
             
             #endregion
 
@@ -139,7 +139,7 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                 else
                 {
                     var packDetailModel = packDetailList.Where(p => p.MaterialPartNo == item.MaterialPartNo).FirstOrDefault();
-                    // pack 可以分 set 做, 如果一条 tracking 没有这个 material part, 说明没做这一组, 不添加到列表中, 给与维护.
+                    // pack 可以分 set 做, 如果一条 tracking 没有这个 material part, 说明没做这一组, 不添加到列表中给与维护.
                     if (packDetailModel == null)
                         continue;
                     else
@@ -619,7 +619,13 @@ namespace Common.ExtendClass.PQCProduction.PackMaintain
                     {
                         var scrapMaterial = hisScrapList.Where(p => p.materialPartNo == maintainMaterialPart.MaterialPartNo).FirstOrDefault();
                         scrapMaterial.materialFromQty = scrapMaterial.materialQty;// 先保存下更新前的数量.
-                        scrapMaterial.materialQty -= Math.Abs(dicMaterialIncreaseQty[maintainMaterialPart.MaterialPartNo]);// 报废数量 - 被维护拉回来的数量
+
+                       
+                        // 维护增加的数量
+                        decimal increasedQty = maintainMaterialPart.UpdatedQty - maintainMaterialPart.MaterialQty;
+                        // 库存扣完, 还不够的数量.
+                        decimal lackQty = Math.Abs(maintainMaterialPart.InventoryQty - increasedQty);
+                        scrapMaterial.materialQty -= lackQty;
                         scrapMaterial.userID = sUserID;
                         scrapMaterial.updatedTime = DateTime.Now;
                         scrapMaterial.remarks = remark;

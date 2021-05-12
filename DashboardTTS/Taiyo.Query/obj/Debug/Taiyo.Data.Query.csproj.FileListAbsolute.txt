@@ -1,4 +1,0 @@
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\bin\Debug\Taiyo.Query.dll
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\bin\Debug\Taiyo.Query.pdb
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\obj\Debug\Taiyo.Query.dll
-D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.Query\obj\Debug\Taiyo.Query.pdb

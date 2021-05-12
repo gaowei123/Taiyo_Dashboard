@@ -17,10 +17,6 @@ namespace DashboardTTS.Webform.PQC
                 if (!IsPostBack)
                 {
                     setRejCode("");
-                                        
-                    this.txtDateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                    this.txtDateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                   
                 }
             }
             catch (Exception ee)

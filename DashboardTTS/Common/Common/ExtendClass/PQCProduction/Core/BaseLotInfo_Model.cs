@@ -12,6 +12,7 @@ namespace Common.ExtendClass.PQCProduction.Core
         public string PartNo { get; set; }
         public string PaintProcess { get; set; }
         public DateTime? MFGDate { get; set; }
-        public decimal LotQty { get; set; }
+        public decimal LotQtySET { get; set; }
+        public decimal LotQtyPCS { get; set; }
     }
 }

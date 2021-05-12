@@ -473,6 +473,9 @@
         var params = {
             JobID: jobID,
             TrackingID: trackingID,
+
+            // true: 显示这个 job 除了当前的 tracking 记录的其它 tracking 记录
+            // false: 只显示这个 job 当前的 tracking 记录
             IsExcludeTracking: false,
             CheckProcess: process
         }
@@ -1046,17 +1049,12 @@
                 align: 'center',
                 valign: 'middle'
             },
-            {
-                field: 'buyoff',
-                title: 'Buyoff',
-                align: 'center',
-                valign: 'middle'
-            }, {
-                field: 'shortage',
-                title: 'Shortage',
-                align: 'center',
-                valign: 'middle'
-            },
+           {
+               field: 'setup',
+               title: 'Setup',
+               align: 'center',
+               valign: 'middle'
+           },
             {
                 field: 'other',
                 title: 'Other',
@@ -1075,33 +1073,31 @@
             onLoadSuccess: function (data) {  //加载成功时执行
                
 
-                var particle = 0;
-                var fibre = 0;
-                var manyParticle = 0;
-                var stainMark = 0;
-                var unevenPaint = 0;
-                var underCoatUnevenPaint = 0;
-                var underSpray = 0;
-                var whiteDot = 0;
-                var silverDot = 0;
-                var dust = 0;
-                var paintCrack = 0;
-                var bubble = 0;
-                var scratch = 0;
-                var abrasionMark = 0;
-                var paintDripping = 0;
-                var roughSurface = 0;
-                var shinning = 0;
-                var matt = 0;
-                var paintPinHole = 0;
-                var lightLeakage = 0;
-                var whiteMark = 0;
-                var dented = 0;
-                var particleForLaserSetup = 0;
-                var buyoff = 0;
-                var shortage = 0;
-                //var qa = 0;
-                var other = 0;
+                let particle = 0;
+                let fibre = 0;
+                let manyParticle = 0;
+                let stainMark = 0;
+                let unevenPaint = 0;
+                let underCoatUnevenPaint = 0;
+                let underSpray = 0;
+                let whiteDot = 0;
+                let silverDot = 0;
+                let dust = 0;
+                let paintCrack = 0;
+                let bubble = 0;
+                let scratch = 0;
+                let abrasionMark = 0;
+                let paintDripping = 0;
+                let roughSurface = 0;
+                let shinning = 0;
+                let matt = 0;
+                let paintPinHole = 0;
+                let lightLeakage = 0;
+                let whiteMark = 0;
+                let dented = 0;
+                let particleForLaserSetup = 0;
+                let setup = 0;
+                let other = 0;
 
 
 
@@ -1132,9 +1128,7 @@
                     whiteMark += data[i].whiteMark;
                     dented += data[i].dented;
                     particleForLaserSetup += data[i].particleForLaserSetup;
-                    buyoff += data[i].buyoff;
-                    shortage += data[i].shortage;
-                    //qa += data[i].qa;
+                    setup += data[i].setup;
                     other += data[i].other;
                 }
 
@@ -1162,9 +1156,7 @@
                 if (whiteMark == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'whiteMark');
                 if (dented == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'dented');
                 if (particleForLaserSetup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'particleForLaserSetup');
-                if (buyoff == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'buyoff');
-                if (shortage == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'shortage');
-                //if (qa == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'qa');
+                if (setup == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'setup');
                 if (other == 0) $('#tablePaintingDefect').bootstrapTable('hideColumn', 'other');
 
 
@@ -1547,12 +1539,13 @@
                 title: 'White Dot In Material',
                 align: 'center',
                 valign: 'middle'
-            }, {
-                field: 'qa',
-                title: 'QA',
-                align: 'center',
-                valign: 'middle'
             },
+             {
+                 field: 'qa',
+                 title: 'QA',
+                 align: 'center',
+                 valign: 'middle'
+             },
             {
                 field: 'other',
                 title: 'Other',

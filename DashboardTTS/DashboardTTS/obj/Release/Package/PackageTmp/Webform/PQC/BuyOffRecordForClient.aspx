@@ -67,14 +67,16 @@
                                 <asp:TextBox runat="server" ID="txtJobNumber" AutoCompleteType="None" Width="100%" Height="23px" ></asp:TextBox>
                             </td>
 
-                            <td class="tdSmall">Setup Rej Qty:</td>
+                            <%--<td class="tdSmall">Setup Rej Qty:</td>--%>
+                            <td class="tdSmall"></td>
                             <td class="tdSmall">
-                                <asp:TextBox runat="server" ID="txtSetupRejQty" AutoCompleteType="None" Width="100%" Height="23px"></asp:TextBox>
+                                <asp:TextBox runat="server" ID="txtSetupRejQty" AutoCompleteType="None" Width="100%" Height="23px" Visible="false"></asp:TextBox>
                             </td>
 
-                            <td class="tdSmall">QA Reliability Test Qty:</td>
+                            <%--<td class="tdSmall">QA Reliability Test Qty:</td>--%>
+                            <td class="tdSmall"></td>
                             <td class="tdSmall">
-                                <asp:TextBox runat="server" ID="txtQATestQty" AutoCompleteType="None" Width="100%" Height="23px"></asp:TextBox>
+                                <asp:TextBox runat="server" ID="txtQATestQty" AutoCompleteType="None" Width="100%" Height="23px" Visible="false"></asp:TextBox>
                             </td>
                         </tr>
                         <tr> 

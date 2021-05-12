@@ -50,7 +50,7 @@
                         <asp:Label runat="server" ID="lbJob" Font-Bold="true"></asp:Label> &nbsp;-&nbsp;
                         <asp:Label runat="server" ID="lbTrackingID" Font-Bold="true"></asp:Label>
 
-                        <asp:Button runat="server" ID="btnEnd" Text="End" OnClick="btnEnd_Click" CssClass="btn btn-success" style="float:right; width:70px;"/>
+                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLoginEnd" style="float:right; width:70px;">End</button>
                     </div>
                 </div>
                 <div class="row form-inline top10"> 
@@ -97,7 +97,7 @@
                 </div>
                 <div class="row form-inline top10 bottom6">
                     <div class="col-sm-12" style="display:flex; justify-content:center;">
-                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLogin" style="width:150px;">Confirm</button>
+                        <button type="button" class="btn btn-success"  data-toggle="modal" data-target="#modalLoginUpdate" style="width:150px;">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -105,8 +105,8 @@
     </div>
 
       
-    <!-- Login 拟态框 -->
-    <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <!-- 维护数量触发的拟态框 -->
+    <div class="modal fade" id="modalLoginUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 	    <div class="modal-dialog" style="width:400px;">
 		    <div class="modal-content">
 			    <div class="modal-header">
@@ -138,6 +138,41 @@
 		    </div>
 	    </div>
     </div>
-    <!-- Login 拟态框 -->
+    <!-- 维护数量触发的拟态框 -->
+
+    <!-- End job 触发的拟态框 -->
+    <div class="modal fade" id="modalLoginEnd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	    <div class="modal-dialog" style="width:400px;">
+		    <div class="modal-content">
+			    <div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					    &times;
+				    </button>
+				    <h4 class="modal-title">
+					    <b>User Login</b>
+				    </h4>
+			    </div>
+			    <div class="modal-body">
+                    <div class="row"> 
+                        <div class="col-md-12 form-inline" >
+                            <label style="width:35%">User Name :</label>
+                            <asp:TextBox runat="server" ID="txtUsernameEnd" CssClass="form-control" Width="60%" placeholder ="Please input user name"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="row"  style="margin-top:15px;"> 
+                        <div class="col-md-12 form-inline" >
+                            <label style="width:35%">Password :</label>
+                            <asp:TextBox runat="server" ID="txtPasswordEnd" CssClass="form-control" Width="60%" placeholder ="Please input passworld" type="password" AutoCompleteType="Disabled"></asp:TextBox>
+                        </div>
+                    </div>
+			    </div>
+			    <div class="modal-footer">
+				    <button type="button" class="btn btn-danger"  data-dismiss="modal">Cancel</button>
+                    <asp:Button runat="server" ID="Button1" Text="Submit" Width="100px" Height="38px" CssClass="btn-success" OnClick="btnEnd_Click" style="border-radius:4px;" UseSubmitBehavior="false" />
+			    </div>
+		    </div>
+	    </div>
+    </div>
+    <!-- End job 触发的拟态框 -->
 
 </asp:Content>

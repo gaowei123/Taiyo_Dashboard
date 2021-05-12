@@ -8,3 +8,8 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\bin\Rele
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.csprojResolveAssemblyReference.cache
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\bin\Release\Taiyo.SearchParam.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\bin\Release\Taiyo.SearchParam.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Taiyo.SearchParam\obj\Release\Taiyo.SearchParam.pdb

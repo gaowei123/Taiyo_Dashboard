@@ -572,6 +572,9 @@
         var params = {
             JobID: jobNo,
             TrackingID: '',
+
+            // true: 显示这个 job 除了当前的 tracking 记录的其它 tracking 记录
+            // false: 只显示这个 job 当前的 tracking 记录
             IsExcludeTracking: false,
             CheckProcess:''
         }
@@ -1658,8 +1661,7 @@
             ],
 
             onLoadSuccess: function (data) {  //加载成功时执行
-                console.log(data);
-
+            
 
                 var pqcScratch = 0;
                 var blackDot = 0;

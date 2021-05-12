@@ -825,14 +825,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="api\index.js" />
-    <Content Include="api\myAxios.js" />
     <Content Include="Dashboard CSS JS\CSS\HomePage.css" />
     <Content Include="Dashboard CSS JS\JS\HomePage.js" />
     <Content Include="Dashboard CSS JS\JS\GlobalConfig.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_DailyReport.js" />
     <Content Include="Dashboard CSS JS\JS\MOULD_MonthlyHighestReject.js" />
-    <Content Include="plugins\axios\axios.min.js" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.css" />
     <Content Include="plugins\bigautocomplete\jquery.bigautocomplete.js" />
     <Content Include="Dashboard CSS JS\CSS\MasterPage.css" />
@@ -3805,17 +3802,9 @@
       <Project>{9ee7ab40-6b50-47a4-9f3a-3b3f3520cadb}</Project>
       <Name>Taiyo.Tool</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Taiyo.Business\Taiyo.Business.csproj">
-      <Project>{df873ad5-39f4-451c-a85c-85c70ac270aa}</Project>
-      <Name>Taiyo.Business</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Taiyo.Enum\Taiyo.Enum.csproj">
       <Project>{7eef5249-5d72-4470-a952-94983fad5433}</Project>
       <Name>Taiyo.Enum</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Taiyo.JobSchedule\Taiyo.JobSchedule.csproj">
-      <Project>{93deb090-d3c7-46b3-a006-fd8bb46316f2}</Project>
-      <Name>Taiyo.JobSchedule</Name>
     </ProjectReference>
     <ProjectReference Include="..\Taiyo.SearchParam\Taiyo.SearchParam.csproj">
       <Project>{d650fea2-5ad3-4599-81d0-97c084053b7b}</Project>

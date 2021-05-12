@@ -30,3 +30,19 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Han
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\StaticRes.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\StaticRes.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\System.Windows.Interactivity.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\de\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\en\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\es\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\it\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\StaticRes\obj\Debug\StaticRes.csprojResolveAssemblyReference.cache

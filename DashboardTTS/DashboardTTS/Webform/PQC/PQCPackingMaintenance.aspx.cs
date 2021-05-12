@@ -241,7 +241,7 @@ namespace DashboardTTS.Webform.PQC
                                    {
                                        MaterialName = MaterialNameList.Key,
                                        InventoryQty = MaterialNameList.Min(p => p.InventoryQty),
-                                       MaterialQty = MaterialNameList.Sum(p => p.MaterialQty),
+                                       MaterialQty = MaterialNameList.Min(p => p.MaterialQty),
                                        ScrapQty = MaterialNameList.Min(p => p.ScrapQty)
                                    };
             this.dgMaterial.DataSource = materialNameList;

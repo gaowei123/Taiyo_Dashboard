@@ -156,12 +156,9 @@ namespace DashboardTTS.ViewBusiness
                 // 遍历每一个 laser job
                 laserNGList.ForEach((item) =>
                 {
-                    if (item.jobNo == "JOT2000012503")
-                    {
-
-                    }
+                  
                     // 处理 laser shortage, 合并到 paint setup defect
-                    var paintSetupDefect = pqcDefectModelList.Where(p => p.defectCode == "Setup" && p.defectDescription == "Paint" && p.jobID == item.jobNo);
+                    var paintSetupDefect = pqcDefectModelList.Where(p => p.defectCode == "Setup" && p.defectDescription == "Paint" && p.jobID == item.jobNo && p.materialNo == item.materialNo);
                     if (paintSetupDefect != null && paintSetupDefect.Count() != 0)
                     {
                         paintSetupDefect.First().rejectQty += item.shortage;
@@ -206,6 +203,12 @@ namespace DashboardTTS.ViewBusiness
                         rejectQty = item.setup,
                         process = "CHECK#1"
                     });
+
+
+                    // 处理 laser vision ng 数量
+                    var laserNgDefect = pqcDefectModelList.Where(p => p.defectCode == "Graphic Shift check by M/C" && p.defectDescription == "Laser" && p.jobID == item.jobNo && p.materialNo == item.materialNo);
+                    laserNgDefect.First().rejectQty = item.ng;
+
                 });
        
 
@@ -455,7 +458,7 @@ namespace DashboardTTS.ViewBusiness
             try
             {
 
-                /**        
+                /*
                  *                     又改需求,
                  *                     改你马的!
                  *         

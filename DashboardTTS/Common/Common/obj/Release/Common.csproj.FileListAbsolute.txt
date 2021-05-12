@@ -32,3 +32,21 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Common.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Common.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\DBHelp.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\StaticRes.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Tool.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Taiyo.SearchParam.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\bin\Release\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\Common\Common\obj\Release\Common.pdb

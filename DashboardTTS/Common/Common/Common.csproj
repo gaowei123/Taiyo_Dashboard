@@ -293,9 +293,6 @@
     <Compile Include="ExtendClass\PQCProduction\OutputSummaryChart\OutputChart_BLL.cs" />
     <Compile Include="ExtendClass\PQCProduction\OutputSummaryChart\OutputChart_Model.cs" />
     <Compile Include="ExtendClass\PQCProduction\ScrapReport\Scrap_BLL.cs" />
-    <Compile Include="ExtendClass\PQCRejDetailReport\RejDetail_BLL.cs" />
-    <Compile Include="ExtendClass\PQCRejDetailReport\RejDetail_DAL.cs" />
-    <Compile Include="ExtendClass\PQCRejDetailReport\RejDetail_Model.cs" />
     <Compile Include="ExtendClass\PQCSummaryReport\Summary_BLL.cs" />
     <Compile Include="ExtendClass\PQCSummaryReport\Summary_DAL.cs" />
     <Compile Include="ExtendClass\PQCSummaryReport\Summary_Model.cs" />

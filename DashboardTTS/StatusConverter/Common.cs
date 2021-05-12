@@ -41,6 +41,28 @@ namespace Taiyo.Tool
             return isDay ? Taiyo.Enum.CommonEnum.Shift.Day : Taiyo.Enum.CommonEnum.Shift.Night;
         }
 
+        // 早上8点之前都是属于前一天
+        public static DateTime CurDay {
+            get {
+                return DateTime.Now.AddHours(-8).Date;
+            }
+        }
+
+
+        // 8:00 ~ 20:00 是白班.  
+        // 其中时间点统一包头不包尾 8:00这一点是属于白班, 20:00这一点是属于晚班
+        public static Taiyo.Enum.CommonEnum.Shift CurShift {
+            get
+            {
+                if (DateTime.Now >= CurDay.AddHours(8) && DateTime.Now < CurDay.AddHours(20))
+                {
+                    return Enum.CommonEnum.Shift.Day;
+                }else
+                {
+                    return Enum.CommonEnum.Shift.Night;
+                }
+            }
+        }
 
     }
 }

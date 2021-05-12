@@ -17,57 +17,7 @@ namespace StaticRes
     }
 
 
-    public static class MouldingStatusDetailColor
-    {
-        //run
-        public static System.Drawing.Color Running = System.Drawing.Color.LawnGreen;
-        public static System.Drawing.Color Adjustment = System.Drawing.Color.Orange;
-        public static System.Drawing.Color Mould_Testing = System.Drawing.Color.Blue;
-        public static System.Drawing.Color Material_Testing = System.Drawing.Color.BlueViolet;
-        public static System.Drawing.Color Change_Model = System.Drawing.Color.Brown;
-
-
-        //idle
-        public static System.Drawing.Color No_Schedule = System.Drawing.Color.Yellow;
-        public static System.Drawing.Color No_Operator = System.Drawing.Color.DeepPink;
-        public static System.Drawing.Color No_Material = System.Drawing.Color.Fuchsia;
-        public static System.Drawing.Color Break_Time = System.Drawing.Color.BurlyWood;
-        public static System.Drawing.Color Login_Out = System.Drawing.Color.Chocolate;
-
-
-        //breakdown
-        public static System.Drawing.Color MachineBreak = System.Drawing.Color.Red;
-        public static System.Drawing.Color DamageMould = System.Drawing.Color.Red;
-
-
-        //shutdown
-        public static System.Drawing.Color ShutDown = System.Drawing.Color.Gray;
-    }
-
-
-    public static class LaserStatusDetailColor
-    {
-        //run
-        public static System.Drawing.Color Operating = System.Drawing.Color.LawnGreen;
-        public static System.Drawing.Color Setup = System.Drawing.Color.Orange;
-        public static System.Drawing.Color Adjustment = System.Drawing.Color.Orange; //adjustment后期改名成setup了, 其实是同一种状态
-        public static System.Drawing.Color Buyoff = System.Drawing.Color.MediumPurple;
-        public static System.Drawing.Color Testing = System.Drawing.Color.RoyalBlue;
-
-
-        //idle
-        public static System.Drawing.Color NoSchedule = System.Drawing.Color.Yellow;
-
-
-        //breakdown
-        public static System.Drawing.Color Maintainence = System.Drawing.Color.Brown;
-        public static System.Drawing.Color BreakDown = System.Drawing.Color.Red;
-
-
-        //shutdown
-        public static System.Drawing.Color ShutDown = System.Drawing.Color.Gray;
-    }
-
+  
     public static class PQCStautsColor
     {
         public static System.Drawing.Color Run = System.Drawing.Color.LawnGreen;

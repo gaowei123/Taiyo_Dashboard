@@ -36,3 +36,23 @@ D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.xml
 D:\Project Storage\Taiyo\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\MyChart.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\MyChart.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Common.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\StaticRes.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Enum.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.SearchParam.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Common.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\DBHelp.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\StaticRes.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Tool.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.Enum.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Taiyo.SearchParam.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\bin\Debug\Newtonsoft.Json.xml
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.csprojResolveAssemblyReference.cache
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.dll
+C:\Users\18721\Source\Repos\Taiyo_Dashboard\DashboardTTS\MyChart\obj\Debug\MyChart.pdb

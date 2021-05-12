@@ -187,14 +187,14 @@
                 title: 'Day',
                 align: 'center',
                 valign: 'middle',
-                formatter: function (data) {
-                    if (data == '' || data == null || data == undefined) {
-                        return '';
-                    }
+                //formatter: function (data) {
+                //    if (data == '' || data == null || data == undefined) {
+                //        return '';
+                //    }
 
-                    var date = new Date(parseInt(data.replace("/Date(", "").replace(")/", ""), 10));
-                    return dateFormat('yyyy/MM/dd', date);
-                },
+                //    var date = new Date(parseInt(data.replace("/Date(", "").replace(")/", ""), 10));
+                //    return dateFormat('yyyy/MM/dd', date);
+                //},
                 footerFormatter: function (data) {
                     return 'Total';
                 }

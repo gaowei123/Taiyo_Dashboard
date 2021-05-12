@@ -436,6 +436,10 @@ namespace Common.BLL
                 DateTime stopTime = DateTime.Parse(dr["stopTime"].ToString());
 
 
+                if (machineID == "1")
+                {
+
+                }
            
 
 
@@ -675,7 +679,7 @@ namespace Common.BLL
 
                 else if (startTime < dDate.AddHours(20) && stopTime > dDate.AddHours(20))
                 {
-                    #region starttime, stoptime 跨 20:00这个dian
+                    #region starttime, stoptime 跨 20:00这个点
 
                     //拆分2条记录
 
@@ -744,8 +748,8 @@ namespace Common.BLL
                     {
                         if (strStatus == StaticRes.Global.LaserStatus.Run) continue;
 
-
-                        //day
+                        
+                        #region add day model
                         var dayModel = (from a in modelList
                                         where a.day == dTemp.Date
                                         && a.machineID == i.ToString()
@@ -766,9 +770,10 @@ namespace Common.BLL
                             model.totalSeconds = 0;
                             lackModelList.Add(model);
                         }
-
-
-                        //night
+                        #endregion
+                        
+                 
+                        #region add night model
                         var nightModel = (from a in modelList
                                           where a.day == dTemp.Date
                                           && a.machineID == i.ToString()
@@ -789,6 +794,7 @@ namespace Common.BLL
                             model.totalSeconds = 0;
                             lackModelList.Add(model);
                         }
+                        #endregion
                     }
                 }
                 dTemp = dTemp.AddDays(1);
@@ -802,60 +808,103 @@ namespace Common.BLL
             //将缺少的数据合并到list中.
             modelList.AddRange(lackModelList);
 
-           
+
 
             #region power off, 查询该机器, 该天总时长是否为0, 是则将power off赋值 12*3600
+
+            // 早上8点之前
             
+
+
             dTemp = dDateFrom.Date;
             while (dTemp < dDateTo)
             {
                 for (int i = 1  ; i < 9; i++)
                 {
 
-                    //查询这一天, 这台机器, 白班的所有信息.
+                    #region  处理白班 shutdown
+                    // 查询这一天, 这台机器, 白班的所有信息.
                     var machineDayList = from a in modelList
-                                  where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day
-                                  select a;
+                                         where a.day == dTemp.Date && 
+                                         a.machineID == i.ToString() && 
+                                         a.shift == Taiyo.Enum.CommonEnum.Shift.Day.GetDescription()
+                                         select a;
+
+
+                    
+                    // 白班 shutdown 的记录
+                    var machinePoweroffDayModel = (from a in modelList
+                                                   where a.day == dTemp.Date && a.machineID == i.ToString() &&
+                                                   a.shift == Taiyo.Enum.CommonEnum.Shift.Day.GetDescription() &&
+                                                   a.status == StaticRes.Global.LaserStatus.Shutdown
+                                                   select a).FirstOrDefault();
 
 
 
-
-
-                    //如果总时长为0, 并且start/stop time为null,  则将poweroff的时长设置为12*3600;
-                    double totalSecond = machineDayList.Sum(p => p.totalSeconds);
-                    if (totalSecond == 0)
+                    if (machineDayList.Sum(p => p.totalSeconds) == 0 && 
+                        Taiyo.Tool.Common.CurDay != dTemp && 
+                        Taiyo.Tool.Common.CurShift != Taiyo.Enum.CommonEnum.Shift.Day)
                     {
-                        var machinePoweroffDayModel = (from a in modelList
-                                                       where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Day && a.status == StaticRes.Global.LaserStatus.Shutdown
-                                                       select a).FirstOrDefault();
-                        if (machinePoweroffDayModel.startTime == null && machinePoweroffDayModel.stopTime == null)
+                        //如果这一天总时长为0, 并且不是当天白班, 则认为是关机状态, 设置 shutdown 12*3600
+                        machinePoweroffDayModel.totalSeconds = 12 * 3600;
+                    }
+                    else 
+                    {
+                        try
+                        {
+                            // 如果是当天白班, 也没有查到 power on 的一条记录, 则也认为是关机状态, 设置 shutdown 12*3600
+                            DataRow[] arrDr = _dal.GetSourceList(dTemp, dTemp.AddDays(1), i.ToString()).Select(" eventTrigger = 'POWER ON' ");
+                            if (arrDr == null || arrDr.Count() == 0)
+                            {
+                                machinePoweroffDayModel.totalSeconds = 12 * 3600;
+                            }
+                        }
+                        catch (Exception)
                         {
                             machinePoweroffDayModel.totalSeconds = 12 * 3600;
                         }
                     }
 
+                    #endregion
 
-
-
-
+                    
+                    #region 处理晚班 shutdown
                     //查询这一天, 这台机器, 晚班的所有信息.
                     var machineNightList = from a in modelList
-                                           where a.day == dTemp && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night
+                                           where a.day == dTemp && 
+                                           a.machineID == i.ToString() && 
+                                           a.shift == Taiyo.Enum.CommonEnum.Shift.Night.GetDescription()
                                            select a;
 
+                    var machinePoweroffNightModel = (from a in modelList
+                                                     where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night && a.status == StaticRes.Global.LaserStatus.Shutdown
+                                                     select a).FirstOrDefault();
 
-                    //如果总时长为0, 并且start/stop time为null,  则将poweroff的时长设置为12*3600;
-                    totalSecond = machineNightList.Sum(p => p.totalSeconds);
-                    if (totalSecond == 0)
+
+                    if (machineNightList.Sum(p => p.totalSeconds) == 0 &&
+                        Taiyo.Tool.Common.CurDay != dTemp &&
+                        Taiyo.Tool.Common.CurShift != Taiyo.Enum.CommonEnum.Shift.Night)
                     {
-                        var machinePoweroffNightModel = (from a in modelList
-                                                         where a.day == dTemp.Date && a.machineID == i.ToString() && a.shift == StaticRes.Global.Shift.Night && a.status == StaticRes.Global.LaserStatus.Shutdown
-                                                         select a).FirstOrDefault();
-                        if (machinePoweroffNightModel.startTime == null && machinePoweroffNightModel.stopTime == null)
+                        //如果这一天总时长为0, 并且不是当天晚班, 则认为是关机状态, 设置 shutdown 12*3600
+                        machinePoweroffNightModel.totalSeconds = 12 * 3600;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            // 如果是当天晚班, 也没有查到 power on 的一条记录, 则也认为是关机状态, 设置 shutdown 12*3600
+                            DataRow[] arrDr = _dal.GetSourceList(dTemp, dTemp.AddDays(1), i.ToString()).Select(" eventTrigger = 'POWER ON' ");
+                            if (arrDr == null || arrDr.Count() == 0)
+                            {
+                                machinePoweroffNightModel.totalSeconds = 12 * 3600;
+                            }
+                        }
+                        catch (Exception)
                         {
                             machinePoweroffNightModel.totalSeconds = 12 * 3600;
                         }
                     }
+                    #endregion
 
                 }
 
@@ -868,23 +917,12 @@ namespace Common.BLL
 
 
 
-            #region 添加 running model,   = 12*3600 - 其他各状态总时长 
+            #region 添加 running model,   = 12*3600 - 其他各状态总时长
 
-           
-            DateTime curDay = DateTime.Now.AddHours(-8).Date;
-            string curShift = string.Empty;
-            if (DateTime.Now >= curDay.AddHours(8) && DateTime.Now < curDay.AddHours(20) )
-            {
-                curShift = StaticRes.Global.Shift.Day;
-            }
-            else
-            {
-                curShift = StaticRes.Global.Shift.Night;
-            }
-
-
-
-
+            DateTime curDay = Taiyo.Tool.Common.CurDay;
+            string curShift = Taiyo.Tool.Common.CurShift.GetDescription();
+      
+            
             dTemp = dDateFrom.Date;
             while (dTemp < dDateTo)
             {

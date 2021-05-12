@@ -187,14 +187,14 @@
                 title: 'Day',
                 align: 'center',
                 valign: 'middle',
-                formatter: function (data) {
-                    if (data == '' || data == null || data == undefined) {
-                        return '';
-                    }
+                //formatter: function (data) {
+                //    if (data == '' || data == null || data == undefined) {
+                //        return '';
+                //    }
 
-                    var date = new Date(parseInt(data.replace("/Date(", "").replace(")/", ""), 10));
-                    return dateFormat('yyyy/MM/dd', date);
-                },
+                //    var date = new Date(parseInt(data.replace("/Date(", "").replace(")/", ""), 10));
+                //    return dateFormat('yyyy/MM/dd', date);
+                //},
                 footerFormatter: function (data) {
                     return 'Total';
                 }
@@ -218,24 +218,31 @@
                 valign: 'middle',
             },
              {
-                 field: 'MaterialPartNo',
-                 title: 'Material Part No',
+                 field: 'MaterialName',
+                 title: 'Material Name',
                  align: 'center',
                  valign: 'middle',
              },
             {
-                field: 'MaterialQty',
+                field: 'ScrapQty',
                 title: 'Scrap Qty',
                 align: 'center',
                 valign: 'middle',
                 footerFormatter: function (data) {
                     let sum = 0;
                     for (var i = 0; i < data.length; i++) {
-                        sum += data[i].MaterialQty;
+                        sum += data[i].ScrapQty;
                     }
                     return sum;
                 }
-            }
+            },
+            //{
+            //    field: 'UserID',
+            //    title: 'Operator',
+            //    align: 'center',
+            //    valign: 'middle',
+            //},
+
         ]
 
 

@@ -232,7 +232,55 @@ and datetime >= @DateFrom and datetime <= @DateTo");
         }
 
 
-        
+
+        public DataTable GetSourceList(DateTime dDateFrom, DateTime dDateTo, string sMachineID)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"
+select 
+[id]
+,[dateTime]
+,[machineID]
+,[currentOperation]
+,[eventTrigger]
+,[startTime]
+,[stopTime]
+from LMMSEventLog 
+where (currentOperation = 'TECHNICIAN_OEE' or currentOperation = 'SYSTEM_OEE')
+and datetime >= @DateFrom and datetime <= @DateTo");
+
+            if (sMachineID != "")
+                strSql.Append(" and machineID = @machineID ");
+
+
+
+
+
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@DateFrom", SqlDbType.DateTime),
+                new SqlParameter("@DateTo", SqlDbType.DateTime),
+                new SqlParameter("@machineID", SqlDbType.VarChar,8)
+            };
+
+            paras[0].Value = DateTime.Now.Date;
+            paras[1].Value = DateTime.Now.Date.AddDays(1);
+            if (sMachineID != "") paras[2].Value = sMachineID; else paras[2] = null;
+
+
+            DataSet ds = DBHelp.SqlDB.Query(strSql.ToString(), paras);
+
+            if (ds == null || ds.Tables.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return ds.Tables[0];
+            }
+        }
+
+
     }
 }
 
